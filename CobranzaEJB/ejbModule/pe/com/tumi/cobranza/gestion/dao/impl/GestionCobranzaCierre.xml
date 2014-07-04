@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GestionCobranzaCierreDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.gestion.domain.GestionCobranzaCierre" alias="GestionCobranzaCierre"/> 
+   
+     <parameterMap id="resUltFechaCierre" class="GestionCobranzaCierre" >
+        <parameter property="dtUltFechaCierre"   jdbcType="DATE"          javaType="java.util.Date" 	mode="INOUT"/>
+     </parameterMap>
+  
+    <parameterMap id="parGestionCobranzaCierre" class="GestionCobranzaCierre">
+      <parameter property="id.intPersEmpresaCierreGestCob"	 jdbcType="NUMERIC"       javaType="java.lang.Integer" 	mode="INOUT"/>
+	  <parameter property="id.intItemCierreGesCobCie"	     jdbcType="NUMERIC"       javaType="java.lang.Integer" 	mode="INOUT"/>    
+      <parameter property="id.dtFechaCierre" 			     jdbcType="DATE"          javaType="java.util.Date" 	mode="INOUT"/> 
+      <parameter property="intEmpresaGestor"	             jdbcType="NUMERIC"       javaType="java.lang.Integer" 	mode="INOUT"/>    
+      <parameter property="intPersonaGestor"	             jdbcType="NUMERIC"       javaType="java.lang.Integer" 	mode="INOUT"/>    
+      <parameter property="intItemGestorCobSuc"	             jdbcType="NUMERIC"       javaType="java.lang.Integer" 	mode="INOUT"/>    
+      <parameter property="strObservacion" 			         jdbcType="VARCHAR"       javaType="java.lang.String" 	mode="INOUT"/>
+    </parameterMap>
+    
+    <procedure id="grabar"    parameterMap = "parGestionCobranzaCierre">
+	 {call PKG_GESTIONCOBRANZACIERRE.grabar(?,?,?,?,?,?,?)}  
+    </procedure>
+    <procedure id="obtUltimaFechaGestion"    parameterMap = "resUltFechaCierre">
+	 {call PKG_GESTIONCOBRANZACIERRE.obtUltimaFechaGestion(?)}  
+    </procedure>
+</sqlMap>  

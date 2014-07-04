@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RatioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.Ratio" alias="Ratio"/> 
+	
+  <resultMap id="resRatio" class="Ratio">
+	<result property="id.intPersEmpresaRatio" 		column="pPers_empresaratio"/>
+	<result property="id.intContPeriodoRatio"   	column="pCont_periodoratio"/>
+	<result property="id.intCodigoRatio"   			column="pCont_codigoratio"/>
+    <result property="intParaTipoRatio"      		column="pPara_tiporatio"/>
+    <result property="strNombreRatio"    			column="pRati_nombreratio"/>
+    <result property="strDescripcionRatio"    		column="pRati_descripcionratio"/>
+    <result property="intParaPeriodicidad"    		column="pPara_periodicidad"/>
+    <result property="intParaUnidadMedida"    		column="pPara_unidadmedia"/>
+    <result property="intParaMoneda"    			column="pPara_moneda"/>
+    <result property="tsFechaRegistro"    			column="pRati_fecharegistro"/>
+    <result property="intParaEstado"    			column="pPara_estado"/>
+    <result property="intParaTipoOperacion"   		column="pPara_tipooperacion"/>
+  </resultMap>
+  
+  <parameterMap id="parRatio" class="Ratio">
+	 <parameter property="id.intPersEmpresaRatio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoRatio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intCodigoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoRatio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strNombreRatio"				javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="strDescripcionRatio"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intParaPeriodicidad"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaUnidadMedida"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaMoneda"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intParaEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoOperacion"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoRatio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>      
+  </parameterMap>
+
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoRatio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoRatio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>      
+  </parameterMap>
+     
+  <procedure id="grabar" parameterMap="parRatio">
+	{ call PKG_RATIO.grabar(?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parRatio" >
+	{ call PKG_RATIO.modificar(?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resRatio">
+	{ call PKG_RATIO.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resRatio">
+	{ call PKG_RATIO.getListaPorBusqueda(?,?,?,?,?) }
+  </procedure>
+</sqlMap>

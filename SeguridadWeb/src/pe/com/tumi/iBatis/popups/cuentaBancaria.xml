@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias type="pe.com.tumi.popup.domain.CuentaBancaria" alias="ctabancaria"/>
+	
+	<resultMap id="resultCtaBancaria" class="ctabancaria" >
+	     <result property="intIdPersona"   		column="IDPERSONA" />
+	     <result property="intIdCtaBancaria"    column="IDCTABANCARIA" />
+	     <result property="intIdBanco"      	column="IDBANCO" />
+	     <result property="intIdTipoCuenta"   	column="IDTIPOCUENTA" />
+	     <result property="strNroCtaBancaria"   column="NROCTABANCARIA" />
+	     <result property="intIdMoneda"     	column="IDMONEDA" />
+	     <result property="intAbono"   			column="ABONOS" />
+	     <result property="intDepositaCTS"      column="CTS" />
+	     <result property="intCargos"      		column="CARGOS" />
+	     <result property="intIdEstado"   		column="ESTADO" />
+	     <result property="strObservacion"      column="OBSERVACION" />
+    </resultMap>
+	
+	<parameterMap id="ctabancaria.domain.ctabancaria.prmtGrabarCtaBancaria" class="ctabancaria">
+    	 <parameter property="intIdPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intIdCtaBancaria" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+    	 <parameter property="intIdBanco" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intIdTipoCuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="strNroCtaBancaria"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="intIdMoneda" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intAbono" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intDepositaCTS" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intCargos" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intIdEstado" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="strObservacion" 		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaCtaBancaria" class="ctabancaria">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intIdPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdCtaBancaria" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+
+    <procedure id="ctabancaria.domain.ctabancaria.grabarCtaBancaria" parameterMap="ctabancaria.domain.ctabancaria.prmtGrabarCtaBancaria">
+		{ call PKG_PUBLIC.grabar_cuentabancaria( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="ctabancaria.domain.ctabancaria.getListaCtaBancaria" parameterMap="prmtListaCtaBancaria" resultMap="resultCtaBancaria">
+		{ call PKG_PUBLIC.listar_cuentabancaria( ?, ?, ? ) }  
+    </procedure>
+</sqlMap>  

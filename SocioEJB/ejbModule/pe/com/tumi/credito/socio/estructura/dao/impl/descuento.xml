@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DescuentoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.Descuento" alias="Descuento"/> 
+	
+  <resultMap id="resDescuento" class="Descuento" >
+     <result property="id.intPeriodo"    					column="pPERIODO_N" />
+     <result property="id.intMes"    						column="pMES_N" />
+     <result property="id.intNivel"    						column="pNIVEL_N" />
+     <result property="id.intCodigo"    					column="pCODIGO_N" />
+     <result property="id.intParaTipoArchivoPadronCod"    	column="pTIPO_ARCHIVOPADRON_N" />
+     <result property="id.intParaModalidadCod"      		column="pMODALIDAD_N" />
+     <result property="id.intParaTipoSocio"   				column="pTIPOSOCIO_N" />
+     <result property="id.intItemAdministraPadron"  		column="pITEMADMINISTRAPADRON_N" />
+     <result property="id.intItemDescuento"  				column="pDSTE_ITEM_DSCTOTERCEROS_N" />
+     <result property="strDsteCpto"      					column="pDSTE_CPTO_V" />
+     <result property="strDstePeriodo"    					column="pDSTE_PERIODO_V" />
+     <result property="strDsteNombre"      					column="pDSTE_NOMBRE_V" />     
+     <result property="intMonto"   							column="pMONTO_N" />
+     <result property="strProgSub"   						column="pPROGSUB_V" />
+     <result property="strCodEst"   						column="pCODEST_V" />
+     <result property="strTipoPla"   						column="pTIPOPLA_V" />
+     <result property="strPro"   							column="pPRO_V" />
+     <result property="strCodEje"   						column="pCODEJE_V" />
+     <result property="strLibEle"   						column="pLIBELE_V" />
+     <result property="strNomCpto"   						column="pNOMCPTO_V" />
+  </resultMap>
+  
+  <resultMap id="resColumnasDctoTerceros" class="Descuento" >
+  	 <result property="strDsteNombre"   					column="pDSTE_NOMCPTO" />
+  	 <result property="strDsteCpto"      					column="pDSTE_CPTO_V" />
+     <result property="strNomCpto"   						column="pNOMCPTO_V" />
+  </resultMap>
+  
+  <resultMap id="resFilasDctoTerceros" class="Descuento" >
+	 <result property="intMonto"   							column="pPERIODOCONCAT" />
+     <result property="id.intPeriodo"    					column="pPERIODO_N" />
+     <result property="id.intMes"    						column="pMES_N" />
+  </resultMap>
+  
+  <parameterMap id="parDescuento" class="Descuento">     
+     <parameter property="id.intPeriodo"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intMes"    					javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intNivel"    					javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intCodigo"    					javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intParaTipoArchivoPadronCod" 	javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intParaModalidadCod"  		 	javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intParaTipoSocio"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intItemAdministraPadron" 		javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intItemDescuento" 				javaType="java.lang.Integer"		jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="strDsteCpto"     			 		javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="strDstePeriodo"   		 		javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="strDsteNombre"  		    		javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="intMonto" 						javaType="java.lang.Integer"		jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="strTipoPla"		 				javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="strCodEje"						javaType="java.lang.String" 		jdbcType="VARCHAR"	mode="INOUT"/>
+	 <parameter property="strLibEle"						javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>    
+     <parameter property="strNomCpto" 						javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>  
+     <parameter property="strPro" 							javaType="java.lang.String"			jdbcType="VARCHAR" 	mode="INOUT"/>
+     <parameter property="strProgSub" 						javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="strCodEst" 						javaType="java.lang.String"			jdbcType="VARCHAR"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  	mode="OUT"/>   	 
+   	 <parameter property="intPeriodo"    			javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intMes"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intNivel"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intCodigo"    			javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaTipoArchivoPadronCod" 	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaModalidadCod"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaTipoSocio"   		javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intItemAdministraPadron" 	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+      <parameter property="id.intItemDescuento" 	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+  </parameterMap>
+   
+  <parameterMap id="parPorPeriodoDniMod" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  	mode="OUT"/>   	 
+   	 <parameter property="intPeriodo"    			javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaModalidadCod"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="strLibEle"   				javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorNomCptoPeriodoMesDniMod" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  	mode="OUT"/>
+   	 <parameter property="strDsteCpto"      		javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN" />
+   	 <parameter property="strNomCpto"    			javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN" />
+   	 <parameter property="intPeriodo"    			javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+   	 <parameter property="intMes"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaModalidadCod"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="strLibEle"   				javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN"/>
+  </parameterMap>  
+  
+  <parameterMap id="parPorAdminPadron" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  	mode="OUT"/>   	 
+   	 <parameter property="intPeriodo"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intMes"    					javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intNivel"    					javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intCodigo"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaTipoArchivoPadronCod" 	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaModalidadCod"   		javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaTipoSocio"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intItemAdministraPadron" 		javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="strLibEle" 					javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN" />
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDescuento">
+	{ call PKG_DSCTOTERCERO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDescuento" >
+	{ call PKG_DSCTOTERCERO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resDescuento">
+	{ call PKG_DSCTOTERCERO.getListaPorPk(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaColumnasPorPeriodoModalidadYDni" parameterMap="parPorPeriodoDniMod" resultMap="resColumnasDctoTerceros">
+	{ call PKG_DSCTOTERCERO.getColsPeriodoModalidadDni(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaFilasPorPeriodoModalidadYDni" parameterMap="parPorPeriodoDniMod" resultMap="resFilasDctoTerceros">
+	{ call PKG_DSCTOTERCERO.getFilsPeriodoModalidadDni(?,?,?,?) }  
+  </procedure>  
+  
+  <procedure id="getMontTotPorNomCptoYPeriodo" parameterMap="parPorNomCptoPeriodoMesDniMod" resultMap="resDescuento">
+	{ call PKG_DSCTOTERCERO.getMontTotPorNomCptoYPeriodo(?,?,?,?,?,?,?) }  
+  </procedure> 
+  
+  
+    <procedure id="getListaPorAdminPadron" parameterMap="parPorAdminPadron" resultMap="resDescuento">
+	{ call PKG_DSCTOTERCERO.getListaPorAdminPadron(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure> 
+  
+   
+</sqlMap>  

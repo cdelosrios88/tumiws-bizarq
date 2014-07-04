@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfServCaptacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.configuracion.domain.ConfServCaptacion" alias="ConfServCaptacion"/> 
+	
+  <resultMap id="resConfServCaptacion" class="ConfServCaptacion" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    		column="pItemreqaut_n" />
+     <result property="id.intItemCaptacion"  		column="pItemreqautcap_n" />
+     <result property="intParaTipoCaptacionCod"     column="pPara_tipocaptacion_n_cod" />
+     <result property="intSocioItem"    			column="pSoc_item_n" />
+     <result property="intParaEstadoCod"  			column="pPara_estado_n_cod" />
+     <result property="tsFechaRegistro"      		column="pFecharegistro_d" />
+     <result property="intPersPersonaUsuarioPk"    	column="pIers_personausuario_n_pk" />
+     <result property="tsFechaEliminacion"  		column="pFechaeliminacion_d" />
+     <result property="intPersPersonaEliminaPk"  	column="pIers_personaeliminar_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parConfServCaptacion" class="ConfServCaptacion">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemSolicitud"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemCaptacion" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoCaptacionCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intSocioItem" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion" 		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCaptacion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConfServCaptacion">
+	{ call PKG_CONFCAPTACION.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfServCaptacion" >
+	{ call PKG_CONFCAPTACION.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfServCaptacion">
+	{ call PKG_CONFCAPTACION.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resConfServCaptacion">
+	{ call PKG_CONFCAPTACION.getListaPorCabecera(?,?,?) }  
+  </procedure>  
+</sqlMap>  

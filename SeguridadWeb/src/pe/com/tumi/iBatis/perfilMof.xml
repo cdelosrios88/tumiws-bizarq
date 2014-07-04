@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+	<parameterMap id="prmtListaPerfilMof" class="java.util.Map">
+    	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pCboEstado"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdVersion"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="perfilmof.domain.perfilmof.mapPerfilMof" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pIntIdPerfil" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdVersion" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pStrArcDoc" 				jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdEmpresaUsu"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdUsuario"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pIntIdEstado" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntPerfil"	 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="perfilmof.domain.perfilmof.mapEliminarPerfmof" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pIntIdPerfil" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdVersion" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="perfilmof.domain.perfilmof.mapOrganigrama" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pStrArchivo" 				jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="perfilmof.domain.perfilmof.getListaPerfilMof" parameterMap="prmtListaPerfilMof" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_perfilmof( ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="perfilmof.domain.perfilmof.grabarPerfilMof" parameterMap="perfilmof.domain.perfilmof.mapPerfilMof" >
+		{ call PKG_TUMI.grabar_perfilmof( ?, ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="perfilmof.domain.perfilmof.updateOrganigrama" parameterMap="perfilmof.domain.perfilmof.mapOrganigrama" >
+		{ call PKG_TUMI.update_organigrama( ?, ? ) }
+	</procedure>
+	
+	<procedure id="perfilmof.domain.perfilmof.eliminarPerfilMof" parameterMap="perfilmof.domain.perfilmof.mapEliminarPerfmof" >
+		{ call PKG_TUMI.eliminar_perfilmof( ?, ?, ? ) }  
+	</procedure>
+</sqlMap>

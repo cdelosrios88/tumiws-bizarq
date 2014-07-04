@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EspecificacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.Especificacion" alias="Especificacion"/> 
+	
+  <resultMap id="resEspecificacion" class="Especificacion" >  
+  	 <result property="id.intItemEspecificacion"    column="pCrie_itemespecificacion_n" />
+  	 <result property="id.intItemCartera"      		column="pCrie_itemcartera_n" />
+  	 <result property="intItemPlantillaDetalle"     column="pCrie_itemplantilladet_n" />
+  	 <result property="intParaTipoSbsCod"      		column="pPara_tiposbs_n" />
+  	 <result property="intParaTipoProvisionCod"     column="pPara_tipoprovision_n" />
+  </resultMap>
+  
+  <parameterMap id="parEspecificacion" class="Especificacion">
+     <parameter property="id.intItemEspecificacion"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemCartera"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemPlantillaDetalle"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoSbsCod"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoProvisionCod"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 <parameter property="intItemEspecificacion" 		jdbcType="NUMERIC"		javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intItemCartera" 				jdbcType="NUMERIC"		javaType="java.lang.Integer"   	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIntItemCartera" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 <parameter property="intItemCartera" 				jdbcType="NUMERIC"		javaType="java.lang.Integer"   	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parEspecificacion">
+	{ call PKG_ESPECIFICACION.grabar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEspecificacion" >
+	{ call PKG_ESPECIFICACION.modificar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resEspecificacion">
+	{ call PKG_ESPECIFICACION.getListaPorPk(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorIntItemCartera" parameterMap="parPorIntItemCartera" resultMap="resEspecificacion">
+	{ call PKG_ESPECIFICACION.getListaPorIntItemCartera(?,?) }  
+  </procedure>  
+</sqlMap>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RequisicionDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.RequisicionDetalle" alias="RequisicionDetalle"/> 
+	
+  <resultMap id="resRequisicionDetalle" class="RequisicionDetalle" >
+	<result property="id.intPersEmpresa"  			column="pempresarequisicion" />
+	<result property="id.intItemRequisicion"   		column="pitemrequisicion" />
+	<result property="id.intItemRequisicionDetalle" column="pitemrequisiciondetalle" />
+	<result property="intCantidad"   				column="pcantidad" />
+	<result property="strDetalle"   				column="pdetalle" />
+	<result property="strObservacion"   			column="pobservacion" />
+	<result property="intParaEstado"   				column="pestado" />
+	<result property="intPersEmpresaUsuario"   		column="pempresausuario" />
+	<result property="intPersPersonaUsuario"   		column="ppersonaususario" />
+	<result property="tsFechaRegistro"   			column="pfecharegistro" />
+	<result property="intPersEmpresaAnula"   		column="pempresaanula" />
+	<result property="intPersPersonaAnula"   		column="ppersonaanula" />
+	<result property="tsFechaAnula"   				column="pfechaanula" />
+  </resultMap>
+  
+  <parameterMap id="parRequisicionDetalle" class="RequisicionDetalle">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemRequisicionDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intCantidad"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDetalle"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicionDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorRequisicion" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  <procedure id="grabar" parameterMap="parRequisicionDetalle">
+	{ call PKG_REQUISICIONDETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parRequisicionDetalle" >
+	{ call PKG_REQUISICIONDETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resRequisicionDetalle">
+	{ call PKG_REQUISICIONDETALLE.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorRequisicion" parameterMap="parPorRequisicion" resultMap="resRequisicionDetalle">
+	{ call PKG_REQUISICIONDETALLE.getListaPorRequisicion(?,?,?) }
+  </procedure>
+    
+</sqlMap>

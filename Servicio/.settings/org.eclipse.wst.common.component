@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Servicio">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="ServicioEJB.jar" deploy-path="/" handle="module:/resource/ServicioEJB/ServicioEJB">
+            <dependent-object>Module_1338914355265</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ServicioWeb.war" deploy-path="/" handle="module:/resource/ServicioWeb/ServicioWeb">
+            <dependent-object>Module_1339178401093</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

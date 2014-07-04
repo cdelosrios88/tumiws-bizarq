@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LineaDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.ctacte.domain.Linea"
+		alias="Linea" />
+
+	<resultMap id="resLinea" class="Linea">
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCtacteCod" column="pPARA_TIPOCTACTE_N_COD" />
+		<result property="id.intItemCtacte" column="pITEMCTACTE_N" />
+		<result property="id.intItem" column="pITEM_N" />
+		<result property="bdMonto" column="pMONTO_N" />
+		<result property="intPorcentaje" column="pPORCENTAJE_N" />
+		<result property="intTipoCaptacionAfecto" column="pTIPOCAPTACIONAFECTA_N" />
+	</resultMap>
+
+	<parameterMap id="parLinea" class="Linea">
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdMonto" javaType="java.math.BigDecimal"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intPorcentaje" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTipoCaptacionAfecto" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parLinea">
+		{ call PKG_CTACTELINEA.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parLinea">
+		{ call PKG_CTACTELINEA.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resLinea">
+		{ call PKG_CTACTELINEA.getListaPorPk(?,?,?,?,?) }  
+  </procedure>
+
+</sqlMap>  

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AreaCodigoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.empresa.domain.AreaCodigo" alias="AreaCodigo"/> 
+  
+  <resultMap id="resListaAreaCodigo" class="AreaCodigo" >
+     <result property="id.intIdEmpresaPk" 		column="IDEMPRESA"/>
+     <result property="id.intIdSucursalPk" 	  	column="IDSUCURSAL"/>
+     <result property="id.intIdAreaPk"  		column="IDAREA"/>
+     <result property="id.intIdTipoCodigoPk" 	column="IDTIPOCODIGO"/>
+     <result property="strDescripcion"  		column="DESCRIPCION"/>
+     <result property="intIdEstado"   			column="IDESTADO"/>
+     <result property="strCodigo"   			column="CODIGO"/>
+  </resultMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="pIntPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="pIntIdSucursalPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="pIntIdArea" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="pIntIdAreaCodigo"		jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   </parameterMap>
+ 
+  <parameterMap id="parListaAreaCodigo" class="java.util.Map">
+  	 <parameter property="cursorLista" 		 javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+     <parameter property="pIntIdEmpresaPk"	 jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pIntIdSucursalPk"	 jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>    
+     <parameter property="pIntIdAreaPk"		 jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/> 
+  </parameterMap>
+  
+  <parameterMap id="parAreaCodigo" class="AreaCodigo">
+     <parameter property="id.intIdEmpresaPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdSucursalPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdAreaPk" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intIdTipoCodigoPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="strDescripcion"		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intIdEstado" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strCodigo" 			jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="getAreaPorPK" parameterMap="parPorPK" resultMap="resListaAreaCodigo">
+	{ call PKG_AREACODIGO.getListaPorPK(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaAreaCodigo" parameterMap="parListaAreaCodigo" resultMap="resListaAreaCodigo">
+	{ call PKG_AREACODIGO.getListaAreaCodigo(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="grabar" parameterMap="parAreaCodigo">
+	{ call PKG_AREACODIGO.grabar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAreaCodigo">
+	{ call PKG_AREACODIGO.modificar(?,?,?,?,?,?,?) }
+  </procedure>
+</sqlMap>

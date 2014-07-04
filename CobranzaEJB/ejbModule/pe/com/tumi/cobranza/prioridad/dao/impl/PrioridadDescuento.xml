@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PrioridadDescuentoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.prioridad.domain.PrioridadDescuento" alias="PrioridadDescuento"/> 
+	
+  <resultMap id="resPrioridadDescuento" class="PrioridadDescuento" >
+     <result property="id.intPersEmpresa" 				column="PPERSOEMPRESA" />
+     <result property="id.intItemPrioridadDescuento"    column="PITEMPRIORIDADDESCTO" />
+     <result property="intParaTipoconceptogeneral"      column="PPARATIPOCPTOGNRAL" />
+     <result property="intPrdeOrdenprioridad"       	column="PPRORDENPRIORIDAD" />
+     <result property="intParaEstado"       			column="PPARAESTADO" />
+     <result property="intParaTipomovimiento"       	column="PPARATIPOMOVIMIENTO" />
+     <result property="intParaTipocaptacion"       		column="PPARATIPOCAPTACION" />
+     <result property="intcsocItem"       				column="PCSOCITEM" />
+     <result property="intParaTipoCredito"       		column="PPARATIPOCREDITO" />
+     <result property="intCsocItemCredito"       		column="PCSOITEMCREDITO" />
+     <result property="intParaTipoCtacte"       		column="PPARATIPOCTACTE" />
+     <result property="intCsocItemCtacte"       		column="PCSOITEMCTACTE" />
+     <result property="tsPrdeFechainicio"       		column="PPRDFECHAINICIO" />
+     <result property="tsPrdeFechaFin"       			column="PPRDFECHAFIN" />
+    
+  </resultMap>
+  
+   <parameterMap id="parConceptoGeneral" class="java.util.Map">
+   	 <parameter property="cursorLista" 		        	 javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 		 		 javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intParaTipoconceptogeneral" 	 javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   </parameterMap>
+   
+   <parameterMap id="parTipoCptoGralCtaCptoExp" class="java.util.Map">
+   	 <parameter property="cursorLista" 		        	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 		 		javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intParaTipoconceptogeneral" 	javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intParaTipomovimiento" 	 	javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intParaTipocaptacion" 	 	javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intcsocItem" 	 				javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intParaTipoCredito" 	 		javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intCsocItemCredito" 	 		javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   </parameterMap>
+   
+  <procedure id="getListaPorConceptoGnral" parameterMap="parConceptoGeneral" resultMap="resPrioridadDescuento">
+	{ call PKG_PRIORIDADDESCUENTO.getListaPorConceptoGnral(?,?,?)}  
+  </procedure>
+  
+  <procedure id="getListaPorTipoCptoGralCtaCptoExpediente" parameterMap="parTipoCptoGralCtaCptoExp" resultMap="resPrioridadDescuento">
+	{ call PKG_PRIORIDADDESCUENTO.getPorTipoCptoGralCtaCptoExp(?,?,?,?,?,?,?,?)}  
+  </procedure>
+  
+</sqlMap>  

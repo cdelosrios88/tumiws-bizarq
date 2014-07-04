@@ -1,0 +1,486 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<validator>
+	  <validator-id>validacion</validator-id>
+	  <validator-class>pe.com.tumi.common.validate.Validacion</validator-class>
+	</validator>
+	
+	<validator>
+	  <validator-id>checkvalidemail</validator-id>
+	  <validator-class>pe.com.tumi.common.validate.ValidateEmail</validator-class>
+	</validator>
+	 
+	 <managed-bean>   
+	  <managed-bean-name>mbTimePicker</managed-bean-name>   
+	  <managed-bean-class>pe.com.tumi.empresa.domain.TimePicker</managed-bean-class>   
+	  <managed-bean-scope>request</managed-bean-scope>  
+	 </managed-bean>
+	 
+	 <managed-bean>   
+	  <managed-bean-name>fileUploadController</managed-bean-name>   
+	  <managed-bean-class>pe.com.tumi.file.controller.FileUploadBean</managed-bean-class>   
+	  <managed-bean-scope>request</managed-bean-scope>  
+	 </managed-bean>
+	
+	<!-- Reglas de Navegacion de Seguridad Sistema Factoring-->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>inicio</from-outcome>
+			<to-view-id>/pages/index.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/portal/*</from-view-id>
+		<navigation-case>
+			<from-outcome>portal.login</from-outcome>
+			<to-view-id>/portal/autentica/login.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>portal.empresa</from-outcome>
+			<to-view-id>/portal/autentica/empresa.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>portal.principal</from-outcome>
+			<to-view-id>/portal/autoriza/principal.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>portal.cambioclave</from-outcome>
+			<to-view-id>/portal/adenda/usuario.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>portal.modulo</from-outcome>
+			<to-view-id>/portal/autoriza/modulo.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>login2</from-outcome>
+			<to-view-id>/pages/login2.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>monitor</from-outcome>
+			<to-view-id>/pages/monitor.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>loginMonitor</from-outcome>
+			<to-view-id>/pages/loginMonitor.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>bienvenida</from-outcome>
+			<to-view-id>/pages/bienvenida.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+<!--*******************************************************************-->
+<!--  Copyright       : <Cooperativa Tumi >                            -->
+<!--  Autor           : Eyder Uceda Lopez							   -->
+<!--  Fecha creación  : 22/08/2011                                     -->
+<!--  Descripción     : Agregar la navegavilidad de las pantallas .jsp -->
+<!--  Referencia      : Requerimiento XXXXXX                           -->
+<!--****************************************************************** -->
+
+
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminMenu</from-outcome>
+			<to-view-id>/pages/Monitor/adminMenu.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>administracionUsuarioPanel</from-outcome>
+			<to-view-id>/pages/Monitor/administracionUsuarioPanel.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		
+    <navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>empresa</from-outcome>
+			<to-view-id>/pages/Monitor/empresa.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>registroPc</from-outcome>
+			<to-view-id>/pages/Monitor/registroPc.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>reglamentosPoliticas</from-outcome>
+			<to-view-id>/pages/Monitor/reglamentosPoliticas.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>usuarioPerfil</from-outcome>
+			<to-view-id>/pages/Monitor/usuario.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>horarioIngreso</from-outcome>
+			<to-view-id>/pages/Monitor/horarioIngreso.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>admFormDoc</from-outcome>
+			<to-view-id>/pages/Monitor/admFormDoc.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>accesosEspeciales</from-outcome>
+			<to-view-id>/pages/Monitor/accesosEspeciales.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>perfilMof</from-outcome>
+			<to-view-id>/pages/Monitor/perfilMof.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>auditoriaSist</from-outcome>
+			<to-view-id>/pages/Monitor/auditoriaSist.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>auditoria</from-outcome>
+			<to-view-id>/pages/Monitor/auditoria.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+<!-- CREDITOS Tumi 01022012 -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>hojaPlaneamiento</from-outcome>
+			<to-view-id>/pages/Creditos/hojaPlaneamiento.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>estructuraOrganica</from-outcome>
+			<to-view-id>/pages/Creditos/estructuraOrganica.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>aportaciones</from-outcome>
+			<to-view-id>/pages/Creditos/aportaciones.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>mantCuentas</from-outcome>
+			<to-view-id>/pages/Creditos/mantCuentas.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+<!-- POPUPS Tumi 01022012 -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>beneficiario</from-outcome>
+			<to-view-id>/pages/popups/beneficiario.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>domicilio</from-outcome>
+			<to-view-id>/pages/popups/domicilio.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>perJuriConve</from-outcome>
+			<to-view-id>/pages/Creditos/perJuriConve.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>representanteLegal</from-outcome>
+			<to-view-id>/pages/Creditos/representanteLegal.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>cuentaBancaria</from-outcome>
+			<to-view-id>/pages/Creditos/cuentaBancaria.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+<!-- <Final> Coorperativa Tumi 201108191108 -->
+
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>cambioContrasenha</from-outcome>
+			<to-view-id>/pages/administracion/cambioContrasenha.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>usuario</from-outcome>
+			<to-view-id>/pages/administracion/usuario.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>sistema</from-outcome>
+			<to-view-id>/pages/administracion/sistema.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>parametro</from-outcome>
+			<to-view-id>/pages/administracion/parametro.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>opcionMenu</from-outcome>
+			<to-view-id>/pages/administracion/opcionMenu.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>rol</from-outcome>
+			<to-view-id>/pages/administracion/rol.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>rol_opcion</from-outcome>
+			<to-view-id>/pages/administracion/rolOpcionMenu.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>cambio</from-outcome>
+			<to-view-id>/pages/administracion/cambio.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>calendario</from-outcome>
+			<to-view-id>/pages/administracion/calendario.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Reglas de Navegacion Front End -->
+	<!-- Editar Certificado -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>editarCertificado</from-outcome> 
+			<to-view-id>/pages/certificado/editarCertificado.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Listar Certificados --> 
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>buscarCertificado</from-outcome>
+			<to-view-id>/pages/certificado/certificadosap.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- Carga Documento  -->	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>carga</from-outcome>
+			<to-view-id>/pages/certificado/cargaDocumentos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- Exportar Certificado  -->		
+	<navigation-rule> 
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>exportarCertificado</from-outcome>
+			<to-view-id>/pages/certificado/exportarCertificado.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Listados de Seguridad -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>listaUsuarioInactivo</from-outcome>
+			<to-view-id>/pages/listados/usuariosInactivos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>listaOpcionPerfil</from-outcome>
+			<to-view-id>/pages/listados/usuariosPerfilMenu.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>listaUsuarioPerfil</from-outcome>
+			<to-view-id>/pages/listados/usuariosPerfil.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>listaUsuarioLog</from-outcome>
+			<to-view-id>/pages/listados/usuariosLogueados.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Permiso Horarios -->
+	<navigation-rule>
+		<from-view-id>/pages/permiso/horario/*</from-view-id>
+		<navigation-case>
+			<from-outcome>horarios.horarios</from-outcome>
+			<to-view-id>/pages/permiso/horario/horario.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>horarioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.seguridad.permiso.controller.HorarioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Permiso Computadoras -->
+	<navigation-rule>
+		<from-view-id>/pages/permiso/computadora/*</from-view-id>
+		<navigation-case>
+			<from-outcome>computadoras.computadoras</from-outcome>
+			<to-view-id>/pages/permiso/computadora/computadora.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>computadoraController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.seguridad.permiso.controller.ComputadoraController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Permiso Acceso Especiales -->
+	<navigation-rule>
+		<from-view-id>/pages/permiso/acceso/*</from-view-id>
+		<navigation-case>
+			<from-outcome>accesos.accesoEspecial</from-outcome>
+			<to-view-id>/pages/permiso/acceso/acceso.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>accesoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.seguridad.permiso.controller.AccesoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--Convertidor Montos -->
+	
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+	
+	<managed-bean>
+		<managed-bean-name>estadoCuentaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.seguridad.controller.EstadoCuentaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<navigation-rule>
+		<from-view-id>/pages/estadoCuenta/estadoCuenta.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>estadoCuenta.estadoCuenta</from-outcome>
+			<to-view-id>/pages/estadoCuenta/estadoCuenta.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>		
+</faces-config>

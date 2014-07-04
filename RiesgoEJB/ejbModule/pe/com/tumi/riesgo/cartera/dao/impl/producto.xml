@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ProductoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.Producto" alias="Producto"/> 
+	
+  <resultMap id="resProducto" class="Producto" >
+  	<result property="id.intItemCartera"      			column="pCrie_itemcartera_n" />
+  	<result property="id.intParaTipoOperacionCod"      	column="pPara_tipooperacion_n_cod" />
+  	<result property="id.intParaTipoConceptoCod"      	column="pPara_tipoconcepto_n_cod" />
+  	<result property="intParaEstadoCod"      			column="pPara_estado_n_cod" />
+  </resultMap>
+  
+  <parameterMap id="parProducto" class="Producto">
+     <parameter property="id.intItemCartera"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoOperacionCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoConceptoCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>     
+ </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemCartera" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoOperacionCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoConceptoCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIntItemCartera" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemCartera" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parProducto">
+	{ call PKG_PRODUCTO.grabar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parProducto" >
+	{ call PKG_PRODUCTO.modificar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resProducto">
+	{ call PKG_PRODUCTO.getListaPorPk(?,?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorIntItemCartera" parameterMap="parPorIntItemCartera" resultMap="resProducto">
+	{ call PKG_PRODUCTO.getListaPorIntItemCartera(?,?) }  
+  </procedure>
+</sqlMap>

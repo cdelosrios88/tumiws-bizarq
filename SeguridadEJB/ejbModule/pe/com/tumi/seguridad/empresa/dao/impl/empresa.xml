@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EmpresaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.empresa.domain.Empresa" alias="Empresa"/> 
+	
+  <resultMap id="resEmpresa" class="Empresa" >
+     <result property="intIdEmpresa"      		column="pPERS_EMPRESA_N" />
+     <result property="intTipoConformacionCod"  column="pTIPOCONFORMACION_N_COD" />
+     <result property="dtTiempoSesion"      	column="pTIEMPOSESION_D" />
+     <result property="dtAlertaSesion"   		column="pALERTASESION_D" />
+     <result property="intVigenciaClaves"   	column="pVIGENCIACLAVES_N" />
+     <result property="intAlertaCaducidad"      column="pALERTACADUCIDAD_N" />
+     <result property="intIntentosIngreso"    	column="pINTENTOSINGRESO_N" />
+     <result property="intControlHoraIngreso"   column="pCONTROLHORAINGRESO_N" />
+     <result property="intControlRegistro"   	column="pCONTROLREGISTRO_N" />
+     <result property="intControlCambioClave"   column="pCONTROLCAMBIOCLAVE_N" />
+     <result property="intEstadoCod"   			column="pESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parEmpresa" class="Empresa">
+     <parameter property="intIdEmpresa"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intTipoConformacionCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strTiempoSesion" 			jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="strAlertaSesion" 			jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intVigenciaClaves" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intAlertaCaducidad"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intIntentosIngreso"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intControlHoraIngreso" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intControlRegistro" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intControlCambioClave" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parEmpresa">
+	{ call PKG_EMPRESA.grabar(?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEmpresa" >
+	{ call PKG_EMPRESA.modificar(?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resEmpresa">
+	{ call PKG_EMPRESA.getListaPorPK(?,?) }  
+  </procedure>
+    
+</sqlMap>  

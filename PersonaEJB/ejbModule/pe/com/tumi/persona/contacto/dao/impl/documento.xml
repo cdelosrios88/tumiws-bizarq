@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.contacto.domain.Documento" alias="Documento"/> 
+	
+  <resultMap id="resDocumento" class="Documento" >
+     <result property="id.intIdPersona"      		column="pPERSONA_N" />
+     <result property="id.intItemDocumento"    		column="pITEMDOCUMENTO_N" />
+     <result property="intTipoIdentidadCod"      	column="pTIPOIDENTIDAD_N_COD" />
+     <result property="strNumeroIdentidad"   		column="pNUMEROIDENTIDAD_V" />
+     <result property="intEstadoCod"   				column="pESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parDocumento" class="Documento">
+     <parameter property="id.intIdPersona"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemDocumento"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intTipoIdentidadCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="strNumeroIdentidad" 		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDocumento" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="PorIdPersonaYTipoIdentidad" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intTipoIdentidad" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDocumento">
+	{ call PKG_DOCUMENTO.grabar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDocumento" >
+	{ call PKG_DOCUMENTO.modificar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resDocumento">
+	{ call PKG_DOCUMENTO.getListaPorPK(?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona" resultMap="resDocumento">
+	{ call PKG_DOCUMENTO.getListaPorIdPersona(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorIdPersonaYTipoIdent" parameterMap="PorIdPersonaYTipoIdentidad" resultMap="resDocumento">
+	{ call PKG_DOCUMENTO.getListaPorIdPersonaYTipoIdent(?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

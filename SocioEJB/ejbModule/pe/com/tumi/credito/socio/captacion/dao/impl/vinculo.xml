@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="VinculoDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.captacion.domain.Vinculo"
+		alias="Vinculo" />
+
+	<resultMap id="resVinculo" class="Vinculo">
+		<result property="id.intEmpresaPk" 			column="pPERS_EMPRESA_N_PK" />
+		<result property="id.paraTipoCaptacionCod" 	column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" 				column="pITEM_N" />
+		<result property="id.paraTipoVinculoCod" 	column="pPARA_TIPOVINCULO_N" />
+		<result property="id.intItemVinculo" 		column="pITEMVINCULO_N" />
+		<result property="intParaTipoCuotaCod" 		column="pPARA_TIPOCUOTA_N_COD" />
+		<result property="intCuotaCancelada" 		column="pCUOTACANCELADA_N" />
+		<result property="bdBeneficio" 				column="pBENEFICIO_N" />
+		<result property="bdGastoAdministrativo" 	column="pGASTOADMINISTRATIVO_N" />
+		<result property="intAportacion" 			column="pAPORTACION_N" />
+		<result property="intInteres" 				column="pINTERES_N" />
+		<result property="intPenalidad" 			column="pPENALIDAD_N" />
+		<result property="intParaMotivo" 			column="pMOTIVO_N" />
+		<result property="intParaMotivo" 			column="pMOTIVO_N" />
+		<result property="intEstadoCod" 			column="pESTADO_N" />
+	</resultMap>
+
+	<parameterMap id="parVinculo" class="Vinculo">
+		<parameter property="id.intEmpresaPk" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.paraTipoCaptacionCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.paraTipoVinculoCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemVinculo" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoCuotaCod" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intCuotaCancelada" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdBeneficio" 				javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdGastoAdministrativo" 	javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intAportacion" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intInteres" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intPenalidad" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaMotivo" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intEstadoCod" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="paraTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="paraTipoVinculoCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemVinculo" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="par" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPKCaptacion" class="java.util.Map">
+		<parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="paraTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parVinculoEliminar" class="java.util.Map">
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="strPkVinculo" 				javaType="java.lang.String"  jdbcType="VARCHAR" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parVinculo">
+		{ call PKG_CONFCAPTREQVINCULO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	</procedure>
+
+	<procedure id="modificar" parameterMap="parVinculo">
+		{ call PKG_CONFCAPTREQVINCULO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	</procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resVinculo">
+		{ call PKG_CONFCAPTREQVINCULO.getListaPorPK(?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPkCaptacion" parameterMap="parPorPKCaptacion" resultMap="resVinculo">
+		{ call PKG_CONFCAPTREQVINCULO.getListaPorPkCaptacion(?,?,?,?) }
+	</procedure>
+
+	<procedure id="getLista" parameterMap="par" resultMap="resVinculo">
+		{ call PKG_CONFCAPTREQVINCULO.getLista(?) }
+  </procedure>
+
+	<procedure id="eliminar" parameterMap="parVinculoEliminar">
+		{ call PKG_CONFCAPTREQVINCULO.eliminar(?,?,?,?) }
+  </procedure>
+
+</sqlMap>  

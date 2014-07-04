@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SucursalZonalDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.empresa.domain.Sucursal" alias="SucursalZonal"/> 
+	
+  <resultMap id="resSucursalZonal" class="SucursalZonal" >
+     <result property="id.intPersEmpresaPk"      			column="psPers_empresa_n_pk" />
+     <result property="id.intIdSucursal"  					column="psIdSucursal_n" />
+     <result property="intPersPersonaPk"   					column="psPers_persona_n_pk" />
+     <result property="intIdTipoSucursal"   				column="psIdTipoSucursal_n" />
+     <!--result property=""   								column="psIdZonal_n" /-->
+     <result property="intIdEstado"    						column="psIdEstado_n" />
+	 <result property="zonal.id.intPersEmpresaPk"   		column="pzPers_empresa_n_pk" />
+     <result property="zonal.id.intIdzonal"  				column="pzIdzonal_n" />
+     <result property="zonal.intPersPersonaPk" 				column="pzPers_persona_n_pk" />
+     <result property="zonal.intIdTipoZonal"   				column="pzIdtipozonal_n" />
+     <result property="zonal.intPersPersonaResponsablePk"   column="pzPers_personaresponsable_n_pk" />
+     <!--result property="zonal."    						column="pzIdsucursal_n" /-->
+     <result property="zonal.intIdEstado"    				column="pzIdestado_n" />
+  </resultMap>
+  
+  <parameterMap id="parPorPkEmpresa" class="java.util.Map">
+  	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa"		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkEmpresaYTipoSucursal" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdTipoSucursal"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkEmpresaYPkZonalTipoSucursal" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdZonal"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdTipoSucursal"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="getListaPorPkEmp" parameterMap="parPorPkEmpresa"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorPkEmp(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkEmpYTipo" parameterMap="parPorPkEmpresaYTipoSucursal"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorPkEmpYTipo(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkEmpYTipoDeAne" parameterMap="parPorPkEmpresaYTipoSucursal"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorPkEmpYTipoDeAne(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkEmpYTipoDeLib" parameterMap="parPorPkEmpresaYTipoSucursal"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorPkEmpYTipoDeLib(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorEmpYZonalYTipo" parameterMap="parPorPkEmpresaYPkZonalTipoSucursal"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorEmpYZonalYTipo(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorEmpYZonalYTipoDeAne" parameterMap="parPorPkEmpresaYPkZonalTipoSucursal"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorEmpYZonalYTipoDeAne(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorEmpYZonalYTipoDeLib" parameterMap="parPorPkEmpresaYPkZonalTipoSucursal"  resultMap="resSucursalZonal">
+	{ call PKG_SUCURSAL_ZONAL.getListaPorEmpYZonalYTipoDeLib(?,?,?,?) }
+  </procedure>
+</sqlMap>

@@ -1,0 +1,4 @@
+
+if(document.images){var expandir=new Image();expandir.src=strContextPath+'/remoting/?parametro=treeExpandir.gif';var colapsar=new Image();colapsar.src=strContextPath+'/remoting/?parametro=treeColapsar.gif';}
+j$.irModulo=function(control,pStrPath,pStrPagina){var srtUrl="";var strPathOrigen="path="+strContextPath;var strTicket="ticket="+strIdTicket;var strPathDestino=pStrPath+'/InitialCheck?';var strPagina="pagina="+pStrPagina;try{srtUrl=srtUrl+strPathDestino+strTicket+'&'+strPagina+'&'+strPathOrigen;control.href=srtUrl;return true;}catch(e){alert('Script irModulo msg: '+e.message)}}
+j$.tree=function(idTree,id){var oTabla=document.getElementById(idTree+'Tabla'+id);var oImagen=document.getElementById(idTree+'Imagen'+id);try{if(oTabla.style.display=='none'){oTabla.style.display='block';oImagen.src=colapsar.src;}else{oTabla.style.display='none';oImagen.src=expandir.src;}}catch(e){alert('Script tree msg: '+e.message)}}

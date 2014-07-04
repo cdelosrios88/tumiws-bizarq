@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="PresupuestoDaoIbatis">
+<typeAlias type="pe.com.tumi.presupuesto.core.domain.Presupuesto" alias="Presupuesto"/> 
+
+	<resultMap id="resPresupuesto" class="Presupuesto" >
+	     <result property="id.intEmpresaPresupuestoPk"  column="pPERS_EMPRESAPRESUPUESTO_N_PK" />
+	     <result property="id.intPeriodoPresupuesto"    column="pPRES_PERIODOPRESUPUESTO_N" />
+	     <result property="id.intMesPresupuesto"    	column="pPRES_MESPRESUPUESTO_N" />
+	     <result property="id.intEmpresaCuentaPk"    	column="pPERS_EMPRESACUENTA_N_PK" />
+	     <result property="id.intPeriodoCuenta"    		column="pCONT_PERIODOCUENTA_N" />
+	     <result property="id.strNumeroCuenta"     		column="pCONT_NUMEROCUENTA_V" />
+	     <result property="id.intEmpresaSucursalPk"     column="pPERS_EMPRESASUCURSAL_N_PK" />
+	     <result property="id.intIdSucursal"    		column="pSUCU_IDSUCURSAL_N_PK" />
+	     <result property="id.intIdSubSucursal"     	column="pSUDE_IDSUBSUCURSAL_N_PK" />
+	     <result property="bdMontoProyecSoles"     		column="pPRDE_MONTOPROYSOLES_N" />
+	     <result property="bdMontoProyecExtranjero"     column="pPRDE_MONTOPROYEXTRANJERO_N" />
+	     <result property="bdMontoEjecSoles"     		column="pPRDE_MONTOEJECSOLES_N" />
+	     <result property="bdMontoEjecExtranjero"     	column="pPRDE_MONTOEJECEXTRANJERO_N" />
+	     <result property="tsFechaRegistro"    			column="pPRES_FECHAREGISTRO_D" />
+	     <result property="intParaEstadoCierre"    		column="pPARA_ESTADOCIERRE_N_COD" />
+	     <result property="intEmpresaUsuarioPk"     	column="pPERS_EMPRESAUSUARIO_N_PK" />
+	     <result property="intPersonaUsuarioPk"     	column="pPERS_PERSONAUSUARIO_N_PK" />
+	</resultMap>
+	
+	<resultMap id="resMesAnioBase" class="Presupuesto" >
+	     <result property="id.intMesPresupuesto"    	column="pPRES_MESPRESUPUESTO_N" />
+	</resultMap>
+	
+	<resultMap id="resPstoDescCtaYSubSuc" class="Presupuesto" >
+	     <result property="id.intEmpresaPresupuestoPk"  column="pPERS_EMPRESAPRESUPUESTO_N_PK" />
+	     <result property="id.intPeriodoPresupuesto"    column="pPRES_PERIODOPRESUPUESTO_N" />
+	     <result property="id.intMesPresupuesto"    	column="pPRES_MESPRESUPUESTO_N" />
+	     <result property="id.intEmpresaCuentaPk"    	column="pPERS_EMPRESACUENTA_N_PK" />
+	     <result property="id.intPeriodoCuenta"    		column="pCONT_PERIODOCUENTA_N" />
+	     <result property="id.strNumeroCuenta"     		column="pCONT_NUMEROCUENTA_V" />
+	     <result property="id.intEmpresaSucursalPk"     column="pPERS_EMPRESASUCURSAL_N_PK" />
+	     <result property="id.intIdSucursal"    		column="pSUCU_IDSUCURSAL_N_PK" />
+	     <result property="id.intIdSubSucursal"     	column="pSUDE_IDSUBSUCURSAL_N_PK" />
+	     <result property="bdMontoProyecSoles"     		column="pPRDE_MONTOPROYSOLES_N" />
+	     <result property="bdMontoProyecExtranjero"     column="pPRDE_MONTOPROYEXTRANJERO_N" />
+	     <result property="bdMontoEjecSoles"     		column="pPRDE_MONTOEJECSOLES_N" />
+	     <result property="bdMontoEjecExtranjero"     	column="pPRDE_MONTOEJECEXTRANJERO_N" />
+	     <result property="tsFechaRegistro"    			column="pPRES_FECHAREGISTRO_D" />
+	     <result property="intParaEstadoCierre"    		column="pPARA_ESTADOCIERRE_N_COD" />
+	     <result property="intEmpresaUsuarioPk"     	column="pPERS_EMPRESAUSUARIO_N_PK" />
+	     <result property="intPersonaUsuarioPk"     	column="pPERS_PERSONAUSUARIO_N_PK" />
+	     <result property="strDescripcionCuenta"      	column="pPLCU_DESCRIPCION_V"/>
+	     <result property="strDescripcionSubSucursal"   column="pSUDE_DESCRIPCION_V"/>
+	</resultMap>
+	
+	<parameterMap id="parPorPresupuesto" class="Presupuesto">
+	   	<parameter property="id.intEmpresaPresupuestoPk"	javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intPeriodoPresupuesto" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intMesPresupuesto" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>	   	
+	   	<parameter property="id.intEmpresaCuentaPk" 		javaType="java.lang.Integer" 		jdbcType="NUMERIC"     mode="INOUT"/>
+	   	<parameter property="id.intPeriodoCuenta" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="id.strNumeroCuenta" 			javaType="java.lang.String" 		jdbcType="VARCHAR" 	   mode="INOUT"/>
+	    <parameter property="id.intEmpresaSucursalPk" 		javaType="java.lang.Integer" 		jdbcType="NUMERIC"     mode="INOUT"/>
+	   	<parameter property="id.intIdSucursal" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="id.intIdSubSucursal" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="bdMontoProyecSoles" 			javaType="java.math.BigDecimal"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="bdMontoProyecExtranjero" 		javaType="java.math.BigDecimal"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="bdMontoEjecSoles" 				javaType="java.math.BigDecimal"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="bdMontoEjecExtranjero" 		javaType="java.math.BigDecimal"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="tsFechaRegistro" 				javaType="java.sql.Timestamp" 		jdbcType="TIMESTAMP"   mode="INOUT"/>
+	   	<parameter property="intParaEstadoCierre" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="intEmpresaUsuarioPk" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="intPersonaUsuarioPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+	   	<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	   	<parameter property="intEmpresaPresupuestoPk"		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+		<parameter property="intPeriodoPresupuesto" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	<parameter property="intMesPresupuesto" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>	   	
+	   	<parameter property="intEmpresaCuentaPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	   	<parameter property="intPeriodoCuenta" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="strNumeroCuenta" 				javaType="java.lang.String" 		jdbcType="VARCHAR" 	   	mode="IN"/>
+	    <parameter property="intEmpresaSucursalPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	   	<parameter property="intIdSucursal" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="intIdSubSucursal" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   	mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parPorRangoFechas" class="java.util.Map">
+	   	<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	   	<parameter property="intEmpresaPresupuestoPk"		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+		<parameter property="intPeriodoPresupuesto" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	<parameter property="intMesDesde" 					javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>	   	
+	   	<parameter property="intMesHasta" 					javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parPorPresupuestoId" class="IndicadorId">
+	   	<parameter property="intEmpresaPresupuestoPk"		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+		<parameter property="intPeriodoPresupuesto" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	<parameter property="intMesPresupuesto" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>	   	
+	   	<parameter property="intEmpresaCuentaPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	   	<parameter property="intPeriodoCuenta" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="strNumeroCuenta" 				javaType="java.lang.String" 		jdbcType="VARCHAR" 	   	mode="IN"/>
+	    <parameter property="intEmpresaSucursalPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	   	<parameter property="intIdSucursal" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="intIdSubSucursal" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   	mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parPorPkYTipoCtaBusq" class="java.util.Map">
+	   	<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	   	<parameter property="intEmpresaPresupuestoPk"		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+		<parameter property="intPeriodoPresupuesto" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	<parameter property="intMesPresupuesto" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>	   	
+	   	<parameter property="intEmpresaCuentaPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	   	<parameter property="intPeriodoCuenta" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="strNumeroCuenta" 				javaType="java.lang.String" 		jdbcType="VARCHAR" 	   	mode="IN"/>
+	    <parameter property="intEmpresaSucursalPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	   	<parameter property="intIdSucursal" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="intIdSubSucursal" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   	mode="IN"/>
+  		<parameter property="intTipoCuentaBusq" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   	mode="IN"/>
+	</parameterMap>
+
+  	<procedure id="grabar" parameterMap="parPorPresupuesto">
+		{ call PKG_PRESUPUESTO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  
+  	<procedure id="modificar" parameterMap="parPorPresupuesto" >
+		{ call PKG_PRESUPUESTO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  
+  	<procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resPresupuesto">
+		{ call PKG_PRESUPUESTO.getListaPorPK(?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+	<procedure id="getListaPresupuestoPorFiltros" parameterMap="parPorPkYTipoCtaBusq" resultMap="resPstoDescCtaYSubSuc">
+		{ call PKG_PRESUPUESTO.getListaPorFiltros(?,?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getListaPorRangoFechas" parameterMap="parPorRangoFechas" resultMap="resPresupuesto">
+		{ call PKG_PRESUPUESTO.getListaPorRangoFechas(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getMesesDelAnioBase" parameterMap="parPorRangoFechas" resultMap="resMesAnioBase">
+		{ call PKG_PRESUPUESTO.getMesesDelAnioBase(?,?,?,?,?)}  
+  	</procedure>
+  	
+	<procedure id="eliminar" parameterMap="parPorPresupuestoId">
+		{ call PKG_PRESUPUESTO.eliminar(?,?,?,?,?,?,?,?,?) }  
+	</procedure>
+	
+	<procedure id="getLstPstoAnioBase" parameterMap="parPorRangoFechas" resultMap="resPresupuesto">
+		{ call PKG_PRESUPUESTO.getLstPstoAnioBase(?,?,?,?,?)}  
+  	</procedure>
+</sqlMap>

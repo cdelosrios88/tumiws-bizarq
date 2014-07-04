@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TarifaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.general.domain.Tarifa" alias="Tarifa"/> 
+	
+  <resultMap id="resTarifa" class="Tarifa" >
+     <result property="id.intPersEmpresaTarifa"     column="pPers_empresatarifa_n_pk"/>
+     <result property="id.intParaTipoTarifaCod"    	column="pPara_tipotarifa_n_cod"/>
+     <result property="id.dtParaTarifaDesde" 		column="pPARA_TARIFADESDE_D"/>
+     <result property="dtTarifaHasta"      			column="pTarifahasta_d"/>
+     <result property="strComentario"    			column="pComentario_v"/>
+     <result property="intParaFormaAplicar"      	column="pPara_formaaplicar_n"/>
+     <result property="bdValor"   					column="pValor_n"/>
+     <result property="tsFechaRegistro"    			column="pFecharegistro"/>
+     <result property="intPersEmpresaUsuario"      	column="pPers_empresausuario_n_pk"/>
+     <result property="intPersPersonaUsuario"   	column="pers_personausuario_n_pk"/>
+  </resultMap>
+  
+  <parameterMap id="parTarifa" class="Tarifa">
+     <parameter property="id.intPersEmpresaTarifa"		jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="id.intParaTipoTarifaCod"		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="id.dtParaTarifaDesde"			jdbcType="DATE"   		javaType="java.util.Date" 			mode="INOUT"/>
+     <parameter property="dtTarifaHasta" 				jdbcType="DATE"   		javaType="java.util.Date" 			mode="INOUT"/>  
+	 <parameter property="strComentario"				jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="INOUT"/>    
+     <parameter property="intParaFormaAplicar" 			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>  
+     <parameter property="bdValor" 						jdbcType="NUMERIC" 		javaType="java.math.BigDecimal"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				jdbcType="TIMESTAMP" 	javaType="java.sql.Timestamp" 		mode="INOUT"/>    
+     <parameter property="intPersEmpresaUsuario" 		jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>  
+     <parameter property="intPersPersonaUsuario" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+   	 <parameter property="pIntPersEmpresaTarifa"	jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="IN"/>
+	 <parameter property="pIntParaTipoTarifaCod"	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>    
+     <parameter property="pDtParaTarifaDesde"		jdbcType="DATE"   		javaType="java.util.Date" 			mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+	 <parameter property="pIntParaTipoTarifaCod"	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parTarifa">
+	{ call PKG_TARIFA.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+
+  <procedure id="modificar" parameterMap="parTarifa" >
+	{ call PKG_TARIFA.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resTarifa">
+	{ call PKG_TARIFA.getListaPorPK(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resTarifa">
+	{ call PKG_TARIFA.getBusqueda(?,?) }  
+  </procedure>
+  
+</sqlMap>  

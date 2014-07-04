@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaCierreDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.CuentaCierre" alias="CuentaCierre"/> 
+	
+  <resultMap id="resCuentaCierre" class="CuentaCierre">
+	<result property="id.intPersEmpresaCierre" 		column="pPers_empresacierre"/>
+	<result property="id.intContPeriodoCierre"   	column="pCont_periodocierre"/>
+	<result property="id.intParaTipoCierre"   		column="pPara_tipocierre"/>
+	<result property="id.intContCodigoCierre"   	column="pCont_codigocierre"/>
+    <result property="strDescripcion"      			column="pCuci_descripcion"/>
+    <result property="intPersEmpresaCuenta"    		column="pPers_empresacuenta"/>
+    <result property="intContPeriodoCuenta"    		column="pCont_periodocuenta"/>
+    <result property="strContNumeroCuenta"    		column="pCont_numerocuenta"/>
+    <result property="tsFechaRegistro"    			column="pCuci_fecharegistro"/>
+    <result property="intPersEmpresaUsuario"    	column="pPers_empresausuario"/>
+    <result property="intPersPersonaUsuario"    	column="pPers_personausuario"/>
+    <result property="intParaEstado"    			column="pPara_estado"/>
+    <result property="tsFechaEliminacion"    		column="pCuci_fechaeliminacion"/>
+  </resultMap>
+  
+  <parameterMap id="parCuentaCierre" class="CuentaCierre">
+	 <parameter property="id.intPersEmpresaCierre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoCierre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContCodigoCierre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strDescripcion"				javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strContNumeroCuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>     
+  </parameterMap>
+
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intContPeriodoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strDescripcion"				javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+     <parameter property="strContNumeroCuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/> 
+     <parameter property="intParaEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>      
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parCuentaCierre">
+	{ call PKG_CUENTACIERRE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaCierre" >
+	{ call PKG_CUENTACIERRE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCuentaCierre">
+	{ call PKG_CUENTACIERRE.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resCuentaCierre">
+	{ call PKG_CUENTACIERRE.getListaPorBusqueda(?,?,?,?,?,?) }
+  </procedure> 	
+</sqlMap>

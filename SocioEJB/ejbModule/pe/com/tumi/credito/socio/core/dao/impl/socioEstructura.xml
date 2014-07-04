@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SocioEstructuraDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.core.domain.SocioEstructura" alias="SocioEstructura"/> 
+	
+  <resultMap id="resSocioEstructura" class="SocioEstructura" >
+     <result property="id.intIdPersona"    			column="pPersona_n_pk" />
+     <result property="id.intIdEmpresa"    			column="pEmpresa_n_pk" />
+     <result property="id.intItemSocioEstructura"   column="pItemsocioestructura_n" />
+     <result property="intEmpresaSucUsuario"    	column="pEmpresasucusuario_n_pk" />
+     <result property="intIdSucursalUsuario"       	column="pIdsucursalusuario_n_pk" />
+     <result property="intIdSubSucursalUsuario"     column="pIdsubsucursalusuario_n_pk" />
+     <result property="intEmpresaSucAdministra"    	column="pEmpresasucadministra_n_pk" />
+     <result property="intIdSucursalAdministra"    	column="pIdsucursaladministra_n_pk" />
+     <result property="intIdSubsucurAdministra"    	column="pIdsubsucursaladministra_n_pk" />
+     <result property="intTipoSocio"    			column="pTIPOSOCIO_N_COD" />
+     <result property="intModalidad"    			column="pMODALIDAD_N_COD" />
+     <result property="intNivel"    				column="pNivel_n" />
+     <result property="intCodigo"    				column="pCodigo_n" />
+     <result property="strCodigoPlanilla"    		column="pCodigoplanilla_v" />
+     <result property="intTipoEstructura"    		column="pTipoestructura_n_cod" />
+     <result property="dtFechaRegistro"    			column="pFecharegistro_d" />
+     <result property="intEmpresaUsuario"    		column="pEmpresausuario_n_pk" />
+     <result property="intPersonaUsuario"    		column="pPersonausuario_n_pk" />
+     <result property="intEstadoCod"   				column="pEstado_n_cod" />
+     <result property="tsFechaEliminacion"    		column="pFechaeliminacion_d" />
+     <result property="intEmpresaEliminar"    		column="pEmpresaeliminar_n_pk" />
+     <result property="intPersonaEliminar"    		column="pPersonaeliminar_n_pk" />
+  </resultMap>
+  
+  <resultMap id="resSocioEstructuraAdministra" class="SocioEstructura">
+  	<result property="id.intIdEmpresa"    			column="pEmpresa_n_pk" />
+  	<result property="intIdSucursalAdministra"    	column="pIdsucursaladministra_n_pk" />
+    <result property="intIdSubsucurAdministra"    	column="pIdsubsucursaladministra_n_pk" />
+  </resultMap>
+  
+  <resultMap id="resSocioEstructuraPersona"  class="SocioEstructura">
+  	 <result property="id.intIdPersona"    			column="pPersona_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parSocioEstructura" class="SocioEstructura">
+     <parameter property="id.intIdPersona"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intIdEmpresa"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemSocioEstructura"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEmpresaSucUsuario"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdSucursalUsuario"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdSubSucursalUsuario"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEmpresaSucAdministra"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdSucursalAdministra"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdSubsucurAdministra"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoSocio"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intModalidad"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intNivel"						jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCodigo"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strCodigoPlanilla"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intTipoEstructura"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtFechaRegistro"				jdbcType="TIMESTAMP"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intEmpresaUsuario"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersonaUsuario"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEstadoCod"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp"	mode="INOUT"/>
+     <parameter property="intEmpresaEliminar"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersonaEliminar"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntItemSocioEstructura" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusq" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   		mode="OUT"/>
+     <parameter property="pIntIdPersona"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdEmpresa"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntItemSocioEstructura"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntEmpresaSucUsuario"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdSucursalUsuario"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdSubSucursalUsuario"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntEmpresaSucAdministra"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdSucursalAdministra"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdSubsucurAdministra"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntTipoSocio"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntModalidad"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntNivel"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntCodigo"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pStrCodigoPlanilla"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+     <parameter property="pIntTipoEstructura"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pDtFechaRegistro"				jdbcType="TIMESTAMP"	javaType="java.util.Date" 		mode="IN"/>
+     <parameter property="pIntEmpresaUsuario"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntPersonaUsuario"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntEstado"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pDtFechaEliminacion"			jdbcType="TIMESTAMP"  	javaType="java.util.Date" 		mode="IN"/>
+     <parameter property="pIntEmpresaEliminar"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntPersonaEliminar"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="PorPkSocioYPkEstructura" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   		mode="OUT"/>
+     <parameter property="pIntIdPersona"		jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntNivel"			jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntCodigo"			jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntTipoEstructura"	jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="PorPkSocioYTipoEstructura" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   		mode="OUT"/>
+     <parameter property="pIntIdPersona"		jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntTipoEstructura"	jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="PorPkSocioYPkEstructuraSinTipo" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   		mode="OUT"/>
+     <parameter property="pIntIdPersona"		jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntNivel"			jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntCodigo"			jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>    
+  </parameterMap>
+  
+   <parameterMap id="parPorIdPersonayActivo" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pintActivo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKTipoSocio" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntItemSocioEstructura" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntTipoSocio" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+   <parameterMap id="parPorIdPersonayActivoTipo" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pintActivo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntTipoSocio" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap> 
+   
+    <parameterMap id="parPorNivelCodigo" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntNivel" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntCodigo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pintActivo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntTipoSocio" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+   <parameterMap id="parPorIdPersonayActivoTipoNivelCodigo" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pintActivo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntTipoSocio" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntNivel" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntCodigo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+   
+   <parameterMap id="parAdministra" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>   	 
+   	  <parameter property="pIntNivel" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntCodigo" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntIdEmpresa" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>   	  
+   	  <parameter property="pIntTipoSocio" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorNivelCodigoAdminiSubAdmin" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntNivel" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntCodigo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pintActivo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntTipoSocio" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntSucursalAdministra" 		javaType="java.lang.Integer"    jdbcType="NUMERIC"   	  mode="IN"/>
+   	  <parameter property="pIntSubSucursalAdministra" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		  mode="IN"/>   	 
+  </parameterMap>
+  
+   <parameterMap id="parPorNivelCodigoAdminiSubAdminPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="pIntNivel" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntCodigo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="pIntIdEmpresa" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pintActivo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntTipoSocio" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	  <parameter property="pIntSucursalAdministra" 		javaType="java.lang.Integer"    jdbcType="NUMERIC"   	  mode="IN"/>
+   	  <parameter property="pIntSubSucursalAdministra" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		  mode="IN"/>
+   	  <parameter property="pIntPersona"				    javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		  mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSocioEstructura" >
+	{ call PKG_SOCIOESTRUCTURA.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaPorPK(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorSocioPK" parameterMap="parPorIdPersona" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaPorSocioPK(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaSocioEstructuraBusq" parameterMap="parBusq" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaSocioEstructuraBusq(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+    
+  <procedure id="getLstPorPkSocioYPkEstYTipoEst" parameterMap="PorPkSocioYPkEstructura" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getLstPorPkSocioYPkEstYTipoEst(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getLstPorPkSocioYTipoEstruct" parameterMap="PorPkSocioYTipoEstructura" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getLstPorPkSocioYTipoEstruct(?,?,?,?) }  
+  </procedure>
+  
+    <procedure id="getLstPorPkSocioYPkEst" parameterMap="PorPkSocioYPkEstructuraSinTipo" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getLstPorPkSocioYPkEst(?,?,?,?,?) }  
+  </procedure>
+  
+    <procedure id="getListaPorSocioPKyActivo" parameterMap="parPorIdPersonayActivo" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaPorSocioPKyActivo(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKTipoSocio" parameterMap="parPorPKTipoSocio" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaPorPkTipoSocio(?,?,?,?,?) }  
+  </procedure>
+  
+   <procedure id="getListaXSocioPKActivoTipo" parameterMap="parPorIdPersonayActivoTipo" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaXSocioPKActivoTipo(?,?,?,?,?) }  
+  </procedure>
+  
+   <procedure id="getListaXSocioPKActivoTipoSocio" parameterMap="parPorIdPersonayActivoTipoNivelCodigo" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaXSocioPKActivoTipo(?,?,?,?,?,?,?) }  
+  </procedure>
+    
+     <procedure id="getListaXNivelCodigoNoCas" parameterMap="parPorNivelCodigo" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaXNivelCodigoNoCas(?,?,?,?,?,?) }  
+  </procedure> 
+    
+      <procedure id="getListaXNivelCodigosoloCas" parameterMap="parPorNivelCodigoAdminiSubAdmin" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaXNivelCodigosoloCas(?,?,?,?,?,?,?,?) }  
+  </procedure> 
+   
+    <procedure id="getListaAgregarSocioEfectuado" parameterMap="parPorIdPersonayActivoTipo" resultMap="resSocioEstructura">
+		{ call PKG_SOCIOESTRUCTURA.getListaAgregarSocioEfectuado(?,?,?,?,?) }  
+  	</procedure>
+    
+    <procedure id="getLstBySocioAndEst" parameterMap="PorPkSocioYPkEstructuraSinTipo" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getLstBySocioAndEst(?,?,?,?,?,?) }  
+  </procedure>
+  
+   <procedure id="getListaHABERINCENT" parameterMap="parAdministra" resultMap="resSocioEstructuraAdministra">
+    	{ call PKG_SOCIOESTRUCTURA.getListaHABERINCENT(?,?,?,?,?)}
+   </procedure>
+   
+   <procedure id="getListaXNivelCodigosoloHaberIncentivo" parameterMap="parPorNivelCodigoAdminiSubAdmin" resultMap="resSocioEstructuraPersona">
+	{ call PKG_SOCIOESTRUCTURA.getListaXNivelCodigoHabInc(?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorCodPersonaOfEnviado" parameterMap="parPorNivelCodigoAdminiSubAdminPersona" resultMap="resSocioEstructura">
+	{ call PKG_SOCIOESTRUCTURA.getListaPorCodPersonaOfEnviado(?,?,?,?,?,?,?,?,?) }  
+  </procedure> 
+  
+    <procedure id="getListaXAdminySubAdminSOLOCAS" parameterMap="parAdministra" resultMap="resSocioEstructuraAdministra">
+    	{ call PKG_SOCIOESTRUCTURA.getListaXAdminySubAdminSOLOCAS(?,?,?,?,?)}
+    </procedure>
+    
+</sqlMap>  

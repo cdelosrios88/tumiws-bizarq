@@ -1,0 +1,435 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<managed-bean>   
+	  <managed-bean-name>mbTimePicker</managed-bean-name>   
+	  <managed-bean-class>pe.com.tumi.credito.socio.captacion.domain.TimePicker</managed-bean-class>   
+	  <managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<validator>
+	  <validator-id>checkvalidemail</validator-id>
+	  <validator-class>pe.com.tumi.common.validate.ValidateEmail</validator-class>
+	</validator>
+
+	<managed-bean>
+		<managed-bean-name>captacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.captacion.controller.CaptacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fondoRetiroController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.captacion.controller.FondoRetiroController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>aportacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.captacion.controller.AportacionesController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>mantCuentaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.captacion.controller.MantenimientoCuentaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fondoSepelioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.captacion.controller.FondoSepelioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>aesController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.captacion.controller.AesController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>hojaPlaneamientoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.convenio.controller.HojaPlaneamientoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>controlProcesoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.convenio.controller.ControlProcesoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>convenioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.convenio.controller.ConvenioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoGarantiaPersonalController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoGarantiaPersonalController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoGarantiaRealController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoGarantiaRealController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoGarantiaAutoliquidableController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoGarantiaAutoliquidableController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoGarantiaRapidaRealizacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoGarantiaRapidaRealizacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoDescuentoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoDescuentoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>creditoExcepcionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.credito.controller.CreditoExcepcionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Managed Bean de Estructura -->
+	<managed-bean>
+		<managed-bean-name>estrucOrgController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.estructura.controller.EstructuraOrganicaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Managed Beans de Popups -->
+	<managed-bean>
+		<managed-bean-name>perJuridicaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.JuridicaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>naturalController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.NaturalController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>domicilioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.DomicilioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>comunicacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.ComunicacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>ctaBancariaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.CuentaBancariaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>actEconomicaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.ActividadEconomicaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>tipoComprobanteController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.popup.TipoComprobanteController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>messageController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.message.MessageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.fileupload.FileUploadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Managed Beans de Socios -->
+	<managed-bean>
+		<managed-bean-name>socioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.core.controller.SocioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>aperturaCuentaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.core.controller.AperturaCuentaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>estadoCuentaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.estado.controller.EstadoCuentaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+		
+	<managed-bean>
+		<managed-bean-name>beneficiarioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.core.controller.BeneficiarioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>socioEstrucController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.core.controller.SocioEstructuraController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Navigation Rules --> 
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>inicio</from-outcome>
+			<to-view-id>/pages/index.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/captacion/*</from-view-id>
+		<navigation-case>
+			<from-outcome>captacion.prueba</from-outcome>
+			<to-view-id>/pages/captacion/prueba.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/pages/captacion/*</from-view-id>
+		<navigation-case>
+			<from-outcome>captacion.pruebaBody</from-outcome>
+			<to-view-id>/pages/captacion/pruebaBody.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/captacion/credito/*</from-view-id>
+		<navigation-case>
+			<from-outcome>captacion.credito.fondoRetiro</from-outcome>
+			<to-view-id>/pages/captacion/credito/fondoRetiro.jsp</to-view-id>
+		</navigation-case>
+                <navigation-case>
+			<from-outcome>captacion.credito.mantCuenta</from-outcome>
+			<to-view-id>/pages/captacion/credito/mantCuenta.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/captacion/credito/*</from-view-id>
+		<navigation-case>
+			<from-outcome>captacion.credito.aportaciones</from-outcome>
+			<to-view-id>/pages/captacion/credito/aportaciones.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/estructura/*</from-view-id>
+		<navigation-case>
+			<from-outcome>estructura.estructura</from-outcome>
+			<to-view-id>/pages/estructura/estructura.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.juridica</from-outcome>
+			<to-view-id>/pages/popup/juridica.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.contactoNatural</from-outcome>
+			<to-view-id>/pages/popup/contactoNatural.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.natural</from-outcome>
+			<to-view-id>/pages/popup/natural.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.comunicacion</from-outcome>
+			<to-view-id>/pages/popup/comunicacion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.domicilio</from-outcome>
+			<to-view-id>/pages/popup/domicilio.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.cuenta</from-outcome>
+			<to-view-id>/pages/popup/cuenta.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.actividadEconomica</from-outcome>
+			<to-view-id>/pages/popup/actividadEconomica.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.tipoComprobante</from-outcome>
+			<to-view-id>/pages/popup/tipoComprobante.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/convenio/*</from-view-id>
+		<navigation-case>
+			<from-outcome>convenio.hojaPlaneamiento</from-outcome>
+			<to-view-id>/pages/convenio/hojaPlaneamiento.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<from-view-id>/pages/credito/*</from-view-id>
+		<navigation-case>
+			<from-outcome>credito.credito</from-outcome>
+			<to-view-id>/pages/credito/credito.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/estructura/*</from-view-id>
+		<navigation-case>
+			<from-outcome>padrones.padrones</from-outcome>
+			<to-view-id>/pages/estructura/padron.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>padronController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.estructura.controller.PadronController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>tercerosController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.estructura.controller.TercerosController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/pages/aperturaCuenta/*</from-view-id>
+		<navigation-case>
+			<from-outcome>aperturaCuenta.socio</from-outcome>
+			<to-view-id>/pages/aperturaCuenta/socio.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/estadoCuenta/estadoCuenta.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>estadoCuenta.estadoCuenta</from-outcome>
+			<to-view-id>/pages/estadoCuenta/estadoCuenta.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		
+	<navigation-rule>
+		<from-view-id>/pages/parametros/*</from-view-id>
+		<navigation-case>
+			<from-outcome>parametros.paramContabilidad</from-outcome>
+			<to-view-id>/pages/parametros/paramContabilidad.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/aperturaCuenta/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>aperturaCuenta.popup.socioDependencia</from-outcome>
+			<to-view-id>/pages/aperturaCuenta/popup/socioDependencia.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/popup/*</from-view-id>
+		<navigation-case>
+			<from-outcome>popup.terceros</from-outcome>
+			<to-view-id>/pages/popup/terceros.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Archivos de Envio -->
+	<navigation-rule>
+		<from-view-id>/pages/estructura/*</from-view-id>
+		<navigation-case>
+			<from-outcome>padrones.padrones</from-outcome>
+			<to-view-id>/pages/estructura/envio.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Navegación para Tabs de Productos (Cuenta corriente, Créditos y Ahorro) -->
+	<navigation-rule>
+		<from-view-id>/pages/servicios/*</from-view-id>
+		<navigation-case>
+			<from-outcome>servicios.productos</from-outcome>
+			<to-view-id>/pages/servicios/productos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>configuracionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.credito.socio.estructura.controller.ConfiguracionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--Convertidor Montos 28-09-2013 JCHAVEZ-->
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+</faces-config>

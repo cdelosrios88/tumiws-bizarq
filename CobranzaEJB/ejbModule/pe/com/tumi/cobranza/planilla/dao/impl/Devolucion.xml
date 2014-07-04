@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DevolucionDaoIbatis">
+	<typeAlias alias="Devolucion" type="pe.com.tumi.cobranza.planilla.domain.Devolucion"/>
+	
+	<resultMap class="Devolucion" id="resDevolucion">
+		<result property="id.intPersEmpresaDevolucion" 	column="pPers_Empresadevolucion_n_Pk"/>
+		<result property="id.intItemDevolucion" 		column="pCcob_Itemdevolucion_n"/>
+		<result property="tsDevoFecha" 					column="pDevo_Fecha_d"/>
+		<result property="intParaDocumentoGeneral" 		column="pPara_documentogeneral_n_cod"/>
+		<result property="intCuenta" 					column="pCsoc_cuenta_n_pk"/>
+		<result property="bdDevoMonto" 					column="pDevo_monto_n"/>
+		<result property="intParaEstado" 				column="pPara_estado_n_cod"/>
+		<result property="intParaEstadoPago" 			column="pPara_estadopago_n_cod"/>
+		<result property="intItemEgresoGeneral" 		column="pTeso_itemegresogeneral_n"/>
+		<result property="intPersEmpresaEgreso" 		column="pPers_empresaegreso_n_pk"/>
+		<result property="intPersEmpresaLibro" 			column="pPers_empresalibro_n_pk"/>
+		<result property="intContPeriodo" 				column="pCont_periodolibro_n"/>
+		<result property="intContCodigoLibro" 			column="pCont_codigolibro_n"/>
+		<result property="intPersEmpresaSolCtaCte"		column="pPers_empresasolctacte_n_pk"/>
+		<result property="intCcobItemSolCtaCte" 		column="pCcob_itemsolctacte_n"/>
+		<result property="intParaTipoSolicitudCtaCte" 	column="pPara_tiposolctacte_n_cod"/>
+	</resultMap>
+	
+	<parameterMap id="parDevolucion" 	class="Devolucion">
+     	<parameter property="id.intPersEmpresaDevolucion"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+	 	<parameter property="id.intItemDevolucion" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>    
+	 	<parameter property="tsDevoFecha" 					jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 		mode="INOUT"/>  
+	 	<parameter property="intParaDocumentoGeneral"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 	<parameter property="intCuenta" 					jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 	<parameter property="bdDevoMonto"					jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/> 
+	 	<parameter property="intParaEstado"					jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 	<parameter property="intParaEstadoPago" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 	<parameter property="intItemEgresoGeneral" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intPersEmpresaEgreso" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intPersEmpresaLibro" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intContPeriodo" 				jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intContCodigoLibro" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intPersEmpresaSolCtaCte" 		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intCcobItemSolCtaCte" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  		<parameter property="intParaTipoSolicitudCtaCte" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>   	
+  	</parameterMap>
+  	
+	<parameterMap class="java.util.Map" id="parXSolTipo">
+		<parameter property="cursorLista" 					jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 	<parameter property="intEmpresaSolCtaCte" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 	<parameter property="intItemSolCtaCte" 				jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 	<parameter property="intParaTipoSolicitudCtaCte"	jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+	</parameterMap>
+
+<procedure id="grabar" parameterMap="parDevolucion">
+	{ call PKG_CCO_DEVOLUCION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDevolucion" >
+	{ call PKG_CCO_DEVOLUCION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  </procedure>
+  
+  <procedure id="getListaPorSolicitudCtaCteTipo" parameterMap="parXSolTipo" resultMap="resDevolucion">
+	{ call PKG_CCO_DEVOLUCION.getListaPorSolicitudCtaCteTipo(?,?,?,?)}
+  </procedure>
+  
+</sqlMap>

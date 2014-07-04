@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LibroMayorDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.LibroMayorDetalle" alias="LibroMayorDetalle"/> 
+	
+  <resultMap id="resLibroMayorDetalle" class="LibroMayorDetalle">
+	<result property="id.intPersEmpresaMayor" 		column="pPers_empresamayor_n_pk"/>
+	<result property="id.intContPeriodoMayor"   	column="pCont_periodomayor_n"/>
+	<result property="id.intContMesMayor"   		column="pCont_mesmayor_n"/>
+	<result property="id.intPersEmpresaCuenta"   	column="pPers_empresacuenta_n"/>
+    <result property="id.intContPeriodoCuenta"      column="pCont_periodocuenta_n"/>
+    <result property="id.strContNumeroCuenta"    	column="pCont_numerocuenta_v"/>
+    <result property="id.intPersEmpresaSucursal"    column="pPers_empresasucursal_n"/>
+    <result property="id.intSucuIdSucursal"    		column="pSucu_idsucursal_n"/>
+    <result property="id.intSudeIdSubSucursal"    	column="pSude_idsubsucursal_n"/>
+    <result property="bdDebeSolesSaldo"    			column="pLmde_debesolessaldo_n"/>
+    <result property="bdHaberSolesSaldo"    		column="pLmde_habersolessaldo_n"/>
+    <result property="bdDebeExtranjeroSaldo"    	column="pLmde_debeextranjerosaldo_n"/>
+    <result property="bdHaberExtranjeroSaldo"    	column="pLmde_haberextranjerosaldo_n"/>
+    <result property="bdDebeSoles"    				column="pLmde_debesoles_n"/>
+    <result property="bdHaberSoles"    				column="pLmde_habersaldo_n"/>
+    <result property="bdDebeExtranjero"    			column="pLmde_debeextranjero_n"/>
+    <result property="bdHaberExtranjero"    		column="pLmde_haberextranjero_n"/>
+  </resultMap>
+  
+  <parameterMap id="parLibroMayorDetalle" class="LibroMayorDetalle">
+		<parameter property="id.intPersEmpresaMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContPeriodoMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContMesMayor"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intPersEmpresaCuenta"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="id.intContPeriodoCuenta"     	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="id.strContNumeroCuenta"    	javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+	    <parameter property="id.intPersEmpresaSucursal"    	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="id.intSucuIdSucursal"    		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="id.intSudeIdSubSucursal"    	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdDebeSolesSaldo"    			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdHaberSolesSaldo"    			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdDebeExtranjeroSaldo"    		javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdHaberExtranjeroSaldo"    	javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdDebeSoles"    				javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdHaberSoles"    				javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdDebeExtranjero"    			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdHaberExtranjero"    			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContMesMayor"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intPersEmpresaCuenta"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoCuenta"     	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="strContNumeroCuenta"    	javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="IN"/>	    
+  	<parameter property="intPersEmpresaSucursal"	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intSucuIdSucursal"    		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intSudeIdSubSucursal"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>	    
+  </parameterMap>
+  
+  <parameterMap id="parEliminar" class="java.util.Map">
+   	<parameter property="intPersEmpresaMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContMesMayor"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intPersEmpresaCuenta"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoCuenta"     	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="strContNumeroCuenta"    	javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="IN"/>	    
+  	<parameter property="intPersEmpresaSucursal"	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intSucuIdSucursal"    		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intSudeIdSubSucursal"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>	    
+  </parameterMap>
+  
+  <parameterMap id="parPorLibroMayor" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContMesMayor"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>		    
+  </parameterMap>
+  
+  <parameterMap id="parPorLibroMayorYPlanCuenta" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoMayor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContMesMayor"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intPersEmpresaCuenta"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoCuenta"     	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="strContNumeroCuenta"    	javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="IN"/>	    
+  			    
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parLibroMayorDetalle">
+	{ call PKG_LIBROMAYORDETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parLibroMayorDetalle" >
+	{ call PKG_LIBROMAYORDETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroMayorDetalle">
+	{ call PKG_LIBROMAYORDETALLE.getListaPorPk(?,?,?,?,?,?,?,?,?,?) }
+  </procedure> 	
+   	
+  <procedure id="getListaPorLibroMayor" parameterMap="parPorLibroMayor" resultMap="resLibroMayorDetalle">
+	{ call PKG_LIBROMAYORDETALLE.getListaPorLibroMayor(?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="eliminar" parameterMap="parEliminar" >
+	{ call PKG_LIBROMAYORDETALLE.eliminar(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorLibroMayorYPlanCuenta" parameterMap="parPorLibroMayorYPlanCuenta" resultMap="resLibroMayorDetalle">
+	{ call PKG_LIBROMAYORDETALLE.getPorLibroMayorYPlanCuenta(?,?,?,?,?,?,?) }
+  </procedure>  
+</sqlMap>

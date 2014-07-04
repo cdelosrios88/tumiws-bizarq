@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.Documento" alias="Documento"/> 
+	
+  <resultMap id="resDocumento" class="Documento" >
+     <result property="id.intPersEmpresaPk"      			column="pPers_empresa_n_pk" />
+     <result property="id.intIdPerfil"  					column="pIdperfil_n" />
+     <result property="id.intIdTransaccion"      			column="pIdtransaccion_n" />
+     <result property="id.intIdTipoDocumento"   			column="pIdtipodocumentos_n" />
+     <result property="id.intVersion" 						column="pVersion_n" />
+     <result property="empresaUsuario.id.intPersEmpresaPk"  column="pPers_empresausuario_n_pk" />
+     <result property="empresaUsuario.id.intPersPersonaPk"  column="pPersonausuario_n_pk" />
+     <result property="tsFechaRegistro"   					column="pFecharegistro_d" />
+     <result property="intIdEstado"    						column="pIdestado_n" />
+     <result property="tsFechaEliminacion"  				column="pFechaeliminacion_d" />
+  </resultMap>
+  
+  <parameterMap id="parDocumento" class="Documento">
+     <parameter property="id.intPersEmpresaPk"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdPerfil"						jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdTransaccion" 					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intIdTipoDocumento"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intVersion"						jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="empresaUsuario.id.intPersEmpresaPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="empresaUsuario.id.intPersPersonaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro" 						jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intIdEstado" 							jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"					jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTipoDocumento" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intVersion" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDocumento">
+	{ call PKG_DOCUMENTO.grabar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDocumento" >
+	{ call PKG_DOCUMENTO.modificar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resDocumento">
+	{ call PKG_DOCUMENTO.getListaPorPK(?,?,?,?,?,?) }
+  </procedure>
+
+</sqlMap>  

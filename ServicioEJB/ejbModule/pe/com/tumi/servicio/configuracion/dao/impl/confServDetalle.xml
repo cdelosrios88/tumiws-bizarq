@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfServDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.configuracion.domain.ConfServDetalle" alias="ConfServDetalle"/> 
+	
+  <resultMap id="resConfServDetalle" class="ConfServDetalle" >
+     <result property="id.intPersEmpresaPk"      			column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    				column="pItemreqaut_n" />
+     <result property="id.intItemDetalle"  					column="pItemreqautestdetalle_n" />
+     <result property="intParaTipoDescripcion"      		column="pPara_tipodescripcion_n" />
+     <result property="intParaTipoPersonaOperacionCod"  	column="pPara_tipopersonaope_n_co" />
+     <result property="intOpcionAdjunta"  					column="pOpcionadjunta_n" />
+     <result property="intParaEstadoCod"      				column="pPara_estado_n_cod" />
+     <result property="tsFechaRegistro"    					column="pFecharegistro_d" />
+     <result property="intPersPersonaUsuarioPk"  			column="pPers_personausuario_n_pk" />
+     <result property="tsFechaEliminacion"    				column="pFechaeliminacion_d" />
+     <result property="intPersPersonaEliminaPk"  			column="pPers_personaeliminar_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parConfServDetalle" class="ConfServDetalle">
+     <parameter property="id.intPersEmpresaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemSolicitud"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemDetalle" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoDescripcion" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoPersonaOperacionCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intOpcionAdjunta" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro" 					jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion" 				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetalle" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+ <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConfServDetalle">
+	{ call PKG_CONFDETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfServDetalle" >
+	{ call PKG_CONFDETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfServDetalle">
+	{ call PKG_CONFDETALLE.getListaPorPk(?,?,?,?) }  
+  </procedure>  
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resConfServDetalle">
+	{ call PKG_CONFDETALLE.getListaPorCabecera(?,?,?) }  
+  </procedure>  
+</sqlMap>  

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="InformeGerenciaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.InformeGerencia" alias="InformeGerencia"/> 
+	
+  <resultMap id="resInformeGerencia" class="InformeGerencia" >
+	<result property="id.intPersEmpresa"  			column="pempresainforme" />
+	<result property="id.intItemInformeGerencia"   	column="piteminformegerencia" />
+	<result property="tsFechaRegistro"   			column="pfecharegistro" />
+	<result property="intParaTipoInforme"   		column="ptipoinforme" />
+	<result property="intPersEmpresaRequisicion"   	column="pempresarequisicion" />
+	<result property="intItemRequisicion"   		column="pitemrequisicion" />
+	<result property="intPersPersonaServicio"   	column="ppersonaservicio" />
+	<result property="intPersPersonaAutoriza"   	column="ppersonaautoriza" />
+	<result property="intSucuIdSucursal"   			column="pidsucursalautoriza" />
+	<result property="intIdArea"   					column="pidareaaturiza" />
+	<result property="dtFechaInforme"   			column="pfechainforme" />
+	<result property="bdMontoAutorizado"   			column="pmontoautorizado" />
+	<result property="intParaTipoMoneda"   			column="ptipomoneda" />
+	<result property="strObservacion"   			column="pobservacion" />
+	<result property="intParaTipo"   				column="ptipo" />
+	<result property="intItemArchivo"   			column="pitemarchivo" />
+	<result property="intItemHistorico"   			column="pitemhistorico" />
+	<result property="intPersEmpresaUsuario" 		column="pempresausuario" />
+	<result property="intPersPersonaUsuario"   		column="ppersonausuario" />
+	<result property="tsFechaAnula"   				column="pfechaanula" />
+	<result property="intPersEmpresaAnula"   		column="pempresaanula" />
+	<result property="intPersPersonaAnula"   		column="ppersonaanula" />
+	<result property="intParaEstado"   				column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parInformeGerencia" class="InformeGerencia">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemInformeGerencia"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intParaTipoInforme"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaRequisicion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaServicio"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAutoriza"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdArea"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="dtFechaInforme"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="bdMontoAutorizado"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaTipo"   				javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemArchivo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemHistorico"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>	 
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intParaTipoInforme"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="dtFiltroDesde"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroHasta"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="intPersEmpresaRequisicion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Agregado por cdelosrios, 08/10/2013 -->
+	 <parameter property="intItemInformeGerencia"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Fin agregado por cdelosrios, 08/10/2013 -->
+  </parameterMap>  
+  
+  
+  <procedure id="grabar" parameterMap="parInformeGerencia">
+	{ call PKG_INFORMEGER.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parInformeGerencia" >
+	{ call PKG_INFORMEGER.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resInformeGerencia">
+	{ call PKG_INFORMEGER.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resInformeGerencia">
+	{ call PKG_INFORMEGER.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

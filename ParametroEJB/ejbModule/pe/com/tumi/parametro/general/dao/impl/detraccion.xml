@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DetraccionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.general.domain.Detraccion" alias="Detraccion"/> 
+	
+  <resultMap id="resDetraccion" class="Detraccion" >
+     <result property="intParaTipoDetraccion"   column="ptipodetrac"/>
+     <result property="strDescripcion"    		column="pdescripcion"/>
+     <result property="bdPorcentaje"    		column="pporcentaje"/>
+  </resultMap>
+  
+  <parameterMap id="parPorTodos" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+  </parameterMap>
+  
+  
+  <procedure id="getListaTodos" parameterMap="parPorTodos" resultMap="resDetraccion">
+	{ call PKG_DETRACCIONES.getListaPorDetracciones(?) }  
+  </procedure>
+  
+</sqlMap>  

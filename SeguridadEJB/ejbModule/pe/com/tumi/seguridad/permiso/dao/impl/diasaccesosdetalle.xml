@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DiasAccesosDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.DiasAccesosDetalle" alias="DiasAccesosDetalle"/> 
+	
+  <resultMap id="resDiasAccesosDetalle" class="DiasAccesosDetalle" >
+     <result property="id.intPersEmpresa"    	column="pPers_empresa_n_pk" />
+     <result property="id.intIdTipoSucursal" 	column="pIdtiposucursal" />
+     <result property="id.intIdDiaSemana" 		column="pIddiasemana_n" />
+     <result property="id.intItemDiasAccesos"   column="pItemdiasaccesos_n" />
+     <result property="tsHoraInicio" 			column="pHorainicio_d" />
+     <result property="tsHoraFin"  				column="pHorafin_d" />
+     <result property="intIdEstado"  			column="pIdestado_n" />
+  </resultMap>
+  
+  <parameterMap id="parDiasAccesosDetalle" class="DiasAccesosDetalle">
+     <parameter property="id.intPersEmpresa"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdTipoSucursal"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdDiaSemana" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemDiasAccesos"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="tsHoraInicio"				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>    
+     <parameter property="tsHoraFin" 				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intIdEstado" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>     
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTipoSucursal" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdDiaSemana" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intItemDiasAccesos"		jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			jdbcType="NUMERIC"		javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTipoSucursal" 		jdbcType="NUMERIC"		javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intItemDiasAccesos"		jdbcType="NUMERIC"		javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDiasAccesosDetalle">
+	{ call PKG_DIASACCESODETALLE.grabar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDiasAccesosDetalle" >
+	{ call PKG_DIASACCESODETALLE.modificar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resDiasAccesosDetalle">
+	{ call PKG_DIASACCESODETALLE.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resDiasAccesosDetalle">
+	{ call PKG_DIASACCESODETALLE.getListaPorCabecera(?,?,?,?) }
+  </procedure>
+
+</sqlMap>  

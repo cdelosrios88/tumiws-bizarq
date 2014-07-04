@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	   http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<bean id="usuario" class="pe.com.tumi.seguridad.domain.Usuario"
+		scope="session">
+	</bean>
+	
+	<bean id="beanSesion" class="pe.com.tumi.seguridad.domain.BeanSesion"
+		scope="session">
+	</bean>
+	
+	<bean id="usuarioEnSesion" name="usuarioEnSesion" class="pe.com.tumi.seguridad.domain.Usuario" 
+		scope="session">
+	</bean>
+	
+	<bean id="rolEnSesion" name="rolEnSesion" class="pe.com.tumi.seguridad.domain.Rol" 
+		scope="session">
+	</bean>
+	
+	<bean id="controlesEnSesion" name="controlesEnSesion" class="pe.com.tumi.seguridad.domain.Controles" 
+		scope="session">
+	</bean>
+	
+	<bean id="usuarioBusqueda" class="pe.com.tumi.seguridad.domain.Usuario"
+		scope="session">
+	</bean>
+	
+	<bean id="usuarioBusquedaSesion" class="pe.com.tumi.seguridad.domain.Usuario"
+		scope="session">
+	</bean>
+	
+	<bean id="superior" class="pe.com.tumi.common.domain.TipoArbol"
+		scope="session">
+	</bean>
+	
+	<bean id="opcionMenuBusqueda" class="pe.com.tumi.seguridad.domain.OpcionMenu"
+		scope="request">
+	</bean>
+	
+	<bean id="opcionMenuBean" class="pe.com.tumi.seguridad.domain.OpcionMenu"
+		scope="request">
+	</bean>
+	
+	<bean id="loginLog" class="pe.com.tumi.seguridad.domain.LoginLog"	
+		scope="session">
+	</bean>
+
+	<bean id="parametro" class="pe.com.tumi.administracion.domain.Parametro"
+		scope="session">
+	</bean>
+	
+	<bean id="parametroBusqueda" class="pe.com.tumi.administracion.domain.Parametro"
+		scope="session">
+	</bean>
+
+	<bean id="rol" class="pe.com.tumi.seguridad.domain.Rol"
+		scope="session">
+	</bean>
+	
+	<bean id="rolEnSession" class="pe.com.tumi.seguridad.domain.Rol"
+		scope="session">
+	</bean>
+	
+	<bean id="rolBusqueda" class="pe.com.tumi.seguridad.domain.Rol"
+		scope="session">
+	</bean>
+	
+	<bean id="sistema" class="pe.com.tumi.seguridad.domain.Sistema"
+		scope="session">
+	</bean>
+
+	<bean id="sistemaBusqueda" class="pe.com.tumi.seguridad.domain.Sistema" scope="session"></bean>	
+	
+	<bean id="empresa" class="pe.com.tumi.empresa.domain.Empresa" scope="session" />
+	
+	<bean id="usuarioPerfil" class="pe.com.tumi.seguridad.usuario.domain.Usuario" scope="session" />
+	
+	<bean id="horarioIngreso" class="pe.com.tumi.horario.domain.Horario" scope="session" />
+	
+	<bean id="admFormDoc" class="pe.com.tumi.admFormDoc.domain.AdmFormDoc" scope="session" />
+	
+	<bean id="adminMenu" class="pe.com.tumi.seguridad.domain.AdminMenu" scope="session" />
+	
+	<bean id="controles" class="pe.com.tumi.seguridad.domain.Controles" scope="session" />
+	
+	<bean id="registroPc" class="pe.com.tumi.seguridad.domain.RegistroPc" scope="session" />
+	
+	<bean id="accesoEspecial" class="pe.com.tumi.seguridad.domain.AccesoEspecial" scope="session" />
+	
+	<bean id="perfilMof" class="pe.com.tumi.seguridad.domain.PerfilMof" scope="session" />
+	
+	<bean id="maestroParametros" class="pe.com.tumi.common.domain.MaestroParametros" scope="session" />
+	
+	<bean id="reglamentoPolitica" class="pe.com.tumi.seguridad.domain.ReglamentoPolitica" scope="session" />
+	
+	<bean id="auditoriaSistemas" class="pe.com.tumi.seguridad.domain.AuditoriaSistemas" scope="session" /> 
+	
+	<bean id="auditoria" class="pe.com.tumi.seguridad.domain.Auditoria" scope="session" />
+	
+	<!-- Beans para Créditos -->
+	<bean id="hojaPlaneamiento" class="pe.com.tumi.creditos.domain.HojaPlaneamiento" scope="session" />
+	
+	<bean id="controlProceso" class="pe.com.tumi.creditos.domain.ControlProceso" scope="session" />
+	
+	<bean id="estructuraOrganica" class="pe.com.tumi.creditos.domain.EstructuraOrganica" scope="session" />
+	
+	<bean id="aportaciones" class="pe.com.tumi.creditos.domain.Aportes" scope="session" />
+	
+	<bean id="mantCuentas" class="pe.com.tumi.creditos.domain.Aportes" scope="session" />
+	
+	<!-- Beans para Administracion Cuenta -->
+	<bean id="personaJuridica" class="pe.com.tumi.adminCuenta.domain.PersonaJuridica" scope="session" />
+	
+	<bean id="actividadEconomica" class="pe.com.tumi.adminCuenta.domain.ActividadEconomica" scope="session" />
+	
+	<!-- Beans para Popup's -->
+	<bean id="beneficiario" class="pe.com.tumi.popup.domain.Beneficiario" scope="session" />
+	
+	<bean id="domicilio" class="pe.com.tumi.popup.domain.Domicilio" scope="session" />
+	
+	<bean id="comunicacion" class="pe.com.tumi.popup.domain.Comunicacion" scope="session" />
+	
+	<bean id="ctabancaria" class="pe.com.tumi.popup.domain.CuentaBancaria" scope="session" />
+	
+	<bean id="replegal" class="pe.com.tumi.empresa.domain.RepresentanteLegal" scope="session" />
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="PrevisionDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.credito.asociativo.domain.Prevision" alias="Prevision"/>
+	<resultMap id="resPrevision" class="Prevision" >
+	     <result property="intCuentaPk"  			column="pCuentaPk" />
+	     <result property="strNroSolicitud"  		column="pNROSOLICITUD" />
+	     <result property="strCuenta"    			column="pCUENTA" />
+	     <result property="strTipo"    				column="pTIPOVINCULO" />
+	     <result property="bdMontoBruto"    		column="pMONTOBRUTO" />
+	     <result property="bdMontoGastos"    		column="pMONTOGASTOS" />
+	     <result property="bdMontoNeto"     		column="pMONTONETO" />
+	     <result property="strFechaFallecimiento"   column="pFECHAFALLECIMIENTO" />
+	     <result property="strFechaSolicitud"   	column="pFechaSolicitud" />
+	     <result property="strEvaluacionEstado"     column="pESTADOEVALUACION" />
+	     <result property="strEvaluacionFecha"      column="pFECHAESTADOEVALUACION" />
+	     <result property="strEgresoFecha"      	column="pFECHAESTADOEGRESO" />
+	</resultMap>
+	
+	<parameterMap id="parPrevision" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdDocumentoGeneral" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoFiltro" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="strTipoFiltro" 			javaType="java.lang.String"  	jdbcType="VARCHAR" 	   mode="IN"/>
+	   	 <parameter property="intIdTipoVinculo" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdEstadoSolicitud" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdEstadoPago" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="dtFechaSolicitudDesde" 	javaType="java.util.Date"  		jdbcType="DATE" 	   mode="IN"/>
+	   	 <parameter property="dtFechaSolicitudHasta" 	javaType="java.util.Date"  		jdbcType="DATE" 	   mode="IN"/>
+	</parameterMap>
+	
+  	<procedure id="getListaFondoSepelio" parameterMap="parPrevision" resultMap="resPrevision">
+		{ call PKG_CREDITOS_PREVISION.getFondoSepelio(?,?,?,?,?,?,?,?,?,?,?)}
+  	</procedure>
+  	
+  	<procedure id="getListaFondoRetiro" parameterMap="parPrevision" resultMap="resPrevision">
+		{ call PKG_CREDITOS_PREVISION.getFondoRetiro(?,?,?,?,?,?,?,?,?,?,?)}
+  	</procedure>
+  	
+  	<procedure id="getListaAes" parameterMap="parPrevision" resultMap="resPrevision">
+		{ call PKG_CREDITOS_PREVISION.getAes(?,?,?,?,?,?,?,?,?,?,?)}
+  	</procedure>
+</sqlMap>  	

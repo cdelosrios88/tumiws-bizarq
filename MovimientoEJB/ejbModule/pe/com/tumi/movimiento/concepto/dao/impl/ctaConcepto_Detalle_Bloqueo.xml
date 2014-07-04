@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CtaConceptoDetalleBloqueoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.CuentaConcepto" alias="CuentaConceptoDetBloqueo"/> 
+	
+  <resultMap id="resCuentaConceptoDetBloqueo" class="CuentaConceptoDetBloqueo" >
+     <result property="id.intPersEmpresaPk"     			column="pcPERS_EMPRESA_N_PK" />
+     <result property="id.intCuentaPk"    					column="pcCSOC_CUENTA_N_PK" />
+     <result property="id.intItemCuentaConcepto"    		column="pcCMOV_ITEMCUENTACONCEPTO_N" />
+     <result property="bdSaldo"      						column="pcCUCO_SALDO_N" />
+     <result property="detalle.id.intPersEmpresaPk"      	column="pdPers_empresa_n_pk" />
+     <result property="detalle.id.intCuentaPk"      		column="pdCsoc_cuenta_n_pk" />
+     <result property="detalle.id.intItemCuentaConcepto"    column="pdCmov_itemcuentaconcepto_n" />
+     <result property="detalle.id.intItemCtaCptoDet"      	column="pdCmov_itemctacptodet_n" />
+     <result property="detalle.tsInicio"      				column="pdCcde_inicio_d" />
+     <result property="detalle.tsFin"      					column="pdCcde_fin_d" />
+     <result property="detalle.bdMontoInicial"      		column="pdCcde_montoinicial_n" />
+     <result property="detalle.intParaTipoConceptoCod"      column="pdPara_tipoconcepto_n_cod" />
+     <result property="detalle.intItemConcepto"      		column="pdCsoc_itemconcepto_n" />
+     <result property="detalle.intSucursalUsuarioPk"      	column="pdUssu_sucursalusuario_n_pk" />
+     <result property="detalle.intSubsucursalUsuarioPk"     column="pdSude_subsucursalusuario_n_pk" />
+     <result property="detalle.intPersPersonaUsuarioPk"     column="pdPers_personausuario_n_pk" />
+     <result property="detalle.bdSaldoDetalle"      		column="pdCcde_saldodetalle_n" />
+     <result property="detalle.bdMontoConcepto"      		column="pdCcde_montoconcepto_n" />
+     <result property="detalle.intParaTipoDescuentoCod"     column="pdPara_tipodescuento_n_cod" />
+     <result property="bloqueo.intItemBloqueoCuenta"		column="pbCmov_itemblcu_n" />
+     <result property="bloqueo.intPersEmpresaPk"			column="pbPers_empresa_n_pk" />
+     <result property="bloqueo.intCuentaPk"					column="pbCsoc_cuenta_n_pk" />
+     <result property="bloqueo.intItemCuentaConcepto"		column="pbCmov_itemcuentaconcepto_n" />
+     <result property="bloqueo.intItemExpediente"			column="pbCser_itemexpediente_n" />
+     <result property="bloqueo.intItemExpedienteDetalle"	column="pbCser_itemdetexpediente_n" />
+     <result property="bloqueo.intParaTipoBloqueoCod"		column="pbPara_tipobloqueo_n_cod" />
+     <result property="bloqueo.tsFechaInicio"				column="pbBlcu_inicio_d" />
+     <result property="bloqueo.tsFechaFin"					column="pbBlcu_fin_d" />
+     <result property="bloqueo.intParaCodigoMotivoCod"		column="pbPara_codigomotivo_n_cod" />
+     <result property="bloqueo.strObservacion"				column="pbBlcu_observacion_v" />
+     <result property="bloqueo.tsFechaRegistro"				column="pbBlcu_fecharegistro_d" />
+     <result property="bloqueo.intPersEmpresaUsuarioPk"		column="pbPers_empresausuario_n_pk" />
+     <result property="bloqueo.intPersPersonaUsuarioPk"		column="pbPers_personausuario_n_pk" />
+     <result property="bloqueo.intParaEstadoCod"			column="pbPara_estado_n_cod" />
+     <result property="bloqueo.intPersEmpresaEliminaPk"		column="pbPers_empresaelimina_n_pk" />
+     <result property="bloqueo.intPersPersonaEliminaPk"		column="pbPers_personaelimina_n_pk" />
+     <result property="bloqueo.tsFechaEliminar"				column="pbBlcu_fechaeliminar_d" />
+  </resultMap>
+
+  <parameterMap id="parPorEmpresaYCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="getListaPorEmpresaYCuenta" parameterMap="parPorEmpresaYCuenta" resultMap="resCuentaConceptoDetBloqueo">
+	{ call PKG_CTACONCEPTO_DET_BLOQUEO.getListaPorEmpresaYCuenta(?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaEmpresaCuentaOfCob" parameterMap="parPorEmpresaYCuenta" resultMap="resCuentaConceptoDetBloqueo">
+	{ call PKG_CTACONCEPTO_DET_BLOQUEO.getListaEmpresaCuentaOfCob(?,?,?) }  
+  </procedure>
+  
+</sqlMap>  

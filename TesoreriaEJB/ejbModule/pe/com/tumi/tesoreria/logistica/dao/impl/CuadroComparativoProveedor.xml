@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuadroComparativoProveedorDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.CuadroComparativoProveedor" alias="CuadroComparativoProveedor"/> 
+	
+  <resultMap id="resCuadroComparativoProveedor" class="CuadroComparativoProveedor" >
+	<result property="id.intPersEmpresa"  					column="pempresacuadcomp" />
+	<result property="id.intItemCuadroComparativo"  		column="pitemcuadcomp" />
+	<result property="id.intItemCuadroComparativoProveedor" column="pitemcuadcomppro" />
+	<result property="intPersEmpresaProveedor"   	column="pempresaproveedor" />
+	<result property="intPersPersonaProveedor"   	column="ppersonaproveedor" />
+	<result property="tsPlazoEntrega"   			column="pplazoentrega" />
+	<result property="strLugarEntrega"  			column="plugarentrega" />
+	<result property="strGarantia"   				column="pgarantia" />
+	<result property="strCondicionPago"   			column="pcondicionpago" />
+	<result property="strDescuento"   				column="pdescuento" />
+	<result property="strObservacion"   			column="pobservacion" />
+	<result property="intParaTipoMoneda"   			column="ptipomoneda" />
+	<result property="bdPrecioTotal"   				column="ppreciototal" />
+	<result property="intParaTipo"   				column="ptipo" />
+	<result property="intItemArchivo"   			column="pitemarchivo" />
+	<result property="intItemHistorico"   			column="pitemhistorico" />
+	<result property="intParaEstadoSeleccion"   	column="pestadoseleccion" />
+  </resultMap>
+  
+  <parameterMap id="parCuadroComparativoProveedor" class="CuadroComparativoProveedor">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCuadroComparativo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCuadroComparativoProveedor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaProveedor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaProveedor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsPlazoEntrega"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="strLugarEntrega"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strGarantia"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strCondicionPago"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strDescuento"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdPrecioTotal"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemArchivo"   			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemHistorico"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoSeleccion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativoProveedor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorCuadroComparativo" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCuadroComparativoProveedor">
+	{ call PKG_CUADROCOMPPRO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuadroComparativoProveedor" >
+	{ call PKG_CUADROCOMPPRO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCuadroComparativoProveedor">
+	{ call PKG_CUADROCOMPPRO.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorCuadroComparativo" parameterMap="parPorCuadroComparativo" resultMap="resCuadroComparativoProveedor">
+	{ call PKG_CUADROCOMPPRO.getListaPorCuadroComp(?,?,?) }
+  </procedure>
+    
+</sqlMap>

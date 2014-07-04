@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+	<sqlMap resource="pe/com/tumi/iBatis/Parametro.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/Usuario.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/LoginLog.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/TipoArbol.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/Rol.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/Sistema.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/Listados.xml"/>
+	<!-- sqlMap para Empresa -->
+	<sqlMap resource="pe/com/tumi/iBatis/empresa.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/sucursal.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/sucursal_empresa.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/sucursal_zonal.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/subsucursal.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/area.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/areacodigo.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/zonal.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/zonal_sucursal.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/empresa/dao/impl/sucursalcodigo.xml"/>
+
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/empresaUsuario.xml"/>	
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/perfil.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/usuario.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/usuarioComp.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/usuarioPerfil.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/usuarioSubSucursal.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/usuarioSucursal.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/contenido.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/diccionario.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/documento.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/permisoPerfil.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/permisoUsuario.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/solCambioDiccionario.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/solicitudCambio.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/transaccion.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/password.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/computadora.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/computadoraAcceso.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/diasaccesos.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/diasaccesosdetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/accesoEspecial.xml"/>
+	<sqlMap resource="pe/com/tumi/seguridad/permiso/dao/impl/accesoEspecialDetalle.xml"/>
+	
+	<!-- sqlMap para Usuario -->
+	<sqlMap resource="pe/com/tumi/iBatis/usuarioPerfil.xml"/>
+	<!-- sqlMap para Horario de Ingreso -->
+	<sqlMap resource="pe/com/tumi/iBatis/horarioIngreso.xml"/>
+	<!-- sqlMap para Relación Formulario y Documentación -->
+	<sqlMap resource="pe/com/tumi/iBatis/admFormDoc.xml"/>
+	<!-- sqlMap para FileUpload -->
+	<sqlMap resource="pe/com/tumi/iBatis/fileUpload.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/iBatis/adminMenu.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/registroPc.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/accesosEspeciales.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/perfilMof.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/parameters.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/reglamentoPolitica.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/auditoriaSist.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/auditoria.xml"/>
+	
+	<!-- sqlMap para Créditos -->
+	<sqlMap resource="pe/com/tumi/iBatis/creditos/hojaPlaneamiento.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/creditos/controlProceso.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/creditos/estructuraOrganica.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/creditos/aportacion.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/creditos/mantCuenta.xml"/>
+	
+	<!-- sqlMap para Persona Jurídica -->
+	<sqlMap resource="pe/com/tumi/iBatis/admincuenta/personaJuridica.xml"/>
+	
+	<!-- sqlMap para Popups -->
+	<sqlMap resource="pe/com/tumi/iBatis/popups/beneficiario.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/popups/domicilio.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/popups/comunicacion.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/popups/cuentaBancaria.xml"/>
+	<sqlMap resource="pe/com/tumi/iBatis/popups/representanteLegal.xml"/>
+	
+	<!-- sqlMap para Estado de Cuenta -->
+	<sqlMap resource="pe/com/tumi/estadoCuenta/dao/impl/estadoCuenta.xml"/>
+</sqlMapConfig>

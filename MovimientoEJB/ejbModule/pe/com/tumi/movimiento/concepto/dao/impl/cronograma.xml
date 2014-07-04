@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CronogramaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.Cronograma" alias="Cronograma"/> 
+	
+  <resultMap id="resCronograma" class="Cronograma" >
+     <result property="id.intPersEmpresaPk"     		column="pPers_empresa_n_pk" />
+     <result property="id.intCuentaPk"    				column="pCsoc_cuenta_n_pk" />
+     <result property="id.intItemExpediente"    		column="pCser_itemexpediente_n" />
+     <result property="id.intItemExpedienteDetalle" 	column="pCser_itemdetexpediente_n" />
+     <result property="id.intItemCronograma"     		column="pCser_itemcronograma_n" />
+     <result property="intNumeroCuota"    				column="pCrcr_numerocuota_n" />
+     <result property="intParaTipoCuotaCod"    			column="pPara_tipocuota_n_cod" />
+     <result property="intParaFormaPagoCod"      		column="pPara_formapago_n_cod" />
+     <result property="intParaTipoConceptoCreditoCod"   column="pPara_tipoconceptocr_n_cod" />
+     <result property="bdMontoConcepto"    				column="pCrcr_montoconcepto_n" />
+     <result property="bdMontoCapital"    				column="pCrcr_montocapital_n" />
+     <result property="tsFechaVencimiento"      		column="pCrcr_fechavencimiento_d" />
+     <result property="intPeriodoPlanilla"    			column="pCrcr_periodoplanilla_n" />
+     <result property="intParaEstadoCod"    			column="pPara_estado_n_cod" />
+     <result property="bdSaldoDetalleCredito"      		column="pCrcr_saldodetallecredito_n" />
+  </resultMap>
+  
+  <parameterMap id="parCronograma" class="Cronograma">
+     <parameter property="id.intPersEmpresaPk"			 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="id.intCuentaPk"				 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="id.intItemExpediente"			 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="id.intItemExpedienteDetalle" 	 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>  
+     <parameter property="id.intItemCronograma"			 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="intNumeroCuota"				 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="intParaTipoCuotaCod"			 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intParaFormaPagoCod" 			 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intParaTipoConceptoCreditoCod" jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="bdMontoConcepto"				 jdbcType="NUMERIC"   	 javaType="java.math.BigDecimal" 	mode="INOUT"/>    
+     <parameter property="bdMontoCapital"				 jdbcType="NUMERIC"   	 javaType="java.math.BigDecimal" 	mode="INOUT"/>
+     <parameter property="tsFechaVencimiento" 			 jdbcType="TIMESTAMP"    javaType="java.sql.Timestamp" 		mode="INOUT"/>
+     <parameter property="intPeriodoPlanilla"			 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="intParaEstadoCod"				 jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="bdSaldoDetalleCredito" 		 jdbcType="NUMERIC"   	 javaType="java.math.BigDecimal" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 					 jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			 jdbcType="NUMERIC" 	 javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuentaPk" 					 jdbcType="NUMERIC"		 javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intItemExpediente"			 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+   	 <parameter property="intItemCronograma" 			 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPkExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 					 jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			 jdbcType="NUMERIC" 	 javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuentaPk" 					 jdbcType="NUMERIC"		 javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intItemExpediente"			 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPkExpedienteYPeriodoYFormaPago" class="java.util.Map">
+   	 <parameter property="cursorLista" 					 jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			 jdbcType="NUMERIC" 	 javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuentaPk" 					 jdbcType="NUMERIC"		 javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intItemExpediente"			 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+   	 <parameter property="intPeriodoPlanilla" 	 		 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+   	 <parameter property="intParaFormaPagoCod" 	 		 jdbcType="NUMERIC"		 javaType="java.lang.Integer"  		mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parCronograma">
+	{ call PKG_CRONOGRAMACREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCronograma" >
+	{ call PKG_CRONOGRAMACREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resCronograma">
+	{ call PKG_CRONOGRAMACREDITO.getListaPorPK(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkExpediente" parameterMap="parPkExpediente" resultMap="resCronograma">
+	{ call PKG_CRONOGRAMACREDITO.getListaPorPkExpediente(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getLstVencidoPorPkExpYPerYPago" parameterMap="parPkExpedienteYPeriodoYFormaPago" resultMap="resCronograma">
+	{ call PKG_CRONOGRAMACREDITO.getLstVencidoPorPkExpYPerYPago(?,?,?,?,?,?,?) }
+  </procedure>
+    
+</sqlMap>  

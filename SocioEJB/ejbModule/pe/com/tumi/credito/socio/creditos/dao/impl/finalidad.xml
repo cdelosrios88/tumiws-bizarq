@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="FinalidadDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.Finalidad" alias="Finalidad"/> 
+	
+  <resultMap id="resFinalidad" class="Finalidad" >
+     <result property="id.intPersEmpresaPk"      	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"	column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      		column="pITEMCREDITO_N" />
+     <result property="id.intParaFinalidadCod"     	column="pFINALIDAD_N" />
+     <result property="intValor"     				column="pVALOR_N" />
+  </resultMap>
+  
+  <parameterMap id="parFinalidad" class="Finalidad">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intParaFinalidadCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intValor" 					javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaFinalidadCod" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parFinalidad">
+	{ call PKG_CONFCREFINALIDAD.grabar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parFinalidad" >
+	{ call PKG_CONFCREFINALIDAD.modificar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resFinalidad">
+	{ call PKG_CONFCREFINALIDAD.getListaPorPK(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPkCredito" parameterMap="parPorPKCredito" resultMap="resFinalidad">
+	{ call PKG_CONFCREFINALIDAD.getListaPorPkCredito(?,?,?,?) }  
+  </procedure> 
+</sqlMap>

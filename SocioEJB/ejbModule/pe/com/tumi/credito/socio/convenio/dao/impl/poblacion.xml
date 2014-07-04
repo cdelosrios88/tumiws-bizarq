@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PoblacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.Poblacion" alias="Poblacion"/> 
+	
+  <resultMap id="resPoblacion" class="Poblacion" >
+     <result property="id.intItemPoblacion" column="pITEMPOBLACION_N" />
+     <result property="intConvenio"      	column="pCONVENIO_N" />
+     <result property="intItemConvenio"     column="pITEMCONVENIO_N" />
+     <result property="strDescripcion"      column="pDESCRIPCION_V" />
+     <result property="bdDistancia"   		column="pDISTANCIA_N" />
+     <result property="intParaEstadoCod"   	column="pPARA_ESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parPoblacion" class="Poblacion">
+     <parameter property="id.intItemPoblacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intConvenio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+	 <parameter property="intItemConvenio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="strDescripcion" 		javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>  
+     <parameter property="bdDistancia" 			javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemPoblacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKConvenio" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPoblacion">
+	{ call PKG_CONVPOBLACION.grabar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPoblacion" >
+	{ call PKG_CONVPOBLACION.modificar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPoblacion">
+	{ call PKG_CONVPOBLACION.getListaPorPk(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkConvenio" parameterMap="parPorPKConvenio" resultMap="resPoblacion">
+	{ call PKG_CONVPOBLACION.getListaPorPkConvenio(?,?,?) }
+  </procedure>
+</sqlMap>

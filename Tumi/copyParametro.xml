@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<project default="main" basedir=".">
+<property name="nombre" value="Parametro" />
+<property name="path.seguridad" value="${basedir}\..\Seguridad" />
+<property name="path.persona" value="${basedir}\..\Persona" />
+<property name="path.parametro" value="${basedir}\..\Parametro" />
+<property name="path.socio" value="${basedir}\..\Socio" />
+<property name="path.servicio" value="${basedir}\..\Servicio" />
+<property name="path.movimiento" value="${basedir}\..\Movimiento" />
+<property name="path.cobranza" value="${basedir}\..\Cobranza" />
+<property name="path.riesgo" value="${basedir}\..\Riesgo" />
+<property name="path.contabilidad" value="${basedir}\..\Contabilidad" />
+<target name="main" description="Create project" depends="copiar">
+	<echo>copiar jars.</echo>
+</target>
+	
+<target name="proceso">
+	<ant antfile="${path.parametro}EJB\build.xml" dir="${path.parametro}EJB\" target="crear-cliente"/>
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.seguridad}\EarContent\META-INF\${nombre}.jar" />
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.persona}\EarContent\META-INF\${nombre}.jar" />
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.socio}\EarContent\META-INF\${nombre}.jar" />
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.servicio}\EarContent\META-INF\${nombre}.jar" />
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.movimiento}\EarContent\META-INF\${nombre}.jar" />
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.riesgo}\EarContent\META-INF\${nombre}.jar" />
+	<copy file="${path.parametro}EJB\${nombre}.jar" tofile="${path.contabilidad}\EarContent\META-INF\${nombre}.jar" />
+	<delete file="${path.parametro}EJB\${nombre}.jar"/>
+</target>
+	
+<target name="copiar" description="copia el jar Seguridad" depends="proceso"/>
+</project>

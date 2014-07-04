@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="IngresoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.ingreso.domain.Ingreso" alias="Ingreso"/> 
+	
+  <resultMap id="resIngreso" class="Ingreso" >
+	<result property="id.intIdEmpresa"  					column="pEmpresaingreso" />
+	<result property="id.intIdIngresoGeneral"   			column="pitemingresogeneral" />
+	<result property="intParaTipoOperacion"   				column="pTipooperacion" />
+    <result property="intParaFormaPago"      				column="pFormapago" />
+    <result property="intParaDocumentoGeneral"     			column="pdocumentogeneral" />
+    <result property="intItemPeriodoIngreso"      			column="pitemperiodoingreso" />
+    <result property="intItemIngreso"      					column="pitemingreso" />
+    <result property="intSucuIdSucursal"      				column="pidsucursal" />
+    <result property="intSudeIdSubsucursal"      			column="pidsubsucursal" />
+    <result property="intParaTipoSuboperacion"      		column="psubtipooperacion" />
+    <result property="tsFechaProceso"      					column="pfechaprogreso" />
+    <result property="dtFechaIngreso"      					column="pfechaingreso" />
+    <result property="intParaFondoFijo"      				column="ptipofondofijo" />
+    <result property="intItemBancoFondo"      				column="pitembancofondo" />
+    <result property="intItemBancoCuenta"     				column="pitembancocuenta" />
+    <result property="strNumeroCheque"     					column="pnumerocheque" />
+    <result property="intPersEmpresaGirado"      			column="pempresagirado" />
+    <result property="intPersPersonaGirado"      			column="ppersonagirado" />
+    <result property="intCuentaGirado"      				column="pcuentagirado" />
+    <result property="intParaTipoMoneda"      				column="ptipomoneda" />
+    <result property="bdTipoCambio"      					column="ptipocambio" />
+    <result property="bdMontoTotal"      					column="pmontototal" />
+    <result property="strObservacion"      					column="pobservacion" />
+    <result property="intParaEstado"      					column="pestado" />
+    <result property="intPersEmpresaLibro"      			column="pempresalibro" />
+    <result property="intContPeriodoLibro"      			column="pperiodolibro" />
+    <result property="intContCodigoLibro"      				column="pcodigolibro" />
+    <result property="tsFechaRegistro"      				column="pfecharegistro" />
+    <result property="intPersEmpresaUsuario"    			column="pempresausuario" />
+    <result property="intPersPersonaUsuario"      			column="ppersonausuario" />
+    <result property="intPersEmpresaIngresoAn"      		column="pempresaingresoan" />
+    <result property="intItemIngresoGeneralAn"      		column="pitemingresogeneralan" />
+    <result property="intParaTipoIngreso"      				column="ptipoingreso" />
+    <result property="intItemArchivoIngreso"      			column="pitemarchivoingreso" />
+    <result property="intHistoricoIngreso"      			column="pitemhistoricoingreso" />
+    <result property="intParaTipoDeposito"      			column="ptipodeposito" />
+    <result property="intItemArchivoDeposito"      			column="pitemarchivodeposito" />
+    <result property="intItemHistoricoDeposito"      		column="pitemhistoricodeposito" />
+    <result property="intPersEmpresa"      					column="pempresa" />
+    <result property="intParaTipoFondoFijoCan"      		column="ptipofondofijocan" />
+    <result property="intItemPeriodoFondo"      			column="pitemperiodofondo" />
+    <result property="intIdSucursalCan"      				column="pidsucursalcan" />
+    <result property="intItemFondoFijo"      				column="pitemfondofijo" />
+    <result property="strNumeroOperacion"      				column="pnumerooperacion" />
+    <result property="intParaEstadoDepositado"      		column="pestadodepositado" />
+  </resultMap>
+  
+  <parameterMap id="parIngreso" class="Ingreso">
+	 <parameter property="id.intIdEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intIdIngresoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoOperacion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaFormaPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaDocumentoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemPeriodoIngreso"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemIngreso"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoSuboperacion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaProceso"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="dtFechaIngreso"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="intParaFondoFijo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strNumeroCheque"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaGirado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaGirado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intCuentaGirado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdTipoCambio"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoTotal"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContCodigoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"   		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaIngresoAn"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemIngresoGeneralAn"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemArchivoIngreso"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intHistoricoIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoDeposito"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemArchivoDeposito"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemHistoricoDeposito"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoFondoFijoCan"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemPeriodoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdSucursalCan"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemFondoFijo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strNumeroOperacion"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstadoDepositado"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intIdEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIdIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parParaItem" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intParaDocumentoGeneral"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemPeriodoIngreso"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parParaBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intIdEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intParaDocumentoGeneral"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intItemIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="dtFechaDesde"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+   	 <parameter property="dtFechaHasta"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+   	 <parameter property="bdMontoTotal"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intParaEstado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="strNumeroOperacion"		javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
+   	 <parameter property="intItemBancoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intItemBancoCuenta"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parParaDepositar" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intIdEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intParaTipoMoneda"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>   	 
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intIdEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  
+  <procedure id="getListaParaItem" parameterMap="parParaItem" resultMap="resIngreso">
+	{ call PKG_INGRESO.getListaParaItem(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="grabar" parameterMap="parIngreso">
+	{ call PKG_INGRESO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parIngreso" >
+	{ call PKG_INGRESO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resIngreso">
+	{ call PKG_INGRESO.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaParaBuscar" parameterMap="parParaBuscar" resultMap="resIngreso">
+	{ call PKG_INGRESO.getListaParaBuscar(?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaParaDepositar" parameterMap="parParaDepositar" resultMap="resIngreso">
+	{ call PKG_INGRESO.getListaParaDepositar(?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getListaIngNoEnlazados" parameterMap="parPorEmpresa" resultMap="resIngreso">
+	{ call PKG_INGRESO.getListaIngNoEnlazados(?,?) }
+  </procedure> 
+</sqlMap>
