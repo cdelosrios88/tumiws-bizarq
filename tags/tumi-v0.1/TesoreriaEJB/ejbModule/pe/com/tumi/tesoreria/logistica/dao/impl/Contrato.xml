@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ContratoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.Contrato" alias="Contrato"/> 
+	
+  <resultMap id="resContrato" class="Contrato" >
+	<result property="id.intPersEmpresa"  			column="pempresacontrato" />
+	<result property="id.intItemContrato"   		column="pitemcontrato" />
+	<result property="intPersEmpresaRequisicion"   	column="pempresarequisicion" />
+	<result property="intItemRequisicion"   		column="pitemrequisicion" />
+	<result property="tsFechaContrato"   			column="pfechacontrato" />
+	<result property="intParaTipoContrato"   		column="ptipocontrato" />
+	<result property="intParatTipoEmpresaServicio"  column="ptipoempservicio" />
+	<result property="intPersPersonaServicio"   	column="ppersonaservicio" />
+	<result property="intDomicilio"   				column="pdomicilio" />
+	<result property="intParaTipoEmpresaSolicita"   column="ptipoempsolicita" />
+	<result property="intPersPersonaSolicita"   	column="ppersonasolicita" />
+	<result property="intPersEmpresaSucursal"   	column="pempresasucursal" />
+	<result property="intSucuIdSucursal"   			column="pidsucursal" />
+	<result property="intIdAreaSolicitante"   		column="pidareasolicitante" />
+	<result property="dtFechaInicio"   				column="pfechainicio" />
+	<result property="dtFechaFin"   				column="pfechafin" />
+	<result property="intParaTipoFrecuencia"   		column="ptipofrecuencia" />
+	<result property="intPagoUnico" 				column="ppagounico" />
+	<result property="bdMontoContrato"   			column="pmontocontrato" />
+	<result property="intParaTipoMoneda"   			column="ptipomoneda" />
+	<result property="intRenovacion"   				column="prenovacion" />
+	<result property="bdMontoGarantia"   			column="pmontogarantia" />
+	<result property="intParaTipoMonedaGarantia"   	column="ptipomonedagaran" />
+	<result property="strObservacion"   			column="pobservacion" />
+	<result property="intPersEmpresaAnterior"   	column="pempresacontratoant" />
+	<result property="intItemContratoAnterior"   	column="pitemcontratoant" />
+	<result property="intPersEmpresaUsuario"   		column="pempresausuario" />
+	<result property="intPersPersonaUsuario"   		column="ppersonausuario" />
+	<result property="tsFechaAnula"   				column="pfechaanula" />
+	<result property="intPersEmpresaAnula"   		column="pempresaanula" />
+	<result property="intPersPersonaAnula"   		column="ppersonaanula" />
+	<result property="intParaTipo"   				column="ptipo" />
+	<result property="intItemArchivo"   			column="pitemarchivo" />
+	<result property="intItemHistorico"   			column="pitemhistorico" />
+	<result property="intParaEstado"   				column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parContrato" class="Contrato">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemContrato"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaRequisicion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaContrato"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intParaTipoContrato"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParatTipoEmpresaServicio"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaServicio"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intDomicilio"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoEmpresaSolicita"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaSolicita"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdAreaSolicitante"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="dtFechaInicio"   				javaType="java.util.Date" 			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="dtFechaFin"					javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="intParaTipoFrecuencia"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPagoUnico"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoContrato"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intRenovacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoGarantia"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMonedaGarantia"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnterior"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemContratoAnterior"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemArchivo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemHistorico"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>	 
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemContrato"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoContrato"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersonaServicio"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersonaSolicita"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="dtFiltroInicioDesde"   		javaType="java.util.Date" 			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroInicioHasta"   		javaType="java.util.Date" 			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroFinDesde"   			javaType="java.util.Date" 			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroFinHasta"   			javaType="java.util.Date" 			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="intPersEmpresaRequisicion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Agregado por cdelosrios, 29/09/2013 -->
+	 <parameter property="intItemContrato"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Fin agregado por cdelosrios, 29/09/2013 -->
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parContrato">
+	{ call PKG_CONTRATO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parContrato" >
+	{ call PKG_CONTRATO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resContrato">
+	{ call PKG_CONTRATO.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resContrato">
+	{ call PKG_CONTRATO.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

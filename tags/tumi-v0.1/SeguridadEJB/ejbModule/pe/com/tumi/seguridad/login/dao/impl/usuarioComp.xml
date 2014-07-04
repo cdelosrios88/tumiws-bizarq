@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="UsuarioCompDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.composite.UsuarioComp" alias="UsuarioComp"/> 
+	
+  <resultMap id="resUsuarioComp" class="UsuarioComp" >
+     <result property="usuario.intPersPersonaPk"      		column="puPers_persona_n_pk" />
+     <result property="usuario.intTipoUsuario"  			column="puTipousuario_n" />
+     <result property="usuario.strUsuario"      			column="puUsuario_v" />
+     <result property="usuario.strContrasena"   			column="puContrasena_v" />
+     <result property="usuario.dtFechaRegistro"    			column="puFecharegistro_d" />
+     <result property="usuario.intIdEstado"    				column="puIdestado_n" />
+     <result property="empresaUsuario.id.intPersEmpresaPk"  column="peuPers_empresa_n_pk" />
+     <result property="empresaUsuario.id.intPersPersonaPk"  column="peuPers_persona_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parUsuarioCompBusqueda" class="java.util.Map">
+  	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 	mode="OUT"/>
+     <parameter property="intIdEmpresa"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="intTipoUsuario"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>    
+     <parameter property="intIdEstado" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intIdPerfil"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="strUsuario"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>    
+     <parameter property="intTipoSucursal" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="getListaDeBusqueda" parameterMap="parUsuarioCompBusqueda" resultMap="resUsuarioComp">
+	{ call PKG_USUARIO_COMP.getListaDeBusqueda(?,?,?,?,?,?,?) }
+  </procedure>
+      
+</sqlMap>  

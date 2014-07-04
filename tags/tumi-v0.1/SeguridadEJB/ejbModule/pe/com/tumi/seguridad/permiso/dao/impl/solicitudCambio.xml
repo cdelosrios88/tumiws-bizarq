@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudCambioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.SolicitudCambio" alias="SolicitudCambio"/> 
+	
+  <resultMap id="resSolicitudCambio" class="SolicitudCambio" >
+     <result property="id.intPersEmpresaPk"     column="pPers_empresa_n_pk" />
+     <result property="id.intIdTransaccion"  	column="pIdtransaccion_n" />
+     <result property="id.intItem"      		column="pItem_n" />
+     <result property="strDescripcion"   		column="pDescripcion_v" />
+     <result property="strJustificacion" 		column="pJustificacion_v" />
+     <result property="strFinalidad"   			column="pFinalidad_v" />
+  </resultMap>
+  
+  <parameterMap id="parSolicitudCambio" class="SolicitudCambio">
+     <parameter property="id.intPersEmpresaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdTransaccion"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItem" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strDescripcion"		jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+	 <parameter property="strJustificacion"		jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="strFinalidad" 		jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intItem" 				jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSolicitudCambio">
+	{ call PKG_SOLICITUDCAMBIO.grabar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSolicitudCambio" >
+	{ call PKG_SOLICITUDCAMBIO.modificar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resSolicitudCambio">
+	{ call PKG_SOLICITUDCAMBIO.getListaPorPK(?,?,?,?) }
+  </procedure>
+
+</sqlMap>  

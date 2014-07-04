@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PermisoPerfilDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.PermisoPerfil" alias="PermisoPerfil"/> 
+	
+  <resultMap id="resPermisoPerfil" class="PermisoPerfil" >
+     <result property="id.intPersEmpresaPk"      column="pPers_empresa_n_pk" />
+     <result property="id.intIdPerfil"  		 column="pIdperfil_n" />
+     <result property="id.intIdTransaccion"      column="pIdtransaccion_n" />
+     <result property="intIdEstado"   			 column="pIdestado_n" />
+  </resultMap>
+  
+  <parameterMap id="parPermisoPerfil" class="PermisoPerfil">
+     <parameter property="id.intPersEmpresaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdPerfil"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdTransaccion" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdEstado"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKPerfil" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPermisoPerfil">
+	{ call PKG_PERMISOPERFIL.grabar(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPermisoPerfil" >
+	{ call PKG_PERMISOPERFIL.modificar(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPermisoPerfil">
+	{ call PKG_PERMISOPERFIL.getListaPorPK(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorPkPerfil" parameterMap="parPorPKPerfil" resultMap="resPermisoPerfil">
+	{ call PKG_PERMISOPERFIL.getListaPorPkPerfil(?,?,?) }
+  </procedure>
+  
+</sqlMap>  

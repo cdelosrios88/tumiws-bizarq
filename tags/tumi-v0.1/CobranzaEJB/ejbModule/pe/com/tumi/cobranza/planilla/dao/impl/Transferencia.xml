@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TransferenciaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.Transferencia" alias="Transferencia"/> 
+	<resultMap class="Transferencia" id="resTransferencia">
+		<result property="id.intPersEmpresaTransferencia" 	column="PEMPRESATRANSFERENCIA"/>
+		<result property="id.intCcobItemtransferencia" 		column="PITEMTRANSFERENCIA"/>
+		<result property="tsTranFecha" 						column="PTRANFECHA"/>
+		<result property="intParaDocumentoGeneral" 			column="PDOCUMENTOGENERAL"/>
+		<result property="intPersEmpresaSolctacte" 			column="PEMPRESASOLCTACTE"/>
+		<result property="intCcobItemSolctacte" 			column="PITEMSOLCTACTE"/>
+		<result property="intParaTipoSolicitudctacte" 		column="PTIPOSOLICITUDCTACTE"/>
+		<result property="intPersEmpresaLibro" 				column="PEMPRESALIBRO"/>
+		<result property="intContPeriodoLibro" 				column="PPERIODOLIBRO"/>
+		<result property="intContCodigoLibro" 				column="PCODIGOLIBRO"/>
+		<result property="intTranPeriodo" 					column="PTRANPERIODO"/>
+	</resultMap>
+
+  <parameterMap id="parTransferencia" class="Transferencia">
+		<parameter property="id.intPersEmpresaTransferencia"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intCcobItemtransferencia"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsTranFecha"						javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intParaDocumentoGeneral"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaSolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intCcobItemSolctacte"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoSolicitudctacte"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intTranPeriodo"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+
+  </parameterMap>
+  
+  <parameterMap id="parPorFiltro" class="java.util.Map">
+  		<parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>		
+		<parameter property="intPersEmpresaSolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intCcobItemSolctacte"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoSolicitudctacte"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>		
+
+  </parameterMap>
+  
+
+  
+  <procedure id="grabar" parameterMap="parTransferencia">
+	{ call PKG_Transferencia.grabar(?,?,?,?,?,?,?,?,?,?,?)}  
+  </procedure>
+  
+ <procedure id="getListaTransferencias" parameterMap="parPorFiltro" resultMap="resTransferencia">
+	{ call PKG_Transferencia.getListaTransferencias(?,?,?,?) }
+  </procedure>	
+</sqlMap>  

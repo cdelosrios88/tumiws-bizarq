@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AdendaCaptacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.AdendaCaptacion" alias="AdendaCaptacion"/> 
+	
+  <resultMap id="resAdendaCaptacion" class="AdendaCaptacion">
+     <result property="id.intConvenio"  			column="pCONVENIO_N" />
+     <result property="id.intItemConvenio"      	column="pITEMCONVENIO_N" />
+     <result property="id.intPersEmpresaPk"    		column="pPERS_EMPRESA_N" />
+     <result property="id.intParaTipoCaptacionCod"  column="pPARA_TIPOCAPTACION_N" />
+     <result property="id.intItem"  				column="pITEM_N" />
+     <result property="intParaEstadoCod"   			column="pPARA_ESTADO_N" />
+     <result property="tsFechaEliminacion"   		column="pFECHAELIMINACION_D" />
+     <result property="intPersPersonaRegistraPk"   	column="pPERSONAREGISTRA_N" />
+     <result property="tsFechaRegistra"   			column="pFECHAREGISTRA_D" />
+     <result property="intPersPersonaEliminaPk"   	column="pPERSONAELIMINA_N" />
+  </resultMap>
+  
+  <parameterMap id="parAdendaCaptacion" class="AdendaCaptacion">
+     <parameter property="id.intConvenio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intItemConvenio"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+	 <parameter property="id.intParaTipoCaptacionCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intItem" 					javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="intParaEstadoCod" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPersPersonaRegistraPk" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistra" 				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP" mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItem" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKAdendaYConvenio" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdItemConvenio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCaptacion" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parAdendaCaptacion">
+	{ call PKG_ADENDACAPTACION.grabar(?,?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAdendaCaptacion" >
+	{ call PKG_ADENDACAPTACION.modificar(?,?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAdendaCaptacion">
+	{ call PKG_ADENDACAPTACION.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkAdenda" parameterMap="parPorPKAdendaYConvenio" resultMap="resAdendaCaptacion">
+	{ call PKG_ADENDACAPTACION.getListaPorPkAdendaYConvenio(?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>  

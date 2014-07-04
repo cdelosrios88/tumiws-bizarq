@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ConceptoPagoDaoIbatis">
+<typeAlias type="pe.com.tumi.movimiento.concepto.domain.ConceptoPago" alias="ConceptoPago"/> 
+
+	<resultMap id="resConceptoPago" class="ConceptoPago" >
+	     <result property="id.intPersEmpresaPk"     	column="pPERS_EMPRESA_N_PK" />
+	     <result property="id.intCuentaPk"    			column="pCSOC_CUENTA_N_PK" />
+	     <result property="id.intItemCuentaConcepto"    column="pCMOV_ITEMCUENTACONCEPTO_N" />
+	     <result property="id.intItemCtaCptoDet"    	column="pCMOV_ITEMCTACPTODET_N" />
+	     <result property="id.intItemConceptoPago"    	column="pCMOV_ITEMCOCEPTOPAGO_N" />
+	     <result property="intPeriodo"     				column="pCOPA_PERIODO_N" />
+	     <result property="bdMontoPago"     			column="pCOPA_MONTOPAGO_N" />
+	     <result property="bdMontoSaldo"     			column="pCOPA_MONTOSALDO_N" />
+	     <result property="intEstadoCod"     			column="pPARA_ESTADO_N_COD" />  
+	</resultMap>
+
+	<parameterMap id="parPorConceptoPago" class="ConceptoPago">
+	   	<parameter property="id.intPersEmpresaPk" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intCuentaPk" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intItemCuentaConcepto" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intItemCtaCptoDet" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intItemConceptoPago" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="intPeriodo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="bdMontoPago" 					javaType="java.math.BigDecimal" jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="bdMontoSaldo" 					javaType="java.math.BigDecimal" jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="intEstadoCod" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+  	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intPersEmpresaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemCuentaConcepto" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemCtaCptoDet" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemConceptoPago" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parPorCuentaConceptoDet" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemCuentaConcepto" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemCtaCptoDet" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parPorCuentaConceptoDetYPeriodo" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemCuentaConcepto" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemCtaCptoDet" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+
+
+  	<procedure id="grabar" parameterMap="parPorConceptoPago">
+		{ call PKG_CONCEPTOPAGO.grabar(?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  
+  	<procedure id="modificar" parameterMap="parPorConceptoPago" >
+		{ call PKG_CONCEPTOPAGO.modificar(?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  
+  	<procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resConceptoPago">
+		{ call PKG_CONCEPTOPAGO.getListaPorPK(?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaConceptoPagoPorCuentaConceptoDet" parameterMap="parPorCuentaConceptoDet" resultMap="resConceptoPago">
+		{ call PKG_CONCEPTOPAGO.getListaPorCtaCtoDet(?,?,?,?,?) }  
+  	</procedure>
+
+	<procedure id="getListaConceptoPagoPorCtaCptoDetYPeriodo" parameterMap="parPorCuentaConceptoDetYPeriodo" resultMap="resConceptoPago">
+		{ call PKG_CONCEPTOPAGO.getListaPorCtaCptoDetYPeriodo(?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getUltimoCptoPagoPorCuentaConceptoDet" parameterMap="parPorCuentaConceptoDet" resultMap="resConceptoPago">
+		{ call PKG_CONCEPTOPAGO.getUltimoCptoPago(?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaConceptoPagotoCobranza" parameterMap="parPorCuentaConceptoDet" resultMap="resConceptoPago">
+		{ call PKG_CONCEPTOPAGO.getListaPorCtaCtoDettoCobranza(?,?,?,?,?) }  
+  	</procedure>	
+</sqlMap> 
+  

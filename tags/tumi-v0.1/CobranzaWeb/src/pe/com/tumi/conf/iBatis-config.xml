@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Efectuado.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Envioconcepto.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Envioinflada.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Enviomonto.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Envioresumen.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/gestion/dao/impl/GestorCobranza.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/gestion/dao/impl/GestionCobranza.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/gestion/dao/impl/GestionCobranzaEnt.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/gestion/dao/impl/GestionCobranzaSoc.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/gestion/dao/impl/DocumentoCobranza.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/gestion/dao/impl/GestionCobranzaCierre.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/EfectuadoResumen.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/CobroPlanillas.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/SolicitudCtaCte.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/SolicitudCtaCteTipo.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/EstadoSolicitudCtaCte.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/SolicitudCtaCteBloqueo.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/EfectuadoConcepto.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/DescuentoIndebido.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Transferencia.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/prioridad/dao/impl/PrioridadDescuento.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/cierremensual/dao/impl/CierreCobranza.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/cierremensual/dao/impl/CierreCobranzaOperacion.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/cierremensual/dao/impl/CierreCobranzaPlanilla.xml"/>
+	<sqlMap resource="pe/com/tumi/cobranza/planilla/dao/impl/Devolucion.xml"/>
+</sqlMapConfig>

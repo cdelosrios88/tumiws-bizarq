@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="UbigeoDaoIbatis">
+    <typeAlias type="pe.com.tumi.parametro.general.domain.Ubigeo" alias="ubigeo"/>
+    
+    <resultMap id="resUbigeo" class="ubigeo" >
+	     <result property="intIdUbigeo"      	column="pIDUBIGEO_N" />
+	     <result property="strDescripcion"      column="pDESCRIPCION_V" />
+	     <result property="intEstado"      		column="pIDESTADO_N" />
+    </resultMap>
+    
+    <parameterMap id="parDepartamento" 		class="java.util.Map">
+    	 <parameter property="cursor"		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="parProvinciaPorIdUbigeo" class="java.util.Map">
+    	 <parameter property="cursor" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pId" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="parDistritoPorIdUbigeo" class="java.util.Map">
+    	 <parameter property="cursor" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pId" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="getListaDepartamento" parameterMap="parDepartamento" resultMap="resUbigeo">
+		{ call PKG_UBIGEO.getListaDepartamento( ? ) }  
+    </procedure>
+    
+    <procedure id="getListaProvinciaPorIdUbigeo" parameterMap="parProvinciaPorIdUbigeo" resultMap="resUbigeo">
+		{ call PKG_UBIGEO.getListaProvinciaPorIdUbigeo( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="getListaDistritoPorIdUbigeo" parameterMap="parDistritoPorIdUbigeo" resultMap="resUbigeo">
+		{ call PKG_UBIGEO.getListaDistritoPorIdUbigeo( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="getListaPorIdUbigeo" parameterMap="parDistritoPorIdUbigeo" resultMap="resUbigeo">
+		{ call PKG_UBIGEO.getListaPorIdUbigeo( ?, ? ) }  
+    </procedure>  
+    
+    
+</sqlMap>  

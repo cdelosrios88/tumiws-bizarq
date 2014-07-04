@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+    <typeAlias type="pe.com.tumi.seguridad.domain.LoginLog" alias="loginlog"/> 
+    
+    <parameterMap id="seguridad.domain.loginlog.map" class="loginLog">  
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>  
+		 <parameter property="fechaIntento" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>
+         <parameter property="ip" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="host" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="tipoIntento" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="usuario_id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>
+         <parameter property="sistema_id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="OUT"/>
+    </parameterMap>  
+       
+    <resultMap id="seguridad.domain.loginlog.result" class="loginlog" >
+	     <result property="id" column="LOGC_NCODIGO"/>
+	     <result property="fechaIntento" column="LOGC_DFECHAINTENTO"/>
+	     <result property="ip" column="LOGC_VIP"/>
+		 <result property="host" column="LOGC_VHOSTNAME"/>
+		 <result property="tipoIntento" column="LOGC_VTIPOINTENTO"/>
+	     <result property="usuario_id" column="USRC_NCODIGO"/>
+	     <result property="sistema_id" column="SISC_NCODIGO"/>
+    </resultMap>
+    
+    <parameterMap id="parameterMap_01" class="java.util.Map">
+     	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="parameterMap_02" class="java.util.Map">
+   		<parameter property="condition" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+
+    <procedure id="seguridad.domain.loginlog.find" parameterMap="parameterMap_02" resultMap="seguridad.domain.loginlog.result">
+		{ call PKG_ASE.LOGSS_FIND( ? , ? ) }  
+    </procedure>
+    
+    <procedure id="seguridad.domain.loginlog.insert" parameterMap="seguridad.domain.loginlog.map">  
+        { call PKG_ASE.LOGSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? ) }  
+    </procedure> 
+
+</sqlMap>  

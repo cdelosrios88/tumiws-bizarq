@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoSunatDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDetalle" alias="DocumentoSunatDetalle"/> 
+	
+  <resultMap id="resDocumentoSunatDetalle" class="DocumentoSunatDetalle" >
+	<result property="id.intPersEmpresa"  				column="pempresadocsunat" />
+	<result property="id.intItemDocumentoSunat"   		column="pitemdocsun" />
+	<result property="id.intItemDocumentoSunatDetalle"	column="pitemdocsundet" />
+	<result property="intParaTipoDocumentoSunat"   		column="ptipocptodocsunat" />
+	<result property="intPersEmpresaOrdenCompra"   		column="pempresaorden" />
+	<result property="intItemOrdenCompra"   			column="pitemordencompra" />
+	<result property="intItemOrdenCompraDetalle"  		column="pitemordencompradet" />
+	<result property="intAfectoIGV"   					column="pafectoigv" />
+	<result property="intParaTipoMoneda"   				column="ptipomoneda" />
+	<result property="bdMontoSinTipoCambio"   			column="pmontosintipocambio" />
+	<result property="bdMontoTotal"   					column="pmontototal" />
+	<result property="strDescripcion"   				column="pdescripcion" />
+	<result property="intSucuIdSucursal"   				column="pidsucursal" />
+	<result property="intSudeIdSubsucursal"   			column="pidsubsucursal" />
+	<result property="intIdArea"   						column="pidarea" />
+	<result property="intParaEstado"   					column="pestado" />
+	<result property="intPersEmpresaCuenta"   			column="pempresacuenta" />
+	<result property="intContPeriodoCuenta" 			column="pperiodocuenta" />
+	<result property="strContNumeroCuenta"   			column="pnumerocuenta" />
+  </resultMap>
+  
+  <parameterMap id="parDocumentoSunatDetalle" class="DocumentoSunatDetalle">
+	 <parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDocumentoSunatDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaOrdenCompra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemOrdenCompra"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemOrdenCompraDetalle"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intAfectoIGV"						javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSinTipoCambio"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoTotal"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDescripcion"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdArea"   						javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaCuenta"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoCuenta"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strContNumeroCuenta"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>	 
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunatDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorDocumentoSunat" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorOrdenCompraDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaOrdenCompra"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompraDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+  </parameterMap> 
+  
+  <!-- Agregado por cdelosrios, 01/11/2013 -->
+  <parameterMap id="parPorDocumentoSunatYTipoDocSunat" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoDocumentoSunat"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin agregado por cdelosrios, 01/11/2013 -->
+  
+  <procedure id="grabar" parameterMap="parDocumentoSunatDetalle">
+	{ call PKG_DOCUMENTOSUNATDETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDocumentoSunatDetalle" >
+	{ call PKG_DOCUMENTOSUNATDETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDocumentoSunatDetalle">
+	{ call PKG_DOCUMENTOSUNATDETALLE.getListaPorPk(?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getListaPorDocumentoSunat" parameterMap="parPorDocumentoSunat" resultMap="resDocumentoSunatDetalle">
+	{ call PKG_DOCUMENTOSUNATDETALLE.getListaPorDocumentoSunat(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorOrdenCompraDetalle" parameterMap="parPorOrdenCompraDetalle">
+	{ call PKG_DOCUMENTOSUNATDETALLE.getListaPorOrdenCompraDetalle(?,?,?,?) }  
+  </procedure>
+  
+  <!-- Agregado por cdelosrios, 01/11/2013 -->
+  <procedure id="getListaPorDocSunatYTipoDocSunat" parameterMap="parPorDocumentoSunatYTipoDocSunat" 
+  		resultMap="resDocumentoSunatDetalle">
+	{ call PKG_DOCUMENTOSUNATDETALLE.getListaPorDocSunatYTipoDoc(?,?,?,?) }  
+  </procedure>
+  <!-- Fin agregado por cdelosrios, 01/11/2013 -->
+  
+</sqlMap>

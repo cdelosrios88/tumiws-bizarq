@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+    <typeAlias type="pe.com.tumi.administracion.domain.Parametro" alias="parametro"/> 
+    
+    <parameterMap id="administracion.domain.parametro.map" class="parametro">  
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>  
+         <parameter property="fechaCreacion" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>  
+         <parameter property="fechaModificacion" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>  
+         <parameter property="codigo" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="descripcion" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="estado" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="nombre" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="valor" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="idSis" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/> 
+         <parameter property="usuarioCreacion" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/> 
+         <parameter property="usuarioModificacion" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>  
+    </parameterMap>  
+       
+    <resultMap id="administracion.domain.parametro.result" class="parametro" >
+	     <result property="id" column="PARC_NID_TIP_SIMPL"/>
+	     <result property="fechaCreacion" column="PARC_DFECH_CRECN"/>
+	     <result property="fechaModificacion" column="PARC_DFECH_MODFCN"/>
+	     <result property="codigo" column="PARC_VCODG"/>
+	     <result property="descripcion" column="PARC_VDESCRPCN"/>  
+         <result property="estado" column="PARC_VESTD"/>  
+         <result property="nombre" column="PARC_VNOMBR"/>  
+         <result property="valor" column="PARC_VVALR"/>  
+         <result property="idSis" column="PARC_NSIS_COD"/>  
+         <result property="usuarioCreacion" column="PARC_NUSR_CRECN_ID"/>  
+	     <result property="usuarioModificacion" column="PARC_NUSR_MODFCN_ID"/> 
+    </resultMap>
+    
+    <resultMap id="administracion.domain.parametro.result2" class="parametro" >
+	     <result property="id" column="PARC_NID_TIP_SIMPL"/>
+	     <result property="fechaCreacion" column="PARC_DFECH_CRECN"/>
+	     <result property="fechaModificacion" column="PARC_DFECH_MODFCN"/>
+	     <result property="codigo" column="PARC_VCODG"/>
+	     <result property="descripcion" column="PARC_VDESCRPCN"/>  
+         <result property="estado" column="PARC_VESTD"/>  
+         <result property="nombre" column="PARC_VNOMBR"/>  
+         <result property="valor" column="PARC_VVALR"/>  
+         <result property="idSis" column="PARC_NSIS_COD"/>  
+         <result property="sistemaDescripcion" column="sisc_vnombrecorto"/>
+         <result property="usuarioCreacion" column="PARC_NUSR_CRECN_ID"/>  
+	     <result property="usuarioModificacion" column="PARC_NUSR_MODFCN_ID"/> 
+    </resultMap>
+    
+    <parameterMap id="parameterMap_01" class="java.util.Map">
+     	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="parameterMap_02" class="java.util.Map">
+   		<parameter property="condition" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="administracion.domain.parametro.save" parameterMap="administracion.domain.parametro.map">  
+          { call PKG_ASE.PARSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ) }
+	</procedure>  
+		
+     <procedure id="administracion.domain.parametro.insert" parameterMap="administracion.domain.parametro.map">  
+          { call PKG_ASE.PARSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ) }  
+     </procedure> 
+        
+    <procedure id="administracion.domain.parametro.find" parameterMap="parameterMap_02" resultMap="administracion.domain.parametro.result">
+		  { call PKG_ASE.PARSS_FIND( ? , ? ) }  
+    </procedure>
+    
+    <procedure id="administracion.domain.parametro.findwithdesc" parameterMap="parameterMap_02" resultMap="administracion.domain.parametro.result2">
+		  { call PKG_ASE.PARSS_FINDWITHDESC( ? , ? ) }  
+    </procedure>
+        
+    <procedure id="administracion.domain.parametro.delete" parameterClass="java.lang.Long">  
+          { call PKG_ASE.PARSD_DELETE( #id# , #id# ) }  
+    </procedure> 
+       
+</sqlMap>  

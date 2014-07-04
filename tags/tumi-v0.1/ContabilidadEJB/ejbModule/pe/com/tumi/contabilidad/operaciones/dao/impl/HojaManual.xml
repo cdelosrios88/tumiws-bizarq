@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="HojaManualDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.operaciones.domain.HojaManual" alias="HojaManual"/> 
+	
+  <resultMap id="resHojaManual" class="HojaManual">
+	<result property="id.intPersEmpresaHojaPk" 		column="pPers_empresahoja_n_pk"/>
+	<result property="id.intContPeriodoHoja"   		column="pCont_periodohoja_n"/>
+	<result property="id.intContCodigoHoja"   		column="pCont_codigohoja_n"/>
+	<result property="intParaDocumentoGeneralCod" 	column="pPara_documentogeneral_n_cod"/>
+    <result property="strHomaGlosa"      			column="pHoma_glosa_v"/>
+    <result property="tsHomaFechaRegistro"    		column="pHoma_fecharegistro_d"/>
+    <result property="intPersEmpresaLibroPk"    	column="pPers_empresalibro_n_pk"/>
+    <result property="intContPeriodoLibro"      	column="pCont_periodolibro_n"/>
+    <result property="intContCodigoLibro"   		column="pCont_codigolibro_n"/>
+  </resultMap>
+  
+  <parameterMap id="parHojaManual" class="HojaManual">
+	 <parameter property="id.intPersEmpresaHojaPk"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoHoja"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContCodigoHoja"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaDocumentoGeneralCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strHomaGlosa"					javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="tsHomaFechaRegistro"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intPersEmpresaLibroPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoLibro"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContCodigoLibro"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntPersEmpresaHojaPk"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="pIntContPeriodoHoja"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="pIntContCodigoHoja"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pTsFechaRegistroDesde"	javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="pTsFechaRegistroHasta"	javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="pIntContCodigoHoja"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parHojaManual">
+	{ call PKG_HOJAMANUAL.grabar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parHojaManual" >
+	{ call PKG_HOJAMANUAL.modificar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resHojaManual">
+	{ call PKG_HOJAMANUAL.getListaPorPk(?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resHojaManual">
+	{ call PKG_HOJAMANUAL.getBusqueda(?,?,?,?) }
+  </procedure>  	
+    
+</sqlMap>  

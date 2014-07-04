@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="VinculoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.vinculo.domain.Vinculo" alias="Vinculo"/> 
+	
+  <resultMap id="resVinculo" class="Vinculo" >
+  	 <result property="intItemVinculo"      	column="pITEMVINCULO_N" />
+     <result property="intIdEmpresa"      		column="pEMPRESA_N" />
+     <result property="intIdPersona"    		column="pPERSONA_N" />
+     <result property="intTipoVinculoCod"    	column="pTIPOVINCULO_N_COD" />
+     <result property="intEmpresaVinculo"   	column="pEMPRESAVINC_N" />
+     <result property="intPersonaVinculo"   	column="pPERSONAVINC_N" />
+     <result property="intCargoVinculoCod"      column="pCARGOVINCULO_N_COD" />
+     <result property="dtInicioCargo"   		column="pINICIOVINCULO_D" />
+     <result property="intEstadoCod"   			column="ESTADO_N_COD" />
+     <result property="tsFechaEliminacion"   	column="pFECHAELIMINACION_D" />
+  </resultMap>
+  
+  <parameterMap id="parVinculo" class="Vinculo">
+  	 <parameter property="intItemVinculo"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdEmpresa"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intIdPersona"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intTipoVinculoCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intEmpresaVinculo" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersonaVinculo" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCargoVinculoCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="dtInicioCargo" 		jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intEstadoCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"	jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntItemVinculo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKPersonaEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorTipoVinculo" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntIdEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntTipoVinculoCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkPersEmpYPkPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intEmpresaVinculo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaVinculo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parVinculo">
+	{ call PKG_VINCULO.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parVinculo" >
+	{ call PKG_VINCULO.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resVinculo">
+	{ call PKG_VINCULO.getListaPorPK(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKPersonaEmpresa" parameterMap="parPorPKPersonaEmpresa" resultMap="resVinculo">
+	{ call PKG_VINCULO.getListaPorPKPersonaEmpresa(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKPerEmpYTipoVin" parameterMap="parPorTipoVinculo" resultMap="resVinculo">
+	{ call PKG_VINCULO.getListaPorPKPerEmpYTipoVin(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKPersEmpYPkPersona" parameterMap="parPorPkPersEmpYPkPersona" resultMap="resVinculo">
+	{ call PKG_VINCULO.getListaPorPKPerEmpYPkPers(?,?,?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

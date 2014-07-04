@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EfectuadoConceptoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.EfectuadoConcepto" alias="EfectuadoConcepto"/> 
+	
+  <resultMap id="resEfectuadoConcepto" class="EfectuadoConcepto" >
+	<result property="id.intEmpresaCuentaEnvioPk"   			column="ppersempresacuentaenv" />
+	<result property="id.intItemEfectuado"   					column="pccobitemefectuado" />
+	<result property="id.intItemEfectuadoConcepto"   			column="pccobitemefectuadoconcepto" />
+	<result property="intItemCuentaConcepto"   			    	column="pcmovitemcuentaconcept" />
+	<result property="intItemExpediente"   			  		    column="pcseritemexpediente" />
+	<result property="intItemDetExpediente"   					column="pcseritemdetexpediente" />
+	<result property="intTipoConceptoGeneralCod"   				column="pparatipoconceptogeneral" />
+	<result property="bdMontoConcepto"   						column="pefcomontoconcept" />
+	<result property="intEstadoCod"   							column="pparaestado" />
+  </resultMap>
+  
+  <resultMap id="resEfectuadoConceptoMonto" class="EfectuadoConcepto" >
+	<result property="bdMontoConcepto"   						column="pefcomontoconcept" />	
+  </resultMap>
+  
+    <resultMap id="resMontoNroCuentaConcepGene" class="EfectuadoConcepto" >
+	<result property="bdMontoConcepto"   						column="pefcomontoconcept" /> 
+	<result property="strContNumeroCuenta"   				    column="pstrContNumeroCuenta" />
+	<result property="intTipoConceptoGeneralCod"   				column="pparatipoconceptogeneral" />	
+  </resultMap>
+        
+  <resultMap id="resPrestamoInteres" class="EfectuadoConcepto" >
+	<result property="bdMontoConcepto"   						column="pefcomontoconcept" />
+	<result property="intTipoConceptoGeneralCod"   				column="pparatipoconceptogeneral" />
+	<result property="intParaTipoConceptoCod"   				column="ppintParaTipoConceptoCod" />		
+	<result property="intItemConcepto"   			  		    column="pintItemConcepto" />
+	<result property="intCategoria"   			    			column="pintCategoria" />
+  </resultMap>
+  
+  <parameterMap id="parPorEfectuado" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaCuentaEnvioPk"						javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemefectuado"								javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEfectuadoYExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaCuentaEnvioPk"						javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemefectuado"								javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemExpediente"						    javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemDetExpediente"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>	 
+  </parameterMap>  
+
+  <parameterMap id="parPorEfectuadoPKEnvioConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaCuentaEnvioPk"						javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemefectuado"								javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemExpediente"						    javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemDetExpediente"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>	 
+	 <parameter property="intItemCuentaConcepto"						javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intTipoConceptoGeneralCod"					javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>  
+  
+  <parameterMap  id="parEfectuadoConcepto" class="EfectuadoConcepto">
+  	<parameter property="id.intEmpresaCuentaEnvioPk" 		javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="id.intItemEfectuado" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="id.intItemEfectuadoConcepto" 		javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="intItemCuentaConcepto" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="intItemExpediente" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="intItemDetExpediente" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="intTipoConceptoGeneralCod" 		javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="bdMontoConcepto" 					javaType="java.math.BigDecimal" 	jdbcType="NUMERIC" 		mode="INOUT"/>
+  	<parameter property="intEstadoCod" 						javaType="java.lang.Integer" 		jdbcType="NUMERIC" 		mode="INOUT"/>  	
+  </parameterMap>
+  
+    <parameterMap id="parPorItemResumenItemCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intItemEfectuadoResumen"						javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intParaTipoCredito"				     		javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemCredito"						        javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+</parameterMap>
+
+    <parameterMap id="parPorItemResumen" class="java.util.Map">
+   	 	<parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 	<parameter property="intItemEfectuadoResumen"						javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	</parameterMap>
+
+  
+  <procedure id="getListaPorEfectuado" parameterMap="parPorEfectuado" resultMap="resEfectuadoConcepto">
+	{call PKG_EFECTUADOCONCEPTO.getListaPorEfectuado(?,?,?)}
+  </procedure>
+  
+   <procedure id="getListaPorEfectuadoYExpediente" parameterMap="parPorEfectuadoYExpediente" resultMap="resEfectuadoConcepto">
+	{ call PKG_EFECTUADOCONCEPTO.getListaPorEfecYExp(?,?,?,?,?) }
+  </procedure>
+    
+  <procedure id="parPorEfectuadoYExpediente" parameterMap="parPorEfectuadoYExpediente" resultMap="resEfectuadoConcepto">
+	{ call PKG_EFECTUADOCONCEPTO.getListaPorEfecYExp(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorEfectuadoPKEnvioConcepto" parameterMap="parPorEfectuadoPKEnvioConcepto" resultMap="resEfectuadoConcepto">
+	{ call PKG_EFECTUADOCONCEPTO.getXEfecExpCtaCptoTipCptoGral(?,?,?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="grabar" parameterMap="parEfectuadoConcepto">
+  {call PKG_EFECTUADOCONCEPTO.grabar(?,?,?,?,?,?,?,?,?)}
+  </procedure>
+    
+  <procedure id="grabarSub" parameterMap="parEfectuadoConcepto">
+  {call PKG_EFECTUADOCONCEPTO.grabarSub(?,?,?,?,?,?,?,?,?)}
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEfectuadoConcepto">
+  {call PKG_EFECTUADOCONCEPTO.modificar(?,?,?,?,?,?,?,?,?)}
+  </procedure>
+  
+  <procedure id="montoExpedientePrestamo" parameterMap="parPorItemResumenItemCredito" resultMap="resEfectuadoConceptoMonto">
+	{ call PKG_EFECTUADOCONCEPTO.montoExpedientePrestamo(?,?,?,?) }
+  </procedure> 
+   
+  <procedure id="montoExpedienteInteres" parameterMap="parPorItemResumen" resultMap="resEfectuadoConceptoMonto">
+	{ call PKG_EFECTUADOCONCEPTO.montoExpedienteInteres(?,?) }
+  </procedure> 
+  
+  <procedure id="montoCuentaPorPagar" parameterMap="parPorItemResumen" resultMap="resEfectuadoConceptoMonto">
+	{ call PKG_EFECTUADOCONCEPTO.montoCuentaPorPagar(?,?) }
+  </procedure>   
+  
+  
+  <procedure id="prestamoInteres" parameterMap="parPorItemResumen" resultMap="resPrestamoInteres">
+	{ call PKG_EFECTUADOCONCEPTO.prestamoInteres(?,?) }
+  </procedure>   
+</sqlMap>

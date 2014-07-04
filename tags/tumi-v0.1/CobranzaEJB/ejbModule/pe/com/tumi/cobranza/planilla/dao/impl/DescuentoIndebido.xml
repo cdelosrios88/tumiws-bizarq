@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DescuentoIndebidoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.DescuentoIndebido" alias="DescuentoIndebido"/> 
+	
+  <resultMap id="resDescuentoIndebido" class="DescuentoIndebido" >
+	<result property="id.intPersEmpresaDsctoindeb"		column="ppersempresadsctoindeb"/>
+	<result property="id.intCcobItemDescuentoindebido" 	column="pccobitemdescuentoindebido"/>
+	<result property="tsDeinFecha" 						column="pdeinfecha"/>
+	<result property="intParaDocumentoGeneralcod" 		column="pparadocumentogeneral"/>
+	<result property="intCsocCuenta" 					column="pcsoccuenta"/>
+	<result property="intPersEmpresaCuentaenv" 			column="ppersempresacuentaenv"/>
+	<result property="intCcobItemEfectuado" 			column="pccobitemefectuado"/>
+	<result property="intCcobItemEfectuadoconcepto" 	column="pccobitemefectuadoconcepto"/>
+	<result property="bdDeinMonto" 						column="pdeinmonto"/>
+	<result property="intParaEstadocod" 				column="pparaestado"/>
+	<result property="intParaEstadoPagadocod" 			column="pparaestadopagado"/>
+	<result property="intPersEmpresaEgreso" 			column="ppersempresaegreso"/>
+	<result property="intTesoItemEgresoGeneral" 		column="ptesoitemegresogeneral"/>
+	<result property="intPersEmpresaLibro" 				column="ppersempresalibro"/>
+	<result property="intContPeriodoLibro" 				column="pcontperiodolibro"/>
+	<result property="intContCodigoLibro" 				column="pcontcodigolibro"/>
+	<result property="intPersEmpresaSolctacte" 			column="ppersempresasolctacte"/>
+	<result property="intCcobItemsolCtacte" 			column="pccobitemsolctacte"/>
+	<result property="intParaTiposolicitudCtactecod" 	column="pparatiposolictacte"/>
+  </resultMap>
+  
+  <parameterMap id="parDescuentoIndebido" class="DescuentoIndebido">
+	<parameter property="id.intPersEmpresaDsctoindeb"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	   mode="INOUT"/>
+	<parameter property="id.intCcobItemDescuentoindebido"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	   mode="INOUT"/>
+	<parameter property="tsDeinFecha"						javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"   mode="INOUT"/>
+	<parameter property="intParaDocumentoGeneralcod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCsocCuenta"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intPersEmpresaCuentaenv"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCcobItemEfectuado"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCcobItemEfectuadoconcepto"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="bdDeinMonto"						javaType="java.math.BigDecimal"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intParaEstadocod"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intParaEstadoPagadocod"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intPersEmpresaEgreso"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intTesoItemEgresoGeneral"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intPersEmpresaLibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intContPeriodoLibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intContCodigoLibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intPersEmpresaSolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCcobItemsolCtacte"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intParaTiposolicitudCtactecod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaDsctoindeb"			javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="IN"/>
+   	 <parameter property="intCcobItemEfectuado"				javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="IN"/>
+   	 <parameter property="intCcobItemEfectuadoconcepto"		javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="IN"/>
+   	 <parameter property="intCsocCuenta"					javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaDsctoindeb"			javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="IN"/>
+   	 <parameter property="intCsocCuenta"					javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDescuentoIndebido">
+	{ call PKG_DescuentoIndebido.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDescuentoIndebido" >
+	{ call PKG_DescuentoIndebido.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorEmpCptoEfeGnralyCuenta" parameterMap="parPorEmpresaCuenta" resultMap="resDescuentoIndebido">
+	{ call PKG_DescuentoIndebido.getListPorEmpItemCptoGnralYCta(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListPorEmpYCta" parameterMap="parPorEmpCuenta" resultMap="resDescuentoIndebido">
+	{ call PKG_DescuentoIndebido.getListPorEmpYCta(?,?,?) }
+  </procedure>
+  
+    
+</sqlMap>  

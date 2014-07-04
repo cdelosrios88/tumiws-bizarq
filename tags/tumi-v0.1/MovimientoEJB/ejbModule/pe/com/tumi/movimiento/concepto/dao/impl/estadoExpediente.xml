@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EstadoExpedienteDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.EstadoExpediente" alias="EstadoExpediente"/> 
+
+  <resultMap id="resEstadoExpediente" 				class="EstadoExpediente" >
+     <result property="id.intEmpresaEstado"     	column="pPERS_EMPRESAESTADO_N_PK" />
+     <result property="id.intItemEstado"    		column="pESCE_ITEMESTADO_N" />
+     <result property="intEmpresa"     				column="pPERS_EMPRESA_N_PK" />
+     <result property="intCuenta"    				column="pCSOC_CUENTA_N_PK" />
+     <result property="intItemCuentaConcepto"    	column="pCMOV_ITEMCUENTACONCEPTO_N" />
+     <result property="intItemExpediente"      		column="pCSER_ITEMEXPEDIENTE_N" />
+     <result property="intItemDetExpediente"     	column="pCSER_ITEMDETEXPEDIENTE_N" />
+     <result property="intParaEstadoExpediente"     column="pPARA_ESTADOCPTOEXP_N_COD" />
+     <result property="intIndicadorEntrega"    		column="pESCE_INDICADORENTREGA_N" />
+  </resultMap>
+  
+  <parameterMap id="parEstadoExpediente" 			class="EstadoExpediente">
+     <parameter property="id.intEmpresaEstado"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="id.intItemEstado"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>    
+	 <parameter property="intEmpresa"				jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>  
+	 <parameter property="intCuenta"				jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 <parameter property="intItemCuentaConcepto"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 <parameter property="intItemExpediente"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 <parameter property="intItemDetExpediente"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 <parameter property="intParaEstadoExpediente"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+	 <parameter property="intIndicadorEntrega"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/> 
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 <parameter property="intEmpresaEstado" 		jdbcType="NUMERIC"			javaType="java.lang.Integer"    mode="IN"/>
+   	 <parameter property="intItemEstado" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"    mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 <parameter property="intEmpresa" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intCuenta" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intItemExpediente" 	jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 <parameter property="intItemDetExpediente" jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+  </parameterMap>
+
+  <procedure id="grabar" parameterMap="parEstadoExpediente">
+	{ call PKG_CMO_ESTADOEXPEDIENTE.grabar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEstadoExpediente" >
+	{ call PKG_CMO_ESTADOEXPEDIENTE.modificar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resEstadoExpediente">
+	{ call PKG_CMO_ESTADOEXPEDIENTE.getListaPorPK(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resEstadoExpediente">
+	{ call PKG_CMO_ESTADOEXPEDIENTE.getListaPorExpediente(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getMaxEstadoExpPorPkExpediente" parameterMap="parPorExpediente" resultMap="resEstadoExpediente">
+	{ call PKG_CMO_ESTADOEXPEDIENTE.getMaxEstadoExpPorPkExpediente(?,?,?,?,?) }
+  </procedure>
+  
+  
+
+
+</sqlMap>  

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+
+	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/Plancuenta.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/Modelo.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/ModeloDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/ModeloDetalleNivel.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/LibroMayor.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/LibroMayorDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/LibroDiario.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/LibroDiarioDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/CuentaCierre.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/CuentaCierreDetalle.xml"/>	
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/Anexo.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/AnexoDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/AnexoDetalleOperador.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/AnexoDetalleCuenta.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/operaciones/dao/impl/HojaManual.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/operaciones/dao/impl/HojaManualDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/Ratio.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/RatioDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/legalizacion/dao/impl/LibroLegalizacion.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/legalizacion/dao/impl/PagoLegalizacion.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/AccesoPlanCuenta.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/AccesoPlanCuentaDetalle.xml"/>
+</sqlMapConfig>

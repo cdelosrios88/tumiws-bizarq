@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/afecto.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/captacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/concepto.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/condicion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/contable.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/estructuraCaptacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/requisito.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/captacion/dao/impl/vinculo.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/adenda.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/adjunto.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/competencia.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/perfil.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/perfilDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/perfilValidacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/poblacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/poblacionDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/retencionPlanilla.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/donacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/firmante.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/adendaCaptacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/convenio/dao/impl/adendaCredito.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/credito/socio/ctacte/dao/impl/ctacteCondicion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/ctacte/dao/impl/ctacte.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/ctacte/dao/impl/linea.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/ctacte/dao/impl/rango.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/adminPadron.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/convenioDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/descuento.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/estructuraDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/estructura.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/padron.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/solicitudPago.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/solicitudPagoDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estructura/dao/impl/dsctoTerceros.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/core/dao/impl/socio.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/core/dao/impl/socioEstructura.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/credito.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/condicion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/condicionHabil.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTopeCaptacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoInteres.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/finalidad.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoDescuento.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoDescuentoCaptacion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoGarantia.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTipoGarantia.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTipoGarantiaCondicionSocio.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTipoGarantiaCondicionHabil.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTipoGarantiaSituacionLaboral.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTipoGarantiaCondicionLaboral.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoTipoValorVenta.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoExcepcion.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoExcepcionAporteNoTrans.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/creditos/dao/impl/creditoExcepcionDiasCobranza.xml"/>
+	
+	<!-- Mapeo para Apertura de Cuentas -->
+	<sqlMap resource="pe/com/tumi/credito/socio/aperturaCuenta/core/dao/impl/cuenta.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/aperturaCuenta/core/dao/impl/cuentaIntegrante.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/aperturaCuenta/core/dao/impl/cuentaIntegrantePermiso.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/aperturaCuenta/core/dao/impl/cuentaMesCobro.xml"/>
+	
+	
+	<sqlMap resource="pe/com/tumi/credito/socio/estadoCuenta/dao/impl/EstadoCuenta.xml"/>
+	<sqlMap resource="pe/com/tumi/credito/socio/estadoCuenta/dao/impl/cuentaComp.xml"/>
+	
+</sqlMapConfig>

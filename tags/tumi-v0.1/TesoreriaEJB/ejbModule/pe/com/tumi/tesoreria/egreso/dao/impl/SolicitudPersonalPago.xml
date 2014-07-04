@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudPersonalPagoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.SolicitudPersonalPago" alias="SolicitudPersonalPago"/> 
+	
+  <resultMap id="resSolicitudPersonalPago" class="SolicitudPersonalPago" >
+	<result property="id.intPersEmpresa"  			column="pempresasolper" />
+	<result property="id.intItemSolicitudPersonal"  column="pitemsolpersonal" />
+	<result property="id.intItemSolicitudPersonalPago" column="pitemsolpersonalpago" />
+    <result property="intPersEmpresaEgreso"      	column="pempresaegreso" />
+    <result property="intItemEgresoGeneral"			column="pitemegresogeneral" />
+    <result property="bdMonto"      				column="pmonto" />
+    <result property="intParaEstado"      			column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parSolicitudPersonalPago" class="SolicitudPersonalPago">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemSolicitudPersonal"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemSolicitudPersonalPago"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaEgreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemEgresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMonto"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonalPago"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorSolicitudPersonal" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+    
+    
+  <procedure id="grabar" parameterMap="parSolicitudPersonalPago">
+	{ call PKG_SOLICITUDPERSONALPAGO.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSolicitudPersonalPago" >
+	{ call PKG_SOLICITUDPERSONALPAGO.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resSolicitudPersonalPago">
+	{ call PKG_SOLICITUDPERSONALPAGO.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorSolicitudPersonal" parameterMap="parPorSolicitudPersonal" resultMap="resSolicitudPersonalPago">
+	{ call PKG_SOLICITUDPERSONALPAGO.getListaPorSolicitudPersonal(?,?,?) }
+  </procedure>
+    
+</sqlMap>

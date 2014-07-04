@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="421" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="88cf839b-c2c6-4510-9140-cfd75e0927b8">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Dataset1" uuid="c0cace03-c358-412c-b365-4dfb1ff83e8c">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter (2)"/>
+		<queryString language="SQL">
+			<![CDATA[]]>
+		</queryString>
+		<field name="strRazonSocial" class="java.lang.String">
+			<fieldDescription><![CDATA[strRazonSocial]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="strAnioActual" class="java.lang.String"/>
+	<parameter name="strFecEmision" class="java.lang.String"/>
+	<parameter name="strSocioCliente" class="java.lang.String"/>
+	<parameter name="strCondicion" class="java.lang.String"/>
+	<parameter name="strFecAperturaCta" class="java.lang.String"/>
+	<parameter name="strCtaAporte" class="java.lang.String"/>
+	<parameter name="strSaldoAporte" class="java.lang.String"/>
+	<parameter name="strSaldoFdoRetiro" class="java.lang.String"/>
+	<parameter name="strPteFdoSepelio" class="java.lang.String"/>
+	<parameter name="strPteMantenimiento" class="java.lang.String"/>
+	<parameter name="strNumeroCuenta" class="java.lang.String"/>
+	<parameter name="strUltEnvAportes" class="java.lang.String"/>
+	<parameter name="strUltEnvFdoSepelio" class="java.lang.String"/>
+	<parameter name="strUltEnvFdoRetiro" class="java.lang.String"/>
+	<parameter name="strUltEnvMantenimiento" class="java.lang.String"/>
+	<parameter name="strUltEnvPeriodo" class="java.lang.String"/>
+	<parameter name="strUltEnvSumatoria" class="java.lang.String"/>
+	<parameter name="strSaldosSumatoria" class="java.lang.String"/>
+	<parameter name="strSucursal" class="java.lang.String"/>
+	<parameter name="strUnidadEjec" class="java.lang.String"/>
+	<parameter name="strNroCtaLiq" class="java.lang.String"/>
+	<parameter name="strFchLiqCta" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="strDescripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[strDescripcion]]></fieldDescription>
+	</field>
+	<field name="strFecha" class="java.lang.String">
+		<fieldDescription><![CDATA[strFecha]]></fieldDescription>
+	</field>
+	<field name="strCuotas" class="java.lang.String">
+		<fieldDescription><![CDATA[strCuotas]]></fieldDescription>
+	</field>
+	<field name="strTasaInteres" class="java.lang.String">
+		<fieldDescription><![CDATA[strTasaInteres]]></fieldDescription>
+	</field>
+	<field name="strMontoTotal" class="java.lang.String">
+		<fieldDescription><![CDATA[strMontoTotal]]></fieldDescription>
+	</field>
+	<field name="strSaldoCredito" class="java.lang.String">
+		<fieldDescription><![CDATA[strSaldoCredito]]></fieldDescription>
+	</field>
+	<field name="strDiferencia" class="java.lang.String">
+		<fieldDescription><![CDATA[strDiferencia]]></fieldDescription>
+	</field>
+	<field name="strUltimoEnvio" class="java.lang.String">
+		<fieldDescription><![CDATA[strUltimoEnvio]]></fieldDescription>
+	</field>
+	<group name="Cuerpo">
+		<groupHeader>
+			<band height="20">
+				<staticText>
+					<reportElement x="494" y="4" width="62" height="13" uuid="2620aae5-8a65-4aa7-808d-eb6f84fd1247"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ultimo Envío]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="430" y="4" width="56" height="13" uuid="e0ee41ec-dcd0-4126-975b-08093d55f492"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Diferencias]]></text>
+				</staticText>
+				<line>
+					<reportElement x="-6" y="17" width="567" height="1" uuid="dcc1e3cb-9f3c-40e4-940f-09ff1e77ad03"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="307" y="4" width="54" height="13" uuid="9dc2a949-782a-497a-8095-9ac06108e808"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CT/CP/CA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="4" width="28" height="13" uuid="f30536fb-f826-44e9-9fd6-e120be0a4504"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Saldo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="4" width="83" height="13" uuid="d6496d4a-6cb8-4c98-9ce0-fb626af2be02"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Conceptos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="202" y="4" width="28" height="13" uuid="8b7fb3b1-8c56-42eb-8d67-a773aca5040d"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tasa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="245" y="4" width="39" height="13" uuid="7ed4c8cf-b95c-46d9-a7f2-5e3bb329e30c"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Monto Total]]></text>
+				</staticText>
+				<line>
+					<reportElement x="-6" y="2" width="567" height="1" uuid="dcc1e3cb-9f3c-40e4-940f-09ff1e77ad03"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="3" y="4" width="34" height="13" uuid="eb941250-c6f0-47bf-bdbd-dec01f082086"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="95">
+				<line>
+					<reportElement x="0" y="75" width="210" height="1" uuid="a518905c-d5ce-45fe-9f47-4f35e8e6f8ff"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="373" y="4" width="50" height="13" uuid="997430eb-4390-4f8a-8246-7d2a6992343c">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strSaldosSumatoria}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="352" y="64" width="66" height="13" uuid="40ca3657-3b5e-42e8-bc73-aee638a0886e"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ultimo Envío:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="506" y="32" width="50" height="13" uuid="243acc11-a2d9-462f-91f4-f5ac1eb48f75"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strUltEnvFdoRetiro}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="506" y="46" width="50" height="13" uuid="fd045e8e-ed34-4d60-ae3d-61b2383ddcd3"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strUltEnvMantenimiento}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="3" y="58" width="40" height="13" uuid="642cfdc7-28ae-4445-9b0f-fc2d67a0f882"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cuenta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="100" y="58" width="104" height="13" uuid="e1231de7-d494-4730-a219-77f50eed3aef"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha de Liquidación]]></text>
+				</staticText>
+				<line>
+					<reportElement x="-6" y="1" width="567" height="1" uuid="dcc1e3cb-9f3c-40e4-940f-09ff1e77ad03"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="506" y="4" width="50" height="13" uuid="84a8dfac-1283-4852-951a-449cd8d35aa1"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strUltEnvAportes}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="448" y="18" width="54" height="13" uuid="b57871f5-bd2f-4151-9798-1fdbb902ef83">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="local_mesure_unitwidth" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<text><![CDATA[Fdo.Sepelio]]></text>
+				</staticText>
+				<line>
+					<reportElement x="433" y="60" width="128" height="1" uuid="c1895450-fc34-4ab6-bee9-b2a946f12856"/>
+					<graphicElement>
+						<pen lineWidth="2.0" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="-4" y="4" width="270" height="13" uuid="aa7de686-13ca-43ad-8fb8-9be67a900393">
+						<property name="local_mesure_unitheight" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<text><![CDATA[CP : Cuotas pagadas  CT : Cuotas totales  CA: Cuotas atrasadas]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="506" y="64" width="50" height="13" uuid="cbc39735-b19a-410d-8e19-b45213a16216"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strUltEnvSumatoria}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="448" y="46" width="46" height="13" uuid="01bfd4c1-b733-4e4f-9fe4-7e18f26af95e">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<text><![CDATA[Mant.Cta.]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="421" y="64" width="80" height="13" uuid="c755a957-45f7-4ce8-b60c-5a88c85edbb7"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strUltEnvPeriodo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="448" y="4" width="36" height="13" uuid="d9cd576c-b857-492b-8c73-a7f7d17b4a5b">
+						<property name="local_mesure_unitheight" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<text><![CDATA[Aportes]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="506" y="18" width="50" height="13" uuid="71e57023-6073-4e67-ba42-f2ea62697d95"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{strUltEnvFdoSepelio}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="448" y="32" width="48" height="13" uuid="9cf2872e-ab2d-4b65-88d2-e3be69323c6f">
+						<property name="local_mesure_unitheight" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<text><![CDATA[Fdo.Retiro]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="204" y="0" width="164" height="18" uuid="d1855a41-c37a-4c63-9f6a-b53499166149">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO DE CUENTA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="81" height="40" uuid="8ac08d91-b922-47e0-8d8b-bb664c34bc3e"/>
+				<imageExpression><![CDATA["/images/icons/icon_login.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="451" y="5" width="99" height="26" uuid="0eedc8ad-caa1-4da1-b416-8ff6f86c189b">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strFecEmision}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="264" y="20" width="50" height="13" uuid="22ebdf60-5b24-4ce8-a96a-95d15f226ade"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strAnioActual}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="-5" y="-1" width="566" height="44" uuid="64815145-6569-4645-b58d-2d400b5c3888">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="109" splitType="Stretch">
+			<staticText>
+				<reportElement x="84" y="79" width="58" height="13" uuid="e0d23ee3-9361-4dd1-9877-7926c87a0475"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[Fdo.Sepelio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="364" y="18" width="53" height="13" uuid="dad67a4d-1075-4daa-bb02-0827f3bf6a4b">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="3" width="78" height="13" uuid="b14b39a0-4090-40c7-9efb-d00c89efe57c">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apertura Cta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="18" width="2" height="13" uuid="4b1090af-31af-41db-9f6e-5b1f51ba3186"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="449" y="64" width="60" height="13" uuid="73e3b233-659b-4a02-a1dd-544329d132db"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strSaldoFdoRetiro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="84" y="34" width="471" height="13" uuid="f71c38b2-0d49-4834-8ea9-83cf13baaa74"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strSucursal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="217" y="79" width="68" height="13" uuid="ed30ea4e-ed98-453f-bf40-e66a1b7ebefd"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[Mantenimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="79" width="2" height="13" uuid="efe56975-0e6c-4768-8418-14b77b8aba80"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="289" y="79" width="60" height="13" uuid="16a2e2ef-0b1f-46e6-bbd0-2d0ebf79f748"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strPteMantenimiento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="64" width="78" height="13" uuid="ed394e28-409d-44cf-b96c-745e9a43d061">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cta.Aporte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="34" width="2" height="13" uuid="448a021a-754c-4a5c-9094-8eb29d567fe1"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="3" width="60" height="13" uuid="b730577e-3381-477b-b942-900f5a977831">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strFecAperturaCta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="217" y="64" width="70" height="13" uuid="739a179f-ef02-40f3-b330-09319baa61a4"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Aporte:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="418" y="18" width="169" height="13" uuid="30ad1905-7cba-4b2f-8a28-3cf417b28f11">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strCondicion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="18" width="78" height="13" uuid="e9328455-1d13-428b-9b7f-a553fcfbff22">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Socio/Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="3" width="2" height="13" uuid="c7cc0fa8-1679-4192-a061-1d4694c44a0c"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="64" width="2" height="13" uuid="e7dfbe6c-ac21-41e9-aa58-8dfd4278aafa"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="289" y="64" width="70" height="13" uuid="12687fc6-5b08-4060-a87b-f37f9f770059">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strSaldoAporte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="79" width="70" height="13" uuid="e7d9c483-fde5-4182-a318-e36495e4d5f4"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strPteFdoSepelio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="94" width="2" height="13" uuid="455df207-1464-4495-b1f6-ba42cb22c42f"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="64" width="70" height="13" uuid="4ee04684-54a5-4c4c-b80b-a98cad892959"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strCtaAporte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="94" width="78" height="13" uuid="80868560-9afe-48d9-b3ca-179856823f27"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nro. de Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="50" width="2" height="13" uuid="448a021a-754c-4a5c-9094-8eb29d567fe1"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="50" width="78" height="13" uuid="5d76e932-8097-43b3-8e94-652a6eaf2c0c">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidad Ejecutora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="79" width="78" height="13" uuid="335095f9-cea5-444c-a2c5-8789b5e968a9"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pendiente     ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="18" width="201" height="13" uuid="73b2296a-f742-4a6c-8314-3143d82ec6fb">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strSocioCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="84" y="50" width="471" height="13" uuid="09642e9b-a71a-4378-bca1-dd9731f2fa5a"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strUnidadEjec}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="84" y="94" width="130" height="13" uuid="b973d213-a843-48b5-9555-ae73e3314281"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strNumeroCuenta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="364" y="64" width="82" height="13" uuid="6ec588d9-7cd7-4bcf-b174-b225553425af"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fondo de Retiro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="34" width="78" height="13" uuid="db961a87-64e5-49d1-8b6c-19cf9a4c6495">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="-5" y="1" width="50" height="13" uuid="4d3cb75a-c8be-44f9-817d-fa9ead657d87"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strFecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="51" y="1" width="144" height="13" uuid="2b5ce898-cc6c-4469-878a-60d4a4b93447"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strDescripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="195" y="1" width="35" height="13" uuid="1e4757b8-faac-4a68-b951-526e7c02a8ee"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strTasaInteres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="1" width="50" height="13" uuid="cd33044a-4740-4175-b5e5-2e6bc1eb11ea"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strMontoTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="299" y="1" width="70" height="13" uuid="0085a02e-8383-4d2d-8e41-8094b049ba8a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strCuotas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="373" y="1" width="50" height="13" uuid="3efe3e09-feff-49d5-a24f-b10d7957549f"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strSaldoCredito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="506" y="1" width="50" height="13" uuid="16b0853a-b0ef-492d-a15b-5225a05bcb12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strUltimoEnvio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="1" width="50" height="13" uuid="f2681d45-9d4a-4afb-b7cb-cb8f287922fa"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strDiferencia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="3" y="-17" width="78" height="13" uuid="c48f8609-0357-4c59-9dcb-99e867134a85"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strNroCtaLiq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="-17" width="104" height="13" uuid="6146baa3-c2a2-4ee6-81f0-114b90f05639"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strFchLiqCta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

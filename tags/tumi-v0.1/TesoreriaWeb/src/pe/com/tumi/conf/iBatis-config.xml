@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/Bancocuenta.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/Bancocuentacheque.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/Bancofondo.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/Fondodetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/Acceso.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/AccesoDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/banco/dao/impl/AccesoDetalleRes.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/ControlFondosFijos.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/Egreso.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/EgresoDetalle.xml"/>	
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/Movilidad.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/MovilidadDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/CierreDiarioArqueo.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/CierreDiarioArqueoBillete.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/CierreDiarioArqueoDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/Saldo.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/SolicitudPersonal.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/SolicitudPersonalDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/SolicitudPersonalPago.xml"/>		
+	
+	<sqlMap resource="pe/com/tumi/tesoreria/ingreso/dao/impl/ReciboManual.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/ingreso/dao/impl/ReciboManualDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/ingreso/dao/impl/Ingreso.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/ingreso/dao/impl/IngresoDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/ingreso/dao/impl/DepositoIngreso.xml"/>	
+	
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/Proveedor.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/ProveedorDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/Requisicion.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/RequisicionDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/InformeGerencia.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/Contrato.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/CuadroComparativo.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/CuadroComparativoProveedor.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/CuadroComparativoProveedorDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/OrdenCompra.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/OrdenCompraDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/OrdenCompraDocumento.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunat.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/AdelantoSunat.xml"/>
+	<!-- Agregado por cdelosrios, 02/11/2013 -->
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatDoc.xml"/>
+	<!-- Fin agregado por cdelosrios, 02/11/2013 -->
+</sqlMapConfig>

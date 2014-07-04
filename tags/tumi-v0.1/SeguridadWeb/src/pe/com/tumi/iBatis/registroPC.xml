@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.seguridad.domain.RegistroPc" alias="beanRegistroPc"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.AccesoExternoPc" alias="beanAccesoExtPc"/>
+    
+    <resultMap id="registropc.domain.registropc.resultRegistroPc" class="beanRegistroPc" >
+	     <result property="strSucursal"      	column="NOMBRE_SUCURSAL" />
+	     <result property="strArea"      		column="NOMBRE_AREA" />
+	     <result property="strCodPc"      		column="COD_PC" />
+	     <result property="strFechaAcceso"      column="FECHA_ACCESO" />
+	     <result property="intIdPc"      		column="ID_PC" />
+	     <result property="intIdEmpresa"      	column="ID_EMP" />
+	     <result property="intIdSucursal"      	column="ID_SUC" />
+	     <result property="intIdArea"      		column="ID_AREA" />
+	     <result property="intIdEstado"      	column="ID_ESTADO" />
+    </resultMap>
+    
+    <resultMap id="registropc.domain.registropc.resultAcceosExtPc" class="beanAccesoExtPc" >
+	     <result property="intIdEmpresa"   		column="IDEMPRESA" />
+	     <result property="intIdSucursal"      	column="IDSUCURSAL" />
+	     <result property="intIdArea"      		column="IDAREA" />
+	     <result property="intIdComputadora"   	column="IDCOMPUTADORA" />
+	     <result property="intIdTipoAcceso"     column="IDTIPOACCESO" />
+	     <result property="strTipoAcceso"      	column="TIPOACCESO" />
+	     <result property="intIdEstado"     	column="IDESTADO" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaRegistroPc" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdSucursal" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdArea" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdEstado" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdRegPc" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="registropc.domain.registropc.prmtRegistroPc" class="beanRegistroPc">
+		 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdSucursal" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdArea"	 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdPc" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="strCodPc" 			jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="intIdEstado" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdPcOut" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarRegistroPc" class="beanRegistroPc">
+		 <parameter property="intIdPc" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaAccesosExtPc" class="beanAccesoExtPc">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdSucursal" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdArea"	 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdComputadora"		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="registropc.domain.registropc.prmtAccesoExtPc" class="beanAccesoExtPc">
+		 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdSucursal" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdArea"	 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdComputadora" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdTipoAcceso" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdEstado" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intConta" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="registropc.domain.registropc.getListaRegistroPc" parameterMap="prmtListaRegistroPc" resultMap="registropc.domain.registropc.resultRegistroPc">
+		{ call PKG_TUMI.listar_registropc( ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="registropc.domain.registropc.grabarRegistroPc" parameterMap="registropc.domain.registropc.prmtRegistroPc" >
+		{ call PKG_TUMI.grabar_registropc( ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="registropc.domain.registropc.eliminarRegistroPc" parameterMap="prmtEliminarRegistroPc" >
+		{ call PKG_TUMI.eliminar_registropc( ? )  }  
+	</procedure>
+	
+	<procedure id="registropc.domain.registropc.getListaAccesosExtPc" parameterMap="prmtListaAccesosExtPc" resultMap="registropc.domain.registropc.resultAcceosExtPc">
+		{ call PKG_TUMI.listar_accesosextpc( ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="registropc.domain.registropc.grabarAccesoExtPc" parameterMap="registropc.domain.registropc.prmtAccesoExtPc" >
+		{ call PKG_TUMI.grabar_accesoextpc( ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	      
+</sqlMap>  

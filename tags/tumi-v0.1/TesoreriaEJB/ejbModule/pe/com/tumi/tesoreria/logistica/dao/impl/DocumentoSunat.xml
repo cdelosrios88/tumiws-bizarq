@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoSunatDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat" alias="DocumentoSunat"/> 
+	
+  <resultMap id="resDocumentoSunat" class="DocumentoSunat" >
+	<result property="id.intPersEmpresa"  				column="pempresadocsunat" />
+	<result property="id.intItemDocumentoSunat"   		column="pitemdocsunat" />
+	<result property="intPersEmpresaOrden"   			column="pempresaorden" />
+	<result property="intItemOrdenCompra"   			column="pitemordencompra" />
+	<result property="intPersEmpresaRequisicion"   		column="pempresarequisicion" />
+	<result property="intItemRequisicion"   			column="pitemrequisicion" />
+	<result property="tsFechaProvision"  				column="pfechaprovision" />
+	<result property="intParaDocumentoGeneral"   		column="pdocumentogeneral" />
+	<result property="intParaTipoComprobante"   		column="ptipocomprobante" />
+	<result property="strSerieDocumento"   				column="pseriedocumento" />
+	<result property="strNumeroDocumento"   			column="pnumerodoc" />
+	<result property="dtFechaEmision"   				column="pfechaemision" />
+	<result property="dtFechaVencimiento"   			column="pfechavencimiento" />
+	<result property="dtFechaPago"   					column="pfechapago" />
+	<result property="intIndicadorInafecto"   			column="pindicadorinafecto" />
+	<result property="intIndicadorIGV"   				column="pindicadorigv" />
+	<result property="intIndicadorPercepcion"   		column="pindicadorpercepcion" />
+	<result property="intIndicadorLetras" 				column="pindicadorletras" />
+	<result property="strGlosa"   						column="pglosa" />
+	<result property="intParaEstado"   					column="pestado" />
+	<result property="intParaEstadoPago"   				column="pestadopago" />
+	<result property="intPersEmpresaDocSunatEnlazado" 	column="pempresadocsunaten" />
+	<result property="intItemDocumentoSunatEnlazado"  	column="pitemdocsunen" />
+	<result property="intPersEmpresaUsuario"   			column="pempresausuario" />
+	<result property="intPersPersonaUsuario"   			column="ppersonausuario" />
+	<result property="tsFechaAnula"   					column="pfechaanula" />
+	<result property="intPersEmpresaAnula"   			column="pempresaanula" />
+	<result property="intPersPersonaAnula"   			column="ppersonaanula" />
+	<result property="intPersEmpresaEgreso"   			column="pempresaegreso" />
+	<result property="intItemEgresoGeneral"   			column="pitemegresogeneral" />
+	<result property="intEmpresaLibro"   				column="pempresalibro" />
+	<result property="intPeriodoLibro"   				column="pperiodolibro" />
+	<result property="intCodigoLibro"   				column="pcodigolibro" />
+	<!-- Agregado por cdelosrios, 03/11/2013 -->
+	<result property="intParaTipo"   					column="pParaTipoCod" />
+	<result property="intItemArchivo"   				column="pItemArchivo" />
+	<result property="intItemHistorico"   				column="pItemHistorico" />
+	<!-- Fin agregado por cdelosrios, 03/11/2013 -->
+	<!-- Agregado por cdelosrios, 12/11/2013 -->
+	<result property="intSucuIdSucursal"   				column="pSucuIdSucursal" />
+	<result property="intSubIdSubsucursal"   			column="pSudeIdSubsucursal" />	
+	<!-- Agregado por cdelosrios, 12/11/2013 -->
+	<!-- Agregado por cdelosrios, 04/01/2014 -->
+	<result property="tsFechaRegistro"   				column="pFechaRegistro" />
+	<!-- Fin agregado por cdelosrios, 04/01/2014 -->
+  </resultMap>
+  
+  <parameterMap id="parDocumentoSunat" class="DocumentoSunat">
+	 <parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaOrden"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemOrdenCompra"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemRequisicion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaProvision"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intParaDocumentoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoComprobante"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strSerieDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strNumeroDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="dtFechaEmision"					javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="dtFechaVencimiento"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="dtFechaPago"						javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="intIndicadorInafecto"   			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIndicadorIGV"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIndicadorPercepcion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIndicadorLetras"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strGlosa"							javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstado"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaDocSunatEnlazado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemDocumentoSunatEnlazado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaEgreso"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemEgresoGeneral"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intEmpresaLibro"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPeriodoLibro"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intCodigoLibro"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <!-- Agregado por cdelosrios, 03/11/2013 -->
+  	 <parameter property="intParaTipo"						javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <parameter property="intItemArchivo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <parameter property="intItemHistorico"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <!-- Fin agregado por cdelosrios, 03/11/2013 -->
+  	 <!-- Agregado por cdelosrios, 12/11/2013 -->
+  	 <parameter property="intSucuIdSucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <parameter property="intSubIdSubsucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <!-- Fin agregado por cdelosrios, 04/01/2014 -->
+  	 <!-- Agregado por cdelosrios, 12/11/2013 -->
+  	 <parameter property="tsFechaRegistro"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+  	 <!-- Fin agregado por cdelosrios, 04/01/2014 -->
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstadoPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="dtFiltroEmisionDesde"			javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroEmisionHasta"			javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroVencimientoDesde"		javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroVencimientoHasta"		javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroProgramacionDesde"	javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFiltroProgramacionHasta"	javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="intEmpresaLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Agregado por cdelosrios, 10/10/2013 -->
+	 <parameter property="intParaTipoComprobante"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intNroDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
+	 <!-- Fin agregado por cdelosrios, 10/10/2013 -->
+  </parameterMap>
+  
+  <parameterMap id="parPorOrdenCompra" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaOrden"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Agregado por cdelosrios, 16/11/2013 -->
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Fin agregado por cdelosrios, 16/11/2013 -->
+  </parameterMap>
+  
+  <parameterMap id="parPorEnlazados" class="java.util.Map">
+   	 <parameter property="cursorLista" 					 	javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaDocSunatEnlazado"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunatEnlazado"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <!-- Agregado por cdelosrios, 18/11/2013 -->
+  <parameterMap id="parPorOrdenYTipoComprobante" class="java.util.Map">
+   	 <parameter property="cursorLista" 					 	javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaOrden"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoComprobante"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin agregado por cdelosrios, 18/11/2013 -->
+  
+  <procedure id="grabar" parameterMap="parDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorOrdenCompra" parameterMap="parPorOrdenCompra" resultMap="resDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.getListaPorOrdenCompra(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaEnlazados" parameterMap="parPorEnlazados" resultMap="resDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.getListaEnlazados(?,?,?) }
+  </procedure>
+  
+  <!-- Agregado por cdelosrios, 18/11/2013 -->
+  <procedure id="getListaPorOrdenCompraYTipoDoc" parameterMap="parPorOrdenYTipoComprobante" resultMap="resDocumentoSunat">
+	{ call PKG_DOCUMENTOSUNAT.getListaDocSunatYTipoComp(?,?,?,?) }
+  </procedure>
+  <!-- Fin agregado por cdelosrios, 18/11/2013 -->
+  
+</sqlMap>

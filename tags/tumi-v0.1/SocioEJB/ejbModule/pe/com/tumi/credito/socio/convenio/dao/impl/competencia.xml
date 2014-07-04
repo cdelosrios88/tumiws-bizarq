@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CompetenciaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.Competencia" alias="Competencia"/> 
+	
+  <resultMap id="resCompetencia" class="Competencia" >
+     <result property="id.intItemCompetencia"  	column="pITEMCOMPETENCIA_N" />
+     <result property="intConvenio"    			column="pCONVENIO_N" />
+     <result property="intItemConvenio"    		column="pITEMCONVENIO_N" />
+     <result property="strDescripcionEntidad"   column="pDESCRIPCIONENTIDAD_V" />
+     <result property="intCantidad"   			column="pCANTIDAD_N" />
+     <result property="bdPlazoPrestamo"   		column="pPLAZOPRESTAMO_N" />
+	 <result property="bdTasaPrestamo"    		column="pTASASPRESTAMO_N" />
+     <result property="bdAporte"      			column="pAPORTES_N" />
+     <result property="strServicio"   			column="pSERVICIOS_V" />
+     <result property="intParaEstadoCod"   		column="pPARA_ESTADO_N_COD" />     
+  </resultMap>
+  
+  <parameterMap id="parCompetencia" class="Competencia">
+     <parameter property="id.intItemCompetencia"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intConvenio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+	 <parameter property="intItemConvenio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="strDescripcionEntidad"	javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="intCantidad" 				javaType="java.lang.Integer"    jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="bdPlazoPrestamo" 			javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>
+ 	 <parameter property="bdTasaPrestamo"			javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="bdAporte" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="strServicio" 				javaType="java.lang.String"		jdbcType="VARCHAR" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>     
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemCompetencia" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKConvenio" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parCompetencia">
+	{ call PKG_CONVCOMPETENCIA.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCompetencia" >
+	{ call PKG_CONVCOMPETENCIA.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCompetencia">
+	{ call PKG_CONVCOMPETENCIA.getListaPorPk(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPkConvenio" parameterMap="parPorPKConvenio" resultMap="resCompetencia">
+	{ call PKG_CONVCOMPETENCIA.getListaPorPkConvenio(?,?,?) }
+  </procedure>
+    
+</sqlMap>  

@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.seguridad.usuario.domain.Usuario" alias="usuarioPerfil"/>
+    <typeAlias type="pe.com.tumi.seguridad.usuario.domain.Perfil" alias="perfil"/>
+    <typeAlias type="pe.com.tumi.seguridad.usuario.domain.EmpresaUsuario" alias="empresaUsuario"/>
+    <typeAlias type="pe.com.tumi.seguridad.usuario.domain.PerfilUsuario" alias="perfilUsuario"/>
+    <typeAlias type="pe.com.tumi.empresa.domain.Subsucursal" alias="subsucursal"/>
+    
+    <resultMap id="usuario.domain.usuario.resultUsuarioPerfil" class="usuarioPerfil">
+	     <result property="intIdPersona"  	 column="pers_idpersona_n"/>
+	     <result property="strNombreUsuario" column="usua_usuario_v"/>
+	     <result property="strClaveUsuario"  column="usua_contraseÑa_v"/>
+	     <result property="intIdTipoUsuario" column="usua_tipousuario_n"/>
+	     <result property="strTipoUsuario"   column="v_tipousuario"/>
+	     <result property="intIdEstado"		 column="usua_idestado_n"/>
+	     <result property="strEmpresaUsuario" column="v_empresa"/>
+	     <result property="strPerfil" 		 column="v_descripcion_perf"/>
+	     <result property="daFecRegistro" 	 column="usua_fecharegistro_d"/>
+	     <result property="intIdTipoPersona" column="n_idtipopersona"/>
+	     <result property="intIdTipoDoc" 	 column="n_idtipoidentidad"/>
+	     <result property="strNroDoc" 		 column="v_nroidentidad"/>
+	     <result property="strApepat" 		 column="v_apellidopaterno"/>
+	     <result property="strApemat" 		 column="v_apellidomaterno"/>
+	     <result property="strNombres" 		 column="v_nombres"/>
+	     <result property="intHoraIng" 		 column="usua_controlhoraingreso_n"/>
+	     
+	     <result property="rbVigClave" 		 column="usua_controlvigenciaclave_n"/>
+	     <result property="intNroDias" 		 column="usua_diasvigencia_n"/>
+	     <result property="strSucsubcursal"  column="v_sucsubsuc"/>
+	     <result property="strImagen" 		 column="USUA_IMAGEN_V"/>
+	     <result property="strEstado" 		 column="estado"/>
+    </resultMap>
+    
+    <resultMap id="usuario.domain.usuario.resultCboUsuario" class="usuarioPerfil">
+	     <result property="intIdPersona"  	 column="pers_idpersona_n"/>
+	     <result property="strNombreUsuario" column="usua_usuario_v"/>
+    </resultMap>
+    
+    <resultMap id="usuario.domain.usuario.resultPerfiles" class="perfil">
+	     <result property="intIdEmpresa"  	 column="empr_idempresa_n"/>
+	     <result property="strEmpresaPerfil" column="V_RAZONSOCIAL"/>
+	     <result property="intIdPerfil" 	 column="perf_idperfil_n"/>
+	     <result property="strDescripcion" 	 column="perf_descripcion_v"/>
+	     <result property="intIdTipoPerfil"  column="perf_tipoperfil_n"/>
+	     <result property="intIdEstado"		 column="perf_idestado_n"/>
+	     <result property="daFecReg" 		 column="d_fecharegistro_perf"/>
+	     <result property="daFecIni" 		 column="d_desde_perf"/>
+	     <result property="daFecFin" 		 column="d_hasta_perf"/>
+	     <result property="strEstado" 		 column="estado"/>
+    </resultMap>
+    
+    <resultMap id="usuario.domain.usuario.resultEmpresaUsuario" class="empresaUsuario">
+	     <result property="intIdEmpresa"  	column="EMPR_IDEMPRESA_N"/>
+	     <result property="intIdPersona" 	column="PERS_IDPERSONA_N"/>
+	     <result property="strEmpresa" 		column="V_EMPRESA"/>
+    </resultMap>
+    
+    <resultMap id="usuario.domain.usuario.resultPerfilUsuario" class="perfilUsuario">
+	     <result property="intIdPerfil"  	column="PERF_IDPERFIL_N"/>
+	     <result property="strDescPerfil" 	column="PERF_DESCRIPCION_V"/>
+    </resultMap>
+    
+    <resultMap id="empresa.domain.empresa.resultSubsucursal" class="subsucursal">
+	     <result property="id.intPersEmpresaPk" column="empr_idempresa_n"/>
+	     <result property="id.intIdSucursal" 	column="sucu_idsucursal_n"/>
+	     <result property="id.intIdSubSucursal" column="sude_idsubsucursal_n"/>
+	     <result property="strDescripcion"  	column="sude_descripcion_v"/>
+	     <result property="intIdEstado"  		column="sude_idestado_n"/>
+    </resultMap>  
+    
+	<parameterMap id="prmtListaPerfiles" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <!-- <parameter property="pTxtEmpresaPerfil" 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/> -->  
+         <parameter property="pTxtPerfil" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pCboTipoPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pCboEstadoPerfil" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pTxtFecIni" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pTxtFecFin" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPerfusuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <!--parameter property="pTxtEmpresaPerfil" 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/-->
+    	 <!--parameter property="pIntIdSucursal" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/-->  
+         <parameter property="pTxtPerfil" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pCboTipoPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pCboEstadoPerfil" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pTxtFecIni" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pTxtFecFin" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapperfil" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="INOUT"/>  
+         <parameter property="pStrDescripcion" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="pIntIdTipoPerfil" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdEstado" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pDaFecIni" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+		 <parameter property="pDaFecFin" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <!-- <parameter property="pIntIdPerfil2" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="OUT"/>!-->
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarPerfil" class="java.util.Map">
+    	 <parameter property="prmIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="prmIdPerfil" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarPerfilDet" class="java.util.Map">
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPerfilDetalle" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdTipo"	 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrIdPadre" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaMenuPerfUsuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrIdPadre" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapperfildet" class="pe.com.tumi.usuario.domain.PerfilDet">
+		 <parameter property="intIdEmpresa"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="intIdPerfil" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="strIdTransaccion" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="intIdEstado" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <!-- Mapeo de Usuarios -->
+    <parameterMap id="prmtListaUsuarios" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pCboEmpresaUsuario" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pCboTipoUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pCboEstadoUsuario" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pCboPerfil" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pTxtUsuario" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pCboTipoSucursal" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtLoginUsuarios" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pTxtUsuario" 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pTxtContrasena" 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pTxtEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>      	 
+    </parameterMap>
+    
+    <!--parameterMap id="prmtNumIntentos" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>      	 
+    </parameterMap-->
+    
+    <parameterMap id="prmtErrorIntentos" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>      	 
+    </parameterMap>
+    
+    <parameterMap id="prmtFecRegistro" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>      	 
+    </parameterMap>
+    
+    <parameterMap id="prmtListaComunicacion" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdComunicacion"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaEmpresaUsuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPerfilUsuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaSucursalUsuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaSubSucursal" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdSucursal" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaSubSucursalUsuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapusuario" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="INOUT"/>    
+         <parameter property="pIntIdTipoPersona" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pStrRazonSocial" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="pIntIdTipoDoc" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pStrNroDoc" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="pStrApepat" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrApemat" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrNombres" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pIntIdTipoUsuario"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrUsuario" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrClave" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pChkHoraIngreso"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pChkCambioClave"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pChkVigenciaClave"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pChkDiasVigencia"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdEstado"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrImagen"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapcomunicacion" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+		 <parameter property="pIntIdComunicacion"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdTipoCom" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pIntIdSubTipoCom" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pIntIdTipoLinea" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntNro" 				jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pIntAnexo" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+		 <parameter property="pStrDescripcion"		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pChkCasoEmerg" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapempresausuario" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+		 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.maperrorintentos" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+		 <parameter property="pIntNumIntentos"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapbloqueousuario" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapperfilusuario" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdPerfil"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrDaFecIni"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrDaFecFin"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapsucursalusuario" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdSucursal"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrDaFecIni"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrDaFecFin"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mapsubsucursalusuario" class="java.util.Map">
+		 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdSucursal"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdSubSucursal"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrDaFecIni"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrDaFecFin"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarUsuarioDet" class="java.util.Map">
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarSubSucursalUsuario" class="java.util.Map">
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarSucursalUsuario" class="java.util.Map">
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarPerfilUsuario" class="java.util.Map">
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarEmpresaUsuario" class="java.util.Map">
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <!-- Métodos para Permisos -->
+    <parameterMap id="prmtListaPermisos" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pCboTipoPerfilPermiso" jdbcType="NUMERIC" 			javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pCboEstadoPerfilPermiso" jdbcType="NUMERIC" 			javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pTxtUsuario" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pDaFecIni" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pDaFecFin" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaUsuariosEmpresa" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPerfilesxUsuario" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdUsuario" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaMenuesPermiso" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdTipo"	 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="usuario.domain.usuario.mappermiso" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdPersona"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdPerfil"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrIdTransaccion"	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pDaFecIni"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pDaFecFin"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pIntIdEstado"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarPermiso" class="java.util.Map">
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtDeletePermiso" class="java.util.Map">
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="usuario.domain.usuario.getListaPerfiles" parameterMap="prmtListaPerfiles" resultClass="java.util.HashMap" resultMap="usuario.domain.usuario.resultPerfiles">
+		{ call PKG_TUMI.listar_perfiles( ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="perfilmof.domain.perfilmof.getListaPerfiles1" parameterMap="prmtListaPerfiles" resultClass="java.util.HashMap" resultMap="usuario.domain.usuario.resultPerfiles">
+		{ call PKG_TUMI.listar_perfiles( ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="regpol.domain.regpol.getListaPerfiles2" parameterMap="prmtListaPerfiles" resultClass="java.util.HashMap" resultMap="usuario.domain.usuario.resultPerfiles">
+		{ call PKG_TUMI.listar_perfiles( ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaPerfusuario" parameterMap="prmtListaPerfusuario" resultMap="usuario.domain.usuario.resultPerfilUsuario">
+		{ call PKG_TUMI.listar_perfusuario( ?, ?, ?, ?, ?, ?, ?, ?, ?) } <!-- , ?, ? ) } -->  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.grabarPerfil" parameterMap="usuario.domain.usuario.mapperfil" >
+		{ call PKG_TUMI.insert_perfil( ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarPerfil" parameterMap="prmtEliminarPerfil" >
+		{ call PKG_TUMI.eliminar_perfil( ?, ? )  }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarPerfilDet" parameterMap="prmtEliminarPerfilDet" >
+		{ call PKG_TUMI.eliminar_perfildet( ?, ? ) }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.getListaPerfilDetalle" parameterMap="prmtListaPerfilDetalle" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_menues_perfil( ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaMenuPerfUsuario" parameterMap="prmtListaMenuPerfUsuario" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_menues_perfil_usuario( ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.grabarPerfilDet" parameterMap="usuario.domain.usuario.mapperfildet" >
+		{ call PKG_TUMI.insert_perfildetalle( ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<!-- Mapeo de Usuarios -->
+	<procedure id="usuario.domain.usuario.getListaUsuarios" parameterMap="prmtListaUsuarios" resultClass="java.util.HashMap" resultMap="usuario.domain.usuario.resultUsuarioPerfil">
+		{ call PKG_TUMI.listar_usuarios( ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getLoginUsuarios" parameterMap="prmtLoginUsuarios" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.login_usuarios( ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <!--procedure id="usuario.domain.usuario.getNumIntentos" parameterMap="prmtNumIntentos" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.num_intentos( ?, ?) }  
+    </procedure-->
+    
+    <procedure id="usuario.domain.usuario.getErrorIntentos" parameterMap="prmtErrorIntentos" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.error_intentos( ?, ?) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getFecRegistro" parameterMap="prmtFecRegistro" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.fec_registro( ?, ?) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaComunicacion" parameterMap="prmtListaComunicacion" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_comunicacion( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaEmpresaUsuario" parameterMap="prmtListaEmpresaUsuario" resultMap="usuario.domain.usuario.resultEmpresaUsuario">
+		{ call PKG_TUMI.listar_empresa_usuario( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaPerfilUsuario" parameterMap="prmtListaPerfilUsuario" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_perfil_usuario( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaSucursalUsuario" parameterMap="prmtListaSucursalUsuario" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_sucursal_usuario( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaSubSucursales" parameterMap="prmtListaSubSucursal" resultMap="empresa.domain.empresa.resultSubsucursal">
+		{ call PKG_TUMI.listar_subsucursal( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaSubSucursalUsuario" parameterMap="prmtListaSubSucursalUsuario" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_subsucursal_usuario( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.grabarUsuario" parameterMap="usuario.domain.usuario.mapusuario" >
+		{ call PKG_TUMI.insert_usuario( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarComunicacion" parameterMap="usuario.domain.usuario.mapcomunicacion" >
+		{ call PKG_TUMI.insert_comunicacion( ?, ?, ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarEmpresaUsuario" parameterMap="usuario.domain.usuario.mapempresausuario" >
+		{ call PKG_TUMI.insert_empresa_usuario( ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarErrorIntentos" parameterMap="usuario.domain.usuario.maperrorintentos" >
+		{ call PKG_TUMI.insert_error_intentos( ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarBloqueoUsuario" parameterMap="usuario.domain.usuario.mapbloqueousuario" >
+		{ call PKG_TUMI.insert_bloqueo_usuario( ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarPerfilUsuario" parameterMap="usuario.domain.usuario.mapperfilusuario" >
+		{ call PKG_TUMI.insert_perfil_usuario( ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarSucursalUsuario" parameterMap="usuario.domain.usuario.mapsucursalusuario" >
+		{ call PKG_TUMI.insert_sucursal_usuario( ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.grabarSubSucursalUsuario" parameterMap="usuario.domain.usuario.mapsubsucursalusuario" >
+		{ call PKG_TUMI.insert_subsucursal_usuario( ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarUsuarioDet" parameterMap="prmtEliminarUsuarioDet" >
+		{ call PKG_TUMI.eliminar_usuariodet( ? ) }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarSubSucursalUsuario" parameterMap="prmtEliminarSubSucursalUsuario" >
+		{ call PKG_TUMI.eliminar_subsucursal_usuario( ? ) }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarSucursalUsuario" parameterMap="prmtEliminarSucursalUsuario" >
+		{ call PKG_TUMI.eliminar_sucursal_usuario( ? ) }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarPerfilUsuario" parameterMap="prmtEliminarPerfilUsuario" >
+		{ call PKG_TUMI.eliminar_perfil_usuario( ? ) }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarEmpresaUsuario" parameterMap="prmtEliminarEmpresaUsuario" >
+		{ call PKG_TUMI.eliminar_empresa_usuario( ? ) }
+	</procedure>
+	
+	<!-- Métodos para Permisos -->
+	<procedure id="usuario.domain.usuario.getListaPermisos" parameterMap="prmtListaPermisos" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_permisos( ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaUsuariosEmpresa" parameterMap="prmtListaUsuariosEmpresa" resultClass="java.util.HashMap" resultMap="usuario.domain.usuario.resultCboUsuario">
+		{ call PKG_TUMI.listar_usuarioxempresa( ?, ? ) }
+    </procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.getListaUsuariosEmpresa1" parameterMap="prmtListaUsuariosEmpresa" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_usuarioxempresa( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaPerfilesxUsuario" parameterMap="prmtListaPerfilesxUsuario" resultClass="java.util.HashMap" resultMap="usuario.domain.usuario.resultPerfilUsuario">
+		{ call PKG_TUMI.listar_perfilxusuario( ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaMenuesPermiso" parameterMap="prmtListaMenuesPermiso" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_menuesxusuario( ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.grabarPermiso" parameterMap="usuario.domain.usuario.mappermiso" >
+		{ call PKG_TUMI.insert_permisos( ?, ?, ?, ?, ?, ?, ? )  }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.eliminarPermiso" parameterMap="prmtEliminarPermiso" >
+		{ call PKG_TUMI.eliminar_permisos( ?, ? ) }
+	</procedure>
+	
+	<procedure id="usuario.domain.usuario.deletePermiso" parameterMap="prmtDeletePermiso" >
+		{ call PKG_TUMI.delete_permiso( ?, ? ) }
+	</procedure>
+	
+</sqlMap>

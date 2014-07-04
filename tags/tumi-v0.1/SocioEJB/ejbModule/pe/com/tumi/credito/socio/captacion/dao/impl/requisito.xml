@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RequisitoDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.captacion.domain.Requisito"
+		alias="Requisito" />
+
+	<resultMap id="resRequisito" class="Requisito">
+		<result property="id.intPersEmpresaPk" 			column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCaptacionCod" 	column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" 					column="pITEM_N" />
+		<result property="id.intParaTipoRequisitoBenef" column="pPARA_TIPOREQUISITOBENEF_N" />
+		<result property="id.intItemRequisito" 			column="pITEMREQUISITO_N" />
+		<result property="intNumeroCuota" 				column="pNUMEROCUOTAS_N" />
+		<result property="intParaTipoMaxMinCod" 		column="pPARA_TIPOMAXMIN_N_COD" />
+		<result property="bdBeneficio" 					column="pBENEFICIO_N" />
+		<result property="bdGastoAdministrativo" 		column="pGASTOADMINIST_N" />
+		<result property="intParaEstadoCod" 			column="pESTADO_N" />
+	</resultMap>
+
+	<parameterMap id="parRequisito" class="Requisito">
+		<parameter property="id.intPersEmpresaPk" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCaptacionCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" 					javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoRequisitoBenef" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemRequisito" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoMaxMinCod" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intNumeroCuota" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdBeneficio" 					javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdGastoAdministrativo" 		javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaEstadoCod" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoRequisitoBenef" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemRequisito" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parPorPKCaptacion" class="java.util.Map">
+		<parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parRequisitoEliminar" class="java.util.Map">
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="strPkRequisito" 			javaType="java.lang.String"  jdbcType="VARCHAR" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parRequisito">
+		{ call PKG_CONFCAPTREQUISITO.grabar(?,?,?,?,?,?,?,?,?,?) }
+  	</procedure>
+
+	<procedure id="modificar" parameterMap="parRequisito">
+		{ call PKG_CONFCAPTREQUISITO.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resRequisito">
+		{ call PKG_CONFCAPTREQUISITO.getListaPorPK(?,?,?,?,?,?) }  
+  	</procedure>
+
+	<procedure id="getListaPorPkCaptacion" parameterMap="parPorPKCaptacion" resultMap="resRequisito">
+		{ call PKG_CONFCAPTREQUISITO.getListaPorPkCaptacion(?,?,?,?) }
+	</procedure>
+
+	<procedure id="eliminar" parameterMap="parRequisitoEliminar">
+		{ call PKG_CONFCAPTREQUISITO.eliminar(?,?,?,?) }
+   	</procedure>
+</sqlMap>

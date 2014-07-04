@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Cobranza">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="CobranzaEJB.jar" deploy-path="/" handle="module:/resource/CobranzaEJB/CobranzaEJB">
+            <dependent-object>Module_1344031077265</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="CobranzaWeb.war" deploy-path="/" handle="module:/resource/CobranzaWeb/CobranzaWeb">
+            <dependent-object>Module_1344031077343</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

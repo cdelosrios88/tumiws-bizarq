@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="genericService" class="pe.com.tumi.common.service.impl.GenericServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="genericDAO" />
+	</bean>
+		
+	<bean id="loginService" class="pe.com.tumi.seguridad.service.impl.LoginServiceImpl"
+		parent="genericService"          scope="singleton">
+		<property name="usuarioDAO"      ref="usuarioDAO" />
+		<property name="loginLogDAO"     ref="loginLogDAO" />
+		<property name="parametroHelper" ref="parametroHelper"/>
+	</bean>
+
+	<bean id="parametroService" class="pe.com.tumi.common.service.impl.GenericServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="parametroDAO" />
+	</bean>
+	
+	<bean id="tipoArbolService" class="pe.com.tumi.seguridad.service.impl.TipoArbolServiceImpl"
+		scope="singleton">
+		<property name="tipoArbolDAO" ref="tipoArbolDAO" />
+		<property name="genericDAO" ref="tipoArbolDAO" />
+	</bean>
+
+	<bean id="usuarioService" class="pe.com.tumi.common.service.impl.GenericServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="usuarioDAO" />
+	</bean>
+
+	<bean id="rolService" class="pe.com.tumi.seguridad.service.impl.RolServiceImpl"
+		scope="singleton">
+		<property name="rolDAO" ref="rolDAO" />
+		<property name="genericDAO" ref="rolDAO" />
+	</bean>
+
+	<bean id="sistemaService" class="pe.com.tumi.common.service.impl.GenericServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="sistemaDAO" />
+	</bean>
+
+	<bean id="parametroHelper" class="pe.com.tumi.common.util.ParametroHelper" 
+		scope="singleton">
+		<property name="parametroDAO" ref="parametroDAO"></property>
+	</bean>
+
+	<bean id="sistemaHelper" class="pe.com.tumi.common.util.SistemaHelper" 
+		scope="singleton">
+		<property name="sistemaDAO" ref="sistemaDAO"></property>
+	</bean>
+
+	<bean id="listadosService" class="pe.com.tumi.common.service.impl.GenericServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="listadosDAO" />
+	</bean>
+	
+	<bean id="empresaService" class="pe.com.tumi.empresa.service.impl.EmpresaServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="empresaDAO" />
+	</bean>
+	
+	<bean id="usuarioPerfilService" class="pe.com.tumi.usuario.service.impl.UsuarioServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="usuarioPerfilDAO" />
+	</bean>
+	
+	<bean id="adminMenuService" class="pe.com.tumi.seguridad.service.impl.AdminMenuServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="adminMenuDAO" />
+	</bean>
+	
+	<bean id="horarioIngresoService" class="pe.com.tumi.horario.service.impl.HorarioServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="horarioIngresoDAO" />
+	</bean>
+	
+	<bean id="admFormDocService" class="pe.com.tumi.admFormDoc.service.impl.AdmFormDocServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="admFormDocDAO" />
+	</bean>
+	
+	<bean id="fileUploadService" class="pe.com.tumi.file.service.impl.FileUploadServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="fileUploadDAO" />
+	</bean>
+	
+	<bean id="registroPcService" class="pe.com.tumi.seguridad.service.impl.RegistroPcServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="registroPcDAO" />
+	</bean>
+	
+	<bean id="accesoEspecialService" class="pe.com.tumi.seguridad.service.impl.AccesoEspecialServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="accesoEspecialDAO" />
+	</bean>
+	
+	<bean id="perfilMofService" class="pe.com.tumi.seguridad.service.impl.PerfilMofServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="perfilMofDAO" />
+	</bean>
+	
+	<bean id="parametersService" class="pe.com.tumi.common.service.impl.GenericServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="parametersDAO" />
+	</bean>
+	
+	<bean id="reglamentoPoliticaService" class="pe.com.tumi.seguridad.service.impl.ReglamentoPoliticaServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="reglamentoPoliticaDAO" />
+	</bean> 
+	
+	<bean id="auditoriaSistemasService" class="pe.com.tumi.seguridad.service.impl.AuditoriaSistemasServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="auditoriaSistemasDAO" />
+	</bean> 
+	
+	<bean id="auditoriaService" class="pe.com.tumi.seguridad.service.impl.AuditoriaServiceImpl"
+		scope="singleton">
+		<property name="genericDAO" ref="auditoriaDAO" />
+	</bean>
+	
+	<!-- Creditos Service Bean -->
+	<bean id="hojaPlaneamientoService" class="pe.com.tumi.creditos.service.impl.HojaPlaneamientoServiceImpl"
+		scope="singleton">
+		<property name="creditosDAO" ref="hojaPlaneamientoDAO" />
+	</bean>
+	
+	<bean id="controlProcesoService" class="pe.com.tumi.creditos.service.impl.ControlProcesoServiceImpl"
+		scope="singleton">
+		<property name="creditosDAO" ref="controlProcesoDAO" />
+	</bean>
+	
+	<bean id="estrucOrgService" class="pe.com.tumi.creditos.service.impl.EstrucOrgServiceImpl"
+		scope="singleton">
+		<property name="creditosDAO" ref="estrucOrgDAO" />
+	</bean>
+	
+	<bean id="aportacionesService" class="pe.com.tumi.creditos.service.impl.AportacionesServiceImpl"
+		scope="singleton">
+		<property name="creditosDAO" ref="aportacionesDAO" />
+	</bean>
+	
+	<bean id="mantCuentasService" class="pe.com.tumi.creditos.service.impl.MantCuentasServiceImpl"
+	scope="singleton">
+	<property name="creditosDAO" ref="mantCuentasDAO" />
+	</bean>
+	
+	<!-- Apertura Cuenta Service Bean -->
+	<bean id="perJuridicaService" class="pe.com.tumi.adminCuenta.service.impl.AdminCuentaServiceImpl"
+		scope="singleton">
+		<property name="adminCuentaDAO" ref="perJuridicaDAO" />
+	</bean>
+	
+	<!-- Popups Service Bean -->
+	<bean id="popupService" class="pe.com.tumi.popup.service.impl.PopupServiceImpl"
+		scope="singleton">
+		<property name="popupDAO" ref="popupDAO" />
+	</bean>
+	
+	<bean id="beneficiarioService" class="pe.com.tumi.popup.service.impl.BeneficiarioServiceImpl"
+		scope="singleton">
+		<property name="popupDAO" ref="beneficiarioDAO" />
+	</bean>
+	
+	<bean id="domicilioService" class="pe.com.tumi.popup.service.impl.DomicilioServiceImpl"
+		scope="singleton">
+		<property name="popupDAO" ref="domicilioDAO" />
+	</bean>
+	
+	<bean id="comunicacionService" class="pe.com.tumi.popup.service.impl.ComunicacionServiceImpl"
+		scope="singleton">
+		<property name="popupDAO" ref="comunicacionDAO" />
+	</bean>
+	
+	<bean id="ctaBancariaService" class="pe.com.tumi.popup.service.impl.CtaBancariaServiceImpl"
+		scope="singleton">
+		<property name="popupDAO" ref="ctabancariaDAO" />
+	</bean>
+	
+	<bean id="repLegalService" class="pe.com.tumi.popup.service.impl.RepLegalServiceImpl"
+		scope="singleton">
+		<property name="popupDAO" ref="replegalDAO" />
+	</bean>
+</beans>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>SeguridadWeb</display-name>
+  <context-param>
+	<param-name>javax.faces.ALLOW_JAVASCRIPT</param-name>
+	<param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>org.richfaces.LoadScriptStrategy</param-name>
+    <param-value>ALL</param-value>
+  </context-param>
+  <context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.richfaces.SKIN</param-name>
+		  <param-value>newyork</param-value> 
+	</context-param>
+	<context-param>
+		<param-name>org.richfaces.CONTROL_SKINNING</param-name>
+		<param-value>disabled</param-value>
+	</context-param>
+  <context-param>
+	  <param-name>contextConfigLocation</param-name> 
+	  <param-value>classpath:/pe/com/tumi/conf/applicationContext*.xml</param-value> 
+  </context-param>
+  <context-param>
+		<param-name>com.sun.faces.validateXml</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<filter>
+		<display-name>RichFaces Filter</display-name>
+		<filter-name>richfaces</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+		<init-param>
+			<param-name>createTempFiles</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+ 			<param-name>maxRequestSize</param-name>
+ 			<param-value>10485760</param-value> <!-- Máximo de 10 MB -->
+ 			<!-- <param-value>10000000</param-value>  -->
+ 		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>richfaces</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	    <dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher> 
+    </filter-mapping>
+  
+  <filter>
+	  <display-name>CheckClient</display-name>
+	  <filter-name>CheckClient</filter-name>
+	  <filter-class>pe.com.tumi.framework.servicio.seguridad.controller.cliente.CheckClient</filter-class>
+  </filter>	
+
+  <filter-mapping>
+	  <filter-name>CheckClient</filter-name>
+	  <url-pattern>/pages/*</url-pattern>
+	  <dispatcher>REQUEST</dispatcher>
+	  <dispatcher>FORWARD</dispatcher>
+	  <dispatcher>INCLUDE</dispatcher>
+  </filter-mapping>
+  <filter-mapping>
+	  <filter-name>CheckClient</filter-name>
+	  <url-pattern>/InitialCheck</url-pattern>
+  </filter-mapping>
+  
+  <!-- Manejo de  filtros-->
+  <filter>
+	  <filter-name>SessionFilter</filter-name>
+	  <filter-class>pe.com.tumi.seguridad.login.filter.SeguridadFilter</filter-class>
+  </filter>
+	
+  <filter-mapping>
+	  <filter-name>SessionFilter</filter-name>
+	     <url-pattern>/portal/autentica/empresa.jsf</url-pattern>
+	     <url-pattern>/portal/autoriza/principal.jsp</url-pattern>
+  </filter-mapping>
+  
+
+  <listener>
+	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+  	<listener-class>pe.com.tumi.framework.vista.listener.LoadInitial</listener-class>
+  </listener>
+  <servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>TilesServet</servlet-name>
+		<servlet-class>org.apache.struts.tiles.TilesServlet</servlet-class>
+		<init-param>
+			<param-name>definitions-config</param-name>
+			<param-value>/WEB-INF/tiles-defs.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>Remoting</servlet-name>
+		<servlet-class>pe.com.tumi.framework.vista.recurso.servlet.Remoting</servlet-class>
+	</servlet>
+	<servlet>
+		<display-name>ValidarController</display-name>
+		<servlet-name>ValidarController</servlet-name>
+		<servlet-class>pe.com.tumi.seguridad.controller.ValidarController</servlet-class>
+	</servlet>
+	<servlet>
+		<display-name>CheckServer</display-name>
+		<servlet-name>CheckServer</servlet-name>
+		<servlet-class>pe.com.tumi.framework.servicio.seguridad.controller.server.CheckServer</servlet-class>
+    </servlet>
+    <servlet>
+		<display-name>DispatchServer</display-name>
+		<servlet-name>DispatchServer</servlet-name>
+		<servlet-class>pe.com.tumi.framework.servicio.seguridad.controller.server.DispatchServer</servlet-class>
+    </servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.faces</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Remoting</servlet-name>
+		<url-pattern>/remoting</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ValidarController</servlet-name>
+		<url-pattern>/ValidarController</url-pattern>
+	</servlet-mapping>
+    <servlet-mapping>
+		<servlet-name>CheckServer</servlet-name>
+		<url-pattern>/CheckServer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+		<servlet-name>DispatchServer</servlet-name>
+		<url-pattern>/DispatchServer</url-pattern>
+    </servlet-mapping>
+  	
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

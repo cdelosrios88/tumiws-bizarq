@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Class-Path: META-INF/Parametro.jar 
+ META-INF/Tumi.jar 
+ META-INF/commons-beanutils-core-1.7.0.jar 
+ META-INF/commons-digester-1.7.jar 
+ META-INF/ibatis-sqlmap-2.3.0.jar 
+ META-INF/log4j-1.2.14.jar 
+ META-INF/spring-2.5.6.jar 
+ META-INF/Socio.jar 
+ META-INF/Persona.jar 
+ META-INF/Seguridad.jar 
+ META-INF/Movimiento.jar 
+ META-INF/Contabilidad.jar 
+ META-INF/Tesoreria.jar 
+ META-INF/Cobranza.jar 
+ META-INF/Riesgo.jar 
+ META-INF/jasperreports-4.1.3.jar 
+ META-INF/groovy-all-1.7.5.jar 
+ META-INF/joda-time-2.1.jar 
+ META-INF/iText-2.1.7.jar
+

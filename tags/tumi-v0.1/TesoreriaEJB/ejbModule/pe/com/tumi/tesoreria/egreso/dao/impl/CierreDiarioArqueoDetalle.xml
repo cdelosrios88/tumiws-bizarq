@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreDiarioArqueoDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoDetalle" alias="CierreDiarioArqueoDetalle"/> 
+	
+  <resultMap id="resCierreDiarioArqueoDetalle" class="CierreDiarioArqueoDetalle" >
+	<result property="id.intPersEmpresa"  			column="pempresaarqueo" />
+	<result property="id.intParaTipoArqueo"   		column="ptipoarqueo" />
+	<result property="id.intSucuIdSucursal"   		column="pidsucursal" />
+	<result property="id.intSudeIdSubsucursal"   	column="pidsubsucursal" />
+	<result property="id.intItemCierreDiarioArqueo" column="pitemcierrediarioarqueo" />
+    <result property="id.intItemDetalle"      		column="pitemcidiarde" />
+    <result property="intPersEmpresa"     			column="pempresa" />
+    <result property="intParaTipoFondoFijo"    		column="ptipofondofijo" />
+    <result property="intItemPeriodoFondo"    		column="pitemperiodofondo" />
+    <result property="intItemFondoFijo"      		column="pitemfondofijo" />
+    <result property="bdMontoApertura"      		column="pmontoapertura" />
+    <result property="bdMontoRendido"      			column="pmontorendido" />
+    <result property="strDetalleRendido"     		column="pdetallerendido" />
+    <result property="bdMontoIngreso"     			column="pmontoingreso" />
+    <result property="bdMontoDeposito"     			column="pmontodeposito" />
+    <result property="bdMontoReciboSunat"     		column="pmontorecibosunat" />
+    <result property="strDetalleReciboSunat"     	column="pdetallerecibosunat" />
+    <result property="bdMontoValesRendir"     		column="pmontovalesrendir" />
+    <result property="strDetalleValeRendir"     	column="pdetallevalerendir" />
+    <result property="bdMontoIngPendiente"     		column="pmontoingpendiente" />
+    <result property="strDetalleIngPendiente"     	column="pdetalleingpendiente" />
+    <result property="bdAjusteRedondeo"     		column="pajusteredondeo" />
+    <result property="bdMontoSaldoEfectivo"     	column="pmontosaldoefecetivo" />
+    <result property="intItemBancoFondo"      		column="pitembancofondo" />
+    <result property="intItemBancoCuenta"      		column="pitembancocuenta" />
+    <result property="bdMontoCuentaBancaria"      	column="pmontoctabancaria" />
+  </resultMap>
+  
+  <parameterMap id="parCierreDiarioArqueoDetalle" class="CierreDiarioArqueoDetalle">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDetalle"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoFondoFijo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemPeriodoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemFondoFijo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoApertura"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoRendido"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDetalleRendido"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdMontoIngreso"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoDeposito"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoReciboSunat"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDetalleReciboSunat"		javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdMontoValesRendir"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDetalleValeRendir"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdMontoIngPendiente"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDetalleIngPendiente"		javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdAjusteRedondeo"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSaldoEfectivo"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoCuentaBancaria"		javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDetalle"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCierreDiarioArqueo" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/> 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  <procedure id="grabar" parameterMap="parCierreDiarioArqueoDetalle">
+	{ call PKG_CIERREDIARIOARQUEODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCierreDiarioArqueoDetalle" >
+	{ call PKG_CIERREDIARIOARQUEODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCierreDiarioArqueoDetalle">
+	{ call PKG_CIERREDIARIOARQUEODETALLE.getListaPorPk(?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorCierreDiarioArqueo" parameterMap="parPorCierreDiarioArqueo" resultMap="resCierreDiarioArqueoDetalle">
+	{ call PKG_CIERREDIARIOARQUEODETALLE.getListaPorCierreDiarioArqueo(?,?,?,?,?,?) }
+  </procedure>
+</sqlMap>

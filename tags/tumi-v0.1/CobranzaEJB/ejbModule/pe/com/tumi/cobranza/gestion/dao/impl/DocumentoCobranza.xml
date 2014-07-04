@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoCobranzaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.gestion.domain.DocumentoCobranza" alias="DocumentoCobranza"/> 
+	
+  <resultMap id="resDocumentoCobranza" class="DocumentoCobranza" >
+     <result property="id.intPersEmresaDocCob" column="IDEMPRESA" />
+     <result property="id.intItemDocCob"       column="IDITEM" />
+     <result property="strNombre"              column="NOMBRE" />
+  </resultMap>
+  
+   <parameterMap id="parFiltro" class="java.util.Map">
+   	 <parameter property="cursorLista" 		         javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intParaTipoCobranza" 		 javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   </parameterMap>
+
+  <procedure id="getLista" parameterMap="parFiltro" resultMap="resDocumentoCobranza">
+	{ call PKG_DOCUMENTOCOBRANZA.getLista(?,?) }  
+  </procedure>
+  
+
+  
+
+</sqlMap>  

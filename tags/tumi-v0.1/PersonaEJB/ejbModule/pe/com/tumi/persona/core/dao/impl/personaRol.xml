@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PersonaRolDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.core.domain.PersonaRol" alias="PersonaRol"/> 
+	
+  <resultMap id="resPersonaRol" class="PersonaRol" >
+     <result property="id.intIdEmpresa"      		column="pEMPRESA_N" />
+     <result property="id.intIdPersona"    			column="pPERSONA_N" />
+     <result property="id.intParaRolPk"      		column="pPARA_ROL_N_PK" />
+     <result property="id.dtFechaInicio"      		column="pFECHAINICIO_D" />
+     <result property="dtFechaFin"   				column="pFECHAFIN_D" />
+     <result property="intEstadoCod"   				column="pESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parPersonaRol" class="PersonaRol">
+     <parameter property="id.intIdEmpresa"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdPersona"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intParaRolPk" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="id.dtFechaInicio" 	jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="dtFechaFin" 			jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intEstadoCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="id.intParaRolPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC"  	   mode="IN"/>
+   	 <parameter property="dtFechaInicio" 	javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKPersonaEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPersonaRol">
+	{ call PKG_PERSONAROL.grabar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPersonaRol" >
+	{ call PKG_PERSONAROL.modificar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resPersonaRol">
+	{ call PKG_PERSONAROL.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkPersonaEmpresa" parameterMap="parPorPKPersonaEmpresa" resultMap="resPersonaRol">
+	{ call PKG_PERSONAROL.getListaPorPkPersonaEmpresa(?,?,?) }
+  </procedure>
+  
+  <procedure id="modificarPorPerEmpYRol" parameterMap="parPersonaRol" >
+	{ call PKG_PERSONAROL.modificarPorPerEmpYRol(?,?,?,?,?,?) }
+  </procedure>
+    
+</sqlMap>  

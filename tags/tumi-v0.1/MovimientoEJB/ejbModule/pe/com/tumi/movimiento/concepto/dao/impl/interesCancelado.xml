@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="InteresCanceladoDaoIbatis">
+	 <typeAlias type="pe.com.tumi.movimiento.concepto.domain.InteresCancelado" alias="InteresCancelado"/> 
+	 
+	 <parameterMap  id="parInteresCancelado" class="InteresCancelado">		 
+		  <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="id.intCuentaPk"				jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="id.intItemExpediente"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="id.intItemExpedienteDetalle"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="id.intItemMovCtaCte"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="id.intItemCancelaInteres"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="intParaTipoFormaPago"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="bdSaldoCredito" 				jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>
+		  <parameter property="intParaEstado"				jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="tsFechaInicio"				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		  <parameter property="tsFechaMovimiento"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		   <parameter property="intDias"					jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+		  <parameter property="bdTasa" 						jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>	
+		  <parameter property="bdMontoInteres" 				jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>		
+	 </parameterMap>
+	 
+	<parameterMap id="parPorExpediente" class="java.util.Map">
+   	 	<parameter property="cursorLista" 			jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 	<parameter property="intEmpresa" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 	<parameter property="intCuenta" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 	<parameter property="intItemExpediente" 	jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   		<parameter property="intItemDetExpediente" jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parPorPK" class="java.util.Map">
+   	 	<parameter property="cursorLista" 			jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 	<parameter property="intEmpresa" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 	<parameter property="intCuenta" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   	 	<parameter property="intItemExpediente" 	jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   		<parameter property="intItemDetExpediente"  jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   		<parameter property="intItemMovCtaCte" 		jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+   		<parameter property="intItemCancelaInteres" jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+  	</parameterMap>
+	 
+	 <resultMap  id="resInteresCancelado" class="InteresCancelado">
+	 	<result property="id.intPersEmpresaPk"			column="pPERS_EMPRESA_N_PK"/>
+	 	<result property="id.intCuentaPk" 				column="pCSOC_CUENTA_N_PK"/>
+	 	<result property="id.intItemExpediente"			column="pCSER_ITEMEXPEDIENTE_N"/>
+	 	<result property="id.intItemExpedienteDetalle"	column="pCSER_ITEMDETEXPEDIENTE_N"/>
+	 	<result property="id.intItemMovCtaCte" 			column="pCMOV_ITEMMOVCTACTE_N"/>
+	 	<result property="id.intItemCancelaInteres"		column="pCSER_ITEMCANCELAINTERES_N"/>
+	 	<result property="intParaTipoFormaPago" 		column="pPARA_TIPOFORMAPAGO_N_COD"/>
+	 	<result property="bdSaldoCredito" 				column="pCRID_SALDOCREDITO_N"/>
+	 	<result property="intParaEstado" 				column="pPARA_ESTADO_N_COD"/>
+	 	<result property="tsFechaInicio" 				column="pCRID_FECHAINICIO_D"/>
+	 	<result property="tsFechaMovimiento" 			column="pCRID_FECHAMOVIMIENTO_D"/>
+	 	<result property="intDias" 						column="pCRID_DIAS_N"/>
+	 	<result property="bdTasa" 						column="pCRID_TASA_N"/>
+	 	<result property="bdMontoInteres" 				column="pCRID_MONTOINTERES_N"/>
+	 </resultMap>
+	 
+	 <procedure id="grabar" parameterMap="parInteresCancelado">
+	 { call PKG_INTERESCANCELADO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	 </procedure>
+	<procedure id="modificar" parameterMap="parInteresCancelado" >
+		{ call PKG_INTERESCANCELADO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?)} 
+  	</procedure>
+  
+  	<procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resInteresCancelado">
+		{ call PKG_INTERESCANCELADO.getListaPorPK(?,?,?,?,?,?,?) }  
+  	</procedure>
+	 
+	 <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resInteresCancelado">
+		{ call PKG_INTERESCANCELADO.getListaPorPkExpediente(?,?,?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="getListMaxPorExpediente" parameterMap="parPorExpediente" resultMap="resInteresCancelado">
+		{ call PKG_INTERESCANCELADO.getListMaxPorExpediente(?,?,?,?,?) }
+  	</procedure>
+	 
+</sqlMap>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EstadoLiquidacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.prevision.domain.EstadoLiquidacion" alias="EstadoLiquidacion"/> 
+	
+  <resultMap id="resEstadoLiquidacion" class="EstadoLiquidacion" >
+  	 <result property="id.intPersEmpresaPk"  		column="pEmpresaliquidacion" />
+  	 <result property="id.intItemExpediente"  		column="pItemExpedienteLiqui" />
+  	 <result property="id.intItemEstado"  			column="pItemEstadoLiqui" />
+  	 <result property="intParaEstado"  				column="pEstadops" />
+     <result property="tsFechaEstado"  				column="pFechaEstado" />
+     <result property="intPersEmpresaEstado"  		column="pEmpresaEstado" />
+     <result property="intSucuIdSucursal"     		column="pIdSucursal" />
+     <result property="intSudeIdSubsucursal"    	column="pIdsubsucursal" />
+     <result property="intPersUsuarioEstado"    	column="pUsuarioEstado" />
+     <result property="strObservacion"    			column="pObservacion" />
+     <result property="intPersEmpresaLibro"    		column="pEmpresaLibro" />
+     <result property="intContPeriodoLibro"    		column="pPeriodolibro" />
+     <result property="intContCodigoLibro"    		column="pCodigolibro" />
+  </resultMap>
+  
+  <parameterMap id="parEstadoLiquidacion" class="EstadoLiquidacion">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemEstado"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstado"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="tsFechaEstado"				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>    
+     <parameter property="intPersEmpresaEstado" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intSucuIdSucursal" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intSudeIdSubsucursal" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersUsuarioEstado" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strObservacion" 				jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intPersEmpresaLibro" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intContPeriodoLibro" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intContCodigoLibro" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemEstado" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+	
+  <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  	
+  <procedure id="grabar" parameterMap="parEstadoLiquidacion">
+	{ call PKG_ESTADOLIQUIDACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEstadoLiquidacion" >
+	{ call PKG_ESTADOLIQUIDACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resEstadoLiquidacion">
+	{ call PKG_ESTADOLIQUIDACION.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resEstadoLiquidacion">
+	{ call PKG_ESTADOLIQUIDACION.getListaPorExpediente(?,?,?) }
+  </procedure>
+  
+  <procedure id="getMaxEstadoLiquidacionPorPkExpediente" parameterMap="parPorExpediente" resultMap="resEstadoLiquidacion">
+	{ call PKG_ESTADOLIQUIDACION.getMaxEstadoLiquidacion(?,?,?) }
+  </procedure>
+  
+    <procedure id="getMinEstadoLiquidacionPorPkExpediente" parameterMap="parPorExpediente" resultMap="resEstadoLiquidacion">
+	{ call PKG_ESTADOLIQUIDACION.getMinEstadoLiquidacion(?,?,?) }
+  </procedure>
+</sqlMap>

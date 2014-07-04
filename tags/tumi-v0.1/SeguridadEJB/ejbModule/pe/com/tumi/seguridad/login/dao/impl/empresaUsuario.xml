@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EmpresaUsuarioDaoIbatis">
+	
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.EmpresaUsuario" alias="EmpresaUsuarioSeg"/> 
+	
+  <resultMap id="resEmpresaUsuarioSeg" class="EmpresaUsuarioSeg" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intPersPersonaPk"  		column="pPers_persona_n_pk" />
+     <result property="intControlHoraIngreso"  		column="pControlhoraingreso_n" />
+     <result property="intCambioClave"  			column="pCambioclave_n" />
+     <result property="intControlVigenciaClave"  	column="pControlvigenciaclave_n" />
+     <result property="intDiasVigencia"  			column="pDiasvigencia_n" />
+     <result property="intIdEstado"  				column="pEstado_n" />
+     <result property="tsFechaEliminacion"  		column="pFechaeliminacion_d" />
+     <result property="intPersPersonaEliminaPk"  	column="pPers_personaelimina_n_pk" />
+  </resultMap>
+  
+  <resultMap id="resEscalarEmpresaUsuarioSeg" class="java.util.Map" >
+    	<result property="intEscalar" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" column="pESCALAR" />
+  </resultMap>
+  	
+  <parameterMap id="parEmpresaUsuarioSeg" class="EmpresaUsuarioSeg">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intPersPersonaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intControlHoraIngreso"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intCambioClave"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intControlVigenciaClave"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intDiasVigencia"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intIdEstado"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="tsFechaEliminacion"		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+	 <parameter property="intPersPersonaEliminaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+    
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersPersonaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdPersonaYFechaEliminacion" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersPersonaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="tsFechaEliminacion" 	javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" 	   mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parEmpresaUsuarioSeg">
+	{ call PKG_EMPRESAUSUARIO.grabar(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEmpresaUsuarioSeg" >
+	{ call PKG_EMPRESAUSUARIO.modificar(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resEmpresaUsuarioSeg">
+	{ call PKG_EMPRESAUSUARIO.getListaPorPK(?,?,?) }
+  </procedure>
+    
+  <!--procedure id="getCantidadPorPkZonal" parameterMap="parPorPkZonal"  resultMap="resEscalarEmpresaUsuario">
+	{ call PKG_EMPRESAUSARIO.getCantidadPorPkZonal(?,?) }
+  </procedure-->
+   
+  <procedure id="getListaPorIdEmpresa" parameterMap="parPorIdEmpresa"  resultMap="resEmpresaUsuarioSeg">
+	{ call PKG_EMPRESAUSUARIO.getListaPorIdEmpresa(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona"  resultMap="resEmpresaUsuarioSeg">
+	{ call PKG_EMPRESAUSUARIO.getListaPorIdPersona(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorIdPersonaYFechaEli" parameterMap="parPorIdPersonaYFechaEliminacion"  resultMap="resEmpresaUsuarioSeg">
+	{ call PKG_EMPRESAUSUARIO.getListaPorIdPersonaYFechaEli(?,?,?) }
+  </procedure>
+  
+</sqlMap>

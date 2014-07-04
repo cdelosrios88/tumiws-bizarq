@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LibroDiarioDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalle" alias="LibroDiarioDetalle"/> 
+	
+  <resultMap id="resLibroDiarioDetalle" class="LibroDiarioDetalle">
+	<result property="id.intPersEmpresaLibro" 	column="pPers_empresalibro"/>
+	<result property="id.intContPeriodoLibro"   column="pCont_periodolibro"/>
+	<result property="id.intContCodigoLibro"   	column="pCont_codigolibro"/>
+	<result property="id.intContItemLibro"   	column="pCont_itemlibro"/>
+    <result property="intPersEmpresaCuenta"     column="pPers_empresacuenta"/>
+    <result property="intContPeriodo"    		column="pCont_periodo"/>
+    <result property="strContNumeroCuenta"    	column="pCont_numerocuenta"/>
+    <result property="intPersPersona"    		column="pPers_persona"/>
+    <result property="intParaDocumentoGeneral" 	column="pPara_documentogeneral"/>
+    <result property="strSerieDocumento"    	column="pLdde_seriedocumento"/>
+    <result property="strNumeroDocumento"    	column="pLdde_numerodocumento"/>
+    <result property="intPersEmpresaSucursal"   column="pPers_empresasucursal"/>
+    <result property="intSucuIdSucursal"    	column="pPucu_idsucursal"/>
+    <result property="intSudeIdSubSucursal"    	column="pSude_idsubsucursal"/>
+    <result property="intParaMonedaDocumento"   column="pPara_monedadocumento"/>
+    <result property="intTipoCambio"    		column="pLdde_tipocambio"/>
+    <result property="bdDebeSoles"    			column="pLdde_debesoles"/>
+    <result property="bdHaberSoles"    			column="pLdde_habersoles"/>
+    <result property="bdDebeExtranjero"    		column="pLdde_debeextranjero"/>
+    <result property="bdHaberExtranjero"    	column="pLdde_haberextranjero"/>
+    <result property="strComentario"    		column="pLdde_comentario"/>
+  </resultMap>
+  
+  <parameterMap id="parLibroDiarioDetalle" class="LibroDiarioDetalle">
+		<parameter property="id.intPersEmpresaLibro"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContPeriodoLibro"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContCodigoLibro"		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContItemLibro"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intPersEmpresaCuenta"     	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intContPeriodo"    		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="strContNumeroCuenta"    	javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+	    <parameter property="intPersPersona"    		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intParaDocumentoGeneral"  	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="strSerieDocumento"    		javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+	    <parameter property="strNumeroDocumento"    	javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+	    <parameter property="intPersEmpresaSucursal"    javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intSucuIdSucursal"    		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intSudeIdSubSucursal"    	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intParaMonedaDocumento"    javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="intTipoCambio"    			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdDebeSoles"    			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdHaberSoles"    			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdDebeExtranjero"    		javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="bdHaberExtranjero"    		javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	    <parameter property="strComentario"    			javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	<parameter property="cursorLista"					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContCodigoLibro"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContItemLibro"   			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorLibroMayorYPlanContable" class="java.util.Map">
+   	<parameter property="cursorLista"					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaMayor"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intPeriodoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorLibroDiario" class="java.util.Map">
+   	<parameter property="cursorLista"					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContCodigoLibro"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	<parameter property="cursorLista"					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContCodigoLibro"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContItemLibro"   			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
+	<parameter property="intPersEmpresaSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intSucuIdSucursal"				javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intSudeIdSubSucursal"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <!-- Inicio - GTorresBroussetP - 05.abr.2014 -->
+  <!-- Parámetros para buscar el Libro Diario Detalle por Periodo y Documento General -->
+  <parameterMap id="parPorPeriodoDocumento" class="java.util.Map">
+   	<parameter property="cursorLista"					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intParaDocumentoGeneral"		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin - GTorresBroussetP - 05.abr.2014 -->
+  
+  <procedure id="grabar" parameterMap="parLibroDiarioDetalle">
+	{ call PKG_LIBRODIARIODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parLibroDiarioDetalle" >
+	{ call PKG_LIBRODIARIODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroDiarioDetalle">
+	{ call PKG_LIBRODIARIODETALLE.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+ 
+  <procedure id="getListaPorLibroMayorYPlanContable" parameterMap="parPorLibroMayorYPlanContable" resultMap="resLibroDiarioDetalle">
+	{ call PKG_LIBRODIARIODETALLE.getPorLibroMayorYPlan(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorLibroDiario" parameterMap="parPorLibroDiario" resultMap="resLibroDiarioDetalle">
+	{ call PKG_LIBRODIARIODETALLE.getListaPorLibroDiario(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resLibroDiarioDetalle">
+	{ call PKG_LIBRODIARIODETALLE.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <!-- Inicio - GTorresBroussetP - 05.abr.2014 -->
+  <!-- Llamada al procedimiento que busca el Libro Diario Detalle por Periodo y Documento General -->
+  <procedure id="getListaPorPeriodoDocumento" parameterMap="parPorPeriodoDocumento" resultMap="resLibroDiarioDetalle">
+	{ call PKG_LIBRODIARIODETALLE.getListaPorPeriodoDocumento(?,?,?,?) }
+  </procedure>
+  <!-- Fin - GTorresBroussetP - 05.abr.2014 -->
+</sqlMap>

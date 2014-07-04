@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CaptacionDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.captacion.domain.Captacion" alias="Captacion" />
+	<typeAlias type="pe.com.tumi.credito.socio.captacion.domain.CaptacionId" alias="CaptacionId" />
+
+	<resultMap id="resCaptacion" class="Captacion">
+		<result property="id.intPersEmpresaPk" 			column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCaptacionCod" 	column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" 					column="pITEM_N" />
+		<result property="strDescripcion" 				column="pDESCRIPCION_V" />
+		<result property="strDtFechaIni" 				column="pINICIO_D" />
+		<result property="strDtFechaFin" 				column="pFIN_D" />
+		<result property="intParaTipopersonaCod" 		column="pPARA_TIPOPERSONA_N_COD" />
+		<result property="intParaRolPk" 				column="pPARA_ROL_N_PK" />
+		<result property="intParaCondicionLaboralCod" 	column="pPARA_CONDICIONLABORAL_N_COD" />
+		<result property="intParaTipoDescuentoCod" 		column="pPARA_TIPODESCUENTO_N_COD" />
+		<result property="intParaTipoConfiguracionCod" 	column="pPARA_TIPOCONFIGURACION_N_COD" />
+		<result property="bdValorConfiguracion" 		column="pVALORCONFIGURACION_N" />
+		<result property="bdPorcConfiguracion" 			column="pPORCENTAJECONFIGURACION_N" />
+		<result property="intParaAplicacionCod" 		column="pPARA_APLICACION_N_COD" />
+		<result property="intParaMonedaCod" 			column="pPARA_MONEDA_N_COD" />
+		<result property="bdTem" 						column="pTEM_N" />
+		<result property="intTasaNaturaleza" 			column="pTASANATURALEZA_N" />
+		<result property="intTasaFormula" 				column="pTASAFORMULA_N" />
+		<result property="bdTea" 						column="pTEA_N" />
+		<result property="bdTna" 						column="pTNA_N" />
+		<result property="intEdadLimite" 				column="pEDADLIMITE_N" />
+		<result property="intTiempoSustento" 			column="pTIEMPOSUSTENTO_N" />
+		<!-- <result property="intPeriodicSustento" 			column="pPERIODICSUSTENTO_N" />-->
+		<result property="intParaTipoMaxMinSustCod" 	column="pTIPOMAXMINSUSTENTO" />
+		<result property="intCeseBeneficio" 			column="pCESEBENEFICIO_N" />
+		<result property="intNumeroCuota" 				column="pNUMEROCUOTAS_N" />
+		<result property="intTiempoPermanencia" 		column="pTIEMPOPERMANENCIA_N" />
+		<result property="bdPenalidadPorcentaje" 		column="pPENALIDADPORCENTAJE_N" />
+		<result property="bdPenalidadTasaMora" 			column="pPENALIDADTASAMORA_N" />
+		<result property="intParaPenalidadAplicacion" 	column="pPARA_PENALIDADAPLICACION_N" />
+		<result property="intTiempoAportacion" 			column="pTIEMPOMINIMOAPORTACION_N" />
+		<result property="intPeriodicAportacionCod" 	column="pPERIODICIDADAPORTACION_N" />
+		<result property="intParaTipoMaxMinAportCod" 	column="pTIPOMAXMINAPORTACION_N" />
+		<result property="intCuota" 					column="pCUOTASMINIMAS_N" />
+		<result property="intParaPeriodicCuotasCod" 	column="pPERIODICIDADCUOTAS_N" />
+		<result property="intParaTipoMaxMinCuotaCod" 	column="pTIPOMAXMINCUOTA_N" />
+		<result property="intTiempoDevolucion" 			column="pTIEMPOMINIMODEVOLUCION_N" />
+		<result property="intParaTipoDia" 				column="pPARA_TIPODIAS_N" />
+		<result property="intRegularidad" 				column="pREGULARIDAD_N" />
+		<result property="intPeriodicidad" 				column="pPERIODICIDAD_N" />
+		<result property="strDtFechaRegistro" 			column="pFECHAREGISTRO_D" />
+		<result property="intParaEstadoSolicitudCod" 	column="pPARA_ESTADOSOLICITUD_N_COD" />
+		<result property="intParaEstadoCod" 			column="pPARA_ESTADO_N_COD" />
+	</resultMap>
+	
+		<resultMap id="resCaptacionOpcional" class="Captacion">
+		<result property="id.intPersEmpresaPk" 			column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCaptacionCod" 	column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" 					column="pITEM_N" />
+		<result property="strDescripcion" 				column="pDESCRIPCION_V" />
+		<result property="strDtFechaIni" 				column="pINICIO_D" />
+		<result property="strDtFechaFin" 				column="pFIN_D" />
+		<result property="intParaTipopersonaCod" 		column="pPARA_TIPOPERSONA_N_COD" />
+		<result property="intParaRolPk" 				column="pPARA_ROL_N_PK" />
+		<result property="intParaCondicionLaboralCod" 	column="pPARA_CONDICIONLABORAL_N_COD" />
+		<result property="intParaTipoDescuentoCod" 		column="pPARA_TIPODESCUENTO_N_COD" />
+		<result property="intParaTipoConfiguracionCod" 	column="pPARA_TIPOCONFIGURACION_N_COD" />
+		<result property="bdValorConfiguracion" 		column="pVALORCONFIGURACION_N" />
+		<result property="bdPorcConfiguracion" 			column="pPORCENTAJECONFIGURACION_N" />
+		<result property="intParaAplicacionCod" 		column="pPARA_APLICACION_N_COD" />
+		<result property="intParaMonedaCod" 			column="pPARA_MONEDA_N_COD" />
+		<result property="bdTem" 						column="pTEM_N" />
+		<result property="intTasaNaturaleza" 			column="pTASANATURALEZA_N" />
+		<result property="intTasaFormula" 				column="pTASAFORMULA_N" />
+		<result property="bdTea" 						column="pTEA_N" />
+		<result property="bdTna" 						column="pTNA_N" />
+		<result property="intEdadLimite" 				column="pEDADLIMITE_N" />
+		<result property="intTiempoSustento" 			column="pTIEMPOSUSTENTO_N" />
+		<result property="intPeriodicSustento" 			column="pPERIODICSUSTENTO_N" /><!-- QUITAR Y FUNCIONA -->
+		<result property="intParaTipoMaxMinSustCod" 	column="pTIPOMAXMINSUSTENTO" />
+		<result property="intCeseBeneficio" 			column="pCESEBENEFICIO_N" />
+		<result property="intNumeroCuota" 				column="pNUMEROCUOTAS_N" />
+		<result property="intTiempoPermanencia" 		column="pTIEMPOPERMANENCIA_N" />
+		<result property="bdPenalidadPorcentaje" 		column="pPENALIDADPORCENTAJE_N" />
+		<result property="bdPenalidadTasaMora" 			column="pPENALIDADTASAMORA_N" />
+		<result property="intParaPenalidadAplicacion" 	column="pPARA_PENALIDADAPLICACION_N" />
+		<result property="intTiempoAportacion" 			column="pTIEMPOMINIMOAPORTACION_N" />
+		<result property="intPeriodicAportacionCod" 	column="pPERIODICIDADAPORTACION_N" />
+		<result property="intParaTipoMaxMinAportCod" 	column="pTIPOMAXMINAPORTACION_N" />
+		<result property="intCuota" 					column="pCUOTASMINIMAS_N" />
+		<result property="intParaPeriodicCuotasCod" 	column="pPERIODICIDADCUOTAS_N" />
+		<result property="intParaTipoMaxMinCuotaCod" 	column="pTIPOMAXMINCUOTA_N" />
+		<result property="intTiempoDevolucion" 			column="pTIEMPOMINIMODEVOLUCION_N" />
+		<result property="intParaTipoDia" 				column="pPARA_TIPODIAS_N" />
+		<result property="intRegularidad" 				column="pREGULARIDAD_N" />
+		<result property="intPeriodicidad" 				column="pPERIODICIDAD_N" />
+		<result property="strDtFechaRegistro" 			column="pFECHAREGISTRO_D" />
+		<result property="intParaEstadoSolicitudCod" 	column="pPARA_ESTADOSOLICITUD_N_COD" />
+		<result property="intParaEstadoCod" 			column="pPARA_ESTADO_N_COD" />
+	</resultMap>
+
+	<parameterMap id="parCaptacion" class="Captacion">
+		<parameter property="id.intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="strDescripcion" 				javaType="java.lang.String" jdbcType="VARCHAR" mode="INOUT" />
+		<parameter property="dtInicio" 						javaType="java.util.Date" jdbcType="DATE" mode="INOUT" />
+		<parameter property="dtFin" 						javaType="java.util.Date" jdbcType="DATE" mode="INOUT" />
+		<parameter property="intParaTipopersonaCod" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaRolPk" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaCondicionLaboralCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoDescuentoCod" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoConfiguracionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdValorConfiguracion" 			javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdPorcConfiguracion" 			javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaAplicacionCod" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaMonedaCod" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdTem" 						javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTasaNaturaleza" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTasaFormula" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdTea" 						javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdTna" 						javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intEdadLimite" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTiempoSustento" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intPeriodicSustento" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoMaxMinSustCod" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intCeseBeneficio" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intNumeroCuota" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTiempoPermanencia" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdPenalidadPorcentaje"	 		javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdPenalidadTasaMora" 			javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaPenalidadAplicacion" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTiempoAportacion" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intPeriodicAportacionCod" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoMaxMinAportCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intCuota" 						javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaPeriodicCuotasCod" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoMaxMinCuotaCod"	 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTiempoDevolucion" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoMaxMinDevolucionCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoDia" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intRegularidad" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intPeriodicidad" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<!-- <parameter property="dtFechaRegistro" javaType="java.util.Date" jdbcType="DATE" 
+			mode="INOUT"/> -->
+		<parameter property="intParaEstadoSolicitudCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaEstadoCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parCaptacionEliminar" class="CaptacionId">
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intItem" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parCaptacionParaFiltro" class="Captacion">
+		<parameter property="id.intPersEmpresaPk" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="id.intParaTipoCaptacionCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="id.intItem" 					javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="strDescripcion" 				javaType="java.lang.String" 	jdbcType="VARCHAR" mode="IN" />
+		<parameter property="strDtFechaIni" 				javaType="java.lang.String" 	jdbcType="VARCHAR" mode="IN" />
+		<parameter property="strDtFechaFin" 				javaType="java.lang.String" 	jdbcType="VARCHAR" mode="IN" />
+		<parameter property="intParaTipopersonaCod" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaRolPk" 					javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaCondicionLaboralCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoDescuentoCod" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoConfiguracionCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="bdValorConfiguracion" 			javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaAplicacionCod" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaMonedaCod" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="bdTem" 						javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTasaNaturaleza" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTasaFormula" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="bdTea" 						javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="bdTna" 						javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intEdadLimite" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intNumeroCuota" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTiempoPermanencia" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaEstadoSolicitudCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaEstadoCod" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parPorPKParaFiltro" class="java.util.Map">
+		<parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" 					javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="strDescripcion" 			javaType="java.lang.String" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="intParaTipoConfiguracionCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTipoFecha" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="dtInicio" 					javaType="java.lang.String" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="dtFin" 					javaType="java.lang.String" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="intParaTipopersonaCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="bdTna" 					javaType="java.math.BigDecimal" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intEdadLimite" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaCondicionLaboralCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intCondicionSocio" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaRolPk" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaEstadoSolicitudCod" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTasaInteres" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intLimiteEdad" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<!-- <parameter property="intIndeterminado" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" /> -->
+		<parameter property="intVigencia" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intAportacionVigente" 		javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTipoCuenta" 			javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parCaptacion">
+		{ call PKG_CONFCAPTACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  	</procedure>
+
+	<procedure id="modificar" parameterMap="parCaptacion">
+		{ call PKG_CONFCAPTACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  	</procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCaptacion">
+		{ call PKG_CONFCAPTACION.getListaPorPk(?,?,?,?) }
+  	</procedure>
+
+	<procedure id="getListaPorPkCaptacion" parameterMap="parPorPK" resultMap="resCaptacion">
+		{ call PKG_CONFCAPTACION.getListaPorPkCaptacion(?,?,?,?) }
+  	</procedure>
+
+	<procedure id="getListaParaFiltro" parameterMap="parPorPKParaFiltro" resultMap="resCaptacion">
+		{ call PKG_CONFCAPTACION.getListaParaFiltro(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+ 	</procedure>
+
+	<procedure id="eliminar" parameterMap="parCaptacionEliminar">
+		{ call PKG_CONFCAPTACION.eliminar(?,?,?) }
+  	</procedure>  	
+  	
+  	<procedure id="getListaPorPkCaptacionOpcional" parameterMap="parPorPK" resultMap="resCaptacionOpcional">
+		{ call PKG_CONFCAPTACION.getListaPorPkCaptacionOpcional(?,?,?,?) }
+  	</procedure>
+</sqlMap>

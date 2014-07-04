@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreDiarioArqueoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueo" alias="CierreDiarioArqueo"/> 
+	
+  <resultMap id="resCierreDiarioArqueo" class="CierreDiarioArqueo" >
+	<result property="id.intPersEmpresa"  			column="pempresaarqueo" />
+	<result property="id.intParaTipoArqueo"   		column="ptipoarqueo" />
+	<result property="id.intSucuIdSucursal"      	column="pidsucursal" />
+    <result property="id.intSudeIdSubsucursal"     	column="pidsubsucursal" />
+    <result property="id.intItemCierreDiarioArqueo" column="pitemcidiar" />
+    <result property="tsFechaCierreArqueo"   		column="pFechaCierreArqueo" />
+    <result property="intPersEmpresaResponsable"    column="pempresaresponsable" />
+    <result property="intPersPersonaResponsable"    column="ppersonaresponsable" />
+    <result property="strObservacion"      			column="pobservacion" />
+    <result property="tsFechaRegistro"      		column="pfecharegistro" />
+    <result property="intParaEstadoCierre"      	column="pestadocierre" />
+    <result property="bdMontoTotalEfectivo"      	column="pmontototalefectivo" />
+    <result property="bdMontoTotalFondo"      		column="pmontototalfondo" />
+    <result property="bdMontoDiferencia"      		column="pmontodiferencia" />
+    <result property="intPersEmpresaCierreAn"      	column="pempresacierrean" />
+    <result property="intPersPersonaCierreAn"      	column="ppersonacierrean" />
+    <result property="strObersvacionAnula"     		column="pobservacionanula" />
+    <result property="tsFechaCierreAnula"     		column="pfechacierreanula" />
+  </resultMap>
+  
+  <parameterMap id="parCierreDiarioArqueo" class="CierreDiarioArqueo">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>	 
+	 <parameter property="id.intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaCierreArqueo"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaResponsable"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaResponsable"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intParaEstadoCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoTotalEfectivo"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoTotalFondo"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoDiferencia"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaCierreAn"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaCierreAn"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObersvacionAnula"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="tsFechaCierreAnula"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>		
+  </parameterMap>
+  
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/> 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="tsFechaCierreArqueo"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="intParaEstadoCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parParaDiaAnterior" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPersEmpresa" class="java.util.Map">
+	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+
+    
+  <procedure id="grabar" parameterMap="parCierreDiarioArqueo">
+	{ call PKG_CIERREDIARIOARQUEO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCierreDiarioArqueo" >
+	{ call PKG_CIERREDIARIOARQUEO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCierreDiarioArqueo">
+	{ call PKG_CIERREDIARIOARQUEO.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resCierreDiarioArqueo">
+	{ call PKG_CIERREDIARIOARQUEO.getListaPorBuscar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaParaDiaAnterior" parameterMap="parParaDiaAnterior" resultMap="resCierreDiarioArqueo">
+	{ call PKG_CIERREDIARIOARQUEO.getListaParaDiaAnterior(?,?,?,?,?) }
+  </procedure>
+  
+  <resultMap id="saldoHash" class="java.util.HashMap">
+  	<result property="idSubsucursal" 	column="sude_idsubsucursal_n" />
+    <result property="fechaMaxima" 		column="max_fecha" />
+  </resultMap>
+      
+  <procedure id="getListaSaldoFechas" parameterMap="parPersEmpresa" resultMap="saldoHash">
+	{ call PKG_CIERREDIARIOARQUEO.getListaSaldoFechas(?,?) }
+  </procedure>
+</sqlMap>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DiccionarioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.Diccionario" alias="Diccionario"/> 
+	
+  <resultMap id="resDiccionario" class="Diccionario" >
+     <result property="intCodigo"      		column="pCodigo_n" />
+     <result property="intTipo"  			column="pTipo_n" />
+     <result property="strDescripcion"      column="pDescripcion_v" />
+     <result property="intNivel"   			column="pNivel_n" />
+     <result property="intSeguridad" 		column="pSeguridad_n" />
+     <result property="intIdEstado"   		column="pIdestado_n" />
+  </resultMap>
+  
+  <parameterMap id="parDiccionario" class="Diccionario">
+     <parameter property="intCodigo"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intTipo"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strDescripcion" 	jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intNivel"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intSeguridad"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intIdEstado" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intCodigo" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDiccionario">
+	{ call PKG_DICCIONARIO.grabar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDiccionario" >
+	{ call PKG_DICCIONARIO.modificar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resDiccionario">
+	{ call PKG_DICCIONARIO.getListaPorPK(?,?) }
+  </procedure>
+
+</sqlMap>  

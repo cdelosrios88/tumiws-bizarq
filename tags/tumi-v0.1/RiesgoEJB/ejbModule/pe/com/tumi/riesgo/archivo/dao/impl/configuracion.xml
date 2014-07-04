@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfiguracionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.archivo.domain.Configuracion" alias="Configuracion"/> 
+	
+  <resultMap id="resConfiguracion" class="Configuracion" >
+     <result property="id.intPersEmpresaPk"      		column="pPers_empresa_n_pk" />
+     <result property="id.intItemConfiguracion"    		column="pItem_archivoconf_n" />
+     <result property="intParaTipoConfiguracionCod"     column="pPara_tipoconfiguracion_n_cod" />
+     <result property="intParaFormatoArchivoCod"   		column="pPara_formatoarchivo_n_cod" />
+     <result property="intParaEstadoCod"   				column="pPara_estado_n_cod" />
+     <result property="intPersPersonaUsuarioPk"   		column="pPers_personausuario_n_pk" />
+     <result property="tsFechaRegistro"   				column="pFecharegistro_d" />
+     <result property="intPersPersonaEliminaPk"   		column="pPers_personaelimina_n_pk" />
+     <result property="tsFechaEliminacion"   			column="pFechaeliminar_d" />
+  </resultMap>
+  
+  <resultMap id="resConfiguracionConfEstructura" class="Configuracion" >
+     <result property="id.intPersEmpresaPk"      		column="pPers_empresa_n_pk" />
+     <result property="id.intItemConfiguracion"    		column="pItem_archivoconf_n" />
+     <result property="intParaTipoConfiguracionCod"     column="pPara_tipoconfiguracion_n_cod" />
+     <result property="intParaFormatoArchivoCod"   		column="pPara_formatoarchivo_n_cod" />
+     <result property="intParaEstadoCod"   				column="pPara_estado_n_cod" />
+     <result property="intPersPersonaUsuarioPk"   		column="pPers_personausuario_n_pk" />
+     <result property="tsFechaRegistro"   				column="pFecharegistro_d" />
+     <result property="intPersPersonaEliminaPk"   		column="pPers_personaelimina_n_pk" />
+     <result property="tsFechaEliminacion"   			column="pFechaeliminar_d" />     
+     <result property="confEstructura.id.intPersEmpresaPk"      column="pCEPers_empresa_n_pk" />
+     <result property="confEstructura.id.intItemConfiguracion"  column="pCEItem_archivoconf_n" />
+     <result property="confEstructura.intSociNivelPk"      		column="pCECsoc_nivel_n_pk" />
+     <result property="confEstructura.intSociCodigoPk"   		column="pCECsoc_codigo_n_pk" />
+     <result property="confEstructura.intParaTipoSocioCod"   	column="pCEPara_tiposocio_n_cod" />
+     <result property="confEstructura.intParaModalidadCod"   	column="pCEPara_modalidad_n_cod" />
+     <result property="confEstructura.intParaEstadoCod"   		column="pCEPara_estado_n_cod" />
+  </resultMap>
+  
+  <parameterMap id="parConfiguracion" class="Configuracion">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemConfiguracion"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intParaTipoConfiguracionCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaFormatoArchivoCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>    
+     <parameter property="intPersPersonaEliminaPk" 		jdbcType="VARCHAR"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="tsFechaEliminacion" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+    <parameterMap id="parConfEstructura" class="ConfEstructura">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemConfiguracion"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intSociNivelPk" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intSociCodigoPk" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoSocioCod"   	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaModalidadCod"   	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>  
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConfiguracion" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"    mode="OUT"/>
+   	 <parameter property="intItemConfiguracion" javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>
+   	 <parameter property="intParaEstadoCod" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>
+   	 <parameter property="tsBusquedaInicio" 	javaType="java.sql.Timestamp"  	jdbcType="TIMESTAMP" 	   mode="IN"/>
+   	 <parameter property="tsBusquedaFin" 		javaType="java.sql.Timestamp"  	jdbcType="TIMESTAMP" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusquedaConEstructura" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"    mode="OUT"/>
+   	 <parameter property="intItemConfiguracion" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>
+   	 <parameter property="intParaEstadoCod" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>
+   	 <parameter property="tsBusquedaInicio" 		javaType="java.sql.Timestamp"  	jdbcType="TIMESTAMP" 	   mode="IN"/>
+   	 <parameter property="tsBusquedaFin" 			javaType="java.sql.Timestamp"  	jdbcType="TIMESTAMP" 	   mode="IN"/>
+   	    	 
+	 <parameter property="intSociNivelPk" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>  
+     <parameter property="intParaModalidadCod"   	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>
+     <parameter property="intParaTipoSocioCod"   	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parConfiguracion">
+	{ call PKG_ARCHIVOCONF.grabar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfiguracion" >
+	{ call PKG_ARCHIVOCONF.modificar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfiguracion">
+	{ call PKG_ARCHIVOCONF.getListaPorPk(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resConfiguracion">
+	{ call PKG_ARCHIVOCONF.getListaPorBusqueda(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorBusquedaConEstructura" parameterMap="parPorBusquedaConEstructura" resultMap="resConfiguracionConfEstructura">
+	{ call PKG_ARCHIVOCONF.getListaPorBusquedaConEstr(?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorBusquedaSinEstructura" parameterMap="parPorBusqueda" resultMap="resConfiguracion">
+	{ call PKG_ARCHIVOCONF.getListaPorBusquedaSinEstr(?,?,?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

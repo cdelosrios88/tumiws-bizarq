@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PerfilValidacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.PerfilValidacion" alias="PerfilValidacion"/> 
+	
+  <resultMap id="resPerfilValidacion" class="PerfilValidacion" >
+     <result property="id.intPersEmpresaPk"     column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intSeguPerfilPk"    	column="pSEGU_PERFIL_N_PK" />
+     <result property="id.intParaValidacionCod" column="pPARA_VALIDACION_N_COD" />
+     <result property="intParaEstadoCod"   		column="pPARA_ESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parPerfilValidacion" class="PerfilValidacion">
+     <parameter property="id.intPersEmpresaPk"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intSeguPerfilPk"	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intValidacion" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="intParaEstadoCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intSeguPerfilPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaValidacionCod" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaYPerfil" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intSeguPerfilPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parPerfilValidacion">
+	{ call PKG_PERFILVALIDACION.grabar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPerfilValidacion" >
+	{ call PKG_PERFILVALIDACION.modificar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPerfilValidacion">
+	{ call PKG_PERFILVALIDACION.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorEmpresaYPerfil" parameterMap="parPorEmpresaYPerfil" resultMap="resPerfilValidacion">
+	{ call PKG_PERFILVALIDACION.getListaPorPerfil(?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

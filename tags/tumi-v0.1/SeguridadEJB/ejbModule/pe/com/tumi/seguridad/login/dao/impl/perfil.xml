@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PerfilDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.Perfil" alias="Pefil"/> 
+	
+  <resultMap id="resPefil" class="Pefil" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intIdPerfil"  			column="pIdperfil_n" />
+     <result property="strDescripcion"      		column="pDescripcion_v" />
+     <result property="tsFechaRegistro"   			column="pFecharegistro_d" />
+     <result property="intTipoPerfil" 				column="pTipoperfil_n" />
+     <result property="dtDesde"   					column="pDesde_d" />
+     <result property="dtHasta"    					column="pHasta_d" />
+     <result property="intIdEstado"    				column="pIdestado_n" />
+     <result property="intPersPersonaUsuarioPk"    	column="pPers_personausuario_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parPefil" class="Pefil">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdPerfil"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strDescripcion" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro"			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+	 <parameter property="intTipoPerfil"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="dtDesde" 					jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="dtHasta" 					jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intIdEstado" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkEmpresaUsuario" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPkEmpresaUsuarioYEstado" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="intIdEstado" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk"		jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="intIdPerfil"			jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>    
+     <parameter property="strDescripcion" 		jdbcType="VARCHAR"  	 javaType="java.lang.String" 	mode="IN"/>
+     <parameter property="tsFechaRegistro"		jdbcType="TIMESTAMP"  	 javaType="java.sql.Timestamp" 	mode="IN"/>
+	 <parameter property="intTipoPerfil"		jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>    
+	 <parameter property="intIndeterminado"		jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="intVigencia"			jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="dtDesde" 				jdbcType="DATE"  		 javaType="java.util.Date" 		mode="IN"/>
+     <parameter property="dtHasta" 				jdbcType="DATE"  		 javaType="java.util.Date" 		mode="IN"/>
+     <parameter property="intIdEstado" 			jdbcType="NUMERIC"  	 javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parPefil">
+	{ call PKG_PERFIL.grabar(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPefil" >
+	{ call PKG_PERFIL.modificar(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPefil">
+	{ call PKG_PERFIL.getListaPorPK(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorPkEmpresaUsuario" parameterMap="parPorPkEmpresaUsuario" resultMap="resPefil">
+	{ call PKG_PERFIL.getListaPorPkEmpresaUsuario(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkEmpresaUsuarioYSt" parameterMap="parPorPkEmpresaUsuarioYEstado" resultMap="resPefil">
+	{ call PKG_PERFIL.getListaPorPkEmpresaUsuarioYSt(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorIdEmpresa" parameterMap="parPorIdEmpresa" resultMap="resPefil">
+	{ call PKG_PERFIL.getListaPorIdEmpresa(?,?) }
+  </procedure>
+
+  <procedure id="getListaBusqueda" parameterMap="parBusqueda" resultMap="resPefil">
+	{ call PKG_PERFIL.getListaBusqueda(?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+        
+</sqlMap>  

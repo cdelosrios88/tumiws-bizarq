@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+
+	<sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/cuentaConcepto.xml"/>
+	<sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/cuentaConceptoDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/cuentaDetalleBeneficio.xml"/>
+	<sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/ctaConcepto_Detalle_Bloqueo.xml"/>
+	<sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/cronograma.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/expediente.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/movimiento.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/bloqueoCuenta.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/estadoExpediente.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/conceptoPago.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/conceptoDetallePago.xml"/>
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/interesCancelado.xml"/>  
+    <sqlMap resource="pe/com/tumi/movimiento/concepto/dao/impl/interesProvisionado.xml"/> 
+</sqlMapConfig>

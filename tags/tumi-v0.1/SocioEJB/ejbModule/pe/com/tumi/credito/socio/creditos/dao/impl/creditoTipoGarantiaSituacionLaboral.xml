@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoTipoGarantiaSituacionLaboralDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.SituacionLaboralTipoGarantia" alias="SituacionLaboralTipoGarantia"/> 
+	
+  <resultMap id="resSituacionLaboralTipoGarantia" class="SituacionLaboralTipoGarantia" >
+     <result property="id.intPersEmpresaPk"      		column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"		column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      			column="pITEMCREDITO_N" />
+     <result property="id.intParaTipoGarantiaCod"   	column="pPARA_TIPOGARANTIA_N_COD" />
+     <result property="id.intItemCreditoGarantia"   	column="pITEMCREDITOGARANTIA_N" />
+     <result property="id.intItemGarantiaTipo"   		column="pITEMGARANTIATIPO_N" />
+     <result property="id.intParaSituacionLaboralCod" 	column="pPARA_SITUACIONLABORAL_N_COD" />
+     <result property="intValor"     					column="pVALOR_N" />
+  </resultMap>
+  
+  <parameterMap id="parSituacionLaboralTipoGarantia" class="SituacionLaboralTipoGarantia">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intParaTipoGarantiaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intItemCreditoGarantia" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intItemGarantiaTipo" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intParaSituacionLaboralCod" javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intValor" 					javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoGarantiaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoGarantia" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemGarantiaTipo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaSituacionLaboralCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorTipoGarantia" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoGarantiaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoGarantia" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemGarantiaTipo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSituacionLaboralTipoGarantia">
+	{ call PKG_CONFCRESITULABTIPOGARANTIA.grabar(?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSituacionLaboralTipoGarantia" >
+	{ call PKG_CONFCRESITULABTIPOGARANTIA.modificar(?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resSituacionLaboralTipoGarantia">
+	{ call PKG_CONFCRESITULABTIPOGARANTIA.getListaPorPK(?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorTipoGarantia" parameterMap="parPorTipoGarantia" resultMap="resSituacionLaboralTipoGarantia">
+	{ call PKG_CONFCRESITULABTIPOGARANTIA.getListaPorTipoGarantia(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaSituacionLaboralPorTipoGarantia" parameterMap="parPorTipoGarantia" resultMap="resSituacionLaboralTipoGarantia">
+	{ call PKG_CONFCRESITULABTIPOGARANTIA.getListaSituLabPorTipoGarantia(?,?,?,?,?,?,?) }
+  </procedure>
+</sqlMap>

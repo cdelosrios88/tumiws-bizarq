@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RangoDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.ctacte.domain.Rango"
+		alias="Rango" />
+
+	<resultMap id="resRango" class="Rango">
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCtacteCod" column="pPARA_TIPOCTACTE_N_COD" />
+		<result property="id.intItemCtacte" column="pITEMCTACTE_N" />
+		<result property="id.intItem" column="pITEM_N" />
+		<result property="intparaTipoRangoTasaCod" column="pPARA_TIPORANGOTASA_N_COD" />
+		<result property="bdPorcentaje" column="pPORCENTAJE_N" />
+		<result property="intMesTope" column="pMESTOPE_N" />
+		<result property="bdMontoTope" column="pMONTOTOPE_N" />
+	</resultMap>
+
+	<parameterMap id="parRango" class="Rango">
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intparaTipoRangoTasaCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdPorcentaje" javaType="java.math.BigDecimal"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intMesTope" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdMontoTope" javaType="java.math.BigDecimal"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parRango">
+		{ call PKG_CTACTERANGO.grabar(?,?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parRango">
+		{ call PKG_CTACTERANGO.modificar(?,?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resRango">
+		{ call PKG_CTACTERANGO.getListaPorPk(?,?,?,?,?) }  
+  </procedure>
+
+</sqlMap>  

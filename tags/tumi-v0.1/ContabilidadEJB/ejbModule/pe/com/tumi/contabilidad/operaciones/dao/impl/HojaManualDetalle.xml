@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="HojaManualDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.operaciones.domain.HojaManualDetalle" alias="HojaManualDetalle"/>
+  <typeAlias type="pe.com.tumi.contabilidad.operaciones.domain.HojaManualDetalleId" alias="HojaManualDetalleId"/> 
+	
+  <resultMap id="resHojaManualDetalle" class="HojaManualDetalle">
+	<result property="id.intPersEmpresaHojaPk" 		column="pPers_empresahoja_n_pk"/>
+	<result property="id.intContPeriodoHoja"   		column="pCont_periodohoja_n"/>
+	<result property="id.intContCodigoHoja"   		column="pCont_codigohoja_n"/>
+	<result property="id.intContItemHoja" 			column="pCont_itemhoja_n"/>
+    <result property="intPersEmpresaCuentaPk"      	column="pPers_empresacuenta_n_pk"/>
+    <result property="intContPeriodoCuenta"    		column="pCont_periodocuenta_n"/>
+    <result property="strContNumeroCuenta"    		column="pCont_numerocuenta_v"/>
+    <result property="intPersPersonaPk"      		column="pPers_persona_n_pk"/>
+    <result property="intParaDocumentoGeneralCod"   column="pPara_documentogeneral_n_cod"/>
+    <result property="strHmdeSerieDocumento" 		column="pHmde_seriedocumento_v"/>
+    <result property="strHmdeNumeroDocumento"      	column="pHmde_numerodocumento_v"/>
+    <result property="intParaMonedaDocumento"    	column="pPara_monedadocumento_n"/>
+    <result property="intHmdeTipoCambio"    		column="pHmde_tipocambio_n"/>
+    <result property="bdHmdeDebeSoles"      		column="pHmde_debesoles_n"/>
+    <result property="bdHmdeHaberSoles"   			column="pHmde_habersoles_n"/>
+    <result property="bdHmdeDebeExtranjero"      	column="pHmde_debeextranjero_n"/>
+    <result property="bdHmdeHaberExtranjero"    	column="pHmde_haberextranjero_n"/>
+    <result property="intPersEmpresaSucursalPk"    	column="pPers_empresasucursal_n_pk"/>
+    <result property="intSucuIdSucursalPk"      	column="pSucu_idsucursal_n_pk"/>
+    <result property="intSudeIdSubsucursalPk"   	column="pSude_idsubsucursal_n_pk"/>
+  </resultMap>
+  
+  <parameterMap id="parHojaManualDetalle" class="HojaManualDetalle">
+	 <parameter property="id.intPersEmpresaHojaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoHoja"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContCodigoHoja"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContItemHoja"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaCuentaPk"		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strContNumeroCuenta"			javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intPersPersonaPk"				javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaDocumentoGeneralCod"	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strHmdeSerieDocumento"		javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="strHmdeNumeroDocumento"		javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intParaMonedaDocumento"		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intHmdeTipoCambio"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="bdHmdeDebeSoles"				javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="bdHmdeHaberSoles"				javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="bdHmdeDebeExtranjero"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="bdHmdeHaberExtranjero"		javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaSucursalPk" 	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intSucuIdSucursalPk"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intSudeIdSubsucursalPk"		javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntPersEmpresaHojaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pIntContPeriodoHoja"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pIntContCodigoHoja"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pIntContCodigoHoja"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntPersEmpresaHojaPk"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pIntContPeriodoHoja"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pIntContCodigoHoja"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pStrContNumeroCuenta"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parHojaManualDetalleId" class="HojaManualDetalleId">
+	 <parameter property="intPersEmpresaHojaPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoHoja"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoHoja"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoHoja"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parHojaManualDetalle">
+	{ call PKG_HOJAMANUALDETALLE.grabar(?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parHojaManualDetalle" >
+	{ call PKG_HOJAMANUALDETALLE.modificar(?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resHojaManualDetalle">
+	{ call PKG_HOJAMANUALDETALLE.getListaPorPk(?,?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resHojaManualDetalle">
+	{ call PKG_HOJAMANUALDETALLE.getBusqueda(?,?,?,?,?) }
+  </procedure>  	
+  
+  <procedure id="eliminar" parameterMap="parHojaManualDetalleId">
+	{ call PKG_MODELODETALLE.eliminar(?,?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

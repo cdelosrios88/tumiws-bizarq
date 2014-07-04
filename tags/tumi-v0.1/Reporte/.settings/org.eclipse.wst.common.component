@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Reporte">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="ReporteWeb.war" deploy-path="/" handle="module:/resource/ReporteWeb/ReporteWeb">
+            <dependent-object>Module_1384452752276</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ReporteEJB.jar" deploy-path="/" handle="module:/resource/ReporteEJB/ReporteEJB">
+            <dependent-object>Module_1384452772698</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

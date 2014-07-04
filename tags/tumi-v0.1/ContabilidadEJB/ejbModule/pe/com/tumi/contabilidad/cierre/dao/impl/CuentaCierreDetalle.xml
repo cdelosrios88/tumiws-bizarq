@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaCierreDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.CuentaCierreDetalle" alias="CuentaCierreDetalle"/> 
+	
+  <resultMap id="resCuentaCierreDetalle" class="CuentaCierreDetalle">
+	<result property="id.intPersEmpresaCierre" 		column="pPers_empresacierre"/>
+	<result property="id.intContPeriodoCierre"   	column="pCont_periodocierre"/>
+	<result property="id.intParaTipoCierre"   		column="pPara_tipocierre"/>
+	<result property="id.intContCodigoCierre"   	column="pCont_codigocierre"/>
+    <result property="id.intItemCierre"      		column="pCont_itemcierre"/>
+    <result property="intPersEmpresaCuenta"    		column="pPers_empresacuenta"/>
+    <result property="intContPeriodoCuenta"    		column="pCont_periodocuenta"/>
+    <result property="strContNumeroCuenta"    		column="pCont_numerocuenta"/>    
+  </resultMap>
+  
+  <parameterMap id="parCuentaCierreDetalle" class="CuentaCierreDetalle">
+	 <parameter property="id.intPersEmpresaCierre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoCierre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContCodigoCierre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="id.intItemCierre"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strContNumeroCuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierre"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>     
+  </parameterMap>
+  
+  <parameterMap id="parPorCuentaCierre" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>     
+  </parameterMap>
+  
+    <parameterMap id="parPorEliminar" class="java.util.Map">
+   	 <parameter property="intPersEmpresaCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoCierre"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoCierre"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierre"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>     
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCuentaCierreDetalle">
+	{ call PKG_CUENTACIERREDETALLE.grabar(?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaCierreDetalle" >
+	{ call PKG_CUENTACIERREDETALLE.modificar(?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCuentaCierreDetalle">
+	{ call PKG_CUENTACIERREDETALLE.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+   <procedure id="getListaPorCuentaCierre" parameterMap="parPorCuentaCierre" resultMap="resCuentaCierreDetalle">
+	{ call PKG_CUENTACIERREDETALLE.getListaPorCuentaCierre(?,?,?,?,?) }
+  </procedure>  
+  	
+   <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_CUENTACIERREDETALLE.eliminar(?,?,?,?,?) }
+  </procedure>    
+</sqlMap>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoInteresDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.CreditoInteres" alias="CreditoInteres"/> 
+
+  <resultMap id="resCreditoInteres" class="CreditoInteres">
+     <result property="id.intPersEmpresaPk"      		column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"    	column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      			column="pITEMCREDITO_N" />
+     <result property="id.intItemInteres"   			column="pITEMINTERES_N" />
+     <result property="bdTasaInteres"   				column="pTASAINTERES_N" />
+     <result property="intMesMaximo"   					column="pMESMAXIMO_N" />
+     <result property="bdMontoMaximo"   				column="pMONTOMAXIMO_N" />
+     <result property="intParaEstadoCod"   				column="pPARA_ESTADO_N_COD" />
+     <result property="intParaTipoSocio"   				column="pPARA_TIPOSOCIO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parCreditoInteres" class="CreditoInteres">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intItemInteres" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="bdTasaInteres" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intMesMaximo" 				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="bdMontoMaximo" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaTipoSocio" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/> 
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemInteres" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCreditoInteres">
+	{ call PKG_CONFCREDITOINTERES.grabar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCreditoInteres">
+	{ call PKG_CONFCREDITOINTERES.modificar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCreditoInteres">
+	{ call PKG_CONFCREDITOINTERES.getListaPorPK(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPkCredito" parameterMap="parPorPKCredito" resultMap="resCreditoInteres">
+	{ call PKG_CONFCREDITOINTERES.getListaPorPkCredito(?,?,?,?) }  
+  </procedure>
+</sqlMap>

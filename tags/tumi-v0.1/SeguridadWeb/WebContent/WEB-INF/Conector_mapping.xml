@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java-wsdl-mapping xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd">
+    <package-mapping>
+        <package-type>ws.servidor</package-type>
+        <namespaceURI>http://servidor.ws</namespaceURI>
+    </package-mapping>
+    <java-xml-type-mapping>
+        <java-type>javax.xml.soap.SOAPElement</java-type>
+        <root-type-qname xmlns:rtq="http://websphere.ibm.com/webservices/">rtq:SOAPElement</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>java.lang.String</java-type>
+        <root-type-qname xmlns:rtq="http://www.w3.org/2001/XMLSchema">rtq:string</root-type-qname>
+        <qname-scope>simpleType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>org.w3c.dom.Element</java-type>
+        <root-type-qname xmlns:rtq="http://xml.apache.org/xml-soap">rtq:Element</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>java.lang.Object</java-type>
+        <root-type-qname xmlns:rtq="http://www.w3.org/2001/XMLSchema">rtq:anyType</root-type-qname>
+        <qname-scope>simpleType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>boolean</java-type>
+        <root-type-qname xmlns:rtq="http://www.w3.org/2001/XMLSchema">rtq:boolean</root-type-qname>
+        <qname-scope>simpleType</qname-scope>
+    </java-xml-type-mapping>
+    <service-interface-mapping>
+        <service-interface>ws.servidor.ConectorService</service-interface>
+        <wsdl-service-name xmlns:sim="http://servidor.ws">sim:ConectorService</wsdl-service-name>
+        <port-mapping>
+            <port-name>Conector</port-name>
+            <java-port-name>Conector</java-port-name>
+        </port-mapping>
+    </service-interface-mapping>
+    <service-endpoint-interface-mapping>
+        <service-endpoint-interface>ws.servidor.Conector_SEI</service-endpoint-interface>
+        <wsdl-port-type xmlns:seimwpt="http://servidor.ws">seimwpt:Conector_SEI</wsdl-port-type>
+        <wsdl-binding xmlns:seimwb="http://servidor.ws">seimwb:ConectorSoapBinding</wsdl-binding>
+        <service-endpoint-method-mapping>
+            <java-method-name>updateOOSSState</java-method-name>
+            <wsdl-operation>updateOOSSState</wsdl-operation>
+            <wrapped-element></wrapped-element>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:updateOOSSStateRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_0_3</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>1</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:updateOOSSStateRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_1_3</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <wsdl-return-value-mapping>
+                <method-return-value>boolean</method-return-value>
+                <wsdl-message xmlns:wrvm="http://servidor.ws">wrvm:updateOOSSStateResponse</wsdl-message>
+                <wsdl-message-part-name>updateOOSSStateReturn</wsdl-message-part-name>
+            </wsdl-return-value-mapping>
+        </service-endpoint-method-mapping>
+        <service-endpoint-method-mapping>
+            <java-method-name>checkTr069</java-method-name>
+            <wsdl-operation>checkTr069</wsdl-operation>
+            <wrapped-element></wrapped-element>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:checkTr069Request</wsdl-message>
+                    <wsdl-message-part-name>arg_0_4</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>1</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:checkTr069Request</wsdl-message>
+                    <wsdl-message-part-name>arg_1_4</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>2</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:checkTr069Request</wsdl-message>
+                    <wsdl-message-part-name>arg_2_4</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>3</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:checkTr069Request</wsdl-message>
+                    <wsdl-message-part-name>arg_3_4</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <wsdl-return-value-mapping>
+                <method-return-value>boolean</method-return-value>
+                <wsdl-message xmlns:wrvm="http://servidor.ws">wrvm:checkTr069Response</wsdl-message>
+                <wsdl-message-part-name>checkTr069Return</wsdl-message-part-name>
+            </wsdl-return-value-mapping>
+        </service-endpoint-method-mapping>
+        <service-endpoint-method-mapping>
+            <java-method-name>findOOSSBySirAdslGestelPK</java-method-name>
+            <wsdl-operation>findOOSSBySirAdslGestelPK</wsdl-operation>
+            <wrapped-element></wrapped-element>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslGestelPKRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_0_1</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <wsdl-return-value-mapping>
+                <method-return-value>java.lang.Object</method-return-value>
+                <wsdl-message xmlns:wrvm="http://servidor.ws">wrvm:findOOSSBySirAdslGestelPKResponse</wsdl-message>
+                <wsdl-message-part-name>findOOSSBySirAdslGestelPKReturn</wsdl-message-part-name>
+            </wsdl-return-value-mapping>
+        </service-endpoint-method-mapping>
+        <service-endpoint-method-mapping>
+            <java-method-name>findOOSSBySirAdslDatos</java-method-name>
+            <wsdl-operation>findOOSSBySirAdslDatos</wsdl-operation>
+            <wrapped-element></wrapped-element>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslDatosRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_0_2</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>1</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslDatosRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_1_2</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>2</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslDatosRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_2_2</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>3</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslDatosRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_3_2</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <wsdl-return-value-mapping>
+                <method-return-value>java.lang.Object</method-return-value>
+                <wsdl-message xmlns:wrvm="http://servidor.ws">wrvm:findOOSSBySirAdslDatosResponse</wsdl-message>
+                <wsdl-message-part-name>findOOSSBySirAdslDatosReturn</wsdl-message-part-name>
+            </wsdl-return-value-mapping>
+        </service-endpoint-method-mapping>
+        <service-endpoint-method-mapping>
+            <java-method-name>findOOSSBySirAdslOrdenId</java-method-name>
+            <wsdl-operation>findOOSSBySirAdslOrdenId</wsdl-operation>
+            <wrapped-element></wrapped-element>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslOrdenIdRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_0_0</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>1</param-position>
+                <param-type>java.lang.String</param-type>
+                <wsdl-message-mapping>
+                    <wsdl-message xmlns:mppm="http://servidor.ws">mppm:findOOSSBySirAdslOrdenIdRequest</wsdl-message>
+                    <wsdl-message-part-name>arg_1_0</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <wsdl-return-value-mapping>
+                <method-return-value>java.lang.Object</method-return-value>
+                <wsdl-message xmlns:wrvm="http://servidor.ws">wrvm:findOOSSBySirAdslOrdenIdResponse</wsdl-message>
+                <wsdl-message-part-name>findOOSSBySirAdslOrdenIdReturn</wsdl-message-part-name>
+            </wsdl-return-value-mapping>
+        </service-endpoint-method-mapping>
+    </service-endpoint-interface-mapping>
+</java-wsdl-mapping>

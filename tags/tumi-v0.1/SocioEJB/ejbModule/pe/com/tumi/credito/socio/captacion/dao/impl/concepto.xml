@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConceptoDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.captacion.domain.Concepto"
+		alias="Concepto" />
+
+	<resultMap id="resConcepto" class="Concepto">
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCaptacionCod" column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" column="pITEM_N" />
+		<result property="id.intParaTipoConcepto" column="pPARA_TIPOCONCEPTOS_N" />
+		<result property="intMonto" column="pMONTOS_N" />
+		<result property="intDia" column="pDIAS_N" />
+		<result property="intTipoMaxMinCod" column="pTIPOMAXMIN_COD_N" />
+	</resultMap>
+
+	<parameterMap id="parConcepto" class="Concepto">
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoConcepto" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intMonto" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intDia" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTipoMaxMinCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoConcepto" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parPorPKCaptacion" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parConcepto">
+		{ call PKG_CONFCAPTCONCEPTO.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parConcepto">
+		{ call PKG_CONFCAPTCONCEPTO.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resConcepto">
+		{ call PKG_CONFCAPTCONCEPTO.getListaPorPk(?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPkCaptacion" parameterMap="parPorPKCaptacion"
+		resultMap="resConcepto">
+		{ call PKG_CONFCAPTCONCEPTO.getListaPorPkCaptacion(?,?,?,?) }
+	</procedure>
+
+</sqlMap>  

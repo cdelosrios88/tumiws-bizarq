@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="infoBean" class="pe.com.tumi.framework.configuracion.info.bean.InformacionBean">
+		<property name="urlAccesoLocal" value="iiop://localhost:2810/"/>
+		<property name="urlAccesoRemoto" value="iiop://localhost:2810/"/>
+		<property name="classConstante" value="pe.com.tumi.common.util.Constante"/>
+		<property name="pathLog4j" value="/WEB-INF/classes/pe/com/tumi/conf/log4j.properties"/>
+	</bean>
+	 
+</beans>
