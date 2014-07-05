@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Movimiento">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="MovimientoWeb.war" deploy-path="/" handle="module:/resource/MovimientoWeb/MovimientoWeb">
+            <dependent-object>Module_1340318852406</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="MovimientoEJB.jar" deploy-path="/" handle="module:/resource/MovimientoEJB/MovimientoEJB">
+            <dependent-object>Module_1340318852515</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

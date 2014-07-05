@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EstadoCuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.aperturaCuenta.core.domain.composite.CuentaComp" alias="CuentaComp"/>
+  
+  	
+  	<resultMap id="resCuentaComp" class="CuentaComp" >
+	    <result property="cuentaIntegrante.id.intPersEmpresaPk" 		column="pPERS_EMPRESA_PK" />
+	    <result property="cuentaIntegrante.id.intCuenta"     			column="pCUENTA_N" />
+	    <result property="cuentaIntegrante.id.intPersonaIntegrante"     column="pPERS_PERSONAINTEGRANTE_N" />
+	    <result property="cuentaIntegrante.intParaTipoIntegranteCod"    column="pPARA_TIPOINTEGRANTE_N" />
+	    <result property="cuentaIntegrante.tsFechaIngreso"    			column="pFECHAINGRESO_D" />
+	    <result property="cuentaIntegrante.tsFechaRenuncia"     		column="pFECHARENUNCIA_D" />
+	    <result property="cuentaIntegrante.intPersonaUsuario"     		column="pPERS_PERSONAUSUARIO_N" />
+	    <result property="cuentaIntegrante.intPersonaFecRenuncia"     	column="pPERS_PERSONAFECRENUNCIA_N" />
+	    <result property="cuenta.strNumeroCuenta"     					column="pCUEN_NUMEROCUENTA_V" />
+	    <result property="cuenta.intParaCondicionCuentaCod"     		column="pPARA_CONDICIONCUENTA_N_COD" />
+	    <result property="cuenta.intParaSubCondicionCuentaCod"     		column="pPARA_SUBCONDICIONCUENTA_N_COD" />
+	    <result property="cuenta.tsCuentFecRegistro"     				column="pCUEN_FECHAREGISTRO_D" />
+	    <result property="cuenta.intParaTipoCuentaCod"     				column="pPARA_TIPOCUENTA_N_COD" />
+	    <result property="cuenta.intParaSituacionCuentaCod"     		column="pPARA_SITUACIONCUENTA_N_COD" />
+  	</resultMap>
+
+  <parameterMap id="parCtasPorPKSocioYTipCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaIntegrante" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCuentaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaSituacionCuentaCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>  
+  </parameterMap>     	
+ 
+  <procedure id="getLsCtasPorPkSocioYTipCta" parameterMap="parCtasPorPKSocioYTipCuenta" resultMap="resCuentaComp">
+	{ call PKG_CUENTAINTEGRANTE.getLsCtasPorPkSocioYTipCta(?,?,?,?,?,?) }
+  </procedure>  	
+</sqlMap>   

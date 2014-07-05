@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="UsuarioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.Usuario" alias="UsuarioLogin"/> 
+	
+  <resultMap id="resUsuarioLogin" class="UsuarioLogin" >
+     <result property="intPersPersonaPk"      	column="pPers_persona_n_pk" />
+     <result property="intTipoUsuario"  		column="pTipousuario_n" />
+     <result property="strUsuario"      		column="pUsuario_v" />
+     <result property="strContrasena"   		column="pContrasena_v" />
+     <result property="dtFechaRegistro" 		column="pFecharegistro_d" />
+     <result property="intIdEstado"   			column="pIdestado_n" />
+     <result property="tsFechaEliminacion"  	column="pFechaEliminacion_d" />
+  </resultMap>
+  
+  <parameterMap id="parUsuarioLogin" class="UsuarioLogin">
+     <parameter property="intPersPersonaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intTipoUsuario"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strUsuario" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="strContrasena"		jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+	 <parameter property="dtFechaRegistro"		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>    
+     <parameter property="intIdEstado" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"	jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCodigo" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="strUsuario" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCodigoYClave" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="strUsuario" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+   	 <parameter property="strContrasena" 		jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parUsuarioLogin">
+	{ call PKG_USUARIO.grabar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parUsuarioLogin" >
+	{ call PKG_USUARIO.modificar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resUsuarioLogin">
+	{ call PKG_USUARIO.getListaPorPK(?,?) }
+  </procedure>
+
+  <procedure id="getListaPorCodigo" parameterMap="parPorCodigo" resultMap="resUsuarioLogin">
+	{ call PKG_USUARIO.getListaPorCodigo(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorCodigoYClave" parameterMap="parPorCodigoYClave" resultMap="resUsuarioLogin">
+	{ call PKG_USUARIO.getListaPorCodigoYClave(?,?,?) }
+  </procedure>
+  
+</sqlMap>  

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlantillaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.Plantilla" alias="Plantilla"/> 
+	
+  <resultMap id="resPlantilla" class="Plantilla" >  	
+  	 <result property="id.intParaTipoSbsCod"      	column="pPara_tiposbs_n_cod" />
+  	 <result property="id.intParaTipoProvisionCod"  column="pPara_tipoprovision_n_cod" />
+  	 <result property="intParaEstadoCod"      		column="pPara_estado_n_cod" />
+  </resultMap>
+  
+  <parameterMap id="parPlantilla" class="Plantilla">
+     <parameter property="id.intParaTipoSbsCod"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoProvisionCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod"				jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>     
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+   	 <parameter property="intParaTipoSbsCod" 			jdbcType="NUMERIC"			javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intParaTipoProvisionCod" 		jdbcType="NUMERIC"			javaType="java.lang.Integer"   	mode="IN"/>
+  </parameterMap>
+  
+  
+  <parameterMap id="parPorTodos" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR"		javaType="java.sql.ResultSet"   mode="OUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPlantilla">
+	{ call PKG_PLANTILLA.grabar(?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPlantilla" >
+	{ call PKG_PLANTILLA.modificar(?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resPlantilla">
+	{ call PKG_PLANTILLA.getListaPorPk(?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorTodos" parameterMap="parPorTodos" resultMap="resPlantilla">
+	{ call PKG_PLANTILLA.getListaPorTodos(?) }  
+  </procedure>  
+</sqlMap>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application id="Application_ID" version="5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd">
+ <display-name>Tesoreria</display-name>
+ <module id="Module_1343940680953">
+ 	<ejb>TesoreriaEJB.jar</ejb>
+ </module>
+ <module id="Module_1343940681015">
+ 	<web>
+ 		<web-uri>TesoreriaWeb.war</web-uri>
+ 		<context-root>TesoreriaWeb</context-root>
+ 	</web>
+ </module> 
+ </application> 

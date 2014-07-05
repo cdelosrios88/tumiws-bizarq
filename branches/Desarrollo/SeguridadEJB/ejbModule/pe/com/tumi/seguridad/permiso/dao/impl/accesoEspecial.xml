@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoEspecialDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.AccesoEspecial" alias="AccesoEspecial"/> 
+	
+  <resultMap id="resAccesoEspecial" class="AccesoEspecial" >
+     <result property="intItemAcceso"     		column="pItemAcceso_n_pk" />
+     <result property="tsFechaInicio"  			column="pFechaInicio_d" />
+     <result property="tsFechaFin"      		column="pFechaFin_d" />
+     <result property="intFeriados"     		column="pFeriados_n" />
+     <result property="intAccesoRemoto"   		column="pAccesoRemoto_n" />
+     <result property="strObservacion"      	column="pObservacion_v" />
+     <result property="intParaTipoMotivo"      	column="pTipoMotivo_n" />
+     <result property="intParaTipoAcceso"      	column="pTipoAcceso_n" />
+     <result property="tsFechaRegistro"      	column="pFechaRegistro_d" />
+     <result property="intPersEmpresa"      	column="pPersEmpresa_n" />
+     <result property="intPersPersonaRegistra"  column="pPersPersonaRegistra_n" />
+     <result property="intPersPersonaOpera"     column="pPersPersonaOpera_n" />
+     <result property="intPersPersonaAutoriza"  column="pPersPersonaAutoriza_n" />
+     <result property="intIdSucursal"      		column="pSucuIdSucursal_n" />
+     <result property="intIdEstado"      		column="pEstado_n" />
+     <result property="tsFechaEliminacion"      column="pFechaEliminacion_d" />
+  </resultMap>
+  
+  <parameterMap id="parAccesoEspecial" class="AccesoEspecial">     
+     <parameter property="intItemAcceso"     		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaInicio"  			jdbcType="TIMESTAMP" 	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="tsFechaFin"      			jdbcType="TIMESTAMP" 	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intFeriados"     			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intAccesoRemoto"   		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strObservacion"      		jdbcType="VARCHAR"   	javaType="java.lang.String" 	mode="INOUT" />
+     <parameter property="intParaTipoMotivo"      	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="INOUT" />
+     <parameter property="intParaTipoAcceso"      	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro"      	jdbcType="TIMESTAMP"	javaType="java.sql.Timestamp" 	mode="INOUT" />
+     <parameter property="intPersEmpresa"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaRegistra" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaOpera"     	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaAutoriza"  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdSucursal"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdEstado"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"      	jdbcType="TIMESTAMP"	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+  	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR"  	javaType="java.sql.ResultSet" 	mode="OUT"/>
+  	 <parameter property="intItemAcceso"     		jdbcType="NUMERIC" 			javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+  	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 	mode="OUT"/>
+  	 <parameter property="tsFechaInicio"  			jdbcType="TIMESTAMP" 	javaType="java.sql.Timestamp" 	mode="IN"/>
+     <parameter property="tsFechaFin"      			jdbcType="TIMESTAMP" 	javaType="java.sql.Timestamp" 	mode="IN"/>
+     <parameter property="intParaTipoMotivo"      	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN" />
+     <parameter property="intParaTipoAcceso"      	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intPersEmpresa"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intPersPersonaOpera"     	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intPersPersonaAutoriza"  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>     
+     <parameter property="intIdEstado"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaUsuario" class="java.util.Map">
+  	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 	mode="OUT"/>
+     <parameter property="intPersEmpresa"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intPersPersonaOpera"     	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>          
+     <parameter property="intIdEstado"      		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>  
+    
+  <procedure id="grabar" parameterMap="parAccesoEspecial">
+	{ call PKG_ACCESOESPECIAL.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAccesoEspecial" >
+	{ call PKG_ACCESOESPECIAL.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAccesoEspecial">
+	{ call PKG_ACCESOESPECIAL.getListaPorPK(?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resAccesoEspecial">
+	{ call PKG_ACCESOESPECIAL.getListaPorBusqueda(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getAccesoPorEmpresaUsuario" parameterMap="parPorEmpresaUsuario" resultMap="resAccesoEspecial">
+	{ call PKG_ACCESOESPECIAL.getAccesoPorEmpresaUsuario(?,?,?,?) }
+  </procedure>
+</sqlMap>  

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CapacidadCreditoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.solicitudPrestamo.domain.CapacidadCredito" alias="CapacidadCredito"/> 
+	
+  <resultMap id="resCapacidadPago" class="CapacidadCredito" >
+  	 <result property="id.intPersEmpresaPk"  		column="pPERS_EMPRESA_N_PK" />
+  	 <result property="id.intCuentaPk"  			column="pCSOC_CUENTA_N_PK" />
+  	 <result property="id.intItemExpediente"  		column="pCSER_ITEMEXPEDIENTE_N" />
+  	 <result property="id.intItemDetExpediente"  	column="pCSER_ITEMDETEXPEDIENTE_N" />
+     <result property="id.intItemCapacidad"  		column="pITEMCAPACIDAD_N" />
+     <result property="intPersPersonaPk"    		column="pPERS_PERSONA_N_PK" />
+     <result property="intItemSocioEstructura"  	column="pITEMSOCIOESTRUCTURA_N" />
+     <result property="intParaTipoCapacidadCod"    	column="pPARA_TIPOCAPACIDAD_N_COD" />
+     <result property="intCartaAutorizacion"  		column="pCARTAAUTORIZACION_N" />
+     <result property="bdTotalIngresos"      		column="pTOTALINGRESOS_N" />
+     <result property="bdCuotaDescontar"    		column="pCUOTADESCONTAR_N" />
+     <result property="bdIndiceDescuento"  			column="pINDICEDESCUENTO_N" />
+     <result property="bdBaseCalculo"  				column="pBASECALCULO_N" />
+     <result property="bdTotalDescuento"  			column="pTOTALDESCUENTO_N" />
+     <result property="bdBaseTotal"  				column="pBASETOTAL_N" />
+     <result property="bdDescuentoCapacidad"  		column="pDESCUENTOCAPACIDAD_N" />
+     <result property="intNroEntidades"  			column="pNUMEROENTIDADES_N" />
+     <result property="bdCapacidadPago"  			column="pCAPACIDADPAGO_N" />
+     <result property="bdCuotaFija"  				column="pCUOTAFIJA_N" />
+     <result property="intParaEstadoCod"  			column="pPARA_ESTADO_N_COD" />
+     <result property="tsFechaRegistro"  			column="pFECHAREGISTRO_D" />
+     <result property="intPersPersonaUsuarioPk"  	column="pPERS_PERSONAUSUARIO_N_PK" />
+     <result property="tsFechaEliminacion"  		column="pFECHAELIMINACION_D" />
+     <result property="intPersPersonaEliminarPk"  	column="pPERS_PERSONAELIMINAR_N_PK" />
+  </resultMap>
+  
+  <parameterMap id="parCapacidadCredito" class="CapacidadCredito">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuentaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemDetExpediente"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemCapacidad"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intPersPersonaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intItemSocioEstructura" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoCapacidadCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCartaAutorizacion" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="bdTotalIngresos" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdCuotaDescontar" 			jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdIndiceDescuento" 			jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdBaseCalculo" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdTotalDescuento" 			jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdBaseTotal" 					jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdDescuentoCapacidad" 		jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="intNroEntidades" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="bdCapacidadPago" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdCuotaFija" 					jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro" 				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminarPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCapacidad" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkExpedienteCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkExpedienteYSocioEstructura" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSocioEstructura" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parDeleteCapacidadCredito"  class="java.util.Map">
+		<parameter property="intPersEmpresaPk" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" mode="IN" />
+		<parameter property="intCuentaPk" 			jdbcType="NUMERIC"		javaType="java.lang.Integer" mode="IN" />
+		<parameter property="intItemExpediente" 	jdbcType="NUMERIC"		javaType="java.lang.Integer" mode="IN" />
+		<parameter property="intItemDetExpediente" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" mode="IN" />
+</parameterMap>
+
+  <procedure id="grabar" parameterMap="parCapacidadCredito">
+	{ call PKG_CONFCAPACIDADCREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCapacidadCredito" >
+	{ call PKG_CONFCAPACIDADCREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCapacidadPago">
+	{ call PKG_CONFCAPACIDADCREDITO.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkExpedienteCredito" parameterMap="parPorPkExpedienteCredito" resultMap="resCapacidadPago">
+	{ call PKG_CONFCAPACIDADCREDITO.getListaPorExpedienteCredito(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorExpedienteYSocioEst" parameterMap="parPorPkExpedienteYSocioEstructura" resultMap="resCapacidadPago">
+	{ call PKG_CONFCAPACIDADCREDITO.getListaPorExpedienteYSocioEst(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  	<procedure id="deletePorPk" parameterMap="parDeleteCapacidadCredito">
+		{ call PKG_CONFCAPACIDADCREDITO.deletePorPk(?,?,?,?) }
+	</procedure>
+  
+</sqlMap>

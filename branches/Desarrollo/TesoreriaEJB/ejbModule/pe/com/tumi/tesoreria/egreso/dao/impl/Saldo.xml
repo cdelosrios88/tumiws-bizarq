@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SaldoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.Saldo" alias="Saldo"/> 
+	
+  <resultMap id="resSaldo" class="Saldo" >
+	<result property="id.intPersEmpresa"  		column="pempresasaldos" />
+	<result property="id.intSucuIdSucursal"   	column="pidsucursal" />
+	<result property="id.intSudeIdSucursal"   	column="pidsubsucursal" />
+	<result property="id.dtFechaSaldo"   		column="pfechasaldo" />
+	<result property="id.intItemSaldo"   		column="pitemsaldo" />
+	<result property="intEmpresaPk"     		column="pempresa" />
+    <result property="intItemBancoCuenta" 		column="pitembancocuenta" />
+    <result property="intItemBancoFondo"   		column="pitembancofondo" />
+    <result property="intParaTipoFondoFijo"    	column="ptipofondofijo" />
+    <result property="bdSaldoInicial"      		column="psaldoinicial" />
+    <result property="bdMovimientos"      		column="pmovimientos" />
+    <result property="tsFechaRegistro"      	column="pfecharegistro" />
+    <result property="intPersEmpresaUsuario"    column="pempresausuario" />
+    <result property="intPersPersonaUsuario"    column="ppersonausuario" />
+    <result property="intParaEstado"      		column="pestado" />
+    <result property="intPersEmpresaAnula"     	column="pempresaanula" />
+    <result property="intPersPersonaAnula"     	column="ppersonaanula" />
+    <result property="tsFechaAnula"     		column="pfechaanula" />
+  </resultMap>  
+
+  <parameterMap id="parSaldo" class="Saldo">
+	 <parameter property="id.intPersEmpresa"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSudeIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.dtFechaSaldo"			javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="id.intItemSaldo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>	 
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoCuenta"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoFondoFijo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdSaldoInicial"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMovimientos"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="Saldo">
+	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="dtFechaSaldo"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="intItemSaldo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>	 
+  </parameterMap>
+  	
+  <parameterMap id="parPorAnterior" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemBancoCuenta"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemBancoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoFondoFijo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 	 
+  </parameterMap>
+  
+  <parameterMap id="parPersEmpresa" class="java.util.Map">
+	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemBancoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="dtFechaDesde"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFechaHasta"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+  </parameterMap>
+
+  
+  <procedure id="grabar" parameterMap="parSaldo">
+	{ call PKG_SALDOS.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSaldo" >
+	{ call PKG_SALDOS.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resSaldo">
+	{ call PKG_SALDOS.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaAnterior" parameterMap="parPorAnterior" resultMap="resSaldo">
+	{ call PKG_SALDOS.getListaAnterior(?,?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="geUltimaFechaSaldo" parameterMap="parPersEmpresa" resultMap="resSaldo">
+	{ call PKG_SALDOS.getUltimaFechaRegistro(?,?) }
+  </procedure>
+    
+  <procedure id="getUltimaFechaSaldo" parameterMap="parPersEmpresa" resultMap="resSaldo">
+	{ call PKG_SALDOS.getUltimaFechaSaldo(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resSaldo">
+	{ call PKG_SALDOS.getListaPorBuscar(?,?,?,?,?) }
+  </procedure>  
+
+  <resultMap id="saldoHash" class="java.util.HashMap">
+  	<result property="idSubsucursal" 	column="sude_idsubsucursal_n" />
+    <result property="fechaMaxima" 		column="max_fecha" />
+  </resultMap>
+      
+  <procedure id="getListaSaldoFechas" parameterMap="parPersEmpresa" resultMap="saldoHash">
+	{ call PKG_SALDOS.getListaSaldoFechas(?,?) }
+  </procedure>
+</sqlMap>

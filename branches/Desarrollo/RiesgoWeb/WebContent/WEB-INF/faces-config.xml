@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<managed-bean>
+		<managed-bean-name>testController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.riesgo.test.controller.TestController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Configuracion de Archivo de Inforcorp-->
+	<managed-bean>
+		<managed-bean-name>confArchivoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.riesgo.configuracion.controller.ConfiguracionArchivoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Configuracion de Cartera de Creditos-->
+	<managed-bean>
+		<managed-bean-name>confCarteraController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.riesgo.configuracion.controller.ConfiguracionCarteraController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Configuracion de Cartera de Creditos Manual-->
+	<managed-bean>
+		<managed-bean-name>carteraManualController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.riesgo.cobranza.carteraycentralriesgos.controller.CarteraManualController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/pages/configuracion/configuracion.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>configuracion.configuracion</from-outcome>
+			<to-view-id>/pages/configuracion/configuracion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/cobranza/carteraycentralriesgos/carteraManual.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>cobranza.carteraycentralriesgos.carteraManual</from-outcome>
+			<to-view-id>/pages/cobranza/carteraycentralriesgos/carteraManual.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+</faces-config>

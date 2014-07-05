@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AnexoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.Anexo" alias="Anexo"/> 
+	
+  <resultMap id="resAnexo" class="Anexo">
+	<result property="id.intPersEmpresaAnexo" 		column="pPers_empresaanexo"/>
+	<result property="id.intContPeriodoAnexo"   	column="pCont_periodoanexo"/>
+	<result property="id.intParaTipoAnexo"   		column="pPara_tipoanexo"/>
+	<result property="strDescripcion"   			column="pAnex_descripcion"/>
+    <result property="tsFechaRegistro"      		column="pAnex_fecharegistro"/>
+    <result property="intParaTipoLibroAnexo"    	column="pPara_tipolibroanexo"/>
+    <result property="intParaTipoIndicador"    		column="pPara_tipoindicador"/>
+    <result property="intParaPeriodicidad"    		column="pPara_periodicidad"/>
+    <result property="intPersEmpresaUsuario"    	column="pPers_empresausuario"/>
+    <result property="intPersPersonaUsuario"    	column="pPers_personausuario"/>
+  </resultMap>
+  
+  <parameterMap id="parAnexo" class="Anexo">
+	 <parameter property="id.intPersEmpresaAnexo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoAnexo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoAnexo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDescripcion"				javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intParaTipoLibroAnexo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoIndicador"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaPeriodicidad"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	      
+  </parameterMap>
+
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+   	 <parameter property="intPersEmpresaAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	      
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoLibroAnexo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	        
+  </parameterMap>
+     
+  <procedure id="grabar" parameterMap="parAnexo">
+	{ call PKG_ANEXO.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAnexo" >
+	{ call PKG_ANEXO.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAnexo">
+	{ call PKG_ANEXO.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resAnexo">
+	{ call PKG_ANEXO.getListaPorBusqueda(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_ANEXO.eliminar(?,?,?) }
+  </procedure>
+</sqlMap>

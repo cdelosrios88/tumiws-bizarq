@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MovilidadDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.Movilidad" alias="Movilidad"/> 
+	
+  <resultMap id="resMovilidad" class="Movilidad" >
+	<result property="id.intPersEmpresaMovilidad"  	column="pPers_empresamovilidad" />
+	<result property="id.intItemMovilidad"   		column="pTeso_itemmovilidad" />
+	<result property="intParaDocumentoGeneral"   	column="pPara_documentogeneral" />
+    <result property="tsFechaRegistro"      		column="pPlmo_fecharegistro" />
+    <result property="intPeriodo"     				column="pPlmo_periodo" />
+    <result property="intPersEmpresaUsuario"      	column="pPers_empresausuario" />
+    <result property="intPersPersonaUsuario"      	column="pPers_personausuario" />
+    <result property="intSucuIdSucursal"      		column="pSucu_idsucursal" />
+    <result property="intSudeIdSubsucursal"      	column="pSude_idsubsucursal" />
+    <result property="intParaEstado"      			column="pPara_estado" />
+    <result property="intParaEstadoPago"      		column="pPara_estadopago" />
+    <result property="intPersEmpresaLibro"      	column="pPers_empresalibro" />
+    <result property="intContPeriodoLibro"      	column="pCont_periodolibro" />
+    <result property="intContCodigoLibro"      		column="pCont_codigolibro" />
+    <result property="intPersEmpresaLibroAnula"     column="pPers_empresalibroanula" />
+    <result property="intContPeriodoLibroAnula"     column="pCont_periodolibroanula" />
+    <result property="intContCodigoLibroAnula"      column="pCont_codigolibroanula" />
+    <result property="intItemEgresoGeneral"      	column="pTeso_itemegresogeneral" />
+    <result property="intPersEmpresaEgreso"      	column="pPers_empresaegreso" />
+    <result property="intIdArea"      				column="pArea_idarea" />
+  </resultMap>
+  
+  <parameterMap id="parMovilidad" class="Movilidad">
+	 <parameter property="id.intPersEmpresaMovilidad"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemMovilidad"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaDocumentoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPeriodo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContCodigoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaLibroAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoLibroAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContCodigoLibroAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemEgresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaEgreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdArea"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaMovilidad"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemMovilidad"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" 	mode="OUT"/>	 
+   	 <parameter property="intPeriodo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>
+   	 <parameter property="tsFechaDesde"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"		mode="IN"/>
+	 <parameter property="tsFechaHasta"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"		mode="IN"/>
+	 <parameter property="intParaEstado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorEgreso" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+	 <parameter property="intPersEmpresaEgreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemEgresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- 16.12.2013 JCHAVEZ -->
+  <resultMap id="resPlanillaMovilidad" class="Movilidad" >
+	<result property="id.intPersEmpresaMovilidad"  	column="pPers_empresamovilidad" />
+	<result property="id.intItemMovilidad"   		column="pTeso_itemmovilidad" />
+	<result property="intParaDocumentoGeneral"   	column="pPara_documentogeneral" />
+    <result property="tsFechaRegistro"      		column="pPlmo_fecharegistro" />
+    <result property="intPeriodo"     				column="pPlmo_periodo" />
+    <result property="intPersEmpresaUsuario"      	column="pPers_empresausuario" />
+    <result property="intPersPersonaUsuario"      	column="pPers_personausuario" />
+    <result property="strPersonaUsuario"      		column="pUSUARIO" />
+    <result property="strEtiquetaUsuario"      		column="pUSUARIODNI" />
+    <result property="intSucuIdSucursal"      		column="pSucu_idsucursal" />
+    <result property="intSudeIdSubsucursal"      	column="pSude_idsubsucursal" />
+    <result property="strDescSucuSubcucu"      		column="pDESC_SUCU_SUBSUCU" />
+    <result property="intParaEstado"      			column="pPara_estado" />
+    <result property="intParaEstadoPago"      		column="pPara_estadopago" />
+    <result property="intPersEmpresaLibro"      	column="pPers_empresalibro" />
+    <result property="intContPeriodoLibro"      	column="pCont_periodolibro" />
+    <result property="intContCodigoLibro"      		column="pCont_codigolibro" />
+    <result property="intPersEmpresaLibroAnula"     column="pPers_empresalibroanula" />
+    <result property="intContPeriodoLibroAnula"     column="pCont_periodolibroanula" />
+    <result property="intContCodigoLibroAnula"      column="pCont_codigolibroanula" />
+    <result property="intItemEgresoGeneral"      	column="pTeso_itemegresogeneral" />
+    <result property="intPersEmpresaEgreso"      	column="pPers_empresaegreso" />
+    <result property="intIdArea"      				column="pArea_idarea" />
+  </resultMap>
+    
+  <parameterMap id="parPorFiltroBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" 	mode="OUT"/>	 
+   	 <parameter property="intTipoBusqueda"				javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>
+   	 <parameter property="intPersEmpresaMovilidad"		javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>
+	 <parameter property="strTextoFiltro"				javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>
+	 <parameter property="intPeriodo" 					javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>	 
+   	 <parameter property="tsFechaDesde"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"		mode="IN"/>
+   	 <parameter property="tsFechaHasta"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"		mode="IN"/>
+	 <parameter property="intParaEstadoPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"			mode="IN"/>	 
+  </parameterMap>
+  <!-- Fin agregado 16.12.2013 -->
+    
+  <procedure id="grabar" parameterMap="parMovilidad">
+	{ call PKG_PLAMOVILIDAD.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parMovilidad" >
+	{ call PKG_PLAMOVILIDAD.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resMovilidad">
+	{ call PKG_PLAMOVILIDAD.getListaPorPk(?,?,?) }
+  </procedure>
+	
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resMovilidad">
+	{ call PKG_PLAMOVILIDAD.getListaPorBusqueda(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPersona" parameterMap="parPorPersona" resultMap="resMovilidad">
+	{ call PKG_PLAMOVILIDAD.getListaPorPersona(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorEgreso" parameterMap="parPorEgreso" resultMap="resMovilidad">
+	{ call PKG_PLAMOVILIDAD.getListaPorEgreso(?,?,?) }
+  </procedure>  
+  
+  <!-- 16.12.2013 JCHAVEZ -->
+  <procedure id="getPorFiltroBusqueda" parameterMap="parPorFiltroBusqueda" resultMap="resPlanillaMovilidad">
+	{ call PKG_PLAMOVILIDAD.getPorFiltroBusqueda(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>  
+</sqlMap>

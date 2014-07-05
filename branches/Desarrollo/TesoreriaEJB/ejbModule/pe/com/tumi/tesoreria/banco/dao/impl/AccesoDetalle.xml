@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.banco.domain.AccesoDetalle" alias="AccesoDetalle"/> 
+	
+  <resultMap id="resAccesoDetalle" class="AccesoDetalle" >
+	<result property="id.intPersEmpresaAcceso"  	column="pPers_empresaacceso" />
+	<result property="id.intItemAcceso"   			column="pTeso_itemacceso" />
+	<result property="id.intItemAccesoDetalle"    	column="pTeso_itemaccesodetalle" />
+    <result property="intPersEmpresa"      			column="pPers_empresa" />
+    <result property="intItemBancoFondo"     		column="pTeso_itembancofondo" />
+    <result property="intItemBancoCuenta"      		column="pTeso_itembancocuenta" />
+    <result property="bdMontoFondo"      			column="pAcde_montofondo" />
+    <result property="intParaTipoValorAlerta"      	column="pPara_tipovalorarlerta" />
+    <result property="bdMontoAlerta"      			column="pActe_montoalerta" />
+    <result property="intParaFrecuenciaTiempo"      column="pPara_frecuenciatiempo" />
+    <result property="intCantidadTiempo"      		column="pAcde_cantidadtiempo" />
+    <result property="bdMontoSobregiro"      		column="pAcde_montosobregiro" />
+    <result property="intParaEstadoEmiteCheque"     column="pPara_estadoemitech" />
+    <result property="intParaEstadoImprimeCheque"   column="pPara_estadoimprimech" />
+    <result property="strObservacion"      			column="pAcde_observacion" />
+    <result property="intParaEstado"      			column="pPara_estado" />
+    <result property="tsFechaRegistro"      		column="pAcde_fecharegistro" />
+    <result property="intPersEmpresaUsuario"      	column="pPers_empresausuario" />
+    <result property="intPersPersonaUsuario"      	column="pPers_personausuario" />
+    <result property="tsFechaEliminacion"      		column="pAcde_fechaeliminacion" />
+    <result property="intPersEmpresaElimina"      	column="pPers_empresaelimina" />
+    <result property="intPersPersonaElimina"      	column="pPers_personaelimina" />
+    <result property="bdMontoMaximo"      			column="pAcde_montomaximo_n" />
+  </resultMap>
+  
+  <parameterMap id="parAccesoDetalle" class="AccesoDetalle">
+	 <parameter property="id.intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemAcceso"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemAccesoDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="bdMontoFondo"					javaType="java.math.BigDecimal"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaTipoValorAlerta"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="bdMontoAlerta"				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaFrecuenciaTiempo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intCantidadTiempo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="bdMontoSobregiro"				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaEstadoEmiteCheque"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaEstadoImprimeCheque"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>	 
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="tsFechaEliminacion"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaElimina"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersPersonaElimina"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="bdMontoMaximo"				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAcceso"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAccesoDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+    
+  <parameterMap id="parPorAcceso" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAcceso"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parAccesoDetalle">
+	{ call PKG_ACCESODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAccesoDetalle" >
+	{ call PKG_ACCESODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAccesoDetalle">
+	{ call PKG_ACCESODETALLE.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorAcceso" parameterMap="parPorAcceso" resultMap="resAccesoDetalle">
+	{ call PKG_ACCESODETALLE.getListaPorAcceso(?,?,?) }
+  </procedure>
+</sqlMap>

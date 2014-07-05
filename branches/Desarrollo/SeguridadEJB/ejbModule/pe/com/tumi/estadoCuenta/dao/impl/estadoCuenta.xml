@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EstadoCuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaMontosBeneficios" alias="DataBeanEstadoCuentaMontosBeneficios"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaResumenPrestamos" alias="DataBeanEstadoCuentaResumenPrestamos"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaSocioCuenta" alias="DataBeanEstadoCuentaSocioCuenta"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaSocioEstructura" alias="DataBeanEstadoCuentaSocioEstructura"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaGestiones" alias="DataBeanEstadoCuentaGestiones"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaDsctoTerceros" alias="DataBeanEstadoCuentaDsctoTerceros"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaPlanillas" alias="DataBeanEstadoCuentaPlanillas"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaPrestamos" alias="DataBeanEstadoCuentaPrestamos"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaPrevisionSocial" alias="DataBeanEstadoCuentaPrevisionSocial"/>
+  <typeAlias type="pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaDetalleMovimiento" alias="DataBeanEstadoCuentaDetalleMovimiento"/>
+    	
+  	<resultMap id="resDataBeanEstadoCuentaMontosBeneficios" class="DataBeanEstadoCuentaMontosBeneficios" >
+	    <result property="intCuenta" 						column="pCUENTA" />
+	    <result property="bdCtaAporte" 						column="pCTA_APORTE" />
+	    <result property="bdSaldoAporte"   					column="pSALDO_APORTE" />
+	    <result property="bdMontoFdoRetiro"    				column="pFDO_RETIRO" />
+	    <result property="bdMontoFdoSepelio"    			column="pFDO_SEPELIO" />
+	    <result property="bdMontoMantenimiento"				column="pMANTENIMIENTO" />
+	    <result property="bdMontoUltimoEnvioAportes"		column="pULTENV_APORTE" />
+	    <result property="bdMontoUltimoEnvioFdoRetiro"		column="pULTENV_FDORETIRO" />
+	    <result property="bdMontoUltimoEnvioFdoSepelio"		column="pULTENV_FDOSEPELIO" />
+	    <result property="bdMontoUltimoEnvioMant"			column="pULTENV_MANTENIMIENTO" />
+  	</resultMap>
+
+  	<resultMap id="resDataBeanEstadoCuentaResumenPrestamos" class="DataBeanEstadoCuentaResumenPrestamos" >
+	    <result property="strFecha" 		column="pFECHA" />
+	    <result property="strDescripcion"   column="pDESCRIPCION" />
+	    <result property="bdTasaInteres"    column="pTASA" />
+	    <result property="bdMontoTotal"    	column="pMONTO_TOTAL" />
+	    <result property="intNumeroCuota"   column="pNROCUOTA" />
+	    <result property="intCtasPagadas"   column="pCTAS_PAGADAS" />
+	    <result property="intCtasAtrasadas" column="pCTAS_ATRASADAS" />
+	    <result property="bdSaldoCredito"   column="pSALDO" />
+	    <result property="bdMontoEfectuado" column="pEFECTUADO" />
+	    <result property="strUltimoEnvio" 	column="pPERIODO_ULTENV" />
+	    <result property="bdUltimoEnvio"    column="pULT_ENVIO" />
+  	</resultMap>
+  	  	
+  	<resultMap id="resDataBeanEstadoCuentaSocioCuenta" class="DataBeanEstadoCuentaSocioCuenta" >
+	    <result property="strNombreCompletoSocio" 				column="pNOMCOMPLETO_SOCIO" />
+	    <result property="intCuenta"   							column="pCUENTA" />
+	    <result property="strNumeroCuenta"   					column="pNRO_CUENTA" />
+	    <result property="intCondicionCuenta"    				column="pCONDICION_CTA" />
+	    <result property="intSubCondicionCuenta"    			column="pSUBCONDICION_CTA" />
+	    <result property="intSituacionCuenta"   				column="pSITUACION_CTA" />
+	    <result property="strFechaApertura"   					column="pAPERTURA_CTA" />
+	    <result property="strFechaLiquidacion" 					column="pFECHA_LIQUIDACION" />
+	    <result property="strExisteExpedienteLiquidacion" 		column="pEXISTE_ESTLIQ" />
+  	</resultMap>
+  	
+  	<resultMap id="resDataBeanEstadoCuentaSocioEstructura" class="DataBeanEstadoCuentaSocioEstructura" >
+	    <result property="intIdPersona"   			column="pIDPERSONA" />
+	    <result property="strDocIdent"   			column="pDOC_IDENT" />
+	    <result property="intIdSucursal" 			column="pIDSUCURSAL" />
+	    <result property="strSucursal"   			column="pDESC_SUCURSAL" />
+	    <result property="strNombreEstructura"  	column="pNOMESTRUCTURA" />
+	    <result property="intCondicionLaboral"  	column="pCOND_LABORAL" />
+	    <result property="intModalidad"   			column="pMODALIDAD" />
+	    <result property="intTipoSocio"   			column="pTIPO_SOCIO" />
+	    <result property="intTipoArchivoFoto"   	column="pTIPOARCH_FOTO" />
+	    <result property="intItemArchivoFoto"   	column="pITEMARCH_FOTO" />
+	    <result property="intItemHistoricoFoto" 	column="pITEMHIST_FOTO" />
+	    <result property="intTipoArchivoFirma"   	column="pTIPOARCH_FIRMA" />
+	    <result property="intItemArchivoFirma"   	column="pITEMARCH_FIRMA" />
+	    <result property="intItemHistoricoFirma"   	column="pITEMHIST_FIRMA" />
+  	</resultMap>
+  	
+  	<resultMap id="resDataBeanEstadoCuentaGestiones" class="DataBeanEstadoCuentaGestiones" >
+	    <result property="intTipoGestionCobCod"   	column="pTIPOGESTION" />
+	    <result property="intSubTipoGestionCobCod" 	column="pTIPOSUBGESTION" />
+	    <result property="intTipoPersonaOpe"   		column="pTIPOPERSONA" />
+	    <result property="dtFechaGestion"  			column="pFECHAGESTION" />
+	    <result property="dtHoraInicio"  			column="pHORAINICIO" />
+	    <result property="dtHoraFin"   				column="pHORAFIN" />
+	    <result property="intParaLugarGestion"   	column="pLUGARGESTION" />
+	    <result property="intCserItemExp" 			column="pITEMEXPEDIENTE" />
+	    <result property="intCserdeteItemExp"   	column="pITEMDETEXPEDIENTE" />
+	    <result property="intParaTipoResultado"  	column="pTIPORESULTADO" />
+	    <result property="intParaTipoSubResultado"  column="pTIPOSUBRESULTADO" />
+	    <result property="strObservacion"   		column="pOBSERVACION" />
+	    <result property="strContacto"   			column="pCONTACTO" />
+	    <result property="strDescSucursal"   		column="pDESC_SUCURSAL" />
+	    <result property="strNombreGestor"   		column="pGESTOR" />
+  	</resultMap>
+  	
+    <resultMap id="resFilasDctoTerceros" class="DataBeanEstadoCuentaDsctoTerceros" >
+        <result property="intAnio"    		column="pANIO" />
+     	<result property="intMes"    		column="pMES" />
+  	</resultMap>  	
+  	
+	<resultMap id="resColumnasDctoTerceros" class="DataBeanEstadoCuentaDsctoTerceros" >
+		<result property="strDsteCpto"      column="pDSTE_CPTO" />
+	   	<result property="strNomCpto"   	column="pNOM_CPTO" />
+	</resultMap>
+
+    <resultMap id="resMontoTotalDctoTerceros" class="DataBeanEstadoCuentaDsctoTerceros" >
+	    <result property="intMonto"   		column="pMONTO_TOTAL" />
+  	</resultMap>
+  	
+    <resultMap id="resPlanillaResumen" class="DataBeanEstadoCuentaPlanillas" >
+	    <result property="intPeriodo"   				column="pPERIODO" />
+	    <result property="bdMontoEnvioHaberes" 			column="pENV_HABERES" />
+	    <result property="bdMontoEnvioIncentivos"   	column="pENV_INCENTIVOS" />
+	    <result property="bdMontoEnvioCas"  			column="pENV_CAS" />
+	    <result property="bdMontoEfectuadoHaberes"  	column="pEFEC_HABERES" />
+	    <result property="bdMontoEfectuadoIncentivos"   column="pEFEC_INCENTIVOS" />
+	    <result property="bdMontoEfectuadoCas"   		column="pEFEC_CAS" />
+	    <result property="strEstadoPagoHaberes" 		column="pESTPGODEP_HAB" />
+	    <result property="strEstadoPagoIncentivos"   	column="pESTPGODEP_INC" />
+	    <result property="strEstadoPagoCas"  			column="pESTPGODEP_CAS" />
+  	</resultMap>
+
+    <resultMap id="resFilasDifPlanilla" class="DataBeanEstadoCuentaPlanillas" >
+        <result property="intPeriodo"    		column="pPERIODO" />
+  	</resultMap>  	
+  	
+	<resultMap id="resColumnasDifPlanilla" class="DataBeanEstadoCuentaPlanillas" >
+		<result property="intTipoConceptoGral"  column="pTIPO_CONCEPTO" />
+		<result property="intCodigoPrioridad"   column="pDSC_PRIORIDAD" />
+	   	<result property="intOrdenPrioridad"   	column="pORDEN_PRIORIDAD" />
+	</resultMap>
+	
+    <resultMap id="resPlanillaDiferencia" class="DataBeanEstadoCuentaPlanillas" >
+	    <result property="intPeriodo"   		column="pPERIODO" />
+	    <result property="intCtaConcepto" 		column="pCTACPTO" />
+	    <result property="strExpediente"   		column="pEXPCRED" />
+	    <result property="bdMontoEnviado"  		column="pENV_MONTO" />
+	    <result property="bdMontoEfectuado"  	column="pEFECT_MONTO" />
+	    <result property="intCodigoPrioridad"   column="pDSC_PRIORIDAD" />
+	    <result property="intOrdenPrioridad"   	column="pORDEN_PRIORIDAD" />
+  	</resultMap>
+
+    <resultMap id="resPrestamoAprobado" class="DataBeanEstadoCuentaPrestamos" >
+	    <result property="intTipoCredito"   	column="pTIPOCREDITO" />
+	    <result property="strFechaSolicitud" 	column="pFECHA_SOLICITUD" />
+	    <result property="strDescPrestamo"   	column="pDESC_PRESTAMO" />
+	    <result property="strSolicitud"  		column="pSOLICITUD" />
+	    <result property="bdPorcetajeInteres"  	column="pPORC_INTERES" />
+	    <result property="strCuotas"   			column="pCUOTAS" />
+	    <result property="bdCuotaMensual"   	column="pCUOTA_MENSUAL" />
+	    <result property="bdMontoTotal"   		column="pMONTO_TOTAL" />
+	    <result property="bdSaldoCredito" 		column="pSALDO_CREDITO" />
+	    <result property="intCategoriaCartera"  column="pCATEGORIA_CARTERA" />
+	    <result property="strFechaGiro"  		column="pFECHAGIRO" />
+	    <result property="strNumeroDocumento"  	column="pNRODOCUMENTO" />
+	    <result property="strEstadoCredito"  	column="pESTADO" />
+  	</resultMap>  
+  	
+    <resultMap id="resPrestamoRechazado" class="DataBeanEstadoCuentaPrestamos" >
+	    <result property="intTipoCredito"   	column="pTIPOCREDITO" />
+	    <result property="strFechaSolicitud" 	column="pFECHA_SOLICITUD" />
+	    <result property="strDescPrestamo"   	column="pDESC_PRESTAMO" />
+	    <result property="strSolicitud"  		column="pSOLICITUD" />
+	    <result property="bdPorcetajeInteres"  	column="pPORC_INTERES" />
+	    <result property="strCuotas"   			column="pCUOTAS" />
+	    <result property="bdCuotaMensual"   	column="pCUOTA_MENSUAL" />
+	    <result property="bdMontoTotal"   		column="pMONTO_TOTAL" />
+	    <result property="strEstadoCredito"  	column="pESTADO" />
+  	</resultMap>
+  	
+    <resultMap id="resPrestamoGarantizado" class="DataBeanEstadoCuentaPrestamos" >
+	    <result property="strPersonaGarantizada"   	column="pSOCIO" />
+	    <result property="bdSaldoAporte" 			column="pAPORTE" />
+	    <result property="strFechaSolicitud"   		column="pFECHA_SOLICITUD" />
+	    <result property="strDescPrestamo"  		column="pDESC_PRESTAMO" />
+	    <result property="strSolicitud"  			column="pSOLICITUD" />
+	    <result property="bdMontoTotal"   			column="pMONTO_TOTAL" />
+	    <result property="strCuotas"   				column="pCUOTAS" />
+		<result property="bdSaldoCredito" 			column="pSALDO_CREDITO" />	    
+  	</resultMap>     	  	
+  	  	
+    <resultMap id="resBeneficiosOtorgados" class="DataBeanEstadoCuentaPrevisionSocial" >
+	    <result property="strFechaSolicitud"   			column="pFECHA_SOLICITUD" />
+	    <result property="intNumeroSolicitud"  			column="pNRO_SOLICITUD" />
+	    <result property="strDescripcionTipoBeneficio" 	column="pDSC_TIPO_BENEFICIO" />
+	    <result property="bdMontoNeto"   				column="pMONTO_NETO" />
+	    <result property="intCodVinculoFallecido"  		column="pVINC_FALLECIDO" />
+	    <result property="strNombreFallecido"  			column="pPERS_FALLECIDO" />
+	    <result property="intCodVinculoBeneficiario"   	column="pVINC_BENEFICIARIO" />
+	    <result property="strNombreBeneficiario"   		column="pPERS_BENEFICIARIO" />
+  	</resultMap>  
+  	  	  	
+    <resultMap id="resPeriodoCtaCto" class="DataBeanEstadoCuentaPrevisionSocial" >
+	    <result property="intItemCuentaConcepto"   			column="pITEM_CTACTO" />
+	    <result property="intItemCuentaConceptoDetalle"		column="pITEM_CTACTODET" />
+	    <result property="intPeriodoInicio" 				column="pPERIODO_INICIO" />
+	    <result property="intPeriodoFin"   					column="pPERIODO_FIN" />
+	    <result property="intAnioInicio"  					column="pANIO_INICIO" />
+	    <result property="intMesInicio"  					column="pMES_INICIO" />
+	    <result property="intAnioFin"   					column="pANIO_FIN" />
+	    <result property="intMesFin"   						column="pMES_FIN" />
+	    <result property="bdCuotaMensual"   				column="pCUOTA_MENSUAL" />
+  	</resultMap>  
+  	
+    <resultMap id="resSumaMontoPago" class="DataBeanEstadoCuentaPrevisionSocial" >
+	    <result property="bdSumaMontoPago" 				column="pSUM_MONTOPAGO" />
+  	</resultMap>  
+  	  	  	  	  	
+    <resultMap id="resConceptoPago" class="DataBeanEstadoCuentaPrevisionSocial" >
+	    <result property="intPersEmpresaPk"   		column="pEMPRESA" />
+	    <result property="intCuentaPk"				column="pCUENTA" />
+	    <result property="intItemCtaCpto" 			column="pITEMCUENTACONCEPTO" />
+	    <result property="intItemCtaCptoDet"   		column="pITEMCTACPTODET" />
+	    <result property="intItemConceptoPago"		column="pITEMCOCEPTOPAGO" />
+	    <result property="intPeriodoInicio"			column="pPERIODO" />
+  	</resultMap>  
+
+	<resultMap id="resMovimientoFdoSepelio" class="DataBeanEstadoCuentaPrevisionSocial" >
+	    <result property="intTipoConceptoGral"  	column="pTIPO_CONCEPTO" />
+	    <result property="strFechaMovimiento"   	column="pFECHA_PAGO" />
+	    <result property="intPeriodoInicio"   		column="pPERIODO" />
+	    <result property="strDescTipoMovimiento"	column="pTIPO_MOVIMIENTO" />
+	    <result property="strNumeroDocumento" 		column="pNUMERO_DOCUMENTO" />
+	    <result property="strDescTipoCargoAbono"   	column="pCARGO_ABONO" />
+	    <result property="bdMontoMovimiento"		column="pMONTO" />
+  	</resultMap>
+  	
+	<resultMap id="resMovimientoFdoRetiroInteres" class="DataBeanEstadoCuentaPrevisionSocial" >
+	    <result property="intTipoConceptoGral"  	column="pTIPO_CONCEPTO" />
+	    <result property="strFechaMovimiento"   	column="pFECHA_MOV" />
+	    <result property="intPeriodoInicio"   		column="pPERIODO" />
+	    <result property="strDescTipoMovimiento"	column="pTIPO_MOVIMIENTO" />
+	    <result property="strNumeroDocumento" 		column="pNUMERO_DOCUMENTO" />
+	    <result property="strDescTipoCargoAbono"   	column="pCARGO_ABONO" />
+	    <result property="bdMontoMovimiento"		column="pMONTO" />
+  	</resultMap>    	  	
+	
+    <resultMap id="resIdPersona" class="DataBeanEstadoCuentaSocioEstructura" >
+	    <result property="intIdPersona" 	column="pID_PERSONA" />
+  	</resultMap>  
+
+    <resultMap id="resSocioPorBusqNombre" class="DataBeanEstadoCuentaSocioCuenta" >
+	    <result property="intIdPersona"   		column="pID_PERSONA" />
+	    <result property="strNombreSocio" 		column="pNOMBRES" />
+	    <result property="strNumeroIdentidad"   column="pNRODOCUMENTO" />
+	    <result property="strTipoSocio"  		column="pDSC_TIPOSOCIO" />
+	    <result property="strCondicionLaboral"  column="pDSC_CONDLABORAL" />
+	    <result property="strSucursal"   		column="pDSC_SUCURSAL" />
+	    <result property="strModalidad"   		column="pDSC_MODALIDAD" />
+		<result property="strTipoCuentaSocio" 	column="pDSC_TIPOCUENTA" />
+		<result property="strFechaRegistro" 	column="pFECHA_REGISTRO" />	    
+  	</resultMap>       	
+  		
+  	<resultMap id="resDataBeanEstadoCuentaDetalleMovimiento" class="DataBeanEstadoCuentaDetalleMovimiento" >
+	    <result property="strFechaMovimiento" 			column="pFECHA_MOVIMIENTO" />
+	    <result property="strTipoNumero" 				column="pTIPO_NUMERO" />
+	    <result property="bdMontoAporte"   				column="pMONTO_APORTE" />
+	    <result property="bdMontoMantenimiento"    		column="pMONTO_MANTENIMIENTO" />
+	    <result property="bdMontoFondoSepelio"    		column="pMONTO_FDOSEPELIO" />
+	    <result property="bdMontoFondoRetiro"			column="pMONTO_FDORETIRO" />
+	    <result property="bdMontoPrestamo"				column="pMONTO_PRESTAMO" />
+	    <result property="bdMontoCredito"				column="pMONTO_CREDITO" />
+	    <result property="bdMontoActividad"				column="pMONTO_ACTIVIDAD" />
+	    <result property="bdMontoMulta"					column="pMONTO_MULTA" />
+	    <result property="bdMontoInteres"				column="pMONTO_INTERES" />
+	    <result property="bdMontoCtaPorPagar"			column="pMONTO_CTA_PORPAGAR" />
+	    <result property="bdMontoCtaPorCobrar"			column="pMONTO_CTA_PORCOBRAR" />
+	    <result property="intEmpresa"    				column="pEMPRESA" />
+	    <result property="intCuenta"					column="pCUENTA" />
+	    <result property="intPersona"					column="pCODPERSONA" />
+	    <result property="intItemCuentaConcepto"		column="pITEMCTACPTO" />
+	    <result property="intItemExpediente"			column="pITEM_EXPEDIENTE" />
+	    <result property="intItemExpedienteDetalle"		column="pITEM_DETEXPEDIENTE" />
+	    <result property="intParaTipoMovimiento"		column="pTIPOMOVIMIENTO" />
+	    <result property="intParaTipoConceptoGeneral"	column="pTIPO_CPTOGRAL" />
+	    <result property="intParaTipoCargoAbono"		column="pTIPO_CARGOABONO" />
+	    <result property="strNumeroDocumento"			column="pNUMERO_DOCUMENTO" />
+  	</resultMap>  	
+  	  		
+  <parameterMap id="parPorCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorPersonaYCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>  
+  </parameterMap>     	 
+  
+  <parameterMap id="parPorCuentaYFecha" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="strFecha" 		javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>    
+  </parameterMap>
+  
+  <parameterMap id="parPorPeriodoModDni" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  	mode="OUT"/>   	 
+   	 <parameter property="intPeriodo"    			javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaModalidadCod"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="strNroDocIden"   			javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorDsteNomCptoAnioMesModDni" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR"  	mode="OUT"/>
+   	 <parameter property="strDsteCpto"      		javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN" />
+   	 <parameter property="strNomCpto"    			javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN" />
+   	 <parameter property="intAnio"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+   	 <parameter property="intMes"    				javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="intParaModalidadCod"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"  		mode="IN" />
+     <parameter property="strNroDocIden"   			javaType="java.lang.String"			jdbcType="VARCHAR"  		mode="IN"/>
+  </parameterMap>  
+    
+  <parameterMap id="parPorCuentaYPeriodo" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPeriodo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>    
+  </parameterMap>
+
+  <parameterMap id="parPorCuentaTipoCredYEstado" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="intTipoCredito" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>    
+   	 <parameter property="intEstadoCredito" javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCuentaTipoCred" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intTipoCredito" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>    
+  </parameterMap>
+  
+  <parameterMap id="parPorCuentaTipoCpto" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intTipoConcepto" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>    
+  </parameterMap>      
+  
+  <parameterMap id="parPorCtaCtoDetYPeriodo" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCtaCto" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCtaCtoDet" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>        
+  </parameterMap>
+    
+  <parameterMap id="parConceptoPago" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCtaCto" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCtaCtoDet" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCptoPago" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+	
+  <parameterMap id="parPorDocumento" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intTipoDocumento" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="strNumeroDocumento" 		javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>  
+  </parameterMap>
+
+  <parameterMap id="parPorNombre" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="strNombre" 		javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>  
+  </parameterMap>
+
+  <parameterMap id="parPorPersonaYTipoCta" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intTipoCuenta"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>    
+  </parameterMap>
+      	
+  <procedure id="getResumenPrestamos" parameterMap="parPorCuenta" resultMap="resDataBeanEstadoCuentaResumenPrestamos">
+	{ call PKG_ESTADOCUENTA.getResumenPrestamos(?,?,?) }
+  </procedure>
+  
+  <procedure id="getCabMtosBeneficios" parameterMap="parPorCuenta" resultMap="resDataBeanEstadoCuentaMontosBeneficios">
+	{ call PKG_ESTADOCUENTA.getCabMtosBeneficios(?,?,?) }
+  </procedure>  
+  
+  <procedure id="getCabSocioEstructura" parameterMap="parPorPersona" resultMap="resDataBeanEstadoCuentaSocioEstructura">
+	{ call PKG_ESTADOCUENTA.getCabSocioEstructura(?,?,?) }
+  </procedure>  
+  
+  <procedure id="getCabCuentasSocio" parameterMap="parPorPersonaYTipoCta" resultMap="resDataBeanEstadoCuentaSocioCuenta">
+	{ call PKG_ESTADOCUENTA.getCabCuentasSocio(?,?,?,?) }
+  </procedure>
+  <!-- Gestiones -->
+  <procedure id="getListaGestionCobranza" parameterMap="parPorCuentaYFecha" resultMap="resDataBeanEstadoCuentaGestiones">
+	{ call PKG_ESTADOCUENTA.getGestionCobranza(?,?,?,?) }
+  </procedure>
+  <!-- Descuento Terceros -->
+  <procedure id="getListaFilasPorPeriodoModalidadYDni" parameterMap="parPorPeriodoModDni" resultMap="resFilasDctoTerceros">
+	{ call PKG_ESTADOCUENTA.getFilasDsctoTerceros(?,?,?,?) }  
+  </procedure>  
+    
+  <procedure id="getListaColumnasPorPeriodoModalidadYDni" parameterMap="parPorPeriodoModDni" resultMap="resColumnasDctoTerceros">
+	{ call PKG_ESTADOCUENTA.getColumnasDsctoTerceros(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getMontoTotalPorNomCptoYPeriodo" parameterMap="parPorDsteNomCptoAnioMesModDni" resultMap="resMontoTotalDctoTerceros">
+	{ call PKG_ESTADOCUENTA.getMontoTotalDsctoTerceros(?,?,?,?,?,?,?) }  
+  </procedure>   
+  <!-- Planillas -->
+  <procedure id="getResumenPlanilla" parameterMap="parPorCuentaYPeriodo" resultMap="resPlanillaResumen">
+	{ call PKG_ESTADOCUENTA.getResumenPlanilla(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getFilasDifPlanilla" parameterMap="parPorCuentaYPeriodo" resultMap="resFilasDifPlanilla">
+	{ call PKG_ESTADOCUENTA.getFilasDifPlanilla(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getColumnasDifPlanilla" parameterMap="parPorCuentaYPeriodo" resultMap="resColumnasDifPlanilla">
+	{ call PKG_ESTADOCUENTA.getColumnasDifPlanilla(?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getDiferenciaPlanilla" parameterMap="parPorCuentaYPeriodo" resultMap="resPlanillaDiferencia">
+	{ call PKG_ESTADOCUENTA.getDiferenciaPlanilla(?,?,?,?) }
+  </procedure>      
+  <!-- Prestamos -->
+  <procedure id="getPrestamoAprobado" parameterMap="parPorCuentaTipoCredYEstado" resultMap="resPrestamoAprobado">
+	{ call PKG_ESTADOCUENTA.getPrestamoAprobado(?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getPrestamoRechazado" parameterMap="parPorCuentaTipoCred" resultMap="resPrestamoRechazado">
+	{ call PKG_ESTADOCUENTA.getPrestamoRechazado(?,?,?,?) }
+  </procedure>     
+  
+  <procedure id="getPrestamoGarantizado" parameterMap="parPorPersonaYCuenta" resultMap="resPrestamoGarantizado">
+	{ call PKG_ESTADOCUENTA.getPrestamoGarantizado(?,?,?,?) }
+  </procedure>  
+  <!-- Previsión Social -->
+  <procedure id="getBenefOtorgados" parameterMap="parPorPersonaYCuenta" resultMap="resBeneficiosOtorgados">
+	{ call PKG_ESTADOCUENTA.getBenefOtorgados(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getPeriodoCtaCto" parameterMap="parPorCuentaTipoCpto" resultMap="resPeriodoCtaCto">
+	{ call PKG_ESTADOCUENTA.getPeriodoCtaCto(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getSumMontoPago" parameterMap="parPorCtaCtoDetYPeriodo" resultMap="resSumaMontoPago">
+	{ call PKG_ESTADOCUENTA.getSumMontoPago(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getConceptoPago" parameterMap="parPorCtaCtoDetYPeriodo" resultMap="resConceptoPago">
+	{ call PKG_ESTADOCUENTA.getConceptoPago(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getMovimientoFdoSepelio" parameterMap="parConceptoPago" resultMap="resMovimientoFdoSepelio">
+	{ call PKG_ESTADOCUENTA.getMovimientoFdoSepelio(?,?,?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getMovFdoRetiroInteres" parameterMap="parPorCuenta" resultMap="resMovimientoFdoRetiroInteres">
+	{ call PKG_ESTADOCUENTA.getMovFdoRetiroInteres(?,?,?) }
+  </procedure>    
+	
+  <procedure id="getSocioPorDocumento" parameterMap="parPorDocumento" resultMap="resIdPersona">
+	{ call PKG_ESTADOCUENTA.getSocioPorDocumento(?,?,?) }
+  </procedure>  
+
+  <procedure id="getSocioPorNombres" parameterMap="parPorNombre" resultMap="resSocioPorBusqNombre">
+	{ call PKG_ESTADOCUENTA.getSocioPorNombres(?,?,?) }
+  </procedure>  
+
+  <procedure id="getDetalleMovimiento" parameterMap="parPorPersonaYCuenta" resultMap="resDataBeanEstadoCuentaDetalleMovimiento">
+	{ call PKG_ESTADOCUENTA.getDetalleMovimiento(?,?,?,?) }
+  </procedure>   
+  
+  <procedure id="getSocioPorNumeroCuenta" parameterMap="parPorCuenta" resultMap="resIdPersona">
+	{ call PKG_ESTADOCUENTA.getSocioPorNumeroCuenta(?,?,?) }
+  </procedure>    
+</sqlMap>   

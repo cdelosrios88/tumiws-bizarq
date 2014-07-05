@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServCancelado.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServCaptacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServCreditoEmpresa.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServEstructuraDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServGrupoCta.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServPerfil.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServRol.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServSolicitud.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/configuracion/dao/impl/confServUsuario.xml"/>
+	
+	<!-- Solicitud de Préstamo -->
+	
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/capacidadCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/capacidadDescuento.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/estadoCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/expedienteCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/cronogramaCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/garantiaCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/requisitoCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/autorizaCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/autorizaVerificacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/cancelacionCredito.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/solicitudPrestamo/dao/impl/expedienteActividad.xml"/>
+
+	<!-- Prevision Social -->
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/beneficiarioPrevision.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/estadoPrevision.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/expedientePrevision.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/requisitoPrevision.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/fallecidoPrevision.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/autorizaPrevision.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/autorizaVerificaPrevision.xml"/>
+	
+	<!-- Liquidacion -->
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/beneficiarioLiquidacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/estadoLiquidacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/expedienteLiquidacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/expedienteLiquidacionDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/requisitoLiquidacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/autorizaLiquidacion.xml"/>
+	<sqlMap resource="pe/com/tumi/servicio/prevision/dao/impl/autorizaVerificaLiquidacion.xml"/>
+
+</sqlMapConfig>

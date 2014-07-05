@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CarteraCreditoDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.CarteraCreditoDetalle" alias="CarteraCreditoDetalle"/>
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.composite.CarteraCreditoManual" alias="CarteraCreditoManual"/> 
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.composite.CarteraCreditoManualGen" alias="CarteraCreditoManualGen"/>  
+	
+  <resultMap id="resCarteraCreditoDetalle" class="CarteraCreditoDetalle" >
+    <result property="id.intPersEmpresacartera_n_pk"	      column="ppers_empresacartera_n_pk"/>
+	<result property="id.intCriePperiodocartera"	          column="pcrie_periodocartera_n"/>
+	<result property="id.intCrieIitemcarteracredito"	      column="pcrie_itemcarteracredito_n"/>
+	<result property="id.intCrieItemcarcredet"	              column="pcrie_itemcarcredet_n"/>
+ 	<result property="intPersPersona"	              		  column="ppers_persona_n_pk"/>
+ 	<result property="intCacdRelacionlaboral"	              column="pcacd_relacionlaboral_n"/>
+    <result property="intCacdTipodocumento"	                  column="pcacd_tipodocumento_n"/>
+    <result property="intCacrRuc"	                    	  column="pcacr_ruc_n"/>
+    <result property="intParaTiposbs"	                      column="ppara_tiposbs_n_cod"/>
+   	<result property="tsCacrFechacredito"	                  column="pcacr_fechacredito_d"/>
+    <result property="intCacrMontoinicial"	                  column="pcacr_montoinicial_n"/>
+    <result property="intCacrSaldocredito"	                  column="pcacr_saldocredito_n"/>
+    <result property="intParaTipocategoriariesgo"	          column="para_tipocategoriariesgo_n_cod"/>
+   	<result property="bdProvTmontoprovision"	              column="pprov_montoprovision_n"/>
+    <result property="bdCacrMontoprovisionrequerida"	      column="cacr_montoprovisionrequerida_n"/>
+    <result property="bdCacrMontoprovisionconstituida"	      column="pcacr_montproviconstituida"/>
+    <result property="intCacrCuotasvencidas"	              column="pcacr_cuotasvencidas_n"/>
+    <result property="intCacrMontorecuperación"	              column="pcacr_montorecuperacion_n"/>
+    <result property="intCacrMontoprovisión"	              column="pcacr_montoprovision_n"/>
+    <result property="intCacrInteressuspenso"	              column="pcacr_interessuspenso_n"/>
+    <result property="intPersEmpresa"	                      column="ppers_empresa_n_pk"/>
+    <result property="intCsocCuenta"	                      column="pcsoc_cuenta_n_pk"/>
+    <result property="intCserItemexpediente"	              column="pcser_itemexpediente_n"/>
+    <result property="intCserItemdetexpediente"	              column="pcser_itemdetexpediente_n"/>
+    <result property="intCmovItemcuentaconcepto"	          column="pcmov_itemcuentaconcepto_n"/>
+    <result property="intSucuIdsucursal"	                  column="psucu_idsucursal_n"/>
+    <result property="intSudeIdsubsucursal"	                  column="psude_idsubsucursal_n"/>
+  </resultMap>
+
+  <resultMap id="resCarteraCreditoManual" class="CarteraCreditoManual" >
+    <result property="intPeriodo"	      					column="intPeriodo"/>
+	<result property="intMes"	          					column="intMes"/>
+	<result property="intAnio"	      						column="intAnio"/>
+	<result property="intTipoCartera"	              		column="intTipoCartera"/>
+	<result property="intTipoCobranza"	              		column="intTipoCobranza"/>
+	<result property="intEstadoCierre"	              		column="intEstadoCierre"/>
+ 	<result property="douMntProvCredito"	              	column="douProvCredito"/>
+ 	<result property="douMntProvProciclica"	              	column="douProvProciclica"/>
+    <result property="dtFechaRegistro"	                  	column="dtFechaRegistro"/>
+  </resultMap>
+
+  <resultMap id="resCarteraCreditoManualGen" class="CarteraCreditoManualGen" >
+    <result property="intPeriodo"	      					column="intPeriodo"/>
+	<result property="intMes"	          					column="intMes"/>
+	<result property="intAnio"	      						column="intAnio"/>
+	<result property="intTipoCartera"	              		column="intTipoCartera"/>
+	<result property="intTipoCobranza"	              		column="intTipoCobranza"/>
+	<result property="intEstadoCierre"	              		column="intEstadoCierre"/>
+ 	<result property="douMntProvCredito"	              	column="douProvCredito"/>
+ 	<result property="douMntProvProciclica"	              	column="douProvProciclica"/>
+    <result property="dtFechaRegistro"	                  	column="dtFechaRegistro"/>
+	<result property="intGenerado"	              			column="intGenerado"/>
+  </resultMap>
+  
+  <parameterMap id="parPorCartaCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresacartera_n_pk" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intCriePperiodocartera" 	        jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intCrieIitemcarteracredito" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorPKExpedienteOCtaConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intCsocCuenta" 	        		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intCserItemexpediente" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>  
+     <parameter property="intCserItemdetexpediente" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parPeriodoYExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intCsocCuenta" 	        		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intCserItemexpediente" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>  
+     <parameter property="intCserItemdetexpediente" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/> 
+     <parameter property="intCriePperiodocartera" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBuscarCarteraManual" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet"   jdbcType="ORACLECURSOR" 	    mode="OUT"/>
+     <parameter property="intPeriodoInicial" 				jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intPeriodoFinal" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intEstadoMen" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="intEstadoMay" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parObtenerCarteraManual" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet"   jdbcType="ORACLECURSOR" 	    mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parGenerarCarteraManual" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet"   jdbcType="ORACLECURSOR" 	    mode="OUT"/>
+     <parameter property="dtFechaCorte"						jdbcType="DATE"  				javaType="java.util.Date" 		mode="IN"/>
+   	 <parameter property="intPersEmpresa" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+   	 <parameter property="intPersPersona" 					jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parCerrarCarteraManual" class="java.util.Map">
+   	 <parameter property="cursorLista" 			            javaType="java.sql.ResultSet"   jdbcType="ORACLECURSOR" 	    mode="OUT"/>
+     <parameter property="intPeriodo"						jdbcType="NUMERIC"  			javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="getListaPorCarteraCredito" parameterMap="parPorCartaCredito" resultMap="resCarteraCreditoDetalle">
+	{ call PKG_CarteraCreditoDetalle.getListaPorCarteraCredito(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaXExpOCtaCpto" parameterMap="parPorPKExpedienteOCtaConcepto" resultMap="resCarteraCreditoDetalle">
+	{ call PKG_CarteraCreditoDetalle.getListaXExpOCtaCpto2(?,?,?,?,?) }  
+  </procedure> 
+  
+  <procedure id="getMaxPorExpediente" parameterMap="parPeriodoYExpediente" resultMap="resCarteraCreditoDetalle">
+	{ call PKG_CarteraCreditoDetalle.getMaxPorExpediente(?,?,?,?,?,?) }  
+  </procedure> 
+  
+  <!-- GTorresBrousset - 25.mar.2014 -->
+  
+  <procedure id="getListaCarteraCredito" parameterMap="parBuscarCarteraManual" resultMap="resCarteraCreditoManual">
+	{ call PKG_CALCULACARTERACREDITO.getListaPorRangoPeriodos(?,?,?,?,?) }  
+  </procedure> 
+  
+  <procedure id="getCarteraCreditoManual" parameterMap="parObtenerCarteraManual" resultMap="resCarteraCreditoManual">
+	{ call PKG_CALCULACARTERACREDITO.getCarteraCreditoManual(?) }  
+  </procedure> 
+  
+  <procedure id="generarCarteraCreditoManual" parameterMap="parGenerarCarteraManual" resultMap="resCarteraCreditoManualGen">
+	{ call PKG_CALCULACARTERACREDITO.generarCarteraManual(?,?,?,?) }  
+  </procedure> 
+  
+  <procedure id="cerrarCarteraManual" parameterMap="parCerrarCarteraManual" resultMap="resCarteraCreditoManual">
+	{ call PKG_CALCULACARTERACREDITO.cerrarCarteraManual(?,?) }  
+  </procedure> 
+  
+  <procedure id="generarLibroCartera">
+	{ call PKG_CALCULACARTERACREDITO.generaLibroCartera() }  
+  </procedure> 
+  
+</sqlMap>

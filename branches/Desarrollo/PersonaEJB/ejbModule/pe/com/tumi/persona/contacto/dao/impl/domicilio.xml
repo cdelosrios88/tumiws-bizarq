@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DomicilioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.contacto.domain.Domicilio" alias="Domicilio"/> 
+	
+  <resultMap id="resDomicilio" class="Domicilio" >
+     <result property="id.intIdPersona"      		column="pPERSONA_N" />
+     <result property="id.intIdDomicilio"    		column="pDOMICILIO_N_COD" />
+     <result property="intTipoDomicilioCod"      	column="pTIPODOMICILIO_N_COD" />
+     <result property="intTipoDireccionCod"   		column="pTIPODIRECCION_N_COD" />
+     <result property="intTipoViviendaCod"   		column="pTIPOVIVIENDA_N_COD" />
+     <result property="intParaUbigeoPk"      		column="pUBIGEO_N_PK" />
+     <result property="intParaUbigeoPkDpto"      	column="pUBIGEO_N_PK_DEPARTAMENTO" />
+     <result property="intParaUbigeoPkProvincia"    column="pUBIGEO_N_PK_PROVINCIA" />
+     <result property="intParaUbigeoPkDistrito"     column="pUBIGEO_N_PK_DISTRITO" />
+     <result property="intTipoViaCod"    			column="pTIPOVIA_N_COD" />
+     <result property="strNombreVia"      			column="pNOMBREVIA_V" />
+     <result property="intNumeroVia"   				column="pNUMEROVIA_N" />
+     <result property="strInterior"   				column="pINTERIOR_V" />
+     <result property="intTipoZonaCod"      		column="pTIPOZONA_N_COD" />
+     <result property="strNombreZona"      			column="pNombreZona_V" />
+     <result property="strReferencia"    			column="pREFERENCIA_V" />
+     <result property="intEnviaCorrespondencia"   	column="pENVIACORRESPONDENCIA_N" />
+     <result property="strObservacion"   			column="pOBSERVACION_V" />
+     <result property="intEstadoCod"   				column="pESTADO_N_COD" />
+     <result property="strDireccion"   				column="pDireccion_V" />
+     <result property="tsFechaEliminacion"   		column="pFECHAELIMINACION_D" />
+     <result property="intParaTipoArchivo"   		column="pTIPOARCHIVO" />
+     <result property="intParaItemArchivo"   		column="pITEMARCHIVO" />
+     <result property="intParaItemHistorico"   		column="pITEMHISTORICO" />
+  </resultMap>
+  
+  <parameterMap id="parDomicilio" class="Domicilio">
+     <parameter property="id.intIdPersona"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdDomicilio"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intTipoDomicilioCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intTipoDireccionCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoViviendaCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaUbigeoPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intTipoViaCod"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strNombreVia" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="intNumeroVia" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strInterior" 				jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intTipoZonaCod"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strNombreZona"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+	 <parameter property="strReferencia"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="intEnviaCorrespondencia" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strObservacion" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intParaTipoArchivo"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaItemArchivo"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaItemHistorico"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdDomicilio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parEliminarDomicilio" class="Domicilio">
+     <parameter property="id.intIdPersona"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intIdDomicilio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDomicilio">
+	{ call PKG_DOMICILIO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDomicilio" >
+	{ call PKG_DOMICILIO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resDomicilio">
+	{ call PKG_DOMICILIO.getListaPorPK(?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona" resultMap="resDomicilio">
+	{ call PKG_DOMICILIO.getListaPorIdPersona(?,?) }  
+  </procedure>
+    
+  <procedure id="eliminar" parameterMap="parEliminarDomicilio">
+	{ call PKG_DOMICILIO.eliminar(?,?) }
+  </procedure>
+</sqlMap>  

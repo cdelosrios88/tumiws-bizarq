@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CarteraCreditoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.CarteraCredito" alias="CarteraCredito"/> 
+	
+  <resultMap id="resCarteraCredito" class="CarteraCredito" >
+  	<result property="id.intPersEmpresaCartera"		column="ppers_empresacartera_n_pk"/>
+	<result property="id.intCriePeriodoCartera"		column="pcrie_periodocartera_n"/>
+	<result property="id.intCrieItemCarteraCredito"	column="pcrie_itemcarteracredito_n"/>
+	<result property="intParaDocumentoGeneral"		column="ppara_documentogeneral_n_cod"/>
+	<result property="tsCacrFechaSaldos"			column="pcacr_fechasaldos_d"/>
+	<result property="intCacrMontoMínimoCartera"	column="pcacr_montominimocartera_n"/>
+	<result property="strCacCodigoSbs"				column="pcacr_codigosbs_v"/>
+	<result property="intCrieItemCartera"			column="pcrie_itemcartera_n"/>
+	<result property="intParaEstado"				column="ppara_estado_n_cod"/>
+	<result property="intParaEstadocierre"			column="ppara_estadocierre_n_cod"/>
+	<result property="intPersEmpresaresgitro"		column="ppers_empresaresgitro_n_pk"/>
+	<result property="intPersPersonaregistro"		column="ppers_personaregistro_n_pk"/>
+	<result property="tsCacrFecharegistro"			column="pcacr_fecharegistro_d"/>
+	<result property="intPersEmpresaelimina"		column="ppers_empresaelimina_n_pk"/>
+	<result property="intPersPersonaelimina"		column="ppers_personaelimina_n_pk"/>
+	<result property="tsCacrFechaelimina"			column="pcacr_fechaelimina_d"/>
+	<result property="intPersEmpresalibro"			column="ppers_empresalibro_n_pk"/>
+	<result property="intContPeriodolibro"			column="pcont_periodolibro_n"/>
+	<result property="intContCodigolibro"			column="pcont_codigolibro_n"/>
+	<result property="intPersEmpresalibroan"		column="ppers_empresalibroan_n_pk"/>
+	<result property="intContPeriodolibroan"		column="pcont_periodolibroan_n"/>
+	<result property="intContCodigolibroan"			column="pcont_codigolibroan_n"/>
+
+  </resultMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 	                javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" 	    mode="OUT"/>
+   	 <parameter property="intPersEmpresacartera_n_pk" 	jdbcType="NUMERIC" 			  javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="getListaPorMaxPeriodo" parameterMap="parPorPk" resultMap="resCarteraCredito">
+	{ call PKG_CarteraCredito.getListaPorMaxPeriodo(?,?) }  
+  </procedure>
+    
+</sqlMap>

@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<converter>
+	  	<converter-id>calendarTimestampConverter</converter-id>
+	  	<converter-class>pe.com.tumi.common.util.CalendarTimestampConverter</converter-class>
+	</converter>
+
+	<managed-bean>
+		<managed-bean-name>testController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.test.controller.TestController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>messageController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.message.controller.MessageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>tipoCambioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.parametro.controller.TipoCambioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>tarifaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.parametro.controller.TarifaGeneralController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>planCuentasController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.core.controller.PlanCuentasController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>modeloController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.core.controller.ModeloController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>hojaManualController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.operaciones.controller.HojaManualController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Navigation Rules -->
+	<navigation-rule>
+		<from-view-id>/pages/parametros/paramContabilidad.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>parametros.paramContabilidad</from-outcome>
+			<to-view-id>/pages/parametros/paramContabilidad.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/contabilidad/*</from-view-id>
+		<navigation-case>
+			<from-outcome>contabilidad.planCuentas</from-outcome>
+			<to-view-id>/pages/contabilidad/planCuentas.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/contabilidad/*</from-view-id>
+		<navigation-case>
+			<from-outcome>contabilidad.modeloContable</from-outcome>
+			<to-view-id>/pages/contabilidad/modeloContable.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/operaciones/*</from-view-id>
+		<navigation-case>
+			<from-outcome>operaciones.hojaManual</from-outcome>
+			<to-view-id>/pages/operaciones/hojaManual.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>		
+	
+	<!-- Cierre mensual / Contabilidad -->
+	<navigation-rule>
+		<from-view-id>/pages/mensual/*</from-view-id>
+		<navigation-case>
+			<from-outcome>cierre.cierre</from-outcome>
+			<to-view-id>/pages/mensual/contabilidad.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>cierreMensualContabilidadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.cierre.controller.ContabilidadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Mayorizacion -->
+	<navigation-rule>
+		<from-view-id>/pages/mayorizacion/*</from-view-id>
+		<navigation-case>
+			<from-outcome>mayorizacion.mayorizacion</from-outcome>
+			<to-view-id>/pages/mayorizacion/mayorizacion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>mayorizacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.cierre.controller.MayorizacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+
+	<!-- Apertura/Cierre de  Cuentas-->
+	<managed-bean>
+	<managed-bean-name>aperturaCierreController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.cierre.controller.AperturaCierreController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+	
+	<!-- Anexos-->
+	<navigation-rule>
+		<from-view-id>/pages/param/anexo.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>anexo.anexo</from-outcome>
+			<to-view-id>/pages/param/anexo.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+	<managed-bean-name>anexoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.cierre.controller.AnexoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Ratios -->	
+	<managed-bean>
+		<managed-bean-name>ratioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.cierre.controller.RatioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Agregado por cdelosrios, 15/09/2013 -->
+	<managed-bean>
+		<managed-bean-name>anexoPopupController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.parametro.controller.AnexoPopupController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Agregado por cdelosrios, 15/09/2013 -->
+	
+</faces-config>

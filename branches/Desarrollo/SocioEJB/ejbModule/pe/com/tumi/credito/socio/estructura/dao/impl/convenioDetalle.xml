@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConvenioDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.ConvenioEstructuraDetalle" alias="ConvenioDetalle"/> 
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.composite.ConvenioEstructuraDetalleComp" alias="ConvenioDetalleComp"/>
+	
+  <resultMap id="resConvenioDetalle" class="ConvenioDetalle" >
+     <result property="id.intNivel"    			column="pNIVEL_N" />
+     <result property="id.intCodigo"      		column="pCODIGO_N" />
+     <result property="id.intCaso"   			column="pCASO_N" />
+     <result property="id.intItemCaso"   		column="pITEMCASO_N" />
+     <result property="id.intConvenio"      	column="pCONVENIO_N" />
+     <result property="id.intItemConvenio"      column="pITEMCONVENIO_N" />
+     <result property="intSocio"    			column="pSOCIOS_N" />
+     <result property="bdDescuento"      		column="pDESCUENTO_N" />
+     <result property="bdMorosidad"   			column="pMOROSIDAD_N" />
+     <result property="intParaEstadoCod"   		column="pPARA_ESTADO_N_COD" />
+     <result property="bdIndiceDescuento"   	column="pCEDE_INDICEDESCUENTO_N" />
+  </resultMap>
+  
+  <resultMap id="resConvenioDetalleComp" class="ConvenioDetalleComp" >
+     <result property="convenioEstructuraDetalle.id.intConvenio"    	column="pCONVENIO_N" />
+     <result property="convenioEstructuraDetalle.id.intItemConvenio" 	column="pITEMCONVENIO_N" />
+     <result property="convenioEstructuraDetalle.intParaEstadoCod" 		column="pESTADOCONVENIO_N" />
+     <result property="estructura.intPersPersonaPk"    					column="pPERS_PERSONA_PK" />
+     <result property="estructura.intPersEmpresaPk"    					column="pPERS_EMPRESA_N_PK" />
+     <result property="estructura.id.intNivel"    						column="pNIVEL_N" />
+     <result property="estructura.id.intCodigo"      					column="pCODIGO_N" />
+     <result property="estructuraDetalle.id.intCaso"   					column="pCASO_N" />
+     <result property="estructuraDetalle.id.intItemCaso"   				column="pITEMCASO_N" />
+     <!-- <result property="adenda.dtInicio"      						column="pFECINICIO_D" /> -->
+     <!-- <result property="adenda.dtCese"   							column="pFECCESE_D" /> -->
+     <result property="estructuraDetalle.intParaModalidadCod"   		column="pMODALIDAD_N" />
+     <result property="estructuraDetalle.intParaTipoSocioCod"   		column="pTIPOSOCIO_N" />
+     <result property="convenioEstructuraDetalle.bdIndiceDescuento" 	column="pCEDE_INDICEDESCUENTO_N" />
+  </resultMap>
+  
+  <parameterMap id="parConvenioDetalle" class="ConvenioDetalle">
+     <parameter property="id.intConvenio"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intItemConvenio"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intNivel"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intCodigo" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intCaso" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intItemCaso" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+	 <parameter property="intSocio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="bdDescuento" 			javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="bdMorosidad" 			javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>     
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intNivel" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCodigo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCaso" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCaso" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKConvenio" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKEstructDet" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intNivel" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCodigo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCaso" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKEstructuraDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intNivel" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCodigo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCaso" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCaso" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConvenioDetalle">
+	{ call PKG_CONVESTRUCDET.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConvenioDetalle" >
+	{ call PKG_CONVESTRUCDET.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resConvenioDetalle">
+	{ call PKG_CONVESTRUCDET.getListaPorPk(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPkConvenio" parameterMap="parPorPKConvenio" resultMap="resConvenioDetalleComp">
+	{ call PKG_CONVESTRUCDET.getListaPorPkConvenio(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaConvDetPorEstructDet" parameterMap="parPorPKEstructDet" resultMap="resConvenioDetalleComp">
+	{ call PKG_CONVESTRUCDET.getListaConvDetPorEstructDet(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaConvDetPorPkEstructDet" parameterMap="parPorPKEstructuraDetalle" resultMap="resConvenioDetalle">
+	{ call PKG_CONVESTRUCDET.getListaConvDetPorPkEstructDet(?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

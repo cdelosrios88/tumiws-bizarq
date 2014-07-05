@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaBancariaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.core.domain.CuentaBancaria" alias="CuentaBancaria"/> 
+	
+  <resultMap id="resCuentaBancaria" class="CuentaBancaria" >
+     <result property="id.intIdPersona"      		column="pPERSONA_N" />
+     <result property="id.intIdCuentaBancaria"    	column="pCUENTABANCARIA_N" />
+     <result property="intBancoCod"      			column="pBANCO_N_COD" />
+     <result property="intTipoCuentaCod"   			column="pTIPOCUENTA_N_COD" />
+     <result property="strNroCuentaBancaria"   		column="pNROCUENTABANCARIA_V" />
+     <result property="intMonedaCod"      			column="pMONEDA_N_COD" />
+     <result property="intDepositaCts"    			column="pDEPOSITA_CTS_N" />
+     <result property="intMarcaAbono"      			column="pMARCAABONOS_N" />
+     <result property="intMarcaCargo"   			column="pMARCACARGOS_N" />
+     <result property="strObservacion"   			column="pOBSERVACION_V" />
+     <result property="intEstadoCod"   				column="pESTADO_N_COD" />
+     <result property="strCodigoInterbancario"   	column="pCODINTERBANCO_N" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaBancaria" class="CuentaBancaria">
+     <parameter property="id.intIdPersona"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>   
+     <parameter property="id.intIdCuentaBancaria" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intBancoCod" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoCuentaCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strNroCuentaBancaria"		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+	 <parameter property="intMonedaCod"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intDepositaCts" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intMarcaAbono" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intMarcaCargo" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strObservacion" 			jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strCodigoInterbancario" 	jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdCuentaBancaria" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorStrNro" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="strNroCuentaBancaria"		javaType="java.lang.String"		jdbcType="VARCHAR"  	mode="INOUT"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parCuentaBancaria">
+	{ call PKG_CUENTA.grabar(?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaBancaria" >
+	{ call PKG_CUENTA.modificar(?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resCuentaBancaria">
+	{ call PKG_CUENTA.getListaPorPK(?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona" resultMap="resCuentaBancaria">
+	{ call PKG_CUENTA.getListaPorIdPersona(?,?) }  
+  </procedure>
+  
+    <procedure id="getListaPorStrNro" parameterMap="parPorStrNro" resultMap="resCuentaBancaria">
+	{ call PKG_CUENTA.getListaPorStrNro(?,?) }  
+  </procedure>
+</sqlMap>  

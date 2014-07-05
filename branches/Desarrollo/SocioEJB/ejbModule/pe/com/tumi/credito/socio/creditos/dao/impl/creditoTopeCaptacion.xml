@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoTopeCaptacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.CreditoTopeCaptacion" alias="CreditoTopeCaptacion"/> 
+	
+  <resultMap id="resCreditoTopeCaptacion" class="CreditoTopeCaptacion" >
+     <result property="id.intPersEmpresaPk"      	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"	column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      		column="pITEMCREDITO_N" />
+     <result property="id.intParaTipoMinMaxCod"     column="pTIPOMINMAX_N" />
+     <result property="id.intParaTipoCaptacion"    	column="pTIPOCAPTACION_N" />
+     <result property="intValor"     				column="pVALOR_N" />
+  </resultMap>
+  
+  <parameterMap id="parCreditoTopeCaptacion" class="CreditoTopeCaptacion">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intParaTipoMinMaxCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoCaptacion" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intValor" 					javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoMinMaxCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCaptacion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKTipoMinMax" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoMinMaxCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parDelete" class="java.util.Map">
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoMinMaxCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCaptacion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCreditoTopeCaptacion">
+	{ call PKG_CONFCRETOPECAPTACION.grabar(?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCreditoTopeCaptacion" >
+	{ call PKG_CONFCRETOPECAPTACION.modificar(?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCreditoTopeCaptacion">
+	{ call PKG_CONFCRETOPECAPTACION.getListaPorPK(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaTipoMinMaxPorPk" parameterMap="parPorPKTipoMinMax" resultMap="resCreditoTopeCaptacion">
+	{ call PKG_CONFCRETOPECAPTACION.getListaTipoMinMaxPorPk(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkCredito" parameterMap="parPorPKCredito" resultMap="resCreditoTopeCaptacion">
+	{ call PKG_CONFCRETOPECAPTACION.getListaPorPkCredito(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="deletePorPk" parameterMap="parDelete">
+		{ call PKG_CONFCRETOPECAPTACION.deletePorPk(?,?,?,?,?)}
+  </procedure>
+</sqlMap>

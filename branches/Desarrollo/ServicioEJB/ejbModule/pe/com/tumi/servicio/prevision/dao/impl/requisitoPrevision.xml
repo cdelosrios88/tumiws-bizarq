@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RequisitoPrevisionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.prevision.domain.RequisitoPrevision" alias="RequisitoPrevision"/> 
+  
+  <resultMap id="resRequisitoPrevision" 			class="RequisitoPrevision" >
+  	 <result property="id.intPersEmpresaPrevision" 	column="pPersEmpresaPrevision"/>
+  	 <result property="id.intCuentaPk"  			column="pCuentaPk"/>
+  	 <result property="id.intItemExpediente"  		column="pItemExpediente"/>
+  	 <result property="id.intItemRequisito"  		column="pItemRequisito"/>
+  	 <result property="intPersEmpresaPk"  			column="pPersEmpresaPk"/>
+     <result property="intItemReqAut"  				column="pItemReqAut"/>
+     <result property="intItemReqAutEstDetalle" 	column="pItemReqAutEstDetalle"/>
+     <result property="intParaTipoArchivo"  		column="pParaTipoArchivo"/>
+     <result property="intParaItemArchivo" 			column="pParaItemArchivo"/>
+     <result property="intParaItemHistorico"  		column="pParaItemHistorico"/>
+     <result property="intParaEstado"     			column="pParaEstado" />
+     <result property="tsFechaRequisito"   			column="pPFechaRequisito" />
+     <result property="intPersonaBeneficiarioId"   	column="pPersonaBeneficiarioId" />
+  </resultMap>
+  
+  <parameterMap id="parRequisitoPrevision" 				class="RequisitoPrevision">
+     <parameter property="id.intPersEmpresaPrevision"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuentaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemRequisito"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersEmpresaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intItemReqAut"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intItemReqAutEstDetalle" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoArchivo" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaItemArchivo" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaItemHistorico" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstado" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRequisito" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersonaBeneficiarioId" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPk" 							class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPrevision" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemRequisito" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+	
+  <parameterMap id="parPorExpediente" 					class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPrevision" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPkExpedientePrevisionYRequisitoDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetalle" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaBeneficiario" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>  
+    	
+  <procedure id="grabar" parameterMap="parRequisitoPrevision">
+	{ call PKG_REQUISITOPREVISION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parRequisitoPrevision" >
+	{ call PKG_REQUISITOPREVISION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resRequisitoPrevision">
+	{ call PKG_REQUISITOPREVISION.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resRequisitoPrevision">
+	{ call PKG_REQUISITOPREVISION.getListaPorExpediente(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkExpedientePrevisionYRequisitoDetalle" parameterMap="parPorPkExpedientePrevisionYRequisitoDetalle" resultMap="resRequisitoPrevision">
+	{ call PKG_REQUISITOPREVISION.getPorExpPrevYReqAutDetalle(?,?,?,?,?,?,?,?) }
+  </procedure>    
+</sqlMap>

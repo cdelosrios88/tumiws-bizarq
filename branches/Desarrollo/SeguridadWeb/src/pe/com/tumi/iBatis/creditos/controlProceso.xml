@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.creditos.domain.ControlProceso" alias="control"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.PerfilConvenio" alias="perfconv"/>
+    
+    <resultMap id="controlProceso.domain.controlProceso.resultControlProceso" class="control">
+	     <result property="inIdConvenio"  	column="CONV_IDCONVENIO_N"/>
+	     <result property="inIdAmpliacion"  column="ADEM_AMPLIACION_N"/>
+	     <result property="inIdEmpresa"  	column="EMPR_IDEMPRESA_N"/>
+	     <result property="inIdNivel"  		column="ESTR_NIVEL_N"/>
+	     <result property="inIdCodigo"  	column="ESTR_IDCODIGO_N"/>
+	     <result property="inIdCaso" 		column="ESDE_CASO_N"/>
+	     <result property="stTipoConvenio" 	column="V_TIPOCONVENIO"/>
+	     <result property="inIdPersona"  	column="PERS_IDPERSONA_N"/>
+	     <result property="stNombreEntidad" column="JURI_RAZONSOCIAL_V"/>
+	     <result property="inIdEstado"  	column="ADEM_IDESTADO_N"/>
+	     <result property="stEstConvenio"   column="V_ESTCONV"/>
+	     <result property="inIdSucursal"  	column="SUCU_IDSUCURSAL_N"/>
+	     <result property="stSucursal" 		column="V_SUCURSAL"/>
+    </resultMap>
+    
+    <resultMap id="controlProceso.domain.controlProceso.resultPerfilConvenio" class="perfconv" >
+	     <result property="inIdValidacion"  column="PEVA_IDVALIDACION_N"/>
+	     <result property="stDescripcion"  	column="V_DESCRIPCION"/>
+	     <result property="stObservacion"  	column="V_OBSERVACION"/>
+	     <result property="inValorPerfDet"  column="APDE_VALOR_N"/>
+    </resultMap>
+    
+    <parameterMap id="prmtListaControlProceso" class="java.util.Map">
+    	 <parameter property="pIntIdAmpliacion"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdSucursal"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEstado"			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrEntidad"			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPerfilConvenio" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdAmpliacion"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil"			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="controlProceso.domain.controlProceso.mapadendaperfil" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdAmpliacion"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdPerfil"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdValidacion"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdValorPefDet"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pStrObservacion"		jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarAdendaPerfil" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdAmpliacion" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtAprobarRechazarAdenda" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdAmpliacion"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdPerfil"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pStrObservacion"	 	jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+		 <parameter property="pIntIdEstado"		 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="controlProceso.domain.controlProceso.getListaControlProceso" parameterMap="prmtListaControlProceso" resultMap="controlProceso.domain.controlProceso.resultControlProceso">
+		{ call PKG_CREDITOS.listar_controlproceso( ?, ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="controlProceso.domain.controlProceso.getListaPerfilConvenio" parameterMap="prmtListaPerfilConvenio" resultMap="controlProceso.domain.controlProceso.resultPerfilConvenio">
+		{ call PKG_CREDITOS.listar_perfilconvenio( ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="controlProceso.domain.controlProceso.grabarAdendaPerfilDet" parameterMap="controlProceso.domain.controlProceso.mapadendaperfil" >
+		{ call PKG_CREDITOS.insert_adendaperfildet( ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="controlProceso.domain.controlProceso.eliminarAdendaPerfil" parameterMap="prmtEliminarAdendaPerfil" >
+		{ call PKG_CREDITOS.eliminar_adendaperfildet( ?, ?, ?, ? ) }
+	</procedure>
+	
+	<procedure id="controlProceso.domain.controlProceso.aprobarRechazarConv" parameterMap="prmtAprobarRechazarAdenda" >
+		{ call PKG_CREDITOS.aprobarrechazar_convenio( ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+</sqlMap>

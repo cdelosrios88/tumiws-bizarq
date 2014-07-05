@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="421" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="88cf839b-c2c6-4510-9140-cfd75e0927b8">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="strAnioActual" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="strFecEmision" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="strSucursal" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="intSumatoriaProyectado" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="intSumatoriaEjecutado" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="intSumatoriaDiferencia" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="intSumatoriaAltas" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="intSumatoriaTotal" class="java.lang.Integer" isForPrompting="false"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="strFmtPeriodo" class="java.lang.String"/>
+	<field name="intCantProyectadas" class="java.lang.Integer"/>
+	<field name="intCantEjecutadas" class="java.lang.Integer"/>
+	<field name="intDiferencia" class="java.lang.Integer"/>
+	<field name="intCantCondAltas" class="java.lang.Integer"/>
+	<field name="intTotalCaptaciones" class="java.lang.Integer"/>
+	<group name="Cuerpo">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="17">
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="2b968d5c-312e-4f0c-93bc-0b0f9eed962d" x="195" y="2" width="50" height="13"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{intSumatoriaEjecutado}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="3b308865-8224-4a32-9b40-dfea875d11f0" x="430" y="2" width="50" height="13"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{intSumatoriaTotal}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="cee239fe-5eb3-4147-92ce-83f6122d6309" x="272" y="2" width="50" height="13"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{intSumatoriaDiferencia}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="c4f63253-cff4-4bf7-81bf-d87b94189396" x="117" y="2" width="50" height="13"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{intSumatoriaProyectado}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="b5ad8627-d036-42cd-9671-cf8837d1d18e" x="353" y="2" width="50" height="13"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{intSumatoriaAltas}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="dcc1e3cb-9f3c-40e4-940f-09ff1e77ad03" x="-6" y="0" width="567" height="1"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement uuid="eb941250-c6f0-47bf-bdbd-dec01f082086" x="16" y="2" width="67" height="13"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d1855a41-c37a-4c63-9f6a-b53499166149" x="204" y="0" width="164" height="18">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CAPTACIONES]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="8ac08d91-b922-47e0-8d8b-bb664c34bc3e" x="0" y="0" width="81" height="40"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR}+"tumi.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="0eedc8ad-caa1-4da1-b416-8ff6f86c189b" x="451" y="5" width="99" height="26">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strFecEmision}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="22ebdf60-5b24-4ce8-a96a-95d15f226ade" x="261" y="20" width="50" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strAnioActual}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="db961a87-64e5-49d1-8b6c-19cf9a4c6495" x="2" y="3" width="47" height="13">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="448a021a-754c-4a5c-9094-8eb29d567fe1" x="52" y="3" width="2" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f71c38b2-0d49-4834-8ea9-83cf13baaa74" x="56" y="3" width="130" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strSucursal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2620aae5-8a65-4aa7-808d-eb6f84fd1247" x="198" y="34" width="62" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ejecutado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9dc2a949-782a-497a-8095-9ac06108e808" x="372" y="21" width="116" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cambio de Condición]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7ed4c8cf-b95c-46d9-a7f2-5e3bb329e30c" x="450" y="34" width="39" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="dcc1e3cb-9f3c-40e4-940f-09ff1e77ad03" x="-7" y="18" width="567" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="f30536fb-f826-44e9-9fd6-e120be0a4504" x="380" y="34" width="28" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Altas]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="dcc1e3cb-9f3c-40e4-940f-09ff1e77ad03" x="-7" y="47" width="567" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="8b7fb3b1-8c56-42eb-8d67-a773aca5040d" x="121" y="34" width="59" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proyectado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e0ee41ec-dcd0-4126-975b-08093d55f492" x="279" y="34" width="56" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diferencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d6496d4a-6cb8-4c98-9ce0-fb626af2be02" x="188" y="21" width="83" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Captaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eb941250-c6f0-47bf-bdbd-dec01f082086" x="15" y="27" width="67" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mes - Año]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement uuid="16e879cc-c3d1-4075-80fc-042b694de1c4" x="16" y="1" width="88" height="13"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strFmtPeriodo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c4f63253-cff4-4bf7-81bf-d87b94189396" x="117" y="1" width="50" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{intCantProyectadas}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2b968d5c-312e-4f0c-93bc-0b0f9eed962d" x="195" y="1" width="50" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{intCantEjecutadas}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cee239fe-5eb3-4147-92ce-83f6122d6309" x="272" y="1" width="50" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{intDiferencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b5ad8627-d036-42cd-9671-cf8837d1d18e" x="353" y="1" width="50" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{intCantCondAltas}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3b308865-8224-4a32-9b40-dfea875d11f0" x="430" y="1" width="50" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{intTotalCaptaciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="24" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.banco.domain.Acceso" alias="Acceso"/> 
+	
+  <resultMap id="resAcceso" class="Acceso" >
+	<result property="id.intPersEmpresaAcceso"  column="pPers_empresaacceso" />
+	<result property="id.intItemAcceso"   		column="pTeso_itemacceso" />
+	<result property="intPersEmpresaSucursal"   column="pPers_empresasucursal" />
+    <result property="intSucuIdSucursal"      	column="pSucu_idsucursal" />
+    <result property="intSudeIdSubsucursal"     column="pSude_idsubsucursal" />
+    <result property="intParaEstado"      		column="pPara_estado" />
+    <result property="strObservacion"      		column="pAcce_observacion" />
+  </resultMap>
+  
+  <parameterMap id="parAcceso" class="Acceso">
+	 <parameter property="id.intPersEmpresaAcceso"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemAcceso"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaSucursal"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaEstado"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="strObservacion"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intItemAcceso"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaSucursal"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstado"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parAcceso">
+	{ call PKG_ACCESO.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAcceso" >
+	{ call PKG_ACCESO.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAcceso">
+	{ call PKG_ACCESO.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resAcceso">
+	{ call PKG_ACCESO.getListaPorBusqueda(?,?,?,?,?,?) }
+  </procedure>
+</sqlMap>

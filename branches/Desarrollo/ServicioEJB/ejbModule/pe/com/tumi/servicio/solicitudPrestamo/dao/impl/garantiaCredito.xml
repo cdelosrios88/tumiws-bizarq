@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GarantiaCreditoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.solicitudPrestamo.domain.GarantiaCredito" alias="GarantiaCredito"/> 
+	
+  <resultMap id="resGarantiaCredito" class="GarantiaCredito" >
+  	 <result property="id.intPersEmpresaPk"  		column="pPERS_EMPRESA_N_PK" />
+  	 <result property="id.intCuentaPk"  			column="pCSOC_CUENTA_N_PK" />
+  	 <result property="id.intItemExpediente"  		column="pCSER_ITEMEXPEDIENTE_N" />
+  	 <result property="id.intItemDetExpediente"  	column="pCSER_ITEMDETEXPEDIENTE_N" />
+     <result property="id.intItemGarantia"  		column="pCSER_ITEMGARANTIA_N" />
+     <result property="intParaTipoGarantiaCod"  	column="pPARA_TIPOGARANTIA_N_COD" />
+     <result property="intItemCreditoGarantia"      column="pCSOC_ITEMCREDITOGARANTIA_N" />
+     <result property="intPersEmpresaGarantePk"    	column="pPERS_EMPRESAGARANTE_N_PK" />
+     <result property="intPersCuentaGarantePk"    	column="pCSOC_CUENTAGARANTE_N_PK" />
+     <result property="intPersPersonaGarantePk"  	column="pPERS_PERSONAGARANTE_N_PK" />
+     <result property="intIdGaranteSucursalPk"      column="pSUCU_IDGARSUCURSAL_N_PK" />
+     <result property="intIdGaranteSubSucursalPk"   column="pSUDE_IDGARSUBSUCRSAL_N_PK" />
+     <result property="intParaEstadoCod"  			column="pPARA_ESTADO_N_COD" />
+     <result property="tsFechaRegistro"  			column="pGACR_FECHAREGISTRO_D" />
+     <result property="intPersPersonaUsuarioPk"  	column="pPERS_PERSONAUSUARIO_N_PK" />
+     <result property="tsFechaEliminacion"  		column="pGACR_FECHAELIMINACION_D" />
+     <result property="intPersPersonaEliminaPk"  	column="pPERS_PERSONAELIMINAR_N_PK" />
+  </resultMap>
+  
+  <resultMap id="resEscalarPersonasGarantizadas" class="java.util.Map" >
+     <result property="intEscalar" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" column="pGARANTIZADOS" />
+  </resultMap>
+  
+  <parameterMap id="parGarantiaCredito" class="GarantiaCredito">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuentaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemDetExpediente"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemGarantia"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intParaTipoGarantiaCod"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intItemCreditoGarantia" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intPersEmpresaGarantePk" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersCuentaGarantePk" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaGarantePk" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdGaranteSucursalPk" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdGaranteSubSucursalPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro" 				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemGarantia" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkExpedienteCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersPersonaGarantePk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPersonaGarante" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	    javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersPersonaGarantePk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPersonaGaranteYCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaGarantePk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersPersonaGarantePk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersCuentaGarantePk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parGarantiaCredito">
+	{ call PKG_CSE_GARANTIACREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parGarantiaCredito" >
+	{ call PKG_CSE_GARANTIACREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resGarantiaCredito">
+	{ call PKG_CSE_GARANTIACREDITO.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorExpedienteCredito" parameterMap="parPorPkExpedienteCredito" resultMap="resGarantiaCredito">
+	{ call PKG_CSE_GARANTIACREDITO.getListaPorExpedienteCredito(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getCantidadGarantizadosPorPkPersona" parameterMap="parPorPersona"  resultMap="resEscalarPersonasGarantizadas">
+	{ call PKG_CSE_GARANTIACREDITO.getCntGarantizadasPorPkPersona(?,?) }
+  </procedure>
+  
+  <procedure id="getListaGarantiasPorPkPersona" parameterMap="parPorPersonaGarante"  resultMap="resGarantiaCredito">
+	{ call PKG_CSE_GARANTIACREDITO.getListaGarantiasPorPkPersona(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaGarantiasPorEmpPersCta" parameterMap="parPorPersonaGaranteYCuenta"  resultMap="resGarantiaCredito">
+	{ call PKG_CSE_GARANTIACREDITO.getListaGarantiasPorEmpPersCta(?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

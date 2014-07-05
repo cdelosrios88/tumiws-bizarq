@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConciliacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.Conciliacion" alias="Conciliacion"/> 
+	
+  <resultMap id="resConciliacion" class="Conciliacion" >
+	<result property="id.intPersEmpresa"  			column="pempresaconciliacion" />
+	<result property="id.intItemConciliacion"   	column="pitemconciliacion" />
+	<result property="id.tsFechaConciliacion"      	column="pfechaconciliacion" />
+    <result property="intPersEmpresa"     			column="pempresa" />
+    <result property="intItemBancoFondo" 			column="pitembancofondo" />
+    <result property="intItemBancoCuenta"   		column="pitembancocuenta" />
+    <result property="bdMontoSaldoInicial"    		column="pmontosaldoinicial" />
+    <result property="bdMontoDebe"    				column="pmontodebe" />
+    <result property="bdMontoHaber"      			column="pmontohaber" />
+    <result property="intRegistrosConciliados"      column="pregistrosconciliados" />
+    <result property="intRegistrosNoConciliados"    column="pregistrosnoconciliados" />
+    <result property="intPersEmpresaConcilia"      	column="pempresaconci" />
+    <result property="intPersPersonaConcilia"   	column="ppersonaconci" />
+    <result property="intPersEmpresaAnula"      	column="pempresaconcianula" />
+    <result property="intPersPersonaAnula"      	column="ppersonaconcianula" />
+    <result property="tsFechaAnula"      			column="pfechaanula" />
+    <result property="strObservaciónAnula"     		column="pobservacionanula" />
+    <result property="intParaEstado"     			column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parConciliacion" class="Conciliacion">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemConciliacion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>	 
+	 <parameter property="tsFechaConciliacion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSaldoInicial"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoDebe"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoHaber"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intRegistrosConciliados"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intRegistrosNoConciliados"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaConcilia"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaConcilia"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="strObservaciónAnula"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemConciliacion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>		
+  </parameterMap>
+
+    
+  <procedure id="grabar" parameterMap="parConciliacion">
+	{ call PKG_CONCILIACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConciliacion" >
+	{ call PKG_CONCILIACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacion">
+	{ call PKG_CONCILIACION.getListaPorPk(?,?,?) }
+  </procedure>
+
+</sqlMap>

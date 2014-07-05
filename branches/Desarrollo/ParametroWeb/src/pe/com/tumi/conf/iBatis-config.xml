@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+	<sqlMap resource="pe/com/tumi/parametro/tabla/dao/impl/tabla.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/general/dao/impl/ubigeo.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/general/dao/impl/archivo.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/general/dao/impl/tipoArchivo.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/general/dao/impl/tipoCambio.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/general/dao/impl/tarifa.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/auditoria/dao/impl/Auditoria.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/auditoria/dao/impl/AuditoriaMotivo.xml"/>
+	<sqlMap resource="pe/com/tumi/parametro/general/dao/impl/detraccion.xml"/>
+</sqlMapConfig>

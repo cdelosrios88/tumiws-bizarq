@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CtaCteCondicionDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.ctacte.domain.CtaCteCondicion"
+		alias="CtaCteCondicion" />
+
+	<resultMap id="resCtaCteCondicion" class="CtaCteCondicion">
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCtacteCod" column="pPARA_TIPOCTACTE_N_COD" />
+		<result property="id.intItemCtacte" column="pITEMCTACTE_N" />
+		<result property="id.intParaCondicionSocioCod" column="pPARA_CONDICIONSOCIO_N_COD" />
+		<result property="intValor" column="pVALOR_N" />
+	</resultMap>
+
+	<parameterMap id="parCtaCteCondicion" class="CtaCteCondicion">
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaCondicionSocioCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intValor" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaCondicionSocioCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parCtaCteCondicion">
+		{ call PKG_CTACTECONDICION.grabar(?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parCtaCteCondicion">
+		{ call PKG_CTACTECONDICION.modificar(?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resCtaCteCondicion">
+		{ call PKG_CTACTECONDICION.getListaPorPk(?,?,?,?,?) }  
+  </procedure>
+
+</sqlMap>  

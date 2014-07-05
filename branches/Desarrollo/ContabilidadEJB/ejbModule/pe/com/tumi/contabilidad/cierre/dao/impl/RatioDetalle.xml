@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RatioDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.RatioDetalle" alias="RatioDetalle"/> 
+	
+  <resultMap id="resRatioDetalle" class="RatioDetalle">
+	<result property="id.intPersEmpresaRatio" 		column="pPers_empresaratio"/>
+	<result property="id.intContPeriodoRatio"   	column="pCont_periodoratio"/>
+	<result property="id.intCodigoRatio"   			column="pCont_codigoratio"/>
+	<result property="id.intItemRatio"   			column="pCont_itemratio"/>
+    <result property="intParte"      				column="pRade_parte"/>
+    <result property="intParteGrupo"    			column="pRade_partegrupo"/>
+    <result property="intPersEmpresaAnexo"    		column="pPers_empresaanexo"/>
+    <result property="intContPeriodoAnexo"    		column="pCont_periodoanexo"/>
+    <result property="intParaTipoAnexo"    			column="pPara_tipoanexo"/>
+    <result property="intAndeItemAnexoDetalle"    	column="pCont_itemanexodet"/>
+    <result property="intParaOperacionInterno"    	column="pPara_operacioninterno"/>
+    <result property="intPersEmpresaAnexo2"    		column="pPers_empresaanexo2"/>
+    <result property="intContPeriodoAnexo2"    		column="pCont_periodoanexo2"/>
+    <result property="intParaTipoAnexo2"    		column="pPara_tipoanexo2"/>
+    <result property="intAndeItemAnexoDetalle2"		column="pCont_itemanexodet2"/>
+    <result property="intParaOperacionExterno"    	column="pPara_operacionexterno"/>
+  </resultMap>
+  
+  <parameterMap id="parRatioDetalle" class="RatioDetalle">
+	 <parameter property="id.intPersEmpresaRatio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoRatio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intCodigoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemRatio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParte"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParteGrupo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaAnexo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoAnexo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoAnexo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intAndeItemAnexoDetalle"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaOperacionInterno"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaAnexo2"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoAnexo2"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoAnexo2"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intAndeItemAnexoDetalle2"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaOperacionExterno"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoRatio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRatio"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>      
+  </parameterMap>
+
+  <parameterMap id="parPorRatio" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoRatio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>      
+  </parameterMap>
+     
+  <parameterMap id="parEliminar" class="java.util.Map">
+   	 <parameter property="intPersEmpresaRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoRatio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoRatio"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRatio"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>      
+  </parameterMap>
+  
+  <parameterMap id="parPorAnexoDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intItemAnexoDetalle"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  <procedure id="grabar" parameterMap="parRatioDetalle">
+	{ call PKG_RATIODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parRatioDetalle" >
+	{ call PKG_RATIODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resRatioDetalle">
+	{ call PKG_RATIODETALLE.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorRatio" parameterMap="parPorRatio" resultMap="resRatioDetalle">
+	{ call PKG_RATIODETALLE.getListaPorRatio(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parEliminar">
+	{ call PKG_RATIODETALLE.eliminar(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorAnexoDetalle" parameterMap="parPorAnexoDetalle" resultMap="resRatioDetalle">
+	{ call PKG_RATIODETALLE.getListaPorAnexoDetalle(?,?,?,?,?) }
+  </procedure>
+</sqlMap>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfServGrupoCtaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.configuracion.domain.ConfServGrupoCta" alias="ConfServGrupoCta"/> 
+	
+  <resultMap id="resConfServGrupoCta" class="ConfServGrupoCta" >
+     <result property="id.intPersEmpresaPk"      		column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    			column="pItemreqaut_n" />
+     <result property="id.intParaTipoCuentaCod"  		column="pPara_tipocuenta_n_cod" />
+     <result property="intParaSubTipoCtaCod"      		column="pPara_subtipocta_n_cod" />
+     <result property="intParaTipoConformacionCod"    	column="pPara_tipo_conformacion_n_cod" />
+     <result property="intParaTipoMonedaCod"  			column="pPara_tipo_moneda_n_cod" />
+     <result property="intValor"      					column="pValor_n" />
+  </resultMap>
+  
+  <parameterMap id="parConfServGrupoCta" class="ConfServGrupoCta">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemSolicitud"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intParaTipoCuentaCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaSubTipoCtaCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoConformacionCod" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoMonedaCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intValor" 					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCuentaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConfServGrupoCta">
+	{ call PKG_CONFGRUPOCTA.grabar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfServGrupoCta" >
+	{ call PKG_CONFGRUPOCTA.modificar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfServGrupoCta">
+	{ call PKG_CONFGRUPOCTA.getListaPorPk(?,?,?,?) }  
+  </procedure>    
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resConfServGrupoCta">
+	{ call PKG_CONFGRUPOCTA.getListaPorCabecera(?,?,?) }  
+  </procedure>
+</sqlMap>  

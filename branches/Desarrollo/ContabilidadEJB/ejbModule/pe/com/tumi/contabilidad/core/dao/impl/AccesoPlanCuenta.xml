@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoPlanCuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.AccesoPlanCuenta" alias="AccesoPlanCuenta"/> 
+	
+  <resultMap id="resAccesoPlanCuenta" class="AccesoPlanCuenta" >
+	<result property="id.intEmpresaCuenta"  			column="pempresacuenta" />
+	<result property="id.intPeriodoCuenta"   			column="pperiodocuenta" />
+	<result property="id.strNumeroCuenta"   			column="pnumerocuenta" />
+	<result property="id.intIdTransaccion"   			column="pidtransaccion" />
+	<result property="id.intItemAccesoPlanCuenta"   	column="pitemconaccplacu" />
+	<result property="intPersEmpresa"   				column="pempresa" />
+	<result property="intSucuIdSucursal"   				column="pidsucursal" />
+	<result property="intSudeIdSubsucursal"   			column="pidsubsucursal" />
+	<result property="intIdPerfil"   					column="pidperfil" />
+	<result property="intParaEstado"   					column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parAccesoPlanCuenta" class="AccesoPlanCuenta">
+	 <parameter property="id.intEmpresaCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPeriodoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.strNumeroCuenta"			javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="id.intIdTransaccion"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAccesoPlanCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdPerfil"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intEmpresaCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strNumeroCuenta"				javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="intIdTransaccion"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAccesoPlanCuenta"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPlanCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intEmpresaCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strNumeroCuenta"				javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="intIdTransaccion"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  
+  <procedure id="grabar" parameterMap="parAccesoPlanCuenta">
+	{ call PKG_ACCESOPLACU.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAccesoPlanCuenta" >
+	{ call PKG_ACCESOPLACU.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAccesoPlanCuenta">
+	{ call PKG_ACCESOPLACU.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPlanCuenta" parameterMap="parPorPlanCuenta" resultMap="resAccesoPlanCuenta">
+	{ call PKG_ACCESOPLACU.getListaPorPlanCuenta(?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

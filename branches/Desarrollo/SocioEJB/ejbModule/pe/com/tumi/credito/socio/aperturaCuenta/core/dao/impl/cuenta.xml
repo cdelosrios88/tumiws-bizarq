@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.aperturaCuenta.core.domain.Cuenta" alias="Cuenta"/> 
+	
+  <resultMap id="resCuenta" class="Cuenta" >
+     <result property="id.intPersEmpresaPk"  			column="pPERS_EMPRESA_N" />
+     <result property="id.intCuenta"      				column="pCUENTA_N" />
+     <result property="strNombreCuenta"    				column="pNOMBRECUENTA_V" />
+     <result property="intIntegrantes"     				column="pINTEGRANTES_N" />
+     <result property="intParaTipoCuentaCod"   			column="pPARA_TIPOCUENTA_N_COD" />
+     <result property="intParaTipoConformacionCod"   	column="pPARA_TIPOCONFORMACION_N_COD" />
+     <result property="intParaSubTipoCuentaCod"   		column="pPARA_SUBTIPOCTA_N_COD" />
+     <result property="intParaTipoMonedaCod"   			column="pPARA_TIPOMONEDA_N_COD" />
+     <result property="intSecuenciaCuenta"   			column="pSECUENCIACUENTA_N" />
+     <result property="strNumeroCuenta"   				column="pNUMEROCUENTA_V" />
+     <result property="bdMontoPlanilla"   				column="pMONTOPLANILLA_N" />
+     <result property="intParaTipoFrecuenciaCod"   		column="pPARA_TIPOFRECUENCIA_N_COD" />
+     <result property="intParaTipoPeriodicidadCod"   	column="pPARA_PERIODICIDAD_N_COD" />
+     <result property="dtFechaInicioCobro"   			column="pFECHAINICIOCOBRO_D" />
+     <result property="intParaOpcionRenovacionCod"   	column="pPARA_OPCIONRENOVACION_N_COD" />
+     <result property="intParaSituacionCuentaCod"   	column="pPARASITUACIONCUENTA_N_COD" />
+     <result property="intParaCondicionCuentaCod"   	column="pPARACONDICIONCUENTA_N_COD" />
+     <result property="intParaSubCondicionCuentaCod"   	column="pPARA_SUBCONDICIONCUENTA_N_COD" />
+     <result property="intIdUsuSucursal"   				column="pSUCU_IDUSUSUCURSAL_N" />
+     <result property="intIdUsuSubSucursal"   			column="pSUDE_IDUSUSUBSUCURSAL_N" />
+     <result property="intPersonaUsuSucursal"   		column="pPERS_PERSONAUSUSUCURSAL_N" />
+     <result property="tsFecRegUsuSucursal"   			column="pUSSU_FECREGUSUSUCURSAL" />
+     <result property="tsCuentFecRegistro"   			column="pCUEN_FECHAREGISTRO_D" />
+  </resultMap>
+  
+  <parameterMap id="parCuenta" class="Cuenta">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intCuenta"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="strNombreCuenta"				javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>    
+     <parameter property="intIntegrantes" 				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="intParaTipoCuentaCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaTipoConformacionCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaSubTipoCuentaCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaTipoMonedaCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intSecuenciaCuenta" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="strNumeroCuenta" 				javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="bdMontoPlanilla" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaTipoFrecuenciaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaTipoPeriodicidadCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="dtFechaInicioCobro" 			javaType="java.util.Date"		jdbcType="DATE"  	mode="INOUT"/>
+     <parameter property="intParaOpcionRenovacionCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaSituacionCuentaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaCondicionCuentaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaSubCondicionCuentaCod" javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intIdUsuSucursal" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intIdUsuSubSucursal" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intPersonaUsuSucursal" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="tsFecRegUsuSucursal" 			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"  mode="INOUT"/>
+     <parameter property="tsCuentFecRegistro" 			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCuentaYSituacion" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaSituacionCuentaCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parNroCuentaYSecuencia" class="Cuenta">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intCuenta"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaTipoCuentaCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaSubTipoCuentaCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaTipoMonedaCod" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intIdPersona" 				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCuenta">
+	{ call PKG_CUENTA.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuenta" >
+	{ call PKG_CUENTA.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCuenta">
+	{ call PKG_CUENTA.getListaPorPk(?,?,?) }
+  </procedure>
+  
+  <procedure id="updateNroCuentaYSecuencia" parameterMap="parNroCuentaYSecuencia" >
+	{ call PKG_CUENTA.updateNroCuentaYSecuencia(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkYSituacionCuenta" parameterMap="parPorCuentaYSituacion" resultMap="resCuenta">
+	{ call PKG_CUENTA.getListaPorSituacionCuenta(?,?,?,?) }
+  </procedure>
+  
+   <procedure id="getListaCuentaPorPkTodoEstado" parameterMap="parPorPK" resultMap="resCuenta">
+	{ call PKG_CUENTA.getListaPorPkFull(?,?,?) }
+  </procedure>
+  
+</sqlMap>  

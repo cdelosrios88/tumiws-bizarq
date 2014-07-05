@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- SQL MapClient - iBatis -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="/WEB-INF/classes/pe/com/tumi/conf/iBatis-config.xml" /> 
+		<property name="dataSource"     ref="dataSource" />
+		<!--<property name="lobHandler"     ref="oracleLobHandler" />-->
+	</bean>
+
+	<!-- oracleLobHandler - iBatis
+	<bean id="oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler">
+        <property name="nativeJdbcExtractor" ref="simpleExtractor"/>
+    </bean>
+ 	-->
+    <!-- simpleExtractor - iBatis 
+    <bean id="simpleExtractor" class="org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor"/>
+	-->
+	<!--	 dataSource - JNDI - iBatis -->
+	 
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="jdbc/Movimiento"/>
+		<property name="lookupOnStartup" value="false"/>
+		<property name="cache" value="true"/>
+		<property name="proxyInterface" value="javax.sql.DataSource"/>
+	</bean>
+
+</beans>

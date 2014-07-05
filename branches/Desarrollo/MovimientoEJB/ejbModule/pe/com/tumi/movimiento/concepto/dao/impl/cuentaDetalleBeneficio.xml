@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaDetalleBeneficioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.CuentaDetalleBeneficio" alias="CuentaDetalleBeneficio"/> 
+
+  <resultMap id="resCuentaDetalleBeneficio" class="CuentaDetalleBeneficio" >
+     <result property="id.intPersEmpresaPk"     	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intCuentaPk"    			column="pCSOC_CUENTA_N_PK" />
+     <result property="id.intItemCuentaConcepto"    column="pCMOV_ITEMCUENTACONCEPTO_N" />
+     <result property="id.intItemBeneficio"    		column="pCMOV_ITEMBENEFICIO_N" />
+     <result property="intItemVinculo"      		column="pVINC_ITEMVINCULO_N" />
+     <result property="paraEstadoCod"      			column="pPARA_ESTADO_N_COD" />
+     <result property="persPersonausuarioPk"      	column="pPERS_PERSONAUSUARIO_N_PK" />
+     <result property="tsFecharegistro"      		column="pCDBE_FECHAREGISTRO_D" />
+     <result property="intPersPersonaEliminaPk"     column="pPERS_PERSONAELIMINA_N_PK" />
+     <result property="tsFechaEliminacion"      	column="pCDBE_FECHAELIMINACION_D" />
+     <result property="bdPorcentaje"      			column="pPORCENTAJE_N" />
+     <result property="intParaTipoConceptoCod"      column="pPARA_TIPOCONCEPTO_N_COD" />
+     <result property="intItemConcepto"      		column="pITEMCONCEPTO_N" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaDetalleBeneficio" class="CuentaDetalleBeneficio">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="id.intCuentaPk"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="id.intItemCuentaConcepto"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="id.intItemBeneficio"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intItemVinculo" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>  
+     <parameter property="paraEstadoCod" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="persPersonausuarioPk" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="tsFecharegistro" 			jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 		mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="tsFechaEliminacion" 		jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 		mode="INOUT"/>
+     <parameter property="bdPorcentaje" 			jdbcType="NUMERIC" 	 javaType="java.math.BigDecimal" 	mode="INOUT"/>
+     <parameter property="intParaTipoConceptoCod" 	jdbcType="NUMERIC" 	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intItemConcepto" 			jdbcType="NUMERIC" 	 javaType="java.lang.Integer" 		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemBeneficio"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  
+  <parameterMap id="parModificarPorBeneficiario" class="CuentaDetalleBeneficio">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="IN"/>
+	 <parameter property="id.intCuentaPk"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="IN"/>    
+     <parameter property="id.intItemCuentaConcepto"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="IN"/>
+     <parameter property="intItemVinculo" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 		mode="IN"/>  
+     <parameter property="bdPorcentaje" 			jdbcType="NUMERIC" 	 javaType="java.math.BigDecimal" 	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCuentaDetalleBeneficio">
+	{ call PKG_CUENTADETALLEBENEFICIO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaDetalleBeneficio" >
+	{ call PKG_CUENTADETALLEBENEFICIO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resCuentaDetalleBeneficio">
+	{ call PKG_CUENTADETALLEBENEFICIO.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPKConcepto" parameterMap="parPorPKConcepto" resultMap="resCuentaDetalleBeneficio">
+	{ call PKG_CUENTADETALLEBENEFICIO.getListaPorPkConcepto(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPKCuenta" parameterMap="parPorPKCuenta" resultMap="resCuentaDetalleBeneficio">
+	{ call PKG_CUENTADETALLEBENEFICIO.getListaPorPkCuenta(?,?,?) }
+  </procedure>
+  
+    <procedure id="modificarPorBeneficiario" parameterMap="parModificarPorBeneficiario" >
+	{ call PKG_CUENTADETALLEBENEFICIO.modificarPorBeneficiario(?,?,?,?,?)}
+  </procedure>
+  
+</sqlMap>

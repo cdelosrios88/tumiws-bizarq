@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuadroComparativoProveedorDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.CuadroComparativoProveedorDetalle" alias="CuadroComparativoProveedorDetalle"/> 
+	
+  <resultMap id="resCuadroComparativoProveedorDetalle" class="CuadroComparativoProveedorDetalle" >
+	<result property="id.intPersEmpresa"  			column="pempresacuadcomp" />
+	<result property="id.intItemCuadroComparativo"  column="pitemcuadcomp" />
+	<result property="id.intItemCuadroComparativoProveedor" 		column="pitemcuadcompro" />
+	<result property="id.intItemCuadroComparativoProveedorDetalle" 	column="pitemcucoprde" />
+	<result property="strDetalle"   				column="pdetalle" />
+	<result property="strMarca"   					column="pmarca" />
+	<result property="bdCantidad"   				column="pcantidad" />
+	<result property="intParaTipoMoneda"  			column="pmoneda" />
+	<result property="bdPrecioUnitario"   			column="ppreciounitario" />
+	<result property="intParaEstado"   				column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parCuadroComparativoProveedorDetalle" class="CuadroComparativoProveedorDetalle">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCuadroComparativo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCuadroComparativoProveedor"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemCuadroComparativoProveedorDetalle"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="strDetalle"					javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strMarca"						javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdCantidad"					javaType="java.math.BigDecimal"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdPrecioUnitario"				javaType="java.math.BigDecimal"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 								javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"							javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativo"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativoProveedor"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativoProveedorDetalle"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorCuadroCompPro" class="java.util.Map">
+   	 <parameter property="cursorLista" 								javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"							javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativo"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCuadroComparativoProveedor"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+  
+  
+  <procedure id="grabar" parameterMap="parCuadroComparativoProveedorDetalle">
+	{ call PKG_CUCOPRDE.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuadroComparativoProveedorDetalle" >
+	{ call PKG_CUCOPRDE.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCuadroComparativoProveedorDetalle">
+	{ call PKG_CUCOPRDE.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorCuadroCompPro" parameterMap="parPorCuadroCompPro" resultMap="resCuadroComparativoProveedorDetalle">
+	{ call PKG_CUCOPRDE.getListaPorCuadroCompPro(?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

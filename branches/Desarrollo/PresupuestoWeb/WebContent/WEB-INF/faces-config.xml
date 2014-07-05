@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<!-- Managed Beans de Principales -->
+	
+	<managed-bean>
+		<managed-bean-name>indicadoresDeGestionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.presupuesto.indicador.controller.IndicadoresDeGestionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>presupuestoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.presupuesto.core.controller.PresupuestoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Managed Beans de Popups -->
+	
+	<managed-bean>
+		<managed-bean-name>messageController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.mensaje.MessageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Navigation Rules --> 
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>inicio</from-outcome>
+			<to-view-id>/pages/index.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/indicadoresDeGestion/indicadoresDeGestion.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>indicadoresDeGestion.indicadoresDeGestion</from-outcome>
+			<to-view-id>/pages/indicadoresDeGestion/indicadoresDeGestion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/presupuesto/presupuesto.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>presupuesto.presupuesto</from-outcome>
+			<to-view-id>/pages/presupuesto/presupuesto.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!--Convertidor Montos -->
+	
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+</faces-config>

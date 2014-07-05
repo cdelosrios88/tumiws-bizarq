@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaMesCobroDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaMesCobro" alias="CuentaMesCobro"/> 
+	
+  <resultMap id="resCuentaMesCobro" class="CuentaMesCobro" >
+     <result property="id.intPersEmpresaPk"  	column="pPERS_EMPRESA_PK" />
+     <result property="id.intCuenta"      		column="pCUENTA_N" />
+     <result property="id.intParaMesCod"    	column="pPARA_MES_N_COD" />
+     <result property="intValor"   				column="pVALOR_N" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaMesCobro" class="CuentaMesCobro">
+     <parameter property="id.intPersEmpresaPk"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaMesCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="intValor" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaMesCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCuentaMesCobro">
+	{ call PKG_CUENTAMESCOBRO.grabar(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaMesCobro">
+	{ call PKG_CUENTAMESCOBRO.modificar(?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCuentaMesCobro">
+	{ call PKG_CUENTAMESCOBRO.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+</sqlMap>  
