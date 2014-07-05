@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="BancocuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.banco.domain.Bancocuenta" alias="Bancocuenta"/> 
+	
+  <resultMap id="resBancocuenta" class="Bancocuenta" >
+	<result property="id.intEmpresaPk"   		column="pPERS_EMPRESA_N_PK" />
+	<result property="id.intItembancocuenta"   	column="pTESO_ITEMBANCOCUENTA_N" />
+	<result property="id.intItembancofondo"   	column="pTESO_ITEMBANCOFONDO_N" />
+    <result property="strNombrecuenta"      	column="pBACU_NOMBRECUENTA_V" />
+    <result property="intPersona"      			column="pPERS_PERSONA_N" />
+    <result property="intCuentabancaria"      	column="pPERS_CUENTABANCARIA_N" />
+    <result property="intEmpresacuentaPk"      	column="pPERS_EMPRESACUENTA_N_PK" />
+    <result property="intPeriodocuenta"      	column="pCONT_PERIODOCUENTA_N" />
+    <result property="strNumerocuenta"      	column="pCONT_NUMEROCUENTA_V" />
+    <result property="bdMontosobregiro"      	column="pBACU_MONTOSOBREGIRO_N" />
+  </resultMap>
+  
+  <parameterMap id="parBancocuenta" class="Bancocuenta">
+	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItembancocuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItembancofondo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strNombrecuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intPersona"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intCuentabancaria"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEmpresacuentaPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intPeriodocuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strNumerocuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="bdMontosobregiro"			javaType="java.math.BigDecimal" jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancocuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancofondo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBancoFondo" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancofondo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPlanCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intEmpresacuentaPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+     <parameter property="intPeriodocuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+     <parameter property="strNumerocuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="IN"/>
+  </parameterMap>
+  
+  
+  <procedure id="grabar" parameterMap="parBancocuenta">
+	{ call PKG_BANCOCUENTA.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parBancocuenta" >
+	{ call PKG_BANCOCUENTA.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resBancocuenta">
+	{ call PKG_BANCOCUENTA.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBancoFondo" parameterMap="parPorBancoFondo" resultMap="resBancocuenta">
+	{ call PKG_BANCOCUENTA.getListaPorBancoFondo(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPlanCuenta" parameterMap="parPorPlanCuenta" resultMap="resBancocuenta">
+	{ call PKG_BANCOCUENTA.getListaPorPlanCuenta(?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

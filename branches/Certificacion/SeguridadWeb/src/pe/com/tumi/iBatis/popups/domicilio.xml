@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.popup.domain.Domicilio" alias="domicilio"/>
+    
+    <resultMap id="domicilio.domain.domicilio.resultDomicilio" class="domicilio">
+	     <result property="intIdPersona"  		column="PERS_IDPERSONA_N"/>
+	     <result property="intIdDireccion" 		column="DOMI_IDDOMICILIO_N"/>
+	     <result property="strDireccion"  		column="V_DIRECCION"/>
+	     <result property="intIdTipoDomicilio"  column="DOMI_IDTIPODOMICILIO_N"/>
+	     <result property="intIdTipoDireccion"  column="DOMI_TIPODIRECCION_N"/>
+	     <result property="intIdTipoVivienda"  	column="DOMI_TIPOVIVIENDA_N"/>
+	     <result property="intIdTipoVia"  		column="DOMI_IDTIPOVIA_N"/>
+	     <result property="strNombreVia"  		column="DOMI_NOMBREVIA_C"/>
+	     <result property="intNroVia"  			column="DOMI_NUMEROVIA_N"/>
+	     <result property="intInterior"  		column="DOMI_INTERIOR_N"/>
+	     <result property="intIdTipoZona"  		column="DOMI_IDTIPOZONA_N"/>
+	     <result property="strNombreZona"  		column="DOMI_NOMBREZONA_C"/>
+	     <result property="strReferencia"  		column="DOMI_REFERENCIA_C"/>
+	     <result property="intFgCorrespondencia" column="DOMI_ENVIACORRESPONDENCIA_C"/>
+	     <result property="intIdEstado"  		column="DOMI_IDESTADO_C"/>
+	     <result property="strObservacion"  	column="DOMI_OBSERVACION_C"/>
+    </resultMap>
+    
+    <parameterMap id="prmtListaDomicilio" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdDomicilio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="domicilio.domain.domicilio.mapdomicilio" class="domicilio">
+		 <parameter property="intIdPersona" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="intIdDireccion" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="INOUT"/>
+		 <parameter property="intIdTipoDomicilio" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="intIdTipoDireccion" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="intIdTipoVivienda" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="intIdTipoVia" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="strNombreVia" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="intNroVia" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intInterior" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intIdTipoZona" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="strNombreZona" 		jdbcType="NUMERIC" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="strReferencia" 		jdbcType="NUMERIC" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="intIdDepartamento" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intIdProvincia" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intIdDistrito" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intFgCroquis" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intFgCorrespondencia" jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="strObservacion" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="domicilio.domain.domicilio.getListaDomicilio" parameterMap="prmtListaDomicilio" resultMap="domicilio.domain.domicilio.resultDomicilio">
+		{ call PKG_TUMI.listar_direccion( ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="domicilio.domain.domicilio.grabarDomicilio" parameterMap="domicilio.domain.domicilio.mapdomicilio" >
+		{ call PKG_TUMI.insert_domicilio(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+</sqlMap>

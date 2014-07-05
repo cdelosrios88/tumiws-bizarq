@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LibroLegalizacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.legalizacion.domain.LibroLegalizacion" alias="LibroLegalizacion"/> 
+	
+  <resultMap id="resLibroLegalizacion" class="LibroLegalizacion">
+	<result property="id.intPersEmpresa" 			column="pPers_empresa"/>
+	<result property="id.intParaLibroContable"   	column="pPara_librocontable"/>
+	<result property="id.intItemLibroLegalizacion"  column="pCont_itemlibrolegalizacion"/>
+	<result property="intPersEmpresaLegal"   		column="pPers_empresalegal"/>
+    <result property="intPersPersona"      			column="pPers_persona"/>
+    <result property="dtFechaLegalizacion"    		column="pLile_fechalegalizacion"/>
+    <result property="intNroCertificado"    		column="pLile_nrocertificado"/>
+    <result property="intFolioInicio"    			column="pLile_folioinicio"/>
+    <result property="intFolioFin"    				column="pLile_foliofin"/>
+    <result property="intParaTipo"    				column="pPara_tipo"/>
+    <result property="intItemArchivo"    			column="pMae_itemarchivo"/>
+    <result property="intItemHistorico"    			column="pMae_itemhistorico"/>
+  </resultMap>
+  
+  <parameterMap id="parLibroLegalizacion" class="LibroLegalizacion">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemLibroLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaLegal"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersPersona"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="dtFechaLegalizacion"			javaType="java.util.Date" 		jdbcType="DATE"			mode="INOUT"/>
+     <parameter property="intNroCertificado"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intFolioInicio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intFolioFin"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipo"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intItemArchivo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intItemArchivo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemLibroLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	      
+  </parameterMap>
+
+  <parameterMap id="parPorPersona" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>   
+   	<parameter property="intPersPersona"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+     
+  <procedure id="grabar" parameterMap="parLibroLegalizacion">
+	{ call PKG_LIBROLEGALIZACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parLibroLegalizacion" >
+	{ call PKG_LIBROLEGALIZACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroLegalizacion">
+	{ call PKG_LIBROLEGALIZACION.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorPersona" parameterMap="parPorPersona" resultMap="resLibroLegalizacion">
+	{ call PKG_LIBROLEGALIZACION.getListaPorPersona(?,?,?) }
+  </procedure>
+</sqlMap>

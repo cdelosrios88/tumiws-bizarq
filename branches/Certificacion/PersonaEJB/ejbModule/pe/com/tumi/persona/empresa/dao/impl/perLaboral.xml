@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PerLaboralDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.empresa.domain.PerLaboral" alias="PerLaboral"/> 
+	
+  <resultMap id="resPerLaboral" class="PerLaboral" >
+     <result property="id.intIdPersona"    			column="pPersona_n" />
+     <result property="id.intItemLaboral"    		column="pItemlaboral_n" />
+     <result property="strCentroTrabajo"    		column="pCentrotrabajo_v" />
+     <result property="intCargo"   					column="pCargo_n_cod" />
+     <result property="intCondicionLaboral"   		column="pCondicionlaboral_n_cod" />
+     <result property="intCondicionLaboralDet" 		column="pCondicionlaboraldet_n_cod" />
+     <result property="intTipoContrato"   			column="pTipocontrato_n_cod" />
+     <result property="dtInicioContrato"   			column="pContratodesde_d" />
+     <result property="dtFinContrato"   			column="pContratohasta_d" />
+     <result property="intTipoArchivoContrato"   	column="pTipoarchivocontrato_n_cod" />
+     <result property="intItemArchivoContrato"   	column="pItemarchivocontrato_n" />
+     <result property="intItemHistoricoContrato"   	column="pItemhistoricocontrato_n" />
+     <result property="dtInicioServicio"   			column="pInicioservicio_d" />
+     <result property="bdRemuneracion"   			column="pRemuneracion_n" />
+     <result property="intRegimenLaboral"   		column="pRegimenlaboral_n_cod" />
+     <result property="strSolicitudONP"   			column="pSolicitudonp_v" />
+  </resultMap>
+  
+  <parameterMap id="parPerLaboral" class="PerLaboral">
+     <parameter property="id.intIdPersona"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemLaboral"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strCentroTrabajo" 		jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="intCargo" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCondicionLaboral" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCondicionLaboralDet" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoContrato" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtInicioContrato" 		jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="dtFinContrato" 			jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intTipoArchivoContrato" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemArchivoContrato" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemHistoricoContrato" jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtInicioServicio" 		jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="bdRemuneracion" 			jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="intRegimenLaboral" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strSolicitudONP" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"   mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+   	 <parameter property="intItemLaboral" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	  mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parPerLaboral">
+	{ call PKG_PERLABORAL.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPerLaboral" >
+	{ call PKG_PERLABORAL.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resPerLaboral">
+	{ call PKG_PERLABORAL.getListaPorPK(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona" resultMap="resPerLaboral">
+	{ call PKG_PERLABORAL.getListaPorIdPersona(?,?) }  
+  </procedure>
+    
+</sqlMap>  

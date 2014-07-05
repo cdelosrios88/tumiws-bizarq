@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EfectuadoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.Efectuado" alias="Efectuado"/> 
+	
+  <resultMap id="resEfectuado" class="Efectuado" >
+	<result property="id.intEmpresacuentaPk"   						column="pPers_empresacuenta_n_pk" />
+	<result property="id.intItemefectuado"   						column="pCcob_itemefectuado_n" />
+	<result property="tsFechaProceso"      							column="pEfct_fechaproceso_d" />
+	<result property="intParaTipoIngresoDatoCod"      				column="pPara_tipoingresodato_n_cod" />
+	<result property="intCuentaPk"      							column="pCsoc_cuenta_n_pk" />
+	<result property="intPeriodoPlanilla"      						column="pEfec_periodoplanilla_n" />
+	<result property="bdMontoEfectuado"      						column="pEfec_montoefectuado_n" />
+	<result property="intTiposocioCod"      						column="pPara_tiposocio_n_cod" />
+	<result property="intModalidadCod"      						column="pPara_modalidad_n_cod" />
+	<result property="intNivel"      								column="pCsoc_nivel_n" />
+	<result property="intCodigo"      								column="pCsoc_codigo_n" />
+	<result property="intTipoestructuraCod"      					column="pPara_tipoestructura_n_cod" />
+	<result property="intEmpresasucprocesaPk"      					column="pPers_empresasucprocesa_n_pk" />
+	<result property="intIdsucursalprocesaPk"      					column="pSucu_idsucursalprocesa_n_pk" />
+    <result property="intIdsubsucursalprocesaPk"      				column="pSude_idsubsucursalproce_n_pk" />
+	<result property="intEmpresasucadministraPk"      				column="pPers_empresasucadminist_n_pk" />
+	<result property="intIdsucursaladministraPk"      				column="pSucu_idsucursaladminist_n_pk" />
+	<result property="intIdsubsucursaladministra"      				column="pSude_idsubsucursaladminist_n" />
+	<result property="intEstadoCod"      							column="pPara_estado_n_cod" />
+	<result property="tsFecharegistro"      						column="pEfec_fecharegistro_d" />
+	<result property="intEmpresausuarioPk"      					column="pPers_empresausuario_n_pk" />
+	<result property="intPersonausuarioPk"      					column="pPers_personausuario_n_pk" />
+	<result property="tsFechaeliminacion"      						column="pEfec_fechaeliminacion_d" />
+	<result property="intEmpresaeliminaPk"      					column="pPers_empresaelimina_n_pk" />
+	<result property="intPersonaeliminaPk"      					column="pPers_personaelimina_n_pk" />
+	<result property="intIndiestructuraagregada"      				column="pEfec_indiestructuraagregada_n" />
+	<result property="bdMontooriginal"      						column="pEfec_montooriginal_n" />
+	<result property="efectuadoResumen.id.intEmpresa"      			column="pPers_empresa_n_pk" />
+	<result property="efectuadoResumen.id.intItemEfectuadoResumen"  column="pCcob_itemefectuadoresumen_n" />
+	<result property="envioMonto.id.intEmpresacuentaPk"      		column="pPers_empresacuentaenvi_n_pk" />
+	<result property="envioMonto.id.intItemenvioconcepto"      		column="pCcob_itemenvioconcepto_n" />
+	<result property="envioMonto.id.intItemenviomonto"      		column="pCcob_itemenviomonto_n" />
+  </resultMap>
+  
+  <resultMap id="resAdministra" class="Efectuado">
+  	<result property="intIdsucursaladministraPk" column="pSucu_idsucursaladminist_n_pk"/>
+  	<result property="intIdsubsucursaladministra" column="pSude_idsubsucursaladminist_n"/>
+  </resultMap>
+  
+  <resultMap  id="resMonto" class="Efectuado">
+  	<result property="bdMontoEfectuado" column="pEfec_montoefectuado_n"/>  	
+  </resultMap>
+  
+  <parameterMap id="parEfectuado" class="Efectuado">
+	 <parameter property="id.intEmpresacuentaPk"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemefectuado"							javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="tsFechaProceso"								javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intParaTipoIngresoDatoCod"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intCuentaPk"									javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intPeriodoPlanilla"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="bdMontoEfectuado"								javaType="java.math.BigDecimal" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intTiposocioCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intModalidadCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intNivel"										javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intCodigo"									javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intTipoestructuraCod"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEmpresasucprocesaPk"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIdsucursalprocesaPk"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIdsubsucursalprocesaPk"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEmpresasucadministraPk"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIdsucursaladministraPk"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIdsubsucursaladministra"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEstadoCod"									javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="tsFecharegistro"								javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intEmpresausuarioPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intPersonausuarioPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="tsFechaeliminacion"							javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intEmpresaeliminaPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intPersonaeliminaPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIndiestructuraagregada"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="bdMontooriginal"								javaType="java.math.BigDecimal" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="efectuadoResumen.id.intEmpresa"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="efectuadoResumen.id.intItemEfectuadoResumen"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="envioMonto.id.intEmpresacuentaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="envioMonto.id.intItemenvioconcepto"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="envioMonto.id.intItemenviomonto"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemefectuado"								javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaYPKEstructuraYTipoModalidadYPeriodo" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intNivel"										javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intCodigo"									javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intModalidadCod"								javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intPeriodoPlanilla"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaYEstructuraYTipoSocioYModalidad" class="java.util.Map">
+   	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intNivel"										javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intCodigo"									javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intTiposocioCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intModalidadCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEscalar" 									javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaYEstructuraYTipoSocioYModalidadTipoEstru" class="java.util.Map">
+   	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intNivel"										javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intCodigo"									javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intTiposocioCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intModalidadCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intTipoEstruCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEscalar" 									javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaYEstructuraYTipoSocio" class="java.util.Map">
+   	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intNivel"										javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intCodigo"									javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intTiposocioCod"								javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	
+	 <parameter property="intEscalar" 									javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="OUT"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorPkEnviomontoYPeriodo" class="java.util.Map">
+  	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemenvioconcepto"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intItemenviomonto"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"	    mode="IN"/>
+	 <parameter property="intPeriodoPlanilla"							javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	
+  </parameterMap>
+  
+    <parameterMap id="parPorEmpresaYPKEstructuraYTipoModalidadYPeriodoTS" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intNivel"										javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intCodigo"									javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intModalidadCod"								javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intPeriodoPlanilla"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intTipoSocio"									javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorItemenvioconcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intItemenvioconcepto"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpCtaPer" class="java.util.Map">
+   	 <parameter property="cursorLista" 									javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresacuentaPk"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intCuentaPk"									javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+	 <parameter property="intPeriodoPlanilla"							javaType="java.lang.Integer"  	jdbcType="NUMERIC"	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorItemEfectuadoResumenAdministra"  class="java.util.Map">
+  	<parameter property="cursorLista" 				javaType="java.sql.ResultSet"  	jdbcType="ORACLECURSOR" mode="OUT"/>
+  	<parameter property="intItemEfectuadoResumen" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap  id="parPorItemEfectuadoResumenAdministraConceptoGeneral" class="java.util.Map">
+  	<parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+  	<parameter property="intItemEfectuadoResumen" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="sucursal" 					javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="subSucursal" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>  	
+  	<parameter property="intConceptoGeneral" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intParaTipoConcepto" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intEmpresa" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intPeriodo" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intCodigoModelo" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="strNumeroCuenta" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorItemEfectuadoResumen" class="java.util.Map">
+  	<parameter property="intItemEfectuadoResumen" javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN"/>
+  	<parameter property="intEscalar" 			  javaType="java.lang.Integer" jdbcType="NUMERIC" mode="OUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parEfectuado">
+	{ call PKG_EFECTUADO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? ) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEfectuado" >
+	{ call PKG_EFECTUADO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? ) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resEfectuado">
+	{ call PKG_EFECTUADO.getListaPorPk(?,?,?) }
+  </procedure>
+    
+  <procedure id="getLsPorEmpYPKEstYTipModYPerio" parameterMap="parPorEmpresaYPKEstructuraYTipoModalidadYPeriodo" resultMap="resEfectuado">
+	{ call PKG_EFECTUADO.getLsPorEmpYPKEstYTipModYPerio(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getMaxPerPorEmpYEstYTipSocYMod" parameterMap="parPorEmpresaYEstructuraYTipoSocioYModalidad">
+	{ call PKG_EFECTUADO.getMaxPerPorEmpYEstYTipSocYMod(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getMaxPerPorEmpYEstYTipSocYModTipEst" parameterMap="parPorEmpresaYEstructuraYTipoSocioYModalidadTipoEstru">
+	{ call PKG_EFECTUADO.getMaxPerPorYEstYTipSYModTipEs(?,?,?,?,?,?) }
+  </procedure>
+  
+   <procedure id="getMaxPerPorEmpYEstYTipSoc" parameterMap="parPorEmpresaYEstructuraYTipoSocio">
+	{ call PKG_EFECTUADO.getMaxPerPorEmpYEstYTipSoc(?,?,?,?,?) }
+  </procedure>
+  	
+  <procedure id="getListaEfectuadoPorPkEnviomontoYPeriodo" parameterMap="parPorPkEnviomontoYPeriodo" resultMap="resEfectuado">
+	{ call PKG_EFECTUADO.getListaPorPkEnviomontoYPer(?,?,?,?,?) }
+  </procedure>  
+  				   
+  <procedure id="getLsPorEmpYPKEstYTipModYPerioTipoSocio" parameterMap="parPorEmpresaYPKEstructuraYTipoModalidadYPeriodoTS" resultMap="resEfectuado">
+	{ call PKG_EFECTUADO.getLsModYPerioTipoSocio(?,?,?,?,?,?,?) }
+  </procedure>
+	
+  <procedure id="getPorItemEnvioConcepto" parameterMap="parPorItemenvioconcepto" resultMap="resEfectuado">
+	{ call PKG_EFECTUADO.getPorItemEnvioConcepto(?,?,?) }
+  </procedure>  
+
+  <procedure id="getListaPorEmpCtaPeriodo" parameterMap="parPorEmpCtaPer" resultMap="resEfectuado">
+	{ call PKG_EFECTUADO.getListaPorEmpCtaPeriodo(?,?,?,?) }
+  </procedure>   
+  
+  <procedure id="getListaPorAdministra" parameterMap="parPorItemEfectuadoResumenAdministra" resultMap="resAdministra">
+  { call PKG_EFECTUADO.getListaPorAdministra(?,?)}
+  </procedure>
+  
+  <procedure id="getMontoTotalPorConcepto" parameterMap="parPorItemEfectuadoResumenAdministraConceptoGeneral" resultMap="resMonto">
+  { call PKG_EFECTUADO.getMontoTotalPorConcepto(?,?,?,?,?,?,?,?,?,?)}
+  </procedure>
+   
+ <procedure id="getNumerodeRolesUsuarios" parameterMap="parPorItemEfectuadoResumen">
+	{ call PKG_EFECTUADO.getNumerodeRolesUsuarios(?,?) }
+ </procedure>
+    
+</sqlMap>  

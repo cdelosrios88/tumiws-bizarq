@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ControlFondosFijosDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos" alias="ControlFondosFijos"/>
+  <typeAlias type="pe.com.tumi.tesoreria.cierre.fdoFijo.domain.ControlFondoFijoAnula" alias="ControlFondoFijoAnula"/>  
+	
+  <resultMap id="resControlFondosFijos" class="ControlFondosFijos">
+	<result property="id.intPersEmpresa"  			column="pPers_empresa" />
+	<result property="id.intParaTipoFondoFijo"  	column="pPara_tipofondofijo" />
+	<result property="id.intItemPeriodoFondo"   	column="pTeso_itemperiodofondo" />
+    <result property="id.intSucuIdSucursal"      	column="pSucu_idsucursal" />
+    <result property="id.intItemFondoFijo"     		column="pTeso_itemfondofijo" />
+    <result property="intSudeIdSubsucursal"      	column="pSude_idsubsucursal" />
+    <result property="intPersPersonaResponsable"    column="pPers_personaresponsable" />
+    <result property="bdMontoGirado"      			column="pCoff_montogirado" />
+    <result property="bdMontoApertura"      		column="pCoff_montoapertura" />
+    <result property="bdMontoUtilizado"      		column="pCoff_montoutilizado" />
+    <result property="bdMontoSaldo"      			column="pCoff_montosaldo" />
+    <result property="intEstadoFondo"      			column="pCoff_estadofondo" />
+    <result property="tsFechaRegistro"      		column="pCoff_fecharegistro" />
+    <result property="intPersEmpresaUsuario"      	column="pPers_empresausuario" />
+    <result property="intPersPersonaUsuario"     	column="pPers_personausuario" />
+    <result property="tsFechaCierre"     			column="pCoff_fechacierre" />
+    <result property="intPersEmpresaCierre"      	column="pPers_empresacierre" />
+    <result property="intPersPersonaCierre"      	column="pPers_personacierre" />
+    <result property="intPersEmpresaEgreso"      	column="pPers_empresaegreso" />
+    <result property="intEgresoGeneral"      		column="pTeso_itemegresogeneral" />
+  </resultMap>
+  
+  <resultMap id="resControlFondoFijoAnula" class="ControlFondoFijoAnula">
+	<result property="id.intPersEmpresa"  				column="pPers_empresa" />
+	<result property="id.intParaTipoFondoFijo"  		column="pPara_tipofondofijo" />
+	<result property="id.intItemPeriodoFondo"   		column="pTeso_itemperiodofondo" />
+    <result property="id.intSucuIdSucursal"      		column="pSucu_idsucursal" />
+    <result property="id.intItemFondoFijo"     			column="pTeso_itemfondofijo" />
+    <result property="id.intItemControlFdoFijoAnula"    column="pTeso_itemfondofijo" />
+    <result property="tsFechaAnulacion"      			column="pSude_idsubsucursal" />
+    <result property="intParaTipoAnulaFondo"    		column="pPers_personaresponsable" />
+    <result property="strObservacion"      				column="pCoff_montogirado" />
+    <result property="intIdEmpresaUsuario"      		column="pCoff_montoapertura" />
+    <result property="intIdPersonaUsuario"      		column="pCoff_montoutilizado" />
+  </resultMap>
+
+  <resultMap id="resCierreControlFondoFijo" class="ControlFondosFijos">
+	<result property="intOrden"  					column="pROWNUM" />
+	<result property="id.intPersEmpresa"  			column="pEMPRESA" />
+	<result property="id.intParaTipoFondoFijo"   	column="pTIPO_FONDOFIJO" />
+    <result property="strDescTipoFondoFijo"      	column="pDESC_TIPO_FONDOFIJO" />
+    <result property="id.intItemPeriodoFondo"     	column="pPERIODO" />
+    <result property="id.intItemFondoFijo"      	column="pITEM_FONDOFIJO" />
+    <result property="id.intSucuIdSucursal"    		column="pSUCURSAL" />
+    <result property="strDescSucursal"      		column="pDESC_SUCURSAL" />
+    <result property="intSudeIdSubsucursal"      	column="pSUBSUCURSAL" />
+    <result property="strDescSubSucursal"      		column="pDESC_SUBSUCURSAL" />
+    <result property="strNumeroApertura"      		column="pAPERTURA" />
+    <result property="intEstadoFondo"      			column="pESTADOFONDO" />
+    <result property="strDescEstadoFondo"      		column="pDESC_ESTADOFONDO" />
+    <result property="intPersPersonaResponsable"    column="pPERSONA_RESPONSABLE" />
+    <result property="bdMontoGirado"      			column="pMONTO_GIRADO" />
+    <result property="bdMontoApertura"     			column="pMONTO_APERTURA" />
+    <result property="bdMontoUtilizado"     		column="pMONTO_UTILIZADO" />
+    <result property="bdMontoSaldo"      			column="pMONTO_SALDO" />
+    <result property="tsFechaRegistro"      		column="pFECHA_REGISTRO" />
+    <result property="strFechaRegistro"      		column="pFMT_FECHA_REGISTRO" />
+    <result property="intPersEmpresaUsuario"      	column="pEMPRESA_REGISTRO" />
+    <result property="intPersPersonaUsuario"      	column="pPERSONA_REGISTRO" />
+    <result property="tsFechaCierre"     			column="pFECHA_CIERRE" />
+    <result property="strFechaCierre"     			column="pFMT_FECHA_CIERRE" />
+    <result property="intPersEmpresaCierre"      	column="pEMPRESA_CIERRE" />
+    <result property="intPersPersonaCierre"      	column="pPERSONA_CIERRE" />
+    <result property="intPersEmpresaEgreso"      	column="PPERS_EMPRESAEGRESO" />
+    <result property="intEgresoGeneral"      		column="PTESO_ITEMEGRESOGENERAL" />    
+  </resultMap>  
+    
+  <parameterMap id="parControlFondosFijos" class="ControlFondosFijos">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoFondoFijo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemPeriodoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemFondoFijo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaResponsable"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoGirado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoApertura"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoUtilizado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSaldo"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intEstadoFondo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaCierre"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaEgreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intEgresoGeneral"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parControlFondoFijoAnula" class="ControlFondoFijoAnula">
+	<parameter property="id.intPersEmpresa"  				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="id.intParaTipoFondoFijo"  			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="id.intItemPeriodoFondo"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+    <parameter property="id.intSucuIdSucursal"      		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+    <parameter property="id.intItemFondoFijo"     			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+    <parameter property="id.intItemControlFdoFijoAnula" 	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+    <parameter property="tsFechaAnulacion"      			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+    <parameter property="intParaTipoAnulaFondo"    			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+    <parameter property="strObservacion"      				javaType="java.lang.String"   		jdbcType="VARCHAR" 	    mode="INOUT"/>    
+    <parameter property="intIdEmpresaUsuario"      			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+    <parameter property="intIdPersonaUsuario"      			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>  
+    
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoFondoFijo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemPeriodoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemFondoFijo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoFondoFijo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemPeriodoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemFiltro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEstadoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parParaItem" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intParaTipoFondoFijo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemPeriodoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parTipoFdoYSucuYSubSucu" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intEmpresa"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intTipoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIdSucursal"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIdSubSucursal"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+
+  
+  <procedure id="grabar" parameterMap="parControlFondosFijos">
+	{ call PKG_CONTROLFONDOSFIJOS.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parControlFondosFijos" >
+	{ call PKG_CONTROLFONDOSFIJOS.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resControlFondosFijos">
+	{ call PKG_CONTROLFONDOSFIJOS.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaParaItem" parameterMap="parParaItem" resultMap="resControlFondosFijos">
+	{ call PKG_CONTROLFONDOSFIJOS.getListaParaItem(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resControlFondosFijos">
+	{ call PKG_CONTROLFONDOSFIJOS.getListaPorBusqueda(?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="grabarAnulaCierre" parameterMap="parControlFondoFijoAnula" resultMap="resControlFondoFijoAnula">
+	{ call PKG_CONTROLFONDOFIJOANULA.grabar(?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getControlFondoFijo" parameterMap="parTipoFdoYSucuYSubSucu" resultMap="resCierreControlFondoFijo">
+	{ call PKG_CIERREFONDO.getControlFondoFijo(?,?,?,?,?) }
+  </procedure> 
+</sqlMap>

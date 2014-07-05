@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="FallecidoPrevisionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.prevision.domain.FallecidoPrevision" alias="FallecidoPrevision"/> 
+  
+  <resultMap id="resFallecidoPrevision" class="FallecidoPrevision">
+  	 <result property="id.intPersEmpresaPrevision"  	column="pEmpresaprevision" />
+  	 <result property="id.intCuenta"  					column="pCuenta" />
+  	 <result property="id.intItemExpediente"  			column="pItemexpedienteps" />
+  	 <result property="id.intItemFallecido"  			column="pItemFallecido" />
+  	 <result property="intPersPersonaFallecido"     	column="pPersonaFallecido" />
+  	 <result property="intItemViculo"  					column="pItemvinculo" />
+     <result property="intParaEstado"  					column="pEstado" />
+  </resultMap>
+  
+  <resultMap id="resFallecidoPrevisionNom" class="FallecidoPrevision" >
+  	 <result property="strApePaterno"  					column="nApellidoPaterno" />
+  	 <result property="strApeMaterno"  					column="nApellidoMaterno" />
+  	 <result property="strNombre"  						column="nombres" />
+   </resultMap>
+   
+    <resultMap id="resVinculoAes" class="FallecidoPrevision" >
+  	 <result property="intTipoVinculoCod" 					column="pTipoVinculo" />
+  	 <result property="intItemVinculoCod" 					column="cItemVinculo" />
+    </resultMap>
+  
+  <parameterMap id="parFallecidoPrevision" class="FallecidoPrevision">
+     <parameter property="id.intPersEmpresaPrevision"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuenta"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemFallecido"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemViculo"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaEstado" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intPersPersonaFallecido"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPrevision" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemFallecido" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPrevision" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+	<parameterMap id="parPorExpedienteNom" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPrevision" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parVinculoAes" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPrevision" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intExpediente" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  <procedure id="grabar" parameterMap="parFallecidoPrevision">
+	{ call PKG_FALLECIDO_PREVISION.grabar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parFallecidoPrevision" >
+	{ call PKG_FALLECIDO_PREVISION.modificar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resFallecidoPrevision">
+	{ call PKG_FALLECIDO_PREVISION.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resFallecidoPrevision">
+	{ call PKG_FALLECIDO_PREVISION.getListaPorExpediente(?,?,?,?) }
+  </procedure>
+	
+  <procedure id="getListaNombreCompletoAes" parameterMap="parPorExpedienteNom" resultMap="resFallecidoPrevisionNom">
+	{ call PKG_FALLECIDO_PREVISION.getListaNombreCompletoAes(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaVinculoAes" parameterMap="parVinculoAes" resultMap="resVinculoAes">
+	{ call PKG_FALLECIDO_PREVISION.getListaVinculoAes(?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

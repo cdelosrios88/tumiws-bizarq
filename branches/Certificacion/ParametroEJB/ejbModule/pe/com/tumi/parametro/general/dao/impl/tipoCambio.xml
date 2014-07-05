@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TipoCambioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.general.domain.TipoCambio" alias="TipoCambio"/> 
+	
+  <resultMap id="resTipoCambio" class="TipoCambio" >
+     <result property="id.intPersEmpresa"      		column="pPers_empresatc_n_pk" />
+     <result property="id.dtParaFecha"    			column="pPara_fechatc_d" />
+     <result property="id.intParaClaseTipoCambio" 	column="pPara_clasetc_n_cod" />
+     <result property="id.intParaMoneda"      		column="pPara_moneda_n_cod" />
+     <result property="bdCompra"    				column="pCompra_n" />
+     <result property="bdVenta"      				column="pVenta_n" />
+     <result property="bdPromedio"   				column="pPromedio_n" />
+     <result property="tsFechaRegistro"    			column="pFecharegistro" />
+     <result property="intEmpresaUsuario"      		column="pPers_empresausuario_n_pk" />
+     <result property="intPersonaUsuario"   		column="pPers_personausuario_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parTipoCambio" class="TipoCambio">
+     <parameter property="id.intPersEmpresa"			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="id.dtParaFecha"				jdbcType="DATE" 		javaType="java.util.Date" 			mode="INOUT"/>    
+     <parameter property="id.intParaClaseTipoCambio"	jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="id.intParaMoneda" 			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>  
+	 <parameter property="bdCompra"						jdbcType="NUMERIC" 		javaType="java.math.BigDecimal" 	mode="INOUT"/>    
+     <parameter property="bdVenta" 						jdbcType="NUMERIC"   	javaType="java.math.BigDecimal" 	mode="INOUT"/>  
+     <parameter property="bdPromedio" 					jdbcType="NUMERIC" 		javaType="java.math.BigDecimal"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				jdbcType="TIMESTAMP" 	javaType="java.sql.Timestamp" 		mode="INOUT"/>    
+     <parameter property="intEmpresaUsuario" 			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 		mode="INOUT"/>  
+     <parameter property="intPersonaUsuario" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+   	 <parameter property="pIntPersEmpresa"			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pDtParaFecha"				jdbcType="DATE" 		javaType="java.util.Date" 		mode="IN"/>    
+     <parameter property="pIntParaClaseTipoCambio"	jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntParaMoneda" 			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+	 <parameter property="pDtFechaTCDesde"			jdbcType="DATE" 		javaType="java.util.Date" 		mode="IN"/>
+	 <parameter property="pDtFechaTCHasta"			jdbcType="DATE" 		javaType="java.util.Date" 		mode="IN"/>    
+     <parameter property="pIntParaClaseTipoCambio"	jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntParaMoneda" 			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parTipoCambio" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+	 <parameter property="pintPersEmpresa"			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pIntParaClaseTipoCambio"	jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntParaMoneda" 			jdbcType="NUMERIC"   	javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  <procedure id="grabar" parameterMap="parTipoCambio">
+	{ call PKG_TIPOCAMBIO.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+
+  <procedure id="modificar" parameterMap="parTipoCambio" >
+	{ call PKG_TIPOCAMBIO.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resTipoCambio">
+	{ call PKG_TIPOCAMBIO.getListaPorPK(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resTipoCambio">
+	{ call PKG_TIPOCAMBIO.getBusqueda(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getTipoCambioActual" parameterMap="parTipoCambio" resultMap="resTipoCambio">
+	{ call PKG_TIPOCAMBIO.getTipoCambioActual(?,?,?,?) }  
+  </procedure>
+</sqlMap>  

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AuditoriaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.auditoria.domain.Auditoria" alias="Auditoria"/> 
+	
+  <resultMap id="resAuditoria" class="Auditoria" >
+	<result property="intIdcodigo"      	column="pAUDI_IDCODIGO_N" />
+    <result property="strTabla"      		column="pAUDI_TABLA_V" />
+    <result property="strColumna"      		column="pAUDI_COLUMNA_V" />
+    <result property="intEmpresaPk"      	column="pPERS_EMPRESA_N_PK" />
+    <result property="strLlave1"      		column="pAUDI_LLAVE1_V" />
+    <result property="strLlave2"      		column="pAUDI_LLAVE2_V" />
+    <result property="strLlave3"      		column="pAUDI_LLAVE3_V" />
+    <result property="strLlave4"      		column="pAUDI_LLAVE4_V" />
+    <result property="strLlave5"      		column="pAUDI_LLAVE5_V" />
+    <result property="strLlave6"      		column="pAUDI_LLAVE6_V" />
+    <result property="strLlave7"      		column="pAUDI_LLAVE7_V" />
+    <result property="strLlave8"      		column="pAUDI_LLAVE8_V" />
+    <result property="strLlave9"      		column="pAUDI_LLAVE9_V" />
+    <result property="strLlave10"      		column="pAUDI_LLAVE10_V" />
+    <result property="intTipo"      		column="pAUDI_TIPO_N" />
+    <result property="strValoranterior"     column="pAUDI_VALORANTERIOR_V" />
+    <result property="strValornuevo"      	column="pAUDI_VALORNUEVO_V" />
+    <result property="tsFecharegistro"      column="pAUDI_FECHAREGISTRO_D" />
+    <result property="intPersonaPk"      	column="pPERS_PERSONA_N_PK" />
+  </resultMap>
+  
+  <parameterMap id="parAuditoria" class="Auditoria">
+	 <parameter property="intIdcodigo"			javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strTabla"				javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strColumna"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intEmpresaPk"			javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strLlave1"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave2"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave3"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave4"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave5"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave6"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave7"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave8"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave9"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strLlave10"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intTipo"				javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strValoranterior"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strValornuevo"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="tsFecharegistro"		javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intPersonaPk"			javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intIdcodigo"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorTablaColumnaLlave" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="strTabla"			javaType="java.lang.String" jdbcType="VARCHAR"	mode="IN"/>
+	 <parameter property="strColumna"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="IN"/>
+	 <parameter property="strLlave1"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parAuditoria">
+	{ call PKG_AUDITORIA.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAuditoria" >
+	{ call PKG_AUDITORIA.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAuditoria">
+	{ call PKG_AUDITORIA.getListaPorPk(?,?) }	
+  </procedure>
+  
+  <procedure id="getListaDeMaxPkPorTabColLlave" parameterMap="parPorTablaColumnaLlave" resultMap="resAuditoria">
+	{ call PKG_AUDITORIA.getListaDeMaxPkPorTabColLlave(?,?,?,?) }	
+  </procedure>
+    
+</sqlMap>  

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AdelantoSunatDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.AdelantoSunat" alias="AdelantoSunat"/> 
+	
+  <resultMap id="resAdelantoSunat" class="AdelantoSunat" >
+	<result property="id.intPersEmpresa"  								column="pempresadocsunord" />
+	<result property="id.intItemAdelantoSunat"   						column="pitemempresadocsunord" />
+	<result property="ordenCompraDocumentoId.intPersEmpresa"   			column="pempresaorden" />
+	<result property="ordenCompraDocumentoId.intItemOrdenCompra"   		column="pitemordencompra" />
+	<result property="ordenCompraDocumentoId.intItemOrdenCompraDocumento" column="pitemordencompradoc" />
+	<result property="documentoSunatId.intPersEmpresa"   				column="pempresadocsunat" />
+	<result property="documentoSunatId.intItemDocumentoSunat"  			column="pitemdocsun" />
+	<result property="bdMonto"   										column="pmonto" />
+	<result property="intParaEstado"   									column="pestado" />
+	<!-- Agregado por cdelosrios, 12/11/2013 -->
+	<result property="intItemOrdenCompraDet"   							column="pItemOrdenCompraDet" />
+	<!-- Fin agregado por cdelosrios, 12/11/2013 -->
+  </resultMap>
+  
+  <parameterMap id="parAdelantoSunat" class="AdelantoSunat">
+	 <parameter property="id.intPersEmpresa"								javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAdelantoSunat"							javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="ordenCompraDocumentoId.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="ordenCompraDocumentoId.intItemOrdenCompra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="ordenCompraDocumentoId.intItemOrdenCompraDocumento"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="documentoSunatId.intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="documentoSunatId.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMonto"											javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"									javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <!-- Agregado por cdelosrios, 12/11/2013 -->
+	 <parameter property="intItemOrdenCompraDet"							javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <!-- Fin agregado por cdelosrios, 12/11/2013 -->
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAdelantoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorOrdenCompraDocumento" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompraDocumento"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+  </parameterMap>
+  
+  <!-- Agregado por cdelosrios, 13/11/2013 -->
+  <parameterMap id="parPorDocumentoSunat" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin agregado por cdelosrios, 13/11/2013 -->
+  
+  <procedure id="grabar" parameterMap="parAdelantoSunat">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAdelantoSunat" >
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAdelantoSunat">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.getListaPorPk(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorOrdenCompraDocumento" parameterMap="parPorOrdenCompraDocumento" resultMap="resAdelantoSunat">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.getListaPorOrdenCompraDoc(?,?,?,?) }
+  </procedure>
+  
+  <!-- Agregado por cdelosrios, 13/11/2013 -->
+  <procedure id="getListaPorDocumentoSunat" parameterMap="parPorDocumentoSunat" resultMap="resAdelantoSunat">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.getListaPorDocSunat(?,?,?) }
+  </procedure>
+  <!-- Fin agregado por cdelosrios, 13/11/2013 -->
+</sqlMap>

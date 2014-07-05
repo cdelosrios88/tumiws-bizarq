@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ActividadEconomicaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.empresa.domain.ActividadEconomica" alias="ActividadEconomica"/> 
+	
+  <resultMap id="resActividadEconomica" class="ActividadEconomica" >
+     <result property="id.intIdPersona"      		column="pPERSONA_N" />
+     <result property="id.intItemActividad"    		column="pACTIVIDAD_N_COD" />
+     <result property="intSectorEconomicoCod"      	column="pSECTORECONOMICO_N_COD" />
+     <result property="intActividadEconomicaCod"   	column="pACTIVIDADECONOMICA_N_COD" />
+     <result property="intEstadoCod"   				column="pESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parActividadEconomica" class="ActividadEconomica">
+     <parameter property="id.intIdPersona"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemActividad"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intSectorEconomicoCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intActividadEconomicaCod" jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion" 		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemActividad" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parActividadEconomica">
+	{ call PKG_ACTIVIDAD.grabar(?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parActividadEconomica" >
+	{ call PKG_ACTIVIDAD.modificar(?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resActividadEconomica">
+	{ call PKG_ACTIVIDAD.getListaPorPK(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona" resultMap="resActividadEconomica">
+	{ call PKG_ACTIVIDAD.getListaPorIdPersona(?,?) }  
+  </procedure>
+    
+</sqlMap>  

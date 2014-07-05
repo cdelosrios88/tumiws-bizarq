@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="FondodetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.banco.domain.Fondodetalle" alias="Fondodetalle"/> 
+	
+  <resultMap id="resFondodetalle" class="Fondodetalle" >
+	<result property="id.intEmpresaPk"   		column="pPERS_EMPRESA_N_PK" />
+	<result property="id.intItembancofondo"   	column="pTESO_ITEMBANCOFONDO_N" />
+	<result property="id.intItemfondodetalle"   column="pTESO_ITEMFONDODETALLE_N" />
+    <result property="intCodigodetalle"      	column="pFODE_CODIGODETALLE_N" />
+    <result property="intTotalsucursalCod"      column="pPARA_TOTALSUCURSAL_N_COD" />
+    <result property="intEmpresasucursalPk"     column="pPERS_EMPRESASUCURSAL_N_PK" />
+    <result property="intIdsucursal"      		column="pSUCU_IDSUCURSAL_N" />
+    <result property="intIdsubsucursal"      	column="pSUDE_IDSUBSUCURSAL_N" />
+    <result property="intEmpresacuentaPk"      	column="pPERS_EMPRESACUENTA_N_PK" />
+    <result property="intPeriodocuenta"      	column="pCONT_PERIODOCUENTA_N" />
+    <result property="strNumerocuenta"      	column="pCONT_NUMEROCUENTA_V" />
+    <result property="intDocumentogeneralCod"   column="pPARA_DOCUMENTOGENERAL_N_COD" />
+    <result property="intTipocomprobanteCod"    column="pPARA_TIPOCOMPROBANTE_N_COD" />
+    <result property="bdMontomaxdocumento"      column="pFODE_MONTOMAXDOCUMENTO_N" />
+    <result property="bdMontosobregiro"      	column="pFODE_MONTOSOBREGIRO_N" />
+    <result property="intEstadoCod"      		column="pPARA_ESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parFondodetalle" class="Fondodetalle">
+	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItembancofondo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemfondodetalle"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intCodigodetalle"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intTotalsucursalCod"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEmpresasucursalPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIdsucursal"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intIdsubsucursal"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEmpresacuentaPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intPeriodocuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strNumerocuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intDocumentogeneralCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intTipocomprobanteCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="bdMontomaxdocumento"		javaType="java.math.BigDecimal" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="bdMontosobregiro"			javaType="java.math.BigDecimal" jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet"	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItembancofondo"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemfondodetalle"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBancoFondo" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet"	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItembancofondo"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorSubSucursalPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet"	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intEmpresasucursalPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intIdsucursal"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intIdsubsucursal"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parFondodetalle">
+	{ call PKG_FONDODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parFondodetalle" >
+	{ call PKG_FONDODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resFondodetalle">
+	{ call PKG_FONDODETALLE.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBancoFondo" parameterMap="parPorBancoFondo" resultMap="resFondodetalle">
+	{ call PKG_FONDODETALLE.getListaPorBancoFondo(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorSubSucursalPK" parameterMap="parPorSubSucursalPK" resultMap="resFondodetalle">
+	{ call PKG_FONDODETALLE.getListaPorSubSucursalPK(?,?,?,?) }
+  </procedure>    
+</sqlMap>

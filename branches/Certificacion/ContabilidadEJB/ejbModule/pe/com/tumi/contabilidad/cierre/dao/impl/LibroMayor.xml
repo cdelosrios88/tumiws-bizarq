@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LibroMayorDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.LibroMayor" alias="LibroMayor"/> 
+	
+  <resultMap id="resLibroMayor" class="LibroMayor">
+	<result property="id.intPersEmpresaMayor" 		column="pPersEmpresaMayor"/>
+	<result property="id.intContPeriodoMayor"   	column="pContPeriodoMayor"/>
+	<result property="id.intContMesMayor"   		column="pContMesMayor"/>
+	<result property="tsFechaRegistro"   			column="pLimaFechaRegistro"/>
+    <result property="intParaEstadoCierreCod"      	column="pParaEstadoCierre"/>
+    <result property="intPersEmpresaUsuario"    	column="pPersEmpresaUsuario"/>
+    <result property="intPersPersonaUsuario"    	column="pPersPersonaUsuario"/>
+  </resultMap>
+  
+  <parameterMap id="parLibroMayor" class="LibroMayor">
+	 <parameter property="id.intPersEmpresaMayor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoMayor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContMesMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersPersonaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContMesMayor"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intContMesMayor"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  
+  <procedure id="grabar" parameterMap="parLibroMayor">
+	{ call PKG_LIBROMAYOR.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parLibroMayor" >
+	{ call PKG_LIBROMAYOR.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroMayor">
+	{ call PKG_LIBROMAYOR.getListaPorPk(?,?,?,?) }
+  </procedure> 	
+    
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resLibroMayor">
+	{ call PKG_LIBROMAYOR.getListaPorBuscar(?,?,?,?) }
+  </procedure>
+   	
+</sqlMap>

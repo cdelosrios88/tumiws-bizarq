@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SucursalCodigoDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.empresa.domain.SucursalCodigo" alias="SucursalCodigo"/> 
+ 	
+ 	<resultMap id="resSucursalCodigo" class="SucursalCodigo">
+     	<result property="sucursal.id.intPersEmpresaPk"	column="pPers_empresa_n_pk"/>
+     	<result property="sucursal.id.intIdSucursal"  	column="pIdSucursal_n"/>
+     	<result property="intIdTipoCodigo"      		column="pIdTipoCodigo_n"/>
+     	<result property="strIdCodigo"   				column="pIdCodigo_n"/>
+     	<result property="intEstadoCod"   				column="pIdEstado_n"/>
+  	</resultMap>
+ 	
+ 	<parameterMap id="parPorPK" class="java.util.Map">
+   		<parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 	<parameter property="intPersEmpresaPk"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 	<parameter property="intIdSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 	<parameter property="intIdTipoCodigo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parPorIdSucursal" class="java.util.Map">
+   		<parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 	<parameter property="intIdSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+ 	
+  	<parameterMap id="parSucursalCodigo" class="SucursalCodigo">
+    	<parameter property="sucursal.id.intPersEmpresaPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 	<parameter property="sucursal.id.intIdSucursal"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+    	<parameter property="intIdTipoCodigo"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 	<parameter property="strIdCodigo"					jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>    
+     	<parameter property="intEstadoCod" 					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  	</parameterMap>
+  	
+  	<procedure id="grabar" parameterMap="parSucursalCodigo">
+		{ call PKG_SUCURSALCODIGO.grabar(?,?,?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="modificar" parameterMap="parSucursalCodigo" >
+		{ call PKG_SUCURSALCODIGO.modificar(?,?,?,?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resSucursalCodigo">
+		{ call PKG_SUCURSALCODIGO.getListaPorPk(?,?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="getListaPorIdSucursal" parameterMap="parPorIdSucursal" resultMap="resSucursalCodigo">
+		{ call PKG_SUCURSALCODIGO.getListaPorIdSucursal(?,?) }  
+  	</procedure>
+    
+</sqlMap>

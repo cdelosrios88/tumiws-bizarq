@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CtaCteDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.ctacte.domain.CtaCte"
+		alias="CtaCte" />
+
+	<resultMap id="resCtaCte" class="CtaCte">
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCtacteCod" column="pPARA_TIPOCTACTE_N_COD" />
+		<result property="id.intItemCtacte" column="pITEMCTACTE_N" />
+		<result property="strDescripcion" column="pDESCRIPCION_V" />
+		<result property="dtInicio" column="pINICIO_D" />
+		<result property="dtFin" column="pFIN_D" />
+		<result property="intParaTipopersonaCod" column="pPARA_TIPOPERSONA_N_COD" />
+		<result property="intParaRolPk" column="pPARA_ROL_N_PK" />
+		<result property="intTipohabil" column="pTIPOHABIL_N" />
+		<result property="intParaCondicionLaboralCod" column="pPARA_CONDICIONLABORAL_N_COD" />
+		<result property="intParaMonedaCod" column="pPARA_MONEDA_N_COD" />
+		<result property="intParaTipoConfiguracionCod" column="pPARA_TIPOCONFIGURACION_N_COD" />
+		<result property="bdValorConfiguracion" column="pVALORCONFIGURACION_N" />
+		<result property="intParaAplicacionCod" column="pPARA_APLICACION_N_COD" />
+		<result property="intParaTipoCalculoInteresCod" column="pPARA_TIPOCALCULOINTERES_N_COD" />
+		<result property="intParaTipoChequeraCod" column="pPARA_TIPOCHEQUERA_N_COD" />
+		<result property="intTitulares" column="pTITULARES_N" />
+		<result property="intEmisionesSinFondo" column="pEMISIONESSINFONDO_N" />
+		<result property="intInhabilitaciones" column="pINHABILITACIONES_N" />
+		<result property="intTipoInhabilitaciones" column="pTIPOINHABILITACIONES_N" />
+		<result property="dtFechaRegistro" column="pFECHAREGISTRO_D" />
+		<result property="intParaEstadoSolicitudCod" column="pPARA_ESTADOSOLICITUD_N_COD" />
+		<result property="intParaEstadoCod" column="pPARA_ESTADO_N_COD" />
+	</resultMap>
+
+	<parameterMap id="parCtaCte" class="CtaCte">
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="strDescripcion" javaType="java.lang.String"
+			jdbcType="VARCHAR" mode="INOUT" />
+		<parameter property="dtInicio" javaType="java.lang.String"
+			jdbcType="VARCHAR" mode="INOUT" />
+		<parameter property="dtFin" javaType="java.lang.String"
+			jdbcType="VARCHAR" mode="INOUT" />
+		<parameter property="intParaTipopersonaCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaRolPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTipohabil" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaCondicionLaboralCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaMonedaCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoConfiguracionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="bdValorConfiguracion" javaType="java.math.BigDecimal"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaAplicacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoCalculoInteresCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaTipoChequeraCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTitulares" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intEmisionesSinFondo" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intInhabilitaciones" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intTipoInhabilitaciones" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="dtFechaRegistro" javaType="java.lang.String"
+			jdbcType="VARCHAR" mode="INOUT" />
+		<parameter property="intParaEstadoSolicitudCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intParaEstadoCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCtacteCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemCtacte" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parCtaCte">
+		{ call PKG_CTACTE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		}  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parCtaCte">
+		{ call
+		PKG_CTACTE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	</procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resCtaCte">
+		{ call PKG_CTACTE.getListaPorPk(?,?,?,?) }  
+  </procedure>
+
+</sqlMap>  

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PagoLegalizacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.legalizacion.domain.PagoLegalizacion" alias="PagoLegalizacion"/> 
+	
+  <resultMap id="resPagoLegalizacion" class="PagoLegalizacion">
+	<result property="id.intPersEmpresa" 			column="pPers_empresa"/>
+	<result property="id.intParaLibroContable"   	column="pPara_librocontable"/>
+	<result property="id.intItemLibroLegalizacion"  column="pCont_itemlibrolegalizacion"/>
+	<result property="id.intItemPagoLegalizacion"   column="pCont_itempagolegalizacion"/>
+    <result property="intParaTipoDocumento"      	column="pPara_documentogeneral"/>
+    <result property="intParaTipoMoneda"    		column="pPara_tipomoneda"/>
+    <result property="bdMonto"    					column="pPale_monto"/>
+    <result property="intParaEstado"    			column="pPara_estado"/>
+    <result property="intParaEstadoPago"    		column="pPara_estadopago"/>
+    <result property="intPersEmpresaLibro"    		column="pPers_empresalibro"/>
+    <result property="intContPeriodoLibro"    		column="pCont_periodolibro"/>
+    <result property="intContCodigoLibro"    		column="pCont_codigolibro"/>
+    <result property="intPersEmpresaLibroAnula"    	column="pPers_empresalibroanula"/>
+    <result property="intContPeriodoLibroAnula"    	column="pCont_periodolibroanula"/>
+    <result property="intContCodigoLibroAnula"    	column="pCont_codigolibroanula"/>
+  </resultMap>
+  
+  <parameterMap id="parPagoLegalizacion" class="PagoLegalizacion">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemLibroLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemPagoLegalizacion"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoDocumento"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="bdMonto"						javaType="java.math.BigDecimal" jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaEstadoPago"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoLibro"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaLibroAnula"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContPeriodoLibroAnula"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intContCodigoLibroAnula"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemLibroLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemPagoLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorLibroLegalizacion" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemLibroLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+     
+  <procedure id="grabar" parameterMap="parPagoLegalizacion">
+	{ call PKG_PAGOLEGALIZACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPagoLegalizacion" >
+	{ call PKG_PAGOLEGALIZACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resPagoLegalizacion">
+	{ call PKG_PAGOLEGALIZACION.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorLibroLegalizacion" parameterMap="parPorLibroLegalizacion" resultMap="resPagoLegalizacion">
+	{ call PKG_PAGOLEGALIZACION.getListaPorLibro(?,?,?,?) }
+  </procedure>
+</sqlMap>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+	<sqlMap resource="pe/com/tumi/persona/contacto/dao/impl/comunicacion.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/contacto/dao/impl/domicilio.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/contacto/dao/impl/documento.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/core/dao/impl/cuentaBancaria.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/core/dao/impl/natural.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/core/dao/impl/persona.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/core/dao/impl/personaEmpresa.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/core/dao/impl/personaRol.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/empresa/dao/impl/actividadEconomica.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/empresa/dao/impl/tipoComprobante.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/empresa/dao/impl/empresa.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/empresa/dao/impl/juridica.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/empresa/dao/impl/perLaboral.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/vinculo/dao/impl/vinculo.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/empresa/dao/impl/empresa_juridica.xml"/>
+	<sqlMap resource="pe/com/tumi/persona/core/dao/impl/cuentaBancariaFin.xml"/>
+</sqlMapConfig>

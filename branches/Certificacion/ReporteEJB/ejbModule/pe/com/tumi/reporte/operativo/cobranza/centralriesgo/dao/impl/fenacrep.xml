@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="FenacrepDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.cobranza.centralriesgo.domain.Fenacrep" alias="Fenacrep"/>
+	<resultMap id="resFenacrep" class="Fenacrep" >
+	     <result property="strCooperativa"		  		column="pCOOPERATIVA"/>
+	     <result property="strMes"   					column="pMES"/>
+	     <result property="strAnio"						column="pANIO"/>
+	     <result property="intSecuencia" 				column="pNRO_SECUENCIA"/>
+	     <result property="strApepatRazSoc" 			column="pAPEPAT_RAZSOC"/>
+	     <result property="strApeCasada"    			column="pAPELLIDO_CASADA"/>
+	     <result property="strApematRazSoc"   			column="pAPEMAT_RAZSOC"/>
+	     <result property="strNombre"     				column="pNOMBRES"/>
+	     <result property="strSegundoNombre" 			column="pSEGUNDO_NOMBRE"/>
+	     <result property="strFecNac"					column="pFEC_NACIMIENTO"/>
+	     <result property="strGenero"					column="pGENERO"/>
+	     <result property="strEstCivil"					column="pESTADO_CIVIL"/>
+	     <result property="strSiglaEmpresa"				column="pSIGLA_EMPRESA"/>
+	     <result property="intCodSocio"					column="pCOD_PERSONA"/>
+	     <result property="strPartidaRegistral"			column="pPARTIDA_REGISTRAL"/>
+	     <result property="strTipoDocumento"			column="pTIPO_DOCUMENTO"/>
+	     <result property="strNroDoc"					column="pNRO_DOC"/>
+	     <result property="strTipoPersona"				column="pTIPO_PERSONA"/>
+	     <result property="strDomicilio"				column="pDOMICILIO"/>
+	     <result property="strClasifDeudor"				column="pCLASIF_DEUDOR"/>
+	     <result property="strRol"						column="pROL"/>
+	     <result property="strClasifDeudorAlineam"		column="pCLASIF_DEUDOR_ALINEAM"/>
+	     <result property="strCodAgencia"				column="pCOD_AGENCIA"/>
+	     <result property="strNroCuenta"				column="pCUENTA_CONTABLE"/>
+	     <result property="strMoneda"					column="pMONEDA"/>
+	     <result property="strNroCredito"				column="pNRO_CREDITO"/>
+	     <result property="strTipoSBS"					column="pTIPO_SBS"/>
+	     <result property="strActividad"				column="pACTIVIDAD"/>
+	     <result property="strFechaDesembolso"			column="pFECHA_DESEMBOLSO"/>
+	     <result property="bdMontoDesembolso"			column="pMONTO_DESMBOLSO"/>
+	     <result property="bdTasaAnual"					column="pTASA_ANUAL"/>
+	     <result property="bdSaldoColocacion"			column="pSALDO_COLOCACIONES"/>
+	     <result property="strMora"						column="pMORA"/>
+	     <result property="strGarantiaPreferida"		column="pGARANTIA_PREFERIDA"/>
+	     <result property="strGarantiaAutoliq"			column="pGARANTIA_AUTOLIQ"/>
+	     <result property="bdProvisionReq"				column="pPROV_REQUERIDA"/>
+	     <result property="bdProvisionConst"			column="pPROV_CONSTITUIDA"/>
+	     <result property="bdProvisionProciclica"		column="pPROV_PROCICLICA"/>
+	     <result property="bdSaldoCastigado"			column="pSALDO_CASTIGADO"/>
+	     <result property="strEstContable"				column="pEST_CONTABLE_CREDITO"/>
+	     <result property="bdRendDevengado"				column="pREND_DEVENGADO"/>
+	     <result property="bdInteresSuspenso"			column="pINT_SUSPENSO"/>
+	</resultMap>
+	
+	<parameterMap id="parFenacrep" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intPeriodo" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<procedure id="getFenacrep" parameterMap="parFenacrep" resultMap="resFenacrep">
+		{ call PKG_COBRANZA_CARTERACREDITO.getReporteFenacrep(?,?)}  
+  	</procedure>
+</sqlMap>  	

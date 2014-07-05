@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="OrdenCompraDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle" alias="OrdenCompraDetalle"/> 
+	
+  <resultMap id="resOrdenCompraDetalle" class="OrdenCompraDetalle" >
+	<result property="id.intPersEmpresa"  			column="pempresa" />
+	<result property="id.intItemOrdenCompra"   		column="pitemordencompra" />
+	<result property="id.intItemOrdenCompraDetalle" column="pitemordencompradet" />
+	<result property="bdCantidad"   				column="pcantidad" />
+	<result property="intParaUnidadMedida"  		column="punidadmedida" />
+	<result property="intAfectoIGV"   				column="pafectoigv" />
+	<result property="intParaTipoMoneda"  			column="ptipomoneda" />
+	<result property="bdPrecioUnitario"   			column="ppreciounitario" />
+	<result property="bdPrecioTotal"   				column="ppreciototal" />
+	<result property="bdMontoSaldo"   				column="pmontosaldoen" />
+	<result property="strDescripcion"   			column="pdescripcion" />
+	<result property="intSucuIdSucursal"   			column="pidsucursal" />
+	<result property="intSudeIdSubsucursal"   		column="pidsubsucursal" />
+	<result property="intIdArea"   					column="piadrea" />
+	<result property="strObservacion"   			column="pobservacion" />
+	<result property="intParaEstado"   				column="pestado" />
+	<result property="intPersEmpresaUsuario"   		column="pempresausuario" />
+	<result property="intPersPersonaUsuario" 		column="ppersonausuario" />
+	<result property="tsFechaAnula"   				column="pfechaanula" />
+	<result property="intPersEmpresaAnula"   		column="pempresaanula" />
+	<result property="intPersPersonaAnula"   		column="ppersonaanula" />
+	<result property="intPersEmpresaCuenta"   		column="pempresacuenta" />
+	<result property="intContPeriodoCuenta"   		column="pperiodocuenta" />
+	<result property="strContNumeroCuenta"   		column="pnumerocuenta" />
+  </resultMap>
+  
+  <parameterMap id="parOrdenCompraDetalle" class="OrdenCompraDetalle">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemOrdenCompra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemOrdenCompraDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdCantidad"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaUnidadMedida"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intAfectoIGV"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdPrecioUnitario"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdPrecioTotal"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSaldo"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDescripcion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdArea"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"   			javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>	 
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompraDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorOrdenCompra" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  
+  <procedure id="grabar" parameterMap="parOrdenCompraDetalle">
+	{ call PKG_ORDENCOMPRADETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parOrdenCompraDetalle" >
+	{ call PKG_ORDENCOMPRADETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resOrdenCompraDetalle">
+	{ call PKG_ORDENCOMPRADETALLE.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorOrdenCompra" parameterMap="parPorOrdenCompra" resultMap="resOrdenCompraDetalle">
+	{ call PKG_ORDENCOMPRADETALLE.getListaPorOrdenCompra(?,?,?) }
+  </procedure>
+  
+</sqlMap>

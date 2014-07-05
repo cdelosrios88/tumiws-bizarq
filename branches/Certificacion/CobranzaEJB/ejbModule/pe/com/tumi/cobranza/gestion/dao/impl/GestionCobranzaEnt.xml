@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GestionCobranzaEntDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.gestion.domain.GestionCobranzaEnt" alias="GestionCobranzaEnt"/> 
+	
+  <resultMap id="resGestionCobranzaEnt" class="GestionCobranzaEnt" >
+     <result property="id.intPersEmpresaGestion"   column="IDEMPRESA" />
+     <result property="id.intItemGestionCobranza"  column="IDTEMGESTIONCOBRANZA" />
+     <result property="id.intItemGestCobrEntidad"  column="IDTEMGESTIONCOBRANZAENT" />
+     <result property="intNivel"   		           column="NIVEL" />
+     <result property="intCodigo"   	           column="CODIGO" />
+     <result property="intEstadoCod"               column="ESTADO" />
+  </resultMap>
+  
+  <parameterMap id="parGestionCobranzaEnt" class="GestionCobranzaEnt">
+     <parameter property="id.intPersEmpresaGestion"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemGestionCobranza"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemGestCobrEntidad" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="estructura.id.intNivel"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="estructura.id.intCodigo" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intEstadoCod" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parFiltro" class="java.util.Map">
+   	 <parameter property="cursorLista" 		      javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaGestion"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemGestionCobranza" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		       javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	  <parameter property="intPersEmpresaGestion"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	  <parameter property="intItemGestionCobranza" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	  <parameter property="intItemGestCobrEntidad" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	  
+  </parameterMap>
+  
+  
+  <procedure id="getListaGestionCobranzaEnt" parameterMap="parFiltro" resultMap="resGestionCobranzaEnt">
+	{ call PKG_GESTIONCOBRANZAENT.getListaGestionCobranzaEnt(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getGestionCobranzaEntPorPK" parameterMap="parPorPK" resultMap="resGestionCobranzaEnt">
+	{ call PKG_GESTIONCOBRANZAENT.getGestionCobranzaEnt(?,?,?,?) }  
+  </procedure>
+      
+  <procedure id="grabar"    parameterMap = "parGestionCobranzaEnt">
+	{ call PKG_GESTIONCOBRANZAENT.grabar(?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap = "parGestionCobranzaEnt" >
+	{ call PKG_GESTIONCOBRANZAENT.modificar(?,?,?,?,?,?)  }  
+  </procedure> 
+  
+  
+
+</sqlMap>  

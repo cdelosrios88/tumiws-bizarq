@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ExpedienteLiquidacionDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionDetalle" alias="ExpedienteLiquidacionDetalle"/> 
+	
+  <resultMap id="resExpedienteLiquidacionDetalle" class="ExpedienteLiquidacionDetalle" >
+  	 <result property="id.intPersEmpresaLiquidacion"	column="pEmpresaliquidacion"/>
+  	 <result property="id.intItemExpediente"  			column="pItemexpedienteliqui"/>
+  	 <result property="id.intPersEmpresa"  				column="pEmpresa"/>
+  	 <result property="id.intCuenta"  					column="pCuenta"/>
+     <result property="id.intItemCuentaConcepto"		column="pItemcuentaconcepto"/>
+     <result property="bdSaldo"  						column="pSaldo"/>
+  </resultMap>
+  
+  <parameterMap id="parExpedienteLiquidacionDetalle" class="ExpedienteLiquidacionDetalle">
+     <parameter property="id.intPersEmpresaLiquidacion"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intPersEmpresa"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuenta"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemCuentaConcepto"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="bdSaldo" 						jdbcType="NUMERIC"		javaType="java.math.BigDecimal" mode="INOUT"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaLiquidacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta"					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta"					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaLiquidacion"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parExpedienteLiquidacionDetalle">
+	{ call PKG_EXPEDIENTELIQUIDET.grabar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parExpedienteLiquidacionDetalle" >
+	{ call PKG_EXPEDIENTELIQUIDET.modificar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resExpedienteLiquidacionDetalle">
+	{ call PKG_EXPEDIENTELIQUIDET.getListaPorPk(?,?,?,?,?,?)}
+  </procedure>
+
+  <procedure id="getListaPorCuenta" parameterMap="parPorCuenta" resultMap="resExpedienteLiquidacionDetalle">
+	{ call PKG_EXPEDIENTELIQUIDET.getListaPorCuenta(?,?,?)}
+  </procedure>
+  
+  <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resExpedienteLiquidacionDetalle">
+	{ call PKG_EXPEDIENTELIQUIDET.getListaPorExpediente(?,?,?)}
+  </procedure>
+      
+</sqlMap>

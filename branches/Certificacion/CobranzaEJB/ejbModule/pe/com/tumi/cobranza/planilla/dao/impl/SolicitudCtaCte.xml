@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudCtaCteDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.SolicitudCtaCte" alias="SolicitudCtaCte"/> 
+	
+  <resultMap id="resSolicitudCtaCte" class="SolicitudCtaCte" >
+	<result property="id.intEmpresasolctacte" 							column="PEMPRESASOLCTACTE"/>
+	<result property="id.intCcobItemsolctacte"   						column="PITEMSOLCTACTE"/>
+	<result property="intPersEmpresa" 									column="PEMPRESA"/>
+	<result property="intPersPersona" 									column="PPERSONA"/>
+	<result property="intCsocCuenta" 									column="PCSOC_CUENTA"/>
+	<result property="intSucuIdsucursalsocio" 							column="PIDSUCURSALSOCIO"/>
+	<result property="intSudeIdsubsucursalsocio"						column="PIDSUBSUCURSALSOCIO"/>
+	<result property="intPeriodo" 										column="PPERIODO"/>
+	<result property="intParaTipomodalidad" 							column="PTIPOMODALIDAD"/>
+	<result property="intParaTipo" 										column="PTIPO"/>
+	<result property="intMaeItemarchivo" 								column="ITEMARCHIVO"/>
+	<result property="intMaeItemhistorico" 								column="ITEMHISTORICO"/>
+	<result property="solCtaCteTipo.id.intTipoSolicitudctacte" 			column="PTIPOSOLICITUDCTACTE"/>
+	<result property="estSolCtaCte.id.intCcobItemEstado" 			    column="PITEMESTADO"/>
+	<result property="intParaTipo1" 									column="PTIPO1"/>
+	<result property="intMaeItemarchivo1" 								column="ITEMARCHIVO1"/>
+	<result property="intMaeItemhistorico1" 							column="ITEMHISTORICO1"/>
+	<result property="intParaTipo2" 									column="PTIPO2"/>
+	<result property="intMaeItemarchivo2" 								column="ITEMARCHIVO2"/>
+	<result property="intMaeItemhistorico2" 							column="ITEMHISTORICO2"/>
+  </resultMap>
+  
+  <parameterMap id="parSolicitudCtaCte" class="SolicitudCtaCte">
+	 <parameter property="id.intEmpresasolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intCcobItemsolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersEmpresa"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPersPersona"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intCsocCuenta"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intSucuIdsucursalsocio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intSudeIdsubsucursalsocio"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intPeriodo"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaTipomodalidad"			    javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaTipo"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intMaeItemarchivo"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intMaeItemhistorico"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaTipo1"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intMaeItemarchivo1"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intMaeItemhistorico1"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intParaTipo2"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intMaeItemarchivo2"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intMaeItemhistorico2"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 
+	 
+  </parameterMap>
+  
+  <parameterMap id="parPorFiltro" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresasolctacte"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intSucuIdsucursalsocio"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intTipoSolicitud"			javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intEstadoSolicitud"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorFiltro2" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresasolctacte"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intCsocCuenta"				javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSolicitudCtaCte">
+	{ call PKG_SolicitudCtaCte.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSolicitudCtaCte" >
+	{ call PKG_SolicitudCtaCte.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaFilrado" parameterMap="parPorFiltro" resultMap="resSolicitudCtaCte">
+	{ call PKG_SolicitudCtaCte.getListaFilrado(?,?,?,?,?) }
+  </procedure>
+   <procedure id="getListaFilradoAtencion" parameterMap="parPorFiltro" resultMap="resSolicitudCtaCte">
+	{ call PKG_SolicitudCtaCte.getListaFilradoAtencion(?,?,?,?,?) }
+  </procedure>
+  
+    <procedure id="getListaPorCuenta" parameterMap="parPorFiltro2" resultMap="resSolicitudCtaCte">
+	{ call PKG_SolicitudCtaCte.getListaPorCuenta(?,?,?) }
+  </procedure>
+  
+</sqlMap>  

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MovimientoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.Movimiento" alias="Movimiento"/> 
+	
+  <resultMap id="resMovimiento" class="Movimiento" >
+     <result property="intItemMovimiento"     			column="pItemmovctacte" />
+     <result property="tsFechaMovimiento"    			column="pFechamovimiento" />
+     <result property="intPersEmpresa"    				column="pEmpresa" />
+     <result property="intCuenta"    					column="pCuenta" />
+     <result property="intPersPersonaIntegrante" 		column="pPersonaintegrante" />
+     <result property="intItemCuentaConcepto"     		column="pItemcuentaconcepto" />
+     <result property="intItemExpediente"    			column="pItemexpediente" />
+     <result property="intItemExpedienteDetalle"    	column="pItemdetexpediente" />
+     <result property="intParaTipoConceptoGeneral"      column="pTipoconceptogeneral" />
+     <result property="intParaTipoMovimiento"   		column="pTipomovimiento" />
+     <result property="intParaDocumentoGeneral"    		column="pDocumentogeneral" />
+     <result property="strSerieDocumento"    			column="pSeriedocumento" />
+     <result property="strNumeroDocumento"      		column="pNumerodocumento" />
+     <result property="intParaTipoCargoAbono"    		column="pTipocargoabono" />
+     <result property="bdMontoMovimiento"    			column="pMontomovimiento" />
+     <result property="bdMontoSaldo"      				column="pMontosaldo" />
+     <result property="intPeriodoPlanilla"      		column="pPeriodoplanilla" />
+     <result property="intPersEmpresaUsuario"      		column="pEmpresausuario" />
+     <result property="intPersPersonaUsuario"      		column="pPersonausuario" />
+     <result property="intIndicadorAnulado"      		column="pIndicadoranulado" />
+     <result property="intItemMovimientoAnulado"      	column="pItemmovctacteanulado" />
+     <result property="intItemMovimientoRel"      		column="pItemmovctacteRel" />
+  </resultMap>
+  
+   <resultMap id="resFecha" class="Movimiento" >
+     <result property="tsFechaMovimientoMax"      		column="FECHAMAX" />
+  </resultMap>
+    
+  <parameterMap id="parMovimiento" class="Movimiento">
+     <parameter property="intItemMovimiento"			jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="tsFechaMovimiento"			jdbcType="TIMESTAMP"   	 javaType="java.sql.Timestamp" 		mode="INOUT"/>    
+     <parameter property="intPersEmpresa"				jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intCuenta" 	 				jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>  
+     <parameter property="intPersPersonaIntegrante"		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="intItemCuentaConcepto"		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="intItemExpediente"			jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intItemExpedienteDetalle" 	jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intParaTipoConceptoGeneral" 	jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+	 <parameter property="intParaTipoMovimiento"		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>    
+     <parameter property="intParaDocumentoGeneral"		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="strSerieDocumento" 			jdbcType="VARCHAR"    	 javaType="java.lang.String" 		mode="INOUT"/>
+     <parameter property="strNumeroDocumento"			jdbcType="VARCHAR"   	 javaType="java.lang.String" 		mode="INOUT"/>    
+     <parameter property="intParaTipoCargoAbono"		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="bdMontoMovimiento" 		 	jdbcType="NUMERIC"   	 javaType="java.math.BigDecimal" 	mode="INOUT"/>
+     <parameter property="bdMontoSaldo" 		 		jdbcType="NUMERIC"   	 javaType="java.math.BigDecimal" 	mode="INOUT"/>
+     <parameter property="intPeriodoPlanilla" 		 	jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intPersEmpresaUsuario" 		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intPersPersonaUsuario" 		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intIndicadorAnulado" 		 	jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intItemMovimientoAnulado" 	jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intItemEgresoGeneral" 		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intPersEmpresaEgreso" 		jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+     <parameter property="intItemMovimientoRel"			jdbcType="NUMERIC"   	 javaType="java.lang.Integer" 		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 					 jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intItemMovimiento" 			 jdbcType="NUMERIC" 	 javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorCuentaEmpresaConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCuentaEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+ <parameterMap id="parPorCtaEmpPersCptoGeneral" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+     <parameter property="intPersPersonaIntegrante" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoConceptoGeneral" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCtaExpTipo" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+     <parameter property="intPersPersonaIntegrante" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoMovimiento" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpediente" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaDocumentoGeneral" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpediente" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parMovimientoMaximo" class="java.util.Map">
+  	<parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+  </parameterMap>
+
+  <parameterMap id="parXCtaItemCtoTipoCtoGral" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoConceptoGeneral" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpediente" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+
+<parameterMap id="parXEmpCtaTipoMov" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoMovimiento" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+    
+    <parameterMap id="parXCtaEmpCtoTipo" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoConceptoGeneral" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorExpedienteYCtoGral" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpediente" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpedienteDetalle" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoConceptoGeneral" 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap> 
+
+  <parameterMap id="parPorExpedienteYTipoCpto" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpediente" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaTipoConcepto" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaDocumentoGeneral" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parFechaMax" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersIntegrante" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>  
+    
+  <parameterMap id="parPorExpCtaDocGral" class="java.util.Map">
+   	 <parameter property="cursorLista" 					jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" 		mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			 	jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intCuenta" 			 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intItemExpediente" 			jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+   	 <parameter property="intParaDocumentoGeneral" 		jdbcType="NUMERIC" 	 	javaType="java.lang.Integer"  	    mode="IN"/>
+  </parameterMap>
+      
+  <procedure id="grabar" parameterMap="parMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parMovimiento" >
+	{ call PKG_MOVIMIENTOCTACTE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListaPorPK(?,?) }
+  </procedure>
+
+  <procedure id="getListaPorCuentaEmpresaConcepto" parameterMap="parPorCuentaEmpresaConcepto" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListXCuentaEmpresaConcepto(?,?,?,?) }
+  </procedure>  
+  
+   <procedure id="getListPeriodoMaxCuentaEmpresa" parameterMap="parPorCuentaEmpresa" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListPeriodoMaxCuentaEmpresa(?,?,?) }
+  </procedure> 
+ 
+  <procedure id="getListXCtaYPersYCptoGeneral" parameterMap="parPorCtaEmpPersCptoGeneral"    resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListXCtaYPersYCptoGeneral(?,?,?,?,?) }
+  </procedure>  
+  
+    <procedure id="getListXCtaExpedienteYTipoMov" parameterMap="parPorCtaExpTipo"    resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListXCtaExpedienteYTipoMov(?,?,?,?,?,?,?,?) }
+  </procedure>    
+  
+  <procedure id="getListXCtaExpediente" parameterMap="parPorExpediente" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListXCtaExpediente(?,?,?,?,?) }
+  </procedure>  
+    
+  <procedure id="getListaMaximoMovimiento" parameterMap="parMovimientoMaximo" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListaMaximoMovimiento(?) }
+  </procedure>
+    
+  <procedure id="getListaMovimientoPorCtaItemConceptoTipoConceptoGeneral" parameterMap="parXCtaItemCtoTipoCtoGral" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListXCtaItemCtoTipoCtoGral(?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getListaMaximoMovimientoPorCuentaConcepto" parameterMap="parXCtaEmpCtoTipo" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListaMaxMovXCtaCto(?,?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getListaMovimientoPorExpedienteCredito" parameterMap="parPorCuentaEmpresaConcepto" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListaMaxMovXCtaCto(?,?,?,?) }
+  </procedure> 
+    
+  <procedure id="getListXCuentaYEmpresa" parameterMap="parPorCuentaEmpresa" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListXCuentaYEmpresa(?,?,?) }
+  </procedure>  
+  
+    <procedure id="getMaxMovXCtaEmpresaTipoMov" parameterMap="parXEmpCtaTipoMov" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getMaxMovXCtaEmpresaTipoMov(?,?,?,?) }
+  </procedure> 
+
+   <procedure id="getMaxXExpYCtoGral" parameterMap="parPorExpedienteYCtoGral" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getMaxXExpYCtoGral(?,?,?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getListaMovVtaCtePorPagar" parameterMap="parPorExpedienteYTipoCpto" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListaMovVtaCtePorPagar(?,?,?,?,?,?) }
+  </procedure>   
+
+  <procedure id="getMaxMovCtaCteXFecha" parameterMap="parFechaMax" resultMap="resFecha">
+	{ call PKG_MOVIMIENTOCTACTE.getMaxMovCtaCteXFecha(?,?) }
+  </procedure>  
+  
+  <procedure id="getListaMovCtaCtePorPagarLiq" parameterMap="parPorExpCtaDocGral" resultMap="resMovimiento">
+	{ call PKG_MOVIMIENTOCTACTE.getListaMovCtaCtePorPagarLiq(?,?,?,?,?) }
+  </procedure>     
+
+</sqlMap>  

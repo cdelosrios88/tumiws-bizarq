@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PerfilDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.Perfil" alias="Perfil"/> 
+	
+  <resultMap id="resPerfil" class="Perfil" >
+     <result property="id.intItemAdendaPerfil"  column="pITEMADENDAPERFIL_N" />
+     <result property="intConvenio"      		column="pCONVENIO_N" />
+     <result property="intItemConvenio"    		column="pITEMCONVENIO_N" />
+     <result property="intPersEmpresaPk"     	column="pPERS_EMPRESA_N_PK" />
+     <result property="intSeguPerfilPk"   		column="pSEGU_PERFIL_N_PK" />
+     <result property="intPersonaRegistraPk"   	column="pPERSONAREGISTRA_PK_N" />
+     <result property="strObservacion"   		column="pOBSERVACION_V" />
+  </resultMap>
+  
+  <parameterMap id="parPerfil" class="Perfil">
+     <parameter property="id.intItemAdendaPerfil"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intConvenio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="intItemConvenio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="intSeguPerfilPk" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPersonaRegistraPk" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="strObservacion" 			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemAdendaPerfil" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKAdenda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdItemConvenio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdPerfil" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPerfil">
+	{ call PKG_ADENDAPERFIL.grabar(?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPerfil" >
+	{ call PKG_ADENDAPERFIL.modificar(?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPerfil">
+	{ call PKG_ADENDAPERFIL.getListaPorPk(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkAdenda" parameterMap="parPorPKAdenda" resultMap="resPerfil">
+	{ call PKG_ADENDAPERFIL.getListaPorPkAdenda(?,?,?,?,?) }
+  </procedure>
+    
+</sqlMap>  

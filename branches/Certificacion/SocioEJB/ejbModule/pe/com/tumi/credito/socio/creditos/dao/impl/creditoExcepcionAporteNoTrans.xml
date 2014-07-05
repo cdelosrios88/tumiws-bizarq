@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoExcepcionAporteNoTransDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.CreditoExcepcionAporteNoTrans" alias="AporteNoTrans"/> 
+	
+  <resultMap id="resAporteNoTrans" class="AporteNoTrans" >
+     <result property="id.intPersEmpresaPk"      	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"	column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      		column="pITEMCREDITO_N" />
+     <result property="id.intItemCreditoExcepcion"  column="pITEMEXCEPCION_N_COD" />
+     <result property="id.intParaTipoCaptacionCod"  column="pPARA_TIPOCAPTACION_N_COD" />
+     <result property="intValor"     				column="pVALOR_N" />
+  </resultMap>
+  
+  <parameterMap id="parAporteNoTrans" class="AporteNoTrans">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intItemCreditoExcepcion" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intParaTipoCaptacionCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intValor" 					javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoExcepcion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCaptacionCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKCreditoExcepcion" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoExcepcion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parAporteNoTrans">
+	{ call PKG_CONFCREAPORTENOTRANS.grabar(?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAporteNoTrans" >
+	{ call PKG_CONFCREAPORTENOTRANS.modificar(?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAporteNoTrans">
+	{ call PKG_CONFCREAPORTENOTRANS.getListaPorPK(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPkCreditoExcepcion" parameterMap="parPorPKCreditoExcepcion" resultMap="resAporteNoTrans">
+	{ call PKG_CONFCREAPORTENOTRANS.getListaPorPkCreditoExcepcion(?,?,?,?,?) }  
+  </procedure> 
+</sqlMap>

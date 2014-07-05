@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TablaDaoIbatis">
+    <typeAlias type="pe.com.tumi.parametro.tabla.domain.Tabla" alias="beanMaestroParametros"/>
+    
+    <resultMap id="resTabla" class="beanMaestroParametros" >
+	     <result property="intIdMaestro"      	column="IDMAESTRO" />
+	     <result property="intIdDetalle"      	column="IDDETALLE" />
+	     <result property="strDescripcion"      column="DESCRIPCION" />
+	     <result property="strAbreviatura"      column="ABREVIATURA" />
+	     <result property="intOrden"      		column="ORDEN" />
+	     <result property="intEstado"      		column="ESTADO" />
+	     <result property="strIdAgrupamientoA"  column="AGRUPAMIENTOA" />
+	     <result property="strIdAgrupamientoB"	column="AGRUPAMIENTOB" />
+	     <result property="tipoVisualizacion"	column="pVisualizacion_n" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaMotivosAcceso" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIdParametro" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaDetalle" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIdParametro" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIdDetalle" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaTablaAgrupamiento" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIdParametro" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIdAgrupamientoB" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaTablaAgrupamientoAlterno" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIdParametro" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIdAgrupamientoA" 	javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+
+ 	<parameterMap id="prmtPorIdMaestroYNotInIdDetalle" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intIdMaestro" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="csvIdDetalle" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+        
+    <procedure id="getListaTabla" parameterMap="prmtListaMotivosAcceso" resultMap="resTabla">
+		{ call PKG_TABLA.getlistaTabla( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="getListaTablaPorIdDetalle" parameterMap="prmtListaDetalle" resultMap="resTabla">
+		{ call PKG_TABLA.getlistaTablaPorIdDetalle( ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="getListaTablaPorAgrupamiento" parameterMap="prmtListaTablaAgrupamiento" resultMap="resTabla">
+		{ call PKG_TABLA.getlistaTablaPorAgrupamientoB( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="getListaTablaPorAgrupamientoA" parameterMap="prmtListaTablaAgrupamientoAlterno" resultMap="resTabla">
+		{ call PKG_TABLA.getListPorAgrupamientoA( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="getListaPorMaestroYNotInDet" parameterMap="prmtPorIdMaestroYNotInIdDetalle" resultMap="resTabla">
+		{ call PKG_TABLA.getListaPorMaestroYNotInDet( ?, ?, ? ) }  
+    </procedure>
+</sqlMap>

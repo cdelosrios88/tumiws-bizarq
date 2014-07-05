@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PermisoUsuarioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.PermisoUsuario" alias="PermisoUsuario"/> 
+	
+  <resultMap id="resPermisoUsuario" class="PermisoUsuario" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intIdPerfil"  			column="pIdperfil_n" />
+     <result property="id.dtDesde"      			column="pDesde_d" />
+     <result property="id.intPersPersonaPk"   		column="pPers_persona_n_pk" />
+     <result property="id.intIdTransaccion" 		column="pIdtransaccion_n" />
+     <result property="tsFechaRegistro"   			column="pFecharegistro_d" />
+     <result property="dtDesde"    					column="pDesde_d" />
+     <result property="dtHasta"  					column="pHasta_d" />
+     <result property="intIdEstado"    				column="pIdestado_n" />
+     <result property="tsFechaEliminacion"  		column="pFechaeliminacion_d" />
+  </resultMap>
+  
+  <parameterMap id="parPermisoUsuario" class="PermisoUsuario">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdPerfil"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.dtDesde" 				jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="id.intPersPersonaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdTransaccion"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="tsFechaRegistro" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="dtDesde" 					jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="dtHasta"					jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intIdEstado" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="dtDesde" 				jdbcType="DATE"		 	 javaType="java.util.Date"  	mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPermisoUsuario">
+	{ call PKG_PERMISOUSUARIO.grabar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPermisoUsuario" >
+	{ call PKG_PERMISOUSUARIO.modificar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPermisoUsuario">
+	{ call PKG_PERMISOUSUARIO.getListaPorPK(?,?,?,?,?,?) }
+  </procedure>
+
+</sqlMap>  

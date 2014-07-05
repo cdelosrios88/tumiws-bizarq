@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<managed-bean>
+		<managed-bean-name>testController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.test.controller.TestController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>planillaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.planilla.controller.PlanillaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>envioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.planilla.envio.controller.EnvioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>efectuadoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.planilla.efectuado.controller.EfectuadoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>cobranzaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.gestion.controller.CobranzaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.fileupload.FileUploadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>enlaceReciboController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.enlacerecibo.controller.EnlaceReciboController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>cobroController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.cobro.controller.CobroController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>solicitudCtaCteController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.solicitudcta.controller.SolicitudCtaCteController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>cuentaCteController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.movcuentacte.controller.CuentaCteController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+		
+	<!--Convertidor Montos-->
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+	
+	<!-- Inicio cambio, cdelosrios, 24062013 -->
+	<managed-bean>
+		<managed-bean-name>cierreOperacionalController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.cierreoperacional.mensual.controller.CierreOperacionalController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Navigation Rules -->
+	<navigation-rule>
+		<from-view-id>/pages/cierreOperacional/mensual/*</from-view-id>
+		<navigation-case>
+			<from-outcome>cierreOperacional.mensual.cierreOperacional</from-outcome>
+			<to-view-id>/pages/cierreOperacional/mensual/cierreOperacional.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- End Navigation Rules -->
+	<!-- Fin cambio, cdelosrios, 24062013 -->
+	
+	<managed-bean>
+		<managed-bean-name>cierreMensualContabilidadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.cobranza.cierreoperacional.mensual.controller.ContabilidadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+</faces-config>

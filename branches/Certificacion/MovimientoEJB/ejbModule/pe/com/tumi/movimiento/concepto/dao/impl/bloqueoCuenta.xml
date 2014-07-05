@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="BloqueoCuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.BloqueoCuenta" alias="BloqueoCuenta"/> 
+	
+  <parameterMap id="parBloqueoCuenta" class="BloqueoCuenta">
+     	<parameter property="intItemBloqueoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaPk"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intCuentaPk"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intItemCuentaConcepto"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intItemExpediente"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intItemExpedienteDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoBloqueoCod"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsFechaInicio"					javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="tsFechaFin"					javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intParaCodigoMotivoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="strObservacion"				javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+		<parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaUsuarioPk"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaUsuarioPk"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoCod"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaEliminaPk"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaEliminaPk"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsFechaEliminar"				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intParaTipoConceptoCre"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+		 
+  </parameterMap>
+  
+    <resultMap id="resBloqueoCuenta" class="BloqueoCuenta" >
+		<result property="intItemBloqueoCuenta" 			column="pcmovitemblcun"/>
+		<result property="intPersEmpresaPk"   				column="ppersempresan"/>
+		<result property="intCuentaPk" 						column="pcsoccuentan"/>
+		<result property="intItemCuentaConcepto" 			column="pcmovitemcuentaconcepto"/>
+		<result property="intItemExpediente" 				column="pcseritemexpedienten"/>
+		<result property="intItemExpedienteDetalle" 		column="pcseritemdetexpedienten"/>
+		<result property="intParaTipoBloqueoCod"			column="pparatipobloqueoncod"/>
+		<result property="tsFechaInicio" 					column="pblcuiniciod"/>
+		<result property="tsFechaFin" 						column="pblcufind"/>
+		<result property="intParaCodigoMotivoCod" 			column="pparacodigomotivoncod"/>
+		<result property="strObservacion" 					column="pblcuobservacionv"/>
+		<result property="tsFechaRegistro" 					column="pblcufecharegistrod"/>
+		<result property="intPersEmpresaUsuarioPk" 			column="ppersempresausuarion"/>
+		<result property="intPersPersonaUsuarioPk" 			column="pperspersonausuarion"/>
+		<result property="intParaEstadoCod" 			    column="pparaestadoncod"/>
+		<result property="intPersEmpresaEliminaPk" 			column="ppersempresaeliminan"/>
+		<result property="intPersPersonaEliminaPk" 			column="pperspersonaeliminan"/>
+		<result property="tsFechaEliminar" 			        column="pblcufechaeliminard"/>
+		<result property="intParaTipoConceptoCre" 		    column="pparatipoconceptocre"/>
+  </resultMap>
+  
+    <resultMap id="resCuentaConceptoDetBloqueoSepelio" class="BloqueoCuenta" >
+     <result property="montoFdoSepelio"     		   column="pMONTO_FDOSEPELIO" />
+  </resultMap>
+  
+  <parameterMap id="parPorEmpresaYCuentaSepelio" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorFiltro" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk"			javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intCuentaPk"				javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intParaCodigoMotivoCod"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+ </parameterMap>
+ 
+ <parameterMap id="parPorNroCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk"			javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intCuentaPk"				javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+ </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parBloqueoCuenta">
+	{ call PKG_BloqueoCuenta.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  </procedure>
+  
+  <procedure id="getListaPorNroCuentaYMotivo" parameterMap="parPorFiltro" resultMap="resBloqueoCuenta">
+	{ call PKG_BloqueoCuenta.getListaPorNroCuentaYMotivo(?,?,?,?) }
+  </procedure>
+  
+   <procedure id="getListaPorNroCuenta"       parameterMap="parPorNroCuenta" resultMap="resBloqueoCuenta">
+	{ call PKG_BloqueoCuenta.getListaPorNroCuenta(?,?,?) }
+  </procedure>
+  
+    <procedure id="getListaFondoSepelio" parameterMap="parPorEmpresaYCuentaSepelio" resultMap="resCuentaConceptoDetBloqueoSepelio">
+	{ call PKG_CTACONCEPTO_DET_BLOQUEO.getListaFondoSepelio(?,?,?) }  
+  	</procedure>
+</sqlMap>  

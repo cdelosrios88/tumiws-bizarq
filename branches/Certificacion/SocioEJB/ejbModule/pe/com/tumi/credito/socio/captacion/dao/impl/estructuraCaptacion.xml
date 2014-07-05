@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EstructuraCaptacionDaoIbatis">
+
+	<typeAlias
+		type="pe.com.tumi.credito.socio.captacion.domain.EstructuraCaptacion"
+		alias="EstructuraCaptacion" />
+
+	<resultMap id="resEstructuraCaptacion" class="EstructuraCaptacion">
+		<result property="id.intConvenio" column="pCONVENIO_N" />
+		<result property="id.intNivel" column="pNIVEL_N" />
+		<result property="id.intCodigo" column="pCODIGO_N" />
+		<result property="id.intCaso" column="pCASO_N" />
+		<result property="id.intItemCaso" column="pITEMCASO_N" />
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCaptacionCod" column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" column="pITEM_N" />
+	</resultMap>
+
+	<parameterMap id="parEstructuraCaptacion" class="EstructuraCaptacion">
+		<parameter property="id.intConvenio" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intNivel" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intCodigo" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intCaso" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItemCaso" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intConvenio" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intNivel" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intCodigo" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intCaso" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItemCaso" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parPorPKCaptacion" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parEstructuraCaptacion">
+		{ call PKG_CEDETCONFCAPT.grabar(?,?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parEstructuraCaptacion">
+		{ call PKG_CEDETCONFCAPT.modificar(?,?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resEstructuraCaptacion">
+		{ call PKG_CEDETCONFCAPT.getListaPorPK(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPkCaptacion" parameterMap="parPorPKCaptacion"
+		resultMap="resEstructuraCaptacion">
+		{ call PKG_CEDETCONFCAPT.getListaPorPkCaptacion(?,?,?,?,?,?,?,?,?) }
+	</procedure>
+
+</sqlMap>  

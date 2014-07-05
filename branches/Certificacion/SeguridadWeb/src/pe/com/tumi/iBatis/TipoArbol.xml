@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+    <typeAlias type="pe.com.tumi.seguridad.domain.OpcionMenu" alias="recurso"/> 
+    
+    <parameterMap id="seguridad.domain.recurso.map" class="recurso">  
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>  
+         <parameter property="fechaCreacion" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>  
+         <parameter property="fechaModificacion" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>  
+         <parameter property="codigo" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="descripcion" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="estado" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="nombre" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="controller" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="initMethod" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="navigationRule" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="tipoNodo" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/> 
+         <parameter property="superior" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>
+         <parameter property="usuarioCreacion" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/> 
+         <parameter property="usuarioModificacion" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="OUT"/>  
+    </parameterMap>  
+       
+    <resultMap id="seguridad.domain.recurso.result" class="recurso" >
+	     <result property="id" column="RECC_NID_TIP_ARBL"/>
+	     <result property="fechaCreacion" column="RECC_DFECH_CRECN"/>
+	     <result property="fechaModificacion" column="RECC_DFECH_MODFCN"/>
+	     <result property="codigo" column="RECC_VCODG"/>
+	     <result property="descripcion" column="RECC_VDESCRPCN"/>  
+         <result property="estado" column="RECC_VESTD"/>  
+         <result property="nombre" column="RECC_VNOMBR"/>  
+		 <result property="controller" column="RECC_VCONTRLLR"/>
+         <result property="initMethod" column="RECC_VINT_METHD"/> 
+         <result property="navigationRule" column="RECC_VNAV_RUL"/>
+         <result property="tipoNodo" column="RECC_VTIP_NOD"/>
+         <result property="superior" column="RECC_NSUPR_ID"/> 
+         <result property="usuarioCreacion" column="RECC_NUSR_CRECN_ID"/>  
+	     <result property="usuarioModificacion" column="RECC_NUSR_MODFCN_ID"/> 
+    </resultMap>
+    
+    <parameterMap id="parameterMap_01" class="java.util.Map">
+     	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="parameterMap_02" class="java.util.Map">
+   		<parameter property="id" javaType="java.lang.Long" jdbcType="NUMBER" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="parameterMap_03" class="java.util.Map">
+   		<parameter property="condition" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+
+    <parameterMap id="parameterMap_04" class="java.util.Map">
+   		<parameter property="id" javaType="java.lang.Long" jdbcType="NUMBER" mode="IN"/>
+   		<parameter property="sistema" javaType="java.lang.Long" jdbcType="NUMBER" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+                
+    <procedure id="seguridad.domain.recurso.find" parameterMap="parameterMap_03" resultMap="seguridad.domain.recurso.result">
+		{ call PKG_ASE.RECSS_FIND( ? , ? ) }  
+    </procedure>
+
+    <procedure id="seguridad.domain.recurso.findTree" parameterMap="parameterMap_04" resultMap="seguridad.domain.recurso.result">
+		{ call PKG_ASE.RECSS_FINDBYUSRID( ? , ? , ? ) }  
+    </procedure>
+
+    <procedure id="seguridad.domain.recurso.findOpciones" parameterMap="parameterMap_02" resultMap="seguridad.domain.recurso.result">
+		{ call PKG_ASE.RECSS_FINDBYROLID( ? , ? ) }  
+    </procedure>
+    
+    <procedure id="seguridad.domain.recurso.insert" parameterMap="seguridad.domain.recurso.map">
+		{ call PKG_ASE.RECSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ) }  
+    </procedure>
+
+    <procedure id="seguridad.domain.recurso.save" parameterMap="seguridad.domain.recurso.map">
+		{ call PKG_ASE.RECSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ) }  
+    </procedure>
+        
+    <procedure id="seguridad.domain.recurso.delete" parameterClass="java.lang.Long">  
+        { call PKG_ASE.RECSD_DELETE( #id# , #id# ) }  
+    </procedure> 
+         
+    <procedure id="seguridad.domain.recurso.saveRelations" parameterClass="java.util.Map">  
+        { call PKG_ASE.ROCSU_SAVE( #id1# , #id2# , #id1# ) }  
+    </procedure>
+    
+    <procedure id="seguridad.domain.recurso.deleteRelations" parameterClass="java.util.Map">  
+        { call PKG_ASE.ROCSD_DELETE( #id1# , #id2# , #id1# ) }  
+    </procedure>
+    
+</sqlMap>  

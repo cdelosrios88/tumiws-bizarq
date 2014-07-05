@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<project default="main" basedir=".">
+<property name="path.seguridad" value="${basedir}\..\Seguridad" />
+<property name="path.persona" value="${basedir}\..\Persona" />
+<property name="path.parametro" value="${basedir}\..\Parametro" />
+<property name="path.socio" value="${basedir}\..\Socio" />
+<property name="path.servicio" value="${basedir}\..\Servicio" />
+<property name="path.movimiento" value="${basedir}\..\Movimiento" />
+<property name="path.cobranza" value="${basedir}\..\Cobranza" />
+<property name="path.riesgo" value="${basedir}\..\Riesgo" />
+<property name="path.contabilidad" value="${basedir}\..\Contabilidad" />
+<property name="path.presupuesto" value="${basedir}\..\Presupuesto" />
+<target name="main" description="Create project" depends="copiar">
+	<echo>copiar jars.</echo>
+</target>
+	
+<target name="proceso">
+	<ant antfile="${basedir}\jar.xml" dir="${basedir}\" target="crear-jar"/>
+	<copy file="${basedir}\Tumi.jar" tofile="${path.seguridad}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.persona}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.parametro}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.socio}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.servicio}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.movimiento}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.riesgo}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.contabilidad}\EarContent\META-INF\Tumi.jar" />
+	<copy file="${basedir}\Tumi.jar" tofile="${path.presupuesto}\EarContent\META-INF\Tumi.jar" />
+	<!--delete file="${basedir}\Tumi.jar"/-->
+</target>
+	
+<target name="copiar" description="copia el jar Seguridad" depends="proceso"/>
+</project>

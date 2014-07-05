@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="JuridicaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.empresa.domain.Juridica" alias="Juridica"/> 
+	
+  <resultMap id="resJuridica" class="Juridica" >
+     <result property="intIdPersona"      			column="pPERSONA_N" />
+     <result property="strRazonSocial"    			column="pRAZONSOCIAL_V" />
+     <result property="strNombreComercial"      	column="pNOMBRECOMERCIAL_V" />
+     <result property="strSiglas"   				column="pSIGLAS_V" />
+     <result property="dtFechaInscripcion"   		column="pFECHAINSCRIPCION_D" />
+     <result property="intNroTrabajadores"      	column="pNROTRABAJADORES_N" />
+     <result property="intTipoEmpresaCod"    		column="pTIPOEMPRESA_N_COD" />
+     <result property="intTipoContribuyenteCod" 	column="pTIPOCONTRIBUYENTE_N_COD" />
+     <result property="intCondContribuyente"   		column="pCONDCONTRIBUYENTE_N" />
+     <result property="intEstadoContribuyenteCod"   column="pESTADOCONTRIBUYENTE_N_COD" />
+     <result property="intEmisionComprobante"      	column="pEMISIONCOMPROBANTE_N" />
+     <result property="intSistemaContable"   		column="pSISTEMACONTABLE_N" />
+     <result property="intComercioExterior"   		column="pCOMERCIOEXTERIOR_N" />
+     <result property="dtFechaInicioAct"   			column="pFECHAINICIOACT_D" />
+     <result property="strFichaRegPublico" 			column="pFICHAREGPUBLICO_V" />
+  </resultMap>
+  
+   <resultMap id="resJuridicaSucursal" class="Juridica" >
+   		<result property="intIdPersona"      			column="pPERSONA_N" />
+   		<result property="strRazonSocial"    			column="pRAZONSOCIAL_V" />
+   </resultMap>
+  
+  <parameterMap id="parJuridica" class="Juridica">
+     <parameter property="intIdPersona"				  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="strRazonSocial"			  jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="strNombreComercial" 		  jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="strSiglas" 				  jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="dtFechaInscripcion" 		  jdbcType="DATE"		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intNroTrabajadores"		  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intTipoEmpresaCod"		  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intTipoContribuyenteCod" 	  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intCondContribuyente" 	  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEstadoContribuyenteCod"  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEmisionComprobante" 	  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intSistemaContable" 		  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intComercioExterior" 		  jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtFechaInicioAct" 		  jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="strFichaRegPublico" 		  jdbcType="VARCHAR"	javaType="java.lang.String"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+  	 <parameter property="cursorLista" 				  	jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet"   mode="OUT"/>
+     <parameter property="pIntIdPersona"			  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pStrRazonSocial"			  	jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>    
+     <parameter property="pStrNombreComercial" 		  	jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>  
+     <parameter property="pStrSiglas" 				  	jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+     <parameter property="pDtFechaInscripcion" 		  	jdbcType="TIMESTAMP"	javaType="java.util.Date" 		mode="IN"/>
+     <parameter property="pIntNroTrabajadores"		  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pIntTipoEmpresaCod"		  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>    
+     <parameter property="pIntTipoContribuyenteCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>  
+     <parameter property="pIntCondContribuyente" 	  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntEstadoContribuyenteCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntEmisionComprobante" 	  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>  
+     <parameter property="pIntSistemaContable" 		  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntComercioExterior" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pDtFechaInicioAct" 		  	jdbcType="DATE"  		javaType="java.util.Date" 		mode="IN"/>
+     <parameter property="pStrFichaRegPublico" 		  	jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorInPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="csvIdPersona" 	javaType="java.lang.String"  jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorInPkLikeRazon" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="csvIdPersona" 	javaType="java.lang.String"  jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="strRazonSocial" 	javaType="java.lang.String"  jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parCursor" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parRazonSocial" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="strRazonSocial" 		javaType="java.lang.String"  	jdbcType="VARCHAR" 	   	 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parNombeComercial" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="strNombreComercial" 	javaType="java.lang.String"  	jdbcType="VARCHAR" 	   	 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parEfectuadoConArchivo" class="java.util.Map">
+  	<parameter property="cursorLista" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+  	<parameter property="intEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+  	<parameter property="intModalidad" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+  	<parameter property="intCaso" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+  	<parameter property="intTipoSocio" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+  	<parameter property="strProg" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+  	<parameter property="strCodEst" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parEfectuadoWithFile" class="java.util.Map">
+  	<parameter property="cursorLista" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+  	<parameter property="strProg" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+  	<parameter property="strCodEst" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parJuridica">
+	{ call PKG_JURIDICA.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parJuridica" >
+	{ call PKG_JURIDICA.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getListaPorPK(?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorInPk" parameterMap="parPorInPk" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getListaPorInPk(?,?) }  
+  </procedure>
+
+  <procedure id="getListaPorInPkLikeRazon" parameterMap="parPorInPkLikeRazon" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getListaPorInPkLikeRazon(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaDeEmpresa" parameterMap="parCursor" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getListaDeEmpresa(?) }  
+  </procedure>
+  
+  <procedure id="getJuridicaBusqueda" parameterMap="parBusqueda" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getJuridicaBusqueda(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorRazonSocial" parameterMap="parRazonSocial" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getListaPorRazonSocial(?,?) }  
+  </procedure>
+
+  <procedure id="getListaPorNombreComercial" parameterMap="parNombeComercial" resultMap="resJuridica">
+	{ call PKG_JURIDICA.getListaPorNombreComercial(?,?) }  
+  </procedure>  
+  
+  <procedure id="listaJuridicaWithFile" parameterMap="parEfectuadoWithFile" resultMap="resJuridicaSucursal">
+	{ call PKG_JURIDICA.listaJuridicaWithFile(?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

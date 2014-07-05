@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfServCreditoEmpresaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.configuracion.domain.ConfServCreditoEmpresa" alias="ConfServCreditoEmpresa"/> 
+	
+  <resultMap id="resConfServCreditoEmpresa" class="ConfServCreditoEmpresa" >
+     <result property="id.intPersEmpresaPk"      			column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    				column="pItemreqaut_n" />
+     <result property="id.intParaTipoCreditoEmpresaCod" 	column="pPara_tipocreditoempresa_n_cod" />
+     <result property="intValor"      						column="pValor_n" />
+  </resultMap>
+  
+  <parameterMap id="parConfServCreditoEmpresa" class="ConfServCreditoEmpresa">
+     <parameter property="id.intPersEmpresaPk"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemSolicitud"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intParaTipoCreditoEmpresaCod" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intValor" 						jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	mode="IN"/>
+   	 <parameter property="intItemSolicitud" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	mode="IN"/>
+   	 <parameter property="intParaTipoCreditoEmpresaCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConfServCreditoEmpresa">
+	{ call PKG_CONFCREDITOEMPRESA.grabar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfServCreditoEmpresa" >
+	{ call PKG_CONFCREDITOEMPRESA.modificar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfServCreditoEmpresa">
+	{ call PKG_CONFCREDITOEMPRESA.getListaPorPk(?,?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resConfServCreditoEmpresa">
+	{ call PKG_CONFCREDITOEMPRESA.getListaPorCabecera(?,?,?) }  
+  </procedure>
+</sqlMap>  

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ReciboManualDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.ingreso.domain.ReciboManual" alias="ReciboManual"/> 
+	
+  <resultMap id="resReciboManual" class="ReciboManual" >
+	<result property="id.intPersEmpresa"  				column="pempresarecibo" />
+	<result property="id.intItemReciboManual"   		column="pitemrecibomanual" />
+	<result property="intParaTipoDocumentoGeneral"   	column="ptipodocumentogeneral" />
+    <result property="intSucuIdSucursal"      			column="pidsucursal" />
+    <result property="intSudeIdSubsucursal"     		column="pidsubsucursal" />
+    <result property="intSerieRecibo"      				column="pserierecibo" />
+    <result property="intNumeroInicio"      			column="pnumeroinicio" />
+    <result property="intNumeroFinal"      				column="pnumerofinal" />
+    <result property="intParaEstado"      				column="pestado" />
+    <result property="intParaEstadoCierre"      		column="pestadocierre" />
+  </resultMap>
+  
+  <parameterMap id="parReciboManual" class="ReciboManual">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemReciboManual"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoDocumentoGeneral"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSerieRecibo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroInicio"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroFinal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemReciboManual"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+   <parameterMap id="parBuscar" class="java.util.Map">
+	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoDocumentoGeneral"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSerieRecibo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroInicio"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroFinal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+   <parameterMap id="parValidarNroRecibo" class="java.util.Map">
+   	 <parameter property="vResult" 					javaType="java.lang.Integer" 		jdbcType="NUMERIC"      mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intNroRecibo"		        javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+ 
+  <procedure id="getListaPorBuscar" parameterMap="parBuscar" resultMap="resReciboManual">
+	{ call PKG_RECIBOMANUAL.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="grabar" parameterMap="parReciboManual">
+	{ call PKG_RECIBOMANUAL.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parReciboManual" >
+	{ call PKG_RECIBOMANUAL.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resReciboManual">
+	{ call PKG_RECIBOMANUAL.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="validarNroReciboPorSuc" parameterMap="parValidarNroRecibo">
+	{ call PKG_RECIBOMANUAL.validarNroReciboPorSuc(?,?,?,?,?) }
+  </procedure>
+</sqlMap>

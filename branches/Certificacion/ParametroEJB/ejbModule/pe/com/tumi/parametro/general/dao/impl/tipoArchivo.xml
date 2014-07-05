@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TipoArchivoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.general.domain.TipoArchivo" alias="TipoArchivo"/> 
+	
+  <resultMap id="resTipoArchivo" class="TipoArchivo" >
+     <result property="intParaTipoCod"      	column="pPara_tipo_n_cod" />
+     <result property="strDescripcion"    		column="pDescripcion_v" />
+     <result property="strRuta"      			column="pRuta_v" />
+     <result property="intParaGrupoArchivoCod"  column="pGrupoarchivo_n_cod" />
+     <result property="strPrefijo"   			column="pPrefijo_v" />
+  </resultMap>
+  
+  <parameterMap id="parTipoArchivo" class="TipoArchivo">
+     <parameter property="intParaTipoCod"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="strDescripcion"			jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="strRuta" 					jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="intParaGrupoArchivoCod" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strPrefijo"				jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>    
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intParaTipoCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parTipoArchivo">
+	{ call PKG_TIPOARCHIVO.grabar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parTipoArchivo" >
+	{ call PKG_TIPOARCHIVO.modificar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resTipoArchivo">
+	{ call PKG_TIPOARCHIVO.getListaPorPK(?,?) }  
+  </procedure>
+  
+</sqlMap>  
