@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application id="Application_ID" version="5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd">
+ <display-name>Movimiento</display-name>
+ <module id="Module_1340318852406">
+ 	<web>
+ 		<web-uri>MovimientoWeb.war</web-uri>
+ 		<context-root>MovimientoWeb</context-root>
+ 	</web>
+ </module>
+ <module id="Module_1340318852515">
+ 	<ejb>MovimientoEJB.jar</ejb>
+ </module> 
+ </application> 

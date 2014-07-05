@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.seguridad.domain.AccesoEspecial" alias="beanAccesoEspecial"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.AccesoEspecialDet" alias="beanAccesoEspecialDet"/>
+    
+    <resultMap id="accesoespecial.domain.accesoespecial.resultAccesosEspeciales" class="beanAccesoEspecial" >
+	     <result property="intIdUsuario"      		column="ID_USUARIO" />
+	     <result property="strNombreUsuario"      	column="NOMBRE_USUARIO" />
+	     <result property="strApepatUsuario"      	column="APEPAT_USUARIO" />
+	     <result property="strApematUsuario"      	column="APEMAT_USUARIO" />
+	     <result property="intIdEstado"      		column="ACES_IDESTADO_N" />
+	     <result property="intIdEmpresa"      		column="ID_EMPRESA" />
+	     <result property="strEmpresa"      		column="EMPRESA" />
+	     <result property="intTipoUsuario"      	column="TIPO_USUARIO" />
+	     <result property="intIdSucursal"      		column="ID_SUCURSAL" />
+	     <result property="strSucursal"      		column="NOMBRE_SUCURSAL" />
+	     <result property="strFechaInicio"      	column="FECHA_INICIO" />
+	     <result property="strFechaFin"      		column="FECHA_FIN" />
+	     <result property="intIdResponsable"      	column="ID_RESP" />
+	     <result property="strNombreResp"      		column="NOMBRE_RESP" />
+	     <result property="strApepatResp"      		column="APEPAT_RESP" />
+	     <result property="strApematResp"      		column="APEMAT_RESP" />
+	     <result property="strFechaRegistro"      	column="FECHA_REGISTRO" />
+	     <result property="strObservacion"      	column="OBSERVACION" />
+	     <result property="intIdMotivo"      		column="ID_MOTIVO" />
+	     <result property="intAccesoFeriados"      	column="FERIADOS" />
+	     <result property="intAccesoRemoto"      	column="ACCESO_REMOTO" />
+	     <result property="strEstado"      			column="ESTADO" />
+	     <result property="strTipoUsuario"      	column="DESC_USUARIO" />
+    </resultMap>
+    
+    <resultMap id="accesoespecial.domain.accesoespecial.resultAccesosDetalle" class="beanAccesoEspecialDet" >
+	     <result property="intIdEmpresa"      		column="ID_EMPRESA" />
+	     <result property="intIdUsuario"      		column="ID_USUARIO" />
+	     <result property="strFechaInicio"      	column="FECHA_INICIO" />
+	     <result property="intIdDia"      			column="ID_DIA" />
+	     <result property="strHoraInicio"      		column="HORA_INICIO" />
+	     <result property="strHoraFin"      		column="HORA_FIN" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaAccesosEspeciales" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pFechaInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="pIntIdEstado" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdMotivo" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdResponsable" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pRangoFecha1" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="pRangoFecha2" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="pTipoConsulta" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaAccesosFHDetalle" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pFechaInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtGrabarAccesoEspecial" class="beanAccesoEspecial">
+    	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaFin" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intAccesoFeriados" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdEmpresaSuc"	 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intAccesoRemoto" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strObservacion" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intIdMotivo" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdResponsable" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdEstado" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaRegistro" 	javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtGrabarAccesoEspecialDet" class="beanAccesoEspecialDet">
+    	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intIdDia" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strHoraInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strHoraFin" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intConta" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarAccesoEspecial" class="java.util.Map">
+    	 <parameter property="pIntIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pIntIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="pFechaInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="accesoespecial.domain.accesoespecial.getListaAccesosEspeciales" parameterMap="prmtListaAccesosEspeciales" resultMap="accesoespecial.domain.accesoespecial.resultAccesosEspeciales">
+		{ call PKG_TUMI.listar_accesosespeciales( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+	
+	<procedure id="accesoespecial.domain.accesoespecial.getListaAccesosDetalle" parameterMap="prmtListaAccesosFHDetalle" resultMap="accesoespecial.domain.accesoespecial.resultAccesosDetalle">
+		{ call PKG_TUMI.listar_accesosespeciales_det( ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="accesoespecial.domain.accesoespecial.grabarAccesoEspecial" parameterMap="prmtGrabarAccesoEspecial" >
+		{ call PKG_TUMI.grabar_accesoespecial( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="accesoespecial.domain.accesoespecial.grabarAccesoEspecialDet" parameterMap="prmtGrabarAccesoEspecialDet" >
+		{ call PKG_TUMI.grabar_accesoespecial_det( ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="accesoespecial.domain.accesoespecial.eliminarAccesoEspecial" parameterMap="prmtEliminarAccesoEspecial" >
+		{ call PKG_TUMI.eliminar_accesoespecial( ?, ?, ? )  }  
+	</procedure>
+</sqlMap>  

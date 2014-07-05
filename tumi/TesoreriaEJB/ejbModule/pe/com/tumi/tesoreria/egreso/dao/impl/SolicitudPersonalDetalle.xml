@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudPersonalDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.SolicitudPersonalDetalle" alias="SolicitudPersonalDetalle"/> 
+	
+  <resultMap id="resSolicitudPersonalDetalle" class="SolicitudPersonalDetalle" >
+	<result property="id.intPersEmpresa"  			column="pempresarrhh" />
+	<result property="id.intItemSolicitudPersonal"  column="pitemsolpersonal" />
+	<result property="id.intItemSolicitudPersonalDetalle" column="pitemsolpersonaldet" />
+    <result property="intParaDocumentoGeneral"      column="pdocumentogeneral" />
+    <result property="intPersEmpresaAbonado"		column="pempresaabonado" />
+    <result property="intPersPersonaAbonado"      	column="ppersonaabonado" />
+    <result property="bdMonto"      				column="pmonto" />
+    <result property="intSucuIdSucursal"      		column="pidsucursalabonado" />
+    <result property="intSudeIdSubsucursal"      	column="pidsubsucursalabonado" />
+    <result property="intIdArea"      				column="pidarea" />
+    <result property="intPersEmpresaCuenta"      	column="pempresacuenta" />
+    <result property="intContPeriodoCuenta"      	column="pperiodocuenta" />
+    <result property="strContNumeroCuenta"      	column="pnumerocuenta" />
+    <result property="intParaOpcionDebeHaber"      	column="popciondebehaber" />
+    <result property="intNumeroDocumento"     		column="pnumerodocumento" />
+  </resultMap>
+  
+  <parameterMap id="parSolicitudPersonalDetalle" class="SolicitudPersonalDetalle">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemSolicitudPersonal"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemSolicitudPersonalDetalle" javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaDocumentoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaAbonado"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAbonado"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMonto"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdArea"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaOpcionDebeHaber"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroDocumento"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonalDetalle"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorSolicitudPersonal" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonalDetalle"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+    
+  <procedure id="grabar" parameterMap="parSolicitudPersonalDetalle">
+	{ call PKG_SOLICITUDPERSONALDETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSolicitudPersonalDetalle" >
+	{ call PKG_SOLICITUDPERSONALDETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resSolicitudPersonalDetalle">
+	{ call PKG_SOLICITUDPERSONALDETALLE.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorSolicitudPersonal" parameterMap="parPorSolicitudPersonal" resultMap="resSolicitudPersonalDetalle">
+	{ call PKG_SOLICITUDPERSONALDETALLE.getListaPorSolicitudPersonal(?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_SOLICITUDPERSONALDETALLE.eliminar(?,?,?) }
+  </procedure>  
+</sqlMap>

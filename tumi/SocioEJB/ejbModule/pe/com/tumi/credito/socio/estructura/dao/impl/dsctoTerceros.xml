@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TercerosDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.Terceros" alias="Terceros"/> 
+	
+  <resultMap id="resTerceros" class="Terceros" >
+     <result property="id.intPeriodo"   					column="pPeriodo_n" />
+     <result property="id.intMes"   						column="pMes_n" />
+     <result property="id.intNivel"  						column="pNivel_n" />
+     <result property="id.intCodigo"   						column="pCodigo_n" />
+     <result property="id.intParaTipoArchivoPadronCod"   	column="pTipoarchivopadron_n_cod" />
+     <result property="id.intParaModalidadCod"   			column="pModalidad_n_cod" />
+     <result property="id.intParaTipoSocioCod"   			column="pTiposocio_n_cod" />
+     <result property="id.intItemAdministraPadron"   		column="pItemadministrapadron_n" />
+     <result property="id.intItemDesctoTerceros"   			column="pItemdsctotercero_n" />
+     <result property="strCpto"   							column="pCpto_v" />
+     <result property="strPeriodo"   						column="pPeriodo_n" />
+     <result property="strNombre"   						column="pNombre_v" />
+     <result property="intMonto"   							column="pMonto_n" />
+     <result property="strProgSub"   						column="pMonto_n" />
+     <result property="strCodEst"   						column="pCodest_v" />
+     <result property="strTipoPla"   						column="pTipopla_v" />
+     <result property="strPro"   							column="pPro_v" />
+     <result property="strCodEje"   						column="pCodeje_n" />
+     <result property="strLibeje"   						column="pLibeje_v" />
+     <result property="strNomCpto"   						column="pNomcpto_v" />
+  </resultMap>
+  
+  <resultMap id="resFilaTerceros" class="Terceros" >
+     <result property="id.intPeriodo"   					column="pPeriodo_n" />
+     <result property="id.intMes"   						column="pMes_n" />
+     <result property="intMonto"   							column="pMonto_n" />
+  </resultMap>
+  
+  <resultMap id="resColumnaTerceros" class="Terceros" >
+     <result property="id.intPeriodo"   					column="pPeriodo_n" />
+     <result property="id.intMes"   						column="pMes_n" />
+     <result property="strCpto"   							column="pCpto_v" />
+     <result property="intMonto"   							column="pMonto_n" />
+  </resultMap>
+  
+  <parameterMap id="parPorDNI" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pDocIdentidad" 		javaType="java.lang.String"  	jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+  
+   <parameterMap id="parPorDNIITEM" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pDocIdentidad" 		javaType="java.lang.String"  	jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="pItemPadron" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="getListaFilaTercerosPorDNI" parameterMap="parPorDNI" resultMap="resFilaTerceros">
+	{ call PKG_DSCTOTERCERO.getListaFilaTercerosPorDNI(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaColumnaTercerosPorDNI" parameterMap="parPorDNI" resultMap="resColumnaTerceros">
+	{ call PKG_DSCTOTERCERO.getListaColumnaTercerosPorDNI(?,?) }  
+  </procedure>
+  
+   <procedure id="getPorItemDNI" parameterMap="parPorDNIITEM" resultMap="resTerceros">
+	{ call PKG_DSCTOTERCERO.getPorItemDNI(?,?,?) }  
+  </procedure>
+</sqlMap>  

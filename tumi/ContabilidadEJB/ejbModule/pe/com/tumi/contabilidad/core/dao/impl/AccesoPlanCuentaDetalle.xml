@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoPlanCuentaDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.AccesoPlanCuentaDetalle" alias="AccesoPlanCuentaDetalle"/> 
+	
+  <resultMap id="resAccesoPlanCuentaDetalle" class="AccesoPlanCuentaDetalle" >
+	<result property="id.intEmpresaCuenta"  				column="pempresacuenta" />
+	<result property="id.intPeriodoCuenta"   				column="pperiodocuenta" />
+	<result property="id.strNumeroCuenta"   				column="pnumerocuenta" />
+	<result property="id.intIdTransaccion"   				column="pidtransaccion" />
+	<result property="id.intItemAccesoPlanCuenta"   		column="pitemconaccplacu" />
+	<result property="id.intItemAccesoPlanCuentaDetalle" 	column="pconaccplacumon" />
+	<result property="bdMontoMaximo"   						column="pmontomaximo" />
+	<result property="bdMontoMinimo"   						column="pmontominimo" />
+	<result property="intParaPeriodoRestriccion"   			column="pperiodorestriccion" />
+	<result property="intParaOpcionDebeHaber"   			column="popciondebehaber" />
+	<result property="intParaEstado"   						column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parAccesoPlanCuentaDetalle" class="AccesoPlanCuentaDetalle">
+	 <parameter property="id.intEmpresaCuenta"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPeriodoCuenta"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.strNumeroCuenta"					javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="id.intIdTransaccion"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAccesoPlanCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAccesoPlanCuentaDetalle"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoMaximo"						javaType="java.math.BigDecimal"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoMinimo"						javaType="java.math.BigDecimal"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaPeriodoRestriccion"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaOpcionDebeHaber"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 							javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+	 <parameter property="intEmpresaCuenta"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPeriodoCuenta"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strNumeroCuenta"						javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intIdTransaccion"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAccesoPlanCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAccesoPlanCuentaDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+
+  <parameterMap id="parPorAccesoPlanCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 							javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>	 
+	 <parameter property="intEmpresaCuenta"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strNumeroCuenta"						javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="intIdTransaccion"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAccesoPlanCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  
+  <procedure id="grabar" parameterMap="parAccesoPlanCuentaDetalle">
+	{ call PKG_ACCPLACUDET.grabar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAccesoPlanCuentaDetalle" >
+	{ call PKG_ACCPLACUDET.modificar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAccesoPlanCuentaDetalle">
+	{ call PKG_ACCPLACUDET.getListaPorPk(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorAccesoPlanCuenta" parameterMap="parPorAccesoPlanCuenta" resultMap="resAccesoPlanCuentaDetalle">
+	{ call PKG_ACCPLACUDET.getListaPorAccesoPlanCuenta(?,?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

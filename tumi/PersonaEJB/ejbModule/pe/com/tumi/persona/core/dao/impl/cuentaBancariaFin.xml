@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaBancariaFinDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.core.domain.CuentaBancariaFin" alias="CuentaBancariaFin"/> 
+	
+  <resultMap id="resCuentaBancariaFin" class="CuentaBancariaFin" >
+     <result property="id.intIdPersona"      		column="pPERSONA_N" />
+     <result property="id.intIdCuentaBancaria"    	column="pCUENTABANCARIA_N" />
+     <result property="id.intParaTipoFinCuenta"    	column="pTIPOFINCUENTA_N" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaBancariaFin" class="CuentaBancariaFin">
+     <parameter property="id.intIdPersona"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>   
+     <parameter property="id.intIdCuentaBancaria" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoFinCuenta"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdCuentaBancaria" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoFinCuenta"		javaType="java.lang.Integer"  jdbcType="NUMERIC"   	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCuentaBancaria" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdCuentaBancaria" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+   	 <parameter property="intIdPersona" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdCuentaBancaria" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoFinCuenta"		javaType="java.lang.Integer"  jdbcType="NUMERIC"   	   mode="IN"/>
+  </parameterMap> 
+   
+  <procedure id="grabar" parameterMap="parCuentaBancariaFin">
+	{ call PKG_CUENTAFIN.grabar(?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resCuentaBancariaFin">
+	{ call PKG_CUENTAFIN.getListaPorPK(?,?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorCuentaBancaria" parameterMap="parPorCuentaBancaria" resultMap="resCuentaBancariaFin">
+	{ call PKG_CUENTAFIN.getListaPorCuentaBancaria(?,?,?) }  
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_CUENTAFIN.eliminar(?,?,?)  }  
+  </procedure>
+</sqlMap>  

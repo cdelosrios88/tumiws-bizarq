@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GestionCobranzaSocDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.gestion.domain.GestionCobranzaSoc" alias="GestionCobranzaSoc"/> 
+	
+  <resultMap id="resGestionCobranzaSoc" class="GestionCobranzaSoc" >
+     <result property="id.intPersEmpresaGestion"   column="IDEMPRESA" />
+     <result property="id.intItemGestionCobranza"  column="IDTEMGESTIONCOBRANZA" />
+     <result property="id.intItemGestCobrSocio"    column="IDITEM" />
+     <result property="intTipoPersonaOpe"   	   column="TIPOPERSONA" />
+     <result property="intPersEmpresa"   	       column="EMPRSOCIO" />
+     <result property="intPersPersona"   	       column="PERSSOCIO" />
+     <result property="intCsocCuenta"   	       column="NROCUENTA" />
+     <result property="intCserItemExp"   	       column="ITEMEXPEDIENTE" />
+     <result property="intCserdeteItemExp"   	   column="ITEMDETEXPEDIENTE" />
+     <result property="intParaEstado"              column="ESTADO" />
+  </resultMap>
+  
+  <parameterMap id="parGestionCobranzaSoc" class="GestionCobranzaSoc">
+     <parameter property="id.intPersEmpresaGestion"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemGestionCobranza"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemGestCobrSocio" 	    jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intTipoPersonaOpe"		    jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intPersEmpresa" 		        jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intPersPersona" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCsocCuenta" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCserItemExp" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCserdeteItemExp" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstado" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parFiltro" class="java.util.Map">
+   	 <parameter property="cursorLista" 		      javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaGestion"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemGestionCobranza" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		       javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	  <parameter property="intPersEmpresaGestion"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	 mode="IN"/>
+   	  <parameter property="intItemGestionCobranza" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	 mode="IN"/>
+   	  <parameter property="intItemGestCobrSocio"   javaType="java.lang.Integer"  jdbcType="NUMERIC" 	 mode="IN"/>
+   	  
+  </parameterMap>
+ 
+  <parameterMap id="parPorCuentaPKYPeriodo" class="java.util.Map">
+   	 <parameter property="cursorLista" 		    javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"  		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intCsocCuenta" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="strFechaGestion"    	javaType="java.lang.String"		jdbcType="VARCHAR"  	mode="INOUT"/>
+  </parameterMap>
+    
+  <procedure id="getListaGestionCobranzaSoc" parameterMap="parFiltro" resultMap="resGestionCobranzaSoc">
+	{ call PKG_GESTIONCOBRANZASOC.getListaGestionCobranzaSoc(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getGestionCobranzaSocPorPK" parameterMap="parPorPK" resultMap="resGestionCobranzaSoc">
+	{ call PKG_GESTIONCOBRANZASOC.getGestionCobranzaSoc(?,?,?,?) }  
+  </procedure>
+      
+  <procedure id="grabar"    parameterMap = "parGestionCobranzaSoc">
+	{ call PKG_GESTIONCOBRANZASOC.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap = "parGestionCobranzaSoc" >
+	{ call PKG_GESTIONCOBRANZASOC.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure> 
+  
+  <procedure id="getListaPorCuentaPkYPeriodo" parameterMap="parPorCuentaPKYPeriodo" resultMap="resGestionCobranzaSoc">
+	{ call PKG_GESTIONCOBRANZASOC.getListaPorCuentaPkYPeriodo(?,?,?,?) }  
+  </procedure>
+</sqlMap>  

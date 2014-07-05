@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/util.common"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/server.jee.was.7.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/fwk.ibatis.2.3.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/fwk.spring.2.5.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/util.log.log4j.1.2.14"/>
+	<classpathentry kind="lib" path="C:/Archivos de programa/IBM/WebSphere/AppServer/lib/j2ee.jar"/>
+	<classpathentry kind="lib" path="C:/Archivos de programa/IBM/WebSphere/AppServer/plugins/com.ibm.ws.runtime.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Seguridad/EarContent/META-INF/spring-2.5.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Seguridad/EarContent/META-INF/ibatis-sqlmap-2.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Seguridad/EarContent/META-INF/log4j-1.2.14.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Seguridad/EarContent/META-INF/commons-beanutils-core-1.7.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

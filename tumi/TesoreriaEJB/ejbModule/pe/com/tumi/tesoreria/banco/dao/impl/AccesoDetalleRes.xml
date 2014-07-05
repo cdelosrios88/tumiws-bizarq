@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoDetalleResDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.banco.domain.AccesoDetalleRes" alias="AccesoDetalleRes"/> 
+	
+  <resultMap id="resAccesoDetalleRes" class="AccesoDetalleRes" >
+	<result property="id.intPersEmpresaAcceso"  	column="pPers_empresaacceso" />
+	<result property="id.intItemAcceso"   			column="pTeso_itemacceso" />
+	<result property="id.intItemAccesoDetalle"  	column="pTeso_itemaccesodetalle" />
+	<result property="id.intItemAccesoDetalleRes"   column="pTeso_itemaccdetres" />
+	<result property="intPersEmpresaResponsable"   	column="pPers_empresaresponsable" />
+	<result property="intPersPersonaResponsable"   	column="pPers_personaresponsable" />
+	<result property="intOrden"   					column="pAdre_orden" />
+	<result property="intParaEstado"   				column="pPara_estado" />
+	<result property="tsFechaRegistro"   			column="pAdre_fecharegistro" />
+	<result property="intPersEmpresaUsuario"   		column="pPers_empresausuario" />
+	<result property="intPersPersonaUsuario"   		column="pPers_personausuario" />
+	<result property="tsFechaEliminacion"   		column="pAdre_fechaeliminacion" />
+	<result property="intPersEmpresaElimina"   		column="pPers_empresaelimina" />
+	<result property="intPersPersonaElimina"   		column="pPers_personaelimina" />
+  </resultMap>
+  
+  <parameterMap id="parAccesoDetalleRes" class="AccesoDetalleRes">
+	 <parameter property="id.intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAcceso"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAccesoDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAccesoDetalleRes"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaResponsable"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaResponsable"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intOrden"						javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaEliminacion"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaElimina"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaElimina"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAcceso"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAccesoDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAccesoDetalleRes"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+    
+  <parameterMap id="parPorAccesoDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAcceso"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAcceso"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemAccesoDetalle"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parAccesoDetalleRes">
+	{ call PKG_ACCESODETALLERES.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAccesoDetalleRes" >
+	{ call PKG_ACCESODETALLERES.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAccesoDetalleRes">
+	{ call PKG_ACCESODETALLERES.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorAccesoDetalle" parameterMap="parPorAccesoDetalle" resultMap="resAccesoDetalleRes">
+	{ call PKG_ACCESODETALLERES.getListaPorAccesoDetalle(?,?,?,?) }
+  </procedure>
+</sqlMap>

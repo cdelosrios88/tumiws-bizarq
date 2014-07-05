@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="InteresProvisionadoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.InteresProvisionado" alias="InteresProvisionado"/>
+	
+	<parameterMap  id="parInteresProvisionado" class="InteresProvisionado"> 
+		<parameter property="id.intPersEmpresaPk"			  javaType="java.lang.Integer"     jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intCuentaPk"				  javaType="java.lang.Integer" 	   jdbcType="NUMERIC" 	    mode="INOUT"/>
+		<parameter property="id.intItemExpediente"			  javaType="java.lang.Integer" 	   jdbcType="NUMERIC" 	    mode="INOUT"/>
+		<parameter property="id.intItemExpedienteDetalle"	  javaType="java.lang.Integer"     jdbcType="NUMERIC"		mode="INOUT"/>		
+		<parameter property="id.intItemInteres"				  javaType="java.lang.Integer" 	   jdbcType="NUMERIC" 	    mode="INOUT"/>
+		<parameter property="intParaTipoMovInt"				  javaType="java.lang.Integer"     jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsFechaInicio"					  javaType="java.sql.Timestamp"	   jdbcType="TIMESTAMP"	    mode="INOUT"/>
+		<parameter property="tsFechaFin"					  javaType="java.sql.Timestamp"	   jdbcType="TIMESTAMP"	    mode="INOUT"/>
+		<parameter property="intNumeroDias"					  javaType="java.lang.Integer" 	   jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="bdSaldoPrestamo" 				  javaType="java.math.BigDecimal"  jdbcType="NUMERIC"       mode="INOUT"/>
+		<parameter property="bdTasaInteres" 				  javaType="java.math.BigDecimal"  jdbcType="NUMERIC"       mode="INOUT"/>
+		<parameter property="bdMontoInteres" 				  javaType="java.math.BigDecimal"  jdbcType="NUMERIC"       mode="INOUT"/>
+		<parameter property="bdMontoAtrasadoInteres" 		  javaType="java.math.BigDecimal"  jdbcType="NUMERIC"       mode="INOUT"/>
+		<parameter property="bdMontoTotalInteres" 			  javaType="java.math.BigDecimal"  jdbcType="NUMERIC"       mode="INOUT"/>
+		<parameter property="bdMontoSaldo" 					  javaType="java.math.BigDecimal"  jdbcType="NUMERIC"       mode="INOUT"/>
+		<parameter property="intParaEstado"					  javaType="java.lang.Integer" 	   jdbcType="NUMERIC" 	    mode="INOUT"/>
+	</parameterMap>
+	
+	
+	<procedure id="grabar" parameterMap="parInteresProvisionado">
+		{ call PKG_InteresProvisionado.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+	  </procedure>
+</sqlMap>   

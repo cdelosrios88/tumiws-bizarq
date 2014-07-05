@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="ServicioDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.credito.asociativo.domain.Servicio" alias="Servicio"/>
+
+	<resultMap id="resCaptaciones" class="Servicio" >
+	     <result property="intPersEmpresaPk"  		column="pEMPRESA" />
+	     <result property="intIdSucursal"    		column="pIDSUCURSAL" />
+	     <result property="intIdSubSucursal"    	column="pIDSUBSUCURSAL" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	     <result property="intAnio"    				column="pANIO" />
+	     <result property="intMes"    				column="pMES" />
+	     <result property="bdProyectado"     		column="pMONTO_PROYECTADO" />
+	     <result property="bdMontoEjecutado"     	column="pMONTO_EJECUTADO" />
+	     <!-- <result property="intCantCondAltas"     	column="pCANT_CONDICION_ALTAS" /> -->
+	</resultMap>
+	
+	<resultMap id="resDetallePrestamo" class="Servicio" >
+	     <result property="strNroCuenta"    		column="pNUMERO_CUENTA" />
+	     <result property="strNombreSocio"    		column="pSOCIO" />
+	     <result property="strFechaSolicitud"    	column="pFECHA_SOLICITUD" />
+	     <result property="strFechaEgreso"    		column="pFECHA_EGRESO" />
+	     <result property="bdMontoTotal"    		column="pMONTO_TOTAL" />
+	     <result property="strUnidadEjecutora"    	column="pUNIDAD_EJECUTORA" />
+	     <result property="intIdSucursal"     		column="pSUCURSAL" />
+	</resultMap>
+	
+	<resultMap id="resCantProyectadas" class="Servicio" >
+		 <result property="bdProyectado"     		column="pMONTO_PROYECTADO" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	</resultMap>
+	
+	<resultMap id="resCantEjecutadas" class="Servicio" >
+	     <result property="bdMontoEjecutado"     	column="pMONTO_EJECUTADO" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	</resultMap>
+	
+	<resultMap id="resSaldoServicio" class="Servicio" >
+	     <result property="strCuentaSaldo"    		column="pCUENTA" />
+	     <result property="strFechaSolicitudSaldo"  column="pFECHASOLICITUD" />
+	     <result property="strTipoSaldo"    		column="pTIPO" />
+	     <result property="strNumeroSolicitudServicio" column="pNUMEROEXPEDIENTE" />
+	     <result property="bdMontoSolicitud"    	column="pMONTOSOLICITUD" />
+	     <result property="bdMontoCancelado"     	column="pMONTOCANCELADO" />
+	     <result property="bdMontoSaldo"    		column="pSALDO" />
+	     <result property="intNroCuotasTotales"    	column="pCUOTATOTAL" />
+	     <result property="intCuotasFaltantes"    	column="pFALTANTES" />
+	</resultMap>
+	
+	<resultMap id="resPrimerDscto" class="Servicio" >
+		 <result property="strCuentaPrimerDscto"    		column="pCUENTA" />
+	     <result property="strTipoSocio"    				column="pPARATIPOSOCIO" />
+	     <result property="intIdSucursalSocio" 	 			column="pSUCURSALSOCIO" />
+	     <result property="intIdSucursalAtencion"   		column="pSUCURSALATENCION" />
+	     <result property="strTipoSolicitud" 				column="pTIPO" />
+	     <result property="strNroSolicitud" 				column="pNROEXPEDIENTE" />
+	     <result property="strReprestamo"    				column="pREPRESTAMO" />
+	     <result property="strFechaSolicitudPrimerDscto"    column="pFECHASOLICITUD" />
+	     <result property="strPrimerMes"    				column="pPRIMERMES" />
+	     <result property="bdMontoSolicitudPrimerDscto"    	column="pMONTO" />
+	     <result property="bdCapacidadSolicitudPrimerDscto" column="pCAPACIDAD" />
+	     <result property="bdCuotaFijaSolicitudPrimerDscto" column="pCUOTAFIJA" />
+	     <result property="bdDsctoEnviado"    				column="pDSCTOENVIADO" />
+	     <result property="bdDsctoEfectuado"    			column="pDSCTOEFECTUADO" />
+	     <result property="bdDiferenciaDscto"    			column="pDIFERENCIADSCTO" />
+	     <result property="bdIngresoCaja"    				column="pINGRESOCAJA" />
+	     <result property="bdDiferenciaCaja"    			column="pDIFERENCIACAJA" />
+	</resultMap>
+	
+	<parameterMap id="parCantProyectadas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoIndicador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parCantEjecutadas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="strRefinanciados" 	javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+	</parameterMap>
+		
+	<parameterMap id="parCantCondAltasYBajas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="strTabla" 			javaType="java.lang.String"	  jdbcType="VARCHAR"  	   mode="IN"/>
+	   	 <parameter property="strColumna" 			javaType="java.lang.String"	  jdbcType="VARCHAR"  	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parDetallePrestamo" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parConveniosPorSucursal" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parSaldoServicio" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoServicio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intSubTipoServicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parPrimerDscto" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdTipoSocio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoServicio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intSubTipoServicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdTipoFecha" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdMes" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdAnio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="bdMontoMin" 			javaType="java.math.BigDecimal"  jdbcType="NUMERIC"    mode="IN"/>
+	   	 <parameter property="bdMontoMax" 			javaType="java.math.BigDecimal"  jdbcType="NUMERIC"    mode="IN"/>
+	   	 <parameter property="strReprestamo" 		javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+	   	 <parameter property="intIdTipoDiferencia" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<procedure id="getCantidadProyectadas" parameterMap="parCantProyectadas" resultMap="resCantProyectadas">
+		{ call PKG_CREDITOS_SERVICIO.getCantidadProyectadas(?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getCantCaptacionesEjec" parameterMap="parCantEjecutadas" resultMap="resCantEjecutadas">
+		{ call PKG_CREDITOS_SERVICIO.getCantCaptacionesEjec(?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getCaptacionesEjecutadasDetalle" parameterMap="parDetallePrestamo" resultMap="resDetallePrestamo">
+		{ call PKG_CREDITOS_SERVICIO.getCapEjecDetalle(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getSaldoServicios" parameterMap="parSaldoServicio" resultMap="resSaldoServicio">
+		{ call PKG_CREDITOS_SERVICIO.getSaldoServicio(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getPrimerDscto" parameterMap="parPrimerDscto" resultMap="resPrimerDscto">
+		{ call PKG_CREDITOS_SERVICIO.getAnalisisPrimerDscto(?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+
+</sqlMap>  	

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.seguridad.domain.Sesiones" alias="beanSesion"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.AuditoriaSistemas" alias="beanAudisis"/>
+    
+    <resultMap id="audisis.domain.audisis.resultSesiones" class="beanSesion" >
+	     <result property="intIdEmpresa"      		column="IDEMPRESA" />
+	     <result property="intIdUsuario"      		column="IDUSUARIO" />
+	     <result property="strUsuario"      		column="USUARIO" />
+	     <result property="strSucursal"      		column="SUCURSAL" />
+	     <result property="strFechaRegistro"      	column="FECHA_REGISTRO" />
+	     <result property="strFecha"      			column="FECHA" />
+	     <result property="strHoraIni"      		column="HORA_INICIO" />
+	     <result property="strHoraFin"      		column="HORA_FIN" />
+	     <result property="strEstado"	      		column="ESTADO" />
+    </resultMap>
+    
+    <resultMap id="audisis.domain.audisis.resultAuditoriaTablas" class="beanAudisis" >
+	     <result property="intIdAuditoria"      	column="IDAUDITORIA" />
+	     <result property="strTabla"      			column="TABLA" />
+	     <result property="strColumna"      		column="COLUMNA" />
+	     <result property="strValorAnterior"      	column="VALORANTERIOR" />
+	     <result property="strValorNuevo"      		column="VALORNUEVO" />
+	     <result property="strFechaRegistro"     	column="FECHA_REGISTRO" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaSesiones" class="beanSesion">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intEstadoSesion" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoSucursal" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intRangoFechas" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaRegistro" 	javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaFin" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarSesiones" class="beanSesion">
+    	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdUsuario" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaRegistro" 	javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaAuditoriaTablas" class="beanAudisis">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="strFechaInicio" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaFin" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intValoresNull" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intValoresCero"		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strOperadorLogico" 	javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strTabla" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strColumna"			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strValorColumna"		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="audisis.domain.audisis.getListaSesiones" parameterMap="prmtListaSesiones" resultMap="audisis.domain.audisis.resultSesiones">
+		{ call PKG_TUMI.listar_sesiones( ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="audisis.domain.audisis.eliminarSesiones" parameterMap="prmtEliminarSesiones" >
+		{ call PKG_TUMI.eliminar_sesionesactivas( ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="audisis.domain.audisis.getListaAuditoriaTablas" parameterMap="prmtListaAuditoriaTablas" resultMap="audisis.domain.audisis.resultAuditoriaTablas">
+		{ call PKG_TUMI.listar_auditoria( ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+</sqlMap>  

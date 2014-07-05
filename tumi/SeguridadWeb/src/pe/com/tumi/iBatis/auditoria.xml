@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.seguridad.domain.Auditoria" alias="Audit"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.FechasAuditoria" alias="FecAudit"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.FormReport" alias="FormReport"/>
+    
+    <resultMap id="auditoria.domain.auditoria.resultCols" class="FecAudit" >
+	     <result property="strCabecera"  			column="V_FECHA"/>
+    </resultMap>
+    
+    <resultMap id="auditoria.domain.auditoria.resultAplicacion" class="Audit" >
+    	 <result property="intIdEmpresa"    		column="ID_EMPRESA" />
+	     <result property="intIdPersona"  			column="ID_PERSONA" />
+	     <result property="strIdTransaccion"  		column="ID_TRANSACCION" />
+	     <result property="strTransaccion"  		column="VC_TRANSACCION" />
+	     <result property="daFecRegistro"  			column="V_FECHA" />
+	     <result property="intCntAcceso"    		column="CNT_ACCESO" />
+    </resultMap>
+    
+    <resultMap id="auditoria.domain.auditoria.resultFormReport" class="FormReport">
+    	 <result property="intIdEmpresa"    		column="ID_EMPRESA" />
+	     <result property="intIdTipoCambio"  		column="ID_TIPOCAMBIO" />
+	     <result property="strTipoCambio"  			column="TIPO_CAMBIO_V" />
+	     <result property="strIdTransaccion"  		column="ID_TRANSACCION" />
+	     <result property="intIdItem"  				column="ID_ITEM" />
+	     <result property="strDescripcion"    		column="V_DESCRIPCION" />
+	     <result property="strFinalidad"    		column="V_FINALIDAD" />
+	     <result property="intIdAnexos"   	 		column="ID_ANEXOS" />
+	     <result property="intIdClase"  	  		column="ID_CLASE" />
+	     <result property="strClase"    			column="V_CLASE" />
+	     <result property="strFecSolicitud"    		column="D_FECSOLICITUD" />
+	     <result property="intIdSolicitante"    	column="ID_SOLICITANTE" />
+	     <result property="strSolicitante"    		column="V_SOLICITANTE" />
+	     <result property="strObservacion"    		column="V_OBSERVACION" />
+	     <result property="intIdEstado"    			column="ID_ESTADO" />
+	     <result property="strEstado"    			column="V_DESCRIPCION_ESTADO" />
+	     <result property="intIdDesarrollador"   	column="ID_DESARROLLADOR" />
+	     <result property="strDesarrollador"    	column="V_DESARROLLADOR" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaCols" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdTipoReporte"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pDaFecIni"		 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pDaFecFin"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaAplicacion" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoAplicacion"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrIdTransacciones" 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdPersona"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoReporte"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pDaFecIni"		 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pDaFecFin"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaFormReport" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pDaFecIni"		 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pDaFecFin"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIdTransacciones"	 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIdDataObjects"	 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="auditoria.domain.auditoria.getListaCols" parameterMap="prmtListaCols" resultMap="auditoria.domain.auditoria.resultCols">
+		{ call PKG_TUMI.listar_cols( ?, ?, ?, ? ) }
+    </procedure>
+
+    <procedure id="auditoria.domain.auditoria.getListaAplicacion" parameterMap="prmtListaAplicacion" resultMap="auditoria.domain.auditoria.resultAplicacion">
+		{ call PKG_TUMI.listar_aplicacion( ?, ?, ?, ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="auditoria.domain.auditoria.getListaFormReport" parameterMap="prmtListaFormReport" resultMap="auditoria.domain.auditoria.resultFormReport">
+		{ call PKG_TUMI.listar_formreport( ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+</sqlMap>  

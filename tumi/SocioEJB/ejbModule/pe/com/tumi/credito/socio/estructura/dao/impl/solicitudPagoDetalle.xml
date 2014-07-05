@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudPagoDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.SolicitudPagoDetalle" alias="SolicitudPagoDetalle"/> 
+	
+  <resultMap id="parSolicitudPagoDetalle" class="SolicitudPagoDetalle" >
+     <result property="id.intNumero"      			column="pNUMERO_N" />
+     <result property="id.intItemPago"    			column="pITEMPAGO_N" />
+	 <result property="intPeriodo"      			column="pPERIODO_N" />
+     <result property="intMes"    					column="pMES_N" />
+     <result property="intNivel"      				column="pNIVEL_N" />
+     <result property="intCodigo"   				column="pCODIGO_N" />
+     <result property="intParaTipoArchivoPadronCod"		column="pPARA_TIPOARCHIVOPADRON_N_COD" />
+     <result property="intParaModalidadCod"			column="pPARA_MODALIDAD_N_COD" />
+     <result property="intParaTipoSocioCod"			column="pPARA_TIPOSOCIO_N_COD" />
+     <result property="intItemAdministraPadron"		column="pITEMADMINISTRAPADRON_N" />
+  </resultMap>
+  
+  <parameterMap id="parSolicitudPagoDetalle" class="SolicitudPagoDetalle">
+  	<parameter property="id.intNumero"      		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT"/>
+	<parameter property="id.intItemPago"      		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT"/>
+	<parameter property="intPeriodo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intMes"					javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+    <parameter property="intNivel" 					javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+    <parameter property="intCodigo" 				javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+    <parameter property="intParaTipoArchivoPadronCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+    <parameter property="intParaModalidadCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+    <parameter property="intParaTipoSocioCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+    <parameter property="intItemAdministraPadron" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+
+  <parameterMap id="parSolicitudPagoDetalleLista" class="java.util.Map">
+  	<parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parSolicitudPagoDetalleBusqueda" class="java.util.Map">
+  	<parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+  	<parameter property="intPeriodo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="intMes"					javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>    
+    <parameter property="intNivel" 					javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>  
+    <parameter property="intCodigo" 				javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>
+    <parameter property="intParaTipoArchivoPadron" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>
+    <parameter property="intParaModalidadCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>  
+    <parameter property="intParaTipoSocio" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>
+    <parameter property="intItemAdministraPadron"	javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parSolicitudPagoDetalle">
+	{ call PKG_SOLPAGODETALLE.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getLista" parameterMap="parSolicitudPagoDetalleLista" resultMap="parSolicitudPagoDetalle">
+	{ call PKG_SOLPAGODETALLE.getLista(?)  }  
+  </procedure>
+  
+  <procedure id="getBusqueda" parameterMap="parSolicitudPagoDetalleBusqueda" resultMap="parSolicitudPagoDetalle">
+	{ call PKG_SOLPAGODETALLE.getBusqueda(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+</sqlMap>  

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfServEstructuraDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.configuracion.domain.ConfServEstructuraDetalle" alias="ConfServEstructuraDetalle"/> 
+	
+  <resultMap id="resConfServEstructuraDetalle" class="ConfServEstructuraDetalle" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    		column="pItemreqaut_n" />
+     <result property="id.intItemEstructura"  		column="pItemreqautest_n" />
+     <result property="intCodigoPk"      			column="pCodigo_n_pk" />
+     <result property="intNivelPk"    				column="pNivel_n_pk" />
+     <result property="intParaEstadoCod"  			column="pEstado_n" />
+     <result property="intCaso"  					column="pCaso_n_pk" />
+     <result property="intItemCaso"  				column="pItemcaso_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parConfServEstructuraDetalle" class="ConfServEstructuraDetalle">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemSolicitud"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemEstructura" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intCodigoPk" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intNivelPk" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCaso"					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemCaso"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemEstructura" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConfServEstructuraDetalle">
+	{ call PKG_CONFESTRUCTURADETALLE.grabar(?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfServEstructuraDetalle" >
+	{ call PKG_CONFESTRUCTURADETALLE.modificar(?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfServEstructuraDetalle">
+	{ call PKG_CONFESTRUCTURADETALLE.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resConfServEstructuraDetalle">
+	{ call PKG_CONFESTRUCTURADETALLE.getListaPorCabecera(?,?,?) }  
+  </procedure>  
+</sqlMap>  

@@ -1,0 +1,12 @@
+<!DOCTYPE tiles-definitions PUBLIC
+ "-//Apache Software Foundation//DTD Tiles Configuration//EN"
+ "http://jakarta.apache.org/struts/dtds/tiles-config.dtd">
+
+ <tiles-definitions>
+	<definition  name="page.template"    path="/templates/default.jsp"/>
+	<definition  name="page.header"      path="/templates/header.jsp"/>
+	<definition  name="page.left"        path="/templates/leftMenu.jsp"/>
+	<definition  name="page.back"        path="/templates/background.jsp"/>
+	<definition  name="pageMonitor.back" path="/templates/backgroundMonitor.jsp"/>
+	<definition  name="page.footer"      path="/templates/footer.jsp"/>
+</tiles-definitions>

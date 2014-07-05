@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+	
+	
+<sqlMap namespace="AutorizaLiquidacionDaoIbatis">
+	<typeAlias type="pe.com.tumi.servicio.prevision.domain.AutorizaLiquidacion"  alias="AutorizaLiquidacion" />
+		<resultMap id="resAutorizaLiquidacion" class="AutorizaLiquidacion" >
+			<result property="id.intPersEmpresaLiquidacionPk" 	column="pPERS_EMPRESALIQUIDACION_N_PK"/>
+			<result property="id.intItemExpedienteLiqui" 		column="pCSER_ITEMEXPEDIENTELIQUI_N"/>
+			<result property="id.intItemAutoriza" 				column="pCSER_ITEMAUTORIZALI_N"/>
+			<result property="intPersEmpresaPk" 				column="pPERS_EMPRESA_N_PK"/>
+			<result property="intPersEmpresaAutoriza" 			column="pPERS_EMPRESAAUTORIZA_N_PK"/>
+			<result property="intParaEstadoAutorizar" 			column="pPARA_ESTADOAUTORIZAR_N_COD"/>
+			<result property="intParaTipoAureobCod" 			column="pPARA_TIPOAUREOB_N_COD"/>
+			<result property="intPersUsuarioAutoriza" 			column="pPERS_USUARIOAUTORIZA_N_PK"/>
+			<result property="tsFechaAutorizacion" 				column="pAULI_FECHAAUTORIZACION_D"/>
+			<result property="strObservacion" 					column="pAULI_OBSERVACION_V"/>
+			<result property="intParaEstado" 					column="pPARA_ESTADO_N_COD"/>
+			<result property="intIdPerfilAutoriza" 				column="pPERF_IDPERFIL_N_PK"/>      
+		</resultMap>
+		
+		<parameterMap id="parAutorizaLiquidacion" class="AutorizaLiquidacion">      
+			<parameter property="id.intPersEmpresaLiquidacionPk"  	jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="id.intItemExpedienteLiqui" 		jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="id.intItemAutoriza" 				jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="intPersEmpresaPk" 					jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="intParaEstadoAutorizar" 			jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="intParaTipoAureobCod" 				jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="intPersEmpresaAutoriza" 			jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="intPersUsuarioAutoriza" 			jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="intIdPerfilAutoriza" 				jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			<parameter property="tsFechaAutorizacion" 				jdbcType ="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+			<parameter property="strObservacion" 					jdbcType ="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+			<parameter property="intParaEstado" 					jdbcType ="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+			
+		</parameterMap>
+		<parameterMap id="parPorPk" class="java.util.Map">
+			<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  	mode="OUT"/>
+			<parameter property="intPersEmpresaLiquidacionPk"  	javaType="java.lang.Integer"  	jdbcType="NUMERIC"			mode="IN"/>
+			<parameter property="intItemExpedienteLiqui" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+			<parameter property="intItemAutoriza" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 			mode="IN"/>
+		</parameterMap>
+		
+		<parameterMap id="parPorPkExpedienteLiquidacion" class="java.util.Map">
+		   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+		   	 <parameter property="intPersEmpresaLiquidacionPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+		   	 <parameter property="intItemExpedienteLiqui" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	  	</parameterMap>
+
+
+		<procedure id="grabar" parameterMap="parAutorizaLiquidacion">
+			{ call PKG_CSE_AUTORIZALIQUI.grabar(?,?,?,?,?,?,?,?,?,?,?,?)}
+		</procedure>	
+		<procedure id="modificar" parameterMap="parAutorizaLiquidacion" >
+			{ call PKG_CSE_AUTORIZALIQUI.modificar(?,?,?,?,?,?,?,?,?,?,?,?)}
+		</procedure>	
+		<procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAutorizaLiquidacion">
+			{ call PKG_CSE_AUTORIZALIQUI.getListaPorPk(?,?,?,?) }
+		</procedure>
+		<procedure id="getListaPorExpedienteLiquidacion" parameterMap="parPorPkExpedienteLiquidacion" resultMap="resAutorizaLiquidacion">
+			{ call PKG_CSE_AUTORIZALIQUI.getListaPorExpedienteLiqui(?,?,?) }
+		</procedure>
+
+
+</sqlMap>

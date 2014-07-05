@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccesoEspecialDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.AccesoEspecialDetalle" alias="AccesoEspecialDetalle"/> 
+	
+  <resultMap id="resAccesoEspecialDetalle" class="AccesoEspecialDetalle" >
+     <result property="id.intItemAcceso"   	column="pItemAcceso_n_pk" />
+     <result property="id.intIdDiaSemana"  	column="pDiaSemana_n" />
+     <result property="intIdEstado"     	column="pEstado_n" />
+     <result property="tsHoraInicio"    	column="pHoraInicio_d" />
+     <result property="tsHoraFin"      		column="pHoraFin_d" />
+  </resultMap>
+  
+  <parameterMap id="parAccesoEspecialDetalle" class="AccesoEspecialDetalle">
+     <parameter property="id.intItemAcceso"   	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intIdDiaSemana"  	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT" />
+     <parameter property="intIdEstado"     		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT" />
+     <parameter property="tsHoraInicio"    		jdbcType="TIMESTAMP"   	javaType="java.sql.Timestamp" 	mode="INOUT" />
+     <parameter property="tsHoraFin"      		jdbcType="TIMESTAMP"   	javaType="java.sql.Timestamp" 	mode="INOUT" />
+  </parameterMap>
+  
+  <parameterMap id="parPorCabecera" class="java.util.Map">
+  	<parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  	javaType="java.sql.ResultSet" 	mode="OUT"/>
+  	<parameter property="intItemAcceso"   		jdbcType="NUMERIC"  		javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+  	<parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  	javaType="java.sql.ResultSet" 	mode="OUT"/>  	
+    <parameter property="intIdDiaSemana"  		jdbcType="NUMERIC"  		javaType="java.lang.Integer" 	mode="IN" />
+  	<parameter property="intItemAcceso"   		jdbcType="NUMERIC"  		javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+    
+  <procedure id="grabar" parameterMap="parAccesoEspecialDetalle">
+	{ call PKG_ACCESOESPECIALDETALLE.grabar(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAccesoEspecialDetalle" >
+	{ call PKG_ACCESOESPECIALDETALLE.modificar(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resAccesoEspecialDetalle">
+	{ call PKG_ACCESOESPECIALDETALLE.getListaPorCabecera(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAccesoEspecialDetalle">
+	{ call PKG_ACCESOESPECIALDETALLE.getListaPorPK(?,?,?) }
+  </procedure>
+
+</sqlMap>  

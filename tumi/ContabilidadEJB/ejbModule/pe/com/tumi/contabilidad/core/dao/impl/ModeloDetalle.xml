@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ModeloDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.ModeloDetalle" alias="ModeloDetalle"/>
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.ModeloDetalleId" alias="ModeloDetalleId"/>
+	
+  <resultMap id="resModeloDetalle" class="ModeloDetalle">
+	<result property="id.intEmpresaPk" 				column="pPers_empresa_n_pk"/>
+	<result property="id.intCodigoModelo"   		column="pCont_codigomodelo_n"/>
+	<result property="id.intPersEmpresaCuenta" 		column="pPers_empresacuenta_n_pk"/>
+	<result property="id.intContPeriodoCuenta"   	column="pCont_periodocuenta_n"/>
+    <result property="id.strContNumeroCuenta"      	column="pCont_numerocuenta_n"/>
+    <result property="intParaOpcionDebeHaber"      	column="pPara_opciondebehaber_n_cod"/>
+    <result property="intParaDocumentoGral"      	column="pPara_DocumentoGeneral_n_cod"/>
+  </resultMap>
+    
+  <parameterMap id="parModeloDetalle" class="ModeloDetalle">
+	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intCodigoModelo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="id.strContNumeroCuenta"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intParaOpcionDebeHaber"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaDocumentoGral"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+    </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntCodigoModelo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntContPeriodoCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pStrContNumeroCuenta"		javaType="java.lang.String" 	jdbcType="VARCHAR"		 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parOfCobranza" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresa"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>	 
+	 <parameter property="intPeriodo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intItemEfectuadoResumen"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intParaTipoConcepto"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>	 	 
+  </parameterMap>
+  
+  
+  
+  <parameterMap id="parDebeOfCobranza" class="java.util.Map">
+  	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+  	<parameter property="intEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intPeriodo"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intCodigoModelo"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>  	
+  </parameterMap>
+  
+  <parameterMap id="parPorModeloId" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntCodigoModelo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parModeloDetalleId" class="ModeloDetalleId">
+	 <parameter property="intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoModelo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="strContNumeroCuenta"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parDebeUSUARIO10" class="java.util.Map">
+  	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+  	<parameter property="intEmpresaDebe"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intPeriodoDebe"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intCodigoModeloDebe"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  	<parameter property="intCodigo"					javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>  	
+  </parameterMap>
+
+    
+  <procedure id="grabar" parameterMap="parModeloDetalle">
+	{ call PKG_MODELODETALLE.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parModeloDetalle" >
+	{ call PKG_MODELODETALLE.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resModeloDetalle">
+	{ call PKG_MODELODETALLE.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorModeloId" parameterMap="parPorModeloId" resultMap="resModeloDetalle">
+	{ call PKG_MODELODETALLE.getListaPorModeloId(?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parModeloDetalleId">
+	{ call PKG_MODELODETALLE.eliminar(?,?,?,?,?) }  
+  </procedure> 
+  
+  <procedure id="getListaDebeOfCobranza" parameterMap="parDebeOfCobranza" resultMap="resModeloDetalle">
+	{ call PKG_MODELODETALLE.getListaDebeOfCobranza(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaDebeOfCobranzaUSUARIO10" parameterMap="parDebeUSUARIO10" resultMap="resModeloDetalle">
+	{ call PKG_MODELODETALLE.getListaDebeUSUARIO10(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaDebeOfCobranzaUSUARIONO10" parameterMap="parDebeUSUARIO10" resultMap="resModeloDetalle">
+	{ call PKG_MODELODETALLE.getListaDebeUSUARIONO10(?,?,?,?,?) }
+  </procedure>
+
+ 
+      
+</sqlMap>  

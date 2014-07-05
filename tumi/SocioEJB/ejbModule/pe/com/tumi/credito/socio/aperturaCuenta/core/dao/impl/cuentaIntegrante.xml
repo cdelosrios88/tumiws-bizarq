@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaIntegranteDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaIntegrante" alias="CuentaIntegrante"/>
+	
+  <resultMap id="resCuentaIntegrante" class="CuentaIntegrante" >
+     <result property="id.intPersEmpresaPk"  		column="pPERS_EMPRESA_PK" />
+     <result property="id.intCuenta"      			column="pCUENTA_N" />
+     <result property="id.intPersonaIntegrante"    	column="pPERS_PERSONAINTEGRANTE_N" />
+     <result property="intParaTipoIntegranteCod"    column="pPARA_TIPOINTEGRANTE_N" />
+     <result property="tsFechaIngreso"   			column="pFECHAINGRESO_D" />
+     <result property="tsFechaRenuncia"   			column="pFECHARENUNCIA_D" />
+     <result property="intPersonaUsuario"   		column="pPERS_PERSONAUSUARIO_N" />
+     <result property="intPersonaFecRenuncia"   	column="pPERS_PERSONAFECRENUNCIA_N" />
+  </resultMap>
+  
+  <resultMap id="resCuentaIntegranteCobranza" class="CuentaIntegrante" >
+  	<result property="id.intPersonaIntegrante"    	column="pPERS_PERSONAINTEGRANTE_N" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaIntegrante" class="CuentaIntegrante">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intCuenta"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intPersonaIntegrante"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="intParaTipoIntegranteCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="tsFechaIngreso" 				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP" mode="INOUT"/>
+     <parameter property="tsFechaRenuncia" 				javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP" mode="INOUT"/>
+     <parameter property="intPersonaUsuario" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intPersonaFecRenuncia" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaIntegrante" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKSocio" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaIntegrante" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPKSocioYTipCuentaYTipoIntegrante" class="java.util.Map">
+   	 <parameter property="cursorLista" 				 javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		 javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaIntegrante" 	 javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCuentaCod" 	 javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoIntegranteCod"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEmpresaYtipoIntegranteYINCuenta" class="java.util.Map">
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="intParaTipoIntegranteCod" javaType="java.lang.Integer"  jdbcType="NUMERIC"  mode="IN"/>
+   	 <parameter property="strCsvCuenta" 			javaType="java.lang.String"   jdbcType="VARCHAR"  mode="IN"/>
+   	 <parameter property="strEscalar" 				javaType="java.lang.String"   jdbcType="VARCHAR"  mode="OUT"/>
+  </parameterMap>
+
+  <parameterMap id="parPorPKSocioYTipCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				 javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		 javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaIntegrante" 	 javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCuentaCod" 	 javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoIntegranteCod"  javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorSocioPKTipoCtaSituacionCta" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersonaIntegrante" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCuentaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaSituacionCuentaCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap> 
+  
+    <parameterMap id="parPorEmpresaCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="empresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="cuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>   	 
+  </parameterMap> 
+  
+  <procedure id="grabar" parameterMap="parCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.grabar(?,?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaIntegrante" >
+	{ call PKG_CUENTAINTEGRANTE.modificar(?,?,?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkCuenta" parameterMap="parPorPKCuenta" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getListaPorPkCuenta(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkSocio" parameterMap="parPorPKSocio" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getIdCuentaPorPkSocio(?,?,?) }
+  </procedure>
+  
+  <procedure id="getLstPorPkSocioYTipCtaYTipInt" parameterMap="parPorPKSocioYTipCuentaYTipoIntegrante" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getLsPorPkSocioYTipCtaYTipInte(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getCsvPersonaPorEmpYIntYINCta" parameterMap="parPorEmpresaYtipoIntegranteYINCuenta">
+	{ call PKG_CUENTAINTEGRANTE.getCsvPersonaPorEmpYIntYINCta(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorPersona" parameterMap="parPorPKSocio" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getCuentaPorPersona(?,?,?) }
+  </procedure>  
+  
+  <procedure id="getListaIntegrantesPorPkPersona" parameterMap="parPorPKSocio" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getLstIntegrantesPorPkPersona(?,?,?) }
+  </procedure>
+
+  <procedure id="getLstPorPkSocioYTipCta" parameterMap="parPorPKSocioYTipCuenta" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getLsPorPkSocioYTipCta(?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getIdCtaActivaXPkSocio" parameterMap="parPorPKSocio" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getIdCtaActivaXPkSocio(?,?,?) }
+  </procedure>
+  
+  <procedure id="getLstPorSocioPKTipoCtaSituacionCta" parameterMap="parPorSocioPKTipoCtaSituacionCta" resultMap="resCuentaIntegrante">
+	{ call PKG_CUENTAINTEGRANTE.getPorSocioPKTipoYSituacionCta(?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getCodPersonaOfCobranza" parameterMap="parPorEmpresaCuenta" resultMap="resCuentaIntegranteCobranza">
+	{ call PKG_CUENTAINTEGRANTE.getCodPersonaOfCobranza(?,?,?) }
+  </procedure>    
+</sqlMap>

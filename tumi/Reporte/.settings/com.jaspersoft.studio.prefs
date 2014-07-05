@@ -1,0 +1,4 @@
+#Fri May 30 12:02:01 COT 2014
+com.jaspersoft.studio.theme.ui.dark=containerMarginColor\=0,255,0\npageMarginColor\=255,0,0\nelementDesignBorderColor\=255,255,0\npageBackground\=0,0,0\ngridColor\=255,255,255\n
+eclipse.preferences.version=1
+com.jaspersoft.studio.theme.ui.light=containerMarginColor\=170,168,255\npageMarginColor\=170,168,255\nelementDesignBorderColor\=0,0,0\npageBackground\=255,255,255\ngridColor\=192,192,192\n

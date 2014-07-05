@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PersonaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.core.domain.Persona" alias="Persona"/> 
+	
+  <resultMap id="resPersona" class="Persona" >
+     <result property="intIdPersona"      		column="pPERSONA_N" />
+     <result property="intTipoPersonaCod"    	column="pTIPOPERSONA_N_COD" />
+     <result property="strRuc"      			column="pRUC_V" />
+     <result property="dtFechaBajaRuc"   		column="pFECHABAJARUC_D" />
+     <result property="intEstadoCod"   			column="pESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parPersona" class="Persona">
+     <parameter property="intIdPersona"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intTipoPersonaCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strRuc" 				jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="strFechaBajaRuc" 		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntTipoPersonaCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pStrRuc" 				javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="pDtFechaBajaRuc" 		javaType="java.util.Date"  	  jdbcType="DATE" 	   	   mode="IN"/>
+   	 <parameter property="pIntEstadoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorRuc" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pStrRuc" 				javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parPersona">
+	{ call PKG_PERSONA.grabar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPersona" >
+	{ call PKG_PERSONA.modificar(?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resPersona">
+	{ call PKG_PERSONA.getListaPorPK(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaBusqueda" parameterMap="parBusqueda" resultMap="resPersona">
+	{ call PKG_PERSONA.getListaBusqueda(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorRuc" parameterMap="parPorRuc" resultMap="resPersona">
+	{ call PKG_PERSONA.getListaPorRuc(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaActivaPorIdPersona" parameterMap="parPorPK" resultMap="resPersona">
+	{ call PKG_PERSONA.getPersonaActivaPorPk(?,?) }
+  </procedure>
+    
+</sqlMap>  

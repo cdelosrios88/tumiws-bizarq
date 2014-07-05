@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="BancocuentachequeDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.banco.domain.Bancocuentacheque" alias="Bancocuentacheque"/> 
+	
+  <resultMap id="resBancocuentacheque" class="Bancocuentacheque" >
+	<result property="id.intEmpresaPk"   		column="pPERS_EMPRESA_N_PK" />
+	<result property="id.intItembancocuenta"   	column="pTESO_ITEMBANCOCUENTA_N" />
+	<result property="id.intItembancofondo"   	column="pTESO_ITEMBANCOFONDO_N" />
+	<result property="id.intItembancuencheque"  column="pTESO_ITEMBANCUENCHEQUE_N" />
+    <result property="strSerie"      			column="pBCCH_SERIE_V" />
+    <result property="strControl"      			column="pBCCH_CONTROL_V" />
+    <result property="intNumeroinicio"      	column="pBCCH_NUMEROINICIO_N" />
+    <result property="intNumerofin"      		column="pBCCH_NUMEROFIN_N" />
+    <result property="intTipoCod"      			column="pPARA_TIPO_N_COD" />
+    <result property="intItemarchivo"      		column="pMAE_ITEMARCHIVO_N" />
+    <result property="intItemhistorico"      	column="pMAE_ITEMHISTORICO_N" />
+    <result property="intEmpresacuentaPk"      	column="pPERS_EMPRESACUENTA_N_PK" />
+    <result property="intPeriodocuenta"      	column="pCONT_PERIODOCUENTA_N" />
+    <result property="strNumerocuenta"      	column="pCONT_NUMEROCUENTA_V" />
+    <result property="intIdiomaCod"      		column="pPARA_IDIOMA_N_COD" />
+    <result property="strObservacion"      		column="pBCCH_OBSERVACION_V" />
+    <result property="intEstadoCod"      		column="pPARA_ESTADO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parBancocuentacheque" class="Bancocuentacheque">
+	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItembancocuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItembancofondo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItembancuencheque"	javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strSerie"					javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="strControl"				javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intNumeroinicio"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intNumerofin"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intTipoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intItemarchivo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intItemhistorico"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intEmpresacuentaPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intPeriodocuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strNumerocuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intIdiomaCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strObservacion"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+     <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancocuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancofondo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancuencheque"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBancoCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>	 
+	 <parameter property="intItembancofondo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItembancocuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parBancocuentacheque">
+	{ call PKG_BANCOCUENTACHEQUE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parBancocuentacheque" >
+	{ call PKG_BANCOCUENTACHEQUE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resBancocuentacheque">
+	{ call PKG_BANCOCUENTACHEQUE.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorBancoCuenta" parameterMap="parPorBancoCuenta" resultMap="resBancocuentacheque">
+	{ call PKG_BANCOCUENTACHEQUE.getListaPorBancoCuenta(?,?,?,?) }
+  </procedure>  
+</sqlMap>  

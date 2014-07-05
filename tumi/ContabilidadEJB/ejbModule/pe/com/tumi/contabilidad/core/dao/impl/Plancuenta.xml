@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlanCuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.PlanCuenta" alias="PlanCuenta"/> 
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.PlanCuentaId" alias="PlanCuentaId"/> 
+	
+  <resultMap id="resPlanCuenta" class="PlanCuenta">
+	<result property="id.intEmpresaCuentaPk"   		column="pPERS_EMPRESACUENTA_N_PK"/>
+	<result property="id.intPeriodoCuenta"   		column="pCONT_PERIODOCUENTA_N"/>
+	<result property="id.strNumeroCuenta"   		column="pCONT_NUMEROCUENTA_V"/>
+    <result property="intEmpresaOrigenPk"      		column="pPERS_EMPRESAORIGEN_N_PK"/>
+    <result property="intPeriodoOrigen"      		column="pCONT_PERIODOORIGEN_N"/>
+    <result property="strNumeroCuentaOrigen"    	column="pCONT_NUMEROCUENTAORIGEN_V"/>
+    <result property="intEmpresaDestinoPk"      	column="pPERS_EMPRESADESTINO_N_PK"/>
+    <result property="intPeriodoDestino"      		column="pCONT_PERIODODESTINO_N"/>
+    <result property="strNumeroCuentaDestino"      	column="pCONT_NUMEROCUENTADESTINO_V"/>
+    <result property="strDescripcion"      			column="pPLCU_DESCRIPCION_V"/>
+    <result property="strComentario"      			column="pPLCU_COMENTARIO_V"/>
+    <result property="intMovimiento"      			column="pPLCU_MOVIMIENTO_N"/>
+    <result property="intIdentificadorExtranjero"   column="pPLCU_IDENTIFICADOREXT_N"/>
+    <result property="tsFechaRegistro"      		column="pPLCU_FECHAREGISTRO_D"/>
+    <result property="intEmpresaUsuarioPk"      	column="pPERS_EMPRESAUSUARIO_N_PK"/>
+    <result property="intPersonaUsuarioPk"      	column="pPERS_PERSONAUSUARIO_N_PK"/>
+    <result property="intEstadoCod"      			column="pPARA_ESTADO_N_COD"/>
+    <result property="tsFechaEliminacion"      		column="pPLCU_FECHAELIMINACION_D"/>
+    <result property="intEmpresaEliminarPk"      	column="pPERS_EMPRESAELIMINAR_N_PK"/>
+    <result property="intPersonaEliminarPk"      	column="pPERS_PERSONAELIMINAR_N_PK"/>
+  </resultMap>
+  
+  <resultMap id="resPeriodos" class="PlanCuenta">
+	<result property="id.intPeriodoCuenta"   		column="pCONT_PERIODOCUENTA_N"/>
+  </resultMap>
+  
+  <parameterMap id="parPlanCuenta" class="PlanCuenta">
+	 <parameter property="id.intEmpresaCuentaPk"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPeriodoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.strNumeroCuenta"			javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intEmpresaOrigenPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPeriodoOrigen"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strNumeroCuentaOrigen"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intEmpresaDestinoPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPeriodoDestino"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strNumeroCuentaDestino"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="strDescripcion"				javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="strComentario"				javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intMovimiento"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intIdentificadorExtranjero"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intEmpresaUsuarioPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersonaUsuarioPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intEstadoCod"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intEmpresaEliminarPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersonaEliminarPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaCuentaPk"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intPeriodoCuenta"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="strNumeroCuenta"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="pStrNumeroCuenta"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="pStrDescripcion"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="pIntMovimiento"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="pIntIdentificadorExtranjero"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intPeriodoCuenta"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parFindListOperacional" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntPeriodoCuenta"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="pStrNumeroCuenta"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="IN"/>
+	 <parameter property="pStrDescripcion"		javaType="java.lang.String" jdbcType="VARCHAR"	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPeriodos" class="java.util.Map">
+     <parameter property="cursorLista"  javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+  </parameterMap>
+  
+ <parameterMap id="parEmpresaYPeriodo" class="java.util.Map">
+     <parameter property="cursorLista"  		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+     <parameter property="intPeriodoCuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaCuentaPk"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	 
+  </parameterMap>
+  
+   <parameterMap id="parPorPkYDescripcion" class="java.util.Map">
+     <parameter property="cursorLista"  		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+     <parameter property="intEmpresaCuentaPk"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strNumeroCuenta"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="strDescripcion"		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+	 	 
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parPlanCuenta">
+	{ call PKG_PLANCUENTA.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPlanCuenta" >
+	{ call PKG_PLANCUENTA.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resPlanCuenta">
+	{ call PKG_PLANCUENTA.getListaPorPk(?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resPlanCuenta">
+	{ call PKG_PLANCUENTA.getBusqueda(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="findListCuentaOperacional" parameterMap="parFindListOperacional" resultMap="resPlanCuenta">
+	{ call PKG_PLANCUENTA.findListCuentaOperacional(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPeriodo" parameterMap="parPeriodos" resultMap="resPeriodos">
+	{ call PKG_PLANCUENTA.getPeriodos(?) }
+  </procedure>   	
+    
+ <procedure id="getListaPorEmpresaCuentaYPeriodoCuenta" parameterMap="parEmpresaYPeriodo" resultMap="resPlanCuenta">
+	{ call PKG_PLANCUENTA.getPorEmpresaYPeriodo(?,?,?) }
+  </procedure>  
+  
+  <procedure id="getPlanCtaPorPeriodoBase" parameterMap="parEmpresaYPeriodo" resultMap="resPlanCuenta">
+	{ call PKG_PLANCUENTA.getPlanCtaPorPeriodoBase(?,?,?) }
+  </procedure>
+  
+  <procedure id="getBusqPorNroCtaDesc" parameterMap="parPorPkYDescripcion" resultMap="resPlanCuenta">
+	{ call PKG_PLANCUENTA.getBusqPorNroCtaDesc(?,?,?,?,?) }
+  </procedure>    
+</sqlMap>  

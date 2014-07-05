@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+    <typeAlias type="pe.com.tumi.seguridad.domain.Usuario" alias="usuario"/> 
+    
+    <parameterMap id="seguridad.domain.usuario.map" class="usuario">  
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>  
+         <parameter property="fechaCreacion" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>  
+         <parameter property="fechaModificacion" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>  
+         <parameter property="apeMa" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+         <parameter property="apePa" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/> 
+         <parameter property="codigo" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="contrasenha" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+		 <parameter property="correoElectronico" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+         <parameter property="estado" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="fechaCambioPass" jdbcType="TIMESTAMP" javaType="java.util.Date" mode="IN"/>
+         <parameter property="nombre" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+         <parameter property="usuarioCreacion" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/> 
+         <parameter property="usuarioModificacion" jdbcType="NUMERIC" javaType="java.lang.Long" mode="IN"/>
+         <parameter property="areaGestora" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+         <parameter property="empresa" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+         <parameter property="id" jdbcType="NUMERIC" javaType="java.lang.Long" mode="OUT"/>  
+    </parameterMap>  
+       
+    <resultMap id="seguridad.domain.usuario.result" class="usuario" >
+	     <result property="id" column="USRC_NID_USR"/>
+	     <result property="fechaCreacion" column="USRC_DFECH_CRECN"/>
+	     <result property="fechaModificacion" column="USRC_DFECH_MODFCN"/>
+	     <result property="apeMa" column="USRC_VAPELLIDOMATERNO"/>
+         <result property="apePa" column="USRC_VAPELLIDOPATERNO"/>  
+	     <result property="codigo" column="USRC_VCODG"/>
+	     <result property="contrasenha" column="USRC_VCONTRSN"/>
+	     <result property="correoElectronico" column="USRC_VCORR_ELCTRNC"/>  
+         <result property="estado" column="USRC_VESTD"/>  
+         <result property="fechaCambioPass" column="USRC_DULTFECHACAMBIOPASS"/> 
+         <result property="nombre" column="USRC_VNOMBR"/>  
+         <result property="usuarioCreacion" column="USRC_NCRECN_ID"/>  
+	     <result property="usuarioModificacion" column="USRC_NMODFCN_ID"/>
+	     <result property="areaGestora" column="USRC_VAREAGESTORA"/>
+	     <result property="empresa" column="USRC_VEMPRESA"/>    
+    </resultMap>
+    
+    <parameterMap id="parameterMap_01" class="java.util.Map">
+     	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="parameterMap_02" class="java.util.Map">
+   		<parameter property="condition" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+        
+    <procedure id="seguridad.domain.usuario.find" parameterMap="parameterMap_02" resultMap="seguridad.domain.usuario.result">
+		{ call PKG_ASE.USRSS_FIND( ? , ? ) }  
+    </procedure>
+    
+    <procedure id="seguridad.domain.usuario.save" parameterMap="seguridad.domain.usuario.map">
+		{ call PKG_ASE.USRSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ,? ,? ) }  
+    </procedure>
+ 
+    <procedure id="seguridad.domain.usuario.insert" parameterMap="seguridad.domain.usuario.map">
+		{ call PKG_ASE.USRSU_SAVE( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ,? ,? ) }  
+    </procedure>
+    
+    <procedure id="seguridad.domain.usuario.delete" parameterClass="java.lang.Long">  
+        { call PKG_ASE.USRSD_DELETE( #id# , #id# ) }  
+    </procedure> 
+       
+</sqlMap>  

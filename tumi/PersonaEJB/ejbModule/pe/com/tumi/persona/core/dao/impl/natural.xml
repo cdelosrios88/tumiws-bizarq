@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="NaturalDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.core.domain.Natural" alias="Natural"/> 
+	
+  <resultMap id="resNatural" class="Natural" >
+     <result property="intIdPersona"      		column="pPERSONA_N" />
+     <result property="strApellidoPaterno"    	column="pAPELLIDOPATERNO_V" />
+     <result property="strApellidoMaterno"		column="pAPELLIDOMATERNO_V" />
+     <result property="strNombres"   			column="pNOMBRES_V" />
+     <result property="dtFechaNacimiento"   	column="pFECHANACIMIENTO_D" />
+     <result property="intSexoCod"      		column="pSEXO_N_COD" />
+     <result property="intEstadoCivilCod"		column="pESTADOCIVIL_N_COD" />
+     <result property="intTieneEmpresa"   		column="pTIENEEMPRESA_N" />
+     <result property="intTipoArchivoFoto"   	column="pTIPOARCHIVOFOTO_N_COD" />
+     <result property="intItemArchivoFoto"   	column="pITEMARCHIVOFOTO_N" />
+     <result property="intItemHistoricoFoto"   	column="pITEMHISTORICOFOTO_N" />
+     <result property="intTipoArchivoFirma"   	column="pTIPOARCHIVOFIRMA_N_COD" />
+     <result property="intItemArchivoFirma"   	column="pITEMARCHIVOFIRMA_N" />
+     <result property="intItemHistoricoFirma"   column="pITEMHISTORICOFIRMA_N" />
+  </resultMap>
+  
+  <parameterMap id="parNatural" class="Natural">
+     <parameter property="intIdPersona"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="strApellidoPaterno"		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="strApellidoMaterno" 		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="strNombres" 				jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="dtFechaNacimiento" 		jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intSexoCod" 				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intEstadoCivilCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTieneEmpresa" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoArchivoFoto" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemArchivoFoto" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemHistoricoFoto" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoArchivoFirma" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemArchivoFirma" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemHistoricoFirma" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorInPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="csvIdPersona" 	javaType="java.lang.String"  jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorDoc" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntTipoIdentidadCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pStrNroIdentidad" 	javaType="java.lang.String"  jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+     <parameter property="pIntIdPersona"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>
+	 <parameter property="pStrApellidoPaterno"	jdbcType="VARCHAR"  javaType="java.lang.String" 		mode="IN"/>    
+     <parameter property="pStrApellidoMaterno" 	jdbcType="VARCHAR"  javaType="java.lang.String" 		mode="IN"/>  
+     <parameter property="pStrNombres" 			jdbcType="VARCHAR"  javaType="java.lang.String" 		mode="IN"/>
+     <parameter property="pDtFechaNacimiento" 	jdbcType="DATE"  	javaType="java.util.Date" 			mode="IN"/>   
+     <parameter property="pIntSexoCod" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>  
+     <parameter property="pIntEstadoCivilCod" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>
+     <parameter property="pIntTieneEmpresa" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>
+     <parameter property="pFechaDesde" 			jdbcType="DATE"  	javaType="java.util.Date" 			mode="IN"/>
+     <parameter property="pFechaHasta" 			jdbcType="DATE"  	javaType="java.util.Date" 			mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusq" class="java.util.Map">
+  	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+     <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>
+     <parameter property="pStrNombres"		    jdbcType="VARCHAR"  javaType="java.lang.String" 		mode="IN"/>
+     <parameter property="pIntTipoIdentidadCod" jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>
+	 <parameter property="pStrNumeroIdentidad" 	jdbcType="VARCHAR"  javaType="java.lang.String" 		mode="IN"/>
+	 <parameter property="pIntParaRolPk" 	    jdbcType="NUMERIC"  javaType="java.lang.Integer" 		mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parNatural">
+	{ call PKG_NATURAL.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parNatural" >
+	{ call PKG_NATURAL.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resNatural">
+	{ call PKG_NATURAL.getListaPorPK(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorInPk" parameterMap="parPorInPk" resultMap="resNatural">
+	{ call PKG_NATURAL.getListaPorInPk(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorDocIdentidad" parameterMap="parPorDoc" resultMap="resNatural">
+	{ call PKG_NATURAL.getListaPorDocIdentidad(?,?,?) }  
+  </procedure>
+  
+   <procedure id="getListaPerNaturalBusqueda" parameterMap="parBusqueda" resultMap="resNatural">
+	{ call PKG_NATURAL.getListaBusqueda(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaBusqRolODniONomb" parameterMap="parBusq" resultMap="resNatural">
+	{ call PKG_NATURAL.getListaBusqRolODniONomb(?,?,?,?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

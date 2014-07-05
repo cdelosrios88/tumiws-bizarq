@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="crear-jar">
+<property name="name.jar" value="Tumi" />
+<property name="path.project" value="${basedir}" />
+<property name="build.project" value="${path.project}\bin" />
+
+<target name="crear-jar">
+ <jar jarfile="${path.project}/${name.jar}.jar">
+  <fileset dir="${build.project}">
+    <include name="pe/**"/>
+    <include name="META-INF/**"/>
+  </fileset>
+ </jar>
+</target>
+	
+</project>

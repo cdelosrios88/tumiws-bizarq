@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Persona">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="PersonaEJB.jar" deploy-path="/" handle="module:/resource/PersonaEJB/PersonaEJB">
+            <dependent-object>Module_1334449453546</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="PersonaWeb.war" deploy-path="/" handle="module:/resource/PersonaWeb/PersonaWeb">
+            <dependent-object>Module_1334449453547</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

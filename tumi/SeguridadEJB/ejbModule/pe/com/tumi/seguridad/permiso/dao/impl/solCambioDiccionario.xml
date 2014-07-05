@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolCambioDiccionarioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.SolCambioDiccionario" alias="SolCambioDiccionario"/> 
+	
+  <resultMap id="resSolCambioDiccionario" class="SolCambioDiccionario" >
+     <result property="id.intPersEmpresaPk"     column="pPers_empresa_n_pk" />
+     <result property="id.intIdTransaccion"  	column="pIdtransaccion_n" />
+     <result property="id.intItem"      		column="pItem_n" />
+     <result property="id.intCodigo"   			column="pCodigo_n" />
+  </resultMap>
+  
+  <parameterMap id="parSolCambioDiccionario" class="SolCambioDiccionario">
+     <parameter property="id.intPersEmpresaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdTransaccion"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItem" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCodigo"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intItem" 				jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intCodigo" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>   	 
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSolCambioDiccionario">
+	{ call PKG_SOLCAMBIODICCIONARIO.grabar(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSolCambioDiccionario" >
+	{ call PKG_SOLCAMBIODICCIONARIO.modificar(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resSolCambioDiccionario">
+	{ call PKG_SOLCAMBIODICCIONARIO.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+
+</sqlMap>  

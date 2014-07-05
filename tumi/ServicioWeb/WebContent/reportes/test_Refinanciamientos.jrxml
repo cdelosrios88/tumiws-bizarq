@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="scriptlet" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30" whenResourceMissingType="Empty" uuid="e0ddb236-96fc-49f6-96fb-60cbc0e5afb7">
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="strCuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[strCuenta]]></fieldDescription>
+	</field>
+	<field name="strNombreCompleto" class="java.lang.String">
+		<fieldDescription><![CDATA[strNombreCompleto]]></fieldDescription>
+	</field>
+	<field name="strNroSolicitud" class="java.lang.String">
+		<fieldDescription><![CDATA[strNroSolicitud]]></fieldDescription>
+	</field>
+	<field name="strFecRequisito" class="java.lang.String">
+		<fieldDescription><![CDATA[strFecRequisito]]></fieldDescription>
+	</field>
+	<group name="dummy">
+		<groupExpression><![CDATA["dummy"]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="5" width="535" height="15" backcolor="#70A9A9" uuid="eb7f82b4-e469-4455-82e6-9afdaae8b851"/>
+					<box>
+						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					</box>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="136" y="5" width="150" height="15" uuid="02c0fd76-38cf-4a7e-a0de-9cc7583c30be"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[strNombreCompleto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="286" y="5" width="128" height="15" uuid="c7cc0bbf-fa21-471d-b1ec-6e7f956cc636"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[strFecRequisito]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="414" y="5" width="121" height="15" uuid="1628d102-2772-449d-b46f-f743ced4abb4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[strCuenta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="5" width="136" height="15" uuid="6e24929d-4c9e-4a95-849a-98c183e03054"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[strNroSolicitud]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<detail>
+		<band height="16">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="d43f1667-4330-47bc-8544-f85581a48e7a"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="136" y="0" width="150" height="15" uuid="138a9efa-80dd-4175-a63f-049aadcc7400"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{strNombreCompleto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="0" width="128" height="15" uuid="ab902727-e12b-4671-a5b5-4e3ceb2f2784"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{strFecRequisito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="414" y="0" width="121" height="15" uuid="08f87221-adbc-4188-adb7-afb9258041ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strCuenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="136" height="15" uuid="b797fd18-7cb9-4be7-84a2-3039283f8730"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{strNroSolicitud}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AreaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.empresa.domain.Area" alias="Area"/> 
+	
+  <resultMap id="resListaArea" class="Area" >
+     <result property="id.intPersEmpresaPk" 	column="IDEMPRESA"/>
+     <result property="id.intIdSucursalPk" 	  	column="IDSUCURSAL"/>
+     <result property="id.intIdArea"  			column="IDAREA"/>
+     <result property="strDescripcion"   		column="DESCRIPCION"/>
+     <result property="strAbreviatura"  		column="ABREVIATURA"/>
+     <result property="intIdTipoArea"   		column="IDTIPOAREA"/>
+     <result property="intIdEstado"   			column="IDESTADO"/>
+  </resultMap>
+  
+  <parameterMap id="parListaArea" class="java.util.Map">
+  	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+     <parameter property="pIntIdEmpresa"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pIntIdSucursal"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="pIntIdArea"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>    
+     <parameter property="pStrDescripcion"	jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="IN"/>
+     <parameter property="pIntIdTipoArea"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>
+     <parameter property="pIntIdEstado"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="pIntPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="pIntIdSucursalPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="pIntIdArea" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parArea" class="Area">
+     <parameter property="id.intPersEmpresaPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdSucursalPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdArea" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strDescripcion"		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+	 <parameter property="strAbreviatura"		jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="intIdTipoArea" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdEstado" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="getListaArea" parameterMap="parListaArea" resultMap="resListaArea">
+	{ call PKG_AREA.getListaArea(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getAreaPorPK" parameterMap="parPorPK" resultMap="resListaArea">
+	{ call PKG_AREA.getListaPorPK(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="grabar" parameterMap="parArea">
+	{ call PKG_AREA.grabar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parArea">
+	{ call PKG_AREA.modificar(?,?,?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

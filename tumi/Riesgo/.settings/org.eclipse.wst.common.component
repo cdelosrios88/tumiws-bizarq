@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Riesgo">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="RiesgoWeb.war" deploy-path="/" handle="module:/resource/RiesgoWeb/RiesgoWeb">
+            <dependent-object>Module_1338491310406</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="RiesgoEJB.jar" deploy-path="/" handle="module:/resource/RiesgoEJB/RiesgoEJB">
+            <dependent-object>Module_1338491310531</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

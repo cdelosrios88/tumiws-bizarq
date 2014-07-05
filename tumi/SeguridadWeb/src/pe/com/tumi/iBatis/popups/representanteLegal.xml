@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias type="pe.com.tumi.empresa.domain.RepresentanteLegal" alias="replegal"/>
+	<typeAlias type="pe.com.tumi.adminCuenta.domain.PersonaJuridica" alias="juri"/> 
+	
+	<resultMap id="resultRepLegal" class="replegal" >
+	     <result property="intIdEmpresa"   			column="IDEMPRESA" />
+	     <result property="intIdPersona"   			column="IDPERSONA" />
+	     <result property="intEstado"   			column="IDESTADO" />
+	     <result property="strApePat"    			column="APEPAT" />
+	     <result property="strApeMat"      			column="APEMAT" />
+	     <result property="strNombres"   			column="NOMBRES" />
+	     <result property="strFechaNac"   			column="FECHA_NAC" />
+	     <result property="intTipoDocIdentidad"  	column="TIPO_DOC" />
+	     <result property="strNroDocIdentidad"  	column="NRO_DOC" />
+	     <result property="intSexo"   				column="IDSEXO" />
+	     <result property="intEstadoCivil"      	column="EST_CIVIL" />
+	     <result property="intTipoPersona"      	column="TIPO_PERSONA" />
+	     <result property="strPathFoto"      		column="RUTA_FOTO" />
+	     <result property="strPathFirma"   			column="RUTA_FIRMA" />
+	     <result property="intTipoVinculo"   		column="TIPO_VINCULO" />
+    </resultMap>
+	
+	<parameterMap id="prmtGrabarRepLegal" class="replegal">
+		 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+		 <parameter property="intIdPerJuridica"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intIdPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+    	 <parameter property="strApePat" 			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="strApeMat" 			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="strNombres"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="strFechaNac"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="intTipoDocIdentidad"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="strNroDocIdentidad" 	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="intSexo" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intEstadoCivil" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intTipoPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="intTipoVinculo" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    	 <parameter property="strPathFoto" 			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="strPathFirma" 		javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+    	 <parameter property="intEstado" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaRepLegal" class="replegal">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intTipoVinculo" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoDocIdentidad" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strNroDocIdentidad" 	javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPerNatuVinculo" class="juri">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intIdPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+
+    <procedure id="replegal.domain.replegal.grabarRepLegal" parameterMap="prmtGrabarRepLegal">
+		{ call PKG_PUBLIC.grabar_representlegal( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="replegal.domain.replegal.getListaRepLegal" parameterMap="prmtListaRepLegal" resultMap="resultRepLegal">
+		{ call PKG_PUBLIC.listar_representlegal( ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="replegal.domain.replegal.getListaPerNaturalVinculo" parameterMap="prmtListaPerNatuVinculo" resultMap="resultRepLegal">
+		{ call PKG_PUBLIC.listar_pernatural_vinculo( ?, ? ) }  
+    </procedure>
+</sqlMap>  

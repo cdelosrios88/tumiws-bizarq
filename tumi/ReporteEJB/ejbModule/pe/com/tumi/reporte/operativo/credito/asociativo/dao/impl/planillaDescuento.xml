@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="PlanillaDescuentoDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.credito.asociativo.domain.PlanillaDescuento" alias="PlanillaDescuento"/>
+	<resultMap id="resPlanillaDescuento" class="PlanillaDescuento" >
+	     <result property="strUnidadEjecutora"  	column="pUNIDAD_EJECUTORA"/>
+	     <result property="strModalidad"    		column="pMODALIDAD"/>
+	     <result property="strTipo"    				column="pTIPO"/>
+	     <result property="bdMontoEnviado" 			column="pMONTOENVIADO"/>
+	     <result property="intNroSociosEnviado" 	column="pNROSOCIOSENVIADO"/>
+	     <result property="bdMontoEfectuado"    	column="pMONTOEFECTUADO"/>
+	     <result property="intNroSociosEfectuado"   column="pNROSOCIOSEFECTUADO"/>
+	     <result property="bdMontoDiferencia"     	column="pMONTODIFERENCIA"/>
+	     <result property="intNroSociosDiferencia"  column="pSOCIOSDIFERENCIA"/>
+	</resultMap>
+	
+	<parameterMap id="parPlanillaDescuentoDesagregado" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoSocio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intModalidad" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<!-- Agregado para Pendiete de Cobro -->
+	<resultMap id="resPendienteCobro" class="PlanillaDescuento" >
+	     <result property="strUnidadEjecutoraPC"  	column="pUNIDAD_EJECUTORA"/>
+	     <result property="strPeriodoPC"    		column="pPERIODO"/>
+	     <result property="strModalidadPC"    		column="pMODALIDAD"/>
+	     <result property="bdEfectuadoPC" 			column="pEFECTUADO"/>
+	     <result property="bdPagadoPC" 				column="pPAGADO"/>
+	     <result property="bdSaldoPC" 				column="pSALDO"/>
+	</resultMap>
+	
+	<parameterMap id="parPendienteCobro" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoSocio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intModalidad" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="dtFechaCorte" 		javaType="java.util.Date"  	  jdbcType="DATE" 	   	   mode="IN"/>
+	</parameterMap>
+	<!-- Fin agregado para Pendiete de Cobro -->
+	
+	<!-- Agregado para Morosidad Planilla - 18/03/2014 -->
+	<resultMap id="resMorosidadPlanilla" class="PlanillaDescuento" >
+	     <result property="strUnidadEjecutoraMP"  	column="pUNIDAD_EJECUTORA"/>
+	     <result property="strModalidadMP"    		column="pMODALIDAD"/>
+	     <result property="strTipoMP" 				column="pTIPO"/>
+	     <result property="bdAdicionReferencialMP" 	column="pADICION_REFERENCIAL"/>
+	     <result property="bdPlanillaGeneradaMP" 	column="pPLLA_GENERADA"/>
+	     <result property="bdAdicionEjecutadaMP" 	column="pADICION_EJECUTADA"/>
+	     <result property="bdTotalEnviadaMP" 		column="pTOTAL_ENVIADO"/>
+	     <result property="bdPlanillaIngresadaMP" 	column="pPLANILLA_INGRESADA"/>
+	     <result property="bdMontoAdicionalMP" 		column="pMONTO_ADICIONAL"/>
+	     <result property="bdTotalEfectuadaMP" 		column="pTOTAL_EFECTUADO"/>
+	     <result property="bdMorosidadDiferenciaMP" column="pDIFERENCIA"/>
+	     <result property="bdMorosidadPorcMP" 		column="pPORCMOROSIDAD"/>
+	</resultMap>
+	
+	<parameterMap id="parMorosidadPlanilla" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	<!-- Fin agregado para Morosidad Planilla - 18/03/2014 -->
+	
+	<!-- Agregado para Socio Diferencia - 31/03/2014 -->
+	<resultMap id="resSocioDiferencia" class="PlanillaDescuento" >
+	     <result property="strCuenta"  				column="pCUENTA"/>
+	     <result property="strTipoSD" 				column="pTIPO"/>
+	     <result property="strModalidadSD" 			column="pMODALIDAD"/>
+	     <result property="bdEnviadoSD" 			column="pENVIADO"/>
+	     <result property="bdEfectuadoSD" 			column="pEFECTUADO"/>
+	     <result property="bdDiferenciaPllaSD" 		column="pDIFERENCIA"/>
+	     <result property="bdIngresoCajaSD" 		column="pINGRESO_CAJA"/>
+	     <result property="bdDiferenciaCajaSD" 		column="pINGRESO_DIFERENCIA"/>
+	     <result property="bdIngresoTransferenciaSD" column="pTRANSFERENCIA_INGRESO"/>
+	     <result property="bdDiferenciaTransferenciaSD" column="pTRANSFERENCIA_DIFERENCIA"/>
+	</resultMap>
+	
+	<parameterMap id="parSocioDiferencia" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdUnidadEjecutora" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoDiferencia" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdTipoSocio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdModalidad" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	<!-- Fin agregado para Socio Diferencia - 31/03/2014 -->
+	
+	<parameterMap id="parListEntidad" class="java.util.Map">
+		 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	</parameterMap>
+	
+	<resultMap id="resEntidad" class="PlanillaDescuento">
+		<result property="intIdUnidadEjecutora"  		column="pENTIDAD_PK"/>
+	    <result property="strDescUnidadEjecutora" 		column="pDESCRIPCION"/>
+	</resultMap>
+	
+	<procedure id="getPlanillaDescuento" parameterMap="parPlanillaDescuentoDesagregado" resultMap="resPlanillaDescuento">
+		{ call PKG_CREDITOS_PLLADESCUENTO.getControlPllaDesagregado(?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getPendienteCobro" parameterMap="parPendienteCobro" resultMap="resPendienteCobro">
+		{ call PKG_CREDITOS_PLLADESCUENTO.getPendienteCobro(?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getMorosidadPlanilla" parameterMap="parMorosidadPlanilla" resultMap="resMorosidadPlanilla">
+		{ call PKG_CREDITOS_PLLADESCUENTO.getMorosidadPlanilla(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getSocioDiferencia" parameterMap="parSocioDiferencia" resultMap="resSocioDiferencia">
+		{ call PKG_CREDITOS_PLLADESCUENTO.getSocioDiferencia(?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getListEntidad" parameterMap="parListEntidad" resultMap="resEntidad">
+		{ call PKG_CREDITOS_PLLADESCUENTO.getListUnidadEjecutora(?,?)}  
+  	</procedure>
+</sqlMap>  	

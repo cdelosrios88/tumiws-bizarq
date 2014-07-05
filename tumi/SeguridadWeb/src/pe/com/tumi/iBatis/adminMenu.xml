@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.seguridad.domain.DataObjects" alias="dataObjects"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.SolicitudCambio" alias="solicitud"/>
+    <typeAlias type="pe.com.tumi.seguridad.domain.AdminMenu" alias="adminmenu"/>
+    
+    <resultMap id="adminmenu.domain.adminmenu.resultDataObj" class="dataObjects" >
+	     <result property="intCodigo"      	    	column="DICC_CODIGO_N" />
+	     <result property="intTipoObjecto"      	column="DICC_TIPO_N" />
+	     <result property="strNombreObjeto"      	column="DICC_DESCRIPCION_V" />
+	     <result property="intDiccNivel"      	    column="DICC_NIVEL_N" />
+	     <result property="intDiccSeguridad"      	column="DICC_SEGURIDAD_N" />
+	     <result property="intDiccEstado"      	    column="DICC_IDESTADO_N" />
+    </resultMap>
+    
+    <resultMap id="adminmenu.domain.adminmenu.resultListarSolicitudes" class="solicitud" >
+	     <result property="strRuta"      	    	column="RUTA" />
+	     <result property="strIdTransaccion"      	column="IDTRANSACCION" />
+	     <result property="intIdEmpresa"      		column="IDEMPRESA" />
+	     <result property="intIdSolicitud"      	column="IDSOLICITUD" />
+	     <result property="strFechEntrega"      	column="FECHA_ENTREGA" />
+	     <result property="intTipoCambio"      	    column="IDTIPOCAMBIO" />
+	     <result property="strTipoCambio"      	    column="TIPOCAMBIO" />
+	     <result property="intIdEstado"      	    column="IDESTADO" />
+	     <result property="strEstado"      	    	column="ESTADO" />
+	     <result property="strObserv"      	    	column="OBSERVACION" />
+	     <result property="strDescripcion"      	column="DESCRIPCION" />
+	     <result property="strJustificacion"      	column="JUSTIFICACION" />
+	     <result property="strFinalidad"      	    column="FINALIDAD" />
+	     <result property="intClase"      	    	column="IDCLASE" />
+	     <result property="strClase"      	    	column="CLASE" />
+	     <result property="strFechSolicitud"      	column="FECHA_SOLICITUD" />
+	     <result property="strFechPrueba"      	    column="FECHA_PRUEBA" />
+	     <result property="intIdDesarrollador"      column="IDDESARROLLADOR" />
+	     <result property="strDesarrollador"      	column="DESARROLLADOR" />
+	     <result property="intIdSolicitante"      	column="IDSOLICITANTE" />
+	     <result property="strSolicitante"      	column="SOLICITANTE" />
+	     <result property="intIdCIO"      			column="IDCIO" />
+    </resultMap>
+    
+    <resultMap id="adminmenu.domain.adminmenu.resultColumns" class="dataObjects" >
+	     <result property="strNombreObjeto"      	column="COLUMN_NAME" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaAdminMenu" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPadre"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoMenu"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEstadoMenu"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTransaccion"	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="adminmenu.domain.adminmenu.prmtIdTransaccion" class="adminmenu">
+    	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" 	javaType="java.sql.ResultSet" 			mode="OUT"/>
+    	 <parameter property="strIdTransaccionPadre"	jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+    	 <parameter property="intNivelMenu"				jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    </parameterMap>
+    
+    <resultMap id="adminmenu.domain.adminmenu.resultIdTran" class="adminmenu" >
+	     <result property="strIdTransaccion"      	column="IDTRANSACCION" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaMenuPerfil" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPadre"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdPerfil"	 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrNivel"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="adminmenu.domain.adminmenu.mapMenu" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pIntTipoMenu" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdEstado" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pStrIdTransaccion" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="pIntCrecimiento" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntMenuOrden" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pIntFinalMenu" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+		 <parameter property="pStrNombre" 				jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pStrIdTransaccionPadre" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntNivelMenu" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pStrAccion" 				jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="adminmenu.domain.adminmenu.mapDataObjects" class="java.util.Map">
+		 <parameter property="pIntIdCodigo"		 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntIdEmpresa"		 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrIdTransaccion"		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pIntConta"				jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaTablas" class="java.util.Map">
+    	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" 	javaType="java.sql.ResultSet" 			mode="OUT"/>
+    	 <parameter property="pStrIdTransaccion"		jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarMenu" class="java.util.Map">
+    	 <parameter property="prmIdMenu" 				jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+    </parameterMap>  
+    
+    <parameterMap id="prmtListaSolicitudes" class="java.util.Map">
+    	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" 	javaType="java.sql.ResultSet" 			mode="OUT"/>
+    	 <parameter property="pIntIdSolicitud"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntDesarrollador"		jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntSolicitante"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntTipoCambio"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntEstado"				jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntClase"				jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntAnexos"				jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pIntRangoFech"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    	 <parameter property="pStrFechRango1"			jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+    	 <parameter property="pStrFechRango2"			jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="adminmenu.domain.adminmenu.mapSolicitud" class="solicitud">
+		 <parameter property="intIdEmpresa" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="strIdTransaccion" 		jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+		 <parameter property="intIdSolicitud"	 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="strDescripcion" 			jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="strJustificacion" 		jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="strFinalidad" 			jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="intAnexos"	 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intTipoCambio" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intClase"	 				jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="strFechSolicitud" 		jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="strFechPrueba"	 		jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="intIdDesarrollador" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdSolicitante" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="strFechEntrega" 			jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="strObserv" 				jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="intIdCIO" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdEstado" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>         
+         <parameter property="intIdSolicitudOut" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarSolCambio" class="java.util.Map">
+    	 <parameter property="pIntIdSolicitud" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaColumnas" class="java.util.Map">
+    	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR" 	javaType="java.sql.ResultSet" 			mode="OUT"/>
+    	 <parameter property="pNombreTabla"				jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="adminmenu.domain.adminmenu.prmtSocaDetalle" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"		 	jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+		 <parameter property="pStrIdTransaccion"		jdbcType="VARCHAR" 			javaType="java.lang.String" 			mode="IN"/>
+		 <parameter property="pIntIdSocaItem"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+		 <parameter property="pIntDiccCodigo"			jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+		 <parameter property="pIntConta"				jdbcType="NUMERIC" 			javaType="java.lang.Integer" 			mode="IN"/>
+    </parameterMap> 
+    
+    <procedure id="adminmenu.domain.adminmenu.grabarDataObjects" parameterMap="adminmenu.domain.adminmenu.mapDataObjects">
+		{ call PKG_TUMI.insert_dataobjects(?, ?, ?, ?)  }  
+	</procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.eliminarMenu" parameterMap="prmtEliminarMenu" >
+		{ call PKG_TUMI.eliminar_transaccion(?)  }  
+	</procedure>
+	
+    <procedure id="adminmenu.domain.adminmenu.grabarMenu" parameterMap="adminmenu.domain.adminmenu.mapMenu" >
+		{ call PKG_TUMI.insert_transacciones(?,?,?,?,?,?,?,?,?,?,?)  }  
+	</procedure>
+    
+	<procedure id="adminmenu.domain.adminmenu.getListaAdminMenu" parameterMap="prmtListaAdminMenu" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_seg_menues( ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.getListaMenuPerfil" parameterMap="prmtListaMenuPerfil" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_menu_perfil( ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="usuario.domain.usuario.getListaMenuPerfil1" parameterMap="prmtListaMenuPerfil" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_menu_perfil( ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.getListaDataObjects" parameterMap="prmtListaTablas" resultMap="adminmenu.domain.adminmenu.resultDataObj">
+		{ call PKG_TUMI.listar_dataobjects( ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.getListaSolicitudes" parameterMap="prmtListaSolicitudes" resultMap="adminmenu.domain.adminmenu.resultListarSolicitudes">
+		{ call PKG_TUMI.listar_solicitudes( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.grabarSolicitud" parameterMap="adminmenu.domain.adminmenu.mapSolicitud" >
+		{ call PKG_TUMI.grabar_solicitud(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+	</procedure>
+	      
+	<procedure id="adminmenu.domain.adminmenu.eliminarSolCambio" parameterMap="prmtEliminarSolCambio" >
+		{ call PKG_TUMI.eliminar_solicitudcambio(?)  }  
+	</procedure>
+	
+	<procedure id="adminmenu.domain.adminmenu.getListaColumnas" parameterMap="prmtListaColumnas" resultMap="adminmenu.domain.adminmenu.resultColumns">
+		{ call PKG_TUMI.listar_columnas( ?, ? ) }  
+    </procedure>
+    
+    <procedure id="adminmenu.domain.adminmenu.grabarSocaDetalle" parameterMap="adminmenu.domain.adminmenu.prmtSocaDetalle">
+		{ call PKG_TUMI.insert_socadetalle(?, ?, ?, ?, ?)  }  
+	</procedure>
+	
+	<procedure id="adminmenu.domain.adminmenu.getIdTransaccion" parameterMap="adminmenu.domain.adminmenu.prmtIdTransaccion" resultMap="adminmenu.domain.adminmenu.resultIdTran">
+		{ call PKG_TUMI.obtener_idtransaccion( ?, ?, ? )  }  
+	</procedure>
+</sqlMap>  

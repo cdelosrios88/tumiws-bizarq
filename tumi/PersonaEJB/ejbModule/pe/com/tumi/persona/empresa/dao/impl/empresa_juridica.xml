@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EmpresaJuridicaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.empresa.domain.Empresa" alias="EmpresaJuridica"/> 
+	
+  <resultMap id="resEmpresaJuridica" class="EmpresaJuridica" >
+     <result property="intIdEmpresa"      		column="pPERS_EMPRESA_N" />
+     <result property="intTipoConformacionCod"  column="pTIPOCONFORMACION_N_COD" />
+     <result property="strTiempoSesion"      	column="pTIEMPOSESION" />
+     <result property="strAlertaSesion"   		column="pALERTASESION" />
+     <result property="intVigenciaClaves"   	column="pVIGENCIACLAVES_N" />
+     <result property="intAlertaCaducidad"      column="pALERTACADUCIDAD_N" />
+     <result property="intIntentosIngreso"    	column="pINTENTOSINGRESO_N" />
+     <result property="intControlHoraIngreso"   column="pCONTROLHORAINGRESO_N" />
+     <result property="intControlRegistro"   	column="pCONTROLREGISTRO_N" />
+     <result property="intControlCambioClave"   column="pCONTROLCAMBIOCLAVE_N" />
+     <result property="intEstadoCod"   			column="pESTADO_N_COD" />
+     <result property="juridica.persona.strRuc" 	column="pPERS_RUC_V" />
+     <result property="juridica.strRazonSocial"   	column="pJURI_RAZONSOCIAL_V" />
+     <result property="juridica.strSiglas"   		column="pJURI_SIGLAS_V" />
+     <result property="juridica.intTipoEmpresaCod"  column="pJURI_TIPOEMPRESA_N_COD" />
+  </resultMap>
+  
+  <resultMap id="listaEmpresaJuridica" class="EmpresaJuridica" >
+     <result property="intIdEmpresa"      		column="pPERS_EMPRESA_N" />
+     <result property="juridica.strRazonSocial" column="pJURI_RAZONSOCIAL_V" />
+     <result property="intTipoConformacionCod"  column="pEMPR_TIPOCONFORMACION_N_COD" />
+     <result property="intEstadoCod"   			column="pESTADO_N_COD" />
+     <result property="juridica.strSiglas"   	column="pJURI_SIGLAS_V" />
+  </resultMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parListaEmpresa" class="java.util.Map">
+  	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+     <parameter property="pIntIdEmpresa"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="pStrRazonSocial"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="pStrRuc"					jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>  
+     <parameter property="pIntTipoConformacionCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="pIntEstadoCod"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resEmpresaJuridica">
+	{ call PKG_EMPRESA_JURIDICA.getListaPorPK(?,?) }  
+  </procedure>
+  
+  <procedure id="getListaEmpresa" parameterMap="parListaEmpresa" resultMap="listaEmpresaJuridica">
+	{ call PKG_EMPRESA_JURIDICA.getListaEmpresa(?,?,?,?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

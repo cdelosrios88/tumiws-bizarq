@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+       
+    <parameterMap id="parameterMap" class="java.util.HashMap">
+   		<parameter property="sistema" javaType="java.lang.Long" jdbcType="NUMERIC" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+ 
+    <resultMap id="administracion.domain.listados.resultOpcionesxUsuario" class="java.util.HashMap">
+	     <result property="SISTEMA" column="SISTEMA"/> 
+	     <result property="CODG" column="CODG"/>
+	     <result property="NOMBR" column="NOMBR"/>
+	     <result property="APEPA" column="APEPA"/>
+	     <result property="APEMA" column="APEMA"/>  
+	     <result property="ROL" column="ROL"/>
+       <result property="OPCN" column="OPCN"/>  
+    </resultMap>   
+    
+    <parameterMap id="parameterMapUsuariosLogueados" class="java.util.HashMap">
+    	<parameter property="sistema" javaType="java.lang.Long" jdbcType="NUMERIC" mode="IN"/>
+   		<parameter property="fechaInicial" javaType="java.util.Date" jdbcType="DATE" mode="IN"/>
+	   	<parameter property="fechaFinal" javaType="java.util.Date" jdbcType="DATE" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+    <resultMap id="administracion.domain.listados.resultUsuariosLogueados" class="java.util.HashMap">
+	     <result property="SISTEMA" column="SISTEMA"/> 
+	     <result property="CODG" column="CODG"/>
+	     <result property="NOMBR" column="NOMBR"/>
+	     <result property="APEPA" column="APEPA"/>
+	     <result property="APEMA" column="APEMA"/>  
+	     <result property="ESTD" column="ESTD"/>
+         <result property="FECHA" column="FECHA"/>
+         <result property="HOSTNAME" column="HOSTNAME"/> 
+         <result property="IP" column="IP"/>
+         <result property="TIPO" column="TIPO"/>
+    </resultMap>   
+
+    <parameterMap id="parameterMapUsuariosInactivos" class="java.util.HashMap">
+    	<parameter property="sistema" javaType="java.lang.Long" jdbcType="NUMERIC" mode="IN"/>
+	   	<parameter property="limite" javaType="java.lang.Long" jdbcType="NUMERIC" mode="IN"/>
+	   	<parameter property="result" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+    </parameterMap>
+    
+     <resultMap id="administracion.domain.listados.resultUsuariosInactivos" class="java.util.HashMap">
+ 	     <result property="CODG" column="CODG"/>
+	     <result property="NOMBR" column="NOMBR"/>
+	     <result property="APEPA" column="APEPA"/>
+	     <result property="APEMA" column="APEMA"/>  
+	     <result property="EMAIL" column="EMAIL"/>
+	     <result property="ESTD" column="ESTD"/>
+         <result property="FECHA" column="FECHA"/>
+   	     <result property="SISTEMA" column="SISTEMA"/>
+    </resultMap>  
+		
+     <procedure id="administracion.domain.listados.listarOpcionesxUsuario" parameterMap="parameterMap" resultMap="administracion.domain.listados.resultOpcionesxUsuario">  
+          	{ call PKG_ASE.LISSS_FINDOPTIONSBYUSR ( ? , ? ) }  
+     </procedure> 
+        
+    <procedure id="administracion.domain.listados.listarUsuariosLogueados" parameterMap="parameterMapUsuariosLogueados" resultMap="administracion.domain.listados.resultUsuariosLogueados">
+			{ call PKG_ASE.LISSS_FINDUSRLOG ( ? , ? , ? , ? ) }  
+    </procedure>
+        
+    <procedure id="administracion.domain.listados.listarUsuariosInactivos" parameterMap="parameterMapUsuariosInactivos" resultMap="administracion.domain.listados.resultUsuariosInactivos">  
+        	{ call PKG_ASE.LISSS_FINDUSRINACT ( ? , ? , ? ) }  
+    </procedure> 
+       
+</sqlMap>  

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AuditoriaMotivoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.auditoria.domain.AuditoriaMotivo" alias="AuditoriaMotivo"/> 
+  
+  <resultMap id="resAuditoriaMotivo" class="AuditoriaMotivo" >
+	<result property="intIdcodigo"      	column="pAUDI_IDCODIGO_N" />
+	<result property="intAuditoriaMotivo"   column="pMAE_AUDITORIAMOTIVO_N" />
+    <result property="strMotivoCambio"     	column="pAUMO_MOTIVOCAMBIO_V" />
+   
+  </resultMap>
+  
+  <parameterMap id="parAuditoriaMotivo" class="AuditoriaMotivo">
+	 <parameter property="intIdcodigo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="intAuditoriaMotivo"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strMotivoCambio"		javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intIdcodigo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intAuditoriaMotivo"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+ 
+  <parameterMap id="parPorTablaAuditoria" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  	mode="OUT"/>
+	 <parameter property="intIdcodigo"		javaType="java.lang.Integer" 	jdbcType="VARCHAR"			mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parAuditoriaMotivo">
+	{ call PKG_AUDITORIAMOTIVO.grabar(?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAuditoriaMotivo" >
+	{ call PKG_AUDITORIAMOTIVO.modificar(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAuditoriaMotivo">
+	{ call PKG_AUDITORIAMOTIVO.getListaPorPk(?,?,?) }	
+  </procedure>
+  
+  <procedure id="getListaPorAuditoria" parameterMap="parPorTablaAuditoria" resultMap="resAuditoriaMotivo">
+	{ call PKG_AUDITORIAMOTIVO.getListaPorAuditoria(?,?) }	
+  </procedure>
+    
+</sqlMap>  

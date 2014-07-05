@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ArchivoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.parametro.general.domain.Archivo" alias="Archivo"/> 
+	
+  <resultMap id="resArchivo" class="Archivo" >
+     <result property="id.intParaTipoCod"      	column="pPara_tipo_n_cod" />
+     <result property="id.intItemArchivo"    	column="pItemarchivo_n" />
+     <result property="id.intItemHistorico"    	column="pItemhistorico_n" />
+     <result property="strNombrearchivo"      	column="pMombrearchivo_v" />
+     <result property="tsFechaRegistro"    		column="pFecharegistro_d" />
+     <result property="intParaEstadoCod"      	column="pPara_estado_n_cod" />
+     <result property="tsFechaEliminacion"   	column="pFechaeliminacion_d" />
+  </resultMap>
+  
+  <parameterMap id="parArchivo" class="Archivo">
+     <parameter property="id.intParaTipoCod"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemArchivo"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemHistorico"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strNombrearchivo" 	jdbcType="VARCHAR"   javaType="java.lang.String" 	mode="INOUT"/>  
+	 <parameter property="tsFechaRegistro"		jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 	mode="INOUT"/>    
+     <parameter property="intParaEstadoCod" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="tsFechaEliminacion" 	jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intParaTipoCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemArchivo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemHistorico"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorTipoYItem" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intParaTipoCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemArchivo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parArchivo">
+	{ call PKG_ARCHIVO.grabar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="grabarVersion" parameterMap="parArchivo">
+	{ call PKG_ARCHIVO.grabarVersion(?,?,?,?,?,?,?)  }  
+  </procedure>
+
+  <procedure id="modificar" parameterMap="parArchivo" >
+	{ call PKG_ARCHIVO.modificar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resArchivo">
+	{ call PKG_ARCHIVO.getListaPorPK(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaVersionFinPorTipoYItem" parameterMap="parPorTipoYItem" resultMap="resArchivo">
+	{ call PKG_ARCHIVO.getListaVersionFinPorTipoYItem(?,?,?) }  
+  </procedure>
+  
+</sqlMap>  

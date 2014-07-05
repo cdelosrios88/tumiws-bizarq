@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PoblacionDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.PoblacionDetalle" alias="PoblacionDetalle"/> 
+	
+  <resultMap id="resPoblacionDetalle" class="PoblacionDetalle" >
+     <result property="id.intItemPoblacion"     column="pITEMPOBLACION_N" />
+     <result property="id.intTipoTrabajador"    column="pTIPOTRABAJADOR_N" />
+     <result property="id.intTipoSocio"   		column="pTIPOSOCIO_N" />
+     <result property="intPadron"   			column="pPADRON_N" />
+  </resultMap>
+  
+  <parameterMap id="parPoblacionDetalle" class="PoblacionDetalle">
+     <parameter property="id.intItemPoblacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intTipoTrabajador" javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intTipoSocio" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPadron" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemPoblacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intTipoTrabajador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intTipoSocio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKPoblacion" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemPoblacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parPoblacionDetalle">
+	{ call PKG_CONVPOBDETALLE.grabar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPoblacionDetalle" >
+	{ call PKG_CONVPOBDETALLE.modificar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPoblacionDetalle">
+	{ call PKG_CONVPOBDETALLE.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPkPoblacion" parameterMap="parPorPKPoblacion" resultMap="resPoblacionDetalle">
+	{ call PKG_CONVPOBDETALLE.getListaPorPkPoblacion(?,?) }
+  </procedure>
+  
+</sqlMap>

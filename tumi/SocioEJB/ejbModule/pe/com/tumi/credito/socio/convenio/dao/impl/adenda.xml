@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AdendaDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.convenio.domain.Adenda" alias="Adenda" />
+	<typeAlias type="pe.com.tumi.credito.socio.convenio.domain.composite.HojaPlaneamientoComp" alias="HojaPlaneamientoComp" />
+	<typeAlias type="pe.com.tumi.credito.socio.convenio.domain.composite.ConvenioComp" alias="ConvenioComp" />
+
+	<resultMap id="resAdenda" class="Adenda">
+		<result property="id.intConvenio" 			column="pCONVENIO_N" />
+		<result property="id.intItemConvenio" 		column="pITEMCONVENIO_N" />
+		<result property="intPersEmpresaPk" 		column="pPERS_EMPRESA_N_PK" />
+		<result property="intSeguSucursalPk" 		column="pSEGU_SUCURSAL_N_PK" />
+		<result property="dtInicio" 				column="pINICIO_D" />
+		<result property="dtCese" 					column="pCESE_D" />
+		<result property="intOpcionFiltroCredito" 	column="pOPCIONFILTROCREDITO_N" />
+		<result property="dtSuscripcion" 			column="pSUSCRIPCION_D" />
+		<result property="intParaTipoRetencionCod" 	column="pTIPORETENCION_N_COD" />
+		<result property="bdRetencion" 				column="pRETENCION_N" />
+		<result property="intCartaAutorizacion" 	column="pCARTAAUTORIZACION_N" />
+		<result property="intDonacion" 				column="pDONACION_N" />
+		<result property="dtFechaHojaPendiente" 	column="pFECHAREGISTRO_D" />
+		<result property="intRenovacion" 			column="pRENOVACION_N" />
+		<result property="intParaEstadoCod" 		column="pESTADO_N_COD" />
+		<result property="intParaEstadoHojaPlan" 	column="pESTADOCONVENIO_N_COD" />
+		<result property="intParaEstadoConvenioCod" column="pPARA_ESTADOCONVENIO_N_COD" />
+	</resultMap>
+	
+	<resultMap id="resHojaPlaneamiento" class="HojaPlaneamientoComp">
+		<result property="adenda.id.intConvenio" 					column="pCONVENIO_N" />
+		<!-- <result property="estructuraDetalle.id.intNivel" 			column="pNIVEL_N" />  -->
+		<!-- <result property="estructuraDetalle.id.intCodigo" 			column="pCODIGO_N" /> -->
+		<!-- <result property="estructuraDetalle.intParaModalidadCod" 	column="pPARA_MODALIDAD_N_COD" /> -->
+		<!--<result property="estructuraDetalle.intParaTipoSocioCod" 	column="pPARA_TIPOSOCIO_N_COD" /> -->
+		<result property="adenda.id.intItemConvenio" 				column="pITEMCONVENIO_N" />
+		<result property="adenda.intPersEmpresaPk" 					column="pPERS_EMPRESA_N_PK" />
+		<result property="adenda.intSeguSucursalPk" 				column="pSEGU_SUCURSAL_N_PK" />
+		<result property="adenda.dtInicio" 							column="pINICIO_D" />
+		<result property="adenda.dtCese" 							column="pCESE_D" />
+		<result property="adenda.intOpcionFiltroCredito" 			column="pOPCIONFILTROCREDITO_N" />
+		<result property="adenda.dtSuscripcion" 					column="pSUSCRIPCION_D" />
+		<result property="adenda.intParaTipoRetencionCod" 			column="pTIPORETENCION_N_COD" />
+		<result property="adenda.bdRetencion" 						column="pRETENCION_N" />
+		<result property="adenda.intCartaAutorizacion" 				column="pCARTAAUTORIZACION_N" />
+		<result property="adenda.intDonacion" 						column="pDONACION_N" />
+		<result property="adenda.dtFechaHojaPendiente" 				column="pFECHAREGISTRO_D" />
+		<result property="adenda.intRenovacion" 					column="pRENOVACION_N" />
+		<result property="adenda.intParaEstadoCod" 					column="pESTADO_N_COD" />
+		<result property="adenda.intParaEstadoHojaPlan" 			column="pESTADOCONVENIO_N_COD" />
+		<result property="estructuraDetalle.estructura.juridica.intIdPersona" column="pPERS_PERSONA_N_PK" />
+	</resultMap>
+	
+	<resultMap id="resConvenio" class="ConvenioComp">
+		<result property="adenda.id.intConvenio" 					column="pCONVENIO_N" />
+		<result property="adenda.id.intItemConvenio" 				column="pITEMCONVENIO_N" />
+		<result property="adenda.intSeguSucursalPk" 				column="pSEGUSUCURSAL_N_PK" />
+		<result property="adenda.dtInicio" 							column="pINICIO_D" />
+		<result property="adenda.dtCese" 							column="pCESE_D" />
+		<result property="intDiferenciaFecha" 						column="pDIFERENCIA_FECHA" />
+		<result property="adenda.intParaEstadoCod" 					column="pPARAESTADO_N_COD" />
+		<result property="adenda.dtFechaHojaPendiente" 				column="pFECHAHOJAPENDIENTE_D" />
+	</resultMap>
+	
+	<parameterMap id="parPorPKParaFiltro" class="java.util.Map">
+	  	<parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	    <parameter property="intIdConvenio"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+		<parameter property="intParaEstadoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>    
+		<parameter property="intIdSucursal"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <!-- Modificado por cdelosrios, 04/12/2013 -->
+	    <!--<parameter property="intIdSucursal" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="IN"/>
+	    <parameter property="intModalidad"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <parameter property="intTipoSocio"			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <parameter property="intRangoFec" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <parameter property="dtInicio" 				javaType="java.util.Date"		jdbcType="DATE"  	mode="IN"/>
+	    <parameter property="dtFin" 				javaType="java.util.Date"		jdbcType="DATE"  	mode="IN"/>
+	    <parameter property="intDonacion" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <parameter property="intIndeterminado" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <parameter property="intDocAdjunto" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>
+	    <parameter property="intCartaAutorizacion" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="IN"/>-->
+	    <!-- Modificado por cdelosrios, 04/12/2013 -->
+  	</parameterMap>
+	
+	<parameterMap id="parAdenda" class="Adenda">
+		<parameter property="id.intConvenio" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="id.intItemConvenio" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="intSeguSucursalPk" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="dtInicio" 					javaType="java.util.Date" 		jdbcType="DATE" 	mode="INOUT" />
+		<parameter property="dtCese" 					javaType="java.util.Date"		jdbcType="DATE" 	mode="INOUT" />
+		<parameter property="intOpcionFiltroCredito" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="dtSuscripcion" 			javaType="java.util.Date" 		jdbcType="DATE" 	mode="INOUT" />
+		<parameter property="intParaTipoRetencionCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="bdRetencion" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="intCartaAutorizacion" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="intDonacion" 				javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="dtFechaHojaPendiente" 		javaType="java.util.Date" 		jdbcType="DATE" 	mode="INOUT" />
+		<parameter property="intRenovacion" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="intParaEstadoCod" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="intParaEstadoHojaPlan" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT" />
+		<parameter property="tsFechaHojaCulminado" 		javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP" mode="INOUT" />
+	</parameterMap>
+	
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" 		javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intConvenio" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN" />
+		<parameter property="intItemConvenio" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN" />
+	</parameterMap>
+	
+	<parameterMap id="parPorPKEliminar" class="Adenda">
+		<parameter property="id.intConvenio" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN" />
+		<parameter property="id.intItemConvenio" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN" />
+	</parameterMap>
+	
+	<parameterMap id="parPorPKAprobarRechazar" class="Adenda">
+		<parameter property="id.intConvenio" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN" />
+		<parameter property="id.intItemConvenio" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN" />
+		<parameter property="intParaEstadoValidacion" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN" />
+	</parameterMap>
+	
+	<parameterMap id="parPorConvenio" class="java.util.Map">
+	  	<parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	    <!-- Modificado por  cdelosrios, 08/12/2013 -->
+	    <!-- <parameter property="intIdItemConvenio"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intParaEstadoConvenioCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intRenovacion"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intRetencPlla"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intDonacion"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intDocAdjunto"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/> -->
+	    <parameter property="intIdConvenio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intIdSucursalConv"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <parameter property="intVigenciaConvenio"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	    <!-- Fin modificado por  cdelosrios, 08/12/2013 -->
+  	</parameterMap>
+  	
+  	<parameterMap id="parPorConvenioDet" class="java.util.Map">
+	  	<parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	    <parameter property="intIdConvenio"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  	</parameterMap>
+	
+	<parameterMap id="parPorTipoConvenio" class="java.util.Map">
+	  	<parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	    <parameter property="intIdItemConvenio"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parConvenio" class="Adenda">
+		<parameter property="id.intConvenio" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="INOUT" />
+		<parameter property="id.intItemConvenio" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="INOUT" />
+		<parameter property="intRenovacion" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="INOUT" />
+		<parameter property="intParaEstadoConvenioCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="INOUT" />
+	</parameterMap>
+	
+	<procedure id="getListaParaFiltro" parameterMap="parPorPKParaFiltro" resultMap="resHojaPlaneamiento">
+		<!-- Modificado por cdelosrios, 04/12/2013 -->
+		<!-- { call PKG_Adenda.getListaParaFiltro(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) } -->
+		<!-- Fin modificado por cdelosrios, 04/12/2013 -->
+		{ call PKG_Adenda.getListaParaFiltro(?,?,?,?) }
+  	</procedure>
+
+	<procedure id="grabar" parameterMap="parAdenda">
+		{ call PKG_Adenda.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  	</procedure>
+
+	<procedure id="modificar" parameterMap="parAdenda">
+		{ call PKG_Adenda.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	</procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAdenda">
+		{ call PKG_Adenda.getListaPorPk(?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="eliminar" parameterMap="parPorPKEliminar">
+		{ call PKG_Adenda.eliminar(?,?) }
+  	</procedure>
+  	
+  	<procedure id="aprobarRechazar" parameterMap="parPorPKAprobarRechazar">
+		{ call PKG_Adenda.aprobarRechazar(?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="getListaConvenio" parameterMap="parPorConvenio" resultMap="resConvenio">
+		<!-- Modificado por cdelosrios, 08/12/2013 -->
+		<!-- { call PKG_Adenda.getListaConvenio(?,?,?,?,?,?,?,?) } -->
+		{ call PKG_Adenda.getListaConvenio(?,?,?,?) }
+		<!-- Fin modificado por cdelosrios, 08/12/2013 -->
+  	</procedure>
+  	
+  	<procedure id="getListaConvenioDet" parameterMap="parPorConvenioDet" resultMap="resConvenio">
+		{ call PKG_Adenda.getListaConvenioDet(?,?) }
+  	</procedure>
+  	
+  	<procedure id="getListaConvenioPorTipoConvenio" parameterMap="parPorTipoConvenio" resultMap="resConvenio">
+		{ call PKG_Adenda.getListaConvPorTipoConvenio(?,?) }
+  	</procedure>
+  	
+  	<procedure id="grabarConvenio" parameterMap="parConvenio">
+		{ call PKG_Adenda.grabarConvenio(?,?,?,?) }
+  	</procedure>
+  	
+  	<procedure id="modificarConvenio" parameterMap="parConvenio">
+		{ call PKG_Adenda.modificarConvenio(?,?,?,?) }
+  	</procedure>
+</sqlMap>

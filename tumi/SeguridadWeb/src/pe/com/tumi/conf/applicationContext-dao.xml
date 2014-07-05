@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="genericDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="usuarioDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton"  parent="genericDAO">
+		<property name="prefixColumnName" value="USRC"/>
+		<property name="nameSpace" value="seguridad.domain.usuario"/>
+		<property name="idTable" value="NID_USR"/>			
+	</bean>
+
+	<bean id="loginLogDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton" parent="genericDAO">
+		<property name="prefixColumnName" value="LOGC"/>
+		<property name="nameSpace" value="seguridad.domain.loginlog"/>
+		<property name="idTable" value="NCODIGO"/>
+	</bean>
+		
+	<bean id="tipoArbolDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton"  parent="genericDAO">
+		<property name="prefixColumnName" value="RECC"/>
+		<property name="nameSpace" value="seguridad.domain.recurso"/>
+		<property name="idTable" value="NID_TIP_ARBL"/>
+	</bean>
+	
+	<bean id="parametroDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton" parent="genericDAO">
+		<property name="prefixColumnName" value="PARC"/>
+		<property name="nameSpace" value="administracion.domain.parametro"/>
+		<property name="idTable" value="NID_TIP_SIMPL"/>
+	</bean>
+
+	<bean id="sistemaDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton" parent="genericDAO">
+		<property name="prefixColumnName" value="SISC"/>
+		<property name="nameSpace" value="seguridad.domain.sistema"/>
+		<property name="idTable" value="NCODIGO"/>
+	</bean>
+
+	<bean id="rolDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton" parent="genericDAO">
+		<property name="prefixColumnName" value="ROLC"/>
+		<property name="nameSpace" value="seguridad.domain.rol"/>
+		<property name="idTable" value="NID_ROL"/>
+	</bean>
+
+	<bean id="listadosDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis"
+		scope="singleton" parent="genericDAO">
+		<property name="nameSpace" value="administracion.domain.listados"/>
+	</bean>
+	
+	<bean id="empresaDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace" value="empresa.domain.empresa"/>
+	</bean>	
+	
+	<bean id="adminMenuDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO">
+		<property name="nameSpace" value="adminmenu.domain.adminmenu"/>
+	</bean>	
+	
+	<bean id="usuarioPerfilDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="usuario.domain.usuario"/>
+	</bean>
+	
+	<bean id="horarioIngresoDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="horario.domain.horario"/>
+	</bean>
+	
+	<bean id="admFormDocDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="admFormDoc.domain.admFormDoc"/>
+	</bean>
+	
+	<bean id="fileUploadDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="file.domain.file"/>
+	</bean>
+	
+	<bean id="registroPcDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="registropc.domain.registropc"/>
+	</bean>
+	
+	<bean id="accesoEspecialDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="accesoespecial.domain.accesoespecial"/>
+	</bean>
+	
+	<bean id="perfilMofDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="perfilmof.domain.perfilmof"/>
+	</bean>
+	
+	<bean id="parametersDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="parameters.domain.parameters"/>
+	</bean>		
+	
+	<bean id="reglamentoPoliticaDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="regpol.domain.regpol"/>
+	</bean>
+	
+	<bean id="auditoriaSistemasDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="audisis.domain.audisis"/>
+	</bean>
+	
+	<bean id="auditoriaDAO" class="pe.com.tumi.common.dao.impl.GenericDaoIbatis" 
+			scope="singleton" parent="genericDAO" >
+		<property name="nameSpace"        value="auditoria.domain.auditoria"/>
+	</bean> 
+	
+	<!-- Creditos DAO Bean -->
+	<bean id="creditosDAO" class="pe.com.tumi.creditos.dao.impl.CreditosDaoIbatis" 
+			scope="singleton">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="estrucOrgDAO" class="pe.com.tumi.creditos.dao.impl.CreditosDaoIbatis" 
+			scope="singleton" parent="creditosDAO">
+		<property name="nameSpace"        value="estructuraorg.domain.estructuraorg"/>
+	</bean>
+	
+	<bean id="hojaPlaneamientoDAO" class="pe.com.tumi.creditos.dao.impl.CreditosDaoIbatis" 
+			scope="singleton" parent="creditosDAO">
+		<property name="nameSpace"        value="hojaplan.domain.hojaplan"/>
+	</bean>
+	
+	<bean id="controlProcesoDAO" class="pe.com.tumi.creditos.dao.impl.CreditosDaoIbatis" 
+			scope="singleton" parent="creditosDAO">
+		<property name="nameSpace"        value="controlProceso.domain.controlProceso"/>
+	</bean>
+	
+	<bean id="aportacionesDAO" class="pe.com.tumi.creditos.dao.impl.CreditosDaoIbatis" 
+			scope="singleton" parent="creditosDAO">
+		<property name="nameSpace" value="aportacion.domain.aportacion"/>
+	</bean>
+
+	<bean id="mantCuentasDAO" class="pe.com.tumi.creditos.dao.impl.CreditosDaoIbatis" 
+			scope="singleton" parent="creditosDAO">
+		<property name="nameSpace" value="mantCuenta.domain.mantCuenta"/>
+	</bean>
+	
+	<!-- Apertura Cuenta DAO Bean -->
+	<bean id="adminCuentaDAO" class="pe.com.tumi.adminCuenta.dao.impl.AdminCuentaDaoIbatis" 
+			scope="singleton">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="aperturaCuentaDAO" class="pe.com.tumi.adminCuenta.dao.impl.AdminCuentaDaoIbatis" 
+			scope="singleton" parent="adminCuentaDAO">
+		<property name="nameSpace"        value="apercuenta.domain.apercuenta"/>
+	</bean>
+	
+	<bean id="perJuridicaDAO" class="pe.com.tumi.adminCuenta.dao.impl.AdminCuentaDaoIbatis" 
+			scope="singleton" parent="adminCuentaDAO">
+		<property name="nameSpace"        value="perjuridica.domain.perjuridica"/>
+	</bean>
+	
+	<!-- Popups DAO Bean -->
+	<bean id="popupDAO" class="pe.com.tumi.popup.dao.impl.PopupDaoIbatis" 
+			scope="singleton">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="beneficiarioDAO" class="pe.com.tumi.popup.dao.impl.PopupDaoIbatis" 
+			scope="singleton" parent="popupDAO" >
+		<property name="nameSpace"        value="beneficiario.domain.beneficiario"/>
+	</bean>
+	
+	<bean id="domicilioDAO" class="pe.com.tumi.popup.dao.impl.PopupDaoIbatis" 
+			scope="singleton" parent="popupDAO">
+		<property name="nameSpace"        value="domicilio.domain.domicilio"/>
+	</bean>
+	
+	<bean id="comunicacionDAO" class="pe.com.tumi.popup.dao.impl.PopupDaoIbatis" 
+			scope="singleton" parent="popupDAO">
+		<property name="nameSpace"        value="comunicacion.domain.comunicacion"/>
+	</bean> 
+	
+	<bean id="ctabancariaDAO" class="pe.com.tumi.popup.dao.impl.PopupDaoIbatis" 
+			scope="singleton" parent="popupDAO">
+		<property name="nameSpace"        value="ctabancaria.domain.ctabancaria"/>
+	</bean> 
+	
+	<bean id="replegalDAO" class="pe.com.tumi.popup.dao.impl.PopupDaoIbatis" 
+			scope="singleton" parent="popupDAO">
+		<property name="nameSpace"        value="replegal.domain.replegal"/>
+	</bean> 
+	
+</beans>

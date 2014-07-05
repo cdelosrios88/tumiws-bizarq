@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.popup.domain.Beneficiario" alias="beneficiario"/>
+    
+    <resultMap id="beneficiario.domain.beneficiario.resultPerNatural" class="beneficiario">
+	     <result property="intIdPersona"  		column="PERS_IDPERSONA_N"/>
+	     <result property="strApPaterno" 	 	column="NATU_APELLIDOPATERNO_V"/>
+	     <result property="strApMaterno"  		column="NATU_APELLIDOMATERNO_V"/>
+	     <result property="strNombres"  		column="NATU_NOMBRES_V"/>
+	     <result property="strFecNac"  			column="NATU_FECHANACIMIENTO_D"/>
+	     <result property="intTipoDocumento" 	column="NATU_IDTIPOIDENTIDAD_N"/>
+	     <result property="strTipoDocumento" 	column="V_TIPOIDENTIDAD"/>
+	     <result property="strNroDoc" 			column="NATU_NROIDENTIDAD_C"/>
+	     <result property="intIdSexo" 			column="NATU_IDSEXO_N"/>
+	     <result property="intEstCivil" 		column="NATU_IDESTADOCIVIL_N"/>
+	     <result property="intIdTipoVinculo" 	column="VINC_IDTIPOVINCULO_N"/>
+	     <result property="strFoto" 			column="NATU_FOTO_C"/>
+	     <result property="strFirma" 			column="NATU_FIRMA_C"/>
+	     <result property="flPorcAportes" 		column="N_PORCAPORTES"/>
+	     <result property="flPorcFondoSepelio" 	column="N_PORCFONDOSEPELIO"/>
+	     <result property="flPorcFondoRetiro" 	column="N_PORCFONDORETIRO"/>
+    </resultMap>
+    
+    <parameterMap id="prmtListaBeneficiario" class="java.util.Map">
+    	 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntTipoDoc"	 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrNroDoc"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="beneficiario.domain.beneficiario.mapbeneficiario" class="java.util.Map">
+		 <parameter property="pIntIdBeneficiario" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="INOUT"/>
+		 <parameter property="pStrApepat"	 		jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pStrApemat"	 		jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pStrNombres"	 		jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pDaFecNac"			jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pIntIdTipoDoc"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntNroDoc"			jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pIntIdSexo"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdEstCivil"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pStrFoto"				jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pStrFirma"			jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pIntIdTipoVinculo"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdEmpresaBenef"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdEmpresaSocio"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdPersonaSocio"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="beneficiario.domain.beneficiario.mapvinculobeneficiario" class="java.util.Map">
+		 <parameter property="pIntIdEmpresaBeneficiario" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdPersonaBeneficiario"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdTipoVinculo"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdEmpresaVinculo"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdPersonaVinculo"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdTipoBeneficio"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pFlPorcentaje"				jdbcType="NUMERIC" 	javaType="java.lang.Float" 	 mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarPersonaDet" class="java.util.Map">
+    	 <parameter property="pIntIdPersona" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="beneficiario.domain.beneficiario.getListaPersonaNatural" parameterMap="prmtListaBeneficiario" resultMap="beneficiario.domain.beneficiario.resultPerNatural">
+		{ call PKG_PUBLIC.listar_beneficiario( ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="beneficiario.domain.beneficiario.grabarBeneficiario" parameterMap="beneficiario.domain.beneficiario.mapbeneficiario" >
+		{ call PKG_PUBLIC.insert_beneficiario( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="beneficiario.domain.beneficiario.grabarVinculoBeneficio" parameterMap="beneficiario.domain.beneficiario.mapvinculobeneficiario" >
+		{ call PKG_PUBLIC.insert_vinculobeneficiario( ?, ?, ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="beneficiario.domain.beneficiario.eliminarPersonaDet" parameterMap="prmtEliminarPersonaDet" >
+		{ call PKG_TUMI.eliminar_usuariodet( ? ) }
+	</procedure>
+</sqlMap>

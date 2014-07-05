@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RequisitoCreditoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.solicitudPrestamo.domain.RequisitoCredito" alias="RequisitoCredito"/> 
+	
+  <resultMap id="resRequisitoCredito" class="RequisitoCredito" >
+  	 <result property="id.intPersEmpresaPk"  		column="pPERS_EMPRESA_N_PK" />
+  	 <result property="id.intItemRequisito"  		column="pCSER_ITEMREQUISITO_N" />
+  	 <result property="id.intCuentaPk"  			column="pCSOC_CUENTA_N_PK" />
+  	 <result property="id.intItemExpediente"  		column="pCSER_ITEMEXPEDIENTE_N" />
+  	 <result property="id.intItemDetExpediente"  	column="pCSER_ITEMDETEXPEDIENTE_N" />
+     <result property="intPersEmpresaRequisitoPk"  	column="pPERS_EMPRESAREQUISITO_N_PK" />
+     <result property="intItemReqAut"  				column="pCSER_ITEMREQAUT_N" />
+     <result property="intItemReqAutDet"      		column="pCSER_ITEMREQAUTESTDETALLE_N" />
+     <result property="intParaTipoArchivoCod"    	column="pPARA_TIPOARCHIVO_N_COD" />
+     <result property="intParaItemArchivo"    		column="pPARA_ITEMARCHIVO_N" />
+     <result property="intParaItemHistorico"    	column="pPARA_ITEMHISTORICO_N" />
+     <result property="intParaEstadoCod"  			column="pPARA_ESTADO_N_COD" />
+     <result property="tsFechaRequisito"      		column="pRECR_FECHAREQUISITO_D" />
+  </resultMap>
+  
+  <parameterMap id="parRequisitoCredito" class="RequisitoCredito">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemRequisito"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuentaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemDetExpediente"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersEmpresaRequisitoPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intItemReqAut"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intItemReqAutDet" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoArchivoCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaItemArchivo" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaItemHistorico" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRequisito" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemRequisito"		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkExpedienteCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkExpedienteCreditoYRequisitoDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetalle" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>  
+  
+  <procedure id="grabar" parameterMap="parRequisitoCredito">
+	{ call PKG_CSE_REQUISITOCREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parRequisitoCredito">
+	{ call PKG_CSE_REQUISITOCREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resRequisitoCredito">
+	{ call PKG_CSE_REQUISITOCREDITO.getListaPorPk(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorExpedienteCredito" parameterMap="parPorPkExpedienteCredito" resultMap="resRequisitoCredito">
+	{ call PKG_CSE_REQUISITOCREDITO.getListaPorExpedienteCredito(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkExpedienteCreditoYRequisitoDetalle" parameterMap="parPorPkExpedienteCreditoYRequisitoDetalle" resultMap="resRequisitoCredito">
+	{ call PKG_GIROPRESTAMO.getPorExpCredYReqAutDetalle(?,?,?,?,?,?,?,?) }
+  </procedure>  
+</sqlMap>

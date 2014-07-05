@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ModeloDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.Modelo" alias="Modelo"/> 
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.ModeloId" alias="ModeloId"/> 
+	
+  <resultMap id="resModelo" class="Modelo">
+	<result property="id.intEmpresaPk" 			column="pPers_empresa_n_pk"/>
+	<result property="id.intCodigoModelo"   	column="pCont_codigomodelo_n"/>
+	<result property="intTipoModeloContable"   	column="pTIPOMODELOCONTABLE_N_COD"/>
+	<result property="strDescripcion"   		column="pMode_descripcion_v"/>
+    <result property="tsFechaRegistro"      	column="pMode_fecharegistro_d"/>
+    <result property="intEmpresaUsuario"    	column="pPers_empresausuario_n_pk"/>
+    <result property="intPersonaUsuario"    	column="pPers_personausuario_n_pk"/>
+    <result property="intEstado"      			column="pPara_estado_n_cod"/>
+    <result property="tsFechaEliminacion"   	column="pMode_fechaeliminacion_d"/>
+  </resultMap>
+  
+  <parameterMap id="parModelo" class="Modelo">
+	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intCodigoModelo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intTipoModeloContable"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strDescripcion"			javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intEmpresaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersonaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"		javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresaPk"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intCodigoModelo"		javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresaPk"	    javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intTipoModeloContable"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="strDescripcion"			javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="IN"/>
+	 <parameter property="intEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parModelo">
+	{ call PKG_MODELO.grabar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parModelo" >
+	{ call PKG_MODELO.modificar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resModelo">
+	{ call PKG_MODELO.getListaPorPk(?,?,?) }
+  </procedure> 
+  
+  <procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resModelo">
+	{ call PKG_MODELO.getBusqueda(?,?,?,?,?) }
+  </procedure>  	
+    
+</sqlMap>  

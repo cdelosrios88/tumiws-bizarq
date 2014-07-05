@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="EnvioinfladaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.Envioinflada" alias="Envioinflada"/> 
+	
+  <resultMap id="resEnvioinflada" class="Envioinflada" >
+	<result property="id.intItemenvioconcepto"   	column="pCCOB_ITEMENVIOCONCEPTO_N" />
+	<result property="id.intItemenvioinflada"   	column="pCCOB_ITEMENVIOINFLADA_N" />
+	<result property="id.intItemenviomonto"   	column="pCCOB_ITEMENVIOMONTO_N" />
+	<result property="id.intEmpresacuentaPk"   	column="pPERS_EMPRESACUENTA_N_PK" />
+    <result property="intTipoinfladaCod"      	column="pPARA_TIPOINFLADA_N_COD" />
+    <result property="bdMonto"      	column="pENIN_MONTO_N" />
+    <result property="strObservacion"      	column="pENIN_OBSERVACION_V" />
+    <result property="intEstadoCod"      	column="pPARA_ESTADO_N_COD" />
+    <result property="tsFecharegistro"      	column="pENIN_FECHAREGISTRO_D" />
+    <result property="intEmpresausuarioPk"      	column="pPERS_EMPRESAUSUARIO_N_PK" />
+    <result property="intPersonausuarioPk"      	column="pPERS_PERSONAUSUARIO_N_PK" />
+  </resultMap>
+  
+  <parameterMap id="parEnvioinflada" class="Envioinflada">
+	 <parameter property="id.intEmpresacuentaPk"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="id.intItemenvioconcepto"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemenviomonto"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemenvioinflada"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intTipoinfladaCod"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="bdMonto"					javaType="java.math.BigDecimal" jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strObservacion"			javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsFecharegistro"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intEmpresausuarioPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersonausuarioPk"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intItemenvioconcepto"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItemenvioinflada"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItemenviomonto"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intEmpresacuentaPk"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+   <parameterMap id="parPorEnvioMonto" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intItemenvioconcepto"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intItemenviomonto"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+	 <parameter property="intEmpresacuentaPk"	javaType="java.lang.Integer" jdbcType="NUMERIC"	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parEnvioinflada">
+	{ call PKG_ENVIOINFLADA.grabar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parEnvioinflada" >
+	{ call PKG_ENVIOINFLADA.modificar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resEnvioinflada">
+	{ call PKG_ENVIOINFLADA.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+  
+   <procedure id="getListaPorEnvioMonto" parameterMap="parPorEnvioMonto" resultMap="resEnvioinflada">
+	{ call PKG_ENVIOINFLADA.getListaPorEnvioMonto(?,?,?,?) }
+  </procedure> 
+    
+    
+</sqlMap>  

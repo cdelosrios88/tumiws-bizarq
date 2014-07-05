@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ProciclicoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.Prociclico" alias="Prociclico"/> 
+	
+  <resultMap id="resProciclico" class="Prociclico" >
+  	<result property="id.intItemProciclico"      		column="pCrie_itemprociclico_n" />
+  	<result property="id.intItemEspecificacion"     	column="pCrie_itemespecificacion_n" />
+  	<result property="id.intItemCartera"      			column="pCrie_itemcartera_n" />
+  	<result property="intParaTipoCategoriaRiesgoCod"	column="pPara_tipocategoriariesgo_n" />
+  	<result property="bdMontoProvision"      			column="pProc_montoprovision_n" />
+  	<result property="bdMontoConstitucion2"      		column="pProc_montoconstitucion2_n" />
+  	<result property="bdMontoConstitucion4"      		column="pProc_montoconstitucion4_n" />
+  	<result property="bdMontoConstitucion6"      		column="pProc_montoconstitucion6_n" />
+  	<result property="intParaEstadoCod"      			column="pPara_estado_n_cod" />  	 
+  </resultMap>
+  
+  <parameterMap id="parProciclico" class="Prociclico">
+     <parameter property="id.intItemProciclico"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemEspecificacion"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemCartera"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoCategoriaRiesgoCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="bdMontoProvision"					jdbcType="NUMERIC"  javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoConstitucion2"				jdbcType="NUMERIC"  javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoConstitucion4"				jdbcType="NUMERIC"  javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoConstitucion6"				jdbcType="NUMERIC"  javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="intParaEstadoCod"					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemProciclico" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemEspecificacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCartera" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEspecificacion" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemEspecificacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCartera" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parProciclico">
+	{ call PKG_PROCICLICO.grabar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parProciclico" >
+	{ call PKG_PROCICLICO.modificar(?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resProciclico">
+	{ call PKG_PROCICLICO.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorEspecificacion" parameterMap="parPorEspecificacion" resultMap="resProciclico">
+	{ call PKG_PROCICLICO.getListaPorEspecificacion(?,?,?) }  
+  </procedure>
+    
+</sqlMap>

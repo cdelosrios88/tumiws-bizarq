@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PadronDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.Padron" alias="Padron"/> 
+	
+  <resultMap id="resPadron" class="Padron" >
+     <result property="id.intPeriodo"      			column="pPERIODO_N" />
+     <result property="id.intMes"    				column="pMES_N" />
+     <result property="id.intNivel"    				column="pNIVEL_N" />
+     <result property="id.intCodigo"    			column="pCODIGO_N" />
+     <result property="id.intParaTipoArchivoPadronCod" 	column="pTIPOARCHIVOPADRON_N_COD" />
+     <result property="id.intParaModalidadCod" 		column="pMODALIDAD_N_COD" />
+     <result property="id.intParaTipoSocioCod" 		column="pTIPOSOCIO_N_COD" />
+     <result property="id.intItemAdministraPadron" 	column="pITEMADMINISTRAPADRON_N" />
+     <result property="id.intItem"    				column="pITEM_N" />
+     <result property="strPro"      				column="pPRO_V" />
+     <result property="strProgSub"    				column="pPROGSUB_V" />
+     <result property="strCodEst"      				column="pCODEST_V" />
+     <result property="strCodigoNivel"   			column="pCODIGONIVEL_V" />
+     <result property="strCodeje"   				column="pCODEJE_V" />
+     <result property="strTipoPla"      			column="pTIPOPLA_V" />
+     <result property="strNombre"    				column="pNOMBRE_V" />
+     <result property="strPlaza"      				column="pPLAZA_V" />
+     <result property="strLibEle"      				column="pLIBELE_V" />
+     <result property="dtFecNac"   					column="pFECNAC_D" />
+     <result property="strCodCar"   				column="pCODCAR_V" />
+     <result property="strRegim"   					column="pREGIM_V" />
+     <result property="bdLiquid"      				column="pLIQUID_N" />
+     <result property="strCondic"    				column="pCONDIC_V" />
+     <result property="bdPorJud"      				column="pPORJUD_N" />
+     <result property="intLicenp"   				column="pLICENP_N" />
+     <result property="intLicSub"   				column="pLICSUB_N" />
+     <result property="intPorguar"   				column="pPORGUAR_N" />
+     <result property="intEstado"   				column="pESTADO_N" />
+     <result property="strDL6"   					column="pDL6_V" />
+     <result property="intIPSSAT"   				column="pIPSSAT_N" />
+  </resultMap>
+  
+  <parameterMap id="parPadron" class="Padron">
+  	 <parameter property="id.intPeriodo"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  	 <parameter property="id.intMes"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  	 <parameter property="id.intNivel"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  	 <parameter property="id.intCodigo"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+  	 <parameter property="id.intParaTipoArchivoPadronCod" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intParaModalidadCod" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intParaTipoSocioCod" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intItemAdministraPadron" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="id.intItem"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+     <parameter property="strPro"							javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+	 <parameter property="strProgSub"						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>    
+     <parameter property="strCodEst" 						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>  
+     <parameter property="strCodigoNivel" 					javaType="java.lang.String"		jdbcType="VARCHAR" 	mode="INOUT"/>
+     <parameter property="strCodeje" 						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="strTipoPla"						javaType="java.lang.String" 	jdbcType="VARCHAR"	mode="INOUT"/>
+	 <parameter property="strNombre"						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>    
+     <parameter property="strPlaza" 						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>  
+     <parameter property="strLibEle" 						javaType="java.lang.String"		jdbcType="VARCHAR" 	mode="INOUT"/>
+     <parameter property="dtFecNac" 						javaType="java.util.Date"		jdbcType="DATE" 	mode="INOUT"/>
+     <parameter property="strCodCar" 						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="strRegim" 						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="bdLiquid"							javaType="java.math.BigDecimal"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="strCondic" 						javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>  
+     <parameter property="bdPorJud" 						javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intLicenp" 						javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intLicSub" 						javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intPorguar" 						javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intEstado" 						javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="strDL6" 							javaType="java.lang.String"		jdbcType="VARCHAR"  mode="INOUT"/>
+     <parameter property="intIPSSAT" 						javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPeriodo" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intMes" 						javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intNivel" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCodigo" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoArchivoPadronCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaModalidadCod" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoSocioCod" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemAdministraPadron" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItem" 						javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorLibElectoral" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="strLibEle" 					javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+  </parameterMap>
+   
+   <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+   	 <parameter property="intPeriodo" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intMes" 						javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>   	
+    </parameterMap>
+    
+    <parameterMap id="parPorLibElectoralItem" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="strLibEle" 					javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="pItem" 						javaType="java.lang.Integer"   jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+    
+    
+  <procedure id="grabar" parameterMap="parPadron">
+	{ call PKG_PADRON.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parPadron" >
+	{ call PKG_PADRON.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resPadron">
+	{ call PKG_PADRON.getListaPorPk(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaBusqueda" parameterMap="parBusqueda" resultMap="resPadron">
+	{ call PKG_PADRON.getListaBusqueda(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getPadronPorLibElectoral" parameterMap="parPorLibElectoral" resultMap="resPadron">
+	{ call PKG_PADRON.getPadronPorLibElectoral(?,?) }  
+  </procedure>
+  
+  <procedure id="getPadronSOLOPorLibElectoral" parameterMap="parPorLibElectoralItem" resultMap="resPadron">
+	{ call PKG_PADRON.getPadronSOLOPorLibElectoral(?,?,?) }  
+  </procedure>
+  
+</sqlMap>  

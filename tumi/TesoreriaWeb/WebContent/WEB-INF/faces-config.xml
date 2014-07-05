@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<managed-bean>
+		<managed-bean-name>testController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.test.controller.TestController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Managed Beans de Persona Juridica -->
+	<managed-bean>
+		<managed-bean-name>perJuridicaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.JuridicaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>naturalController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.NaturalController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>domicilioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.DomicilioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>comunicacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.ComunicacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>ctaBancariaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.CuentaBancariaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>actEconomicaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.ActividadEconomicaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>tipoComprobanteController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.popup.TipoComprobanteController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>messageController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.message.MessageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.fileupload.FileUploadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Banco y Fondos -->
+	<navigation-rule>
+		<from-view-id>/pages/param/bancoFondo.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>bancoFondo.bancoFondo</from-outcome>
+			<to-view-id>/pages/param/bancoFondo.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>bancoFondoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.parametro.controller.BancoFondoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Niveles de Acceso-->
+	<navigation-rule>
+		<from-view-id>/pages/param/acceso.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>acceso.acceso</from-outcome>
+			<to-view-id>/pages/param/acceso.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>accesoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.parametro.controller.AccesoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Movilidad-->
+	<navigation-rule>
+		<from-view-id>/pages/movilidad/movilidad.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>movilidad.movilidad</from-outcome>
+			<to-view-id>/pages/movilidad/movilidad.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>movilidadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.movilidad.controller.MovilidadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Proveedor-->
+	<navigation-rule>
+		<from-view-id>/pages/proveedor/proveedor.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>proveedor.proveedor</from-outcome>
+			<to-view-id>/pages/proveedor/proveedor.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>proveedorController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.ProveedorController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<!-- Apertura-->
+	<navigation-rule>
+		<from-view-id>/pages/apertura/apertura.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>apertura.apertura</from-outcome>
+			<to-view-id>/pages/apertura/apertura.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>aperturaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.apertura.controller.AperturaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<!--Cierre-->
+	<navigation-rule>
+		<from-view-id>/pages/cierre/cierre.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>cierre.cierre</from-outcome>
+			<to-view-id>/pages/cierre/cierre.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>cierreFondosController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.cierre.controller.CierreFondosController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>cierreDiarioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.cierre.controller.CierreDiarioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>saldoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.cierre.controller.SaldoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--Transferencia-->
+	<navigation-rule>
+		<from-view-id>/pages/banco/bancoBody.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>transferencia.transferencia</from-outcome>
+			<to-view-id>/pages/banco/banco.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>transferenciaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.banco.controller.TransferenciaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--Cheques-->
+	<managed-bean>
+		<managed-bean-name>chequesController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.banco.controller.ChequesController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<!--Fondos Fijos-->
+	<navigation-rule>
+		<from-view-id>/pages/fondosFijos/fondosFijos.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>fondosFijos.fondosFijos</from-outcome>
+			<to-view-id>/pages/fondosFijos/fondosFijos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>fondosFijosController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.fondosFijos.controller.FondosFijosController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>cajaController</managed-bean-name>
+			<managed-bean-class>pe.com.tumi.tesoreria.fondosFijos.controller.CajaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<!--Compras-->
+	<navigation-rule>
+		<from-view-id>/pages/compras/compras.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>compras.compras</from-outcome>
+			<to-view-id>/pages/compras/compras.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>requisicionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.RequisicionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>informeController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.InformeController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<managed-bean-name>contratoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.ContratoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>cuadroController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.CuadroController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>ordenController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.OrdenController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>sunatController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.logistica.controller.SunatController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--Conciliacion-->
+	<navigation-rule>
+		<from-view-id>/pages/conciliacion/conciliacion.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>conciliacion.conciliacion</from-outcome>
+			<to-view-id>/pages/conciliacion/conciliacion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>conciliacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.conciliacion.controller.ConciliacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--Solicitud Personal-->
+	<navigation-rule>
+		<from-view-id>/pages/solicitudPersonal/solicitudPersonal.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>solicitudPersonal.solicitudPersonal</from-outcome>
+			<to-view-id>/pages/solicitudPersonal/solicitudPersonal.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>solicitudPersonalController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.tesoreria.solicitudPersonal.controller.SolicitudPersonalController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	
+	<!--Convertidor Montos-->
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+	
+	<!--Convertidor Timestamp calendar-->
+	<converter>
+  		<converter-id>calendarTimestampConverter</converter-id>
+  		<converter-class>pe.com.tumi.common.util.CalendarTimestampConverter</converter-class>
+	</converter>
+</faces-config>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.creditos.domain.Aportes" alias="aportacion"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.CondSocio" alias="beanCondSoc"/>
+    
+    <resultMap id="aportacion.domain.aportacion.resultAportaciones" class="aportacion">
+	     <result property="intIdEmpresa"  		column="EMPR_IDEMPRESA_N"/>
+	     <result property="intIdTipoCaptacion"  column="COCA_TIPOCAPTACION_N"/>
+	     <result property="intIdCodigo"  		column="COCA_IDCODIGO_N"/>
+	     <result property="strDescripcion"  	column="COCA_DESCRIPCION_V"/>
+	     <result property="daFecIni" 	 		column="COCA_INICIO_D"/>
+	     <result property="daFecFin" 			column="COCA_FIN_D"/>
+	     <result property="intIdTipoPersona" 	column="COCA_IDTIPOPERSONA_N"/>
+	     <result property="intIdRol"  			column="ROLE_IDROL_N"/>
+	     <result property="intIdTipoDcto" 		column="COCA_IDTIPODESCUENTO_N"/>
+	     <result property="intIdTipoConfig"  	column="COCA_IDTIPOCONFIGURACION_N"/>
+	     <result property="strTipoConfig"  		column="VC_TIPOCONFIGURACION"/>
+	     <result property="flValorConfig"   	column="COCA_VALORCONFIGURACION_N"/>
+	     <result property="intIdAplicacion" 	column="COCA_IDAPLICACION_N"/>
+	     <result property="intIdMoneda"			column="COCA_MONEDA_N"/>
+	     <result property="flTem" 				column="COCA_TEM_N"/>
+	     <result property="intIdTasaNaturaleza" column="COCA_TASANATURALEZA_N"/>
+	     <result property="intIdTasaFormula" 	column="COCA_TASAFORMULA_N"/>
+	     <result property="flTea" 				column="COCA_TEA_N"/>
+	     <result property="flTna" 				column="COCA_TNA_N"/>
+	     <result property="intEdadLimite" 		column="COCA_EDADLIMITE_N"/>
+	     <result property="strFecRegistro" 		column="COCA_FECHAREGISTRO_D"/>
+	     <result property="intIdEstSolicitud" 	column="COCA_IDESTADOSOLICITUD_N"/>
+	     <result property="strEstSolicitud" 	column="VC_ESTSOLICITUD"/>
+	     <result property="intIdEstado" 		column="COCA_IDESTADO_N"/>
+	     <result property="intCntCondSoc" 		column="CNT_CONDSOC"/>
+	     <result property="strCondicionSocio"	column="V_CONDICIONSOCIO"/>
+    </resultMap>
+    
+    <resultMap id="aportacion.domain.aportacion.resultCondSocio" class="beanCondSoc" >
+	     <result property="intIdCondSocio"     	column="ID_CONDSOCIO" />
+	     <result property="intIdValor"     		column="ID_VALOR" />
+	     <result property="strDescripcion"      column="VC_DESCRIPCION" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaAportaciones" class="aportacion">
+    	 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdTipoCaptacion" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdCodigo" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdEstSolicitud" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="strDescripcion"	 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="intIdCondicionSocio" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdTipoConfig"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="daFecIni"				jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="daFecFin"				jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="intIdTipoPersona"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intChkTasaInteres"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intChkEdadLimite"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intChkAportVigentes"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intChkAportCaduco"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdTipoCondicionLaboral" jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdTipoCaptacionAfecta"  jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaCondSocio" class="java.util.Map">
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoCaptacion" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdCodigo" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="aportacion.domain.aportacion.mapConfCaptacion" class="aportacion">
+		 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdTipoCaptacion" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdCodigo"	 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="INOUT"/>
+         <parameter property="strDescripcion" 		jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="daFecIni" 			jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="daFecFin" 			jdbcType="VARCHAR" 		javaType="java.lang.String" 		mode="IN"/>
+         <parameter property="intIdTipoPersona" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdRol" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdTipoDcto" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdTipoConfig" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="flValorConfig" 		jdbcType="NUMERIC" 		javaType="java.lang.Float"	 		mode="IN"/>
+         <parameter property="intIdAplicacion" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdMoneda" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="flTem" 				jdbcType="NUMERIC" 		javaType="java.lang.Float" 			mode="IN"/>
+         <parameter property="intIdTasaNaturaleza" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdTasaFormula" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="flTea" 				jdbcType="NUMERIC" 		javaType="java.lang.Float" 			mode="IN"/>
+         <parameter property="flTna" 				jdbcType="NUMERIC" 		javaType="java.lang.Float" 			mode="IN"/>
+         <parameter property="intEdadLimite" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdEstSolicitud" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdEstado" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="aportacion.domain.aportacion.mapCondSocio" class="beanCondSoc">
+		 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdTipoCaptacion" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+		 <parameter property="intIdCodigo"	 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdCondSocio" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+         <parameter property="intIdValor" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarCondSocio" class="aportacion">
+    	 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdTipoCaptacion"	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdCodigo" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarAportacion" class="aportacion">
+    	 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdTipoCaptacion"	jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="intIdCodigo" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="aportacion.domain.aportacion.getListaAportaciones" parameterMap="prmtListaAportaciones" resultMap="aportacion.domain.aportacion.resultAportaciones">
+		{ call PKG_CREDITOS.listar_aportaciones( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="aportacion.domain.aportacion.getListaCondSocio" parameterMap="prmtListaCondSocio" resultMap="aportacion.domain.aportacion.resultCondSocio">
+		{ call PKG_CREDITOS.listar_condsocio( ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="aportacion.domain.aportacion.grabarConfCaptacion" parameterMap="aportacion.domain.aportacion.mapConfCaptacion" >
+		{ call PKG_CREDITOS.insert_confcaptacion( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }  
+	</procedure>
+	
+	<procedure id="aportacion.domain.aportacion.grabarCondicionSocio" parameterMap="aportacion.domain.aportacion.mapCondSocio" >
+		{ call PKG_CREDITOS.insert_condsocio( ?, ?, ?, ?, ? ) }  
+	</procedure>
+	
+	<procedure id="aportacion.domain.aportacion.eliminarCondSocio" parameterMap="prmtEliminarCondSocio" >
+		{ call PKG_CREDITOS.eliminar_condsocio( ?, ?, ? ) }
+	</procedure>
+	
+	<procedure id="aportacion.domain.aportacion.eliminarAportacion" parameterMap="prmtEliminarAportacion" >
+		{ call PKG_CREDITOS.eliminar_aportacion( ?, ?, ? ) }
+	</procedure>
+</sqlMap>

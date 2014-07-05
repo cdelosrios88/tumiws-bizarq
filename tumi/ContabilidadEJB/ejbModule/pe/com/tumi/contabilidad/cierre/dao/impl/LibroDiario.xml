@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LibroDiarioDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.LibroDiario" alias="LibroDiario"/> 
+	
+  <resultMap id="resLibroDiario" class="LibroDiario">
+	<result property="id.intPersEmpresaLibro" 		column="pPers_empresalibro"/>
+	<result property="id.intContPeriodoLibro"   	column="pCont_periodolibro"/>
+	<result property="id.intContCodigoLibro"   		column="pCont_codigolibro"/>
+	<result property="strGlosa"   					column="pLidi_glosa"/>
+    <result property="tsFechaRegistro"      		column="pLidi_fecharegistro"/>
+    <result property="tsFechaDocumento"    			column="pLidi_fechadocumento"/>
+    <result property="intPersEmpresaUsuario"    	column="pPers_empresausuario"/>
+    <result property="intPersPersonaUsuario"    	column="pPers_personausuario"/>
+    <result property="intParaEstado"    			column="pPara_estado"/>
+    <result property="tsfFechaEliminacion"    		column="pLidi_fechaeliminacion"/>
+    <result property="intParaTipoDocumentoGeneral"  column="pPara_documentogeneral"/>
+  </resultMap>
+  
+  <parameterMap id="parLibroDiario" class="LibroDiario">
+	 <parameter property="id.intPersEmpresaLibro"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoLibro"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContCodigoLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strGlosa"						javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="tsFechaDocumento"				javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intParaEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="tsfFechaEliminacion"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intParaTipoDocumentoGeneral"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContCodigoLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parParaCodigo" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parParaBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaLibro"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp" 	jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="intParaEstado"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  <procedure id="grabar" parameterMap="parLibroDiario">
+	{ call PKG_LIBRODIARIO.grabar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parLibroDiario" >
+	{ call PKG_LIBRODIARIO.modificar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroDiario">
+	{ call PKG_LIBRODIARIO.getListaPorPk(?,?,?,?) }
+  </procedure> 	
+  
+  <procedure id="buscarParaCodigo" parameterMap="parParaCodigo" resultMap="resLibroDiario">
+	{ call PKG_LIBRODIARIO.buscarParaCodigo(?,?,?) }
+  </procedure>
+  
+  <procedure id="buscarUltimoParaCodigo" parameterMap="parParaCodigo" resultMap="resLibroDiario">
+	{ call PKG_LIBRODIARIO.buscarUltimoLibroDiario(?,?,?) }
+  </procedure>  	
+  
+  <procedure id="getListaPorBuscar" parameterMap="parParaBuscar" resultMap="resLibroDiario">
+	{ call PKG_LIBRODIARIO.getListaPorBuscar(?,?,?,?) }
+  </procedure>  	
+   	
+</sqlMap>
