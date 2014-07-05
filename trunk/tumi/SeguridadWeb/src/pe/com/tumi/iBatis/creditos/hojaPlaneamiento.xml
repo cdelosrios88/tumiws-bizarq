@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.creditos.domain.HojaPlaneamiento" alias="hojaPlan"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.ConvenioEstructuraDet" alias="poblacion"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.Estructura" alias="estruct"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.EstructuraHojaPlan" alias="estructdet"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.Poblacion" alias="pob"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.PoblacionDet" alias="pobdet"/>
+    <typeAlias type="pe.com.tumi.creditos.domain.Competencia" alias="competencia"/>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultConvenio" class="hojaPlan" >
+	     <result property="nIdEmpresa"  	column="EMPR_IDEMPRESA_N"/>
+	     <result property="nIdCodigo"  		column="ESTR_IDCODIGO_N"/>
+	     <result property="nIdNivel"  		column="ESTR_NIVEL_N"/>
+	     <result property="sNivel"  		column="V_NIVEL"/>
+	     <result property="nIdAmpliacion"  	column="ADEM_AMPLIACION_N"/>
+	     <result property="sTipoConvenio"  	column="V_TIPOCONVENIO"/>
+	     <result property="nIdPersona"  	column="PERS_IDPERSONA_N"/>
+	     <result property="sRazonSocial"  	column="JURI_RAZONSOCIAL_V"/>
+	     <result property="nIdConvenio"  	column="CONV_IDCONVENIO_N"/>
+	     <result property="nIdEstado"  		column="ADEM_IDESTADO_N"/>
+	     <result property="sEstConv"  		column="V_ESTCONV"/>
+	     <result property="nIdSucursal"  	column="SUCU_IDSUCURSAL_N"/>
+	     <result property="sSucursal"  		column="V_SUCURSAL"/>
+	     <result property="nIdModalidad"  	column="ESDE_MODALIDAD_N"/>
+	     <result property="sModalidad"  	column="V_MODALIDAD"/>
+	     <result property="nIdTipoSocio"  	column="ESDE_TIPOSOCIO_N"/>
+	     <result property="sTipoSocio"  	column="V_TIPOSOCIO"/>
+	     <result property="daFecRegistro"  	column="ADEM_FECHAREGISTRO_D"/>
+	     <result property="daFecIni"  		column="ADEM_INICIO_D"/>
+	     <result property="daFecFin"  		column="ADEM_CESE_D"/>
+	     <result property="daFecSuscripcion" column="ADEM_SUSCRIPCION_D"/>
+	     <result property="nTipoRetencion"  column="ADEM_TIPORETENCION_N"/>
+	     <result property="flRetencion"  	column="ADEM_RETENCION_N"/>
+	     <result property="nOpcionFiltroCredito" column="ADEM_OPCIONFILTROCREDITO_N"/>
+	     <result property="nAutorizacion"  	column="ADEM_CARTAAUTORIZACION_N"/>
+	     <result property="nDonacion" 	 	column="ADEM_DONACION_N"/>
+	     <result property="sCartaPresent" 	column="V_CARTACONV"/>
+	     <result property="sConvSugerido" 	column="V_CONVSUGERIDO"/>
+	     <result property="sAdendaSugerida" column="V_ADENDASUGERIDA"/>
+    </resultMap>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultEstructura" class="estruct" >
+	     <result property="nIdEmpresa"  	column="EMPR_IDEMPRESA_N"/>
+	     <result property="nIdCodigo"  		column="ESTR_IDCODIGO_N"/>
+	     <result property="nIdNivel"  		column="ESTR_NIVEL_N"/>
+	     <result property="nIdCaso"  		column="ESDE_CASO_N"/>
+	     <result property="sCaso"  			column="V_CASO"/>
+	     <result property="sRazonSocial" 	column="JURI_RAZONSOCIAL_V"/>
+    </resultMap>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultEstructDet" class="estructdet" >
+	     <result property="nIdEmpresa"  	column="EMPR_IDEMPRESA_N"/>
+	     <result property="nIdCodigo"  		column="ESTR_IDCODIGO_N"/>
+	     <result property="nIdNivel"  		column="ESTR_NIVEL_N"/>
+	     <result property="sNivelDesc"  	column="NIVEL_DESCRIPCION"/>
+	     <result property="nIdPersona"  	column="PERS_IDPERSONA_N"/>
+	     <result property="sNombrePersona" 	column="JURI_RAZONSOCIAL_V"/>
+	     <result property="nIdUsuario"  	column="PERS_USUARIO_N"/>
+	     <result property="nIdModalidad"  	column="ESDE_MODALIDAD_N"/>
+	     <result property="sModalidadDesc"  column="MODALIDAD_DESC"/>
+	     <result property="nIdTipoSocio"  	column="ESDE_TIPOSOCIO_N"/>
+	     <result property="sTipoSocioDesc"  column="TIPOSOCIO_DESC"/>
+	     <result property="nIdCaso"  		column="ESDE_CASO_N"/>
+    </resultMap>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultResumenPoblacion" class="poblacion" >
+	     <result property="sDescripcion"  	column="V_MODALIDAD"/>
+	     <result property="sTipoNombrado"  	column="V_TIPOSOC"/>
+	     <result property="nPadron"  		column="SUM_PADRON"/>
+	     <result property="nSocios"  		column="CNT_SOCIOS"/>
+    </resultMap>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultPoblacion" class="pob" >
+	     <result property="nIdConvenio"  	column="CONV_IDCONVENIO_N"/>
+	     <result property="sCentroTrabajo" 	column="COPO_DESCRIPCION_V"/>
+	     <result property="flDistancia"		column="COPO_DISTANCIA_N"/>
+    </resultMap>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultPoblacionDet" class="pobdet" >
+	     <result property="nIdConvenio"  	column="CONV_IDCONVENIO_N"/>
+	     <result property="nPadron" 		column="CPDE_PADRON_N"/>
+	     <result property="nTipoTrabajador"	column="CPDE_TIPOTRABAJADOR_N"/>
+	     <result property="sTipoTrabajador"	column="V_TIPOTRABAJADOR"/>
+	     <result property="nTipoSocio"		column="CPDE_TIPOSOCIO_N"/>
+	     <result property="sTipoSocio"		column="V_TIPOSOCIO"/>
+    </resultMap>
+    
+    <resultMap id="hojaplan.domain.hojaplan.resultCompetencia" class="competencia" >
+	     <result property="nIdConvenio"  	column="CONV_IDCONVENIO_N"/>
+	     <result property="sEntidadFinanc" 	column="COCO_DESCRIPCIONENTIDAD_V"/>
+	     <result property="flPlazoPrestamo"	column="COCO_PLAZOPRESTAMO_N"/>
+	     <result property="flInteres"		column="COCO_TASASPRESTAMO_N"/>
+	     <result property="flMontoAporte" 	column="COCO_APORTES_N"/>
+	     <result property="sServOfrec" 		column="COCO_SERVICIOS_V"/>
+	     <result property="nSocios" 		column="COCO_CANTIDAD_N"/>
+    </resultMap>
+    
+    <parameterMap id="prmtListaConvenio" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdAmpliacion"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdNivel"			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEstado" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdSucursal"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdModalidad"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrEntidad"		 	jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoSocio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdDonacion"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdRanFec"	 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pDaFecIni"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pDaFecFin"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pChkDocAdjuntos"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pChkCartaAutoriz"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaEstructHojaPlan" class="java.util.Map">
+    	 <parameter property="pStrNombEnt"	 		jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    	 <parameter property="pIntIdNivel"			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoConvenio"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaEstructDet" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdCodigo"	 		jdbcType="NUMERIC" 				javaType="java.lang.Long" 		mode="IN"/>
+    	 <parameter property="pIntIdNivel" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdCaso" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaResumenPob" class="java.util.Map">
+    	 <parameter property="pIntIdPeriodo"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdMes"	 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdEmpresa"		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdNivel"			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPoblacion" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaPoblacionDet" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaCompetencia" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="hojaPlan.domain.hojaPlan.maphojaplan" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="INOUT"/>    
+         <parameter property="pIntIdAmpliacion" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="INOUT"/>
+         <parameter property="pIntIdEstado" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntIdSucursal" 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pDaFecIni" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pDaFecFin" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdTipoOpcFiltro" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pDaFecSuscipcion" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntTipoRetencion" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pDoRetencion" 		jdbcType="NUMERIC" 	javaType="java.lang.Float"		mode="IN"/>
+		 <parameter property="pIntCartaAutoriz" 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pIntDonacion"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+		 <parameter property="pStrCartaPresent" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrConvSugerido" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="pStrAdendaSug" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="hojaPlan.domain.hojaPlan.mapconvenioestructdet" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>    
+         <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdNivel"	 		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdCodigo"			jdbcType="NUMERIC" 	javaType="java.lang.Long" 	 mode="IN"/>
+         <parameter property="pIntIdCaso"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntPadron" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="hojaPlan.domain.hojaPlan.mappoblacion" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdCorr"		 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pStrDescripcion"	 	jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+         <parameter property="pFlDistancia"	 		jdbcType="NUMERIC" 	javaType="java.lang.Float" 	 mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="hojaPlan.domain.hojaPlan.mappoblaciondet" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdCorr"		 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>    
+         <parameter property="pIntTipoTrabajador"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntTipoSocio"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntPadron" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="hojaPlan.domain.hojaPlan.mapcompetencia" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>    
+         <parameter property="pStrEntidadFinanc"	jdbcType="VARCHAR" 	javaType="java.lang.String" mode="IN"/>
+         <parameter property="pIntSocios" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pFlPlazos" 			jdbcType="NUMERIC" 	javaType="java.lang.Float"   mode="IN"/>
+         <parameter property="pFlInteres" 			jdbcType="NUMERIC" 	javaType="java.lang.Float" 	 mode="IN"/>
+         <parameter property="pFlMontoAporte"		jdbcType="NUMERIC" 	javaType="java.lang.Float" 	 mode="IN"/>
+         <parameter property="pStrServicios"	 	jdbcType="VARCHAR" 	javaType="java.lang.String"  mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="hojaPlan.domain.hojaPlan.mapadendaperfil" class="java.util.Map">
+		 <parameter property="pIntIdConvenio"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+		 <parameter property="pIntIdAmpliacion"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+         <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarPoblacion" class="java.util.Map">
+    	 <parameter property="pIntIdConvenio" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaHojaPlan" parameterMap="prmtListaConvenio" resultMap="hojaplan.domain.hojaplan.resultConvenio">
+		{ call PKG_CREDITOS.listar_convenio( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaEstructura" parameterMap="prmtListaEstructHojaPlan" resultMap="hojaplan.domain.hojaplan.resultEstructura">
+		{ call PKG_CREDITOS.listar_estructuras( ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaEstructDet" parameterMap="prmtListaEstructDet" resultMap="hojaplan.domain.hojaplan.resultEstructDet">
+		{ call PKG_CREDITOS.listar_estructdet( ?, ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaResumenPoblacion" parameterMap="prmtListaResumenPob" resultMap="hojaplan.domain.hojaplan.resultResumenPoblacion">
+		{ call PKG_CREDITOS.listar_socios( ?, ?, ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaPoblacion" parameterMap="prmtListaPoblacion" resultMap="hojaplan.domain.hojaplan.resultPoblacion">
+		{ call PKG_CREDITOS.listar_poblacion( ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaPoblacionDet" parameterMap="prmtListaPoblacionDet" resultMap="hojaplan.domain.hojaplan.resultPoblacionDet">
+		{ call PKG_CREDITOS.listar_poblaciondet( ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.getListaCompetencia" parameterMap="prmtListaCompetencia" resultMap="hojaplan.domain.hojaplan.resultCompetencia">
+		{ call PKG_CREDITOS.listar_competencia( ?, ? ) }
+    </procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.grabarHojaPlaneamiento" parameterMap="hojaPlan.domain.hojaPlan.maphojaplan" >
+		{ call PKG_CREDITOS.insert_hojaplaneamiento( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="hojaplan.domain.hojaplan.grabarConvEstructDet" parameterMap="hojaPlan.domain.hojaPlan.mapconvenioestructdet" >
+		{ call PKG_CREDITOS.insert_convenioestructdet( ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="hojaplan.domain.hojaplan.grabarConvPoblacion" parameterMap="hojaPlan.domain.hojaPlan.mappoblacion" >
+		{ call PKG_CREDITOS.insert_poblacionentidad( ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="hojaplan.domain.hojaplan.grabarConvPoblacionDet" parameterMap="hojaPlan.domain.hojaPlan.mappoblaciondet" >
+		{ call PKG_CREDITOS.insert_poblacionentidaddet( ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="hojaplan.domain.hojaplan.grabarCompetencia" parameterMap="hojaPlan.domain.hojaPlan.mapcompetencia" >
+		{ call PKG_CREDITOS.insert_competencia( ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+	
+	<procedure id="hojaplan.domain.hojaplan.grabarAdendaPerfil" parameterMap="hojaPlan.domain.hojaPlan.mapadendaperfil" >
+		{ call PKG_CREDITOS.insert_adendaperfil( ?, ?, ? )  }  
+	</procedure>
+    
+    <procedure id="hojaplan.domain.hojaplan.eliminarPoblacion" parameterMap="prmtEliminarPoblacion" >
+		{ call PKG_CREDITOS.eliminar_poblacionentidad( ? ) }
+	</procedure>
+</sqlMap>  

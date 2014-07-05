@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.creditos.domain.EstructuraOrganica" alias="estructuraorg"/>
+    
+     <resultMap id="estructuraorg.domain.estructuraorg.resultBustEstrucOrg" class="estructuraorg">
+	     <result property="intIdEmpresa"      			column="IDEMPRESA"/>
+	     <result property="intCodigoEstructura"      	column="CODIGO"/>
+	     <result property="strNombreEntidad"      		column="ENTIDAD"/>
+	     <result property="intNivel"      				column="IDNIVEL"/>
+	     <result property="strNivel"      				column="NIVEL"/>
+	     <result property="intTipoEntidad"      		column="ID_TIPO_ENTIDAD"/>
+	     <result property="strTipoEntidad"				column="TIPO_ENTIDAD"/>
+	     <result property="intTipoEntidadTerceros"      column="ID_TIPO_TERCERO"/>
+	     <result property="strTipoEntidadTerceros"		column="TIPO_TERCERO"/>
+	     <result property="strTipoSocio"      			column="TIPO_SOCIO"/>
+	     <result property="intEstadoDocumento"      	column="IDESTADO"/>
+	     <result property="strEstadoDocumento"      	column="ESTADO"/>
+	     <result property="strCasoConfig"      			column="CONFIGURACION"/>
+	     <result property="strModalidad"      			column="MODALIDAD"/>
+	     <result property="strFechaRegistro"      		column="FECHA_REGISTRO"/>
+    </resultMap>
+    
+    <resultMap id="estructuraorg.domain.estructuraorg.resultEstructuraOrganica" class="estructuraorg">
+	     <result property="intIdEmpresa"      			column="IDEMPRESA"/>
+	     <result property="intCodigoEstructura"      	column="CODIGO"/>
+	     <result property="strNombreEntidad"      		column="ENTIDAD"/>
+	     <result property="intNivel"      				column="IDNIVEL"/>
+	     <result property="strNivel"      				column="NIVEL"/>
+	     <result property="intTipoEntidad"      		column="ID_TIPO_ENTIDAD"/>
+	     <result property="strTipoEntidad"				column="TIPO_ENTIDAD"/>
+	     <result property="intTipoEntidadTerceros"      column="ID_TIPO_TERCERO"/>
+	     <result property="strTipoEntidadTerceros"		column="TIPO_TERCERO"/>
+	     <result property="strTipoSocio"      			column="TIPO_SOCIO"/>
+	     <result property="strEstadoDocumento"      	column="ESTADO"/>
+	     <result property="intCasoConfig"      			column="IDCONFIGURACION"/>
+	     <result property="strCasoConfig"      			column="CONFIGURACION"/>
+	     <result property="strModalidad"      			column="MODALIDAD"/>
+	     <result property="strFechaRegistro"      		column="FECHA_REGISTRO"/>
+	     <result property="intSucursal"      			column="ID_SUCURSAL"/>
+	     <result property="strSucursal"      			column="SUCURSAL"/>
+	     <result property="intSubsucursal"      		column="ID_SUBSUCURSAL"/>
+	     <result property="strSubsucursal"      		column="SUBSUCURSAL"/>
+	     <result property="intDiaEnviado"      			column="DIA_ENVIADO"/>
+	     <result property="intFechaEnviado"      		column="ID_SALTO_ENVIADO"/>
+	     <result property="strFechaEnviado"      		column="SALTO_ENVIADO"/>
+	     <result property="intDiaEfectuado"      		column="DIA_EFECTUADO"/>
+	     <result property="intFechaEfectuado"      		column="ID_SALTO_EFECTUADO"/>
+	     <result property="strFechaEfectuado"      		column="SALTO_EFECTUADO"/>
+	     <result property="strCodigoExterno"      		column="COD_EXTERNO"/>
+    </resultMap>
+    
+    <resultMap id="estructuraorg.domain.estructuraorg.resultListaEstrucDet" class="estructuraorg">
+	     <result property="intIdEmpresa"      			column="IDEMPRESA"/>
+	     <result property="intCodigoEstructura"      	column="CODIGO"/>
+	     <result property="strNombreEntidad"      		column="ENTIDAD"/>
+	     <result property="intNivel"      				column="IDNIVEL"/>
+	     <result property="strNivel"      				column="NIVEL"/>
+	     <result property="intTipoEntidad"      		column="ID_TIPO_ENTIDAD"/>
+	     <result property="strTipoEntidad"				column="TIPO_ENTIDAD"/>
+	     <result property="intTipoEntidadTerceros"      column="ID_TIPO_TERCERO"/>
+	     <result property="strTipoEntidadTerceros"		column="TIPO_TERCERO"/>
+	     <result property="strTipoSocio"      			column="TIPO_SOCIO"/>
+	     <result property="strEstadoDocumento"      	column="ESTADO"/>
+	     <result property="intCasoConfig"      			column="IDCONFIGURACION"/>
+	     <result property="strCasoConfig"      			column="CONFIGURACION"/>
+	     <result property="strModalidad"      			column="MODALIDAD"/>
+	     <result property="strFechaRegistro"      		column="FECHA_REGISTRO"/>
+	     <result property="intSucursal"      			column="ID_SUCURSAL"/>
+	     <result property="strSucursal"      			column="SUCURSAL"/>
+	     <result property="intSubsucursal"      		column="ID_SUBSUCURSAL"/>
+	     <result property="strSubsucursal"      		column="SUBSUCURSAL"/>
+	     <result property="intDiaEnviado"      			column="DIA_ENVIADO"/>
+	     <result property="intFechaEnviado"      		column="ID_SALTO_ENVIADO"/>
+	     <result property="strFechaEnviado"      		column="SALTO_ENVIADO"/>
+	     <result property="intDiaEfectuado"      		column="DIA_EFECTUADO"/>
+	     <result property="intFechaEfectuado"      		column="ID_SALTO_EFECTUADO"/>
+	     <result property="strFechaEfectuado"      		column="SALTO_EFECTUADO"/>
+	     <result property="intDiaCheque"      			column="DIA_CHEQUE"/>
+	     <result property="intFechaEfectuado"      		column="ID_SALTO_CHEQUE"/>
+	     <result property="strFechaCheque"      		column="SALTO_CHEQUE"/>
+	     <result property="strCodigoExterno"      		column="COD_EXTERNO"/>
+    </resultMap>
+    
+    <parameterMap id="estructuraorg.domain.estructuraorg.prmtBusqEstrucOrg" class="estructuraorg">
+    	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intCodigoEstructura" 		javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdEmpresa" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoEntidad"			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intNivel" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strNombreEntidad" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strCasoConfig" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strTipoSocio" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strModalidad" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intSucursal" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSubsucursal" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strCodigoExterno" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaDesde" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaHasta" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="estructuraorg.domain.estructuraorg.prmtListaEstructuraOrganica" class="estructuraorg">
+    	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intCodigoEstructura" 		javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdEmpresa" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intNivel" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strCodigoExterno" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intTipoEntidad"			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strNombreEntidad" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intCasoConfig" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoSocio" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intModalidad" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSucursal" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSubsucursal" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaDesde" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaHasta" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="estructuraorg.domain.estructuraorg.prmtListaEstrucDet" class="estructuraorg">
+    	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intCodigoEstructura" 		javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdEmpresa" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intNivel" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strCodigoExterno" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intTipoEntidad"			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strNombreEntidad" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intCasoConfig" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoSocio" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intModalidad" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSucursal" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSubsucursal" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strFechaDesde" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="strFechaHasta" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="estructuraorg.domain.estructuraorg.prmtGrabarEstructura" class="estructuraorg">
+    	 <parameter property="intIdEmpresa" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intNivel" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intCodigoEstructura" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdPersona"				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoEntidad" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoEntidadTerceros"	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intEstadoDocumento" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdUsuario" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intNivelRel" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intCodigoRel" 			javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intCodigoRelOut" 			javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="OUT"/>
+    </parameterMap>
+    
+    <parameterMap id="estructuraorg.domain.estructuraorg.prmtGrabarEstructuraDet" class="estructuraorg">
+    	 <parameter property="intIdEmpresa" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intNivel" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intCodigoEstructura" 		javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intCasoConfig"			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intTipoSocio" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intModalidad" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSucursal" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intSubsucursal" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intDiaEnviado" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intFechaEnviado" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intDiaEfectuado" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intFechaEfectuado" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intDiaCheque" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intFechaCheque" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="strCodigoExterno" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 			mode="IN"/>
+    	 <parameter property="intIdUsuario" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="estructuraorg.domain.estructuraorg.getBusqEstructuraOrganica" parameterMap="estructuraorg.domain.estructuraorg.prmtBusqEstrucOrg" resultMap="estructuraorg.domain.estructuraorg.resultBustEstrucOrg">
+		{ call PKG_CREDITOS.buscar_estructuras( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="estructuraorg.domain.estructuraorg.getListaEstructuraOrganica" parameterMap="estructuraorg.domain.estructuraorg.prmtListaEstructuraOrganica" resultMap="estructuraorg.domain.estructuraorg.resultEstructuraOrganica">
+		{ call PKG_CREDITOS.listar_estructuras2( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="estructuraorg.domain.estructuraorg.getListaEstrucDet" parameterMap="estructuraorg.domain.estructuraorg.prmtListaEstrucDet" resultMap="estructuraorg.domain.estructuraorg.resultListaEstrucDet">
+		{ call PKG_CREDITOS.listar_estrucdetalle( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="estructuraorg.domain.estructuraorg.grabarEstructuraOrganica" parameterMap="estructuraorg.domain.estructuraorg.prmtGrabarEstructura">
+		{ call PKG_CREDITOS.grabar_estructura( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="estructuraorg.domain.estructuraorg.grabarEstructuraDetalle" parameterMap="estructuraorg.domain.estructuraorg.prmtGrabarEstructuraDet">
+		{ call PKG_CREDITOS.grabar_estructuradet( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+</sqlMap>  

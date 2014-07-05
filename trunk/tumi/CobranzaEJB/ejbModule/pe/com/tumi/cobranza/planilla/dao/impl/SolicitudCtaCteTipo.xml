@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudCtaCteTipoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.SolicitudCtaCteTipo" alias="SolicitudCtaCteTipo"/> 
+	
+  <resultMap id="resSolicitudCtaCteTipo" class="SolicitudCtaCteTipo" >
+	<result property="id.intPersEmpresasolctacte" 		column="ppersempresasolctacte"/>
+	<result property="id.intCcobItemsolctacte" 			column="pccobitemsolctacte"/>
+	<result property="id.intTipoSolicitudctacte" 		column="pparatiposolicitudctacte"/>
+	<result property="intTaraEstado" 					column="pparaestado"/>
+	<result property="intParaTipoorigen" 				column="pparatipoorigen"/>
+	<result property="intParaEstadoanalisis" 			column="pparaestadoanalisis"/>
+	<result property="strScctObservacion" 				column="pscctobservacion"/>
+	<result property="dtFechaDocumento" 				column="pscctfechadocumento"/>
+	<result property="intMotivoSolicitud" 				column="pparamotivosolicitud"/>
+	<result property="intEmpresaLibro" 					column="ppersempresalibro"/>
+	<result property="intContPeriodolibro" 				column="pcontperiodolibro"/>
+	<result property="intCodigoLibro" 					column="pcontcodigolibro"/>
+	<result property="intEmpresaCuenta" 				column="ppersempresacuenta"/>
+	<result property="intCcobItemefectuado" 			column="pccobitemefectuado"/>
+  </resultMap>
+  
+  <parameterMap id="parSolicitudCtaCteTipo" class="SolicitudCtaCteTipo">
+	<parameter property="id.intPersEmpresasolctacte"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="id.intCcobItemsolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="id.intTipoSolicitudctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intTaraEstado"						javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intParaTipoorigen"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intParaEstadoanalisis"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="strScctObservacion"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="INOUT"/>
+	<parameter property="dtFechaDocumento"					javaType="java.util.Date"		jdbcType="DATE"		mode="INOUT"/>
+	<parameter property="intMotivoSolicitud"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intEmpresaLibro"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intContPeriodolibro"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCodigoLibro"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intEmpresaCuenta"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCcobItemefectuado"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresasolctacte"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intCcobItemsolctacte"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intTipoSolicitudctacte"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+   <parameterMap id="parPorSolCtaCte" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresasolctacte"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intCcobItemsolctacte"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorSolCtaCteDelete" class="java.util.Map">
+   	 <parameter property="intPersEmpresasolctacte"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intCcobItemsolctacte"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSolicitudCtaCteTipo">
+	{ call PKG_SolicitudCtaCteTipo.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  <procedure id="modificar" parameterMap="parSolicitudCtaCteTipo" >
+	{ call PKG_SolicitudCtaCteTipo.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resSolicitudCtaCteTipo">
+	{ call PKG_SolicitudCtaCteTipo.getListaPorPk(?,?,?,?) }
+  </procedure>
+  <procedure id="getListaPorSolicitudCtacte" parameterMap="parPorSolCtaCte" resultMap="resSolicitudCtaCteTipo">
+	{ call PKG_SolicitudCtaCteTipo.getListaPorSolicitudCtacte(?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminarPorSolicitudCtacte" parameterMap="parPorSolCtaCteDelete">
+	{ call PKG_SolicitudCtaCteTipo.eliminarPorSolicitudCtacte(?,?) }
+  </procedure>
+  
+    <procedure id="getListaPorSolCtacteSinEstado" parameterMap="parPorSolCtaCte" resultMap="resSolicitudCtaCteTipo">
+	{ call PKG_SolicitudCtaCteTipo.getListaPorSolCtacteSinEstado(?,?,?) }
+  </procedure>
+  
+</sqlMap>  

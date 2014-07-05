@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AdjuntoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.convenio.domain.Adjunto" alias="Adjunto"/> 
+	
+  <resultMap id="resAdjunto" class="Adjunto" >
+     <result property="id.intConvenio"      	column="pCONVENIO_N" />
+     <result property="id.intItemConvenio"    	column="pITEMCONVENIO_N" />
+     <result property="id.intCodigo"      		column="pCODIGO_N" />
+     <result property="intParaTipoArchivoCod"   column="pPARA_TIPOARCHIVO_N" />
+     <result property="intItemArchivo"   		column="pITEMARCHIVO_N" />
+     <result property="intParaItemHistorico"   	column="pITEMHISTORICO_N" />
+  </resultMap>
+  
+  <parameterMap id="parAdjunto" class="Adjunto">
+     <parameter property="id.intConvenio"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intItemConvenio"	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intCodigo" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="intParaTipoArchivoCod" javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intItemArchivo" 		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="intParaItemHistorico" javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCodigo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKAdenda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intConvenio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConvenio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parAdjunto">
+	{ call PKG_ADENADJUNTO.grabar(?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAdjunto" >
+	{ call PKG_ADENADJUNTO.modificar(?,?,?,?,?,?)  }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAdjunto">
+	{ call PKG_ADENADJUNTO.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkAdenda" parameterMap="parPorPKAdenda" resultMap="resAdjunto">
+	{ call PKG_ADENADJUNTO.getListaPorPkAdenda(?,?,?) }
+  </procedure>
+</sqlMap>  

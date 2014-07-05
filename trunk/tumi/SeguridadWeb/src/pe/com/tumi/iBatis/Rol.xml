@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+    <typeAlias type="pe.com.tumi.seguridad.domain.PersonaRol" alias="perrol"/>
+    <typeAlias type="pe.com.tumi.empresa.domain.RepresentanteLegal" alias="replegal"/> 
+    
+    <resultMap id="resultRolesPersona" class="perrol" >
+	     <result property="intIdEmpresa"   			column="IDEMPRESA" />
+	     <result property="intIdPersona"   			column="IDPERSONA" />
+	     <result property="intIdRol"   				column="IDROL" />
+	     <result property="strNombRol"    			column="ROL" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaRolesPersona" class="replegal">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="intIdEmpresa" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="intIdPersona" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="rol.domain.rol.getRolesPersona" parameterMap="prmtListaRolesPersona" resultMap="resultRolesPersona">
+		{ call PKG_PUBLIC.get_rolespersona( ?, ?, ? ) }  
+    </procedure>
+            
+</sqlMap>  

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AnexoDetalleCuentaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.AnexoDetalleCuenta" alias="AnexoDetalleCuenta"/> 
+	
+  <resultMap id="resAnexoDetalleCuenta" class="AnexoDetalleCuenta">
+	<result property="id.intPersEmpresaCuenta" 		column="pPers_empresacuenta"/>
+	<result property="id.intContPeriodoCuenta" 		column="pCont_periodocuenta"/>
+	<result property="id.strContNumeroCuenta" 		column="pCont_numerocuenta"/>
+	<result property="id.intPersEmpresaAnexo" 		column="pPers_empresaanexo"/>
+	<result property="id.intContPeriodoAnexo" 		column="pCont_periodoanexo"/>
+	<result property="id.intParaTipoAnexo" 			column="pPara_tipoanexo"/>
+	<result property="id.intItemAnexoDetalle"   	column="pCont_itemanexodet"/>
+	<!-- Agregado por cdelosrios, 16/09/2013 -->
+	<result property="id.intItemAnexoDetalleCuenta" column="pCont_itemanexodetCuenta"/>
+	<result property="intParaEstadoCod" 			column="pCont_Para_Estado_n"/>
+	<!-- Fin agregado por cdelosrios, 16/09/2013 -->
+  </resultMap>
+  
+  <parameterMap id="parAnexoDetalleCuenta" class="AnexoDetalleCuenta">
+	 <parameter property="id.intPersEmpresaCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.strContNumeroCuenta"	javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="id.intPersEmpresaAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoAnexo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemAnexoDetalle"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <!-- Agregado por cdelosrios, 16/09/2013 -->
+	 <parameter property="id.intItemAnexoDetalleCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoCod"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <!-- Fin agregado por cdelosrios, 16/09/2013 -->
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strContNumeroCuenta"	javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="intPersEmpresaAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAnexoDetalle"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorAnexoDetalle" class="java.util.Map">
+   	 <parameter property="cursorLista"			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAnexoDetalle"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+	 <parameter property="intPersEmpresaCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strContNumeroCuenta"	javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="intPersEmpresaAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoAnexo"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAnexo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemAnexoDetalle"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <!-- Agregado por cdelosrios, 16/09/2013 -->
+  <parameterMap id="parPorPlanCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista"			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strContNumeroCuenta"	javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin agregado por cdelosrios, 16/09/2013 -->
+   
+  <procedure id="grabar" parameterMap="parAnexoDetalleCuenta">
+	{ call PKG_ANEXODETALLECUENTA.grabar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAnexoDetalleCuenta">
+	{ call PKG_ANEXODETALLECUENTA.modificar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resAnexoDetalleCuenta">
+	{ call PKG_ANEXODETALLECUENTA.getListaPorPk(?,?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorAnexoDetalle" parameterMap="parPorAnexoDetalle" resultMap="resAnexoDetalleCuenta">
+	{ call PKG_ANEXODETALLECUENTA.getListaPorAnexoDetalle(?,?,?,?,?) }
+  </procedure>
+  
+  <!-- Agregado por cdelosrios, 16/09/2013 -->
+  <procedure id="getListaPorPlanCuenta" parameterMap="parPorPlanCuenta" resultMap="resAnexoDetalleCuenta">
+	{ call PKG_ANEXODETALLECUENTA.getListaPorPlanCuenta(?,?,?,?) }
+  </procedure>
+  <!-- Fin agregado por cdelosrios, 16/09/2013 -->
+  
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_ANEXODETALLECUENTA.eliminar(?,?,?,?,?,?,?) }
+  </procedure>
+</sqlMap>

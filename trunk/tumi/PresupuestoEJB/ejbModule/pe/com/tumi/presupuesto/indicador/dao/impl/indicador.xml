@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="IndicadorDaoIbatis">
+<typeAlias type="pe.com.tumi.presupuesto.indicador.domain.Indicador" alias="Indicador"/>
+<typeAlias type="pe.com.tumi.presupuesto.indicador.domain.IndicadorId" alias="IndicadorId"/>
+
+	<resultMap id="resIndicador" class="Indicador" >
+	     <result property="id.intEmpresaIndicadorPk"  	column="pPERS_EMPRESAINDICADOR_N_PK" />
+	     <result property="id.intPeriodoIndicador"    	column="pPRES_PERIODOINDICADOR_N" />
+	     <result property="id.intMesIndicador"    		column="pPRES_MESINDICADOR_N" />
+	     <result property="id.intParaTipoIndicador"    	column="pPARA_TIPOINDICADOR_N_COD" />
+	     <result property="id.intEmpresaSucursalPk"    	column="pPERS_EMPRESASUCURSAL_N_PK" />
+	     <result property="id.intIdSucursal"     		column="pSUCU_IDSUCURSAL_N_PK" />
+	     <result property="id.intIdSubSucursal"     	column="pSUDE_IDSUBSUCURSAL_N_PK" />
+	     <result property="intParaTipoValor"    		column="pPARA_TIPOVALOR_N_COD" />
+	     <result property="bdMontoProyectado"     		column="pINDE_MONTOPROY_N" />
+	     <result property="bdMontoEjecutado"     		column="pINDE_MONTOEJEC_N" />
+	     <result property="tsFechaRegistro"    			column="pINDI_FECHAREGISTRO_D" />
+	     <result property="intParaEstadoCierre"    		column="pPARA_ESTADOCIERRE_N_COD" />
+	     <result property="intEmpresaUsuarioPk"     	column="pPERS_EMPRESAUSUARIO_N_PK" />
+	     <result property="intPersonaUsuarioPk"     	column="pPERS_PERSONAUSUARIO_N_PK" />
+	</resultMap>
+
+	<resultMap id="resMesAnioBase" class="Indicador" >
+	     <result property="id.intMesIndicador"    		column="pPRES_MESINDICADOR_N" />
+	</resultMap>
+	
+	<resultMap id="resIndDescSubSuc" class="Indicador" >
+	     <result property="id.intEmpresaIndicadorPk"  	column="pPERS_EMPRESAINDICADOR_N_PK" />
+	     <result property="id.intPeriodoIndicador"    	column="pPRES_PERIODOINDICADOR_N" />
+	     <result property="id.intMesIndicador"    		column="pPRES_MESINDICADOR_N" />
+	     <result property="id.intParaTipoIndicador"    	column="pPARA_TIPOINDICADOR_N_COD" />
+	     <result property="id.intEmpresaSucursalPk"    	column="pPERS_EMPRESASUCURSAL_N_PK" />
+	     <result property="id.intIdSucursal"     		column="pSUCU_IDSUCURSAL_N_PK" />
+	     <result property="id.intIdSubSucursal"     	column="pSUDE_IDSUBSUCURSAL_N_PK" />
+	     <result property="intParaTipoValor"    		column="pPARA_TIPOVALOR_N_COD" />
+	     <result property="bdMontoProyectado"     		column="pINDE_MONTOPROY_N" />
+	     <result property="bdMontoEjecutado"     		column="pINDE_MONTOEJEC_N" />
+	     <result property="tsFechaRegistro"    			column="pINDI_FECHAREGISTRO_D" />
+	     <result property="intParaEstadoCierre"    		column="pPARA_ESTADOCIERRE_N_COD" />
+	     <result property="intEmpresaUsuarioPk"     	column="pPERS_EMPRESAUSUARIO_N_PK" />
+	     <result property="intPersonaUsuarioPk"     	column="pPERS_PERSONAUSUARIO_N_PK" />
+	     <result property="strIdSubSucursal"     		column="pSUDE_DESCRIPCION_V" />
+	</resultMap>
+	
+	<parameterMap id="parPorIndicador" class="Indicador">
+	   	<parameter property="id.intEmpresaIndicadorPk"		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intPeriodoIndicador" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intMesIndicador" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+	   	<parameter property="id.intParaTipoIndicador" 		javaType="java.lang.Integer" 		jdbcType="NUMERIC"     mode="INOUT"/>
+	   	<parameter property="id.intEmpresaSucursalPk" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="id.intIdSucursal" 				javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   mode="INOUT"/>
+	    <parameter property="id.intIdSubSucursal" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"     mode="INOUT"/>
+	   	<parameter property="intParaTipoValor" 				javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="bdMontoProyectado" 			javaType="java.math.BigDecimal" 	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="bdMontoEjecutado" 				javaType="java.math.BigDecimal"  	jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="tsFechaRegistro" 				javaType="java.sql.Timestamp" 		jdbcType="TIMESTAMP"   mode="INOUT"/>
+	   	<parameter property="intParaEstadoCierre" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  		<parameter property="intEmpresaUsuarioPk" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   mode="INOUT"/>
+		<parameter property="intPersonaUsuarioPk" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC" 	   mode="INOUT"/>
+  	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresaIndicadorPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoIndicador" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intMesIndicador" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intParaTipoIndicador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intEmpresaSucursalPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parPorIndicadorId" class="IndicadorId">
+	   	 <parameter property="intEmpresaIndicadorPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoIndicador" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intMesIndicador" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intParaTipoIndicador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intEmpresaSucursalPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parPorRangoFechas" class="java.util.Map">
+	   	<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	   	<parameter property="intEmpresaIndicadorPk" 		javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	<parameter property="intPeriodoIndicador" 			javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	<parameter property="intMesDesde" 					javaType="java.lang.Integer"  		jdbcType="NUMERIC" 	   	mode="IN"/>	   	
+	   	<parameter property="intMesHasta" 					javaType="java.lang.Integer" 		jdbcType="NUMERIC"     	mode="IN"/>
+	</parameterMap>
+
+  	<procedure id="grabar" parameterMap="parPorIndicador">
+		{ call PKG_INDICADOR.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  
+  	<procedure id="modificar" parameterMap="parPorIndicador" >
+		{ call PKG_INDICADOR.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  
+  	<procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resIndicador">
+		{ call PKG_INDICADOR.getListaPorPK(?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getListaIndicadorPorFiltros" parameterMap="parPorPK" resultMap="resIndDescSubSuc">
+		{ call PKG_INDICADOR.getListaPorFiltros(?,?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+	<procedure id="eliminar" parameterMap="parPorIndicadorId">
+		{ call PKG_INDICADOR.eliminar(?,?,?,?,?,?,?) }  
+	</procedure>
+
+	  	<procedure id="getListaPorRangoFechas" parameterMap="parPorRangoFechas" resultMap="resIndicador">
+		{ call PKG_INDICADOR.getListaPorRangoFechas(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getMesesDelAnioBase" parameterMap="parPorRangoFechas" resultMap="resMesAnioBase">
+		{ call PKG_INDICADOR.getMesesDelAnioBase(?,?,?,?,?)}  
+  	</procedure>	
+</sqlMap>

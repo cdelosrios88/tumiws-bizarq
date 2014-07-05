@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AdminPadronDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.estructura.domain.AdminPadron" alias="AdminPadron"/> 
+	
+  <resultMap id="resAdminPadron" class="AdminPadron" >
+     <result property="id.intPeriodo"      			column="pPERIODO_N" />
+     <result property="id.intMes"    				column="pMES_N" />
+     <result property="id.intNivel"      			column="pNIVEL_N" />
+     <result property="id.intCodigo"   				column="pCODIGO_N" />
+     <result property="id.intParaTipoArchivoPadronCod"	column="pPARA_TIPOARCHIVOPADRON_N_COD" />
+     <result property="id.intParaModalidadCod"		column="pPARA_MODALIDAD_N_COD" />
+     <result property="id.intParaTipoSocioCod"		column="pPARA_TIPOSOCIO_N_COD" />
+     <result property="id.intItemAdministraPadron"	column="pITEMADMINISTRAPADRON_N" />
+     <result property="intParaTipoPadronCod"   		column="pPARA_TIPOPADRON_N_COD" />
+	 <result property="intParaEstadoCod"   			column="pPARA_ESTADO_N_COD" />
+	 <result property="adPaFechaEliminacion"   		column="pADPA_FECHAELIMINACION_D" />
+	 <result property="intPersEmpresaPk"   			column="pPERS_EMPRESA_N_PK" />
+	 <result property="intPersUsuarioRegistroPk"   	column="pPERS_USUARIOREGISTRO_N_PK" />
+	 <result property="adPaFechaRegistro"   		column="pADPA_FECHAREGISTRO_D" />
+	 <result property="intParaTipoArchivo"   		column="pPARA_TIPOARCHIVO_N_COD" />
+	 <result property="intParaItemArchivo"   		column="pPARA_ITEMARCHIVO_N_PK" />
+	 <result property="intParaItemHistorico"   		column="pPARA_ITEMHISTORICO_N" />
+  </resultMap>
+  
+  <parameterMap id="parAdminPadron" class="AdminPadron">
+     <parameter property="id.intPeriodo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intMes"				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intNivel" 				javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intCodigo" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoArchivoPadronCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intParaModalidadCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoSocioCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intItemAdministraPadron" javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaTipoPadronCod"   	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+	 <parameter property="intParaEstadoCod"   		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+	 <parameter property="adPaFechaEliminacion"   	javaType="java.util.Date"		jdbcType="DATE" 	mode="INOUT"/>
+	 <parameter property="intPersEmpresaPk"   		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+	 <parameter property="intPersUsuarioRegistroPk" javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+	 <parameter property="adPaFechaRegistro"   		javaType="java.util.Date"		jdbcType="DATE" 	mode="INOUT"/>
+	 <parameter property="intParaTipoArchivo" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+	 <parameter property="intParaItemArchivo"	 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+	 <parameter property="intParaItemHistorico" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPeriodo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intMes" 						javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intNivel" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intCodigo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intParaTipoArchivoPadronCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+     <parameter property="intParaTipoModalidadCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+     <parameter property="intParaTipoSocioCod"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+     <parameter property="intItemAdministraPadron" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>    
+  </parameterMap>
+  
+  <parameterMap id="parAdminPadronBusqueda" class="java.util.Map">
+     <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+     <parameter property="intPeriodo"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intMes"						javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>    
+     <parameter property="intNivel" 					javaType="java.lang.Integer"	jdbcType="NUMERIC"  	mode="IN"/>
+     <parameter property="intCodigo" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+     <parameter property="intParaTipoArchivoPadronCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>  
+     <parameter property="intParaTipoModalidadCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+     <parameter property="intParaTipoSocioCod"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>     
+     <parameter property="intParaEstadoCod"   			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parAdminPadronLista" class="java.util.Map">
+     <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parAdminPadronTipoModa" class="java.util.Map">
+     <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+     <parameter property="intParaTipoModalidadCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+     <parameter property="intParaTipoSocioCod"			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>     
+     <parameter property="intParaEstadoCod"   			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parAdminPadron">
+	{ call PKG_ADMINISTRAPADRON.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parAdminPadron" >
+	{ call PKG_ADMINISTRAPADRON.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resAdminPadron">
+	{ call PKG_ADMINISTRAPADRON.getListaPorPk(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaBusqueda" parameterMap="parAdminPadronBusqueda" resultMap="resAdminPadron">
+	{ call PKG_ADMINISTRAPADRON.getListaBusqueda(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getLista" parameterMap="parAdminPadronLista" resultMap="resAdminPadron">
+	{ call PKG_ADMINISTRAPADRON.getLista(?) }  
+  </procedure>
+    
+  <procedure id="getTipSocioModPeriodoMes" parameterMap="parAdminPadronTipoModa" resultMap="resAdminPadron">
+	{ call PKG_ADMINISTRAPADRON.getTipSocioModPeriodoMes(?,?,?,?) }  
+  </procedure>
+
+  <procedure id="getListaMaximoPorAdminPadron" parameterMap="parAdminPadronBusqueda" resultMap="resAdminPadron">
+	{ call PKG_ADMINISTRAPADRON.getListaMaximoPorAdminPadron(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+</sqlMap>  

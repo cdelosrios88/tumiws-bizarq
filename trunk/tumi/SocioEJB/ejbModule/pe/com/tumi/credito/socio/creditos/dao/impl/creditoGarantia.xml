@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoGarantiaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.CreditoGarantia" alias="CreditoGarantia"/> 
+	
+  <resultMap id="resGarantia" class="CreditoGarantia" >
+     <result property="id.intPersEmpresaPk"      	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"	column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      		column="pITEMCREDITO_N" />
+     <result property="id.intParaTipoGarantiaCod" 	column="pPARA_TIPOGARANTIA_N_COD" />
+     <result property="id.intItemCreditoGarantia"   column="pITEMCREDITOGARANTIA_N"/>
+     <result property="intParaClaseCod"     		column="pPARACLASE_N"/>
+     <result property="intParaSubClaseCod"   		column="pSUBPARACLASE_N"/>
+     <result property="intParaNaturalezaGarantiaCod" column="pPARA_NATURALEZAGARANTIA_N"/>
+     <result property="intParaTipoCartaFianzaCod"   column="pPARA_TIPOCARTAFIANZA_N"/>
+     <result property="intOpcionMinimoCta"     		column="pOPCIONMINIMOCUENTA_N"/>
+     <result property="bdPorcCuenta"     			column="pPORCENTAJECUENTA_N"/>
+     <result property="intParaDerechoCarta"     	column="pDERECHOCARTA_N"/>
+     <result property="intOpcionValorVenta"     	column="pOPCIONVALORVENTA_N"/>
+     <result property="intValuadorInscrito"     	column="pVALUADORINSCRITO_N"/>
+     <result property="intTasacionComercial"     	column="pTASACIONCOMERCIAL_N"/>
+     <result property="intNegociacionEndoso"     	column="pNEGOCIACIONENDOSO_N"/>
+     <result property="intParaEstadoCod"     		column="pPARA_ESTADO_N_COD"/>
+  </resultMap>
+  
+  <parameterMap id="parGarantia" class="CreditoGarantia">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intParaTipoGarantiaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intItemCreditoGarantia" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaClaseCod" 				javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaSubClaseCod" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaNaturalezaGarantiaCod" javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaTipoCartaFianzaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intOpcionMinimoCta" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="bdPorcCuenta" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaDerechoCarta" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intOpcionValorVenta" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intValuadorInscrito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intTasacionComercial" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intNegociacionEndoso" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoGarantiaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoGarantia" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKCreditoGarantia" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoGarantiaCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parCreditoGarantiaEliminar" class="CreditoGarantia">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intParaTipoGarantiaCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+     <parameter property="id.intItemCreditoGarantia" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parGarantia">
+	{ call PKG_CONFCREGARANTIA.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parGarantia" >
+	{ call PKG_CONFCREGARANTIA.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resGarantia">
+	{ call PKG_CONFCREGARANTIA.getListaPorPK(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkCreditoGarantia" parameterMap="parPorPKCreditoGarantia" resultMap="resGarantia">
+	{ call PKG_CONFCREGARANTIA.getListaPorPkCredito(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parCreditoGarantiaEliminar">
+	{ call PKG_CONFCREGARANTIA.eliminar(?,?,?,?,?) }
+  </procedure>
+</sqlMap>

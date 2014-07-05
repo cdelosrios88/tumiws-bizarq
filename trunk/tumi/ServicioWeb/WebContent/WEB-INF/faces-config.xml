@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+
+	<managed-bean>
+		<managed-bean-name>testController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.test.controller.TestController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Requisitos -->
+	<navigation-rule>
+		<from-view-id>/pages/requisitos/*</from-view-id>
+		<navigation-case>
+			<from-outcome>requisitos.requisitos</from-outcome>
+			<to-view-id>/pages/requisitos/requisitos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>requisitosController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.requisitos.controller.RequisitosController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Autorizacion -->
+	<navigation-rule>
+		<from-view-id>/pages/autorizacion/*</from-view-id>
+		<navigation-case>
+			<from-outcome>autorizaciones.autorizacion</from-outcome>
+			<to-view-id>/pages/autorizacion/autorizacion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>autorizacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.autorizacion.controller.AutorizacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Solicitud Préstamo -->
+	<navigation-rule>
+		<from-view-id>/pages/creditos/*</from-view-id>
+		<navigation-case>
+			<from-outcome>creditos.nuevoCredito</from-outcome>
+			<to-view-id>/pages/creditos/nuevoCredito.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Prevision Social -->
+	<navigation-rule>
+		<from-view-id>/pages/prevision/prevision.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>prevision.prevision</from-outcome>
+			<to-view-id>/pages/prevision/prevision.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Liquidación -->
+	<navigation-rule>
+		<from-view-id>/pages/liquidacion/liquidacion.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>liquidacion.liquidacion</from-outcome>
+			<to-view-id>/pages/liquidacion/liquidacion.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Refinancianmiento / reprogramacion -->
+	<navigation-rule>
+		<from-view-id>/pages/reprogRefinan/refinanciamiento.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>refinanciamiento.refinanciamiento</from-outcome>
+			<to-view-id>/pages/reprogRefinan/refinanciamiento.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- Prevision Social -->
+	<navigation-rule>
+		<from-view-id>/pages/actividades/actividad.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>actividad.actividad</from-outcome>
+			<to-view-id>/pages/actividades/actividad.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>solicitudPrestamoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.solicitudPrestamo.controller.SolicitudPrestamoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>capacidadPagoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.solicitudPrestamo.controller.CapacidadPagoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>socioEstrucController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.solicitudPrestamo.controller.SocioEstructuraController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadControllerServicio</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.fileupload.FileUploadControllerServicio</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.fileupload.FileUploadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>autorizacionPrestamoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.solicitudPrestamo.controller.AutorizacionPrestamoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>giroCreditoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.solicitudPrestamo.controller.GiroCreditoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>giroPrevisionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.prevision.controller.GiroPrevisionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>giroLiquidacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.liquidacion.controller.GiroLiquidacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>solicitudLiquidacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.liquidacion.controller.SolicitudLiquidacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>autorizacionLiquidacionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.liquidacion.controller.AutorizacionLiquidacionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>solicitudPrevisionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.prevision.controller.SolicitudPrevisionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>autorizacionPrevisionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.prevision.controller.AutorizacionPrevisionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>solicitudRefinanController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.refinanciamiento.controller.SolicitudRefinanController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>autorizacionRefinanController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.refinanciamiento.controller.AutorizacionRefinanController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>solicitudActividadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.actividad.controller.SolicitudActividadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>autorizacionActividadController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.actividad.controller.AutorizacionActividadController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>solicitudEspecialController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.servicio.solicitudEspecial.controller.SolicitudEspecialController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	
+	<!--Convertidor Montos-->
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+	
+	<managed-bean>
+		<managed-bean-name>messageController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.message.controller.MessageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+		
+		<!--Convertidor Montos Personalizable en Precision - decimales -->
+	<converter>
+    	<description>Convertidor de montos de 4 decimales</description>
+    	<converter-id>ConvertidorMontos4</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos4</converter-class>
+	</converter>
+</faces-config>

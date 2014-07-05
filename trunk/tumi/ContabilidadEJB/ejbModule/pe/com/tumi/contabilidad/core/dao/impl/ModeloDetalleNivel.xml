@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ModeloDetalleNivelDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.ModeloDetalleNivel" alias="ModeloDetalleNivel"/>
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.ModeloDetalleNivelId" alias="ModeloDetalleNivelId"/>   
+  <typeAlias type="pe.com.tumi.contabilidad.core.domain.ModeloDetalleNivelComp" alias="ModeloDetalleNivelComp"/>
+	
+  <resultMap id="resModeloDetalleNivel" class="ModeloDetalleNivel">
+	<result property="id.intEmpresaPk" 				column="pPers_empresa_n_pk"/>
+	<result property="id.intCodigoModelo"   		column="pCont_codigomodelo_n"/>
+	<result property="id.intPersEmpresaCuenta" 		column="pPers_empresacuenta_n_pk"/>
+	<result property="id.intContPeriodoCuenta"   	column="pCont_periodocuenta_n"/>
+    <result property="id.strContNumeroCuenta"      	column="pCont_numerocuenta_n"/>
+    <result property="id.intItem"      				column="pCont_item_n"/>
+    <result property="strDescripcion"   			column="pMdni_descripcion_v"/>
+	<result property="intParaTipoRegistro" 			column="pPara_tiporegistro_n"/>
+	<result property="intDatoTablas"   				column="pMdni_datotablas_n"/>
+    <result property="intDatoArgumento"      		column="pMdni_datoargumento_n"/>
+    <result property="intValor"      				column="pMdni_valor_n"/>
+  </resultMap>
+  
+  <resultMap id="resModeloDetalleNivelComp" class="ModeloDetalleNivelComp">
+	<result property="intEmpresa" 				column="pEMPRESA"/>
+	<result property="intCodigoModelo"   		column="pCOD_MODELO"/>
+	<result property="intEmpresaCuenta" 		column="pEMPRESA_CUENTA"/>
+	<result property="intPeriodoCuenta"   		column="pPERIODO_CUENTA"/>
+    <result property="strNumeroCuenta"      	column="pNUMERO_CUENTA"/>
+    <result property="strDescCuenta"   			column="pDESC_CUENTA"/>
+    <result property="intItem"      			column="pITEM"/>
+    <result property="strDescripcion"   		column="pDESCRIPCION"/>
+	<result property="intDatoTablas" 			column="pDATO_TABLAS"/>
+	<result property="intDatoArgumento"   		column="pDATO_ARGUMENTO"/>
+    <result property="intValor"      			column="pVALOR"/>
+    <result property="strCampoConsumir"      	column="pCAMPO_A_CONSUMIR"/>
+    <result property="intParamDebeHaber"      	column="pPARAM_DEBE_HABER"/>
+    <result property="strDebe"      			column="pDEBE"/>
+    <result property="strHaber"      			column="pHABER"/>
+  </resultMap> 
+
+  <resultMap id="resModeloDetalleNivelCampoAUsar" class="ModeloDetalleNivelComp">
+	<result property="intEmpresa" 				column="pEMPRESA"/>
+	<result property="intCodigoModelo"   		column="pCOD_MODELO"/>
+	<result property="intEmpresaCuenta" 		column="pEMPRESA_CUENTA"/>
+	<result property="intPeriodoCuenta"   		column="pPERIODO_CUENTA"/>
+    <result property="strNumeroCuenta"      	column="pNUMERO_CUENTA"/>
+    <result property="strDescCuenta"   			column="pDESC_CUENTA"/>
+    <result property="intItem"      			column="pITEM"/>
+    <result property="intDatoTablas" 			column="pDATO_TABLAS"/>
+	<result property="intDatoArgumento"   		column="pDATO_ARGUMENTO"/>
+    <result property="intValor"      			column="pVALOR"/>
+    <result property="strCampoConsumir"      	column="pCAMPO_A_CONSUMIR"/>
+    <result property="intParamDebeHaber"      	column="pPARAM_DEBE_HABER"/>
+    <result property="strDebe"      			column="pDEBE"/>
+    <result property="strHaber"      			column="pHABER"/>
+  </resultMap> 
+
+  <resultMap id="resModeloDetalleNivelId" class="ModeloDetalleNivelId">
+	<result property="intEmpresaPk" 				column="pEMPRESA"/>
+	<result property="intCodigoModelo"   			column="pCOD_MODELO"/>
+	<result property="intPersEmpresaCuenta" 		column="pEMPRESA_CUENTA"/>
+	<result property="intContPeriodoCuenta"   		column="pPERIODO_CUENTA"/>
+    <result property="strContNumeroCuenta"      	column="pNUMERO_CUENTA"/>
+  </resultMap>  
+  
+    <resultMap id="resModeloDetalleCobranza" class="ModeloDetalleNivel">    
+     <result property="id.strContNumeroCuenta"      	column="pCont_numerocuenta_n"/>
+  </resultMap>  
+        
+  <parameterMap id="parModeloDetalleNivel" class="ModeloDetalleNivel">
+	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intCodigoModelo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="id.strContNumeroCuenta"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+     <parameter property="id.intItem"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strDescripcion"			javaType="java.lang.String"		jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaTipoRegistro"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intDatoTablas"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intDatoArgumento"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intValor"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntCodigoModelo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntContPeriodoCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pStrContNumeroCuenta"		javaType="java.lang.String" 	jdbcType="VARCHAR"		 mode="IN"/>
+	 <parameter property="pIntItem"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorModeloDetalleId" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntCodigoModelo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntContPeriodoCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pStrContNumeroCuenta"		javaType="java.lang.String" 	jdbcType="VARCHAR"		 mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parModeloDetalleNivelId" class="ModeloDetalleNivelId">
+	 <parameter property="intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intCodigoModelo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaCuenta"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCuenta"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="strContNumeroCuenta"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="IN"/>
+     <parameter property="intItem"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorModeloDetalleNivel" class="java.util.Map">
+	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>  	
+	 <parameter property="intEmpresa"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intTipoModeloContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaCuenta"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intDatoTablas"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intDatoArgumento"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorModeloTipoCreditoRiesgo" class="java.util.Map">
+	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>  	
+	 <parameter property="intEmpresa"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intTipoModeloContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaCuenta"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intTipoCredito"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intItemCredito"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intCategoriaRiesgo"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+    
+  <parameterMap id="parPorModeloDetalleId2" class="java.util.Map">
+   	 <parameter property="cursorLista"					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="pIntEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intTipoModeloContable"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntPersEmpresaCuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pIntContPeriodoCuenta"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pStrContNumeroCuenta"			javaType="java.lang.String" 	jdbcType="VARCHAR"		 mode="IN"/>
+  </parameterMap>
+      
+  <parameterMap id="parPorModeloDetalleNivel2" class="java.util.Map">
+	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>  	
+	 <parameter property="intEmpresa"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intTipoModeloContable"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intValor"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parCuentaPorPagar" class="java.util.Map">
+  	<parameter property="intEmpresa" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN"/>  
+  	<parameter property="intPeriodo" 				javaType="java.lang.Integer" jdbcType="NUMERIC" mode="IN"/>  			
+  	<parameter property="strEscalar" 				javaType="java.lang.String"  jdbcType="VARCHAR" mode="OUT"/>
+  </parameterMap>
+  
+    <parameterMap id="parPrestamoInteres" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresa"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intPeriodo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intParaTipoRiesgo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intItemConcepto"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intCategoria"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intConceptoGeneral"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+      <parameterMap id="parPrestamoInteresSC" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresa"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intPeriodo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intParaTipoRiesgo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="intItemConcepto"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>	 
+	 <parameter property="intConceptoGeneral"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+  </parameterMap>
+  
+  <!-- Agregado 27.05.2014 jchavez -->
+  <parameterMap id="parPorPeriodo" class="java.util.Map">
+  	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresa"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPeriodoYTipoModelo" class="java.util.Map">
+  	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	 <parameter property="intEmpresa"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intTipoModeloContable"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEmpresaCuenta"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>       
+  <!-- Fin agregado 27.05.2014 -->
+   
+  <procedure id="grabar" parameterMap="parModeloDetalleNivel">
+	{ call PKG_MODELODETALLENIVEL.grabar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parModeloDetalleNivel" >
+	{ call PKG_MODELODETALLENIVEL.modificar(?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resModeloDetalleNivel">
+	{ call PKG_MODELODETALLENIVEL.getListaPorPk(?,?,?,?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="getListaPorModeloDetalleId" parameterMap="parPorModeloDetalleId" resultMap="resModeloDetalleNivel">
+	{ call PKG_MODELODETALLENIVEL.getListaPorModeloDetalleId(?,?,?,?,?,?) }
+  </procedure> 
+  
+  <procedure id="eliminar" parameterMap="parModeloDetalleNivelId">
+	{ call PKG_MODELODETALLENIVEL.eliminar(?,?,?,?,?,?) }  
+  </procedure>  
+   
+  <procedure id="getModeloGiroPrestamo" parameterMap="parPorModeloDetalleNivel" resultMap="resModeloDetalleNivelComp">
+	{ call PKG_MODELODETALLENIVEL.getModeloGiroPrestamo(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getPkModeloXReprestamo" parameterMap="parPorModeloTipoCreditoRiesgo" resultMap="resModeloDetalleNivelId">
+	{ call PKG_MODELODETALLENIVEL.getPkModeloXReprestamo(?,?,?,?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getCampoXPkModelo" parameterMap="parPorModeloDetalleId2" resultMap="resModeloDetalleNivelComp">
+	{ call PKG_MODELODETALLENIVEL.getCampoXPkModelo(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getModeloGiroPrevision" parameterMap="parPorModeloDetalleNivel" resultMap="resModeloDetalleNivelCampoAUsar">
+	{ call PKG_MODELODETALLENIVEL.getModeloGiroPrevision(?,?,?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getModeloPlanillaMovilidad" parameterMap="parPorModeloDetalleNivel2" resultMap="resModeloDetalleNivelCampoAUsar">
+	{ call PKG_MODELODETALLENIVEL.getModeloPlanillaMovilidad(?,?,?,?,?,?) }
+  </procedure>
+  
+    <procedure id="getCuentaPorPagar" parameterMap="parCuentaPorPagar">
+  	{call PKG_MODELODETALLENIVEL.getCuentaPorPagar(?,?,?)}
+  </procedure>
+   
+  <procedure id="getNumeroCuentaPrestamo" parameterMap="parPrestamoInteres" resultMap="resModeloDetalleCobranza">
+	{ call PKG_MODELODETALLENIVEL.getNumeroCuentaPrestamo(?,?,?,?,?,?,?) }
+  </procedure>  
+  
+    <procedure id="getNroCtaPrestamoSinCategoria" parameterMap="parPrestamoInteresSC" resultMap="resModeloDetalleCobranza">
+	{ call PKG_MODELODETALLENIVEL.getNroCtaPrestamoSinCategoria(?,?,?,?,?,?) }
+  </procedure>  
+  <!-- Agregado 27.05.2014 jchavez -->
+  <procedure id="getModeloProvisionRetiro" parameterMap="parPorPeriodo" resultMap="resModeloDetalleNivelCampoAUsar">
+	{ call PKG_MODELODETALLENIVEL.getModeloProvisionRetiro(?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getModeloProvRetiroInteres" parameterMap="parPorPeriodoYTipoModelo" resultMap="resModeloDetalleNivelCampoAUsar">
+	{ call PKG_MODELODETALLENIVEL.getModeloProvRetiroInteres(?,?,?,?,?) }
+  </procedure>
+  <!-- Fin 27.05.2014 -->
+</sqlMap>  

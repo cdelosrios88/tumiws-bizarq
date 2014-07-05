@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreCobranzaPlanillaDaoIbatis">
+
+  	<typeAlias type="pe.com.tumi.cobranza.cierremensual.domain.CierreCobranzaPlanilla" alias="CierreCobranzaPlanilla"/> 
+	
+	<resultMap id="resCierreCobranzaPlanilla" class="CierreCobranzaPlanilla" >
+	   <result property="id.intPersEmpresaCierreCob" 	column="pIntPersEmpresaCieCob" />
+	   <result property="id.intParaTipoRegistro"     	column="pIntParaTipoRegistro" />
+	   <result property="id.intPeriodoCierre"     		column="pIntPeriodoCierre" />
+	   <result property="id.intEstrucGrupo"     		column="pIntEstrucGrupo" />
+	   <result property="id.intParaTipoSocio"     		column="pIntParaTipoSocio" />
+	   <result property="id.intParaModalidad"     		column="pIntParaModalidad" />
+	   <result property="intParaEstadoCierre"     		column="pIntParaEstadoCierre" />
+	   <result property="intEmpresaRegistro"     		column="pIntPersEmpresaRegistro" />
+	   <result property="intPersonaRegistro"     		column="pIntPersonaRegistro" />
+	   <result property="tsFechaRegistro"     			column="pTsFechaRegistro" />
+	</resultMap>
+  
+	<select id="getListaCierrePlanillaPorPkCierreCobranza" resultMap="resCierreCobranzaPlanilla" parameterClass="CierreCobranzaPlanilla">
+		SELECT 	CP.PERS_EMPRESACIECOB_N_PK 		pIntPersEmpresaCieCob, 
+				CP.PARA_TIPOREGISTRO_N_COD		pIntParaTipoRegistro, 
+				CP.CCOB_PERIODOCIERRE_N			pIntPeriodoCierre,
+				CP.ESTRUC_GRUPO_N				pIntEstrucGrupo,
+    			CP.PARA_MODALIDAD_N_COD			pIntParaModalidad,
+				CP.PARA_TIPOSOCIO_N_COD			pIntParaTipoSocio,
+    			CP.PARA_ESTADOCIERRE_N_COD		pIntParaEstadoCierre,
+    			CP.PERS_EMPRESAREGISTRO_N_PK	pIntPersEmpresaRegistro,
+    			CP.PERS_PERSONAREGISTRO_N_PK	pIntPersonaRegistro,
+    			CP.CICP_FECHAREGISTRO_D			pTsFechaRegistro
+		FROM CCO_CIERRECOBRANZAPLA CP
+	   WHERE CP.PERS_EMPRESACIECOB_N_PK = #id.intPersEmpresaCierreCob#
+	     AND CP.PARA_TIPOREGISTRO_N_COD = #id.intParaTipoRegistro#
+	     AND CP.CCOB_PERIODOCIERRE_N = #id.intPeriodoCierre#
+	     <dynamic>
+		     <isNotNull property="id.intEstrucGrupo" prepend="AND">
+		 	 	<isGreaterThan property="id.intEstrucGrupo" compareValue="0">
+		 	 		CP.ESTRUC_GRUPO_N = #id.intEstrucGrupo#
+		 	 	</isGreaterThan>
+		 	 </isNotNull>
+	 	 </dynamic>
+	     <!-- AND CP.ESTRUC_GRUPO_N = #id.intEstrucGrupo#  -->
+	   ORDER BY 1,2,3,4,5,6
+	</select>
+	
+	<select id="getCierreCobranzaPlanillaPorPK" resultMap="resCierreCobranzaPlanilla" parameterClass="CierreCobranzaPlanilla">
+		SELECT 	CP.PERS_EMPRESACIECOB_N_PK 		pIntPersEmpresaCieCob, 
+				CP.PARA_TIPOREGISTRO_N_COD		pIntParaTipoRegistro, 
+				CP.CCOB_PERIODOCIERRE_N			pIntPeriodoCierre,
+				CP.ESTRUC_GRUPO_N				pIntEstrucGrupo,
+				CP.PARA_TIPOSOCIO_N_COD			pIntParaTipoSocio,
+    			CP.PARA_MODALIDAD_N_COD			pIntParaModalidad,
+    			CP.PARA_ESTADOCIERRE_N_COD		pIntParaEstadoCierre,
+    			CP.PERS_EMPRESAREGISTRO_N_PK	pIntPersEmpresaRegistro,
+    			CP.PERS_PERSONAREGISTRO_N_PK	pIntPersonaRegistro,
+    			CP.CICP_FECHAREGISTRO_D			pTsFechaRegistro
+		FROM CCO_CIERRECOBRANZAPLA CP
+	   WHERE CP.PERS_EMPRESACIECOB_N_PK = #id.intPersEmpresaCierreCob#
+	     AND CP.PARA_TIPOREGISTRO_N_COD = #id.intParaTipoRegistro#
+	     AND CP.CCOB_PERIODOCIERRE_N = #id.intPeriodoCierre#
+	     AND CP.ESTRUC_GRUPO_N = #id.intEstrucGrupo#
+	     AND CP.PARA_TIPOSOCIO_N_COD = #id.intParaTipoSocio#
+	     AND CP.PARA_MODALIDAD_N_COD = #id.intParaModalidad#
+	</select>
+	
+	<select id="getListaCierrePlanillaPorCierreCobranza" resultMap="resCierreCobranzaPlanilla" parameterClass="CierreCobranzaPlanilla">
+		  SELECT CP.PERS_EMPRESACIECOB_N_PK 	pIntPersEmpresaCieCob, 
+				 CP.PARA_TIPOREGISTRO_N_COD		pIntParaTipoRegistro, 
+				 CP.CCOB_PERIODOCIERRE_N		pIntPeriodoCierre,
+		         CP.PARA_ESTADOCIERRE_N_COD		pIntParaEstadoCierre,
+		         CP.PERS_PERSONAREGISTRO_N_PK	pIntPersonaRegistro,
+		         CP.CICP_FECHAREGISTRO_D		pTsFechaRegistro
+		    FROM CCO_CIERRECOBRANZA CC INNER JOIN CCO_CIERRECOBRANZAPLA CP
+		      ON (CC.PERS_EMPRESACIECOB_N_PK = CP.PERS_EMPRESACIECOB_N_PK)
+		         AND (CC.PARA_TIPOREGISTRO_N_COD = CP.PARA_TIPOREGISTRO_N_COD)
+		         AND (CC.CCOB_PERIODOCIERRE_N = CP.CCOB_PERIODOCIERRE_N)
+		GROUP BY CP.PERS_EMPRESACIECOB_N_PK,
+		         CP.PARA_TIPOREGISTRO_N_COD,
+		         CP.CCOB_PERIODOCIERRE_N,
+		         CP.PARA_ESTADOCIERRE_N_COD,
+		         CP.PERS_PERSONAREGISTRO_N_PK,
+		         CP.CICP_FECHAREGISTRO_D
+	</select>
+	
+	<insert id="grabar" parameterClass="CierreCobranzaPlanilla">
+		INSERT INTO CCO_CIERRECOBRANZAPLA(
+			PERS_EMPRESACIECOB_N_PK, PARA_TIPOREGISTRO_N_COD, CCOB_PERIODOCIERRE_N, ESTRUC_GRUPO_N, 
+			PARA_TIPOSOCIO_N_COD, PARA_MODALIDAD_N_COD, PARA_ESTADOCIERRE_N_COD, PERS_EMPRESAREGISTRO_N_PK, 
+    		PERS_PERSONAREGISTRO_N_PK, CICP_FECHAREGISTRO_D)
+		VALUES(
+			#id.intPersEmpresaCierreCob#, #id.intParaTipoRegistro#, #id.intPeriodoCierre#, #id.intEstrucGrupo#, 
+			#id.intParaTipoSocio#, #id.intParaModalidad#, #intParaEstadoCierre#, #intEmpresaRegistro#, 
+			#intPersonaRegistro#, #tsFechaRegistro#
+		)
+	</insert>
+	
+	<update id="modificar" parameterClass="CierreCobranzaPlanilla">
+       UPDATE CCO_CIERRECOBRANZAPLA 
+       	  SET PARA_ESTADOCIERRE_N_COD = #intParaEstadoCierre#,
+       		  PERS_EMPRESAREGISTRO_N_PK = #intEmpresaRegistro#,
+       		  PERS_PERSONAREGISTRO_N_PK = #intPersonaRegistro#,
+       		  CICP_FECHAREGISTRO_D = #tsFechaRegistro#
+        WHERE PERS_EMPRESACIECOB_N_PK = #id.intPersEmpresaCierreCob#
+          AND PARA_TIPOREGISTRO_N_COD = #id.intParaTipoRegistro#
+          AND CCOB_PERIODOCIERRE_N = #id.intPeriodoCierre#
+          AND ESTRUC_GRUPO_N = #id.intEstrucGrupo#
+          AND PARA_TIPOSOCIO_N_COD = #id.intParaTipoSocio#
+          AND PARA_MODALIDAD_N_COD = #id.intParaModalidad#
+    </update>
+    
+    <select id="getCierreCobranzaPlanillaValidarEnvio" resultMap="resCierreCobranzaPlanilla" parameterClass="CierreCobranzaPlanilla">
+		SELECT 	CP.PERS_EMPRESACIECOB_N_PK 		pIntPersEmpresaCieCob, 
+				CP.PARA_TIPOREGISTRO_N_COD		pIntParaTipoRegistro, 			
+				CP.CCOB_PERIODOCIERRE_N			pIntPeriodoCierre,
+				CP.ESTRUC_GRUPO_N				pIntEstrucGrupo,
+				CP.PARA_TIPOSOCIO_N_COD			pIntParaTipoSocio,
+    			CP.PARA_MODALIDAD_N_COD			pIntParaModalidad,
+    			CP.PARA_ESTADOCIERRE_N_COD		pIntParaEstadoCierre,
+    			CP.PERS_EMPRESAREGISTRO_N_PK	pIntPersEmpresaRegistro,
+    			CP.PERS_PERSONAREGISTRO_N_PK	pIntPersonaRegistro, 
+    			CP.CICP_FECHAREGISTRO_D			pTsFechaRegistro   			
+		FROM CCO_CIERRECOBRANZAPLA CP
+	   WHERE CP.PERS_EMPRESACIECOB_N_PK = #id.intPersEmpresaCierreCob#	    
+	     AND CP.CCOB_PERIODOCIERRE_N = #id.intPeriodoCierre#
+	     AND CP.ESTRUC_GRUPO_N = #id.intEstrucGrupo#
+	     AND CP.PARA_TIPOSOCIO_N_COD = #id.intParaTipoSocio#
+	     AND CP.PARA_MODALIDAD_N_COD = #id.intParaModalidad#
+	</select>
+    
+</sqlMap>  

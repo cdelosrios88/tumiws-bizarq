@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ZonalSucursalDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.empresa.domain.Zonal" alias="ZonalSucursal"/> 
+	
+  <resultMap id="resZonalSucursal" class="ZonalSucursal" >
+     <result property="id.intPersEmpresaPk"      		column="pzPers_empresa_n_pk" />
+     <result property="id.intIdzonal"  					column="pzIdzonal_n" />
+     <result property="intPersPersonaPk"      			column="pzPers_persona_n_pk" />
+     <result property="intIdTipoZonal"   				column="pzIdtipozonal_n" />
+     <result property="intPersPersonaResponsablePk" 	column="pzPers_personaresponsable_n_pk" />
+     <result property="intIdEstado"    					column="pzIdestado_n" />
+     <result property="sucursal.id.intPersEmpresaPk"	column="psPers_empresa_n_pk" />
+     <result property="sucursal.id.intIdSucursal"		column="psIdSucursal_n" />
+     <result property="sucursal.intPersPersonaPk"		column="psPers_persona_n_pk" />
+     <result property="sucursal.intIdTipoSucursal"		column="psIdTipoSucursal_n" />
+     <result property="sucursal.intIdEstado"		column="psIdEstado_n" />
+  </resultMap>
+  
+  <parameterMap id="parZonalSucursal" class="ZonalSucursal">
+     <parameter property="id.intPersEmpresaPk"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdzonal"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intPersPersonaPk" 			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intIdTipoZonal"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intPersPersonaResponsablePk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intIdEstado" 					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="sucursal.id.intPersEmpresaPk" jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="sucursal.id.intIdSucursal" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="sucursal.intIdPersona" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="sucursal.intIdTipoSucursal" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="sucursal.intIdEstado" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdZonal" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intIdzonal" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="getListaPorIdZonal" parameterMap="parPorIdZonal" resultMap="resZonalSucursal">
+	{ call PKG_ZONAL_SUCURSAL.getListaPorIdZonal(?,?) }
+  </procedure>
+
+</sqlMap>  

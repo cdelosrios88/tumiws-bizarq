@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GestorCobranzaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.gestion.domain.GestorCobranza" alias="GestorCobranza"/> 
+	
+  <resultMap id="resGestorCobranza" class="GestorCobranza" >
+     <result property="id.intPersEmpresaPk"          column="pempresagestor" />
+     <result property="id.intPersPersonaGestorPk"    column="ppersonagestor" />
+     <result property="id.intItemGestorCobranzaSuc"  column="pitemgestorcobranzasuc" />
+     <result property="intTipoGestorCod"   	         column="ptipogestor" />
+     <result property="fechaInicio"                  column="pfechainicio" />
+     <result property="fechaFin"    	             column="pfechafin" />
+  </resultMap>
+
+    
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 		          javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	      javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intPersPersonaGestorPk"     javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intItemGestorCobranzaSuc"   javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parGestorCobranza" class="GestorCobranza">
+	 <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPersPersonaGestorPk"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemGestorCobranzaSuc"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intTipoGestorCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="fechaInicio"					javaType="java.util.Date" 		jdbcType="DATE"			mode="INOUT"/>
+     <parameter property="fechaFin"						javaType="java.util.Date" 		jdbcType="DATE"			mode="INOUT"/>
+  </parameterMap>
+    
+  <parameterMap id="parPorPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 		        javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	    javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="intPersPersonaGestorPk"   javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	mode="IN"/>
+   	 <parameter property="dtFechaActual"   			javaType="java.util.Date"  		jdbcType="DATE" 	   	mode="IN"/>
+  </parameterMap>
+  
+  
+ 
+  <procedure id="getListaGestorCobranza" parameterMap="parPorPK" resultMap="resGestorCobranza">
+	{ call PKG_GESTORCOBRANZA.getListaGestorCobranza(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="grabar" parameterMap="parGestorCobranza">
+	{ call PKG_GESTORCOBRANZA.grabar(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parGestorCobranza" >
+	{ call PKG_GESTORCOBRANZA.modificar(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getPorPersona" parameterMap="parPorPersona" resultMap="resGestorCobranza">
+	{ call PKG_GESTORCOBRANZA.getPorPersona(?,?,?,?) }
+  </procedure>
+  
+
+</sqlMap>  

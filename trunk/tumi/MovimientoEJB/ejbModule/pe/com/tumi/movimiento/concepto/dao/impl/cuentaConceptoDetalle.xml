@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaConceptoDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.CuentaConceptoDetalle" alias="CuentaConceptoDetalle"/> 
+   <typeAlias type="pe.com.tumi.movimiento.concepto.domain.CuentaConceptoDetalleId" alias="CuentaConceptoDetalleId"/> 
+	
+  <resultMap id="resCuentaConceptoDetalle" class="CuentaConceptoDetalle" >
+     <result property="id.intPersEmpresaPk"     	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intCuentaPk"    			column="pCSOC_CUENTA_N_PK" />
+     <result property="id.intItemCuentaConcepto"    column="pCMOV_ITEMCUENTACONCEPTO_N" />
+     <result property="id.intItemCtaCptoDet"    	column="pCMOV_ITEMCTACPTODET_N" />
+     <result property="tsInicio"      				column="pCCDE_INICIO_D" />
+     <result property="tsFin"      					column="pCCDE_FIN_D" />
+     <result property="bdMontoInicial"      		column="pCCDE_MONTOINICIAL_N" />
+     <result property="intParaTipoConceptoCod"      column="pPARA_TIPOCONCEPTO_N_COD" />
+     <result property="intItemConcepto"      		column="pCSOC_ITEMCONCEPTO_N" />
+     <result property="intSucursalUsuarioPk"      	column="pUSSU_SUCURSALUSUARIO_N_PK" />
+     <result property="intSubsucursalUsuarioPk"     column="pSUDE_SUBSUCURSALUSUARIO_N_PK" />
+     <result property="intPersPersonaUsuarioPk"     column="pPERS_PERSONAUSUARIO_N_PK" />
+     <result property="bdSaldoDetalle"     			column="pSALDODETALLE_N" />
+     <result property="bdMontoConcepto"     		column="pMONTOCONCEPTO_N" />
+     <result property="intParaTipoDescuentoCod"     column="pPARA_TIPODESCUENTO_N_COD" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaConceptoDetalle" class="CuentaConceptoDetalle">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intCuentaPk"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemCuentaConcepto"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemCtaCptoDet"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsInicio" 				jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 	mode="INOUT"/>  
+     <parameter property="tsFin" 					jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="bdMontoInicial" 			jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>  
+     <parameter property="intParaTipoConceptoCod" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemConcepto" 			jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intSucursalUsuarioPk" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intSubsucursalUsuarioPk" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intPersPersonaUsuarioPk" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="bdSaldoDetalle" 			jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>
+     <parameter property="bdMontoConcepto" 			jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>
+     <parameter property="intParaTipoDescuentoCod" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoFinConcepto" 	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parCuentaConcepto" class="CuentaConceptoDetalle">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intCuentaPk"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemCuentaConcepto"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCtaCptoDet"		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKYTipoConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoConceptoCod"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKCuentaYTipoConcepto" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoConceptoCod"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+
+  
+  <procedure id="grabar" parameterMap="parCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaConceptoDetalle" >
+	{ call PKG_CUENTACONCEPTODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.getListaPorPK(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKConcepto" parameterMap="parPorPKConcepto" resultMap="resCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.getListaPorPkConcepto(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKYTipoConcepto" parameterMap="parPorPKYTipoConcepto" resultMap="resCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.getListaPorPkConceptoYConcepto(?,?,?,?,?) }  
+  </procedure>
+
+  <procedure id="modificarDetallePorConcepto" parameterMap="parCuentaConcepto" >
+	{ call PKG_CUENTACONCEPTODETALLE.modificarDetallePorConcepto(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkCuentaYTipoConcepto" parameterMap="parPorPKCuentaYTipoConcepto" resultMap="resCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.getListaPorPkCuentaYConcepto(?,?,?,?) }
+  </procedure>
+  
+  
+  <procedure id="getMaxCuentaConceptoDetPorPKCuentaConcepto" parameterMap="parPorPKConcepto" resultMap="resCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.getMaxCtaCtoDetPorCtaCto(?,?,?,?) }  
+  </procedure>  
+  
+  <procedure id="getCuentaConceptoDetofCobranza" parameterMap="parPorPKConcepto" resultMap="resCuentaConceptoDetalle">
+	{ call PKG_CUENTACONCEPTODETALLE.getCuentaConceptoDetofCobranza(?,?,?,?) }  
+  </procedure>
+</sqlMap>  

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.common.domain.MaestroParametros" alias="beanMaestroParametros"/>
+    
+    <resultMap id="parameters.domain.parameters.resultMotivosAcceso" class="beanMaestroParametros" >
+	     <result property="intIdMaestro"      	column="IDMAESTRO" />
+	     <result property="intIdDetalle"      	column="IDDETALLE" />
+	     <result property="strDescripcion"      column="DESCRIPCION" />
+	     <result property="strAbreviatura"      column="ABREVIATURA" />
+	     <result property="intOrden"      		column="ORDEN" />
+	     <result property="intEstado"      		column="ESTADO" />
+    </resultMap>
+    
+    <parameterMap id="prmtListaMotivosAcceso" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    	 <parameter property="pIdParametro" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 			mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="parameters.domain.parameters.getListaMotivosAcceso" parameterMap="prmtListaMotivosAcceso" resultMap="parameters.domain.parameters.resultMotivosAcceso">
+		{ call PKG_TUMI.maestra_getlist( ?, ? ) }  
+    </procedure>
+</sqlMap>  

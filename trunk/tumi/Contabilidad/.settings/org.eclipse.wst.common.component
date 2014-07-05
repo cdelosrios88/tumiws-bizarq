@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Contabilidad">
+        <wb-resource deploy-path="/" source-path="/EarContent"/>
+        <dependent-module archiveName="ContabilidadEJB.jar" deploy-path="/" handle="module:/resource/ContabilidadEJB/ContabilidadEJB">
+            <dependent-object>Module_1346690541546</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ContabilidadWeb.war" deploy-path="/" handle="module:/resource/ContabilidadWeb/ContabilidadWeb">
+            <dependent-object>Module_1346690541547</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

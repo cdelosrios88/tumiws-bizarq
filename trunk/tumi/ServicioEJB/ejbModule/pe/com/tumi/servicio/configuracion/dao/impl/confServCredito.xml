@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConfServCreditoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.configuracion.domain.ConfServCredito" alias="ConfServCredito"/> 
+	
+  <resultMap id="resConfServCredito" class="ConfServCredito" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    		column="pItemreqaut_n" />
+     <result property="id.intItemCredito"  			column="pItemreqautcre_n" />
+     <result property="intParaTipocreditoCod"      	column="pPara_tipocredito_n_cod" />
+     <result property="intSocioItemCredito"    		column="pItemcredito_n" />
+     <result property="intParaEstadoCod"  			column="pPara_estado_n_cod" />
+     <result property="tsFechaRegistro"      		column="pFecharegistro_d" />
+     <result property="intPersPersonaUsuarioPk"    	column="pPers_personausuario_n_pk" />
+     <result property="tsFechaEliminacion"  		column="pFechaeliminacion_d" />
+     <result property="intPersPersonaEliminaPk"  	column="pPers_personaeliminar_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parConfServCredito" class="ConfServCredito">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"    	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemSolicitud"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipocreditoCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intSocioItemCredito" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro" 			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion" 		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+ <parameterMap id="parPorCabecera" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemSolicitud" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parConfServCredito">
+	{ call PKG_CONFCREDITO.grabar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConfServCredito" >
+	{ call PKG_CONFCREDITO.modificar(?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConfServCredito">
+	{ call PKG_CONFCREDITO.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorCabecera" parameterMap="parPorCabecera" resultMap="resConfServCredito">
+	{ call PKG_CONFCREDITO.getListaPorCabecera(?,?,?) }  
+  </procedure>
+    
+</sqlMap>  

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TransaccionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.Transaccion" alias="Transaccion"/> 
+	
+  <resultMap id="resTransaccion" class="Transaccion" >
+     <result property="id.intPersEmpresaPk"      		column="pPers_empresa_n_pk" />
+     <result property="id.intIdTransaccion"  			column="pIdtransaccion_n" />
+     <result property="strDescripcion"      			column="pDescripcion_v" />
+     <result property="strNombre"   					column="pNombre_v" />
+     <result property="intNivel" 						column="pNivel_n" />
+     <result property="intOrden"   						column="pOrden_n" />
+     <result property="intTipoMenu"    					column="pTipomenu_n" />
+     <result property="intCrecimiento"  				column="pCrecimiento_n" />
+     <result property="intTipoTransaccion"  			column="pTipotransaccion_n" />
+     <result property="intFinal"  						column="pFinal_n" />
+     <result property="intIdEstado"  					column="pIdestado_n" />
+     <result property="transaccion.id.intPersEmpresaPk" column="pPers_empresapadre_n_pk" />
+     <result property="transaccion.id.intIdTransaccion" column="pIdtransaccionpadre_n" />
+     <result property="tsFechaEliminacion" 				column="pFechaeliminacion_d" />
+     <result property="strModulo" 						column="pTran_modulo_v" />
+     <result property="strPagina" 						column="pTran_pagina_v" />
+     <result property="intPersPersonaEliminaPk" 		column="pPers_personaelimina_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parTransaccion" class="Transaccion">
+     <parameter property="id.intPersEmpresaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdTransaccion"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="strDescripcion" 					jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="strNombre"						jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+	 <parameter property="intNivel"							jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intOrden" 						jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoMenu" 						jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCrecimiento"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTipoTransaccion"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intFinal"							jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intIdEstado" 						jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="transaccion.id.intPersEmpresaPk" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="transaccion.id.intIdTransaccion"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"				jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="strModulo"						jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="strPagina"						jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKYIdPefil" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPrincipalPorIdEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPrincipalPorIdPerfil" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccion" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intTipoMenu" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdEstado" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBusquedaPorPKPadre" class="java.util.Map">
+   	 <parameter property="cursorLista" 				jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPadrePk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdTransaccionPadre" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intTipoMenu" 				jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdEstado" 				jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parTransaccion">
+	{ call PKG_TRANSACCION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parTransaccion" >
+	{ call PKG_TRANSACCION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaPorPK(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPrincipalPorIdEmpresa" parameterMap="parPrincipalPorIdEmpresa" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaPrincipalPorIdEmpresa(?,?) }
+  </procedure>
+  
+  <procedure id="getListaPrincipalPorIdPerfil" parameterMap="parPrincipalPorIdPerfil" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaPrincipalPorIdPerfil(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkPadre" parameterMap="parPorPK" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaPorPkPadre(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkPadreYIdPerfil" parameterMap="parPorPKYIdPefil" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaPorPkPadreYIdPerfil(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaDeBusquedaPrincipal" parameterMap="parBusqueda" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaDeBusquedaPrincipal(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaDeBusqueda" parameterMap="parBusqueda" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaDeBusqueda(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaDeBusquedaPorPkPadre" parameterMap="parBusquedaPorPKPadre" resultMap="resTransaccion">
+	{ call PKG_TRANSACCION.getListaDeBusquedaPorPkPadre(?,?,?,?,?) }
+  </procedure>
+  
+</sqlMap>  

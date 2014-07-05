@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CuentaConceptoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.movimiento.concepto.domain.CuentaConcepto" alias="CuentaConcepto"/> 
+	
+  <resultMap id="resCuentaConcepto" class="CuentaConcepto" >
+     <result property="id.intPersEmpresaPk"     	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intCuentaPk"    			column="pCSOC_CUENTA_N_PK" />
+     <result property="id.intItemCuentaConcepto"    column="pCMOV_ITEMCUENTACONCEPTO_N" />
+     <result property="bdSaldo"      				column="pCUCO_SALDO_N" />
+  </resultMap>
+  
+  <parameterMap id="parCuentaConcepto" class="CuentaConcepto">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intCuentaPk"			jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemCuentaConcepto"	jdbcType="NUMERIC"   javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="bdSaldo" 					jdbcType="NUMERIC"   javaType="java.math.BigDecimal" 	mode="INOUT"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCuentaConcepto"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPKCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuentaPk" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parCuentaConcepto">
+	{ call PKG_CUENTACONCEPTO.grabar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCuentaConcepto" >
+	{ call PKG_CUENTACONCEPTO.modificar(?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resCuentaConcepto">
+	{ call PKG_CUENTACONCEPTO.getListaPorPK(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPKCuenta" parameterMap="parPorPKCuenta" resultMap="resCuentaConcepto">
+	{ call PKG_CUENTACONCEPTO.getListaPorPkCuenta(?,?,?) }  
+  </procedure>
+  
+</sqlMap>  

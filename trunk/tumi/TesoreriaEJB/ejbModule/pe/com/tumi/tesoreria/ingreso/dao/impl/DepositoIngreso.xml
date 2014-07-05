@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DepositoIngresoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.ingreso.domain.DepositoIngreso" alias="DepositoIngreso"/> 
+	
+  <resultMap id="resDepositoIngreso" class="DepositoIngreso" >
+	<result property="id.intIdEmpresaDeposito"  		column="pempresadeposito" />
+	<result property="id.intItemDepositoGeneral"   		column="pitemdepositogeneral" />
+	<result property="id.intItemDepositoIngreso"   		column="pitemdepoingre" />
+    <result property="intIdEmpresa"      				column="pempresaingreso" />
+    <result property="intIdIngresoGeneral"     			column="pitemingresogeneral" />
+    <result property="bdMontoCancelado"      			column="pmontocancelado" />
+  </resultMap>
+  
+  <parameterMap id="parDepositoIngreso" class="DepositoIngreso">
+	 <parameter property="id.intIdEmpresaDeposito"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDepositoGeneral"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDepositoIngreso"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoCancelado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intIdEmpresaDeposito"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDepositoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDepositoIngreso"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorIngreso" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+	 <parameter property="intIdEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIdIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorIngresoDeposito" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intIdEmpresaDeposito"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDepositoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  
+  <procedure id="grabar" parameterMap="parDepositoIngreso">
+	{ call PKG_DEPOINGRE.grabar(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDepositoIngreso" >
+	{ call PKG_DEPOINGRE.modificar(?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDepositoIngreso">
+	{ call PKG_DEPOINGRE.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorIngreso" parameterMap="parPorIngreso" resultMap="resDepositoIngreso">
+	{ call PKG_DEPOINGRE.getListaPorIngreso(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorIngresoDeposito" parameterMap="parPorIngresoDeposito" resultMap="resDepositoIngreso">
+	{ call PKG_DEPOINGRE.getListaPorIngresoDeposito(?,?,?) }
+  </procedure>
+    
+</sqlMap>

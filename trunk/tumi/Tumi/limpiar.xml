@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<project default="main" basedir=".">
+<property name="project.src" value="${basedir}\src" />	
+<target name="main" description="Create project" depends="eliminar">
+	<echo>delete source.</echo>
+</target>
+
+<target name="eliminar" description="elimina fuentes">
+	<delete includeemptydirs="true">
+		<fileset dir="${project.src}" defaultexcludes="false">        
+			<include name="pe/**" />     
+			<include name="META-INF/**" />
+		</fileset> 
+	</delete>
+</target>
+</project>

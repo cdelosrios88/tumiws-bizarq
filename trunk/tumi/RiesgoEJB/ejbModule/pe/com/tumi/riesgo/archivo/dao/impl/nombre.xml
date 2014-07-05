@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="NombreDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.archivo.domain.Nombre" alias="Nombre"/> 
+	
+  <resultMap id="resNombre" class="Nombre" >
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intItemConfiguracion"    	column="pItem_archivoconf_n" />
+     <result property="id.intItemNombre"      		column="pItem_archivoconfnom_n" />
+     <result property="intParaTipoValorCod"   		column="pPara_tipovalor_n_cod" />
+     <result property="intParaTipoVariableCod"   	column="pPara_tipovariable_n_cod" />
+     <result property="strValorFijo"   				column="pValorfijo_v" />
+     <result property="intParaEstadoCod"   			column="pPara_estado_n_cod" />
+  </resultMap>
+  
+  <parameterMap id="parNombre" class="Nombre">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intItemConfiguracion"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intItemNombre" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoValorCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoVariableCod" 	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strValorFijo" 			jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod" 		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemConfiguracion" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemNombre" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIntItemConfiguracion" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemConfiguracion" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parNombre">
+	{ call PKG_ARCHIVOCONFNOMBRE.grabar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parNombre" >
+	{ call PKG_ARCHIVOCONFNOMBRE.modificar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resNombre">
+	{ call PKG_ARCHIVOCONFNOMBRE.getListaPorPk(?,?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorIntItemConfiguracion" parameterMap="parPorIntItemConfiguracion" resultMap="resNombre">
+	{ call PKG_ARCHIVOCONFNOMBRE.getListaPorItem_archivoconf(?,?) }  
+  </procedure>
+</sqlMap>  

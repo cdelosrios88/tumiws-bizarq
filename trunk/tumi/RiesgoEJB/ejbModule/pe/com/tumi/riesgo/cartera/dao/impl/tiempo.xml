@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="TiempoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.Tiempo" alias="Tiempo"/> 
+	
+  <resultMap id="resTiempo" class="Tiempo" >  
+  	<result property="id.intItemTiempo"      			column="pCrie_itemtiempo_n" />
+  	<result property="id.intParaTipoSbsCod"      		column="pPara_tiposbs_n_cod" />
+  	<result property="id.intParaTipoProvisionCod"   	column="pPara_tipoprovision_n_cod" />
+  	<result property="intItemCartera"      				column="pCrie_itemcartera_n" />
+  	<result property="intItemTipoCategoriaRiesgoCod"    column="pPara_tipocatriesgo_n_cod" />
+  	<result property="intTiempo"      					column="pTiem_tiempo_n" />
+  	<result property="intParaEstadoCod"      			column="pPara_estado_n_cod" />
+  	<!--  CGD-11.01.2014
+  	<result property="intParaTipoOperacion"      		column="pPara_tipooperacion_n_cod" />
+  	<result property="intParaTipoConcepto"      		column="pPara_tipoconcepto_n_cod" />
+  	-->
+  </resultMap>
+  
+  <parameterMap id="parTiempo" class="Tiempo">
+     <parameter property="id.intItemTiempo"					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoSbsCod"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoProvisionCod"		jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemCartera"					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemTipoCategoriaRiesgoCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intTiempo"						jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaEstadoCod"					jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <!--  CGD-11.01.2014
+     <parameter property="intParaTipoOperacion"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaTipoConcepto"				jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  	 -->
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemTiempo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	 <parameter property="intParaTipoSbsCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	 <parameter property="intParaTipoProvisionCod" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIntItemCartera" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intItemCartera" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parTiempo">
+	{ call PKG_TIEMPO.grabar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parTiempo" >
+	{ call PKG_TIEMPO.modificar(?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resTiempo">
+	{ call PKG_TIEMPO.getListaPorPk(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorIntItemCartera" parameterMap="parPorIntItemCartera" resultMap="resTiempo">
+	{ call PKG_TIEMPO.getListaPorIntItemCartera(?,?) }  
+  </procedure>
+</sqlMap>

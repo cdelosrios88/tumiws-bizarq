@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
+
+	<sqlMap resource="pe/com/tumi/riesgo/archivo/dao/impl/nombre.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/archivo/dao/impl/configuracion.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/archivo/dao/impl/confEstructura.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/archivo/dao/impl/confDetalle.xml"/>
+	
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/cartera.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/especificacion.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/plantilla.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/plantillaDetalle.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/prociclico.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/producto.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/provision.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/tiempo.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/carteracredito.xml"/>
+	<sqlMap resource="pe/com/tumi/riesgo/cartera/dao/impl/carteracreditoDetalle.xml"/>
+</sqlMapConfig>

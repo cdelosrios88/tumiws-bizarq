@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+	<application>
+		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<message-bundle>pe.com.tumi.resource.messages</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+	
+	<!-- Managed Beans de Principales -->
+
+	<managed-bean>
+		<managed-bean-name>asociativoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.asociativo.controller.AsociativoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Managed Beans de Popups -->
+	
+	<managed-bean>
+		<managed-bean-name>messageController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.mensaje.MessageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Navigation Rules --> 
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>inicio</from-outcome>
+			<to-view-id>/pages/index.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/credito/asociativo/asociativo.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>asociativo.asociativo</from-outcome>
+			<to-view-id>/pages/credito/asociativo/asociativo.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule> 
+	
+	<!--Convertidor Montos -->
+	
+	<!-- Agregado, cdelosrios, 27/11/2013 -->
+	<navigation-rule>
+		<from-view-id>/pages/credito/prevision/previsionSocial.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>credito.prevision.previsionSocial</from-outcome>
+			<to-view-id>/pages/credito/prevision/previsionSocial.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>fondoSepelioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.prevision.controller.FondoSepelioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fondoRetiroController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.prevision.controller.FondoRetiroController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 27/11/2013 -->
+	
+	<!-- Inicio agregado, cdelosrios, 26/12/2013 -->
+	<managed-bean>
+		<managed-bean-name>aesController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.prevision.controller.AesController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 26/12/2013 -->
+	
+	<!-- Inicio agregado, cdelosrios, 06/01/2014 -->
+	<navigation-rule>
+		<from-view-id>/pages/credito/servicios/servicios.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>credito.servicios.servicios</from-outcome>
+			<to-view-id>/pages/credito/servicios/servicios.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>prestamoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.servicios.controller.PrestamoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 06/01/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 17/01/2014 -->
+	<managed-bean>
+		<managed-bean-name>saldoServicioController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.servicios.controller.SaldoServicioController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 17/01/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 27/01/2014 -->
+	<managed-bean>
+		<managed-bean-name>primerDescuentoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.servicios.controller.PrimerDescuentoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 27/01/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 23/02/2014 -->
+	<navigation-rule>
+		<from-view-id>/pages/cobranza/planillaDescuento/planillaDescuento.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>cobranza.planillaDescuento.planillaDescuento</from-outcome>
+			<to-view-id>/pages/cobranza/planillaDescuento/planillaDescuento.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>planillaDescuentoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.cobranza.planillaDescuento.controller.PlanillaDescuentoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 23/02/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 04/03/2014 -->
+	<managed-bean>
+		<managed-bean-name>pendienteCobroController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.cobranza.planillaDescuento.controller.PendienteCobroController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 04/03/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 13/03/2014 -->
+	<managed-bean>
+		<managed-bean-name>morosidadPlanillaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.cobranza.planillaDescuento.controller.MorosidadPlanillaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 13/03/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 23/03/2014 -->
+	<managed-bean>
+		<managed-bean-name>socioDiferenciaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.cobranza.planillaDescuento.controller.SociosDiferenciaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 23/03/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 14/04/2014 -->
+	<navigation-rule>
+		<from-view-id>/pages/cobranza/centralRiesgo/centralRiesgo.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>cobranza.centralRiesgo.centralRiesgo</from-outcome>
+			<to-view-id>/pages/cobranza/centralRiesgo/centralRiesgo.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<managed-bean>
+		<managed-bean-name>carteraCreditoController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.cobranza.centralriesgo.controller.CarteraCreditoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 14/04/2014 -->
+	
+	<!-- Inicio agregado, cdelosrios, 23/05/2014 -->
+	<managed-bean>
+		<managed-bean-name>fenacrepController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.cobranza.centralriesgo.controller.FenacrepController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, cdelosrios, 23/05/2014 -->
+	
+	<converter>
+    	<description>Convertidor de montos al formato establecido por Tumi</description>
+    	<converter-id>ConvertidorMontos</converter-id>
+    	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
+	</converter>
+</faces-config>

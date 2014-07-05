@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoDescuentoCaptacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.CreditoDescuentoCaptacion" alias="CreditoDescuentoCaptacion"/> 
+	
+  <resultMap id="resDescuentoCaptacion" class="CreditoDescuentoCaptacion" >
+     <result property="id.intPersEmpresaPk"      	column="pPERS_EMPRESA_N_PK"/>
+     <result property="id.intParaTipoCreditoCod"	column="pPARA_TIPOCREDITO_N_COD"/>
+     <result property="id.intItemCredito"      		column="pITEMCREDITO_N"/>
+     <result property="id.intItemCreditoDescuento" 	column="pITEMCREDITODESCUENTO_N"/>
+     <result property="id.intParaTipoCaptacionCod" 	column="pTIPOCAPTACIONES_N"/>
+     <result property="intValor"	     			column="pVALOR_N"/>
+  </resultMap>
+  
+  <parameterMap id="parDescuentoCaptacion" class="CreditoDescuentoCaptacion">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intItemCreditoDescuento" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="id.intParaTipoCaptacionCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intValor" 					javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoDescuento" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCaptacionCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKCreditoDescuento" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoDescuento" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parDescuentoCaptacion">
+	{ call PKG_CONFCREDESCUENTOCAPTACION.grabar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDescuentoCaptacion" >
+	{ call PKG_CONFCREDESCUENTOCAPTACION.modificar(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resDescuentoCaptacion">
+	{ call PKG_CONFCREDESCUENTOCAPTACION.getListaPorPK(?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkCreditoDescuento" parameterMap="parPorPKCreditoDescuento" resultMap="resDescuentoCaptacion">
+	{ call PKG_CONFCREDESCUENTOCAPTACION.getListaPorPkCreditoDescuento(?,?,?,?,?) }
+  </procedure> 
+</sqlMap>

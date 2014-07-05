@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SucursalEmpresaDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.empresa.domain.Empresa" alias="SucursalEmpresa"/> 
+	
+  <resultMap id="resCantidadPorIdEmpresa" class="SucursalEmpresa" >
+     <result property="intCantidadSucursal" 	column="pCANTIDAD_SUCURSAL" />
+  </resultMap>
+  	
+  <parameterMap id="parCantidadPorIdEmpresa" class="java.util.Map">
+   	 <parameter property="cursorLista" 		javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="getCantidadSucursalPorIdEmpresa" parameterMap="parCantidadPorIdEmpresa" resultMap="resCantidadPorIdEmpresa">
+	{ call PKG_SUCURSAL_EMPRESA.getCantidadPorEmpresa(?,?) }  
+  </procedure>
+    
+</sqlMap>  

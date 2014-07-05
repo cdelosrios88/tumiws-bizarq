@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreCobranzaOperacionDaoIbatis">
+	<typeAlias type="pe.com.tumi.cobranza.cierremensual.domain.CierreCobranza" alias="CierreCobranza"/>
+	<typeAlias type="pe.com.tumi.cobranza.cierremensual.domain.CierreCobranzaOperacion" alias="CierreCobranzaOperacion"/>
+	<typeAlias type="pe.com.tumi.cobranza.cierremensual.domain.CierreCobranzaOperacionId" alias="CierreCobranzaOperacionId"/>
+	
+	<resultMap id="resCierreCobranzaOperacion" class="CierreCobranzaOperacion" >
+	   <result property="id.intEmpresaCierreCob" 		column="pIntIdEmpresaCieCob" />
+	   <result property="id.intParaTipoRegistroCob"     column="pIntParaTipoRegistro" />
+	   <result property="id.intPeriodoCierre"     		column="pIntPeriodoCierre" />
+	   <result property="id.intParaTipoSolicitudCtaCte" column="pIntParaTipoSolicitudCtaCte" />
+	   <result property="intParaEstadoCierre"   		column="pIntParaEstadoCierre" />
+	   <result property="intEmpresaRegistro"   			column="pIntEmpresaRegistro" />
+	   <result property="intPersonaRegistro"   			column="pIntPersonaRegistro" />
+	   <result property="tsFechaRegistro"   			column="pTsFechaRegistro" />
+	</resultMap>
+  
+	<select id="getListaCierreOperacionPorPkCierreCobranza" resultMap="resCierreCobranzaOperacion" parameterClass="CierreCobranza">
+		SELECT 	CC.PERS_EMPRESACIECOB_N_PK 			pIntIdEmpresaCieCob,
+				CC.PARA_TIPOREGISTRO_N_COD			pIntParaTipoRegistro,
+				CC.CCOB_PERIODOCIERRE_N				pIntPeriodoCierre,
+				CC.PARA_TIPOSOLICITUDCTACTE_N_COD	pIntParaTipoSolicitudCtaCte,
+				CC.PARA_ESTADOCIERRE_N_COD			pIntParaEstadoCierre,
+				CC.PERS_EMPRESAREGISTRO_N_PK		pIntEmpresaRegistro,
+				CC.PERS_PERSONAREGISTRO_N_PK		pIntPersonaRegistro,
+				CC.CICO_FECHAREGISTRO_D				pTsFechaRegistro
+		FROM CCO_CIERRECOBRANZAOPER CC
+	   WHERE CC.PERS_EMPRESACIECOB_N_PK = #intEmpresaCierreCobranza#
+ 		 AND CC.PARA_TIPOREGISTRO_N_COD = #intParaTipoRegistro#
+		 AND CC.CCOB_PERIODOCIERRE_N = #intParaPeriodoCierre#
+	   ORDER BY 1,2,3,4
+	</select>
+	
+	<select id="getCierreCobranzaOperacionPorPK" resultMap="resCierreCobranzaOperacion" parameterClass="CierreCobranzaOperacionId">
+		SELECT 	CC.PERS_EMPRESACIECOB_N_PK 			pIntIdEmpresaCieCob,
+				CC.PARA_TIPOREGISTRO_N_COD			pIntParaTipoRegistro,
+				CC.CCOB_PERIODOCIERRE_N				pIntPeriodoCierre,
+				CC.PARA_TIPOSOLICITUDCTACTE_N_COD	pIntParaTipoSolicitudCtaCte,
+				CC.PARA_ESTADOCIERRE_N_COD			pIntParaEstadoCierre,
+				CC.PERS_EMPRESAREGISTRO_N_PK		pIntEmpresaRegistro,
+				CC.PERS_PERSONAREGISTRO_N_PK		pIntPersonaRegistro,
+				CC.CICO_FECHAREGISTRO_D				pTsFechaRegistro
+		FROM CCO_CIERRECOBRANZAOPER CC
+	   WHERE CC.PERS_EMPRESACIECOB_N_PK = #intEmpresaCierreCob#
+ 		 AND CC.PARA_TIPOREGISTRO_N_COD = #intParaTipoRegistroCob#
+		 AND CC.CCOB_PERIODOCIERRE_N = #intPeriodoCierre#
+		 AND CC.PARA_TIPOSOLICITUDCTACTE_N_COD = #intParaTipoSolicitudCtaCte#
+	</select>
+	
+	<insert id="grabar" parameterClass="CierreCobranzaOperacion">
+		INSERT INTO CCO_CIERRECOBRANZAOPER(
+			PERS_EMPRESACIECOB_N_PK, PARA_TIPOREGISTRO_N_COD, CCOB_PERIODOCIERRE_N, PARA_TIPOSOLICITUDCTACTE_N_COD, 
+			PARA_ESTADOCIERRE_N_COD, PERS_EMPRESAREGISTRO_N_PK, PERS_PERSONAREGISTRO_N_PK, CICO_FECHAREGISTRO_D)
+		VALUES(
+			#id.intEmpresaCierreCob#, #id.intParaTipoRegistroCob#, #id.intPeriodoCierre#, #id.intParaTipoSolicitudCtaCte#,
+			#intParaEstadoCierre#, #intEmpresaRegistro#, #intPersonaRegistro#, #tsFechaRegistro#
+		)
+	</insert>
+	
+	<update id="modificar" parameterClass="CierreCobranzaOperacion">
+		UPDATE CCO_CIERRECOBRANZAOPER
+			SET PARA_ESTADOCIERRE_N_COD = #intParaEstadoCierre#,
+				PERS_EMPRESAREGISTRO_N_PK = #intEmpresaRegistro#,
+				PERS_PERSONAREGISTRO_N_PK = #intPersonaRegistro#,
+				CICO_FECHAREGISTRO_D = #tsFechaRegistro#
+		  WHERE PERS_EMPRESACIECOB_N_PK = #id.intEmpresaCierreCob#
+		  	AND PARA_TIPOREGISTRO_N_COD = #id.intParaTipoRegistroCob#
+			AND CCOB_PERIODOCIERRE_N = #id.intPeriodoCierre#
+			AND PARA_TIPOSOLICITUDCTACTE_N_COD = #id.intParaTipoSolicitudCtaCte#
+	</update>
+	
+</sqlMap>

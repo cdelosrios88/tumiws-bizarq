@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MovilidadDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.MovilidadDetalle" alias="MovilidadDetalle"/> 
+	
+  <resultMap id="resMovilidadDetalle" class="MovilidadDetalle" >
+	<result property="id.intPersEmpresaMovilidad"  	column="pPers_empresamovilidad" />
+	<result property="id.intItemMovilidad"   		column="pTeso_itemplamovilidad" />
+	<result property="id.intItemMovilidadDetalle"	column="pTeso_itemplamovilidaddet" />
+	<result property="dtFechaMovilidad"   			column="pPmde_fechamovilidad" />
+    <result property="intParaTipoMovilidad"      	column="pPara_tipomovilidad" />
+    <result property="strMotivo"     				column="pPmde_motivomovilidad" />
+    <result property="strDestino"      				column="pPmde_destinomovilidad" />
+    <result property="bdMonto"      				column="pPmde_montomovilidad" />
+    <result property="intParaEstado"      			column="pPara_estado" />
+    <result property="tsFechaRegistro"      		column="pPmde_fecharegistro" />
+    <result property="intPersEmpresaUsuario"      	column="pPers_empresausuario" />
+    <result property="intPersPersonaUsuario"      	column="pPers_personausuario" />
+    <result property="tsFechaEliminacion"      		column="pPmde_fechaeliminacion" />
+    <result property="intPersEmpresaEliminacion"    column="pPers_empresaelimina" />
+    <result property="intPersPersonaEliminacion"    column="pPers_personaelimina" />
+  </resultMap>
+  
+  <parameterMap id="parMovilidadDetalle" class="MovilidadDetalle">
+	 <parameter property="id.intPersEmpresaMovilidad"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemMovilidad"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemMovilidadDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="dtFechaMovilidad"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="intParaTipoMovilidad"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strMotivo"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="strDestino"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdMonto"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaEliminacion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaEliminacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaEliminacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaMovilidad"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemMovilidad"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemMovilidadDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorMovilidad" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresaMovilidad"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemMovilidad"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+    
+  <procedure id="grabar" parameterMap="parMovilidadDetalle">
+	{ call PKG_PLAMOVILIDADDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parMovilidadDetalle" >
+	{ call PKG_PLAMOVILIDADDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resMovilidadDetalle">
+	{ call PKG_PLAMOVILIDADDET.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorMovilidad" parameterMap="parPorMovilidad" resultMap="resMovilidadDetalle">
+	{ call PKG_PLAMOVILIDADDET.getListaPorPlaMovilidad(?,?,?) }
+  </procedure>
+</sqlMap>

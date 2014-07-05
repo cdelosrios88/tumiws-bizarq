@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ExpedienteCreditoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito" alias="ExpedienteCredito"/> 
+  <typeAlias type="pe.com.tumi.servicio.solicitudPrestamo.domain.composite.ExpedienteCreditoComp" alias="ExpedienteCreditoComp"/>
+  <typeAlias type="pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp" alias="RequisitoCreditoComp"/> 
+  
+	
+  <resultMap id="resExpedienteCredito" class="ExpedienteCredito" >
+  	 <result property="id.intPersEmpresaPk"  			column="pPERS_EMPRESA_N_PK" />
+  	 <result property="id.intCuentaPk"  				column="pCSOC_CUENTA_N_PK" />
+  	 <result property="id.intItemExpediente"  			column="pCSER_ITEMEXPEDIENTE_N" />
+  	 <result property="id.intItemDetExpediente"  		column="pCSER_ITEMDETEXPEDIENTE_N" />
+     <result property="intParaSubTipoOperacionCod"  	column="pPARA_SUBTIPOOPERACION_N_COD" />
+     <result property="intPersEmpresaCreditoPk"  		column="pPERS_EMPRESACREDITO_N_PK" />
+     <result property="intParaTipoCreditoCod"     		column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="intItemCredito"    				column="pCSOC_ITEMCREDITO_N" />
+     <result property="bdPorcentajeInteres"  			column="pEXCR_PORCENTAJEINTERES_N" />
+     <result property="bdPorcentajeGravamen"      		column="pEXCR_PORCENTAJEGRAVAMEN_N" />
+     <result property="bdPorcentajeAporte"    			column="pEXCR_PORCENTAJEAPORTE_N" />
+     <result property="bdMontoTotal"  					column="pEXCR_MONTOTOTAL_N" />
+     <result property="bdMontoGravamen"  				column="pEXCR_MONTOGRAVAMEN_N" />
+     <result property="bdMontoAporte"  					column="pEXCR_MONTOAPORTE_N" />
+     <result property="bdMontoInteresAtrasado"  		column="pEXCR_MONTOINTERESATRASADO_N" />
+     <result property="bdMontoMoraAtrasada"  			column="pEXCR_MONTOMORAATRASADA_N" />
+     <result property="bdMontoSolicitado"  				column="pEXCR_MONTOSOLICITADO_N" />
+     <result property="intNumeroCuota"  				column="pEXCR_NUMEROCUOTA_N" />
+     <result property="intParaFinalidadCod"  			column="pPARA_FINALIDAD_N_COD" />
+     <result property="intPersEmpresaRefPk"  			column="pPERS_EMPRESAREF_N_PK" />
+     <result property="intCuentaRefPk"  				column="pCSOC_CUENTAREF_N_PK" />
+     <result property="intItemExpedienteRef"  			column="pCSER_ITEMEXPEDIENTEREF_N" />
+     <result property="intItemDetExpedienteRef"  		column="pCSER_ITEMDETEXPEDIENTEREF_N" />
+     <result property="intParaDocumentoGeneralCod" 		column="pPARA_DOCUMENTOGENERAL_N_COD" />
+     <result property="strObservacion" 					column="pEXCR_OBSERVACION_V" />
+         
+     <result property="intPersEmpresaSucAdministra" 	column="pPERS_EMPSUCADM_N_PK" />
+     <result property="intSucuIdSucursalAdministra" 	column="pSUCU_IDSUCADM_N_PK" />
+     <result property="intSudeIdSubSucursalAdministra"  column="pSUDE_IDSUBSUCADM_N" />
+  </resultMap>
+
+
+	<resultMap id="resExpedienteCreditoBusqueda" class="ExpedienteCredito" >
+	 	<result property="id.intPersEmpresaPk"  			column="pPERS_EMPRESA_N_PK" />
+	 	<result property="id.intCuentaPk"  					column="pCSOC_CUENTA_N_PK" />
+	 	<result property="id.intItemExpediente"  			column="pCSER_ITEMEXPEDIENTE_N" />
+	 	<result property="id.intItemDetExpediente"  		column="pCSER_ITEMDETEXPEDIENTE_N" />
+	    <result property="intParaSubTipoOperacionCod"  		column="pPARA_SUBTIPOOPERACION_N_COD" />
+	    <result property="intPersEmpresaCreditoPk"  		column="pPERS_EMPRESACREDITO_N_PK" />
+	    <result property="intParaTipoCreditoCod"     		column="pPARA_TIPOCREDITO_N_COD" />
+	    <result property="intItemCredito"    				column="pCSOC_ITEMCREDITO_N" />
+	    <result property="bdPorcentajeInteres"  			column="pEXCR_PORCENTAJEINTERES_N" />
+	    <result property="bdPorcentajeGravamen"      		column="pEXCR_PORCENTAJEGRAVAMEN_N" />
+	    <result property="bdPorcentajeAporte"    			column="pEXCR_PORCENTAJEAPORTE_N" />
+	    <result property="bdMontoTotal"  					column="pEXCR_MONTOTOTAL_N" />
+	    <result property="bdMontoGravamen"  				column="pEXCR_MONTOGRAVAMEN_N" />
+	    <result property="bdMontoAporte"  					column="pEXCR_MONTOAPORTE_N" />
+	    <result property="bdMontoInteresAtrasado"  			column="pEXCR_MONTOINTERESATRASADO_N" />
+	    <result property="bdMontoMoraAtrasada"  			column="pEXCR_MONTOMORAATRASADA_N" />
+	    <result property="bdMontoSolicitado"  				column="pEXCR_MONTOSOLICITADO_N" />
+	    <result property="intNumeroCuota"  					column="pEXCR_NUMEROCUOTA_N" />
+	    <result property="intParaFinalidadCod"  			column="pPARA_FINALIDAD_N_COD" />
+	    <result property="intPersEmpresaRefPk"  			column="pPERS_EMPRESAREF_N_PK" />
+	    <result property="intCuentaRefPk"  					column="pCSOC_CUENTAREF_N_PK" />
+	    <result property="intItemExpedienteRef"  			column="pCSER_ITEMEXPEDIENTEREF_N" />
+	    <result property="intItemDetExpedienteRef"  		column="pCSER_ITEMDETEXPEDIENTEREF_N" />
+	    <result property="intParaDocumentoGeneralCod" 		column="pPARA_DOCUMENTOGENERAL_N_COD" />
+	    <result property="strObservacion" 					column="pEXCR_OBSERVACION_V" />    
+	    <result property="intPersEmpresaSucAdministra" 		column="pPERS_EMPSUCADM_N_PK" />
+	    <result property="intSucuIdSucursalAdministra" 		column="pSUCU_IDSUCADM_N_PK" />
+	    <result property="intSudeIdSubSucursalAdministra"   column="pSUDE_IDSUBSUCADM_N" />
+	    
+	    <result property="intItemEstadoUltimo"  			column="pCSER_ITEMESTADO_N_ULT" />
+	    <result property="intEstadoCreditoUltimo"  			column="pPARA_ESTADOCREDITO_N_COD_ULT" />
+	    <result property="intSucursalEstadoUltimo"  		column="pSUCU_IDUSUSUCURSAL_N_PK_ULT" />
+	    <result property="intItemEstadoInicial"  			column="pCSER_ITEMESTADO_N_INI" />
+	    <result property="intEstadoCreditoInicial"  		column="pPARA_ESTADOCREDITO_N_COD_INI" />
+	    <result property="intSucursalEstadoInicial"  		column="pSUCU_IDUSUSUCURSAL_N_PK_INI" />
+	    <result property="strNroCuentaExpediente"  			column="pCUEN_NROCUENTA_V" />
+	    <result property="strNombreCompletoPersona"  		column="pNATU_NOMBRE_PERSONA" />
+	    <result property="intParaTipoCreditoEmpresa"  		column="pPARA_TIPOCREDITOEMPRESA" />
+	</resultMap>
+
+  <resultMap id="resCategoriaRiesgoExpCred" class="ExpedienteCredito" >
+     <result property="intPeriodoCartera"	    		column="pPERIODOCARTERA"/>
+     <result property="intParaTipoCategoriaRiesgo"	    column="pTIPOCATEGORIARIESGO"/>
+  </resultMap>
+  
+  <resultMap id="resRequisitoParaGiro" class="RequisitoCreditoComp" >
+     <result property="intEmpresa"	    			column="pEMPRESA"/>
+     <result property="intItemRequisito"	    	column="pITEMREQAUT"/>
+     <result property="intItemRequisitoDetalle"	    column="pITEMREQAUTDETALLE"/>
+     <result property="strDescripcionRequisito"	    column="pDESCRIPCION"/>
+     <result property="intParaTipoCredito"	    	column="pTIPOCREDITO"/>
+     <result property="intItemCredito"	    		column="pITEMCREDITO"/>
+  </resultMap>  
+  
+  <parameterMap id="parExpedienteCredito" class="ExpedienteCredito">
+     <parameter property="id.intPersEmpresaPk"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intCuentaPk"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemExpediente"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intItemDetExpediente"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intParaSubTipoOperacionCod"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intPersEmpresaCreditoPk" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intParaTipoCreditoCod" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemCredito" 					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="bdPorcentajeInteres" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdPorcentajeGravamen" 			jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdPorcentajeAporte" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoTotal" 					jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoGravamen" 					jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoAporte" 					jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoInteresAtrasado" 			jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoMoraAtrasada" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="bdMontoSolicitado" 				jdbcType="NUMERIC"  	javaType="java.math.BigDecimal" mode="INOUT"/>
+     <parameter property="intNumeroCuota" 					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaFinalidadCod" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersEmpresaRefPk" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intCuentaRefPk" 					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemExpedienteRef" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intItemDetExpedienteRef" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intParaDocumentoGeneralCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strObservacion" 					jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     
+     <parameter property="intPersEmpresaSucAdministra" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intSucuIdSucursalAdministra" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intSudeIdSubSucursalAdministra" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCuenta" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorTipoCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+     <parameter property="intParaTipoCreditoCod" 	javaType="java.lang.Integer" jdbcType="NUMERIC"  mode="IN"/>
+  </parameterMap>
+  
+  
+  <parameterMap id="parPorExpediente" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemExpediente" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+    <parameterMap id="parPorExpedienteCompBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intBusqTipo" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>   	
+   	 <parameter property="strBusqCadena" 			javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="strBusqNroSol" 			javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="intBusqSucursal" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intBusqEstado" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="dtBusqFechaEstadoDesde" 	javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+   	 <parameter property="dtBusqFechaEstadoHasta" 	javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorExpedienteCompBusqueda2" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intBusqTipo" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="strBusqCadena" 				javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="strBusqNroSol" 				javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="intBusqSucursal" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intBusqEstado" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="dtBusqFechaEstadoDesde" 		javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+   	 <parameter property="dtBusqFechaEstadoHasta" 		javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+   	 <parameter property="intBusqTipoCreditoEmpresa"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+<parameterMap id="parPorActividadCompBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intBusqTipo" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="strBusqCadena" 				javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="strBusqNroSol" 				javaType="java.lang.String"   jdbcType="VARCHAR" 	   mode="IN"/>
+   	 <parameter property="intBusqSucursal" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intBusqEstado" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="dtBusqFechaEstadoDesde" 		javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+   	 <parameter property="dtBusqFechaEstadoHasta" 		javaType="java.util.Date"     jdbcType="DATE" 	   	   mode="IN"/>
+   	 <parameter property="intBusqTipoCreditoEmpresa"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intBusqItemCredito"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parRiegoPorExpCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 					javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="intItemExpediente" 			javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="intItemDetExpediente" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   	 mode="IN"/>
+  </parameterMap>  
+
+  <parameterMap id="parPorTipoCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCredito" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parExpedienteCredito" >
+	{ call PKG_CSE_EXPEDIENTECREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaPorPk(?,?,?,?,?) }
+  </procedure>
+  <!--
+  <procedure id="getListaBusquedaPorExpCredComp" parameterMap="parPorBusqueda" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusquedaPorExpCredComp(?) }
+  </procedure>
+  -->
+    <procedure id="getListaBusquedaPorExpCredComp" parameterMap="parPorTipoCredito" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusquedaPorExpCredComp(?,?) }
+  </procedure>
+  
+  <procedure id="getListaBusquedaAutorizacionPorExpCredComp" parameterMap="parPorBusqueda" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaAutorizacionPorExpCred(?) }
+  </procedure>
+  
+  <procedure id="getListaPorCuenta" parameterMap="parPorCuenta" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaPorCuenta(?,?,?) }
+  </procedure>
+  
+  <procedure id="grabarRefinanciamiento" parameterMap="parExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.grabarRefinanciamiento(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaBusquedaPorExpRefComp" parameterMap="parPorBusqueda" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusquedaPorExpRefComp(?) }
+  </procedure>
+  
+  <procedure id="getListaPorExpediente" parameterMap="parPorExpediente" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaPorExpediente(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaBusquedaPorExpActComp" parameterMap="parPorBusqueda" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusquedaPorExpActComp(?) }
+  </procedure>
+  
+  <procedure id="getListaBusqRefinanFiltros" parameterMap="parPorExpedienteCompBusqueda2" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqRefinanFiltros(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  <procedure id="getListaBusqAutRefFiltros" parameterMap="parPorExpedienteCompBusqueda2" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqAutRefFiltros(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaBusqCreditoFiltros" parameterMap="parPorExpedienteCompBusqueda2" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqCreditoFiltros(?,?,?,?,?,?,?,?,?) }
+  </procedure>  
+  <procedure id="getListaBusqCreditosAutFiltros" parameterMap="parPorExpedienteCompBusqueda2" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqCreditoAutFiltros(?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaBusqActividadFiltros" parameterMap="parPorActividadCompBusqueda" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqActividadFiltros(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  <procedure id="getListaBusqActAutFiltros" parameterMap="parPorActividadCompBusqueda" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqActAutFiltros(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaBusqCreditoEspecialFiltros" parameterMap="parPorExpedienteCompBusqueda2" resultMap="resExpedienteCreditoBusqueda">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getListaBusqCredEspFiltros(?,?,?,?,?,?,?,?,?) }
+  </procedure>  
+  
+  <procedure id="getRiesgoExpCredACancelar" parameterMap="parRiegoPorExpCredito" resultMap="resCategoriaRiesgoExpCred">
+	{ call PKG_GIROPRESTAMO.getRiesgoExpCredACancelar(?,?,?,?,?) }
+  </procedure>   
+  
+  <procedure id="getMaxExpedienteRefinan" parameterMap="parPorExpediente" resultMap="resExpedienteCredito">
+	{ call PKG_CSE_EXPEDIENTECREDITO.getMaxExpedienteRefinan(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getRequisitoGiroPrestamo" parameterMap="parPorTipoCredito" resultMap="resRequisitoParaGiro">
+	{ call PKG_GIROPRESTAMO.getRequisitoGiroPrestamo(?,?,?,?) }
+  </procedure>     
+</sqlMap>

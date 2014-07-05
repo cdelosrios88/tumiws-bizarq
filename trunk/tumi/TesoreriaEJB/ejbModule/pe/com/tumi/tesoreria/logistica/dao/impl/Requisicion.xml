@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="RequisicionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.Requisicion" alias="Requisicion"/> 
+	
+  <resultMap id="resRequisicion" class="Requisicion" >
+	<result property="id.intPersEmpresa"  			column="pempresarequisicion" />
+	<result property="id.intItemRequisicion"   		column="pitemrequisicion" />
+	<result property="tsFechaRequisicion"   		column="pfecharequisicion" />
+	<result property="intParaTipoRequisicion"   	column="ptiporequisicion" />
+	<result property="intParaTipoAprobacion"   		column="ptipoaprobacion" />
+	<result property="intPersEmpresaSolicitante"   	column="pempresasolicitante" />
+	<result property="intPersPersonaSolicitante"   	column="ppersonasolicitante" />
+	<result property="intSucuIdSucursal"   			column="pidsucursalsolicitante" />
+	<result property="intIdArea"   					column="pidarea" />
+	<result property="strObservacion"   			column="pobservacion" />
+	<result property="bdMontoEstimado"   			column="pmontoestimado" />
+	<result property="intParaTipoMoneda"   			column="ptipomoneda" />
+	<result property="intParaEstado"   				column="pestado" />
+	<result property="intPersEmpresaJefatura"   	column="pempresajefatura" />
+	<result property="intPersPersonaJefatura"   	column="ppersonajefatura" />
+	<result property="intSucuIdSucursalJefatura"   	column="pidsucursaljefatura" />
+	<result property="strFundamentoJefatura"   		column="pfundamentojefatura" />
+	<result property="intParaEstadoAprobacionJefatura" column="pestadoaprobacionjef" />
+	<result property="intPersEmpresaLogistica"   	column="pempresalogistica" />
+	<result property="intPersPersonaLogistica"   	column="ppersonalogistica" />
+	<result property="intSucuIdSucursalLogistica"   column="pidusucursallogistica" />
+	<result property="strFundamentoLogistica"   	column="pfundamentologistica" />
+	<result property="intParaEstadoAprobacionLogistica" column="pestadoaprobacionlog" />
+	<result property="tsFechaAnula"   				column="pfechaanula" />
+	<result property="intPersEmpresaAnula"   		column="pempresaanula" />
+	<result property="intPersPersonaAnula"   		column="ppersonaanula" />	
+	<result property="bdMontoJefatura"   			column="pmontojefatura" />
+	<result property="bdMontoLogistica"   			column="pmontologistica" />
+  </resultMap>
+  
+  <parameterMap id="parRequisicion" class="Requisicion">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRequisicion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intParaTipoRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoAprobacion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaSolicitante"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaSolicitante"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdArea"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="bdMontoEstimado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaJefatura"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaJefatura"   	javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursalJefatura"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strFundamentoJefatura"		javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstadoAprobacionJefatura"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaLogistica"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaLogistica"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursalLogistica"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strFundamentoLogistica"		javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstadoAprobacionLogistica"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoJefatura"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoLogistica"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoAprobacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+	 <!-- Agregado por cdelosrios, 29/09/2013 -->
+	 <parameter property="dtFecRequisicionIni"		javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="dtFecRequisicionFin"		javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+	 <parameter property="intItemRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Fin agregado por cdelosrios, 29/09/2013 -->
+  </parameterMap>
+  
+  <parameterMap id="parParaReferencia" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intParaTipoAprobacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <!-- Agregado por cdelosrios, 29/09/2013 -->
+  <parameterMap id="parParaOrdenCompra" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intParaTipoAprobacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intItemRequisicion"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin Agregado por cdelosrios, 29/09/2013 -->
+  
+  <procedure id="grabar" parameterMap="parRequisicion">
+	{ call PKG_REQUISICION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parRequisicion" >
+	{ call PKG_REQUISICION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resRequisicion">
+	{ call PKG_REQUISICION.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resRequisicion">
+	{ call PKG_REQUISICION.getListaPorBuscar(?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaReferencia" parameterMap="parParaReferencia" resultMap="resRequisicion">
+	{ call PKG_REQUISICION.getListaReferencia(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaParaOrdenCompra" parameterMap="parParaOrdenCompra" resultMap="resRequisicion">
+	{ call PKG_REQUISICION.getListaParaOrdenCompra(?,?,?,?) }
+  </procedure>
+  
+</sqlMap>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.adminCuenta.domain.PersonaJuridica" alias="juri"/>
+    
+    <resultMap id="perjuridica.domain.perjuridica.resultPerJuridica" class="juri">
+	     <result property="intIdPersona"      			column="IDPERSONA"/>
+	     <result property="strRazonSocial"      		column="RAZONSOCIAL"/>
+	     <result property="strNombreComercial"      	column="NOMBRECOMERCIAL"/>
+	     <result property="strSiglas"      				column="SIGLAS"/>
+	     <result property="strFechaInscripcion"      	column="FECHA_INSCRIPCION"/>
+	     <result property="intEstadoContribuyente"      column="IDESTADO_CONTRIB"/>
+	     <result property="strEstadoContribuyente"      column="ESTADO_CONTRIB"/>
+	     <result property="intRuc"      				column="RUC"/>
+	     <result property="intNumTrabajadores"      	column="NROTRABAJADORES"/>
+	     <result property="intTipoContribuyente"      	column="IDTIPO_CONTRIBUYENTE"/>
+	     <result property="intCondContribuyente"      	column="IDCONDICION_CONTRIB"/>
+	     <result property="strCondContribuyente"      	column="CONDICION_CONTRIB"/>
+	     <result property="intSistemaContable"      	column="IDTIPOCONTABILIDAD"/>
+	     <result property="strSistemaContable"      	column="TIPO_CONTABILIDAD"/>
+	     <result property="intEmisionComprobante"      	column="IDTIPO_COMPROBANTE"/>
+	     <result property="strEmisionComprobante"      	column="EMISION_COMPROBANTE"/>
+	     <result property="intComercioExterior"      	column="IDCOMER_EXTERIOR"/>
+	     <result property="strComercioExterior"      	column="COMER_EXTERIOR"/>
+	     <result property="intTipoPersona"      		column="IDTIPO_PERSONA"/>
+	     <result property="strTipoPersona"      		column="TIPO_PERSONA"/>
+    </resultMap>
+    
+    <parameterMap id="perjuridica.domain.perjuridica.prmtPerJuridica" class="juri">
+    	 <parameter property="intIdPersona" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="INOUT"/>
+    	 <parameter property="strRazonSocial" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 		mode="IN"/>
+    	 <parameter property="strFechaInscripcion" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 		mode="IN"/>
+    	 <parameter property="strNombreComercial" 		javaType="java.lang.String" 	jdbcType="VARCHAR" 		mode="IN"/>
+    	 <parameter property="strSiglas"				javaType="java.lang.String" 	jdbcType="VARCHAR" 		mode="IN"/>
+    	 <parameter property="intNumTrabajadores" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intTipoEmpresa" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intTipoContribuyente" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intEstadoContribuyente"	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intCondContribuyente" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intEmisionComprobante" 	javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intSistemaContable" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intComercioExterior" 		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intTipoPersona" 			javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intRuc" 					javaType="java.lang.Long" 		jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="intEstado"				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="IN"/>
+    	 <parameter property="strFechaBajaRuc" 			javaType="java.lang.String" 	jdbcType="VARCHAR" 		mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="perjuridica.domain.perjuridica.prmtGetPerJuridica" class="juri">
+    	 <parameter property="intRuc" 					javaType="java.lang.Long" 		jdbcType="NUMERIC" 			mode="IN"/>
+    	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="perjuridica.domain.perjuridica.grabarPerJuridica" parameterMap="perjuridica.domain.perjuridica.prmtPerJuridica">
+		{ call PKG_ADMINCUENTA.grabar_perjuridica( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="perjuridica.domain.perjuridica.getPerJuridica" parameterMap="perjuridica.domain.perjuridica.prmtGetPerJuridica" resultMap="perjuridica.domain.perjuridica.resultPerJuridica">
+		{ call PKG_ADMINCUENTA.obtener_perjuridica( ?, ? ) }  
+    </procedure>
+</sqlMap>  

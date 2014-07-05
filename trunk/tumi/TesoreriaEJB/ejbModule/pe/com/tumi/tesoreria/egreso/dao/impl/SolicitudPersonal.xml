@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudPersonalDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.SolicitudPersonal" alias="SolicitudPersonal"/> 
+	
+  <resultMap id="resSolicitudPersonal" class="SolicitudPersonal" >
+	<result property="id.intPersEmpresa"  			column="pempresainforme" />
+	<result property="id.intItemSolicitudPersonal"  column="piteminformegerencia" />
+	<result property="tsFechaRegistro"   			column="pfecharegistro" />
+    <result property="intParaDocumentoGeneral"      column="pdocumentogeneral" />
+    <result property="intParaSubTipoDocumentoPlanilla"	column="psubtipodocplanilla" />
+    <result property="intParaAgrupacionPago"      	column="pagrupacionpago" />
+    <result property="intPersEmpresaPersona"      	column="pempresapersona" />
+    <result property="intPersPersonaGiro"      		column="ppersonagiro" />
+    <result property="intParaTipoMoneda"      		column="ptipomoneda" />
+    <result property="bdMontoTotalSolicitud"      	column="pmontototalsolicitud" />
+    <result property="intPeriodoPago"      			column="pperiodopago" />
+    <result property="strTipoPlanilla"      		column="ptipoplanilla" />
+    <result property="intParaTipoPeriodo"      		column="ptipoperiodo" />
+    <result property="strObservacion"      			column="pobservacion" />
+    <result property="intParaEstado"     			column="pestado" />
+    <result property="intPersEmpresaUsuario"     	column="pempresausuario" />
+    <result property="intPersPersonaUsuario"      	column="ppersonausuario" />
+    <result property="tsFechaEliminacion"     		column="pfechaeliminacion" />
+    <result property="intPersEmpresaElimina"     	column="pempresaelimina" />
+    <result property="intPersPersonaElimina"      	column="ppersonaelimina" />
+    <result property="intPersEmpresaLibro"      	column="pempresalibro" />
+    <result property="intContPeriodoLibro"      	column="pperiodolibro" />
+    <result property="intContCodigoLibro"      		column="pcodigolibro" />
+    <result property="bdMontoSaldoSolicitud"      	column="pmontosaldosolicitud" />
+    <result property="intParaEstadoPago"      		column="pestadopago" />
+    <result property="intParaTipoSustento"      	column="ptiposustento" />
+    <result property="intItemArchivoSustento"     	column="pitemarchivosustento" />
+    <result property="intItemHistoricoSustento"     column="pitemhistoricosustento" />
+    <result property="intSucuIdSucursal"     		column="pidsucursal" />
+    <result property="intSudeIdSubsucursal"     	column="pidsubsucursal" />
+  </resultMap>
+  
+  <parameterMap id="parSolicitudPersonal" class="SolicitudPersonal">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemSolicitudPersonal"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intParaDocumentoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaSubTipoDocumentoPlanilla"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaAgrupacionPago"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaPersona"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaGiro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoMoneda"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoTotalSolicitud"		javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPeriodoPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strTipoPlanilla"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaTipoPeriodo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="strObservacion"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaUsuario"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaEliminacion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intPersEmpresaElimina"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaElimina"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intContCodigoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSaldoSolicitud"		javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoSustento"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemArchivoSustento"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemHistoricoSustento"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemSolicitudPersonal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaDocumentoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPeriodoPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaEstadoPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+    
+    
+  <procedure id="grabar" parameterMap="parSolicitudPersonal">
+	{ call PKG_SOLICITUDPERSONAL.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSolicitudPersonal" >
+	{ call PKG_SOLICITUDPERSONAL.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resSolicitudPersonal">
+	{ call PKG_SOLICITUDPERSONAL.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resSolicitudPersonal">
+	{ call PKG_SOLICITUDPERSONAL.getListaPorBuscar(?,?,?,?,?,?,?) }
+  </procedure>
+    
+</sqlMap>

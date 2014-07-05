@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CreditoExcepcionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.credito.socio.creditos.domain.CreditoExcepcion" alias="CreditoExcepcion"/> 
+	
+  <resultMap id="resExcepcion" class="CreditoExcepcion" >
+     <result property="id.intPersEmpresaPk"      	column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intParaTipoCreditoCod"	column="pPARA_TIPOCREDITO_N_COD" />
+     <result property="id.intItemCredito"      		column="pITEMCREDITO_N" />
+     <result property="id.intItemCreditoExcepcion" 	column="pITEMCREDITOEXCEPCION_N" />
+     <result property="bdTasaSobreGiro"     		column="pTASASOBREGIRO_N"/>
+     <result property="intPeriodoGracia"     		column="pPERIODOGRACIA_N"/>
+     <result property="intParaPeriodicidadGraciaCod" column="pPARA_PERIODICIDADGRACIA_N_COD"/>
+     <result property="intParaCampoDobleCuotaCod"   column="pPARA_CAMPODOBLECUOTA_N_COD"/>
+     <result property="intIndicadorDobleCuota"     	column="pINDICADORDOBLECUOTA_N"/>
+     <result property="intPrimerCredito"     		column="pPRIMERCREDITO_N"/>
+     <result property="intPrimerCreditoEnvioPlla"   column="pPRIMERCREDITOENVIOPLLA_N"/>
+     <result property="intPorcentajeLimiteCuota"    column="pPORCENTAJELIMITECUOTA_N"/>
+     <result property="intCampoLimiteCuota"     	column="pCAMPOLIMITECUOTA_N"/>
+     <result property="bdPorcentajeNoTrans"     	column="pPORCENTAJENOTRANS_N"/>
+     <result property="intParaConceptoNoTrans"     	column="pPARA_CONCEPTONOTRANS_N"/>
+     <result property="intEdadLimite"     			column="pEDADLIMITE_N"/>
+     <result property="intParaTipoMaxMin"     		column="pTIPOMAXMIN_N"/>
+     <result property="bdImporteEvaluacion"     	column="pIMPORTEEVALUACION_N"/>
+     <result property="intDiasTolerancia"     		column="pDIASTOLERANCIA_N"/>
+     <result property="intAplicaCastigadas"     	column="pAPLICACASTIGADAS_N"/>
+  </resultMap>
+  
+  <parameterMap id="parExcepcion" class="CreditoExcepcion">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intItemCreditoExcepcion" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="bdTasaSobreGiro" 				javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPeriodoGracia" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaPeriodicidadGraciaCod" javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaCampoDobleCuotaCod" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intIndicadorDobleCuota" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPrimerCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPrimerCreditoEnvioPlla" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intPorcentajeLimiteCuota" 	javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intCampoLimiteCuota" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="bdPorcentajeNoTrans" 			javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaConceptoNoTrans" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intEdadLimite" 				javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intParaTipoMaxMin" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="bdImporteEvaluacion" 			javaType="java.math.BigDecimal"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intDiasTolerancia" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+     <parameter property="intAplicaCastigadas" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 	javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCreditoExcepcion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <parameterMap id="parPorPKCredito" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intParaTipoCreditoCod" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemCredito" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parCreditoExcepcionEliminar" class="CreditoExcepcion">
+     <parameter property="id.intPersEmpresaPk"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"	mode="INOUT"/>
+	 <parameter property="id.intParaTipoCreditoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>    
+     <parameter property="id.intItemCredito" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>  
+     <parameter property="id.intItemCreditoExcepcion" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"  mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parExcepcion">
+	{ call PKG_CONFCREEXCEPCION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parExcepcion" >
+	{ call PKG_CONFCREEXCEPCION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resExcepcion">
+	{ call PKG_CONFCREEXCEPCION.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPkCredito" parameterMap="parPorPKCredito" resultMap="resExcepcion">
+	{ call PKG_CONFCREEXCEPCION.getListaPorPkCredito(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parCreditoExcepcionEliminar">
+	{ call PKG_CONFCREEXCEPCION.eliminar(?,?,?,?) }
+  </procedure>
+</sqlMap>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ProveedorDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.ProveedorDetalle" alias="ProveedorDetalle"/> 
+	
+  <resultMap id="resProveedorDetalle" class="ProveedorDetalle" >
+	<result property="id.intPersEmpresa"  			column="pPers_empresaproveedor" />
+	<result property="id.intPersPersona"   			column="pPers_personaproveedor" />
+	<result property="id.intItemProveedorDetalle"  	column="pTeso_itemprovedordetalle" />
+	<result property="intParaTipoProveedor"   		column="pPara_tipoProveedor" />
+  </resultMap>
+  
+  <parameterMap id="parProveedorDetalle" class="ProveedorDetalle">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPersPersona"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemProveedorDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoProveedor"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersona"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemProveedorDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorProveedor" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersona"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersona"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemProveedorDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  
+  
+  <procedure id="grabar" parameterMap="parProveedorDetalle">
+	{ call PKG_PROVEEDORDET.grabar(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parProveedorDetalle" >
+	{ call PKG_PROVEEDORDET.modificar(?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resProveedorDetalle">
+	{ call PKG_PROVEEDORDET.getListaPorPk(?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorProveedor" parameterMap="parPorProveedor" resultMap="resProveedorDetalle">
+	{ call PKG_PROVEEDORDET.getListaPorProveedor(?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_PROVEEDORDET.eliminar(?,?,?) }
+  </procedure>
+  
+  
+</sqlMap>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ProveedorDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.Proveedor" alias="Proveedor"/> 
+	
+  <resultMap id="resProveedor" class="Proveedor" >
+	<result property="id.intPersEmpresa"  		column="pPers_empresaproveedor" />
+	<result property="id.intPersPersona"   		column="pPers_personaproveedor" />
+	<result property="intRetencionCuarta"   	column="pProve_retencioncuart" />
+  </resultMap>
+  
+  <parameterMap id="parProveedor" class="Proveedor">
+	 <parameter property="id.intPersEmpresa"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intPersPersona"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intRetencionCuarta"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersona"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  
+  <procedure id="grabar" parameterMap="parProveedor">
+	{ call PKG_PROVEEDOR.grabar(?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parProveedor" >
+	{ call PKG_PROVEEDOR.modificar(?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resProveedor">
+	{ call PKG_PROVEEDOR.getListaPorPk(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorBusqueda" parameterMap="parPorPk" resultMap="resProveedor">
+	{ call PKG_PROVEEDOR.getListaPorBusqueda(?,?,?) }
+  </procedure>
+</sqlMap>

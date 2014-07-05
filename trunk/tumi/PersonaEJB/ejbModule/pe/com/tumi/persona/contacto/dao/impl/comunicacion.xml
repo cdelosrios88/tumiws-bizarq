@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ComunicacionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.persona.contacto.domain.Comunicacion" alias="Comunicacion"/> 
+	
+  <resultMap id="resComunicacion" class="Comunicacion" >
+     <result property="id.intIdPersona"      		column="pPERSONA_N" />
+     <result property="id.intIdComunicacion"    	column="pCOMUNICACION_N" />
+     <result property="intTipoComunicacionCod"      column="pTIPOCOMUNICACION_N_COD" />
+     <result property="intSubTipoComunicacionCod"   column="pSUBTIPOCOMUNICACION_N_COD" />
+     <result property="strDato"   					column="pDATO_V" />
+     <result property="intTipoLineaCod"      		column="pTIPOLINEA_N_COD" />
+     <result property="intNumero"    				column="pNUMERO_N" />
+     <result property="intAnexo"      				column="pANEXO_N" />
+     <result property="strDescripcion"   			column="pDESCRIPCION_V" />
+     <result property="intCasoEmergencia"   		column="pCASOEMERGENCIA_N" />
+     <result property="intEstadoCod"   				column="pESTADO_N_COD" />
+     <result property="tsFechaEliminacion"   		column="pFECHAELIMINACION_D" />
+  </resultMap>
+  
+  <parameterMap id="parComunicacion" class="Comunicacion">
+     <parameter property="id.intIdPersona"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdComunicacion"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intTipoComunicacionCod" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="intSubTipoComunicacionCod" 	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strDato" 						jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intTipoLineaCod"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intNumero"					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intAnexo" 					jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>  
+     <parameter property="strDescripcion" 				jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intCasoEmergencia" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intEstadoCod" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intIdComunicacion" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIdPersona" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intIdPersona" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+   
+  <procedure id="grabar" parameterMap="parComunicacion">
+	{ call PKG_COMUNICACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parComunicacion" >
+	{ call PKG_COMUNICACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPK" parameterMap="parPorPK" resultMap="resComunicacion">
+	{ call PKG_COMUNICACION.getListaPorPK(?,?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorIdPersona" parameterMap="parPorIdPersona" resultMap="resComunicacion">
+	{ call PKG_COMUNICACION.getListaPorIdPersona(?,?) }  
+  </procedure>
+</sqlMap>  

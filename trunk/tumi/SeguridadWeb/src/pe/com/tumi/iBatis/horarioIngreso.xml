@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+	<parameterMap id="prmtListaHorarios" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pCboTipoSucursal" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pCboEstado" 			jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pStrFecIni" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="horario.domain.horario.maphorario" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pIntIdTipoSucursal"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pDaFecIni" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="pDaFecFin" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pChkFeriado" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pStrAdjunto" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="horario.domain.horario.maphorariodet" class="java.util.Map">
+		 <parameter property="pIntIdEmpresa"	 	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+         <parameter property="pIntIdTipoSucursal"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="pDaFecIni" 			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>  
+         <parameter property="pIntIdDiaL"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniL" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinL" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdDiaM"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniM" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinM" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdDiaMi"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniMi" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinMi" 	jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdDiaJ"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniJ" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinJ" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdDiaV"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniV" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinV" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdDiaS"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniS" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinS" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntIdDiaD"			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="pIntStrTimeIniD" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntStrTimeFinD" 		jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtListaHorariosDet" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pCboTipoSucursal" 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pDaFecIni" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+         <parameter property="pIntDiaSemana" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="prmtEliminarHorario" class="java.util.Map">
+    	 <parameter property="pIntIdEmpresa" 		jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdTipoSucursal"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pStrFecIni" 			jdbcType="VARCHAR" 				javaType="java.lang.String" 	mode="IN"/>
+    </parameterMap>
+    
+    <!-- Mapeo de Parámetros -->
+    <procedure id="horario.domain.horario.getListaHorarios" parameterMap="prmtListaHorarios" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_horarios( ?, ?, ?, ?, ? ) }  
+    </procedure>
+    
+    <procedure id="horario.domain.horario.grabarHorario" parameterMap="horario.domain.horario.maphorario" >
+		{ call PKG_TUMI.insert_horario( ?, ?, ?, ?, ?, ? )  }
+	</procedure>
+	
+	<procedure id="horario.domain.horario.grabarHorarioDet" parameterMap="horario.domain.horario.maphorariodet" >
+		{ call PKG_TUMI.insert_horario_det(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	</procedure>
+	
+	<procedure id="horario.domain.horario.getListaHorariosDet" parameterMap="prmtListaHorariosDet" resultClass="java.util.HashMap">
+		{ call PKG_TUMI.listar_dia_det( ?, ?, ?, ?, ? ) }  
+    </procedure>
+	
+	<procedure id="horario.domain.horario.eliminarHorario" parameterMap="prmtEliminarHorario" >
+		{ call PKG_TUMI.eliminar_horario( ?, ?, ? ) }
+	</procedure>
+</sqlMap>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SolicitudCtaCteBloqueoDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.cobranza.planilla.domain.SolicitudCtaCteBloqueo" alias="SolicitudCtaCteBloqueo"/> 
+  <resultMap id="resSolBloqueoCuenta" class="SolicitudCtaCteBloqueo" >
+		<result property="id.intPersEmpresasolctacte" 	column="PPERSEMPRESASOLCTACTE"/>
+		<result property="id.intCcobItemsolctacte"   	column="PCCOBITEMSOLCTACTE"/>
+		<result property="id.intTipoSolicitudctacte" 	column="PPARATIPOSOLICITUDCTACTE"/>
+		<result property="id.intCcobItemblcu" 			column="PCCOBITEMSOLCTACTEBLO"/>
+		<result property="intCmovItemblcu" 				column="PCMOVITEMBLCU"/>
+  </resultMap>	
+	
+  <parameterMap id="parSolicitudCtaCteBloqueo" class="SolicitudCtaCteBloqueo">
+	<parameter property="id.intPersEmpresasolctacte"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="id.intCcobItemsolctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="id.intTipoSolicitudctacte"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="id.intCcobItemblcu"				javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+	<parameter property="intCmovItemblcu"					javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parSolicitudCtaCtePorTipo" class="java.util.Map">
+    <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+    <parameter property="intPersEmpresasolctacte"   javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="INOUT"/>
+	<parameter property="intTipoSolicitudctacte"	javaType="java.lang.Integer"  jdbcType="NUMERIC"	   mode="INOUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSolicitudCtaCteBloqueo">
+	{ call PKG_SolicitudCtaCteBloqueo.grabar(?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorTipoSol"   parameterMap="parSolicitudCtaCtePorTipo" resultMap="resSolBloqueoCuenta">
+	{ call PKG_SolicitudCtaCteBloqueo.getListaPorTipoSol(?,?,?) }
+  </procedure>
+  
+</sqlMap>  

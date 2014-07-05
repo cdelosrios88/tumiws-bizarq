@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreDiarioArqueoBilleteDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoBillete" alias="CierreDiarioArqueoBillete"/> 
+	
+  <resultMap id="resCierreDiarioArqueoBillete" class="CierreDiarioArqueoBillete" >
+	<result property="id.intPersEmpresa"  			column="pempresaarqueo" />
+	<result property="id.intParaTipoArqueo"   		column="ptipoarqueo" />
+	<result property="id.intSucuIdSucursal"   		column="pidsucursal" />
+	<result property="id.intSudeIdSubsucursal"   	column="pidsubsucursal" />
+	<result property="id.intItemCierreDiarioArqueo" column="pitemcidiar" />
+	<result property="id.intParaTipoMonedaBillete"  column="ptipomonebill" />
+    <result property="intCantidad"      			column="pcantidad" />
+    <result property="bdMonto"     					column="pmonto" />
+    <result property="intParaEstado"    			column="pestado" />
+  </resultMap>
+  
+  <parameterMap id="parCierreDiarioArqueoBillete" class="CierreDiarioArqueoBillete">
+	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intParaTipoMonedaBillete"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intCantidad"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMonto"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/> 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
+	 <parameter property="intParaTipoMonedaBillete"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorCierreDiarioArqueo" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/> 
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+   	 <parameter property="intParaTipoArqueo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemCierreDiarioArqueo"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
+  </parameterMap>
+  
+  
+    
+  <procedure id="grabar" parameterMap="parCierreDiarioArqueoBillete">
+	{ call PKG_CIERREDIARIOARQUEOBILLETE.grabar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCierreDiarioArqueoBillete" >
+	{ call PKG_CIERREDIARIOARQUEOBILLETE.modificar(?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCierreDiarioArqueoBillete">
+	{ call PKG_CIERREDIARIOARQUEOBILLETE.getListaPorPk(?,?,?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorCierreDiarioArqueo" parameterMap="parPorCierreDiarioArqueo" resultMap="resCierreDiarioArqueoBillete">
+	{ call PKG_CIERREDIARIOARQUEOBILLETE.getListaPorCierreDiarioArqueo(?,?,?,?,?,?) }
+  </procedure> 
+</sqlMap>

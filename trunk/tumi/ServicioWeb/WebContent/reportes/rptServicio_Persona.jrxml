@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptServicio_Persona" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="eb0e81ff-0f27-479f-81ba-18e92f77c74f">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPersona" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select nat.pers_persona_n ,
+       cue.csoc_cuenta_n ,
+       nat.natu_apellidopaterno_v || ' ' ||
+       nat.natu_apellidomaterno_v || ', ' ||
+       nat.natu_nombres_v NOMBRES
+from SOCIOqc_201.cso_cuentaintegrante cue , PERsonaqc_102.per_natural nat
+where cue.pers_personaintegrante_n_pk = nat.pers_persona_n
+AND nat.pers_persona_n = $P{idPersona}
+ORDER BY nat.natu_apellidopaterno_v ASC]]>
+	</queryString>
+	<field name="PERS_PERSONA_N" class="java.math.BigDecimal"/>
+	<field name="CSOC_CUENTA_N" class="java.math.BigDecimal"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<sortField name="PERS_PERSONA_N"/>
+	<group name="PERS_PERSONA_N">
+		<groupExpression><![CDATA[$F{PERS_PERSONA_N}]]></groupExpression>
+	</group>
+	<group name="CSOC_CUENTA_N">
+		<groupExpression><![CDATA[$F{CSOC_CUENTA_N}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="23" width="369" height="22" uuid="851279eb-64e3-4a2f-ba35-0e74548c00f1"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE SOCIOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="149" height="20" uuid="476e53ec-9366-4a4a-94ad-b728abf662a8"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD PERSONA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="0" width="133" height="20" uuid="e929cd6d-35d2-402c-8cba-eb9a41a99f05"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NRO CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="0" width="273" height="20" uuid="9e8a19bf-bdf5-4cae-b2cb-f2dc721d5d90"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE COMPLETO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="13" y="0" width="149" height="20" uuid="d2525632-e76e-470b-a296-52fa5388c89e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{PERS_PERSONA_N}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="0" width="133" height="20" uuid="b3af58d1-9373-4db5-9170-39c854f21568"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CSOC_CUENTA_N}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="0" width="273" height="20" uuid="3bee7ea6-7106-490b-acbf-58cdef1b9414"/>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

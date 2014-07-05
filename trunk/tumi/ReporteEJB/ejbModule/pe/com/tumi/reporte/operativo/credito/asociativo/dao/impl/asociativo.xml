@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="AsociativoDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.credito.asociativo.domain.Asociativo" alias="Asociativo"/>
+
+	<resultMap id="resCaptaciones" class="Asociativo" >
+	     <result property="intPersEmpresaPk"  		column="pEMPRESA" />
+	     <result property="intIdSucursal"    		column="pIDSUCURSAL" />
+	     <result property="intIdSubSucursal"    	column="pIDSUBSUCURSAL" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	     <result property="intAnio"    				column="pANIO" />
+	     <result property="intMes"    				column="pMES" />
+	     <result property="intCantProyectadas"     	column="pCANT_PROYECTADAS" />
+	     <result property="intCantEjecutadas"     	column="pCANT_EJECUTADAS" />
+	     <result property="intCantCondAltas"     	column="pCANT_CONDICION_ALTAS" />
+	</resultMap>
+	
+	<resultMap id="resDetalleCaptaciones" class="Asociativo" >
+	     <result property="intPeriodo"  			column="pPERIODO" />
+	     <result property="strNroCuenta"    		column="pNUMERO_CUENTA" />
+	     <result property="strNombreSocio"    		column="pSOCIO" />
+	     <result property="strFechaApertura"    	column="pFECHA_APERTURA" />
+	     <result property="bdMontoAporte"    		column="pMTO_APORTE" />
+	     <result property="bdMontoFdoRetiro"    	column="pMTO_FDORETIRO" />
+	     <result property="strUnidadEjecutora"    	column="pUNIDAD_EJECUTORA" />
+	     <result property="intTipoSocio"     		column="pTIPO_SOCIO" />
+	     <result property="intModalidad"     		column="pMODALIDAD" />
+	     <result property="intIdSucursal"     		column="pSUCURSAL" />
+	</resultMap>
+	
+	<resultMap id="resDetalleRenuncias" class="Asociativo" >
+	     <result property="intPeriodo"  			column="pPERIODO" />
+	     <result property="strNroCuenta"    		column="pNUMERO_CUENTA" />
+	     <result property="strNombreSocio"    		column="pSOCIO" />
+	     <result property="strFechaApertura"    	column="pFECHA_APERTURA" />
+	     <result property="strFechaLiquidacion"  	column="pFECHA_LIQUIDACION" />
+	     <result property="strUnidadEjecutora"    	column="pUNIDAD_EJECUTORA" />
+	     <result property="intTipoSocio"     		column="pTIPO_SOCIO" />
+	     <result property="intModalidad"     		column="pMODALIDAD" />
+	     <result property="intIdSucursal"     		column="pSUCURSAL" />
+	</resultMap>
+	
+	<resultMap id="resCantProyectadas" class="Asociativo" >
+		 <result property="intCantProyectadas"     	column="pCANT_PROYECTADAS" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	</resultMap>
+	
+	<resultMap id="resCantEjecutadas" class="Asociativo" >
+	     <result property="intCantEjecutadas"     	column="pCANT_EJECUTADAS" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	</resultMap>
+	
+	<resultMap id="resCantCondAltas" class="Asociativo" >
+	     <result property="intCantCondAltas"     	column="pCANT_ALTAS" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	</resultMap>
+	
+	<resultMap id="resCantCondBajas" class="Asociativo" >
+	     <result property="intCantCondBajas"     	column="pCANT_Bajas" />
+	     <result property="intPeriodo"    			column="pPERIODO" />
+	</resultMap>
+	
+	<resultMap id="resConvenios" class="Asociativo" >
+	     <result property="intIdSucursal"  			column="pIDSUCURSAL" />
+	     <result property="strEntidadDesc"    		column="pENTIDAD_DESC" />
+	     <result property="strNroRuc"    			column="pNRORUC" />
+	     <result property="intTipoSocio"    		column="pTIPO_SOCIO" />
+	     <result property="intModalidad"  			column="pMODALIDAD" />
+	     <result property="strModalidadHaberes"    	column="pMOD_HABERES" />
+	     <result property="strModalidadIncentivos"  column="pMOD_INCENTIVOS" />
+	     <result property="strModalidadCas"     	column="pMOD_CAS" />
+	     <result property="strTiempoVigencia"     	column="pTIEMPO" />
+	     <result property="strFechaInicio"     		column="pFCHINICIO" />
+	     <result property="strFechaCese"     		column="pFCHCESE" />
+	     <result property="intTipoRetencion"     	column="pTIPO_RETENCION" />
+	     <result property="strRetencionPorcentaje"  column="pRETEN_PORCENTAJE" />
+	     <result property="strRetencionMonto"     	column="pRETEN_MONTO" />
+	     <result property="strClausulaCobranza"     column="pCLAUSULACOB" />
+	     <result property="strDocumentoFisico"      column="pDOCFISICO" />
+	     <result property="strAlertaPorVencimiento" column="pPORVENCER" />
+	</resultMap>
+	
+	<!-- Agregado por cdelosrios, 28/11/2013 -->
+	<resultMap id="resExpedientePrevision" class="Asociativo" >
+	     <result property="intNroSolicitud"  		column="pNROSOLICITUD" />
+	     <result property="strCuenta"    			column="pCUENTA" />
+	     <result property="strTipo"    				column="pTIPOVINCULO" />
+	     <result property="bdMontoBruto"    		column="pMONTOBRUTO" />
+	     <result property="bdMontoGastos"    		column="pMONTOGASTOS" />
+	     <result property="bdMontoNeto"     		column="pMONTONETO" />
+	     <result property="strFechaFallecimiento"   column="pFECHAFALLECIMIENTO" />
+	     <result property="strFechaSolicitud"   	column="pFechaSolicitud" />
+	     <result property="strEvaluacionEstado"     column="pESTADOEVALUACION" />
+	     <result property="strEvaluacionFecha"      column="pFECHAESTADOEVALUACION" />
+	     <result property="strEgresoFecha"      	column="pFECHAESTADOEGRESO" />
+	</resultMap>
+	<!-- Fin agregado por cdelosrios, 28/11/2013 -->
+	
+	<parameterMap id="parCantProyectadas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoIndicador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parCantEjecutadas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+		
+	<parameterMap id="parCantCondAltasYBajas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="strTabla" 			javaType="java.lang.String"	  jdbcType="VARCHAR"  	   mode="IN"/>
+	   	 <parameter property="strColumna" 			javaType="java.lang.String"	  jdbcType="VARCHAR"  	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parDetalleEjecutadas" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoSocio" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intModalidad" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parConveniosPorSucursal" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<!-- Agregado por cdelosrios, 28/11/2013 -->
+	<parameterMap id="parExpedientePrevision" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoFiltro" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="strTipoFiltro" 			javaType="java.lang.String"  	jdbcType="VARCHAR" 	   mode="IN"/>
+	   	 <parameter property="intIdTipoVinculo" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdEstadoSolicitud" 	javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdEstadoPago" 			javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="dtFechaSolicitudDesde" 	javaType="java.util.Date"  		jdbcType="DATE" 	   mode="IN"/>
+	   	 <parameter property="dtFechaSolicitudHasta" 	javaType="java.util.Date"  		jdbcType="DATE" 	   mode="IN"/>
+	</parameterMap>
+	<!-- Fin agregado por cdelosrios, 28/11/2013 -->
+	
+	<procedure id="getCantidadProyectadas" parameterMap="parCantProyectadas" resultMap="resCantProyectadas">
+		{ call PKG_CREDITOS_ASOCIATIVO.getCantidadProyectadas(?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getCantCaptacionesEjec" parameterMap="parCantEjecutadas" resultMap="resCantEjecutadas">
+		{ call PKG_CREDITOS_ASOCIATIVO.getCantCaptacionesEjec(?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getCaptacionesEjecutadasDetalle" parameterMap="parDetalleEjecutadas" resultMap="resDetalleCaptaciones">
+		{ call PKG_CREDITOS_ASOCIATIVO.getCapEjecDetalle(?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getListaCantidadCaptacionesAltas" parameterMap="parCantCondAltasYBajas" resultMap="resCantCondAltas">
+		{ call PKG_CREDITOS_ASOCIATIVO.getCantCaptacionesAltas(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getCantRenunciasEjec" parameterMap="parCantEjecutadas" resultMap="resCantEjecutadas">
+		{ call PKG_CREDITOS_ASOCIATIVO.getCantRenunciasEjec(?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getRenunciasEjecutadasDetalle" parameterMap="parDetalleEjecutadas" resultMap="resDetalleRenuncias">
+		{ call PKG_CREDITOS_ASOCIATIVO.getRenunEjecDetalle(?,?,?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getListaCantidadRenunciasBajas" parameterMap="parCantCondAltasYBajas" resultMap="resCantCondBajas">
+		{ call PKG_CREDITOS_ASOCIATIVO.getCantRenunciasBajas(?,?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getListaConveniosPorSucursal" parameterMap="parConveniosPorSucursal" resultMap="resConvenios">
+		{ call PKG_CREDITOS_ASOCIATIVO.getConveniosPorSucursal(?,?,?)}  
+  	</procedure>
+  	
+  	<!-- Agregado por cdelosrios, 28/11/2013 -->
+  	<procedure id="getListaExpedientePrevision" parameterMap="parExpedientePrevision" resultMap="resExpedientePrevision">
+		{ call PKG_CREDITOS_PREVISION.getPrevisionSocial(?,?,?,?,?,?,?,?,?,?)}
+  	</procedure>
+  	<!-- Fin agregado por cdelosrios, 28/11/2013 -->
+  	
+</sqlMap>  	

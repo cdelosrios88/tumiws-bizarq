@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- Managed Beans -->
+
+	<bean id="genericController" class="pe.com.tumi.common.controller.GenericController" scope="request">
+		<property name="service" ref="genericService"/>
+	</bean>
+
+	<bean id="menuController" class="pe.com.tumi.seguridad.controller.MenuController" scope="session" parent="genericController">
+		<property name="tipoArbolService" ref="tipoArbolService"/>
+	</bean>
+	
+	<bean id="loginController" class="pe.com.tumi.seguridad.controller.LoginController" scope="session">
+	</bean>
+
+	<bean id="parametroController" class="pe.com.tumi.seguridad.controller.ParametroController" scope="session" parent="genericController">
+		<property name="bean" ref="parametro"/>
+		<property name="beanBusqueda" ref="parametroBusqueda" />
+		<property name="parametroService" ref="parametroService"/>
+		<property name="sistemaService" ref="sistemaService"/>
+	</bean>
+
+	<bean id="usuarioController" class="pe.com.tumi.seguridad.controller.UsuarioController" scope="session" parent="genericController">
+		<property name="bean" ref="usuario"/>
+		<property name="beanBusqueda" ref="usuarioBusqueda" />
+		<property name="usuarioService" ref="usuarioService"/>
+		<property name="rolService" ref="rolService"/>
+	</bean>
+
+	<bean id="rolController" class="pe.com.tumi.seguridad.controller.RolController" scope="session" parent="genericController">
+		<property name="bean" ref="rol"/>
+		<property name="beanBusqueda" ref="rolBusqueda" />
+		<property name="rolService" ref="rolService"/>
+		<property name="sistemaService" ref="sistemaService"/>
+		<property name="tipoArbolService" ref="tipoArbolService"/>
+	</bean>
+
+	<bean id="sistemaController" class="pe.com.tumi.seguridad.controller.SistemaController" scope="session" parent="genericController">
+		<property name="bean" ref="rol"/>
+		<property name="beanBusqueda" ref="sistemaBusqueda" />
+		<property name="sistemaService" ref="sistemaService"/>
+	</bean>
+				
+	<bean id="opcionController" class="pe.com.tumi.seguridad.controller.OpcionMenuController" scope="session" parent="genericController">
+		<property name="bean" ref="opcionMenuBean"/>
+		<property name="beanBusqueda" ref="opcionMenuBusqueda" />
+		<property name="tipoArbolService" ref="tipoArbolService"/>
+	</bean>
+	
+	<bean id="usuarioLogListadoController" class="pe.com.tumi.seguridad.controller.UsuarioLogListadoController" 
+		scope="session" parent="genericController">
+		<property name="bean" ref="loginLog"></property>
+		<property name="listadosService" ref="listadosService"/>
+	</bean>
+	
+	<bean id="empresaController" class="pe.com.tumi.empresa.controller.EmpresaController" scope="session" parent="genericController">
+		<property name="bean" ref="empresa"></property>
+		<property name="empresaService" ref="empresaService"/>
+	</bean>
+	
+	<bean id="controlsFiller" class="pe.com.tumi.common.util.ControlsFiller" scope="session" parent="genericController">
+		<property name="empresaService" ref="empresaService"/>
+		<property name="adminMenuService" ref="adminMenuService"/>
+		<property name="usuarioPerfilService" ref="usuarioPerfilService"/>
+	</bean>
+	
+	<bean id="controllerFiller" class="pe.com.tumi.common.util.ControllerFiller" scope="session" parent="genericController">
+		<property name="empresaService" ref="empresaService"/>
+		<property name="adminMenuService" ref="adminMenuService"/>
+		<property name="usuarioPerfilService" ref="usuarioPerfilService"/>
+		<property name="hojaPlaneamientoService" ref="hojaPlaneamientoService"/>
+	</bean>
+	
+	<bean id="adminMenuController" class="pe.com.tumi.seguridad.permiso.controller.AdminMenuController" scope="session" parent="genericController">
+		<property name="bean" ref="adminMenu"></property>
+		<property name="adminMenuService" ref="adminMenuService"/>
+	</bean>
+	
+	<bean id="usuarioPerfilController" class="pe.com.tumi.seguridad.permiso.controller.UsuarioController" scope="session" parent="genericController">
+		<property name="bean" ref="usuarioPerfil"></property>
+		<property name="usuarioPerfilService" ref="usuarioPerfilService"/>
+		<property name="empresaService" ref="empresaService"/>
+		<property name="fileUploadService" ref="fileUploadService"/>
+	</bean>
+	
+	<bean id="admFormDocController" class="pe.com.tumi.admFormDoc.controller.AdmFormDocController" scope="session" parent="genericController">
+		<property name="bean" ref="admFormDoc"/>
+		<property name="admFormDocService" ref="admFormDocService"/>
+		<property name="usuarioPerfilService" ref="usuarioPerfilService"/>
+	</bean>
+	
+	<bean id="registroPcController" class="pe.com.tumi.seguridad.controller.RegistroPcController" scope="session" parent="genericController">
+		<property name="bean" ref="registroPc"></property>
+		<property name="registroPcService" ref="registroPcService"/>
+	</bean>
+	
+	<bean id="accesoEspecialController" class="pe.com.tumi.seguridad.controller.AccesoEspecialController" scope="session" parent="genericController">
+		<property name="bean" ref="accesoEspecial"></property>
+		<property name="accesoEspecialService" ref="accesoEspecialService"/>
+		<property name="usuarioPerfilService" ref="usuarioPerfilService"/>
+	</bean>
+	
+	<bean id="perfilMofController" class="pe.com.tumi.seguridad.controller.PerfilMofController" scope="session" parent="genericController">
+		<property name="bean" ref="perfilMof"></property>
+		<property name="perfilMofService" ref="perfilMofService"/>
+	</bean>
+	
+	<bean id="parametersController" class="pe.com.tumi.common.util.ParametersController" scope="session" parent="genericController">
+		<property name="bean" ref="maestroParametros"></property>
+		<property name="parametersService" ref="parametersService"/>
+	</bean>
+	
+	<bean id="reglamentoPoliticaController" class="pe.com.tumi.seguridad.controller.ReglamentoPoliticaController" scope="session" parent="genericController">
+		<property name="bean" ref="reglamentoPolitica"></property>
+		<property name="reglamentoPoliticaService" ref="reglamentoPoliticaService"/>
+		<property name="adminMenuService" ref="adminMenuService"/>
+	</bean> 
+	
+	<bean id="auditoriaSistController" class="pe.com.tumi.seguridad.controller.AuditoriaSistController" scope="session" parent="genericController">
+		<property name="bean" ref="auditoriaSistemas"></property>
+		<property name="auditoriaSistService" ref="auditoriaSistemasService"/>
+		<property name="adminMenuService" ref="adminMenuService"/>
+	</bean> 
+	
+	<bean id="auditoriaController" class="pe.com.tumi.seguridad.controller.AuditoriaController" scope="session" parent="genericController">
+		<property name="bean" ref="auditoria"></property>
+		<property name="auditoriaService" ref="auditoriaService"/>
+		<property name="adminMenuService" ref="adminMenuService"/>
+	</bean>
+	
+	<!-- Creditos Managed Beans -->
+	<bean id="hojaPlaneamientoController" class="pe.com.tumi.creditos.controller.HojaPlaneamientoController" scope="session" parent="genericController">
+		<property name="bean" ref="hojaPlaneamiento"></property>
+		<property name="hojaPlaneamientoService" ref="hojaPlaneamientoService"/>
+	</bean>
+	
+	<bean id="controlProcesoController" class="pe.com.tumi.creditos.controller.ControlProcesoController" scope="session" parent="genericController">
+		<property name="bean" ref="controlProceso"></property>
+		<property name="controlProcesoService" ref="controlProcesoService"/>
+		<property name="hojaPlaneamientoService" ref="hojaPlaneamientoService"/>
+	</bean>
+	
+	<bean id="estrucOrgController" class="pe.com.tumi.creditos.controller.EstrucOrgController" scope="session" parent="genericController">
+		<property name="bean" ref="estructuraOrganica"></property>
+		<property name="estrucOrgService" ref="estrucOrgService"/>
+		<property name="perJuridicaService" ref="perJuridicaService"/>
+		<property name="ctaBancariaService" ref="ctaBancariaService"/>
+		<property name="domicilioService" ref="domicilioService"/>
+		<property name="comunicacionService" ref="comunicacionService"/>
+		<property name="repLegalService" ref="repLegalService"/>
+	</bean>
+	
+	<bean id="aportacionesController" class="pe.com.tumi.creditos.controller.AportacionesController" scope="session" parent="genericController">
+		<property name="bean" ref="aportaciones"></property>
+		<property name="aportacionesService" ref="aportacionesService"/>
+	</bean>
+	
+	<bean id="mantCuentasController" class="pe.com.tumi.creditos.controller.MantCuentasController" scope="session" parent="genericController">
+		<property name="bean" ref="mantCuentas"></property>
+		<property name="mantCuentasService" ref="mantCuentasService"/>
+	</bean>	
+	
+	<!-- Apertura de Cuentas Managed Beans -->
+	<bean id="perJuridicaController" class="pe.com.tumi.adminCuenta.controller.PerJuridicaController" scope="session" parent="genericController">
+		<property name="bean" ref="personaJuridica"></property>
+		<property name="perJuridicaService" ref="perJuridicaService"/>
+		<property name="domicilioService" ref="domicilioService"/>
+		<property name="comunicacionService" ref="comunicacionService"/>
+		<property name="ctaBancariaService" ref="ctaBancariaService"/>
+		<property name="repLegalService" ref="repLegalService"/>
+	</bean>  
+	
+	<!-- Popups Managed Beans -->
+	<bean id="beneficiarioController" class="pe.com.tumi.popup.controller.BeneficiarioController" scope="session" parent="genericController">
+		<property name="bean" ref="beneficiario"></property>
+		<property name="beneficiarioService" ref="beneficiarioService"/>
+		<property name="domicilioService" ref="domicilioService"/>
+		<property name="comunicacionService" ref="comunicacionService"/>
+	</bean>
+	
+	<bean id="domicilioController" class="pe.com.tumi.popup.controller.DomicilioController" scope="session" parent="genericController">
+		<property name="bean" ref="domicilio"></property>
+		<property name="domicilioService" ref="domicilioService"/>
+	</bean>
+	
+	<bean id="comunicacionController" class="pe.com.tumi.popup.controller.ComunicacionController" scope="session" parent="genericController">
+		<property name="bean" ref="comunicacion"></property>
+		<property name="comunicacionService" ref="comunicacionService"/>
+	</bean>
+	
+	<bean id="ctaBancariaController" class="pe.com.tumi.popup.controller.CtaBancariaController" scope="session" parent="genericController">
+		<property name="bean" ref="ctabancaria"></property>
+		<property name="ctaBancariaService" ref="ctaBancariaService"/>
+	</bean>
+	
+	<bean id="repLegalController" class="pe.com.tumi.popup.controller.RepLegalController" scope="session" parent="genericController">
+		<property name="bean" ref="replegal"></property>
+		<property name="repLegalService" ref="repLegalService"/>
+		<property name="rolService" ref="rolService"/>
+		<property name="comunicacionService" ref="comunicacionService"/>
+		<property name="domicilioService" ref="domicilioService"/>
+	</bean>
+	
+</beans>

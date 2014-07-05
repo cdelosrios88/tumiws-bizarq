@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ContableDaoIbatis">
+
+	<typeAlias type="pe.com.tumi.credito.socio.captacion.domain.Contable"
+		alias="Contable" />
+
+	<resultMap id="resContable" class="Contable">
+		<result property="id.intPersEmpresaPk" column="pPERS_EMPRESA_N_PK" />
+		<result property="id.intParaTipoCaptacionCod" column="pPARA_TIPOCAPTACION_N_COD" />
+		<result property="id.intItem" column="pITEM_N" />
+		<result property="id.intTipoModelo" column="pTIPOMODELO_N" />
+		<result property="intValor" column="pVALOR_N" />
+	</resultMap>
+
+	<parameterMap id="parContable" class="Contable">
+		<parameter property="id.intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="id.intTipoModelo" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+		<parameter property="intValor" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="INOUT" />
+	</parameterMap>
+
+	<parameterMap id="parPorPK" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intTipoModelo" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<parameterMap id="parPorPKCaptacion" class="java.util.Map">
+		<parameter property="cursorLista" javaType="java.sql.ResultSet"
+			jdbcType="ORACLECURSOR" mode="OUT" />
+		<parameter property="intPersEmpresaPk" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intParaTipoCaptacionCod" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+		<parameter property="intItem" javaType="java.lang.Integer"
+			jdbcType="NUMERIC" mode="IN" />
+	</parameterMap>
+
+	<procedure id="grabar" parameterMap="parContable">
+		{ call PKG_CONFCAPTMODCONT.grabar(?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="modificar" parameterMap="parContable">
+		{ call PKG_CONFCAPTMODCONT.modificar(?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPk" parameterMap="parPorPK"
+		resultMap="resContable">
+		{ call PKG_CONFCAPTMODCONT.getListaPorPK(?,?,?,?,?) }  
+  </procedure>
+
+	<procedure id="getListaPorPkCaptacion" parameterMap="parPorPKCaptacion"
+		resultMap="resContable">
+		{ call PKG_CONFCAPTMODCONT.getListaPorPkCaptacion(?,?,?,?) }
+	</procedure>
+
+</sqlMap>  

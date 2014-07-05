@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias type="pe.com.tumi.popup.domain.Comunicacion" alias="comunicacion"/>
+    
+    <resultMap id="comunicacion.domain.comunicacion.resultComunicacion" class="comunicacion">
+	     <result property="intIdPersona"  			column="COMU_IDPERSONA_N"/>
+	     <result property="intIdComunicacion" 		column="COMU_IDCOMUNICACION_N"/>
+	     <result property="intIdTipoComunicacion"  	column="COMU_IDTIPOCOMUNICACION_N"/>
+	     <result property="intIdSubTipoComunicacion" column="COMU_IDSUBTIPOCOMUNICACION_N"/>
+	     <result property="strDato"					column="COMU_DATO_V"/>
+	     <result property="intIdTipoLinea"  		column="COMU_IDTIPOLINEA_N"/>
+	     <result property="intNro"  				column="COMU_NUMERO_N"/>
+	     <result property="intAnexo"  				column="COMU_ANEXO_N"/>
+	     <result property="strDescripcion"  		column="COMU_DESCRIPCION_V"/>
+	     <result property="intCasoEmerg"  			column="COMU_CASOEMERGENCIA_N"/>
+	     <result property="intIdEstado"  			column="COMU_IDESTADO_N"/>
+	     <result property="strDescCom"  			column="DESC_COMUNICACION"/>
+    </resultMap>
+    
+    <parameterMap id="prmtListaComunicacion" class="java.util.Map">
+    	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 		mode="OUT"/>
+    	 <parameter property="pIntIdPersona"	 	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    	 <parameter property="pIntIdComunicacion"	jdbcType="NUMERIC" 				javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <parameterMap id="comunicacion.domain.comunicacion.mapcomunicacion" class="comunicacion">
+		 <parameter property="intIdPersona"	 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>    
+		 <parameter property="intIdComunicacion"		jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="INOUT"/>
+         <parameter property="intIdTipoComunicacion"	jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="intIdSubTipoComunicacion" jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="intIdTipoLinea" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+         <parameter property="intNro" 					jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+         <parameter property="intAnexo" 				jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>  
+		 <parameter property="strDescripcion"			jdbcType="VARCHAR" 	javaType="java.lang.String" 	mode="IN"/>
+		 <parameter property="intCasoEmerg" 			jdbcType="NUMERIC" 	javaType="java.lang.Integer" 	mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="comunicacion.domain.comunicacion.getListaComunicacion" parameterMap="prmtListaComunicacion" resultMap="comunicacion.domain.comunicacion.resultComunicacion">
+		{ call PKG_TUMI.listar_comunicacion( ?, ?, ? ) }
+    </procedure>
+    
+    <procedure id="comunicacion.domain.comunicacion.grabarComunicacion" parameterMap="comunicacion.domain.comunicacion.mapcomunicacion" >
+		{ call PKG_TUMI.insert_comunicacion( ?, ?, ?, ?, ?, ?, ?, ?, ? )  }  
+	</procedure>
+</sqlMap>

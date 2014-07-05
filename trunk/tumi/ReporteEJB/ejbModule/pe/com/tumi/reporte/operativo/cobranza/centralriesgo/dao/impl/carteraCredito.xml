@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="CarteraCreditoDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.cobranza.centralriesgo.domain.CarteraCredito" alias="CarteraCredito"/>
+	<resultMap id="resCarteraCredito" class="CarteraCredito" >
+	     <result property="intCodigoDeudor"		  		column="pCODIGO_DEUDOR"/>
+	     <result property="strNumeroCredito"   			column="pNUMERO_CREDITO"/>
+	     <result property="strCodigoAgencia"			column="pSUCURSAL"/>
+	     <result property="strTipoMoneda" 				column="pMONEDA"/>
+	     <result property="strNombreDeudor" 			column="pDEUDOR"/>
+	     <result property="strTipoCredito"    			column="pTIPOSBS"/>
+	     <result property="strTipoProducto"   			column="pTIPOCREDITOEMPRESA"/>
+	     <result property="strFechaDesembolso"     		column="pFECHA_GIRO"/>
+	     <result property="bdMontoOtorgado" 			column="pMONTO_TOTAL"/>
+	     <result property="bdSaldoCapitalDeuda"			column="pSALDO_CAPITAL"/>
+	     <result property="bdTasaInteresNominalMensual"	column="pPORC_INTERES"/>
+	     <result property="intNroCuotasPactadas"		column="pNRO_CUOTA"/>
+	     <result property="intDiasAtraso"				column="pDIAS_ATRASO"/>
+	     <result property="strFechaVencimientoGral"		column="pFECHA_VENC_CUOTA"/>
+	     <result property="strFechaUltimoMovimiento"	column="pFEC_ULTIMO_MOV"/>
+	     <result property="bdRequerida"					column="pMONTO_PROV_REQUERIDA"/>
+	     <result property="bdConstituida"				column="pMONTO_PROV_CONSTITUIDA"/>
+	     <result property="bdSuperavit"					column="pSUPERAVIT_DEFICIT"/>
+	     <result property="bdPorCobrar"					column="pINTERES_COBRAR"/>
+	     <result property="bdSuspenso"					column="pINTERES_SUSPENSO"/>
+	     <result property="intTipoOperacion"			column="pTIPO_OPERACION"/>
+	     <result property="intClasificacionDeudor"		column="pCLASIF_DEUDOR"/>
+	     <result property="strTipoGarantia"				column="pTIPO_GARANTIA"/>
+	     <result property="strNombreAdmin"				column="pADMINISTRADOR"/>
+	     <result property="bdMontoCuotaPactada"			column="pMONTO_CUOTA_PACTADA"/>
+	     <result property="strGenero"					column="pSEXO"/>
+	     <result property="strDNI"						column="pDNI"/>
+	     <result property="intRelacLaboral"				column="pRELAC_LABORAL"/>
+	     <result property="strFecNacimiento"			column="pFEC_NAC"/>
+	     <result property="strLugarResidencia"			column="pDOMICILIO"/>
+	     <result property="strDistrito"					column="pDISTRITO"/>
+	     <result property="strProvincia"				column="pPROVINCIA"/>
+	     <result property="strDepartamento"				column="pDEPARTAMENTO"/>
+	     <result property="strCargo"					column="pCARGO"/>
+	</resultMap>
+	
+	<parameterMap id="parCarteraCredito" class="java.util.Map">
+	   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoSocio" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intModalidad" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoCredito" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intSubTipoCredito"		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intClasificacionDeudor"	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodo" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<procedure id="getCarteraCredito" parameterMap="parCarteraCredito" resultMap="resCarteraCredito">
+		{ call PKG_COBRANZA_CARTERACREDITO.getCarteraCredito(?,?,?,?,?,?,?,?,?)}  
+  	</procedure>
+</sqlMap>  	

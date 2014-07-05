@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CarteraDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.riesgo.cartera.domain.Cartera" alias="Cartera"/> 
+	
+  <resultMap id="resCartera" class="Cartera" >
+  	 <result property="intItemCartera"      		column="pCrie_itemcartera_n" />
+  	 <result property="intPersEmpresaPk"      		column="pPers_empresa_n_pk" />
+  	 <result property="strNombre"      				column="pCart_nombre_v" />
+  	 <result property="intParaTipoCobranzaCod"      column="pPara_tipocobranza_n" />
+  	 <result property="dtFechaInicio"      			column="pCart_fechainicio_d" />
+  	 <result property="dtFechaFin"      			column="pCart_fechafin_d" />
+  	 <result property="intPersPersonaRegistraPk"    column="pCers_personaregistra_n" />
+  	 <result property="dtFechaRegistra"      		column="pPers_fecharegistra_d" />
+  	 <result property="intPersPersonaEliminaPk"     column="pPers_personaelimina_n" />
+  	 <result property="dtFechaElimina"      		column="pPers_fechaeliminacion_d" />
+  	 <result property="intParaEstadoCod"      		column="pPara_estado_n_cod" />
+  </resultMap>
+  
+  <parameterMap id="parCartera" class="Cartera">
+     <parameter property="intItemCartera"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersEmpresaPk"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="strNombre"				jdbcType="VARCHAR"  javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intParaTipoCobranzaCod"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtFechaInicio"			jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="dtFechaFin"				jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intPersPersonaRegistraPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtFechaRegistra"			jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk"	jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="dtFechaElimina"			jdbcType="DATE"  	javaType="java.util.Date" 		mode="INOUT"/>     
+     <parameter property="intParaEstadoCod"			jdbcType="NUMERIC"  javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" 	mode="OUT"/>
+   	 <parameter property="intItemCartera" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="strNombre" 			javaType="java.lang.String"  	jdbcType="VARCHAR" 	   	 mode="IN"/>
+  </parameterMap>
+  
+
+  
+  <procedure id="grabar" parameterMap="parCartera">
+	{ call PKG_CARTERA.grabar(?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parCartera" >
+	{ call PKG_CARTERA.modificar(?,?,?,?,?,?,?,?,?,?,?)  }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resCartera">
+	{ call PKG_CARTERA.getListaPorPk(?,?) }  
+  </procedure>
+    
+  <procedure id="getListaPorBusqueda" parameterMap="parPorBusqueda" resultMap="resCartera">
+	{ call PKG_CARTERA.getListaPorBusqueda(?,?) }  
+  </procedure>
+
+</sqlMap>

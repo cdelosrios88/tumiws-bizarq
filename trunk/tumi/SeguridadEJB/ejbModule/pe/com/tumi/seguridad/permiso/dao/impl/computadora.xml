@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ComputadoraDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.permiso.domain.Computadora" alias="Computadora"/> 
+	
+  <resultMap id="resComputadora" class="Computadora" >
+     <result property="id.intPersEmpresaPk"     column="pPers_empresa_n_pk" />
+     <result property="id.intIdSucursal"  		column="pIdsucursal_n" />
+     <result property="id.intIdArea"      		column="pIdarea_n" />
+     <result property="id.intIdComputadora"     column="pIdcomputadora_n" />
+     <result property="strIdentificador"     	column="pIdentificador_v" />
+     <result property="dtFechaActivacion"     	column="pFechaactivacion_d" />
+     <result property="intIdEstado"     		column="pIdestado_n" />
+     <result property="tsFechaEliminacion"      column="pFechaeliminacion_d" />
+  </resultMap>
+  
+  <parameterMap id="parComputadora" class="Computadora">
+     <parameter property="id.intPersEmpresaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intIdSucursal"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdArea" 		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.intIdComputadora"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="strIdentificador"		jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>    
+     <parameter property="dtFechaActivacion" 	jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+     <parameter property="intIdEstado"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="tsFechaEliminacion"	jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>    
+  </parameterMap>
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdSucursal" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdArea" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdComputadora" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdSucursal" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdArea" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdComputadora" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdEstado" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parComputadora">
+	{ call PKG_COMPUTADORA.grabar(?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parComputadora" >
+	{ call PKG_COMPUTADORA.modificar(?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resComputadora">
+	{ call PKG_COMPUTADORA.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaBusqueda" parameterMap="parPorBusqueda" resultMap="resComputadora">
+	{ call PKG_COMPUTADORA.getListaBusqueda(?,?,?,?,?,?) }
+  </procedure>
+</sqlMap>  

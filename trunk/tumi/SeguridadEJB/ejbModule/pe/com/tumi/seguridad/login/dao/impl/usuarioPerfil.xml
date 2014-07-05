@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="UsuarioPerfilDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.UsuarioPerfil" alias="UsuarioPerfilLogin"/> 
+	
+  <resultMap id="resUsuarioPerfilLogin" class="UsuarioPerfilLogin" >
+     <result property="id.intPersEmpresaPk"     column="pPers_empresa_n_pk" />
+     <result property="id.intPersPersonaPk"  	column="pPers_persona_n_pk" />
+     <result property="id.intIdPerfil"      	column="pIdperfil_n" />
+     <result property="id.dtDesde"   			column="pDesde_d" />
+     <result property="dtHasta" 				column="pHasta_d" />
+     <result property="dtFechaRegistro"   		column="pFecharegistro_d" />
+     <result property="intIdEstado"   			column="pEstado_n" />
+     <result property="tsFechaEliminacion"  	column="pFechaeliminacion_d" />
+     <result property="intPersPersonaUsuarioPk" column="pPers_personausuario_n_pk" />
+     <result property="intPersPersonaEliminaPk" column="pPers_personaelimina_n_pk" />
+  </resultMap>
+  
+  <parameterMap id="parUsuarioPerfilLogin" class="UsuarioPerfilLogin">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intPersPersonaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="id.intIdPerfil" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="id.dtDesde"				jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>
+	 <parameter property="dtHasta"					jdbcType="DATE"  		javaType="java.util.Date" 		mode="INOUT"/>    
+     <parameter property="dtFechaRegistro" 			jdbcType="TIMESTAMP"	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intIdEstado" 				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaEliminacion"		jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intPersPersonaUsuarioPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intPersPersonaEliminaPk"	jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="intIdPerfil" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="dtDesde" 				jdbcType="DATE"		 	 javaType="java.util.Date"   	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkEmpresaUsuario" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPkEmpresaUsuarioYFechaEliminacion" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersEmpresaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"   mode="IN"/>
+   	 <parameter property="tsFechaEliminacion" 	jdbcType="TIMESTAMP"	 javaType="java.sql.Timestamp"  mode="IN"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parUsuarioPerfilLogin">
+	{ call PKG_USUARIOPERFIL.grabar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parUsuarioPerfilLogin" >
+	{ call PKG_USUARIOPERFIL.modificar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resUsuarioPerfilLogin">
+	{ call PKG_USUARIOPERFIL.getListaPorPK(?,?,?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorPkEmpresaUsuario" parameterMap="parPorPkEmpresaUsuario" resultMap="resUsuarioPerfilLogin">
+	{ call PKG_USUARIOPERFIL.getListaPorPkEmpresaUsuario(?,?,?) }
+  </procedure>
+
+  <procedure id="getListaPorPkEmpUsrYFechaElimi" parameterMap="parPorPkEmpresaUsuarioYFechaEliminacion" resultMap="resUsuarioPerfilLogin">
+	{ call PKG_USUARIOPERFIL.getListaPorPkEmpUsrYFechaElimi(?,?,?,?) }
+  </procedure>
+  
+</sqlMap>  

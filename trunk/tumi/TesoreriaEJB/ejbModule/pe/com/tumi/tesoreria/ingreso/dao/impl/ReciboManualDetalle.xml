@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ReciboManualDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.ingreso.domain.ReciboManualDetalle" alias="ReciboManualDetalle"/> 
+	
+  <resultMap id="resReciboManualDetalle" class="ReciboManualDetalle" >
+	<result property="id.intPersEmpresa"  				column="pempresarecibo" />
+	<result property="id.intItemReciboManual"   		column="pitemrecibomanual" />
+	<result property="id.intItemReciboManualDetalle"   	column="pitemrecibomanualdet" />
+    <result property="intNumeroRecibo"      			column="pnumerorecibo" />
+    <result property="intPersEmpresaIngreso"     		column="pempresaingreso" />
+    <result property="intItemIngresoGeneral"      		column="pitemingresogeneral" />
+    <result property="intParaEstado"      				column="pestado" />
+    <result property="intPersEmpresaAnula"      		column="pempresaanula" />
+    <result property="intPersPersonaAnula"      		column="ppersonaanula" />
+    <result property="dtFechaAnula"      				column="pfechaanula" />
+    <result property="strObservacionAnula"      		column="pobservacionanula" />
+    <result property="intPersPersonaGestor"      		column="ppersonagestor" />
+    <result property="intParaTipoEnlace"      		    column="ptipoenlace" />
+    <result property="intParaTipoDesenlace"      		column="ptipodesenlace" />
+  </resultMap>
+  
+  <parameterMap id="parReciboManualDetalle" class="ReciboManualDetalle">
+	 <parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemReciboManual"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemReciboManualDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroRecibo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaAnula"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersPersonaAnula"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="dtFechaAnula"						javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	 <parameter property="strObservacionAnula"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intPersPersonaGestor"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoEnlace"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoDesenlace"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemReciboManual"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemReciboManualDetalle"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorReciboManual" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemReciboManual"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorIngreso" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>   	 
+  </parameterMap>
+  
+  
+  <parameterMap id="parExisteNroReciboEnlazado" class="java.util.Map">
+   	 <parameter property="vRESULT" 						javaType="java.lang.String" 		jdbcType="VARCHAR"      mode="OUT"/>
+   	 <parameter property="intPersEmpresaIngreso"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		    javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>  
+	 <parameter property="intSudeIdSubsucursal"		    javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>  
+	 <parameter property="intNroRecibo"		            javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>  
+  </parameterMap>
+  
+  <parameterMap id="parPorFiltros" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresaIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			    javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intSudeIdSubsucursal"			    javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intEstadoCierre"			        javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intNroRecibo"			            javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+  </parameterMap>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resReciboManualDetalle">
+	{ call PKG_RECIBOMANUALDET.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="grabar" parameterMap="parReciboManualDetalle">
+	{ call PKG_RECIBOMANUALDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parReciboManualDetalle" >
+	{ call PKG_RECIBOMANUALDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorReciboManual" parameterMap="parPorReciboManual" resultMap="resReciboManualDetalle">
+	{ call PKG_RECIBOMANUALDET.getListaPorReciboManual(?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorIngreso" parameterMap="parPorIngreso" resultMap="resReciboManualDetalle">
+	{ call PKG_RECIBOMANUALDET.getListaPorIngreso(?,?,?) }
+  </procedure>
+  
+   <procedure id="existeNroReciboEnlazado" parameterMap="parExisteNroReciboEnlazado" >
+	{ call PKG_RECIBOMANUALDET.existeNroReciboEnlazado(?,?,?,?,?) }
+  </procedure>
+  <procedure id="getListaPorFiltros" parameterMap="parPorFiltros" resultMap="resReciboManualDetalle">
+	{ call PKG_RECIBOMANUALDET.getListaPorFiltros(?,?,?,?,?,?) }
+  </procedure>
+  
+  
+</sqlMap>
