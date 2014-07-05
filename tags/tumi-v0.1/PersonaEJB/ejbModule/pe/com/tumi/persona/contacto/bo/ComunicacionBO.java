@@ -12,6 +12,7 @@ import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.persona.contacto.dao.ComunicacionDao;
 import pe.com.tumi.persona.contacto.dao.impl.ComunicacionDaoIbatis;
 import pe.com.tumi.persona.contacto.domain.Comunicacion;
+
 import pe.com.tumi.persona.contacto.domain.ComunicacionPK;
 
 public class ComunicacionBO {
