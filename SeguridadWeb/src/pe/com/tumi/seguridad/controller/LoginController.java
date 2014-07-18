@@ -607,6 +607,137 @@ public class LoginController{
 		}
 	}
 	
+	//Inicio: REQ14-001 - lpolanco - 15/07/2014
+	/**
+	 * Metodo que verifica si el usuario autenticado tiene permisos de cabina en el dia y hora actual (se verifican los
+	 * dias de semana en caso se seleccione en el registro de cabina).
+	 * 
+	 * @return Indicador de pertenencia del usuario a cabina <code>bolUsuarioCabina</code>
+	 */
+	public boolean verificarUsuarioCabina() {
+		PermisoFacadeLocal permisoFacade;
+		AccesoEspecial accesoEspecialFiltro = new AccesoEspecial();
+		List<AccesoEspecial> listaAccesosEspeciales = new ArrayList<AccesoEspecial>();
+		boolean bolUsuarioCabina = false;
+		try {
+			// Inicializar el objeto Facade
+			permisoFacade = (PermisoFacadeLocal) EJBFactory.getLocal(PermisoFacadeLocal.class);
+
+			// Actualizar filtros de busqueda
+			accesoEspecialFiltro.setIntPersEmpresa(intIdEmpresa);
+			accesoEspecialFiltro.setIntParaTipoMotivo(null);
+			accesoEspecialFiltro.setIntPersPersonaOpera(usuario.getIntPersPersonaPk());
+			accesoEspecialFiltro.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+
+			// Obtener lista de MAC Address y permisos de cabina
+			/*
+			 * 1.- Primero se va a verificar si el usuario tiene permiso para acceder desde cabina. 1.1- Si tiene
+			 * permiso, no se valida MAC y sigue el proceso de autenticacion 1.2- Si no tiene permiso, se valida MAC 2.-
+			 * En caso se cumpla la condicion 1.2 se procede a validar la MAC en la lista de MAC Address permitidas.
+			 */
+			listaAccesosEspeciales = permisoFacade.buscarAccesosEspeciales(accesoEspecialFiltro);
+
+			// 1.- Buscar permisos para el usuario
+			if (listaAccesosEspeciales != null && !listaAccesosEspeciales.isEmpty()) {
+				for (AccesoEspecial objAccesoEspecialTmp : listaAccesosEspeciales) {
+					// 1.1.- Buscar si la persona autenticada existe
+					if (objAccesoEspecialTmp.getIntPersPersonaOpera().equals(usuario.getIntPersPersonaPk())) {
+						// 1.1.1 Buscar que el dia de hoy (incluida hora) este en el rango de fecha inicio y fin
+						Timestamp tsFechaHoy = new Timestamp(new Date().getTime());
+						if (((objAccesoEspecialTmp.getTsFechaInicio().before(tsFechaHoy)) || (objAccesoEspecialTmp
+								.getTsFechaInicio().equals(tsFechaHoy)))
+								&& ((objAccesoEspecialTmp.getTsFechaFin().after(tsFechaHoy)))
+								|| (objAccesoEspecialTmp.getTsFechaFin().equals(tsFechaHoy))) {
+							// 1.1.1.1 Verificar existencia del detalle del acceso especial
+							// (dia de semana)
+							List<AccesoEspecialDetalle> listaAccesoEspecialDet = permisoFacade
+									.getListaAccesoEspecialDetallePorCabecera(objAccesoEspecialTmp);
+							if (listaAccesoEspecialDet != null && !listaAccesoEspecialDet.isEmpty()) {
+								Calendar calFechaHoy = Calendar.getInstance();
+								calFechaHoy.setTime(tsFechaHoy);
+								int intDiaHoy = calFechaHoy.get(Calendar.DAY_OF_WEEK);
+
+								// Convertir dia Java a dia ERP (Java - Domingo = 1
+								if (intDiaHoy == 1) {
+									intDiaHoy = 7;
+								} else {
+									intDiaHoy = intDiaHoy - 1;
+								}
+								for (AccesoEspecialDetalle objAccesoEspecialDetTmp : listaAccesoEspecialDet) {
+									// 1.1.1.1.1 Verificar el dia en el detalle
+									if (objAccesoEspecialDetTmp.getIntIdEstado().equals(
+											Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)
+											&& objAccesoEspecialDetTmp.getId().getIntIdDiaSemana() != null
+											&& objAccesoEspecialDetTmp.getId().getIntIdDiaSemana() == (intDiaHoy)) {
+										bolUsuarioCabina = true;
+										break;
+									} else {
+										// 1.1.1.1.2 No existe en el detalle
+										bolUsuarioCabina = false;
+									}
+								}
+							} else {
+								// 1.1.1.2 Si no hay detalle especial -> Esta en el rango -> True (isCabina)
+								bolUsuarioCabina = true;
+								break;
+							}
+						} else {
+							// 1.1.2 No esta en el rango -> False (isCabina)
+							bolUsuarioCabina = false;
+						}
+					} else {
+						// 1.2 Persona no esta en la lista -> False (isCabina)
+						bolUsuarioCabina = false;
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return bolUsuarioCabina;
+	}
+
+	/**
+	 * Metodo que verifica si la MAC Address del usuario autenticado se encuentra registrada en la lista Computadoras
+	 * que pertenecen a la misma Empresa y Sucursal del usuario.
+	 * 
+	 * @return Indicador de pertenencia de la MAC Address con la lista de Computadoras <code>bolRegistroMac</code>
+	 */
+	public boolean verificarMacAddress() {
+		PermisoFacadeLocal permisoFacade;
+		Computadora computadoraFiltro = new Computadora();
+		List<Computadora> listaComputadoras = new ArrayList<Computadora>();
+		boolean bolRegistroMac = false;
+		try {
+			// Inicializar el objeto Facade
+			permisoFacade = (PermisoFacadeLocal) EJBFactory.getLocal(PermisoFacadeLocal.class);
+
+			// Armando los filtros de busqueda
+			computadoraFiltro.getId().setIntPersEmpresaPk(intIdEmpresa);
+			computadoraFiltro.getId().setIntIdSucursal(intIdSucursalPersona);
+			computadoraFiltro.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+
+			// Obtener lista de Computadoras registradas
+			listaComputadoras = permisoFacade.buscarComputadora(computadoraFiltro);
+			if (listaComputadoras != null && !listaComputadoras.isEmpty()) {
+				for (Computadora objComputadoraTmp : listaComputadoras) {
+					// 1-Verificar que la MAC se encuentre en la lista de computadoras
+					if (objComputadoraTmp.getStrIdentificador() != null
+							&& objComputadoraTmp.getStrIdentificador().equals(this.strMacAddress)) {
+						bolRegistroMac = true;
+						break;
+					} else {
+						bolRegistroMac = false;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bolRegistroMac;
+	}
+	//Fin: REQ14-001 - lpolanco - 15/07/2014
+	
 	public String autorizar(){
 		boolean sigueValidando = false;
 		PermisoFacadeLocal localPermiso = null;
@@ -620,6 +751,28 @@ public class LoginController{
 		String outcome = "portal.empresa";
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		try{
+			//Inicio: REQ14-001 - lpolanco - 15/07/2014
+			// 1-Validar si el usuario tiene permisos de cabina
+			boolean bolUsuarioCabina = verificarUsuarioCabina();
+			if(bolUsuarioCabina == true){
+				//1.1 Usuario tiene permisos de Cabina -> No verificar MAC
+				//No hacer nada!
+			}else{
+				//1.2 Usuario NO tiene perimsos de Cabina -> Verificar MAC
+				if(this.strMacAddress != null && this.strMacAddress.length() > 0){
+					//1.2.1 Verificar MAC Address en el registro de computadoras
+					boolean bolRegistroMac = verificarMacAddress();
+					if(bolRegistroMac == false){
+						//1.2.1.1. Mostrar mensaje de que no esta en la lista de MAC (Computadora)
+						// y cerrar sesion
+					}else{
+						//1.2.1.2 No hacer nada!
+					}
+				}else{
+					//1.2.2 Mostrar mensaje de que no existe MAC y cerrar sesion
+				}
+			}
+			//Fin: REQ14-001 - lpolanco - 15/07/2014		
 			if(PortalValidador.validarEmpresa(msgPortal, intIdEmpresa, intIdSucursalPersona, intIdSubSucursal, intIdPerfil)){
 				System.out.println("validarUsuario");
 				log.info(intIdEmpresa);

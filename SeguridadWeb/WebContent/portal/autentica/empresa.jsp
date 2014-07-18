@@ -30,11 +30,35 @@
 <script
 	src="<%=request.getContextPath()%>/remoting/?parametro=script.js"
 	type="text/javascript"></script>
+	
+<!-- Inicio: REQ14-001 - lpolanco - 15/07/2014 -->
+<script type="text/javascript" src="/SeguridadWeb/js/jquery19.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$.ajax({ 
+			type: 'GET', 
+			url: 'http://localhost/servicio/servicio.php', 
+			data: { get_param: 'value' }, 
+			dataType: 'json',
+			success: function (data) { 
+				var names = data.name;
+				//$('#idContenido').html(names);
+				//alert(names);
+				document.getElementById('frmPrincipal:strMacAddress').value = names;
+			}
+		});
+	});
+</script>
+<!-- Fin: REQ14-001 - lpolanco - 15/07/2014 -->
+
 </head>
 <body leftmargin="0" rightmargin="0" marginheight="0" marginwidth="0"
 	topmargin="0" bottommargin="0">
 	<f:view>
 		<h:form id="frmPrincipal">
+			<!-- Inicio: REQ14-001 - lpolanco - 15/07/2014 -->
+			<h:inputHidden id="strMacAddress" value="#{loginController.strMacAddress}" />
+			<!-- Fin: REQ14-001 - lpolanco - 15/07/2014 -->
 			<h:panelGrid id="tabla" columns="1" style="border:0px;width:100%;"
 				columnClasses="columna">
 				<h:column>
