@@ -56,6 +56,8 @@ import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.login.validador.CambioValidador;
 import pe.com.tumi.seguridad.login.validador.PortalValidador;
 import pe.com.tumi.seguridad.permiso.domain.AccesoEspecial;
+import pe.com.tumi.seguridad.permiso.domain.AccesoEspecialDetalle;
+import pe.com.tumi.seguridad.permiso.domain.Computadora;
 import pe.com.tumi.seguridad.permiso.domain.DiasAccesos;
 import pe.com.tumi.seguridad.permiso.domain.DiasAccesosId;
 import pe.com.tumi.seguridad.permiso.domain.Transaccion;
@@ -210,7 +212,24 @@ public class LoginController{
 	protected static Logger log = Logger.getLogger(LoginController.class);
 	private int activaPopup;
 	
+	//Inicio: REQ14-001 - lpolanco - 15/07/2014
+	private String strMacAddress;
 	
+	/**
+	 * @return the strMacAddress
+	 */
+	public String getStrMacAddress() {
+		return strMacAddress;
+	}
+
+	/**
+	 * @param strMacAddress the strMacAddress to set
+	 */
+	public void setStrMacAddress(String strMacAddress) {
+		this.strMacAddress = strMacAddress;
+	}
+	//Fin: REQ14-001 - lpolanco - 15/07/2014
+
 	public LoginController(){
 		usuario = new Usuario();
 		msgPortal = new PortalMsg();
@@ -615,14 +634,10 @@ public class LoginController{
 	 * @return Indicador de pertenencia del usuario a cabina <code>bolUsuarioCabina</code>
 	 */
 	public boolean verificarUsuarioCabina() {
-		PermisoFacadeLocal permisoFacade;
 		AccesoEspecial accesoEspecialFiltro = new AccesoEspecial();
 		List<AccesoEspecial> listaAccesosEspeciales = new ArrayList<AccesoEspecial>();
 		boolean bolUsuarioCabina = false;
 		try {
-			// Inicializar el objeto Facade
-			permisoFacade = (PermisoFacadeLocal) EJBFactory.getLocal(PermisoFacadeLocal.class);
-
 			// Actualizar filtros de busqueda
 			accesoEspecialFiltro.setIntPersEmpresa(intIdEmpresa);
 			accesoEspecialFiltro.setIntParaTipoMotivo(null);
@@ -635,7 +650,7 @@ public class LoginController{
 			 * permiso, no se valida MAC y sigue el proceso de autenticacion 1.2- Si no tiene permiso, se valida MAC 2.-
 			 * En caso se cumpla la condicion 1.2 se procede a validar la MAC en la lista de MAC Address permitidas.
 			 */
-			listaAccesosEspeciales = permisoFacade.buscarAccesosEspeciales(accesoEspecialFiltro);
+			listaAccesosEspeciales = this.permisoFacade.buscarAccesosEspeciales(accesoEspecialFiltro);
 
 			// 1.- Buscar permisos para el usuario
 			if (listaAccesosEspeciales != null && !listaAccesosEspeciales.isEmpty()) {
@@ -650,7 +665,7 @@ public class LoginController{
 								|| (objAccesoEspecialTmp.getTsFechaFin().equals(tsFechaHoy))) {
 							// 1.1.1.1 Verificar existencia del detalle del acceso especial
 							// (dia de semana)
-							List<AccesoEspecialDetalle> listaAccesoEspecialDet = permisoFacade
+							List<AccesoEspecialDetalle> listaAccesoEspecialDet = this.permisoFacade
 									.getListaAccesoEspecialDetallePorCabecera(objAccesoEspecialTmp);
 							if (listaAccesoEspecialDet != null && !listaAccesoEspecialDet.isEmpty()) {
 								Calendar calFechaHoy = Calendar.getInstance();
@@ -704,30 +719,46 @@ public class LoginController{
 	 * @return Indicador de pertenencia de la MAC Address con la lista de Computadoras <code>bolRegistroMac</code>
 	 */
 	public boolean verificarMacAddress() {
-		PermisoFacadeLocal permisoFacade;
+		EmpresaFacadeLocal localEmpresa = null;
+		EmpresaUsuarioId empresaUsuarioId = new EmpresaUsuarioId();
 		Computadora computadoraFiltro = new Computadora();
 		List<Computadora> listaComputadoras = new ArrayList<Computadora>();
+		List<Sucursal> listaSucursal = new ArrayList<Sucursal>();
 		boolean bolRegistroMac = false;
+		int intIdSucursal = 0;
 		try {
-			// Inicializar el objeto Facade
-			permisoFacade = (PermisoFacadeLocal) EJBFactory.getLocal(PermisoFacadeLocal.class);
-
-			// Armando los filtros de busqueda
-			computadoraFiltro.getId().setIntPersEmpresaPk(intIdEmpresa);
-			computadoraFiltro.getId().setIntIdSucursal(intIdSucursalPersona);
-			computadoraFiltro.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
-
-			// Obtener lista de Computadoras registradas
-			listaComputadoras = permisoFacade.buscarComputadora(computadoraFiltro);
-			if (listaComputadoras != null && !listaComputadoras.isEmpty()) {
-				for (Computadora objComputadoraTmp : listaComputadoras) {
-					// 1-Verificar que la MAC se encuentre en la lista de computadoras
-					if (objComputadoraTmp.getStrIdentificador() != null
-							&& objComputadoraTmp.getStrIdentificador().equals(this.strMacAddress)) {
-						bolRegistroMac = true;
+			empresaUsuarioId.setIntPersPersonaPk(usuario.getIntPersPersonaPk());
+			empresaUsuarioId.setIntPersEmpresaPk(intIdEmpresa);
+			localEmpresa = (EmpresaFacadeLocal)EJBFactory.getLocal(EmpresaFacadeLocal.class);
+			listaSucursal = localEmpresa.getListaSucursalPorPkEmpresaUsuarioYEstado(empresaUsuarioId,Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+			if(listaSucursal != null && !listaSucursal.isEmpty()){
+				
+				// Obtener el Id de la Sucursal
+				for(Sucursal objSucursalTmp : listaSucursal){
+					if(objSucursalTmp.getIntPersPersonaPk() != null 
+							&& objSucursalTmp.getIntPersPersonaPk().equals(intIdSucursalPersona)){
+						intIdSucursal = objSucursalTmp.getId().getIntIdSucursal();
 						break;
-					} else {
-						bolRegistroMac = false;
+					}
+				}
+
+				// Armando los filtros de busqueda
+				computadoraFiltro.getId().setIntPersEmpresaPk(intIdEmpresa);
+				computadoraFiltro.getId().setIntIdSucursal(intIdSucursal);
+				computadoraFiltro.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+
+				// Obtener lista de Computadoras registradas
+				listaComputadoras = this.permisoFacade.buscarComputadora(computadoraFiltro);
+				if (listaComputadoras != null && !listaComputadoras.isEmpty()) {
+					for (Computadora objComputadoraTmp : listaComputadoras) {
+						// 1-Verificar que la MAC se encuentre en la lista de computadoras
+						if (objComputadoraTmp.getStrIdentificador() != null
+								&& objComputadoraTmp.getStrIdentificador().equals(this.strMacAddress)) {
+							bolRegistroMac = true;
+							break;
+						} else {
+							bolRegistroMac = false;
+						}
 					}
 				}
 			}
