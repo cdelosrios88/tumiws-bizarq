@@ -393,5 +393,5 @@ public class Constante {
 	public static final int INT_NINE = 9;
 	public static final int INT_TEN = 10;
 	
-	//Fin: REQ14-001 - lpolanco - 19/07/2014
+	//Fin: REQ14-001 - cdelosrios - 19/07/2014
 }
