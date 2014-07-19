@@ -379,4 +379,19 @@ public class Constante {
 	//PARAM_T_CARGOABONO
 	public static final Integer PARAM_T_CARGOABONO_ABONO = 1;
 	public static final Integer PARAM_T_CARGOABONO_CARGO = 2;
+	
+	//Inicio: REQ14-001 - cdelosrios - 19/07/2014
+	public static final int INT_ZERO = 0;
+	public static final int INT_ONE = 1;
+	public static final int INT_TWO = 2;
+	public static final int INT_THREE = 3;
+	public static final int INT_FOUR = 4;
+	public static final int INT_FIVE = 5;
+	public static final int INT_SIX = 6;
+	public static final int INT_SEVEN = 7;
+	public static final int INT_EIGTH = 8;
+	public static final int INT_NINE = 9;
+	public static final int INT_TEN = 10;
+	
+	//Fin: REQ14-001 - lpolanco - 19/07/2014
 }
