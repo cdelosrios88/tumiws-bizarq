@@ -5,28 +5,22 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.sql.Timestamp;
 import java.text.ParseException;
-
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.application.Application;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.openjpa.lib.log.Log;
 import org.richfaces.component.html.HtmlPanelMenu;
-
-import javax.servlet.http.HttpServletResponse;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.DaoException;
@@ -628,17 +622,20 @@ public class LoginController{
 	
 	//Inicio: REQ14-001 - lpolanco - 15/07/2014
 	/**
+	 * @author Luis Polanco
+	 * Descripción:
 	 * Metodo que verifica si el usuario autenticado tiene permisos de cabina en el dia y hora actual (se verifican los
 	 * dias de semana en caso se seleccione en el registro de cabina).
 	 * 
 	 * @return Indicador de pertenencia del usuario a cabina <code>bolUsuarioCabina</code>
 	 */
 	public boolean verificarUsuarioCabina() {
-		AccesoEspecial accesoEspecialFiltro = new AccesoEspecial();
-		List<AccesoEspecial> listaAccesosEspeciales = new ArrayList<AccesoEspecial>();
+		AccesoEspecial accesoEspecialFiltro = null;
+		List<AccesoEspecial> listaAccesosEspeciales = null;
 		boolean bolUsuarioCabina = false;
 		try {
 			// Actualizar filtros de busqueda
+			accesoEspecialFiltro = new AccesoEspecial();
 			accesoEspecialFiltro.setIntPersEmpresa(intIdEmpresa);
 			accesoEspecialFiltro.setIntParaTipoMotivo(null);
 			accesoEspecialFiltro.setIntPersPersonaOpera(usuario.getIntPersPersonaPk());
@@ -646,9 +643,11 @@ public class LoginController{
 
 			// Obtener lista de MAC Address y permisos de cabina
 			/*
-			 * 1.- Primero se va a verificar si el usuario tiene permiso para acceder desde cabina. 1.1- Si tiene
-			 * permiso, no se valida MAC y sigue el proceso de autenticacion 1.2- Si no tiene permiso, se valida MAC 2.-
-			 * En caso se cumpla la condicion 1.2 se procede a validar la MAC en la lista de MAC Address permitidas.
+			 * 1.- Primero se va a verificar si el usuario tiene permiso para acceder desde cabina. 
+			 * 		1.1- Si tiene permiso, no se valida MAC y sigue el proceso de autenticacion 
+			 * 		1.2- Si no tiene permiso, se valida MAC 
+			 * 2.- En caso se cumpla la condicion 
+			 * 		2.1 se procede a validar la MAC en la lista de MAC Address permitidas.
 			 */
 			listaAccesosEspeciales = this.permisoFacade.buscarAccesosEspeciales(accesoEspecialFiltro);
 
@@ -673,10 +672,10 @@ public class LoginController{
 								int intDiaHoy = calFechaHoy.get(Calendar.DAY_OF_WEEK);
 
 								// Convertir dia Java a dia ERP (Java - Domingo = 1
-								if (intDiaHoy == 1) {
-									intDiaHoy = 7;
+								if (intDiaHoy == Constante.INT_ONE) {
+									intDiaHoy = Constante.INT_SEVEN;
 								} else {
-									intDiaHoy = intDiaHoy - 1;
+									intDiaHoy = intDiaHoy - Constante.INT_ONE;
 								}
 								for (AccesoEspecialDetalle objAccesoEspecialDetTmp : listaAccesoEspecialDet) {
 									// 1.1.1.1.1 Verificar el dia en el detalle
@@ -713,6 +712,8 @@ public class LoginController{
 	}
 
 	/**
+	 * @author Luis Polanco (Bizarq)
+	 * Descripción:
 	 * Metodo que verifica si la MAC Address del usuario autenticado se encuentra registrada en la lista Computadoras
 	 * que pertenecen a la misma Empresa y Sucursal del usuario.
 	 * 
@@ -720,13 +721,14 @@ public class LoginController{
 	 */
 	public boolean verificarMacAddress() {
 		EmpresaFacadeLocal localEmpresa = null;
-		EmpresaUsuarioId empresaUsuarioId = new EmpresaUsuarioId();
-		Computadora computadoraFiltro = new Computadora();
+		EmpresaUsuarioId empresaUsuarioId = null;
+		Computadora computadoraFiltro = null;
 		List<Computadora> listaComputadoras = new ArrayList<Computadora>();
 		List<Sucursal> listaSucursal = new ArrayList<Sucursal>();
 		boolean bolRegistroMac = false;
 		int intIdSucursal = 0;
 		try {
+			empresaUsuarioId = new EmpresaUsuarioId();
 			empresaUsuarioId.setIntPersPersonaPk(usuario.getIntPersPersonaPk());
 			empresaUsuarioId.setIntPersEmpresaPk(intIdEmpresa);
 			localEmpresa = (EmpresaFacadeLocal)EJBFactory.getLocal(EmpresaFacadeLocal.class);
@@ -743,6 +745,7 @@ public class LoginController{
 				}
 
 				// Armando los filtros de busqueda
+				computadoraFiltro = new Computadora();
 				computadoraFiltro.getId().setIntPersEmpresaPk(intIdEmpresa);
 				computadoraFiltro.getId().setIntIdSucursal(intIdSucursal);
 				computadoraFiltro.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
@@ -790,7 +793,7 @@ public class LoginController{
 				//No hacer nada!
 			}else{
 				//1.2 Usuario NO tiene perimsos de Cabina -> Verificar MAC
-				if(this.strMacAddress != null && this.strMacAddress.length() > 0){
+				if(this.strMacAddress != null && this.strMacAddress.length() > Constante.INT_ZERO){
 					//1.2.1 Verificar MAC Address en el registro de computadoras
 					boolean bolRegistroMac = verificarMacAddress();
 					if(bolRegistroMac == false){
