@@ -1,7 +1,6 @@
 package pe.com.tumi.seguridad.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.sql.Timestamp;
@@ -11,7 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
@@ -52,13 +50,18 @@ import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.login.validador.CambioValidador;
 import pe.com.tumi.seguridad.login.validador.PortalValidador;
 import pe.com.tumi.seguridad.permiso.domain.AccesoEspecial;
-import pe.com.tumi.seguridad.permiso.domain.AccesoEspecialDetalle;
-import pe.com.tumi.seguridad.permiso.domain.Computadora;
 import pe.com.tumi.seguridad.permiso.domain.DiasAccesos;
 import pe.com.tumi.seguridad.permiso.domain.DiasAccesosId;
 import pe.com.tumi.seguridad.permiso.domain.Transaccion;
 import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeLocal;
 //import pe.com.tumi.seguridad.usuario.domain.Perfil;
+
+//Inicio: REQ14-001 - bizarq - 15/07/2014
+import java.io.InputStream;
+import java.util.Properties;
+import pe.com.tumi.seguridad.permiso.domain.AccesoEspecialDetalle;
+import pe.com.tumi.seguridad.permiso.domain.Computadora;
+//Inicio: REQ14-001 - bizarq - 15/07/2014
 
 public class LoginController{
 	
@@ -208,23 +211,27 @@ public class LoginController{
 	protected static Logger log = Logger.getLogger(LoginController.class);
 	private int activaPopup;
 	
-	//Inicio: REQ14-001 - jrivera - 15/07/2014
+	//Inicio: REQ14-001 - bizarq - 15/07/2014
 	private final String STR_URL_PROPERTIES = "../../resource/MessageValidate_es.properties";
 	private static final String STR_LBL_LOGIN = "login";
 	private String strMessageValidMAC;
+	private String strMacAddress;
+
 	
+	/**
+	 * @return the strMessageValidMAC
+	 */
 	public String getStrMessageValidMAC() {
 		return strMessageValidMAC;
 	}
 
+	/**
+	 * @param strMessageValidMAC the strMessageValidMAC to set
+	 */
 	public void setStrMessageValidMAC(String strMessageValidMAC) {
 		this.strMessageValidMAC = strMessageValidMAC;
 	}
-	//Fin: REQ14-001 - jrivera - 15/07/2014
-	
-	//Inicio: REQ14-001 - lpolanco - 15/07/2014
-	private String strMacAddress;
-	
+
 	/**
 	 * @return the strMacAddress
 	 */
@@ -238,7 +245,7 @@ public class LoginController{
 	public void setStrMacAddress(String strMacAddress) {
 		this.strMacAddress = strMacAddress;
 	}
-	//Fin: REQ14-001 - lpolanco - 15/07/2014
+	//Fin: REQ14-001 - bizarq - 15/07/2014
 
 	public LoginController(){
 		usuario = new Usuario();
@@ -636,7 +643,7 @@ public class LoginController{
 		}
 	}
 	
-	//Inicio: REQ14-001 - lpolanco - 15/07/2014
+	//Inicio: REQ14-001 - bizarq - 15/07/2014
 	/**
 	 * @author Luis Polanco
 	 * Descripción:
@@ -728,7 +735,7 @@ public class LoginController{
 	}
 
 	/**
-	 * @author Luis Polanco (Bizarq)
+	 * @author Bizarq Technologies
 	 * Descripción:
 	 * Metodo que verifica si la MAC Address del usuario autenticado se encuentra registrada en la lista Computadoras
 	 * que pertenecen a la misma Empresa y Sucursal del usuario.
@@ -786,15 +793,27 @@ public class LoginController{
 		}
 		return bolRegistroMac;
 	}
-	//Fin: REQ14-001 - lpolanco - 15/07/2014
 	
-	//Inicio: REQ14-001 - jrivera - 15/07/2014
+	/**
+	 * @author Bizarq Technologies
+	 * Descripción:
+	 * Metodo que redirecciona el formulario empresa.jsp a login.jsp
+	 * 
+	 * @return Ruta de pagina login (mapping faces-config) <code>STR_LBL_LOGIN</code>
+	 */
 	public String cancelarSesion (ActionEvent event) {
 		limpiar();
 		cerrarSession();
 		return STR_LBL_LOGIN;
 	}
 	
+	/**
+	 * @author Bizarq Technologies
+	 * Descripción:
+	 * Metodo que retorna una cadena de texto de un archivo properties
+	 * 
+	 * @return Mensaje de texto registrado en un archivo properties <code>strMsg</code>
+	 */
 	public String getProperties (String strLabel){
 		String strMsg = "";
 		InputStream is = LoginController.class.getResourceAsStream(STR_URL_PROPERTIES);
@@ -808,7 +827,7 @@ public class LoginController{
         strMsg = props.getProperty(strLabel);
         return strMsg;
 	}
-	//Fin: REQ14-001 - jrivera - 15/07/2014
+	//Fin: REQ14-001 - bizarq - 15/07/2014
 	
 	public String autorizar(){
 		boolean sigueValidando = false;
@@ -823,7 +842,7 @@ public class LoginController{
 		String outcome = "portal.empresa";
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		try{
-			//Inicio: REQ14-001 - lpolanco - 15/07/2014
+			//Inicio: REQ14-001 - bizarq - 15/07/2014
 			// 1-Validar si el usuario tiene permisos de cabina
 			boolean bolUsuarioCabina = verificarUsuarioCabina();
 			if(bolUsuarioCabina == true){
@@ -841,8 +860,6 @@ public class LoginController{
 						setStrMessageValidMAC (getProperties("label.nofoundMAC.message"));
 						activaPopup = 1;
 						return outcome;
-					}else{
-						//1.2.1.2 No hacer nada!
 					}
 				}else{
 					//1.2.2 Mostrar mensaje de que no existe MAC y cerrar sesion
@@ -852,7 +869,8 @@ public class LoginController{
 					return outcome;
 				}
 			}
-			//Fin: REQ14-001 - lpolanco - 15/07/2014		
+			//Fin: REQ14-001 - bizarq - 15/07/2014
+			
 			if(PortalValidador.validarEmpresa(msgPortal, intIdEmpresa, intIdSucursalPersona, intIdSubSucursal, intIdPerfil)){
 				System.out.println("validarUsuario");
 				log.info(intIdEmpresa);

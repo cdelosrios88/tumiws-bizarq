@@ -1,9 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<!-- Inicio REQ14-001 jrivera 14-07-2014 -->
+<!-- Inicio REQ14-001 bizarq 15-07-2014 -->
 <%@ taglib uri="http://richfaces.org/rich" prefix="rich"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!-- Fin REQ14-001 jrivera 14-07-2014 -->
+<!-- Fin REQ14-001 bizarq 15-07-2014 -->
 <%@ taglib uri="http://richfaces.org/a4j" prefix="a4j"%>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 <%@page import="pe.com.tumi.common.util.Constante"%>
@@ -34,7 +34,7 @@
 <script
 	src="<%=request.getContextPath()%>/remoting/?parametro=script.js"
 	type="text/javascript"></script>
-<!-- Inicio REQ14-001 jrivera 14-07-2014 -->
+<!-- Inicio REQ14-001 bizarq 14-07-2014 -->
 <c:choose>
     <c:when test="${(loginController.activaPopup != null) and (loginController.activaPopup=='1')}">
         <script type="text/javascript">
@@ -45,7 +45,6 @@
 		</script>
     </c:when>
     <c:otherwise>
-        <!-- Inicio: REQ14-001 - lpolanco - 15/07/2014 -->
 		<script type="text/javascript" src="/SeguridadWeb/js/jquery19.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function () {
@@ -56,62 +55,60 @@
 					dataType: 'json',
 					success: function (data) { 
 						var names = data.name;
-						//$('#idContenido').html(names);
-						//alert(names);
 						document.getElementById('frmPrincipal:strMacAddress').value = names;
 					}
 				});
 			});
 		</script>
-		<!-- Fin: REQ14-001 - lpolanco - 15/07/2014 -->
     </c:otherwise>
 </c:choose>
-<!-- Fin REQ14-001 jrivera 14-07-2014 -->
+<!-- Fin REQ14-001 bizarq 15-07-2014 -->
 </head>
 <body leftmargin="0" rightmargin="0" marginheight="0" marginwidth="0"
 	topmargin="0" bottommargin="0">
 	<f:view>
-	<!-- Inicio REQ14-001 jrivera 14-07-2014 -->
-			<rich:modalPanel id="macAddressValid" minWidth="300"
-				minHeight="100" autosized="true" resizeable="false"
-				style="background-color:#DEEBF5;">
-				<f:facet name="header">
-					<h:panelGroup>
-						<h:outputText value="Validación de MAC Address"></h:outputText>
-					</h:panelGroup>
-				</f:facet>
-				<f:facet name="controls">
-					<h:panelGroup>
-						<h:graphicImage value="/images/icons/remove_20.png"
-							styleClass="hidelink" id="hidelinkPerm" />
-						<rich:componentControl for="macAddressValid"
-							attachTo="hidelinkPerm" operation="hide" event="onclick" />
-					</h:panelGroup>
-				</f:facet>
+		<!-- Inicio REQ14-001 bizarq 15-07-2014 -->
+		<rich:modalPanel id="macAddressValid" minWidth="300"
+			minHeight="100" autosized="true" resizeable="false"
+			style="background-color:#DEEBF5;">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Validación de MAC Address"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/images/icons/remove_20.png"
+						styleClass="hidelink" id="hidelinkPerm" />
+					<rich:componentControl for="macAddressValid"
+						attachTo="hidelinkPerm" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
 
-				<h:form id="frmPermModalPanel">
-					<rich:panel
-						style="border-width:1px;border-style:solid;border-color:#17356f;background-color:#DEEBF5;width:450px;">
-						<h:panelGrid columns="2" border="0" cellspacing="4">
-							<h:outputText id="lblCodigo"
-								value="#{loginController.strMessageValidMAC}"
-								style="padding-right:35px;text-align:center;"></h:outputText>
-						</h:panelGrid>
-						<rich:separator height="5px"></rich:separator>
-						<h:panelGrid columns="2" border="0" style="width: 200px;">
-							<a4j:commandButton value="Aceptar"
-								actionListener="#{loginController.limpiar}" onclick = "document.getElementById('linkLogin').click();"
-								styleClass="btnEstilos" id="btnCancelarSesion"  />
-						</h:panelGrid>
-					</rich:panel>
-				</h:form>
-			</rich:modalPanel>
-			<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;"> Login </a>  
-			<!--  Fin REQ14-001 jrivera 14-07-2014 -->
+			<h:form id="frmPermModalPanel">
+				<rich:panel
+					style="border-width:1px;border-style:solid;border-color:#17356f;background-color:#DEEBF5;width:450px;">
+					<h:panelGrid columns="2" border="0" cellspacing="4">
+						<h:outputText id="lblCodigo"
+							value="#{loginController.strMessageValidMAC}"
+							style="padding-right:35px;text-align:center;"></h:outputText>
+					</h:panelGrid>
+					<rich:separator height="5px"></rich:separator>
+					<h:panelGrid columns="2" border="0" style="width: 200px;">
+						<a4j:commandButton value="Aceptar"
+							actionListener="#{loginController.limpiar}" onclick = "document.getElementById('linkLogin').click();"
+							styleClass="btnEstilos" id="btnCancelarSesion"  />
+					</h:panelGrid>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+		<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;"> Login </a>  
+		<!--  Fin REQ14-001 bizarq 15-07-2014 -->
+			
 		<h:form id="frmPrincipal">
-			<!-- Inicio: REQ14-001 - lpolanco - 15/07/2014 -->
+			<!-- Inicio: REQ14-001 - bizarq - 15/07/2014 -->
 			<h:inputHidden id="strMacAddress" value="#{loginController.strMacAddress}" />
-			<!-- Fin: REQ14-001 - lpolanco - 15/07/2014 -->
+			<!-- Fin: REQ14-001 - bizarq - 15/07/2014 -->
 			<h:panelGrid id="tabla" columns="1" style="border:0px;width:100%;"
 				columnClasses="columna">
 				<h:column>
