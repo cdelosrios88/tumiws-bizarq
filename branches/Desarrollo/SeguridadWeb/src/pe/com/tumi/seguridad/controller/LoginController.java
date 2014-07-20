@@ -1,6 +1,7 @@
 package pe.com.tumi.seguridad.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
@@ -205,6 +207,18 @@ public class LoginController{
 	private boolean limpiarMensaje;
 	protected static Logger log = Logger.getLogger(LoginController.class);
 	private int activaPopup;
+	
+	//Inicio: REQ14-001 - jrivera - 15/07/2014
+	private String strMessageValidMAC;
+	
+	public String getStrMessageValidMAC() {
+		return strMessageValidMAC;
+	}
+
+	public void setStrMessageValidMAC(String strMessageValidMAC) {
+		this.strMessageValidMAC = strMessageValidMAC;
+	}
+	//Fin: REQ14-001 - jrivera - 15/07/2014
 	
 	//Inicio: REQ14-001 - lpolanco - 15/07/2014
 	private String strMacAddress;
@@ -772,6 +786,28 @@ public class LoginController{
 	}
 	//Fin: REQ14-001 - lpolanco - 15/07/2014
 	
+	//Inicio: REQ14-001 - jrivera - 15/07/2014
+	public String cancelarSesion (ActionEvent event) {
+		limpiar();
+		cerrarSession();
+		return "login";
+	}
+	
+	public String getProperties (String strLabel){
+		String strMsg = "";
+		InputStream is = LoginController.class.getResourceAsStream("../../resource/MessageValidate_es.properties");
+        Properties props = new Properties();
+        try {
+        props.load(is);
+        is.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+        strMsg = props.getProperty(strLabel);
+        return strMsg;
+	}
+	//Fin: REQ14-001 - jrivera - 15/07/2014
+	
 	public String autorizar(){
 		boolean sigueValidando = false;
 		PermisoFacadeLocal localPermiso = null;
@@ -799,11 +835,19 @@ public class LoginController{
 					if(bolRegistroMac == false){
 						//1.2.1.1. Mostrar mensaje de que no esta en la lista de MAC (Computadora)
 						// y cerrar sesion
+						limpiarMensaje = false;
+						setStrMessageValidMAC (getProperties("label.nofoundMAC.message"));
+						activaPopup = 1;
+						return outcome;
 					}else{
 						//1.2.1.2 No hacer nada!
 					}
 				}else{
 					//1.2.2 Mostrar mensaje de que no existe MAC y cerrar sesion
+					setStrMessageValidMAC (getProperties("label.notgetMAC.message"));
+					limpiarMensaje = false;
+					activaPopup = 1;
+					return outcome;
 				}
 			}
 			//Fin: REQ14-001 - lpolanco - 15/07/2014		
