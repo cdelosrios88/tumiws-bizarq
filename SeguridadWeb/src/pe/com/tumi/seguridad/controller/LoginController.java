@@ -209,6 +209,8 @@ public class LoginController{
 	private int activaPopup;
 	
 	//Inicio: REQ14-001 - jrivera - 15/07/2014
+	private final String STR_URL_PROPERTIES = "../../resource/MessageValidate_es.properties";
+	private static final String STR_LBL_LOGIN = "login";
 	private String strMessageValidMAC;
 	
 	public String getStrMessageValidMAC() {
@@ -790,16 +792,16 @@ public class LoginController{
 	public String cancelarSesion (ActionEvent event) {
 		limpiar();
 		cerrarSession();
-		return "login";
+		return STR_LBL_LOGIN;
 	}
 	
 	public String getProperties (String strLabel){
 		String strMsg = "";
-		InputStream is = LoginController.class.getResourceAsStream("../../resource/MessageValidate_es.properties");
+		InputStream is = LoginController.class.getResourceAsStream(STR_URL_PROPERTIES);
         Properties props = new Properties();
         try {
-        props.load(is);
-        is.close();
+	        props.load(is);
+	        is.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
