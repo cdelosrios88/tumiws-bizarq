@@ -88,6 +88,15 @@
 				        	rendered="#{not empty loginController.msgPortal.contrasena}"
 			--></td>
 		</tr>
+		
+		<!-- Inicio -->
+		<tr>
+			<td>&nbsp;</td>
+			<td colspan="4">
+				<h:outputText value="#{loginController.msgPortal.contrasena}" styleClass="msgError"/>
+			</td>
+		</tr>
+		
 		<!--</h:panelGroup>
 		-->
 		<tr><td colspan="4">&nbsp;</td></tr>

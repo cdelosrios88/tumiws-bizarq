@@ -84,4 +84,8 @@
 	
 	<!-- sqlMap para Estado de Cuenta -->
 	<sqlMap resource="pe/com/tumi/estadoCuenta/dao/impl/estadoCuenta.xml"/>
+	
+	<!-- Inicio: REQ14-002 - cdelosrios - 20/07/2014  -->
+	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/session.xml"/>
+	<!-- Fin: REQ14-002 - cdelosrios - 20/07/2014  -->
 </sqlMapConfig>
