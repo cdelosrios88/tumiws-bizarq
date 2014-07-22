@@ -13,6 +13,7 @@ import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.seguridad.login.bo.EmpresaUsuarioBO;
 import pe.com.tumi.seguridad.login.bo.PerfilBO;
+import pe.com.tumi.seguridad.login.bo.SessionBO;
 import pe.com.tumi.seguridad.login.bo.UsuarioBO;
 import pe.com.tumi.seguridad.login.bo.UsuarioPerfilBO;
 import pe.com.tumi.seguridad.login.bo.UsuarioSubSucursalBO;
@@ -21,6 +22,7 @@ import pe.com.tumi.seguridad.login.domain.EmpresaUsuario;
 import pe.com.tumi.seguridad.login.domain.EmpresaUsuarioId;
 import pe.com.tumi.seguridad.login.domain.Perfil;
 import pe.com.tumi.seguridad.login.domain.PerfilId;
+import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfil;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfilId;
@@ -44,7 +46,10 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 	private UsuarioSubSucursalBO boUsuarioSubSucursal = (UsuarioSubSucursalBO)TumiFactory.get(UsuarioSubSucursalBO.class);
 	private EmpresaUsuarioBO boEmpresaUsuario = (EmpresaUsuarioBO)TumiFactory.get(EmpresaUsuarioBO.class);
 	private LoginService loginService = (LoginService)TumiFactory.get(LoginService.class);
-
+	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	private SessionBO boSession = (SessionBO)TumiFactory.get(SessionBO.class);
+	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<UsuarioComp> getListaUsuarioCompDeBusqueda(UsuarioComp pUsuario) throws BusinessException{
 		List<UsuarioComp> lista = null;
@@ -310,7 +315,49 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 		
 	}
 	
+	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * @param session <object>Session</object>
+	 * 
+	 * Descripción:
+	 * Método que permite grabar en la tabla SEG_V_SESSION la sesión satisfactoria del usuario
+	 * 
+	 * @return session <object>Session</object>
+	 */
+	public Session grabarSession(Session o)throws BusinessException{
+		Session dto = null;
+		try{
+			dto = boSession.grabarSession(o);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return dto;
+	}
 	
-	
-	
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * @param <Integer>intIdPersona</Integer>
+	 * 
+	 * Descripción:
+	 * Método que devuelve si un usuario mantiene una sesión activa o no.
+	 * 
+	 * @return  <Integer>intEscalar</Integer>
+	 */
+	public Integer getCntActiveSessionsByUser(Integer intIdPersona) throws BusinessException{
+		Integer intEscalar = null;
+		try{
+			intEscalar = boSession.getCntActiveSessionsByUser(intIdPersona);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return intEscalar;
+	}
+	//Fin: REQ14-002 - cdelosrios - 20/07/2014
 }

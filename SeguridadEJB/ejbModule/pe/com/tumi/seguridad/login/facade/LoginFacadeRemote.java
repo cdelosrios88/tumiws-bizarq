@@ -8,6 +8,7 @@ import pe.com.tumi.seguridad.login.domain.EmpresaUsuario;
 import pe.com.tumi.seguridad.login.domain.EmpresaUsuarioId;
 import pe.com.tumi.seguridad.login.domain.Perfil;
 import pe.com.tumi.seguridad.login.domain.PerfilId;
+import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfil;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfilId;
@@ -39,5 +40,27 @@ public interface LoginFacadeRemote {
 	public Usuario getUsuarioPorPk(Integer pId) throws BusinessException;
 	public Usuario modificarUsuario(Usuario o) throws BusinessException;
 	public  List<UsuarioSubSucursal> getListaPorSucYSubSucursal(UsuarioSubSucursalId pId) throws BusinessException;
-		
+	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * @param session <object>Session</object>
+	 * 
+	 * Descripción:
+	 * Método que permite grabar en la tabla SEG_V_SESSION la sesión satisfactoria del usuario
+	 * 
+	 * @return session <object>Session</object>
+	 */
+	public Session grabarSession(Session o)throws BusinessException;
+	
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * @param <Integer>intIdPersona</Integer>
+	 * 
+	 * Descripción:
+	 * Método que devuelve si un usuario mantiene una sesión activa o no.
+	 * 
+	 * @return  <Integer>intEscalar</Integer>
+	 */
+	public Integer getCntActiveSessionsByUser(Integer intIdPersona) throws BusinessException;
+	//Fin: REQ14-002 - cdelosrios - 20/07/2014
 }

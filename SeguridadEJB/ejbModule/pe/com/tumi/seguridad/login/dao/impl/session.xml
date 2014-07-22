@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SessionDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.Session" alias="SessionUser"/>
+	
+  <!-- 
+  <resultMap id="resSessionUser" class="SessionUser" >
+     <result property="intPersPersonaPk"      	column="pPers_persona_n_pk" />
+     <result property="intTipoUsuario"  		column="pTipousuario_n" />
+     <result property="strUsuario"      		column="pUsuario_v" />
+     <result property="strContrasena"   		column="pContrasena_v" />
+     <result property="dtFechaRegistro" 		column="pFecharegistro_d" />
+     <result property="intIdEstado"   			column="pIdestado_n" />
+     <result property="tsFechaEliminacion"  	column="pFechaEliminacion_d" />
+  </resultMap>-->
+  
+  <parameterMap id="parSessionUser" class="SessionUser">
+     <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intPersPersonaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="id.intSessionPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="tsFechaRegistro"			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="tsFechaTermino"			jdbcType="TIMESTAMP"  	javaType="java.sql.Timestamp" 	mode="INOUT"/>
+     <parameter property="intIdSucursal"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+     <parameter property="intInAccesoRemoto"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
+	 <parameter property="intIdEstado"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
+     <parameter property="intIdWebSession" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intIdBDSession" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorActiveSession" class="java.util.Map">
+	 <parameter property="intPersPersonaPk"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="intEscalar" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
+  </parameterMap>
+  
+  <procedure id="grabar" parameterMap="parSessionUser">
+	{ call PKG_SESSION.grabar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parSessionUser" >
+	{ call PKG_SESSION.modificar(?,?,?,?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getActiveSessionByUser" parameterMap="parPorActiveSession">
+	{ call PKG_SESSION.getValidSessionByUser(?,?) }
+  </procedure>
+  
+</sqlMap>  
