@@ -45,6 +45,8 @@ import pe.com.tumi.seguridad.login.domain.EmpresaUsuario;
 import pe.com.tumi.seguridad.login.domain.EmpresaUsuarioId;
 import pe.com.tumi.seguridad.login.domain.Perfil;
 import pe.com.tumi.seguridad.login.domain.PerfilId;
+import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.domain.SessionId;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.login.validador.CambioValidador;
@@ -246,13 +248,19 @@ public class LoginController{
 		this.strMacAddress = strMacAddress;
 	}
 	//Fin: REQ14-001 - bizarq - 15/07/2014
+	
+	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	private LoginFacadeLocal loginFacade;
+	//Fin: REQ14-002 - cdelosrios - 20/07/2014
 
 	public LoginController(){
 		usuario = new Usuario();
 		msgPortal = new PortalMsg();
 		try {
 			permisoFacade = (PermisoFacadeLocal) EJBFactory.getLocal(PermisoFacadeLocal.class);
-		
+			//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+			loginFacade = (LoginFacadeLocal)EJBFactory.getLocal(LoginFacadeLocal.class);
+			//Fin: REQ14-002 - cdelosrios - 20/07/2014
 		} catch (EJBFactoryException e) {
 			
 			e.printStackTrace();
@@ -488,7 +496,13 @@ public class LoginController{
 							//msgPortal.setContrasena(null);
 							esClaveVigente = false;
 							
-							//AGREGADO!!!!!
+							//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+							boolean isActiveSession = validateSession(usuario);
+							if(isActiveSession){
+								msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
+								return null;
+							}
+							//Fin: REQ14-002 - cdelosrios - 20/07/2014
 							session.setAttribute(Constante.USUARIO_LOGIN, lUsuario);
 							
 						}else{
@@ -829,6 +843,57 @@ public class LoginController{
 	}
 	//Fin: REQ14-001 - bizarq - 15/07/2014
 	
+	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * Descripción:
+	 * Método que permite registrar la sesión de un usuario una vez que pase las validaciones
+	 * de login. Permitirá registrar la actividad o inactividad del usuario.
+	 * 
+	 */
+	public void saveUserSession(Usuario usuario, HttpSession httpSession){
+		Session session = null;
+		try {
+			session = new Session();
+			session.getId().setIntPersEmpresaPk(usuario.getEmpresa().getIntIdEmpresa());
+			session.getId().setIntPersPersonaPk(usuario.getIntPersPersonaPk());
+			session.setTsFechaRegistro(new Timestamp(new Date().getTime()));
+			session.setIntIdSucursal(intIdSucursalPersona);
+			session.setIntInAccesoRemoto(Constante.INT_ZERO);
+			session.setIntIdWebSession(httpSession.getId());
+			loginFacade.grabarSession(session);
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		
+	}
+	
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * Descripción:
+	 * Método que permite validar la sesión de un usuario y retorna si está activo o no.
+	 * 
+	 */
+	private boolean validateSession(Usuario usuario){
+		boolean isActiveSession = Boolean.FALSE;
+		Integer intUserActiveSession = null;
+		
+		try {
+			intUserActiveSession = loginFacade.getCntActiveSessionsByUser(usuario.getIntPersPersonaPk());
+			if(intUserActiveSession!=null && 
+					intUserActiveSession.equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)){
+				isActiveSession = Boolean.TRUE;
+			}
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		
+		return isActiveSession;
+	}
+	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	
 	public String autorizar(){
 		boolean sigueValidando = false;
 		PermisoFacadeLocal localPermiso = null;
@@ -938,6 +1003,11 @@ public class LoginController{
 				usuario.setEmpresa(remotePersona.getEmpresaPorPk(intIdEmpresa));
 				
 				SeguridadFactory.setTicket(request, usuario);
+				
+				//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+				HttpSession session = ((HttpServletRequest) request).getSession();
+				saveUserSession(usuario, session);
+				//Fin: REQ14-002 - cdelosrios - 20/07/2014
 				outcome = "portal.principal";
 			}
 		} catch (BusinessException e) {
