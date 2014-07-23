@@ -359,5 +359,29 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 		}
 		return intEscalar;
 	}
+	
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * @param session <object>Session</object>
+	 * 
+	 * Descripción:
+	 * Método que permite modificar en la tabla SEG_V_SESSION 
+	 * en el momento que el usuario decide terminar su sesión
+	 * 
+	 * @return session <object>Session</object>
+	 */
+	public Session modificarSession(Session o)throws BusinessException{
+		Session dto = null;
+		try{
+			dto = boSession.modificarSession(o);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return dto;
+	}
 	//Fin: REQ14-002 - cdelosrios - 20/07/2014
 }

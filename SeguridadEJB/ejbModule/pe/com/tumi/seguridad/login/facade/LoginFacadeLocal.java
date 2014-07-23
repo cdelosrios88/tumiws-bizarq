@@ -62,5 +62,16 @@ public interface LoginFacadeLocal {
 	 * @return  <Integer>intEscalar</Integer>
 	 */
 	public Integer getCntActiveSessionsByUser(Integer intIdPersona) throws BusinessException;
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * @param session <object>Session</object>
+	 * 
+	 * Descripción:
+	 * Método que permite modificar en la tabla SEG_V_SESSION 
+	 * en el momento que el usuario decide terminar su sesión
+	 * 
+	 * @return session <object>Session</object>
+	 */
+	public Session modificarSession(Session o)throws BusinessException;
 	//Fin: REQ14-002 - cdelosrios - 20/07/2014
 }
