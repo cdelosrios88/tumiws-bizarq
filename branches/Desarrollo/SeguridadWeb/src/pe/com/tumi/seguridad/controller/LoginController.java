@@ -496,13 +496,6 @@ public class LoginController{
 							//msgPortal.setContrasena(null);
 							esClaveVigente = false;
 							
-							//Inicio: REQ14-002 - cdelosrios - 20/07/2014
-							boolean isActiveSession = validateSession(usuario);
-							if(isActiveSession){
-								msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
-								return null;
-							}
-							//Fin: REQ14-002 - cdelosrios - 20/07/2014
 							session.setAttribute(Constante.USUARIO_LOGIN, lUsuario);
 							
 						}else{
@@ -851,7 +844,7 @@ public class LoginController{
 	 * de login. Permitirá registrar la actividad o inactividad del usuario.
 	 * 
 	 */
-	public void saveUserSession(Usuario usuario, HttpSession httpSession){
+	public void saveUserSession(Usuario usuario, HttpSession httpSession, boolean isUsuarioCabina){
 		Session session = null;
 		try {
 			session = new Session();
@@ -861,12 +854,35 @@ public class LoginController{
 			session.setIntIdSucursal(intIdSucursalPersona);
 			session.setIntInAccesoRemoto(Constante.INT_ZERO);
 			session.setIntIdWebSession(httpSession.getId());
+			session.setStrMacAddress(this.strMacAddress);
+			session.setIntIndCabina(isUsuarioCabina?Constante.INT_ONE:Constante.INT_ZERO);
+			
+			httpSession.setAttribute("objSession", session);
 			loginFacade.grabarSession(session);
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
-		
+	}
+	
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * Descripción:
+	 * Método que permite registrar la sesión de un usuario una vez que pase las validaciones
+	 * de login. Permitirá registrar la actividad o inactividad del usuario.
+	 * 
+	 */
+	public void updateUserSession(HttpSession session){
+		Session objSession = null;
+		try {
+			objSession = (Session) session.getAttribute("objSession");
+			objSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+			objSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
+			session.removeAttribute("objSession");
+			loginFacade.modificarSession(objSession);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 	}
 	
 	/**
@@ -946,7 +962,7 @@ public class LoginController{
 				if(!validarEntradaPorUsuario(intIdEmpresa, usuario.getIntPersPersonaPk(), Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)){
 					log.info("no tiene acceso por usuario");
 					sigueValidando = true;
-				}				
+				}
 				
 				//solo si la primera validacion no paso entonces se realizará la segunda validación
 				if(sigueValidando){
@@ -960,6 +976,13 @@ public class LoginController{
 						return outcome;
 					}
 				}
+				//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+				boolean isActiveSession = validateSession(usuario);
+				if(isActiveSession){
+					msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
+					return null;
+				}
+				//Fin: REQ14-002 - cdelosrios - 20/07/2014
 				
 //				if(1==1){
 //					outcome = "portal.login";
@@ -1006,7 +1029,7 @@ public class LoginController{
 				
 				//Inicio: REQ14-002 - cdelosrios - 20/07/2014
 				HttpSession session = ((HttpServletRequest) request).getSession();
-				saveUserSession(usuario, session);
+				saveUserSession(usuario, session, bolUsuarioCabina);
 				//Fin: REQ14-002 - cdelosrios - 20/07/2014
 				outcome = "portal.principal";
 			}
@@ -1116,9 +1139,13 @@ public class LoginController{
 			
 			//AGREGADO!!!!!
 			HttpSession session = ((HttpServletRequest) request).getSession();
+			//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+			log.info("session.getId(): " + session.getId());
+			log.info("usuarioLogueado: " + session.getAttribute(Constante.USUARIO_LOGIN));
+			updateUserSession(session);
+			//Fin: REQ14-002 - cdelosrios - 20/07/2014
 			session.invalidate();
 			session.removeAttribute(Constante.USUARIO_LOGIN);
-			
 			
 		}catch (SeguridadException e) {
 			e.printStackTrace();
