@@ -32,6 +32,8 @@
 	 <parameter property="intIdEstado"				jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>    
      <parameter property="intIdWebSession" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
      <parameter property="intIdBDSession" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="strMacAddress" 			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="INOUT"/>
+     <parameter property="intIndCabina" 			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parPorActiveSession" class="java.util.Map">
