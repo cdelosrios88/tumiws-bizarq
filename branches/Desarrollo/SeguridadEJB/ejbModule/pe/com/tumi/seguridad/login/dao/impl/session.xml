@@ -5,16 +5,21 @@
 
   <typeAlias type="pe.com.tumi.seguridad.login.domain.Session" alias="SessionUser"/>
 	
-  <!-- 
+  
   <resultMap id="resSessionUser" class="SessionUser" >
-     <result property="intPersPersonaPk"      	column="pPers_persona_n_pk" />
-     <result property="intTipoUsuario"  		column="pTipousuario_n" />
-     <result property="strUsuario"      		column="pUsuario_v" />
-     <result property="strContrasena"   		column="pContrasena_v" />
-     <result property="dtFechaRegistro" 		column="pFecharegistro_d" />
-     <result property="intIdEstado"   			column="pIdestado_n" />
-     <result property="tsFechaEliminacion"  	column="pFechaEliminacion_d" />
-  </resultMap>-->
+     <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
+     <result property="id.intPersPersonaPk"  		column="pPers_persona_n_pk" />
+     <result property="id.intSessionPk"      		column="pSess_idsession_n_pk" />
+     <result property="tsFechaRegistro"   		column="pSess_fecharegistro_d" />
+     <result property="tsFechaTermino" 		column="pSess_fechatermino_d" />
+     <result property="intIdSucursal"   			column="pSess_idsucursal_n" />
+     <result property="intInAccesoRemoto"  	column="pSess_accesoremoto_n" />
+     <result property="intIdEstado"  	column="pSess_idestadosession_n" />
+     <result property="intIdWebSession"  	column="pSess_idwebsession_n" />
+     <result property="intIdBDSession"  	column="pSess_sid_v" />
+     <result property="strMacAddress"  	column="pSess_macaddress_v" />
+     <result property="intIndCabina"  	column="pSess_indcabina_n" />
+  </resultMap>
   
   <parameterMap id="parSessionUser" class="SessionUser">
      <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
@@ -34,6 +39,11 @@
 	 <parameter property="intEscalar" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
   </parameterMap>
   
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
   <procedure id="grabar" parameterMap="parSessionUser">
 	{ call PKG_SESSION.grabar(?,?,?,?,?,?,?,?,?,?,?,?) }
   </procedure>
@@ -44,6 +54,10 @@
   
   <procedure id="getActiveSessionByUser" parameterMap="parPorActiveSession">
 	{ call PKG_SESSION.getValidSessionByUser(?,?) }
+  </procedure>
+  
+  <procedure id="getListByUser" parameterMap="parPorPK" resultMap="resSessionUser">
+	{ call PKG_SESSION.getListByUser(?,?) }
   </procedure>
   
 </sqlMap>  
