@@ -13,6 +13,8 @@ public class Session extends TumiDomain {
 	private Integer intIdEstado;
 	private String intIdWebSession;
 	private String intIdBDSession;
+	private String strMacAddress;
+	private Integer intIndCabina;
 	
 	public Session(){
 		id = new SessionId();
@@ -65,5 +67,21 @@ public class Session extends TumiDomain {
 	}
 	public void setIntIdBDSession(String intIdBDSession) {
 		this.intIdBDSession = intIdBDSession;
+	}
+
+	public String getStrMacAddress() {
+		return strMacAddress;
+	}
+
+	public void setStrMacAddress(String strMacAddress) {
+		this.strMacAddress = strMacAddress;
+	}
+
+	public Integer getIntIndCabina() {
+		return intIndCabina;
+	}
+
+	public void setIntIndCabina(Integer intIndCabina) {
+		this.intIndCabina = intIndCabina;
 	}
 }

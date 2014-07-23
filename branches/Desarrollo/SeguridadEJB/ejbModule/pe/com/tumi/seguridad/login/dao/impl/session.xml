@@ -35,11 +35,11 @@
   </parameterMap>
   
   <procedure id="grabar" parameterMap="parSessionUser">
-	{ call PKG_SESSION.grabar(?,?,?,?,?,?,?,?,?,?) }
+	{ call PKG_SESSION.grabar(?,?,?,?,?,?,?,?,?,?,?,?) }
   </procedure>
   
   <procedure id="modificar" parameterMap="parSessionUser" >
-	{ call PKG_SESSION.modificar(?,?,?,?,?,?,?,?,?,?) }
+	{ call PKG_SESSION.modificar(?,?,?,?,?,?,?,?,?,?,?,?) }
   </procedure>
   
   <procedure id="getActiveSessionByUser" parameterMap="parPorActiveSession">
