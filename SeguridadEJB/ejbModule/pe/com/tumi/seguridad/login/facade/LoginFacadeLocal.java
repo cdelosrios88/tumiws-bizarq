@@ -74,4 +74,8 @@ public interface LoginFacadeLocal {
 	 */
 	public Session modificarSession(Session o)throws BusinessException;
 	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	
+	//Inicio: REQ14-002 - jrivera - 20/07/2014
+	public Session getSesionByUser (Integer intIdPersona) throws BusinessException;
+	//Fin: REQ14-002 - jrivera - 20/07/2014
 }
