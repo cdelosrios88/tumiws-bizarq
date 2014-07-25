@@ -36,9 +36,9 @@
 	type="text/javascript"></script>
 <!-- Inicio REQ14-001 bizarq 14-07-2014 -->
 <c:choose>
-    <c:when test="${(loginController.activaPopup != null) and (loginController.activaPopup=='1')}">
+    <c:when test="${(loginController.activaPopup != null) and (loginController.activaPopup=='2')}">
         <script type="text/javascript">
-       		window.onload=function(){setTimeout(function(){mostrarPanel()},1000);};
+       		window.onload=function(){mostrarPanel();};
        		function mostrarPanel (){
        			Richfaces.showModalPanel('macAddressValid');
        		}
