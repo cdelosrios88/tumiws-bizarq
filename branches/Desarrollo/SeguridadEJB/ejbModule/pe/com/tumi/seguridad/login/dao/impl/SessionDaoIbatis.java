@@ -1,7 +1,9 @@
 package pe.com.tumi.seguridad.login.dao.impl;
 
 import java.util.HashMap;
-
+//Inicio: REQ14-002 - bizarq - 22/07/2014
+import java.util.List;
+//Fin: REQ14-002 - bizarq - 22/07/2014
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.framework.negocio.exception.DAOException;
@@ -47,4 +49,15 @@ public class SessionDaoIbatis extends TumiDaoIbatis implements SessionDao {
 		}
 		return escalar;
 	}
+	
+	public List<Session> getListSesionByUser (Object o) throws DAOException {
+		
+		List<Session> lstSesion= null;
+		try{
+			lstSesion = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListByUser", o);
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return lstSesion;
+ 	}
 }
