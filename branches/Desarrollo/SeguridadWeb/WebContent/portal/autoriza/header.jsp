@@ -10,6 +10,18 @@
 var intSegundoSession = 0;
 </script>
 <script language="JavaScript" src="<%=request.getContextPath()%>/js/main.js"  type="text/javascript"></script>
+<!-- Inicio REQ14-002 bizarq 22-07-2014 -->
+<script type="text/javascript" language="javascript">
+		window.onbeforeunload=function(){
+			
+			if(document.getElementById("hdnIndSesionSalir").value== "0")
+				return 'Esta seguro de salir de la aplicación, se cerrará la sesión';
+		};
+		window.onunload = function (){
+			document.getElementById('frmPrincipal:btnSalirSesion').click();
+		};
+</script>
+<!-- Fin REQ14-002 bizarq 22-07-2014 -->
 <link href="<%=request.getContextPath()%>/css/default.css" rel="stylesheet" type="text/css"/>
 </head>
 <body onmousemove="intSegundoSession=0;" leftmargin="0" rightmargin="0" marginheight="0" marginwidth="0" topmargin="0" bottommargin="0">
@@ -75,7 +87,11 @@ var intSegundoSession = 0;
 												 loginController.usuario.empresaUsuario.intCambioClave == 1}">
 						<h:commandLink value=" CAMBIAR CLAVE " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('linkCambioClave').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>						
 						</h:panelGroup>
-						<h:commandLink value=" SALIR " actionListener="#{loginController.cerrarSession}" onclick="document.getElementById('linkLogin').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
+						<!-- Inicio REQ14-001 bizarq 15-07-2014 -->
+						<h:commandLink value=" SALIR " actionListener="#{loginController.cerrarSession}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkLogin').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
+						<input type="hidden" id="hdnIndSesionSalir" value ="0" />
+						<h:commandLink id="btnSalirSesion" actionListener="#{loginController.cerrarSession}" onclick="top.close();" style="display:none;"/>
+						<!-- Fin REQ14-001 bizarq 15-07-2014 -->
 						<h:commandLink id="linkCerrar" actionListener="#{loginController.cerrarSession}" onclick="top.close();" style="display:none;"/>
 						<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;" target="_top"> Login </a>  
 						<a id="linkEmpresa" href="<%=request.getContextPath()%>/portal/autentica/empresa.jsf" style="display:none;" target="_top"> Empresa </a>
