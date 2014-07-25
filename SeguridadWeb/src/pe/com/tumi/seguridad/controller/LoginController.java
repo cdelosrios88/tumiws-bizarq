@@ -33,7 +33,9 @@ import pe.com.tumi.framework.servicio.seguridad.exception.SeguridadException;
 import pe.com.tumi.framework.servicio.seguridad.factory.SeguridadFactory;
 import pe.com.tumi.parametro.auditoria.domain.Auditoria;
 import pe.com.tumi.parametro.auditoria.facade.AuditoriaFacadeRemote;
+//Inicio: REQ14-002 - bizarq - 22/07/2014
 import pe.com.tumi.persona.core.domain.Persona;
+//Inicio: REQ14-002 - bizarq - 22/07/2014
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.persona.empresa.domain.Empresa;
 import pe.com.tumi.persona.empresa.domain.Juridica;
@@ -939,14 +941,14 @@ public class LoginController{
 						// y cerrar sesion
 						limpiarMensaje = false;
 						setStrMessageValidMAC (getProperties("label.nofoundMAC.message"));
-						activaPopup = 1;
+						activaPopup = 2;
 						return outcome;
 					}
 				}else{
 					//1.2.2 Mostrar mensaje de que no existe MAC y cerrar sesion
 					setStrMessageValidMAC (getProperties("label.notgetMAC.message"));
 					limpiarMensaje = false;
-					activaPopup = 1;
+					activaPopup = 2;
 					return outcome;
 				}
 			}
@@ -979,8 +981,54 @@ public class LoginController{
 				//Inicio: REQ14-002 - cdelosrios - 20/07/2014
 				boolean isActiveSession = validateSession(usuario);
 				if(isActiveSession){
-					msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
-					return null;
+					//Se obtiene la ultima sesion activa del usuario logeado
+					Session objDtoSession =loginFacade.getSesionByUser(usuario.getIntPersPersonaPk());
+					//Se compara la mac que se logeo ultimo vs la maquina en el logeo actual
+					if(objDtoSession.getStrMacAddress().equals(this.strMacAddress)){
+						// se obtiene la fecha de registro de su ultima sesion activa
+						Timestamp tsFechaInicio = objDtoSession.getTsFechaRegistro();
+						// se obtiene la fecha del sistema
+						Timestamp tsFechaActual = new Timestamp(new Date().getTime());
+						//se realiza la diferencia entre las fechas del sistema y la ultima del logeo 
+						long lngTimeMiliSegundo = tsFechaActual.getTime() -tsFechaInicio.getTime();
+						//la diferencia en segundos
+						long lngSegundos = lngTimeMiliSegundo / 1000;
+						//obtenemos las horas de la diferencia
+						long lngHoras = lngSegundos / 3600;
+						//restamos las horas para continuar con minutos
+						lngSegundos -= lngHoras*3600; 
+						//igual que el paso anterior
+						long lngMinutos = lngSegundos /60;
+						boolean blActualizarSesion = false;
+						remotePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+						Empresa objEmpresa = remotePersona.getEmpresaPorPk(objDtoSession.getId().getIntPersEmpresaPk());
+						long lngHoraConf = objEmpresa.getDtTiempoSesion().getHours();
+						long lngMinConf = objEmpresa.getDtTiempoSesion().getMinutes();
+						// compara si hora de la diferencia es mayot a la configurada 
+						// de serlo se activa un flag que permitira desactivar la ultima sesion activa
+						if(lngHoras > lngHoraConf)
+						{
+							blActualizarSesion = true;
+						}
+						// compara si el minuto de la diferencia es mayor a la configurada 
+						// de serlo se activa un flag que permitira desactivar la ultima sesion activa
+						if(lngHoras <= lngHoraConf && lngMinutos > lngMinConf){
+							blActualizarSesion = true;
+						}
+						//desactiva la ultima sesion activa
+						if(blActualizarSesion){
+							objDtoSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+							objDtoSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
+							loginFacade.modificarSession(objDtoSession);
+						}else {
+							//si no muestra la alerta indicando que mantiene una sesion activa en otra pc
+							msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
+							return null;
+						}
+					}else {
+						msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
+						return null;
+					}
 				}
 				//Fin: REQ14-002 - cdelosrios - 20/07/2014
 				
