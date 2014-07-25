@@ -1,7 +1,9 @@
 package pe.com.tumi.seguridad.login.bo;
 
 import java.util.HashMap;
-
+//Inicio: REQ14-002 - bizarq - 22/07/2014
+import java.util.List;
+//Fin: REQ14-002 - bizarq - 22/07/2014
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;
@@ -52,4 +54,23 @@ public class SessionBO {
 		}
 		return intEscalar;
 	}
+	//Inicio: REQ14-002 - bizarq - 22/07/2014
+	public Session getSesionByUser (Integer intIdPersona) throws BusinessException {
+		Session dto = null;
+		List<Session> lstSessionUser = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersPersonaPk", intIdPersona);
+			lstSessionUser =  dao.getListSesionByUser(mapa);
+			if(lstSessionUser != null){
+				dto = lstSessionUser.get(0);
+			}
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return dto;
+	}
+	//Fin: REQ14-002 - bizarq - 22/07/2014
 }
