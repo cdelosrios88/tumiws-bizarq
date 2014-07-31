@@ -321,6 +321,12 @@ public class LoginController{
 	}
 	
 	public String getInicializarPagina(){
+		//Inicio: REQ14-002 - bizarq - 30/07/2014
+		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		HttpSession session = null;
+		session = ((HttpServletRequest) request).getSession();
+		updateUserSession(session);
+		//Fin: REQ14-002 - bizarq - 30/07/2014
 		if(!bolInicio){
 			cerrarSession();
 			limpiar();
@@ -873,10 +879,12 @@ public class LoginController{
 		Session objSession = null;
 		try {
 			objSession = (Session) session.getAttribute("objSession");
-			objSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
-			objSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
-			session.removeAttribute("objSession");
-			loginFacade.modificarSession(objSession);
+			if(objSession != null) {
+				objSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+				objSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
+				session.removeAttribute("objSession");
+				loginFacade.modificarSession(objSession);
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -985,7 +993,7 @@ public class LoginController{
 					Session objDtoSession =loginFacade.getSesionByUser(usuario.getIntPersPersonaPk());
 					//Se compara la mac que se logeo ultimo vs la maquina en el logeo actual
 					if(objDtoSession!=null){
-						if(objDtoSession.getStrMacAddress().equals(this.strMacAddress)){
+						if(!objDtoSession.getStrMacAddress().equals(this.strMacAddress)){
 							// se obtiene la fecha de registro de su ultima sesion activa
 							Timestamp tsFechaInicio = objDtoSession.getTsFechaRegistro();
 							// se obtiene la fecha del sistema
@@ -1025,14 +1033,17 @@ public class LoginController{
 								//si no muestra la alerta indicando que mantiene una sesion activa en otra pc
 								//msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
 								activaPopup = 3;
-								setStrMessageValidUserSession(getProperties("label.notActiveUserSession.message"));
+								setStrMessageValidUserSession("Ud. ya mantiene una sesión activa en otra PC.");
 								return outcome;
 							}
 						}else {
 							//msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
-							activaPopup = 3;
-							setStrMessageValidUserSession(getProperties("label.notActiveUserSession.message"));
-							return outcome;
+//							activaPopup = 3;
+//							setStrMessageValidUserSession("Ud. ya mantiene una sesión activa en otra PC.");
+//							return outcome;
+							objDtoSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+							objDtoSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
+							loginFacade.modificarSession(objDtoSession);
 						}
 					}
 				}
@@ -1202,7 +1213,6 @@ public class LoginController{
 		}
 	}
 	
-	//Inicio: REQ14-002 - bizarq - 30/07/2014
 	public void closeSession(){
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		HttpSession session = null;
@@ -1218,7 +1228,6 @@ public class LoginController{
 			e.printStackTrace();
 		}
 	}
-	//Fin: REQ14-002 - bizarq - 30/07/2014
 	
 	public String login() throws DaoException{
 //		log.info("Empezando método Login...");
