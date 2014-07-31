@@ -1,3 +1,14 @@
+<!-- 
+/************************************************************************/
+/* Nombre de componente: empresa.jsp */
+/* Descripción: Segunda pantalla principal donde el usuario ingresa la empresa,
+	Sucursal, Sub Sucursal y Perfil
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 - modificación */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+-->
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <!-- Inicio REQ14-001 bizarq 15-07-2014 -->
@@ -41,6 +52,14 @@
        		window.onload=function(){mostrarPanel();};
        		function mostrarPanel (){
        			Richfaces.showModalPanel('macAddressValid');
+       		}
+		</script>
+    </c:when>
+    <c:when test="${(loginController.activaPopup != null) and (loginController.activaPopup=='3')}">
+        <script type="text/javascript">
+       		window.onload=function(){mostrarPanel();};
+       		function mostrarPanel (){
+       			Richfaces.showModalPanel('activeUserSession');
        		}
 		</script>
     </c:when>
@@ -102,9 +121,46 @@
 				</rich:panel>
 			</h:form>
 		</rich:modalPanel>
-		<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;"> Login </a>  
+		<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;"> Login </a>
 		<!--  Fin REQ14-001 bizarq 15-07-2014 -->
-			
+		
+		<!-- Inicio REQ14-002 bizarq 27-07-2014 -->
+		<rich:modalPanel id="activeUserSession" minWidth="300"
+			minHeight="100" autosized="true" resizeable="false"
+			style="background-color:#DEEBF5;">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Usuario mantiene sesión activa"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/images/icons/remove_20.png"
+						styleClass="hidelink" id="hidelinkUsr" />
+					<rich:componentControl for="activeUserSession"
+						attachTo="hidelinkUsr" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+
+			<h:form id="frmUsrSessModalPanel">
+				<rich:panel
+					style="border-width:1px;border-style:solid;border-color:#17356f;background-color:#DEEBF5;width:450px;">
+					<h:panelGrid columns="2" border="0" cellspacing="4">
+						<h:outputText id="lblCodigo"
+							value="#{loginController.strMessageValidUserSession}"
+							style="padding-right:35px;text-align:center;"></h:outputText>
+					</h:panelGrid>
+					<rich:separator height="5px"></rich:separator>
+					<h:panelGrid columns="2" border="0" style="width: 200px;">
+						<a4j:commandButton value="Aceptar"
+							actionListener="#{loginController.limpiar}" onclick = "document.getElementById('linkLogin').click();"
+							styleClass="btnEstilos" id="btnCancelarSesion"  />
+					</h:panelGrid>
+				</rich:panel>
+			</h:form>
+		</rich:modalPanel>
+		<!-- Fin REQ14-002 bizarq 28-07-2014 -->
+		
 		<h:form id="frmPrincipal">
 			<!-- Inicio: REQ14-001 - bizarq - 15/07/2014 -->
 			<h:inputHidden id="strMacAddress" value="#{loginController.strMacAddress}" />

@@ -1,9 +1,16 @@
+/************************************************************************/
+/* Nombre de componente: SessionDaoIbatis */
+/* Descripción: Componente que implementa nuevos métodos para la obtención de datos del usuario activo
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1 */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+
 package pe.com.tumi.seguridad.login.dao.impl;
 
 import java.util.HashMap;
-//Inicio: REQ14-002 - bizarq - 22/07/2014
 import java.util.List;
-//Fin: REQ14-002 - bizarq - 22/07/2014
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.framework.negocio.exception.DAOException;

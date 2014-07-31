@@ -1,9 +1,16 @@
+/************************************************************************/
+/* Nombre de componente: SessionBO */
+/* Descripción: Componente que implementa nuevos métodos 
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 - modificación */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+
 package pe.com.tumi.seguridad.login.bo;
 
 import java.util.HashMap;
-//Inicio: REQ14-002 - bizarq - 22/07/2014
 import java.util.List;
-//Fin: REQ14-002 - bizarq - 22/07/2014
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;

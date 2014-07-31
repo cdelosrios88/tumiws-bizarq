@@ -1,3 +1,14 @@
+<!-- 
+/************************************************************************/
+/* Nombre de componente: header.jsp */
+/* Descripción: Componente utilizado en la cabecera del login de la aplicación
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 - modificación */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+-->
+
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
@@ -12,11 +23,17 @@ var intSegundoSession = 0;
 <script language="JavaScript" src="<%=request.getContextPath()%>/js/main.js"  type="text/javascript"></script>
 <!-- Inicio REQ14-002 bizarq 22-07-2014 -->
 <script type="text/javascript" language="javascript">
-		window.onbeforeunload=function(){
-			
-			if(document.getElementById("hdnIndSesionSalir").value== "0")
+		window.onbeforeunload = OnBeforeUnLoad;
+        function OnBeforeUnLoad () {
+        	alert('xxxx');
+            if(document.getElementById("hdnIndSesionSalir").value=="0")
 				return 'Esta seguro de salir de la aplicación, se cerrará la sesión';
-		};
+        }
+		
+		/*window.onbeforeunload=function(){
+			if(document.getElementById("hdnIndSesionSalir").value=="0")
+				return 'Esta seguro de salir de la aplicación, se cerrará la sesión';
+		};*/
 		window.onunload = function (){
 			document.getElementById('frmPrincipal:btnSalirSesion').click();
 		};
@@ -59,11 +76,11 @@ var intSegundoSession = 0;
 					</td>
 					<td style="width:150px;" align="left">
 						<h:outputText value="SUCURSAL: " style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
-						<h:commandLink value="#{fn:toUpperCase(loginController.usuario.sucursal.juridica.strSiglas)} " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('linkEmpresa').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>			  
+						<h:commandLink value="#{fn:toUpperCase(loginController.usuario.sucursal.juridica.strSiglas)} " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkEmpresa').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>			  
 					</td>
 					<td style="width:250px;" align="left">
 						<h:outputText value="SUBSUCURSAL: " style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
-						<h:commandLink value="#{fn:toUpperCase(loginController.usuario.subSucursal.strDescripcion)} " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('linkEmpresa').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>			  
+						<h:commandLink value="#{fn:toUpperCase(loginController.usuario.subSucursal.strDescripcion)} " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkEmpresa').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>			  
 					</td>
 				</tr>
 				<tr bgcolor="#89D887" height="15px">
@@ -72,7 +89,7 @@ var intSegundoSession = 0;
 						<h:outputText value="PERFIL:" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
 					</td>
 					<td style="width:250px;" align="left">
-						<h:commandLink value=" #{fn:toUpperCase(loginController.usuario.perfil.strDescripcion)} " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('linkEmpresa').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>						
+						<h:commandLink value=" #{fn:toUpperCase(loginController.usuario.perfil.strDescripcion)} " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkEmpresa').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>						
 					</td>
 					<td>&nbsp;</td>
 					<td align="right">
@@ -80,17 +97,28 @@ var intSegundoSession = 0;
 						<h:panelGroup rendered="#{empty loginController.usuario.empresaUsuario.intCambioClave}">
 						<h:panelGroup rendered="#{not empty loginController.usuario.empresa.intControlCambioClave &&
 												  loginController.usuario.empresa.intControlCambioClave == 1}">
-						<h:commandLink value=" CAMBIAR CLAVE " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('linkCambioClave').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
+						<h:commandLink value=" CAMBIAR CLAVE " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkCambioClave').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
 						</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup rendered="#{not empty loginController.usuario.empresaUsuario.intCambioClave &&
 												 loginController.usuario.empresaUsuario.intCambioClave == 1}">
-						<h:commandLink value=" CAMBIAR CLAVE " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('linkCambioClave').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>						
+						<h:commandLink value=" CAMBIAR CLAVE " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkCambioClave').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>						
 						</h:panelGroup>
 						<!-- Inicio REQ14-001 bizarq 15-07-2014 -->
-						<h:commandLink value=" SALIR " actionListener="#{loginController.cerrarSession}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkLogin').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
+						
+						<%--<h:commandLink value=" SALIR " actionListener="#{loginController.cerrarSession}" 
+						onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkLogin').click();" 
+						style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>--%>
+						<a4j:commandLink value=" SALIR " action="#{loginController.closeSession}"
+							onclick="document.getElementById('hdnIndSesionSalir').value=1;"
+							oncomplete="document.getElementById('linkLogin').click();"
+							style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>
+						
 						<input type="hidden" id="hdnIndSesionSalir" value ="0" />
-						<h:commandLink id="btnSalirSesion" actionListener="#{loginController.cerrarSession}" onclick="top.close();" style="display:none;"/>
+						<%-- <h:commandLink id="btnSalirSesion" actionListener="#{loginController.cerrarSession}" onclick="window.top.close();" style="display:none;"/>--%>
+						<a4j:jsFunction name="OnBeforeUnLoad"
+		                    action="#{loginController.closeSession}"
+		                    oncomplete="window.close()"/>
 						<!-- Fin REQ14-001 bizarq 15-07-2014 -->
 						<h:commandLink id="linkCerrar" actionListener="#{loginController.cerrarSession}" onclick="top.close();" style="display:none;"/>
 						<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;" target="_top"> Login </a>  
