@@ -1,3 +1,12 @@
+/************************************************************************/
+/* Nombre de componente: LoginFacade */
+/* Descripción: Componente que implementa nuevos métodos para la obtención de datos del usuario activo
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 - Modificación */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+
 package pe.com.tumi.seguridad.login.facade;
 import java.util.List;
 
@@ -40,7 +49,7 @@ public interface LoginFacadeRemote {
 	public Usuario getUsuarioPorPk(Integer pId) throws BusinessException;
 	public Usuario modificarUsuario(Usuario o) throws BusinessException;
 	public  List<UsuarioSubSucursal> getListaPorSucYSubSucursal(UsuarioSubSucursalId pId) throws BusinessException;
-	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	//Inicio: REQ14-002 - bizarq - 20/07/2014
 	/**
 	 * @author Christian De los Ríos - Bizarq
 	 * @param session <object>Session</object>
@@ -73,9 +82,9 @@ public interface LoginFacadeRemote {
 	 * @return session <object>Session</object>
 	 */
 	public Session modificarSession(Session o)throws BusinessException;
-	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	//Fin: REQ14-002 - bizarq - 20/07/2014
 	
-	//Inicio: REQ14-002 - jrivera - 20/07/2014
+	//Inicio: REQ14-002 - bizarq - 20/07/2014
 	public Session getSesionByUser (Integer intIdPersona) throws BusinessException;
-	//Fin: REQ14-002 - jrivera - 20/07/2014
+	//Fin: REQ14-002 - bizarq - 20/07/2014
 }

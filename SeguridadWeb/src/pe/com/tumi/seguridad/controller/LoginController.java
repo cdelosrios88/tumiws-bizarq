@@ -1,6 +1,7 @@
 package pe.com.tumi.seguridad.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
@@ -33,9 +35,7 @@ import pe.com.tumi.framework.servicio.seguridad.exception.SeguridadException;
 import pe.com.tumi.framework.servicio.seguridad.factory.SeguridadFactory;
 import pe.com.tumi.parametro.auditoria.domain.Auditoria;
 import pe.com.tumi.parametro.auditoria.facade.AuditoriaFacadeRemote;
-//Inicio: REQ14-002 - bizarq - 22/07/2014
 import pe.com.tumi.persona.core.domain.Persona;
-//Inicio: REQ14-002 - bizarq - 22/07/2014
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.persona.empresa.domain.Empresa;
 import pe.com.tumi.persona.empresa.domain.Juridica;
@@ -48,24 +48,17 @@ import pe.com.tumi.seguridad.login.domain.EmpresaUsuarioId;
 import pe.com.tumi.seguridad.login.domain.Perfil;
 import pe.com.tumi.seguridad.login.domain.PerfilId;
 import pe.com.tumi.seguridad.login.domain.Session;
-import pe.com.tumi.seguridad.login.domain.SessionId;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.login.validador.CambioValidador;
 import pe.com.tumi.seguridad.login.validador.PortalValidador;
 import pe.com.tumi.seguridad.permiso.domain.AccesoEspecial;
+import pe.com.tumi.seguridad.permiso.domain.AccesoEspecialDetalle;
+import pe.com.tumi.seguridad.permiso.domain.Computadora;
 import pe.com.tumi.seguridad.permiso.domain.DiasAccesos;
 import pe.com.tumi.seguridad.permiso.domain.DiasAccesosId;
 import pe.com.tumi.seguridad.permiso.domain.Transaccion;
 import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeLocal;
-//import pe.com.tumi.seguridad.usuario.domain.Perfil;
-
-//Inicio: REQ14-001 - bizarq - 15/07/2014
-import java.io.InputStream;
-import java.util.Properties;
-import pe.com.tumi.seguridad.permiso.domain.AccesoEspecialDetalle;
-import pe.com.tumi.seguridad.permiso.domain.Computadora;
-//Inicio: REQ14-001 - bizarq - 15/07/2014
 
 public class LoginController{
 	
@@ -220,7 +213,9 @@ public class LoginController{
 	private static final String STR_LBL_LOGIN = "login";
 	private String strMessageValidMAC;
 	private String strMacAddress;
-
+	//Inicio: REQ14-002 - bizarq - 28/07/2014
+	private String strMessageValidUserSession;
+	//Fin: REQ14-002 - bizarq - 28/07/2014
 	
 	/**
 	 * @return the strMessageValidMAC
@@ -251,18 +246,18 @@ public class LoginController{
 	}
 	//Fin: REQ14-001 - bizarq - 15/07/2014
 	
-	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	//Inicio: REQ14-002 - bizarq - 20/07/2014
 	private LoginFacadeLocal loginFacade;
-	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	//Fin: REQ14-002 - bizarq - 20/07/2014
 
 	public LoginController(){
 		usuario = new Usuario();
 		msgPortal = new PortalMsg();
 		try {
 			permisoFacade = (PermisoFacadeLocal) EJBFactory.getLocal(PermisoFacadeLocal.class);
-			//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+			//Inicio: REQ14-002 - bizarq - 20/07/2014
 			loginFacade = (LoginFacadeLocal)EJBFactory.getLocal(LoginFacadeLocal.class);
-			//Fin: REQ14-002 - cdelosrios - 20/07/2014
+			//Fin: REQ14-002 - bizarq - 20/07/2014
 		} catch (EJBFactoryException e) {
 			
 			e.printStackTrace();
@@ -311,12 +306,12 @@ public class LoginController{
 		}*/
 	}
 	
-	public String closeSession(){
+	/*public String closeSession(){
 //		getSession(false).setAttribute(Constante.SESSION_USER, null);
 //		getSession(false).invalidate();
 //		log.info("Fin de Sesion al " + DateHelper.getFechaActual());
 		return "login";
-	}
+	}*/
 	public void inicio(ActionEvent event){
 		if(!bolInicio){
 			cerrarSession(event);
@@ -838,7 +833,7 @@ public class LoginController{
 	}
 	//Fin: REQ14-001 - bizarq - 15/07/2014
 	
-	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	//Inicio: REQ14-002 - bizarq - 20/07/2014
 	/**
 	 * @author Christian De los Ríos - Bizarq
 	 * Descripción:
@@ -900,7 +895,7 @@ public class LoginController{
 		try {
 			intUserActiveSession = loginFacade.getCntActiveSessionsByUser(usuario.getIntPersPersonaPk());
 			if(intUserActiveSession!=null && 
-					intUserActiveSession.equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)){
+					intUserActiveSession.intValue() > Constante.INT_ZERO){
 				isActiveSession = Boolean.TRUE;
 			}
 			
@@ -910,7 +905,7 @@ public class LoginController{
 		
 		return isActiveSession;
 	}
-	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	//Fin: REQ14-002 - bizarq - 20/07/2014
 	
 	public String autorizar(){
 		boolean sigueValidando = false;
@@ -978,59 +973,65 @@ public class LoginController{
 						return outcome;
 					}
 				}
-				//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+				//Inicio: REQ14-002 - bizarq - 20/07/2014
 				boolean isActiveSession = validateSession(usuario);
 				if(isActiveSession){
 					//Se obtiene la ultima sesion activa del usuario logeado
 					Session objDtoSession =loginFacade.getSesionByUser(usuario.getIntPersPersonaPk());
 					//Se compara la mac que se logeo ultimo vs la maquina en el logeo actual
-					if(objDtoSession.getStrMacAddress().equals(this.strMacAddress)){
-						// se obtiene la fecha de registro de su ultima sesion activa
-						Timestamp tsFechaInicio = objDtoSession.getTsFechaRegistro();
-						// se obtiene la fecha del sistema
-						Timestamp tsFechaActual = new Timestamp(new Date().getTime());
-						//se realiza la diferencia entre las fechas del sistema y la ultima del logeo 
-						long lngTimeMiliSegundo = tsFechaActual.getTime() -tsFechaInicio.getTime();
-						//la diferencia en segundos
-						long lngSegundos = lngTimeMiliSegundo / 1000;
-						//obtenemos las horas de la diferencia
-						long lngHoras = lngSegundos / 3600;
-						//restamos las horas para continuar con minutos
-						lngSegundos -= lngHoras*3600; 
-						//igual que el paso anterior
-						long lngMinutos = lngSegundos /60;
-						boolean blActualizarSesion = false;
-						remotePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
-						Empresa objEmpresa = remotePersona.getEmpresaPorPk(objDtoSession.getId().getIntPersEmpresaPk());
-						long lngHoraConf = objEmpresa.getDtTiempoSesion().getHours();
-						long lngMinConf = objEmpresa.getDtTiempoSesion().getMinutes();
-						// compara si hora de la diferencia es mayot a la configurada 
-						// de serlo se activa un flag que permitira desactivar la ultima sesion activa
-						if(lngHoras > lngHoraConf)
-						{
-							blActualizarSesion = true;
-						}
-						// compara si el minuto de la diferencia es mayor a la configurada 
-						// de serlo se activa un flag que permitira desactivar la ultima sesion activa
-						if(lngHoras <= lngHoraConf && lngMinutos > lngMinConf){
-							blActualizarSesion = true;
-						}
-						//desactiva la ultima sesion activa
-						if(blActualizarSesion){
-							objDtoSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
-							objDtoSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
-							loginFacade.modificarSession(objDtoSession);
+					if(objDtoSession!=null){
+						if(objDtoSession.getStrMacAddress().equals(this.strMacAddress)){
+							// se obtiene la fecha de registro de su ultima sesion activa
+							Timestamp tsFechaInicio = objDtoSession.getTsFechaRegistro();
+							// se obtiene la fecha del sistema
+							Timestamp tsFechaActual = new Timestamp(new Date().getTime());
+							//se realiza la diferencia entre las fechas del sistema y la ultima del logeo 
+							long lngTimeMiliSegundo = tsFechaActual.getTime() -tsFechaInicio.getTime();
+							//la diferencia en segundos
+							long lngSegundos = lngTimeMiliSegundo / 1000;
+							//obtenemos las horas de la diferencia
+							long lngHoras = lngSegundos / 3600;
+							//restamos las horas para continuar con minutos
+							lngSegundos -= lngHoras*3600; 
+							//igual que el paso anterior
+							long lngMinutos = lngSegundos /60;
+							boolean blActualizarSesion = false;
+							remotePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+							Empresa objEmpresa = remotePersona.getEmpresaPorPk(objDtoSession.getId().getIntPersEmpresaPk());
+							long lngHoraConf = objEmpresa.getDtTiempoSesion().getHours();
+							long lngMinConf = objEmpresa.getDtTiempoSesion().getMinutes();
+							// compara si hora de la diferencia es mayot a la configurada 
+							// de serlo se activa un flag que permitira desactivar la ultima sesion activa
+							if(lngHoras > lngHoraConf)
+							{
+								blActualizarSesion = true;
+							}
+							// compara si el minuto de la diferencia es mayor a la configurada 
+							// de serlo se activa un flag que permitira desactivar la ultima sesion activa
+							if(lngHoras <= lngHoraConf && lngMinutos > lngMinConf){
+								blActualizarSesion = true;
+							}
+							//desactiva la ultima sesion activa
+							if(blActualizarSesion){
+								objDtoSession.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+								objDtoSession.setTsFechaTermino(new Timestamp(new Date().getTime()));
+								loginFacade.modificarSession(objDtoSession);
+							}else {
+								//si no muestra la alerta indicando que mantiene una sesion activa en otra pc
+								//msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
+								activaPopup = 3;
+								setStrMessageValidUserSession("Ud. ya mantiene una sesión activa en otra PC.");
+								return outcome;
+							}
 						}else {
-							//si no muestra la alerta indicando que mantiene una sesion activa en otra pc
-							msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
-							return null;
+							//msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
+							activaPopup = 3;
+							setStrMessageValidUserSession("Ud. ya mantiene una sesión activa en otra PC.");
+							return outcome;
 						}
-					}else {
-						msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
-						return null;
 					}
 				}
-				//Fin: REQ14-002 - cdelosrios - 20/07/2014
+				//Fin: REQ14-002 - bizarq - 20/07/2014
 				
 //				if(1==1){
 //					outcome = "portal.login";
@@ -1075,10 +1076,10 @@ public class LoginController{
 				
 				SeguridadFactory.setTicket(request, usuario);
 				
-				//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+				//Inicio: REQ14-002 - bizarq - 20/07/2014
 				HttpSession session = ((HttpServletRequest) request).getSession();
 				saveUserSession(usuario, session, bolUsuarioCabina);
-				//Fin: REQ14-002 - cdelosrios - 20/07/2014
+				//Fin: REQ14-002 - bizarq - 20/07/2014
 				outcome = "portal.principal";
 			}
 		} catch (BusinessException e) {
@@ -1179,23 +1180,35 @@ public class LoginController{
 	
 	public void cerrarSession(ActionEvent event){
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		
+		HttpSession session = null;
 		try{
+			session = ((HttpServletRequest) request).getSession();
 			usuario = new Usuario();
 			SeguridadFactory.cancelarTicket(request);
 			limpiar(event);
-			
-			//AGREGADO!!!!!
-			HttpSession session = ((HttpServletRequest) request).getSession();
-			//Inicio: REQ14-002 - cdelosrios - 20/07/2014
-			log.info("session.getId(): " + session.getId());
-			log.info("usuarioLogueado: " + session.getAttribute(Constante.USUARIO_LOGIN));
+			//Inicio: REQ14-002 - bizarq - 20/07/2014
 			updateUserSession(session);
-			//Fin: REQ14-002 - cdelosrios - 20/07/2014
-			session.invalidate();
+			//Fin: REQ14-002 - bizarq - 20/07/2014
 			session.removeAttribute(Constante.USUARIO_LOGIN);
+			session.invalidate();
 			
 		}catch (SeguridadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeSession(){
+		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		HttpSession session = null;
+		try{
+			session = ((HttpServletRequest) request).getSession();
+			usuario = new Usuario();
+			SeguridadFactory.cancelarTicket(request);
+			//limpiar(event);
+			updateUserSession(session);
+			session.removeAttribute(Constante.USUARIO_LOGIN);
+			session.invalidate();
+		} catch (SeguridadException e) {
 			e.printStackTrace();
 		}
 	}
@@ -2270,6 +2283,14 @@ public class LoginController{
 
 	public void setActivaPopup(int activaPopup) {
 		this.activaPopup = activaPopup;
+	}
+
+	public String getStrMessageValidUserSession() {
+		return strMessageValidUserSession;
+	}
+
+	public void setStrMessageValidUserSession(String strMessageValidUserSession) {
+		this.strMessageValidUserSession = strMessageValidUserSession;
 	}
 	
 }

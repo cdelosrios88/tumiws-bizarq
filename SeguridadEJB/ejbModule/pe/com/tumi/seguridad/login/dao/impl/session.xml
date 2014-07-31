@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
 	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<!-- 
+/************************************************************************/
+/* Nombre de componente: session */
+/* Descripción: Componente mapeador de objetos entre la clase Session y la tabla 
+		SEG_V_SESSION de BD   */
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1 */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+-->
+
 <sqlMap namespace="SessionDaoIbatis">
 
   <typeAlias type="pe.com.tumi.seguridad.login.domain.Session" alias="SessionUser"/>
@@ -10,15 +23,15 @@
      <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
      <result property="id.intPersPersonaPk"  		column="pPers_persona_n_pk" />
      <result property="id.intSessionPk"      		column="pSess_idsession_n_pk" />
-     <result property="tsFechaRegistro"   		column="pSess_fecharegistro_d" />
-     <result property="tsFechaTermino" 		column="pSess_fechatermino_d" />
+     <result property="tsFechaRegistro"   			column="pSess_fecharegistro_d" />
+     <result property="tsFechaTermino" 				column="pSess_fechatermino_d" />
      <result property="intIdSucursal"   			column="pSess_idsucursal_n" />
-     <result property="intInAccesoRemoto"  	column="pSess_accesoremoto_n" />
-     <result property="intIdEstado"  	column="pSess_idestadosession_n" />
-     <result property="intIdWebSession"  	column="pSess_idwebsession_n" />
-     <result property="intIdBDSession"  	column="pSess_sid_v" />
-     <result property="strMacAddress"  	column="pSess_macaddress_v" />
-     <result property="intIndCabina"  	column="pSess_indcabina_n" />
+     <result property="intInAccesoRemoto"  			column="pSess_accesoremoto_n" />
+     <result property="intIdEstado"  				column="pSess_idestadosession_n" />
+     <result property="intIdWebSession"  			column="pSess_idwebsession_n" />
+     <result property="intIdBDSession"  			column="pSess_sid_v" />
+     <result property="strMacAddress"  				column="pSess_macaddress_v" />
+     <result property="intIndCabina"  				column="pSess_indcabina_n" />
   </resultMap>
   
   <parameterMap id="parSessionUser" class="SessionUser">

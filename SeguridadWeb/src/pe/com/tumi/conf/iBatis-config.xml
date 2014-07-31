@@ -2,6 +2,17 @@
 <!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
     "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
 
+<!-- 
+/************************************************************************/
+/* Nombre de componente: iBatis-config */
+/* Descripción: Componente intermediario entre objeto java y tabla BD   */
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 - modificación */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+-->
+
 <sqlMapConfig>
 	<settings enhancementEnabled="true" useStatementNamespaces="true"/>
 	<sqlMap resource="pe/com/tumi/iBatis/Parametro.xml"/>
@@ -85,7 +96,7 @@
 	<!-- sqlMap para Estado de Cuenta -->
 	<sqlMap resource="pe/com/tumi/estadoCuenta/dao/impl/estadoCuenta.xml"/>
 	
-	<!-- Inicio: REQ14-002 - cdelosrios - 20/07/2014  -->
+	<!-- Inicio: REQ14-002 - bizarq - 20/07/2014  -->
 	<sqlMap resource="pe/com/tumi/seguridad/login/dao/impl/session.xml"/>
-	<!-- Fin: REQ14-002 - cdelosrios - 20/07/2014  -->
+	<!-- Fin: REQ14-002 - bizarq - 20/07/2014  -->
 </sqlMapConfig>

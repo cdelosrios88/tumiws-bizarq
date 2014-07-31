@@ -1,3 +1,12 @@
+/************************************************************************/
+/* Nombre de componente: LoginFacade */
+/* Descripción: Componente que implementa nuevos métodos para la obtención de datos del usuario activo
+/* Cod. Req.: REQ14-002   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 - Modificación */
+/* Fecha creación : 30/07/2014 */
+/* ********************************************************************* */
+
 package pe.com.tumi.seguridad.login.facade;
 
 import java.util.List;
@@ -46,9 +55,9 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 	private UsuarioSubSucursalBO boUsuarioSubSucursal = (UsuarioSubSucursalBO)TumiFactory.get(UsuarioSubSucursalBO.class);
 	private EmpresaUsuarioBO boEmpresaUsuario = (EmpresaUsuarioBO)TumiFactory.get(EmpresaUsuarioBO.class);
 	private LoginService loginService = (LoginService)TumiFactory.get(LoginService.class);
-	//Inicio: REQ14-002 - cdelosrios - 20/07/2014
+	//Inicio: REQ14-002 - bizarq - 20/07/2014
 	private SessionBO boSession = (SessionBO)TumiFactory.get(SessionBO.class);
-	//Fin: REQ14-002 - cdelosrios - 20/07/2014
+	//Fin: REQ14-002 - bizarq - 20/07/2014
 	
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<UsuarioComp> getListaUsuarioCompDeBusqueda(UsuarioComp pUsuario) throws BusinessException{
