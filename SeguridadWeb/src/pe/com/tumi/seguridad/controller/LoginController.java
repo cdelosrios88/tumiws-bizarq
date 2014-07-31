@@ -973,7 +973,12 @@ public class LoginController{
 						return outcome;
 					}
 				}
-				//Inicio: REQ14-002 - bizarq - 20/07/2014
+				//Inicio: REQ14-002 - bizarq - 30/07/2014
+				HttpSession session = ((HttpServletRequest) request).getSession();
+				if(session.getAttribute("objSession")!=null){
+					return "portal.principal";
+				}
+				
 				boolean isActiveSession = validateSession(usuario);
 				if(isActiveSession){
 					//Se obtiene la ultima sesion activa del usuario logeado
@@ -1020,18 +1025,18 @@ public class LoginController{
 								//si no muestra la alerta indicando que mantiene una sesion activa en otra pc
 								//msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
 								activaPopup = 3;
-								setStrMessageValidUserSession("Ud. ya mantiene una sesión activa en otra PC.");
+								setStrMessageValidUserSession(getProperties("label.notActiveUserSession.message"));
 								return outcome;
 							}
 						}else {
 							//msgPortal.setUsuario("Ud. ya mantiene una sesión activa en otra PC.");
 							activaPopup = 3;
-							setStrMessageValidUserSession("Ud. ya mantiene una sesión activa en otra PC.");
+							setStrMessageValidUserSession(getProperties("label.notActiveUserSession.message"));
 							return outcome;
 						}
 					}
 				}
-				//Fin: REQ14-002 - bizarq - 20/07/2014
+				//Fin: REQ14-002 - bizarq - 30/07/2014
 				
 //				if(1==1){
 //					outcome = "portal.login";
@@ -1077,7 +1082,7 @@ public class LoginController{
 				SeguridadFactory.setTicket(request, usuario);
 				
 				//Inicio: REQ14-002 - bizarq - 20/07/2014
-				HttpSession session = ((HttpServletRequest) request).getSession();
+				//HttpSession session = ((HttpServletRequest) request).getSession();
 				saveUserSession(usuario, session, bolUsuarioCabina);
 				//Fin: REQ14-002 - bizarq - 20/07/2014
 				outcome = "portal.principal";
