@@ -1202,6 +1202,7 @@ public class LoginController{
 		}
 	}
 	
+	//Inicio: REQ14-002 - bizarq - 30/07/2014
 	public void closeSession(){
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		HttpSession session = null;
@@ -1217,6 +1218,7 @@ public class LoginController{
 			e.printStackTrace();
 		}
 	}
+	//Fin: REQ14-002 - bizarq - 30/07/2014
 	
 	public String login() throws DaoException{
 //		log.info("Empezando método Login...");
