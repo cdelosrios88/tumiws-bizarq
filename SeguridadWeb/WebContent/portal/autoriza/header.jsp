@@ -25,7 +25,6 @@ var intSegundoSession = 0;
 <script type="text/javascript" language="javascript">
 		window.onbeforeunload = OnBeforeUnLoad;
         function OnBeforeUnLoad () {
-        	alert('xxxx');
             if(document.getElementById("hdnIndSesionSalir").value=="0")
 				return 'Esta seguro de salir de la aplicación, se cerrará la sesión';
         }
@@ -35,7 +34,7 @@ var intSegundoSession = 0;
 				return 'Esta seguro de salir de la aplicación, se cerrará la sesión';
 		};*/
 		window.onunload = function (){
-			document.getElementById('frmPrincipal:btnSalirSesion').click();
+			
 		};
 </script>
 <!-- Fin REQ14-002 bizarq 22-07-2014 -->
@@ -116,9 +115,6 @@ var intSegundoSession = 0;
 						
 						<input type="hidden" id="hdnIndSesionSalir" value ="0" />
 						<%-- <h:commandLink id="btnSalirSesion" actionListener="#{loginController.cerrarSession}" onclick="window.top.close();" style="display:none;"/>--%>
-						<a4j:jsFunction name="OnBeforeUnLoad"
-		                    action="#{loginController.closeSession}"
-		                    oncomplete="window.close()"/>
 						<!-- Fin REQ14-001 bizarq 15-07-2014 -->
 						<h:commandLink id="linkCerrar" actionListener="#{loginController.cerrarSession}" onclick="top.close();" style="display:none;"/>
 						<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;" target="_top"> Login </a>  
