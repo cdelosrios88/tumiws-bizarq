@@ -1,12 +1,12 @@
 <!-- 
 /************************************************************************/
 /* Nombre de componente: empresa.jsp */
-/* Descripci髇: Segunda pantalla principal donde el usuario ingresa la empresa,
+/* Descripci贸n: Segunda pantalla principal donde el usuario ingresa la empresa,
 	Sucursal, Sub Sucursal y Perfil
 /* Cod. Req.: REQ14-002   */
-/* Autor : Christian De los R韔s */
-/* Versi髇 : V1.1 - modificaci髇 */
-/* Fecha creaci髇 : 30/07/2014 */
+/* Autor : Christian De los R铆os */
+/* Versi贸n : V1.1 - modificaci贸n */
+/* Fecha creaci贸n : 30/07/2014 */
 /* ********************************************************************* */
 -->
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
@@ -64,7 +64,7 @@
 		</script>
     </c:when>
     <c:otherwise>
-		<script type="text/javascript" src="/SeguridadWeb/js/jquery19.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function () {
 				jQuery.ajax({ 
@@ -92,7 +92,7 @@
 			style="background-color:#DEEBF5;">
 			<f:facet name="header">
 				<h:panelGroup>
-					<h:outputText value="Validaci髇 de MAC Address"></h:outputText>
+					<h:outputText value="Validaci贸n de MAC Address"></h:outputText>
 				</h:panelGroup>
 			</f:facet>
 			<f:facet name="controls">
@@ -130,7 +130,7 @@
 			style="background-color:#DEEBF5;">
 			<f:facet name="header">
 				<h:panelGroup>
-					<h:outputText value="Usuario mantiene sesi髇 activa"/>
+					<h:outputText value="Usuario mantiene sesi贸n activa"/>
 				</h:panelGroup>
 			</f:facet>
 			<f:facet name="controls">
