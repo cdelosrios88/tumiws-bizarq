@@ -178,6 +178,9 @@ var intSegundoSession = 0;
 	  var fechaHoraSession = new Date(intSegundo);
 
 	  if(fechaHoraTranscurrido>fechaHoraSession){
+	  	  //Inicio REQ14-002 bizarq 04-08-2014
+	  	  document.getElementById('hdnIndSesionSalir').value="1";
+	  	  //Fin REQ14-002 bizarq 04-08-2014
 		  document.getElementById('frmPrincipal:linkCerrar').click();
 		  window.clearInterval(handleSegundo);
 		  window.clearInterval(handleSession);
