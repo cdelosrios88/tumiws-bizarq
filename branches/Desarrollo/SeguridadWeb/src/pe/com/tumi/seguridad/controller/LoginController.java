@@ -120,6 +120,7 @@ public class LoginController{
 	 */
 	private String verifyPassword;
 	/**
+	/**
 	 * @uml.property  name="fullName"
 	 */
 	private String fullName;
@@ -852,7 +853,8 @@ public class LoginController{
 		try {
 			session = new Session();
 			session.getId().setIntPersEmpresaPk(usuario.getEmpresa().getIntIdEmpresa());
-			session.getId().setIntPersPersonaPk(usuario.getIntPersPersonaPk());
+			//session.getId().setIntPersPersonaPk(usuario.getIntPersPersonaPk());
+			session.getId().setIntPersPersonaPk(getSucursalIdByPkPersona(usuario.getIntPersPersonaPk(), usuario.getEmpresa().getIntIdEmpresa()));
 			session.setTsFechaRegistro(new Timestamp(new Date().getTime()));
 			session.setIntIdSucursal(intIdSucursalPersona);
 			session.setIntInAccesoRemoto(Constante.INT_ZERO);
@@ -912,6 +914,40 @@ public class LoginController{
 		}
 		
 		return isActiveSession;
+	}
+	
+	/**
+	 * @author Christian De los Ríos - Bizarq
+	 * Descripción:
+	 * Método que permite validar la sesión de un usuario y retorna si está activo o no.
+	 * @param 
+	 * 		<Integer>intIdPersona<Integer>
+	 * 		<Integer>intIdEmpresa<Integer>
+	 * @return retorna el Id Sucursal de acuerdo a su PK Jurìdica.
+	 * */
+	private Integer getSucursalIdByPkPersona(Integer intIdPersona, Integer intIdEmpresa){
+		Integer intIdSucursal = null;
+		EmpresaUsuarioId empresaUsuarioId = null; 
+		List<Sucursal> listaSucursal = null;
+		try {
+			empresaUsuarioId = new EmpresaUsuarioId();
+			empresaUsuarioId.setIntPersPersonaPk(intIdPersona);
+			empresaUsuarioId.setIntPersEmpresaPk(intIdEmpresa);
+			EmpresaFacadeLocal localEmpresa = (EmpresaFacadeLocal)EJBFactory.getLocal(EmpresaFacadeLocal.class);
+			listaSucursal = localEmpresa.getListaSucursalPorPkEmpresaUsuarioYEstado(empresaUsuarioId,Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+			if(listaSucursal!=null && !listaSucursal.isEmpty()){
+				for(Sucursal objSucursalTmp : listaSucursal){
+					if(objSucursalTmp.getIntPersPersonaPk() != null 
+							&& objSucursalTmp.getIntPersPersonaPk().equals(intIdSucursalPersona)){
+						intIdSucursal = objSucursalTmp.getId().getIntIdSucursal();
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return intIdSucursal;
 	}
 	//Fin: REQ14-002 - bizarq - 20/07/2014
 	
@@ -983,16 +1019,13 @@ public class LoginController{
 				}
 				//Inicio: REQ14-002 - bizarq - 30/07/2014
 				HttpSession session = ((HttpServletRequest) request).getSession();
-				if(session.getAttribute("objSession")!=null){
-					return "portal.principal";
-				}
 				
 				boolean isActiveSession = validateSession(usuario);
 				if(isActiveSession){
 					//Se obtiene la ultima sesion activa del usuario logeado
 					Session objDtoSession =loginFacade.getSesionByUser(usuario.getIntPersPersonaPk());
 					//Se compara la mac que se logeo ultimo vs la maquina en el logeo actual
-					if(objDtoSession!=null){
+					if(objDtoSession!=null && session.getAttribute("objSession")==null){
 						if(!objDtoSession.getStrMacAddress().equals(this.strMacAddress)){
 							// se obtiene la fecha de registro de su ultima sesion activa
 							Timestamp tsFechaInicio = objDtoSession.getTsFechaRegistro();
@@ -1094,7 +1127,8 @@ public class LoginController{
 				
 				//Inicio: REQ14-002 - bizarq - 20/07/2014
 				//HttpSession session = ((HttpServletRequest) request).getSession();
-				saveUserSession(usuario, session, bolUsuarioCabina);
+				if(session.getAttribute("objSession")==null)
+					saveUserSession(usuario, session, bolUsuarioCabina);
 				//Fin: REQ14-002 - bizarq - 20/07/2014
 				outcome = "portal.principal";
 			}
