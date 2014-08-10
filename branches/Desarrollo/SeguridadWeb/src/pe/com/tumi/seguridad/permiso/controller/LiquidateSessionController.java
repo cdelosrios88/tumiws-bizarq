@@ -77,6 +77,7 @@ public class LiquidateSessionController {
 		try {
 			usuario = (Usuario) getRequest().getSession().getAttribute(
 					"usuario");
+			objLiqSess = new LiquidateSession();
 			if (usuario != null) {
 				personaFacade = (PersonaFacadeRemote) EJBFactory
 						.getRemote(PersonaFacadeRemote.class);
