@@ -103,7 +103,7 @@ var intSegundoSession = 0;
 												 loginController.usuario.empresaUsuario.intCambioClave == 1}">
 						<h:commandLink value=" CAMBIAR CLAVE " actionListener="#{loginController.irEmpresa}" onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkCambioClave').click();" style="color:#ffffff;padding-left: 5px;font-size:11px;font-weight:bold;"/>						
 						</h:panelGroup>
-						<!-- Inicio REQ14-001 bizarq 15-07-2014 -->
+						<!-- Inicio REQ14-002 bizarq 15-07-2014 -->
 						
 						<%--<h:commandLink value=" SALIR " actionListener="#{loginController.cerrarSession}" 
 						onclick="document.getElementById('hdnIndSesionSalir').value=1;document.getElementById('linkLogin').click();" 
@@ -115,7 +115,7 @@ var intSegundoSession = 0;
 						
 						<input type="hidden" id="hdnIndSesionSalir" value ="0" />
 						<%-- <h:commandLink id="btnSalirSesion" actionListener="#{loginController.cerrarSession}" onclick="window.top.close();" style="display:none;"/>--%>
-						<!-- Fin REQ14-001 bizarq 15-07-2014 -->
+						<!-- Fin REQ14-002 bizarq 15-07-2014 -->
 						<h:commandLink id="linkCerrar" actionListener="#{loginController.cerrarSession}" onclick="top.close();" style="display:none;"/>
 						<a id="linkLogin" href="<%=request.getContextPath()%>/portal/autentica/login.jsf" style="display:none;" target="_top"> Login </a>  
 						<a id="linkEmpresa" href="<%=request.getContextPath()%>/portal/autentica/empresa.jsf" style="display:none;" target="_top"> Empresa </a>
