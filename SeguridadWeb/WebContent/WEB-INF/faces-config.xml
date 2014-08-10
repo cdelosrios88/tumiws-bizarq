@@ -464,6 +464,22 @@
 	
 	<!--Convertidor Montos -->
 	
+	<!-- jrivera -->
+	<navigation-rule>
+		<from-view-id>/pages/permiso/liquidatesesion/*</from-view-id>
+		<navigation-case>
+			<from-outcome>liquidate.liquidateSession</from-outcome>
+			<to-view-id>/pages/permiso/liquidatesesion/liquidateMain.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>liquidateSessionController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.seguridad.permiso.controller.LiquidateSessionController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!--jrivera -->
+	
 	<converter>
     	<description>Convertidor de montos al formato establecido por Tumi</description>
     	<converter-id>ConvertidorMontos</converter-id>
