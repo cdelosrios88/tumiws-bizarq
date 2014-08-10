@@ -853,10 +853,9 @@ public class LoginController{
 		try {
 			session = new Session();
 			session.getId().setIntPersEmpresaPk(usuario.getEmpresa().getIntIdEmpresa());
-			//session.getId().setIntPersPersonaPk(usuario.getIntPersPersonaPk());
-			session.getId().setIntPersPersonaPk(getSucursalIdByPkPersona(usuario.getIntPersPersonaPk(), usuario.getEmpresa().getIntIdEmpresa()));
+			session.getId().setIntPersPersonaPk(usuario.getIntPersPersonaPk());
 			session.setTsFechaRegistro(new Timestamp(new Date().getTime()));
-			session.setIntIdSucursal(intIdSucursalPersona);
+			session.setIntIdSucursal(getSucursalIdByPkPersona(intIdSucursalPersona));
 			session.setIntInAccesoRemoto(Constante.INT_ZERO);
 			session.setIntIdWebSession(httpSession.getId());
 			session.setStrMacAddress(this.strMacAddress);
@@ -919,31 +918,18 @@ public class LoginController{
 	/**
 	 * @author Christian De los Ríos - Bizarq
 	 * Descripción:
-	 * Método que permite validar la sesión de un usuario y retorna si está activo o no.
+	 * Método que retorna el ID correcto de una determinada sucursal de acuerdo al ID Persona
 	 * @param 
 	 * 		<Integer>intIdPersona<Integer>
-	 * 		<Integer>intIdEmpresa<Integer>
 	 * @return retorna el Id Sucursal de acuerdo a su PK Jurìdica.
 	 * */
-	private Integer getSucursalIdByPkPersona(Integer intIdPersona, Integer intIdEmpresa){
+	private Integer getSucursalIdByPkPersona(Integer intIdPersona){
 		Integer intIdSucursal = null;
-		EmpresaUsuarioId empresaUsuarioId = null; 
-		List<Sucursal> listaSucursal = null;
+		Sucursal sucursal = null;
 		try {
-			empresaUsuarioId = new EmpresaUsuarioId();
-			empresaUsuarioId.setIntPersPersonaPk(intIdPersona);
-			empresaUsuarioId.setIntPersEmpresaPk(intIdEmpresa);
 			EmpresaFacadeLocal localEmpresa = (EmpresaFacadeLocal)EJBFactory.getLocal(EmpresaFacadeLocal.class);
-			listaSucursal = localEmpresa.getListaSucursalPorPkEmpresaUsuarioYEstado(empresaUsuarioId,Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
-			if(listaSucursal!=null && !listaSucursal.isEmpty()){
-				for(Sucursal objSucursalTmp : listaSucursal){
-					if(objSucursalTmp.getIntPersPersonaPk() != null 
-							&& objSucursalTmp.getIntPersPersonaPk().equals(intIdSucursalPersona)){
-						intIdSucursal = objSucursalTmp.getId().getIntIdSucursal();
-						break;
-					}
-				}
-			}
+			sucursal = localEmpresa.getSucursalPorIdPersona(intIdPersona);
+			intIdSucursal = sucursal.getId().getIntIdSucursal();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
