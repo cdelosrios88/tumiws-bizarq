@@ -8,7 +8,7 @@ Insert into SEGURIDAD.SEG_M_TRANSACCIONES
  Values
    (2, 330, NULL, 'Liquidar Sesiones', 3, 
     2, 1, 2, NULL, 0, 
-    1, 2, 25, NULL, '/SeguridadWeb', 
+    1, 2, 7, NULL, '/SeguridadWeb', 
     '/pages/permiso/liquidatesesion/liquidateMain.jsf', NULL);
 
 Insert into SEGURIDAD.SEG_V_PERFILDETALLE
