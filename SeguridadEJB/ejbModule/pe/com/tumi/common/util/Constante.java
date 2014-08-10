@@ -393,4 +393,11 @@ public class Constante {
 	public static final int INT_NINE = 9;
 	public static final int INT_TEN = 10;
 	//Fin: REQ14-001 - bizarq - 15/07/2014
+	//Inicio: REQ14-003 - bizarq - 02/08/2014
+	public static final Integer PARAM_T_SESSION_WEB= 1;
+	public static final Integer PARAM_T_BLOCK_BD= 2;
+	public static final Integer PARAM_T_SESSION_BD= 3;
+	public static final String PARAM_T_ESTADO_ANULADO = "3";
+	//Inicio: REQ14-003 - bizarq - 02/08/2014
+	
 }
