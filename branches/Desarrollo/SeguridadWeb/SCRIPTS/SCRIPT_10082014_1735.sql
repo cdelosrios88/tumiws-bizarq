@@ -7,7 +7,7 @@ Insert into SEGURIDAD.SEG_M_TRANSACCIONES
     PERS_PERSONAELIMINA_N_PK)
  Values
    (2, 330, NULL, 'Liquidar Sesiones', 3, 
-    2, 1, 2, NULL, 0, 
+    4, 1, 2, NULL, 0, 
     1, 2, 2, NULL, '/SeguridadWeb', 
     '/pages/permiso/liquidatesesion/liquidateMain.jsf', NULL);
 
