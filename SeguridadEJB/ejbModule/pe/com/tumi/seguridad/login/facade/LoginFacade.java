@@ -427,8 +427,8 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 		return dto;
 	}
 	
-	public List<Session> getListaSessionWeb (Session o, String strFullName) throws BusinessException{ 
-		List<Session> lista = null;
+	public List<SessionComp> getListaSessionWeb (Session o, String strFullName) throws BusinessException{ 
+		List<SessionComp> lista = null;
 		try{
 			lista = boSession.getListaSessionWeb(o,strFullName);
 		}catch(BusinessException e){
