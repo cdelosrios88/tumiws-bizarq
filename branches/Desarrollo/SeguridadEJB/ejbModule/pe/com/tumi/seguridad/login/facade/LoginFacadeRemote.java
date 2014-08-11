@@ -18,6 +18,7 @@ import pe.com.tumi.seguridad.login.domain.EmpresaUsuarioId;
 import pe.com.tumi.seguridad.login.domain.Perfil;
 import pe.com.tumi.seguridad.login.domain.PerfilId;
 import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.domain.SessionDB;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfil;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfilId;
@@ -87,4 +88,13 @@ public interface LoginFacadeRemote {
 	//Inicio: REQ14-002 - bizarq - 20/07/2014
 	public Session getSesionByUser (Integer intIdPersona) throws BusinessException;
 	//Fin: REQ14-002 - bizarq - 20/07/2014
+	
+	//Inicio: REQ14-003 - bizarq - 10/08/2014
+	public Session getSessionPorPk (Integer intSessionPk) throws BusinessException;
+	public List<Session> getListaSessionWeb (Session o) throws BusinessException;
+	public List<SessionDB> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException;
+	public List<SessionDB> getListaSessionDB (String strSchema, String strProgram) throws BusinessException;
+	public Integer killBlockDB(String strSID, String strSerial) throws BusinessException;
+	public Integer killSessionDB(String strSID, String strSerial) throws BusinessException;
+	//Fin: REQ14-003 - bizarq - 10/08/2014
 }

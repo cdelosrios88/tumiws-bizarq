@@ -11,12 +11,14 @@ package pe.com.tumi.seguridad.login.dao.impl;
 
 import java.util.HashMap;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.persistencia.dao.impl.TumiDaoIbatis;
 import pe.com.tumi.seguridad.login.dao.SessionDao;
 import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.domain.SessionDB;
 
 public class SessionDaoIbatis extends TumiDaoIbatis implements SessionDao {
 
@@ -67,4 +69,71 @@ public class SessionDaoIbatis extends TumiDaoIbatis implements SessionDao {
 		}
 		return lstSesion;
  	}
+	//Inicio: REQ14-003 - bizarq - 10/08/2014
+	public List<Session> getListaPorPk(Object o) throws DAOException {
+		List<Session> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaPorPk", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	
+	public List<Session> getListaSessionWeb(Object o) throws DAOException {
+		List<Session> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaSessionWeb", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	
+	public List<SessionDB> getListBlockDB(Object o) throws DAOException {
+		List<SessionDB> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListBlockDB", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	
+	public List<SessionDB> getListaSessionDB(Object o) throws DAOException {
+		List<SessionDB> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaSessionDB", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	
+	public Integer killBlockDB(Object o) throws DAOException{
+		Integer escalar = null;
+		try{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".killBlockDB",o);
+			m = (HashMap<String, Object>)o;
+			escalar = (Integer)m.get("intEscalar");
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return escalar;
+	}
+	
+	public Integer killSessionDB(Object o) throws DAOException{
+		Integer escalar = null;
+		try{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".killSessionDB",o);
+			m = (HashMap<String, Object>)o;
+			escalar = (Integer)m.get("intEscalar");
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return escalar;
+	}
+	//Fin: REQ14-003 - bizarq - 10/08/2014
 }

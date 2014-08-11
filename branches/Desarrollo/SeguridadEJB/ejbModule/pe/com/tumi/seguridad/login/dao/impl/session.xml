@@ -17,7 +17,9 @@
 <sqlMap namespace="SessionDaoIbatis">
 
   <typeAlias type="pe.com.tumi.seguridad.login.domain.Session" alias="SessionUser"/>
-	
+  <!-- Inicio: REQ14-003 - bizarq - 10/08/2014 -->
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.SessionDB" alias="SessionDB"/>
+  <!-- Fin: REQ14-003 - bizarq - 10/08/2014 -->
   
   <resultMap id="resSessionUser" class="SessionUser" >
      <result property="id.intPersEmpresaPk"      	column="pPers_empresa_n_pk" />
@@ -33,7 +35,24 @@
      <result property="strMacAddress"  				column="pSess_macaddress_v" />
      <result property="intIndCabina"  				column="pSess_indcabina_n" />
   </resultMap>
-  
+   
+  <resultMap id="resSessionDB" class="SessionDB" >
+     <result property="strSID"      		column="pSID_V" />
+     <result property="strSerial"  			column="pSERIAL_V" />
+     <result property="strUserName"      	column="pPCUSER_V" />
+     <result property="strBdUser"   		column="pBDUSER_V" />
+     <result property="strTypeLock" 		column="pTYPELOCK_V" />
+     <result property="strProcessLocker"   	column="pPROCESS_LOCKER_V" />
+     <result property="strSchemaName"  		column="pSCHEMA_V" />
+     <result property="strObjectName"  		column="pOBJECT_NAME_V" />
+     <result property="strObjectType"  		column="pOBJECT_TYPE_V" />
+     <result property="strProgram"  		column="pPROGRAM_V" />
+     <result property="strOwner"  			column="pOWNER_V" />
+     <result property="strSqlQuery"  		column="pSQL_QUERY_V" />
+     <result property="strMachine"  		column="pMACHINE_V" />
+     <result property="strSqlId"  			column="pSQLID_V" />
+  </resultMap>
+   
   <parameterMap id="parSessionUser" class="SessionUser">
      <parameter property="id.intPersEmpresaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
 	 <parameter property="id.intPersPersonaPk"		jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="INOUT"/>
@@ -54,10 +73,54 @@
 	 <parameter property="intEscalar" 				jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
   </parameterMap>
   
-  <parameterMap id="parPorPK" class="java.util.Map">
+  <parameterMap id="parPorUserPK" class="java.util.Map">
    	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
    	 <parameter property="intPersPersonaPk" 	jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
   </parameterMap>
+  
+  <!-- Inicio: REQ14-003 - bizarq - 10/08/2014 -->
+  
+  <parameterMap id="parPorPK" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intSessionPk" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorSessionWeb" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="intIdSucursal" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+   	 <parameter property="strFullName" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+   	 <parameter property="tsFechaRegistro" 		jdbcType="TIMESTAMP"	 javaType="java.sql.Timestamp"  mode="IN"/>
+   	 <parameter property="tsFechaTermino" 		jdbcType="TIMESTAMP"	 javaType="java.sql.Timestamp"  mode="IN"/>
+   	 <parameter property="intIdEstado" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorBlockBD" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="strSchema" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+   	 <parameter property="strProgram" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+   	 <parameter property="strObject" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+  </parameterMap>
+  
+  
+  <parameterMap id="parPorSessionBD" class="java.util.Map">
+   	 <parameter property="cursorLista" 			jdbcType="ORACLECURSOR"  javaType="java.sql.ResultSet" 	mode="OUT"/>
+   	 <parameter property="strSchema" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+   	 <parameter property="strProgram" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorkillBlockDB" class="java.util.Map">
+	 <parameter property="strSID"				jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+	 <parameter property="strSerial"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+	 <parameter property="intEscalar" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorkillSessionDB" class="java.util.Map">
+	 <parameter property="strSID"				jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+	 <parameter property="strSerial"			jdbcType="VARCHAR"  	javaType="java.lang.String" 	mode="IN"/>
+	 <parameter property="intEscalar" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
+  </parameterMap>
+  <!-- Fin: REQ14-003 - bizarq - 10/08/2014 -->
   
   <procedure id="grabar" parameterMap="parSessionUser">
 	{ call PKG_SESSION.grabar(?,?,?,?,?,?,?,?,?,?,?,?) }
@@ -71,8 +134,33 @@
 	{ call PKG_SESSION.getValidSessionByUser(?,?) }
   </procedure>
   
-  <procedure id="getListByUser" parameterMap="parPorPK" resultMap="resSessionUser">
+  <procedure id="getListByUser" parameterMap="parPorUserPK" resultMap="resSessionUser">
 	{ call PKG_SESSION.getListByUser(?,?) }
   </procedure>
   
+  <!-- Inicio: REQ14-003 - bizarq - 10/08/2014 -->
+  <procedure id="getListaPorPk" parameterMap="parPorPK" resultMap="resSessionUser">
+	{ call PKG_SESSION.getListaPorPK(?,?) }
+  </procedure>
+  
+  <procedure id="getListaSessionWeb" parameterMap="parPorSessionWeb" resultMap="resSessionUser">
+	{ call PKG_SESSION.getListSessionWeb(?,?,?,?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListBlockDB" parameterMap="parPorBlockBD" resultMap="resSessionDB">
+	{ call PKG_SESSION.getListBlockDB(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListSessionDB" parameterMap="parPorSessionBD" resultMap="resSessionDB">
+	{ call PKG_SESSION.getListSessionDB(?,?,?) }
+  </procedure>
+  
+  <procedure id="killBlockDB" parameterMap="parPorkillBlockDB">
+	{ call PKG_SESSION.killBlockDB(?,?,?) }
+  </procedure>
+  
+  <procedure id="killSessionDB" parameterMap="parPorkillSessionDB">
+	{ call PKG_SESSION.killSessionDB(?,?,?) }
+  </procedure>
+  <!-- Fin: REQ14-003 - bizarq - 10/08/2014 -->
 </sqlMap>  
