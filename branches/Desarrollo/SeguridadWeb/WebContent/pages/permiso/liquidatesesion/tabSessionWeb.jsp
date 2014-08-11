@@ -59,7 +59,7 @@
 				<f:selectItem itemLabel="Seleccionar.." itemValue="0" />
 				<tumih:selectItems var="sel"
 					value="#{liquidateSessionController.listaJuridicaSucursal}"
-					itemValue="#{sel.intPersPersonaPk}"
+					itemValue="#{sel.id.intIdSucursal}"
 					itemLabel="#{sel.juridica.strRazonSocial}" />
 			</h:selectOneMenu>
 		</rich:column>

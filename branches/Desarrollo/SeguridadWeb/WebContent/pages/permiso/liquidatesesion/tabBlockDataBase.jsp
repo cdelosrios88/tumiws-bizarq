@@ -19,14 +19,14 @@
 		</rich:column>
 		<rich:column width="200px">
 			<h:inputText style="width: 150px;"
-				value="#{liquidateSessionController.objLiqSess.strUsuario}" />
+				value="#{liquidateSessionController.strEsquema}" />
 		</rich:column>
 		<rich:column style="width: 110px">
 			<h:outputText value="Objeto : " />
 		</rich:column>
 		<rich:column width="200px">
 			<h:inputText style="width: 150px;"
-				value="#{liquidateSessionController.objLiqSess.strUsuario}" />
+				value="#{liquidateSessionController.strObjecto}" />
 		</rich:column>
 	</h:panelGrid>
 	<rich:spacer height="10px" />
@@ -36,11 +36,11 @@
 		</rich:column>
 		<rich:column width="200px">
 			<h:inputText style="width: 150px;"
-				value="#{liquidateSessionController.objLiqSess.strUsuario}" />
+				value="#{liquidateSessionController.strPrograma}" />
 		</rich:column>
 		<rich:column  style="width: 110px">
         	<a4j:commandButton styleClass="btnEstilos" value="Buscar"
-            	action="#{liquidateSessionController.buscarSesionWeb}" reRender="panelSesionWeb"/>
+            	action="#{liquidateSessionController.buscarBlockDataBase}" reRender="panelSesionWeb"/>
         </rich:column>  
 	</h:panelGrid>
 
