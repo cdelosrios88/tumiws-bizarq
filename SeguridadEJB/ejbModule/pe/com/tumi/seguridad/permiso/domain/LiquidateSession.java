@@ -1,11 +1,31 @@
 package pe.com.tumi.seguridad.permiso.domain;
 
+import java.util.Date;
+
 public class LiquidateSession {
 	private Integer intPersEmpresa;
 	private String strUsuario;
 	private Integer intEstado;
 	private Integer intCboSucursalEmp;
+	private Date fechaInicioFiltro;
+	private Date fechaFinFiltro;
 	
+
+	public Date getFechaInicioFiltro() {
+		return fechaInicioFiltro;
+	}
+
+	public void setFechaInicioFiltro(Date fechaInicioFiltro) {
+		this.fechaInicioFiltro = fechaInicioFiltro;
+	}
+
+	public Date getFechaFinFiltro() {
+		return fechaFinFiltro;
+	}
+
+	public void setFechaFinFiltro(Date fechaFinFiltro) {
+		this.fechaFinFiltro = fechaFinFiltro;
+	}
 
 	public Integer getIntCboSucursalEmp() {
 		return intCboSucursalEmp;
