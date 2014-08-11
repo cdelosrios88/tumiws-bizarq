@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.richfaces.component.html.HtmlPanelMenu;
 
+import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.DaoException;
 import pe.com.tumi.empresa.domain.Subsucursal;
@@ -855,7 +856,7 @@ public class LoginController{
 			session.getId().setIntPersEmpresaPk(usuario.getEmpresa().getIntIdEmpresa());
 			session.getId().setIntPersPersonaPk(usuario.getIntPersPersonaPk());
 			session.setTsFechaRegistro(new Timestamp(new Date().getTime()));
-			session.setIntIdSucursal(getSucursalIdByPkPersona(intIdSucursalPersona));
+			session.setIntIdSucursal(CommonUtils.getSucursalIdByPkPersona(intIdSucursalPersona));
 			session.setIntInAccesoRemoto(Constante.INT_ZERO);
 			session.setIntIdWebSession(httpSession.getId());
 			session.setStrMacAddress(this.strMacAddress);
@@ -913,27 +914,6 @@ public class LoginController{
 		}
 		
 		return isActiveSession;
-	}
-	
-	/**
-	 * @author Christian De los Ríos - Bizarq
-	 * Descripción:
-	 * Método que retorna el ID correcto de una determinada sucursal de acuerdo al ID Persona
-	 * @param 
-	 * 		<Integer>intIdPersona<Integer>
-	 * @return retorna el Id Sucursal de acuerdo a su PK Jurìdica.
-	 * */
-	private Integer getSucursalIdByPkPersona(Integer intIdPersona){
-		Integer intIdSucursal = null;
-		Sucursal sucursal = null;
-		try {
-			EmpresaFacadeLocal localEmpresa = (EmpresaFacadeLocal)EJBFactory.getLocal(EmpresaFacadeLocal.class);
-			sucursal = localEmpresa.getSucursalPorIdPersona(intIdPersona);
-			intIdSucursal = sucursal.getId().getIntIdSucursal();
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return intIdSucursal;
 	}
 	//Fin: REQ14-002 - bizarq - 20/07/2014
 	
