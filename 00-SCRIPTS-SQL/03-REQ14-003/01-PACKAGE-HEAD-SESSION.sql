@@ -1,15 +1,15 @@
-create or replace 
-PACKAGE           PKG_SESSION
+/* Formatted on 10/08/2014 07:23:19 p.m. (QP5 v5.163.1008.3004) */
+CREATE OR REPLACE PACKAGE SEGURIDAD.PKG_SESSION
 AS
    TYPE cursorlista IS REF CURSOR;
 
    PROCEDURE getListaSession (v_LISTA OUT cursorlista);
 
    PROCEDURE getListaPorPk (
-      v_LISTA                  OUT cursorlista,
-      V_PERS_EMPRESA_N_PK   IN     SEG_V_SESSION.PERS_EMPRESA_N_PK%TYPE,
-      V_PERSONA_N_PK        IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
-      V_SESSION_N_PK        IN     SEG_V_SESSION.SESS_IDSESSION_N_PK%TYPE);
+      v_LISTA             OUT cursorlista,
+      --V_PERS_EMPRESA_N_PK   IN     SEG_V_SESSION.PERS_EMPRESA_N_PK%TYPE,
+      --V_PERSONA_N_PK        IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
+      V_SESSION_N_PK   IN     SEG_V_SESSION.SESS_IDSESSION_N_PK%TYPE);
 
    PROCEDURE grabar (
       V_PERS_EMPRESA_N_PK   IN OUT SEG_V_SESSION.PERS_EMPRESA_N_PK%TYPE,
@@ -46,28 +46,32 @@ AS
    PROCEDURE getListByUser (
       v_LISTA             OUT cursorlista,
       V_PERSONA_N_PK   IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE);
-      
-  PROCEDURE getListSessionWeb(
-      v_LISTA OUT cursorlista,
-      v_pers_empresa_n_pk   IN seg_v_session.pers_empresa_n_pk%TYPE,
-      v_sucu_idsucursal_n IN seg_m_sucursal.pers_persona_n_pk%TYPE,
-      v_pers_natu_nombres IN persona.per_natural.natu_nombres_v%TYPE,
-      v_sess_fecharegistro_d IN seg_v_session.sess_fecharegistro_d%TYPE,
-      v_sess_fechatermino_d IN seg_v_session.sess_fechatermino_d%TYPE,
-      v_sess_idestadosession_n IN seg_v_session.sess_idestadosession_n%TYPE      
+
+   -------------------------------------------------------------------------------------------------------------------------
+   PROCEDURE getListSessionWeb (
+      v_LISTA                       OUT cursorlista,
+      v_pers_empresa_n_pk        IN     seg_v_session.pers_empresa_n_pk%TYPE,
+      v_sucu_idsucursal_n        IN     SEG_V_SESSION.SUCU_IDSUCURSAL_N%TYPE,
+      v_pers_natu_nombres        IN     persona.per_natural.natu_nombres_v%TYPE,
+      v_sess_fecharegistro_d     IN     seg_v_session.sess_fecharegistro_d%TYPE,
+      v_sess_fechatermino_d      IN     seg_v_session.sess_fechatermino_d%TYPE,
+      v_sess_idestadosession_n   IN     seg_v_session.sess_idestadosession_n%TYPE);
+
+   PROCEDURE getListBlockDB (v_LISTA        OUT cursorlista,
+                             v_schema    IN     VARCHAR2,
+                             v_program   IN     VARCHAR2,
+                             v_object    IN     VARCHAR2);
+
+   PROCEDURE getListSessionDB (v_LISTA        OUT cursorlista,
+                               v_schema    IN     VARCHAR2,
+                               v_program   IN     VARCHAR2);
+
+
+    PROCEDURE killSessionDB(
+      v_pn_sid IN NUMBER,
+      v_pn_serial IN NUMBER,
+      v_result OUT NUMBER
   );
-  
-  PROCEDURE getListBlockDB(
-      v_LISTA OUT cursorlista,
-      v_schema IN VARCHAR2,
-      v_program IN VARCHAR2,
-      v_object IN VARCHAR2
-  );
-  
-  PROCEDURE getListSessionDB(
-      v_LISTA OUT cursorlista,
-      v_schema IN VARCHAR2,
-      v_program IN VARCHAR2
-  );
-      
+-------------------------------------------------------------------------------------------------------------------------
 END PKG_SESSION;
+/
