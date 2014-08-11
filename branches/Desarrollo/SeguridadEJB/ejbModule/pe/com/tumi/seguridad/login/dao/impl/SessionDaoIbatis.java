@@ -19,6 +19,7 @@ import pe.com.tumi.framework.negocio.persistencia.dao.impl.TumiDaoIbatis;
 import pe.com.tumi.seguridad.login.dao.SessionDao;
 import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.SessionDB;
+import pe.com.tumi.seguridad.login.domain.composite.SessionComp;
 
 public class SessionDaoIbatis extends TumiDaoIbatis implements SessionDao {
 
@@ -90,8 +91,8 @@ public class SessionDaoIbatis extends TumiDaoIbatis implements SessionDao {
 		return lista;
 	}
 	
-	public List<SessionDB> getListBlockDB(Object o) throws DAOException {
-		List<SessionDB> lista = null;
+	public List<SessionComp> getListBlockDB(Object o) throws DAOException {
+		List<SessionComp> lista = null;
 		try{
 			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListBlockDB", o);
 		}catch(Exception e) {

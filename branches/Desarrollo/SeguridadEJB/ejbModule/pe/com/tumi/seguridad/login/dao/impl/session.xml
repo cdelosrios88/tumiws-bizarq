@@ -19,6 +19,7 @@
   <typeAlias type="pe.com.tumi.seguridad.login.domain.Session" alias="SessionUser"/>
   <!-- Inicio: REQ14-003 - bizarq - 10/08/2014 -->
   <typeAlias type="pe.com.tumi.seguridad.login.domain.SessionDB" alias="SessionDB"/>
+  <typeAlias type="pe.com.tumi.seguridad.login.domain.composite.SessionComp" alias="SessionComp"/>
   <!-- Fin: REQ14-003 - bizarq - 10/08/2014 -->
   
   <resultMap id="resSessionUser" class="SessionUser" >
@@ -51,6 +52,22 @@
      <result property="strSqlQuery"  		column="pSQL_QUERY_V" />
      <result property="strMachine"  		column="pMACHINE_V" />
      <result property="strSqlId"  			column="pSQLID_V" />
+  </resultMap>
+  
+  <resultMap id="resSessionComp" class="SessionComp" >
+     <result property="session.id.intSessionPk"    	column="pSess_idsession_n_pk" />
+     <result property="intPersonaPk"  				column="pIdPersonaPk" />
+     <result property="strFullName"      			column="pFullName_V" />
+     <result property="session.intIdEstado"   		column="pSess_idestadosession_n" />
+     <result property="intIdEmpresa" 				column="pPers_empresa_n_pk" />
+     <result property="strEmpresa"   				column="pPers_razonsocial_v" />
+     <result property="strEmpresaSiglas"  			column="pPers_siglas_v" />
+     <result property="session.intIdSucursal"  		column="pPers_sucursal_n_pk" />
+     <result property="strSucursal"  				column="pSucursal_v" />
+     <result property="strSucursalSiglas"  			column="pSiglasSucursal_v" />
+     <result property="session.tsFechaRegistro"  	column="pSess_fecharegistro_d" />
+     <result property="session.tsFechaTermino"		column="pSess_fechatermino_d" />
+     <result property="session.strMacAddress"  		column="pSess_macaddress_v" />
   </resultMap>
    
   <parameterMap id="parSessionUser" class="SessionUser">
@@ -147,7 +164,7 @@
 	{ call PKG_SESSION.getListSessionWeb(?,?,?,?,?,?,?) }
   </procedure>
   
-  <procedure id="getListBlockDB" parameterMap="parPorBlockBD" resultMap="resSessionDB">
+  <procedure id="getListBlockDB" parameterMap="parPorBlockBD" resultMap="resSessionComp">
 	{ call PKG_SESSION.getListBlockDB(?,?,?,?) }
   </procedure>
   

@@ -20,6 +20,7 @@ import pe.com.tumi.seguridad.login.dao.SessionDao;
 import pe.com.tumi.seguridad.login.dao.impl.SessionDaoIbatis;
 import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.SessionDB;
+import pe.com.tumi.seguridad.login.domain.composite.SessionComp;
 
 public class SessionBO {
 
@@ -127,8 +128,8 @@ public class SessionBO {
 		return lista;
 	}
 	
-	public List<SessionDB> getListBlockDB(String strSchema, String strProgram, String strObject) throws BusinessException{
-		List<SessionDB> lista = null;
+	public List<SessionComp> getListBlockDB(String strSchema, String strProgram, String strObject) throws BusinessException{
+		List<SessionComp> lista = null;
 		try{
 			HashMap<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("strSchema", strSchema);

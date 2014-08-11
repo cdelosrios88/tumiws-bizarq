@@ -40,6 +40,7 @@ import pe.com.tumi.seguridad.login.domain.UsuarioSubSucursal;
 import pe.com.tumi.seguridad.login.domain.UsuarioSubSucursalId;
 import pe.com.tumi.seguridad.login.domain.UsuarioSucursal;
 import pe.com.tumi.seguridad.login.domain.UsuarioSucursalId;
+import pe.com.tumi.seguridad.login.domain.composite.SessionComp;
 import pe.com.tumi.seguridad.login.domain.composite.UsuarioComp;
 import pe.com.tumi.seguridad.login.service.LoginService;
 import pe.com.tumi.seguridad.login.service.UsuarioCompService;
@@ -440,8 +441,8 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 		return lista;
 	}
 	
-	public List<SessionDB> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException{ 
-		List<SessionDB> lista = null;
+	public List<SessionComp> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException{ 
+		List<SessionComp> lista = null;
 		try{
 			lista = boSession.getListBlockDB(strSchema,strProgram,strObject);
 		}catch(BusinessException e){
