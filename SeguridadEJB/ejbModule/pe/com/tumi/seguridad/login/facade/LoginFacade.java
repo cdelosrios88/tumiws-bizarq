@@ -32,6 +32,7 @@ import pe.com.tumi.seguridad.login.domain.EmpresaUsuarioId;
 import pe.com.tumi.seguridad.login.domain.Perfil;
 import pe.com.tumi.seguridad.login.domain.PerfilId;
 import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.domain.SessionDB;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfil;
 import pe.com.tumi.seguridad.login.domain.UsuarioPerfilId;
@@ -410,4 +411,85 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 	}
 	//Fin: REQ14-002 - cdelosrios - 20/07/2014
 	
+	//Inicio: REQ14-003 - bizarq - 10/08/2014
+	public Session getSessionPorPk (Integer intSessionPk) throws BusinessException{ 
+		Session dto = null;
+		try{
+			dto = boSession.getSessionPorPk(intSessionPk);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return dto;
+	}
+	
+	public List<Session> getListaSessionWeb (Session o) throws BusinessException{ 
+		List<Session> lista = null;
+		try{
+			lista = boSession.getListaSessionWeb(o);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	public List<SessionDB> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException{ 
+		List<SessionDB> lista = null;
+		try{
+			lista = boSession.getListBlockDB(strSchema,strProgram,strObject);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	public List<SessionDB> getListaSessionDB (String strSchema, String strProgram) throws BusinessException{ 
+		List<SessionDB> lista = null;
+		try{
+			lista = boSession.getListaSessionDB(strSchema,strProgram);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	public Integer killBlockDB(String strSID, String strSerial) throws BusinessException{
+		Integer intEscalar = null;
+		try{
+			intEscalar = boSession.killBlockDB(strSID,strSerial);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return intEscalar;
+	}
+	
+	public Integer killSessionDB(String strSID, String strSerial) throws BusinessException{
+		Integer intEscalar = null;
+		try{
+			intEscalar = boSession.killSessionDB(strSID,strSerial);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return intEscalar;
+	}
+	//Fin: REQ14-003 - bizarq - 10/08/2014
 }
