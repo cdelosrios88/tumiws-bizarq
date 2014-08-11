@@ -160,7 +160,7 @@
 	{ call PKG_SESSION.getListaPorPK(?,?) }
   </procedure>
   
-  <procedure id="getListaSessionWeb" parameterMap="parPorSessionWeb" resultMap="resSessionUser">
+  <procedure id="getListaSessionWeb" parameterMap="parPorSessionWeb" resultMap="resSessionComp">
 	{ call PKG_SESSION.getListSessionWeb(?,?,?,?,?,?,?) }
   </procedure>
   

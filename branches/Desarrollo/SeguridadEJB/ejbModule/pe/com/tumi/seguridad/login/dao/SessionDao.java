@@ -23,7 +23,7 @@ public interface SessionDao extends TumiDao {
 	public List<Session> getListSesionByUser (Object o) throws DAOException;
 	//Inicio: REQ14-003 - bizarq - 10/08/2014
 	public List<Session> getListaPorPk(Object o) throws DAOException;
-	public List<Session> getListaSessionWeb(Object o) throws DAOException;
+	public List<SessionComp> getListaSessionWeb(Object o) throws DAOException;
 	public List<SessionComp> getListBlockDB(Object o) throws DAOException;
 	public List<SessionDB> getListaSessionDB(Object o) throws DAOException;
 	public Integer killBlockDB(Object o) throws DAOException;

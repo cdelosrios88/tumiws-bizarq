@@ -109,8 +109,8 @@ public class SessionBO {
 		return domain;
 	}
 	
-	public List<Session> getListaSessionWeb(Session o, String strFullName) throws BusinessException{
-		List<Session> lista = null;
+	public List<SessionComp> getListaSessionWeb(Session o, String strFullName) throws BusinessException{
+		List<SessionComp> lista = null;
 		try{
 			HashMap<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("intIdEmpresa", o.getId().getIntPersEmpresaPk());
