@@ -218,25 +218,17 @@ AS
                      ON sc.sucu_idsucursal_n = sv.sucu_idsucursal_n
                   LEFT JOIN persona.per_juridica pj1
                      ON sc.pers_persona_n_pk = pj1.pers_persona_n
-            WHERE (v_pers_empresa_n_pk IS NULL
-                   OR sv.pers_empresa_n_pk = v_pers_empresa_n_pk) /*AND v_sucu_idsucursal_n IS NULL
-                                                              OR sc.pers_persona_n_pk = v_sucu_idsucursal_n*/
-                  AND (v_sucu_idsucursal_n IS NULL
-                       OR SC.SUCU_IDSUCURSAL_N = v_sucu_idsucursal_n)
-                  AND v_pers_natu_nombres IS NULL
-                  OR UPPER (
-                           pn0.natu_nombres_v
+            WHERE (v_pers_empresa_n_pk IS NULL OR sv.pers_empresa_n_pk = v_pers_empresa_n_pk)
+                  AND (v_sucu_idsucursal_n IS NULL OR SC.SUCU_IDSUCURSAL_N = v_sucu_idsucursal_n)
+                  AND (v_pers_natu_nombres IS NULL OR (pn0.natu_nombres_v
                         || '-'
                         || pn0.natu_apellidopaterno_v
                         || '-'
                         || pn0.natu_apellidopaterno_v) LIKE
-                        '%' || UPPER (v_pers_natu_nombres) || '%'
-                     AND v_sess_fecharegistro_d IS NULL
-                  OR sv.sess_fecharegistro_d <= v_sess_fecharegistro_d
-                     AND v_sess_fechatermino_d IS NULL
-                  OR sv.sess_fechatermino_d <= v_sess_fechatermino_d
-                     AND v_sess_idestadosession_n IS NULL
-                  OR sv.sess_idestadosession_n <= v_sess_idestadosession_n
+                        '%' || v_pers_natu_nombres || '%')
+                  AND (v_sess_fecharegistro_d IS NULL OR sv.sess_fecharegistro_d <= v_sess_fecharegistro_d)
+                  AND (v_sess_fechatermino_d IS NULL OR sv.sess_fechatermino_d <= v_sess_fechatermino_d)
+                  AND (v_sess_idestadosession_n IS NULL OR sv.sess_idestadosession_n <= v_sess_idestadosession_n)
          ORDER BY 1 ASC;
 
       v_LISTA := var_lista;
