@@ -18,7 +18,9 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeLocal;
+import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.Usuario;
+import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.permiso.domain.LiquidateSession;
 
 public class LiquidateSessionController {
@@ -35,7 +37,35 @@ public class LiquidateSessionController {
 	private List listaSesionWeb;
 	private List listaBlockDataBase;
 	private List listaSesionDataBase;
+	private LoginFacadeLocal loginFacade;
+	private String strEsquema;
+	private String strObjecto;
+	private String strPrograma;
 	
+
+	public String getStrEsquema() {
+		return strEsquema;
+	}
+
+	public void setStrEsquema(String strEsquema) {
+		this.strEsquema = strEsquema;
+	}
+
+	public String getStrObjecto() {
+		return strObjecto;
+	}
+
+	public void setStrObjecto(String strObjecto) {
+		this.strObjecto = strObjecto;
+	}
+
+	public String getStrPrograma() {
+		return strPrograma;
+	}
+
+	public void setStrPrograma(String strPrograma) {
+		this.strPrograma = strPrograma;
+	}
 
 	public List getListaBlockDataBase() {
 		return listaBlockDataBase;
@@ -112,7 +142,7 @@ public class LiquidateSessionController {
 				tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 				listaEmpresas = personaFacade.getListaJuridicaDeEmpresa();
 				listaEstados = tablaFacade.getListaTablaPorIdMaestroYNotInIdDetalle(Constante.INT_ONE, Constante.PARAM_T_ESTADO_ANULADO);
-				
+				loginFacade = (LoginFacadeLocal) EJBFactory.getLocal(LoginFacadeLocal.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,8 +182,23 @@ public class LiquidateSessionController {
 	public void desactivarSesion(ActionEvent event){
 		
 	}
-	public void buscarSesionWeb(ActionEvent event){
+	public void buscarSesionWeb()throws BusinessException, Exception{
+		Session objSession = new Session();
+		objSession.getId().setIntPersEmpresaPk(objLiqSess.getIntPersEmpresa());
+		objSession.setIntIdEstado(objLiqSess.getIntEstado());
+		objSession.setIntIdSucursal(objLiqSess.getIntCboSucursalEmp());
+		objSession.setTsFechaRegistro(objLiqSess.getFechaInicioFiltro());
+		objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
+		listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getStrUsuario());
 		
+	}
+	
+	public void buscarBlockDataBase ()throws BusinessException, Exception{
+		listaBlockDataBase = loginFacade.getListBlockDB(strEsquema, strPrograma, strObjecto);
+	}
+	
+	public void buscarSesionDataBase () throws BusinessException, Exception {
+		listaSesionDataBase = loginFacade.getListaSessionDB(strEsquema, strPrograma);
 	}
 	
 	protected HttpServletRequest getRequest() {
