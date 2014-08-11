@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -20,6 +19,7 @@ import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeLocal;
 import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.Usuario;
+import pe.com.tumi.seguridad.login.domain.composite.SessionComp;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.permiso.domain.LiquidateSession;
 
@@ -34,7 +34,7 @@ public class LiquidateSessionController {
 	private Usuario usuario;
 	private TablaFacadeRemote tablaFacade;
 	private List<Sucursal> listaJuridicaSucursal;
-	private List listaSesionWeb;
+	private List<SessionComp> listaSesionWeb;
 	private List listaBlockDataBase;
 	private List listaSesionDataBase;
 	private LoginFacadeLocal loginFacade;
@@ -83,11 +83,11 @@ public class LiquidateSessionController {
 		this.listaSesionDataBase = listaSesionDataBase;
 	}
 
-	public List getListaSesionWeb() {
+	public List<SessionComp> getListaSesionWeb() {
 		return listaSesionWeb;
 	}
 
-	public void setListaSesionWeb(List listaSesionWeb) {
+	public void setListaSesionWeb(List<SessionComp> listaSesionWeb) {
 		this.listaSesionWeb = listaSesionWeb;
 	}
 

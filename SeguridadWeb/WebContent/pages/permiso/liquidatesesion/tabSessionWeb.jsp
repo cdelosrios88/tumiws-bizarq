@@ -101,18 +101,19 @@
                     	<f:facet name="header">
                         	<h:outputText value="Codigo"/>
                       	</f:facet>
-                      	<h:outputText value=""/>
+                      	<h:outputText value="#{item.intPersonaPk}"/>
                 	</rich:column>
                     <rich:column>
                     	<f:facet name="header">
                         	<h:outputText value="Nombre de Usuario"/>
                       	</f:facet>
-                      	<h:outputText value=""/>
+                      	<h:outputText value="#{item.strFullName}"/>
                 	</rich:column>
                   	<rich:column>
                     	<f:facet name="header">
                         	<h:outputText value="Estado Sesion"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.session.intIdEstado}"/>
                     </rich:column>
                     <rich:column >
                     	<f:facet name="header">
@@ -120,31 +121,31 @@
                       	</f:facet>
                       	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_INT}" 
 							itemValue="intIdDetalle" itemLabel="strDescripcion" 
-							property="#{item.intIdEstado}"/>
+							property="#{item.session.intIdEstado}"/>
                   	</rich:column>
                     <rich:column>
                    		<f:facet name="header">
                         	<h:outputText value="Sucursal"/>
                         </f:facet>
-                        <h:outputText value=""/>
+                        <h:outputText value="#{item.strSucursal}"/>
                   	</rich:column>
                   	<rich:column>
                    		<f:facet name="header">
                         	<h:outputText value="Fecha Inicio"/>
                         </f:facet>
-                        <h:outputText value=""/>
+                        <h:outputText value="#{item.session.tsFechaRegistro}"/>
                   	</rich:column>
                     <rich:column >
                     	<f:facet name="header">
                         	<h:outputText value="Fecha Fin"/>
                     	</f:facet>
-                    	<h:outputText value=""/>
+                    	<h:outputText value="#{item.session.tsFechaTermino}"/>
                   	</rich:column>
                   	<rich:column >
                   		<f:facet name="header">
                         	<h:outputText value="MAC Address"/>
                      	</f:facet>
-                     	<h:outputText value=""/>
+                     	<h:outputText value="#{item.session.strMacAddress}"/>
                   	</rich:column>
                     
                     <f:facet name="footer">   
