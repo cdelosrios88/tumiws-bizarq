@@ -1,29 +1,29 @@
 package pe.com.tumi.seguridad.permiso.domain;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class LiquidateSession {
 	private Integer intPersEmpresa;
 	private String strUsuario;
 	private Integer intEstado;
 	private Integer intCboSucursalEmp;
-	private Date fechaInicioFiltro;
-	private Date fechaFinFiltro;
+	private Timestamp fechaInicioFiltro;
+	private Timestamp fechaFinFiltro;
 	
 
-	public Date getFechaInicioFiltro() {
+	public Timestamp getFechaInicioFiltro() {
 		return fechaInicioFiltro;
 	}
 
-	public void setFechaInicioFiltro(Date fechaInicioFiltro) {
+	public void setFechaInicioFiltro(Timestamp fechaInicioFiltro) {
 		this.fechaInicioFiltro = fechaInicioFiltro;
 	}
 
-	public Date getFechaFinFiltro() {
+	public Timestamp getFechaFinFiltro() {
 		return fechaFinFiltro;
 	}
 
-	public void setFechaFinFiltro(Date fechaFinFiltro) {
+	public void setFechaFinFiltro(Timestamp fechaFinFiltro) {
 		this.fechaFinFiltro = fechaFinFiltro;
 	}
 
