@@ -179,7 +179,7 @@ AS
       var_lista   cursorlista;
    BEGIN
       OPEN var_lista FOR
-           SELECT SV.PERS_EMPRESA_N_PK pPers_empresa_n_pk,
+           /*SELECT SV.PERS_EMPRESA_N_PK pPers_empresa_n_pk,
                   SV.PERS_PERSONA_N_PK pPers_persona_n_pk,
                   SV.SESS_IDSESSION_N_PK pSess_idsession_n_pk,
                   SV.SESS_FECHAREGISTRO_D pSess_fecharegistro_d,
@@ -190,25 +190,25 @@ AS
                   SV.SESS_IDWEBSESSION_N pSess_idwebsession_n,
                   SV.SESS_SID_N pSess_sid_v,
                   SV.SESS_MACADDRESS_V pSess_macaddress_v,
-                  SV.SESS_INDCABINA_N pSess_indcabina_n
-             /*SELECT sv.sess_idsession_n_pk,
-                    sv.pers_persona_n_pk AS cod_persona,
-                    (   pn0.natu_nombres_v
-                     || '-'
-                     || pn0.natu_apellidopaterno_v
-                     || '-'
-                     || pn0.natu_apellidopaterno_v)
-                       AS pFullName_v,
-                    sv.sess_idestadosession_n pSess_idestadosession_n,
-                    sv.pers_empresa_n_pk pPers_empresa_n_pk,
-                    pj0.juri_razonsocial_v pPers_razonsocial_v,
-                    pj0.juri_siglas_v pPers_siglas_v,
-                    sc.pers_persona_n_pk pPers_sucursal_n_pk,
-                    pj1.juri_razonsocial_v pSucursal_v,
-                    pj1.juri_siglas_v pSiglasSucursal_v,
-                    sv.sess_fecharegistro_d pSess_fecharegistro_d,
-                    sv.sess_fechatermino_d pSess_fechatermino_d,
-                    sv.sess_macaddress_v pSess_macaddress_v*/
+                  SV.SESS_INDCABINA_N pSess_indcabina_n*/
+           SELECT sv.sess_idsession_n_pk pSess_idsession_n_pk,
+                  sv.pers_persona_n_pk pIdPersonaPk,
+                  (   pn0.natu_nombres_v
+                   || '-'
+                   || pn0.natu_apellidopaterno_v
+                   || '-'
+                   || pn0.natu_apellidopaterno_v)
+                     AS pFullName_V,
+                  sv.sess_idestadosession_n pSess_idestadosession_n,
+                  sv.pers_empresa_n_pk pPers_empresa_n_pk,
+                  pj0.juri_razonsocial_v pPers_razonsocial_v,
+                  pj0.juri_siglas_v pPers_siglas_v,
+                  SC.SUCU_IDSUCURSAL_N pPers_sucursal_n_pk,
+                  pj1.juri_razonsocial_v pSucursal_v,
+                  pj1.juri_siglas_v pSiglasSucursal_v,
+                  sv.sess_fecharegistro_d pSess_fecharegistro_d,
+                  sv.sess_fechatermino_d pSess_fechatermino_d,
+                  sv.sess_macaddress_v pSess_macaddress_v
              FROM seg_v_session sv
                   LEFT JOIN persona.per_juridica pj0
                      ON sv.pers_empresa_n_pk = pj0.pers_persona_n
