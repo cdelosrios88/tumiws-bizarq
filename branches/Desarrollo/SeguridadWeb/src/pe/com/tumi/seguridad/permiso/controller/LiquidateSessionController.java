@@ -32,6 +32,34 @@ public class LiquidateSessionController {
 	private Usuario usuario;
 	private TablaFacadeRemote tablaFacade;
 	private List<Sucursal> listaJuridicaSucursal;
+	private List listaSesionWeb;
+	private List listaBlockDataBase;
+	private List listaSesionDataBase;
+	
+
+	public List getListaBlockDataBase() {
+		return listaBlockDataBase;
+	}
+
+	public void setListaBlockDataBase(List listaBlockDataBase) {
+		this.listaBlockDataBase = listaBlockDataBase;
+	}
+
+	public List getListaSesionDataBase() {
+		return listaSesionDataBase;
+	}
+
+	public void setListaSesionDataBase(List listaSesionDataBase) {
+		this.listaSesionDataBase = listaSesionDataBase;
+	}
+
+	public List getListaSesionWeb() {
+		return listaSesionWeb;
+	}
+
+	public void setListaSesionWeb(List listaSesionWeb) {
+		this.listaSesionWeb = listaSesionWeb;
+	}
 
 	public List<Sucursal> getListaJuridicaSucursal() {
 		return listaJuridicaSucursal;
@@ -110,8 +138,22 @@ public class LiquidateSessionController {
 	}
 	
 	public void mostrarSessionWeb(ActionEvent event) {
-		intTipoAcceso = Constante.PARAM_T_ACCESOESPECIAL_FUERAHORA;
+		intTipoAcceso = Constante.PARAM_T_SESSION_WEB;
 
+	}
+	public void mostrarBlockDataBase(ActionEvent event) {
+		intTipoAcceso = Constante.PARAM_T_BLOCK_BD;
+
+	}
+	public void mostrarSessionDataBase(ActionEvent event) {
+		intTipoAcceso = Constante.PARAM_T_SESSION_BD;
+
+	}
+	public void desactivarSesion(ActionEvent event){
+		
+	}
+	public void buscarSesionWeb(ActionEvent event){
+		
 	}
 	
 	protected HttpServletRequest getRequest() {
