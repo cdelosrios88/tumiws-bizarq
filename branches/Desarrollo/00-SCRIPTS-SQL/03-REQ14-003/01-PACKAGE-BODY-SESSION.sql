@@ -1,5 +1,5 @@
-/* Formatted on 10/08/2014 07:30:13 p.m. (QP5 v5.163.1008.3004) */
-CREATE OR REPLACE PACKAGE BODY SEGURIDAD.PKG_SESSION
+create or replace 
+PACKAGE BODY           PKG_SESSION
 AS
    PROCEDURE getListaSession (v_LISTA OUT cursorlista)
    IS
@@ -250,41 +250,46 @@ AS
       var_lista   cursorlista;
    BEGIN
       OPEN var_lista FOR
-         SELECT s.SID pSID_V,
-                s.SERIAL# pSERIAL_V,
-                S.OSUSER pPCUSER_V,
-                S.USERNAME pBDUSER_V,
-                DECODE (L.TYPE,  'TM', 'TABLE',  'TX', 'RECORDS') pTYPELOCK_V,
-                S.PROCESS pPROCESS_LOCKER_V,
-                s.schemaname pSCHEMA_V,
-                O.OBJECT_NAME pOBJECT_NAME_V,
-                O.OBJECT_TYPE pOBJECT_TYPE_V,
-                DECODE (CONCAT ('', S.PROGRAM),
-                        'JDBC Thin Client', 'ERP TUMI',
-                        CONCAT ('', S.PROGRAM))
-                   pPROGRAM_V,
-                O.OWNER pOWNER_V,
-                vs.sql_text pSQL_QUERY_V,
-                NULL pMACHINE_V,
-                NULL pSQLID_V
-           FROM v$lock l,
-                dba_objects o,
-                v$session s,
-                v$sqlarea vs
-          WHERE     l.ID1 = o.OBJECT_ID
-                AND s.SID = l.SID
-                AND l.TYPE IN ('TM', 'TX')
-                AND s.sql_id = vs.sql_id
-                AND (v_schema IS NULL
-                     OR s.schemaname LIKE '%' || v_schema || '%')
-                AND (v_program IS NULL
-                     OR (DECODE (CONCAT ('', S.PROGRAM),
-                                 'JDBC Thin Client', 'ERP TUMI',
-                                 CONCAT ('', S.PROGRAM))) LIKE
-                           '%' || v_program || '%')
-                AND (v_object IS NULL
-                     OR (O.OBJECT_NAME) LIKE '%' || v_object || '%');
-
+         SELECT 
+          -------------------- USUARIO QUE BLOQUEA (LOCK) -------------------------------
+          s1.SID,
+          s1.SERIAL#,
+          S1.OSUSER PC_USER_LOCK,
+          S1.USERNAME BD_USER_LOCK,
+          DECODE(CONCAT('',S1.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S1.PROGRAM)) PROGRAM_LOCK,
+          -------------------- USUARIO BLOQUEADO (LOCK) -------------------------------
+          S2.OSUSER PC_USER_BLOQ,
+          S2.USERNAME BD_USER_BLOQ,
+          DECODE(CONCAT('',S2.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S2.PROGRAM)) PROGRAM_BLOQ,
+          ----------------------------------------------------------------------------
+          DECODE(L1.TYPE,'TM','TABLE','TX','RECORDS') TYPE_LOCK_OBJECT,
+          do.owner OWNER_OBJECT,
+          do.object_name OBJECT_NAME,
+          do.object_type OBJECT_TYPE,
+          vs.sql_text SQL_OBJECT
+        FROM v$lock l1,
+          v$session s1,
+          v$lock l2,
+          v$session s2,
+          dba_objects DO,
+          v$sqlarea vs
+        WHERE s1.sid         =l1.sid
+        AND s2.sid           =l2.sid
+        AND l1.BLOCK         =1
+        AND l2.request       > 0
+        AND l1.id1           = l2.id1
+        AND l2.id2           = l2.id2
+        AND s2.ROW_WAIT_OBJ# = do.object_id
+        AND s2.sql_id        =vs.sql_id
+        AND (v_schema IS NULL
+             OR do.owner LIKE '%' || v_schema || '%')
+        AND (v_program IS NULL
+             OR (DECODE (CONCAT ('', S2.PROGRAM),
+                         'JDBC Thin Client', 'ERP TUMI',
+                         CONCAT ('', S2.PROGRAM))) LIKE
+                   '%' || v_program || '%')
+        AND (v_object IS NULL
+             OR (do.OBJECT_NAME) LIKE '%' || v_object || '%');
       v_LISTA := var_lista;
    END getListBlockDB;
 
