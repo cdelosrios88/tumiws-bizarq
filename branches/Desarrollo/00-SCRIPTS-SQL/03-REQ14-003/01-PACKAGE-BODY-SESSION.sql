@@ -1,5 +1,5 @@
-create or replace 
-PACKAGE BODY PKG_SESSION
+/* Formatted on 10/08/2014 07:30:13 p.m. (QP5 v5.163.1008.3004) */
+CREATE OR REPLACE PACKAGE BODY SEGURIDAD.PKG_SESSION
 AS
    PROCEDURE getListaSession (v_LISTA OUT cursorlista)
    IS
@@ -24,10 +24,10 @@ AS
    END getListaSession;
 
    PROCEDURE getListaPorPk (
-      v_LISTA                  OUT cursorlista,
-      V_PERS_EMPRESA_N_PK   IN     SEG_V_SESSION.PERS_EMPRESA_N_PK%TYPE,
-      V_PERSONA_N_PK        IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
-      V_SESSION_N_PK        IN     SEG_V_SESSION.SESS_IDSESSION_N_PK%TYPE)
+      v_LISTA             OUT cursorlista,
+      --V_PERS_EMPRESA_N_PK   IN     SEG_V_SESSION.PERS_EMPRESA_N_PK%TYPE,
+      --V_PERSONA_N_PK        IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
+      V_SESSION_N_PK   IN     SEG_V_SESSION.SESS_IDSESSION_N_PK%TYPE)
    IS
       var_lista   cursorlista;
    BEGIN
@@ -45,9 +45,10 @@ AS
                 SESS_MACADDRESS_V pSess_macaddress_v,
                 SESS_INDCABINA_N pSess_indcabina_n
            FROM SEG_V_SESSION SES
-          WHERE     SES.PERS_EMPRESA_N_PK = V_PERS_EMPRESA_N_PK
-                AND SES.PERS_PERSONA_N_PK = V_PERSONA_N_PK
-                AND SES.SESS_IDSESSION_N_PK = V_SESSION_N_PK;
+          WHERE /*SES.PERS_EMPRESA_N_PK = V_PERS_EMPRESA_N_PK
+            AND SES.PERS_PERSONA_N_PK = V_PERSONA_N_PK
+            AND */
+               SES.SESS_IDSESSION_N_PK = V_SESSION_N_PK;
 
       v_LISTA := var_lista;
    END getListaPorPk;
@@ -164,112 +165,182 @@ AS
 
       v_LISTA := var_lista;
    END getListByUser;
-   
+
    -------------------------------------------------------------------------------------------------------------------------
-   PROCEDURE getListSessionWeb(
-      v_LISTA OUT cursorlista,
-      v_pers_empresa_n_pk   IN seg_v_session.pers_empresa_n_pk%TYPE,
-      v_sucu_idsucursal_n IN seg_m_sucursal.pers_persona_n_pk%TYPE,
-      v_pers_natu_nombres IN persona.per_natural.natu_nombres_v%TYPE,
-      v_sess_fecharegistro_d IN seg_v_session.sess_fecharegistro_d%TYPE,
-      v_sess_fechatermino_d IN seg_v_session.sess_fechatermino_d%TYPE,
-      v_sess_idestadosession_n IN seg_v_session.sess_idestadosession_n%TYPE)
+   PROCEDURE getListSessionWeb (
+      v_LISTA                       OUT cursorlista,
+      v_pers_empresa_n_pk        IN     seg_v_session.pers_empresa_n_pk%TYPE,
+      v_sucu_idsucursal_n        IN     SEG_V_SESSION.SUCU_IDSUCURSAL_N%TYPE,
+      v_pers_natu_nombres        IN     persona.per_natural.natu_nombres_v%TYPE,
+      v_sess_fecharegistro_d     IN     seg_v_session.sess_fecharegistro_d%TYPE,
+      v_sess_fechatermino_d      IN     seg_v_session.sess_fechatermino_d%TYPE,
+      v_sess_idestadosession_n   IN     seg_v_session.sess_idestadosession_n%TYPE)
    IS
       var_lista   cursorlista;
    BEGIN
-     OPEN var_lista FOR
-         select sv.sess_idsession_n_pk,
-               sv.pers_persona_n_pk as cod_persona, 
-               (pn0.natu_nombres_v ||'-'||pn0.natu_apellidopaterno_v||'-'||pn0.natu_apellidopaterno_v) as tx_nombres,
-               DECODE(sv.sess_idestadosession_n,1,'ACTIVO',2,'INACTIVO','NONE') as tx_estado,
-               sv.pers_empresa_n_pk,
-               pj0.juri_razonsocial_v,
-               pj0.juri_siglas_v,
-               sc.pers_persona_n_pk,
-               pj1.juri_razonsocial_v,
-               pj1.juri_siglas_v,
-               sv.sess_fecharegistro_d,
-               sv.sess_fechatermino_d,
-               sv.sess_macaddress_v
-        from seg_v_session sv
-        left join persona.per_juridica pj0 on sv.pers_empresa_n_pk = pj0.pers_persona_n
-        left join persona.per_natural pn0 on sv.pers_persona_n_pk = pn0.pers_persona_n
-        left join seg_m_sucursal sc on sc.sucu_idsucursal_n = sv.sucu_idsucursal_n
-        left join persona.per_juridica pj1 on sc.pers_persona_n_pk = pj1.pers_persona_n
-        where v_pers_empresa_n_pk is null or sv.pers_empresa_n_pk = v_pers_empresa_n_pk
-          and v_sucu_idsucursal_n is null or sc.pers_persona_n_pk = v_sucu_idsucursal_n
-          and v_pers_natu_nombres is null or upper(pn0.natu_nombres_v ||'-'||pn0.natu_apellidopaterno_v||'-'||pn0.natu_apellidopaterno_v) like '%'||upper(v_pers_natu_nombres)||'%'
-          and v_sess_fecharegistro_d is null or sv.sess_fecharegistro_d <= v_sess_fecharegistro_d
-          and v_sess_fechatermino_d is null or sv.sess_fechatermino_d <= v_sess_fechatermino_d
-          and v_sess_idestadosession_n is null or sv.sess_idestadosession_n <= v_sess_idestadosession_n
-        order by 1 asc;
+      OPEN var_lista FOR
+           SELECT SV.PERS_EMPRESA_N_PK pPers_empresa_n_pk,
+                  SV.PERS_PERSONA_N_PK pPers_persona_n_pk,
+                  SV.SESS_IDSESSION_N_PK pSess_idsession_n_pk,
+                  SV.SESS_FECHAREGISTRO_D pSess_fecharegistro_d,
+                  SV.SESS_FECHATERMINO_D pSess_fechatermino_d,
+                  SV.SUCU_IDSUCURSAL_N pSess_idsucursal_n,
+                  SV.SESS_ACCESOREMOTO_N pSess_accesoremoto_n,
+                  SV.SESS_IDESTADOSESSION_N pSess_idestadosession_n,
+                  SV.SESS_IDWEBSESSION_N pSess_idwebsession_n,
+                  SV.SESS_SID_N pSess_sid_v,
+                  SV.SESS_MACADDRESS_V pSess_macaddress_v,
+                  SV.SESS_INDCABINA_N pSess_indcabina_n
+             /*SELECT sv.sess_idsession_n_pk,
+                    sv.pers_persona_n_pk AS cod_persona,
+                    (   pn0.natu_nombres_v
+                     || '-'
+                     || pn0.natu_apellidopaterno_v
+                     || '-'
+                     || pn0.natu_apellidopaterno_v)
+                       AS pFullName_v,
+                    sv.sess_idestadosession_n pSess_idestadosession_n,
+                    sv.pers_empresa_n_pk pPers_empresa_n_pk,
+                    pj0.juri_razonsocial_v pPers_razonsocial_v,
+                    pj0.juri_siglas_v pPers_siglas_v,
+                    sc.pers_persona_n_pk pPers_sucursal_n_pk,
+                    pj1.juri_razonsocial_v pSucursal_v,
+                    pj1.juri_siglas_v pSiglasSucursal_v,
+                    sv.sess_fecharegistro_d pSess_fecharegistro_d,
+                    sv.sess_fechatermino_d pSess_fechatermino_d,
+                    sv.sess_macaddress_v pSess_macaddress_v*/
+             FROM seg_v_session sv
+                  LEFT JOIN persona.per_juridica pj0
+                     ON sv.pers_empresa_n_pk = pj0.pers_persona_n
+                  LEFT JOIN persona.per_natural pn0
+                     ON sv.pers_persona_n_pk = pn0.pers_persona_n
+                  LEFT JOIN seg_m_sucursal sc
+                     ON sc.sucu_idsucursal_n = sv.sucu_idsucursal_n
+                  LEFT JOIN persona.per_juridica pj1
+                     ON sc.pers_persona_n_pk = pj1.pers_persona_n
+            WHERE (v_pers_empresa_n_pk IS NULL
+                   OR sv.pers_empresa_n_pk = v_pers_empresa_n_pk) /*AND v_sucu_idsucursal_n IS NULL
+                                                              OR sc.pers_persona_n_pk = v_sucu_idsucursal_n*/
+                  AND (v_sucu_idsucursal_n IS NULL
+                       OR SC.SUCU_IDSUCURSAL_N = v_sucu_idsucursal_n)
+                  AND v_pers_natu_nombres IS NULL
+                  OR UPPER (
+                           pn0.natu_nombres_v
+                        || '-'
+                        || pn0.natu_apellidopaterno_v
+                        || '-'
+                        || pn0.natu_apellidopaterno_v) LIKE
+                        '%' || UPPER (v_pers_natu_nombres) || '%'
+                     AND v_sess_fecharegistro_d IS NULL
+                  OR sv.sess_fecharegistro_d <= v_sess_fecharegistro_d
+                     AND v_sess_fechatermino_d IS NULL
+                  OR sv.sess_fechatermino_d <= v_sess_fechatermino_d
+                     AND v_sess_idestadosession_n IS NULL
+                  OR sv.sess_idestadosession_n <= v_sess_idestadosession_n
+         ORDER BY 1 ASC;
+
       v_LISTA := var_lista;
    END getListSessionWeb;
-  
-  PROCEDURE getListBlockDB(
-      v_LISTA OUT cursorlista,
-      v_schema IN VARCHAR2,
-      v_program IN VARCHAR2,
-      v_object IN VARCHAR2
-  )
-  IS
+
+   PROCEDURE getListBlockDB (v_LISTA        OUT cursorlista,
+                             v_schema    IN     VARCHAR2,
+                             v_program   IN     VARCHAR2,
+                             v_object    IN     VARCHAR2)
+   IS
       var_lista   cursorlista;
    BEGIN
-    OPEN var_lista FOR
-        SELECT s.SID,
-          s.SERIAL#,
-          S.OSUSER PC_USER,
-          S.USERNAME BD_USER,
-          DECODE(L.TYPE,'TM','TABLE','TX','RECORDS') TYPE_LOCK,
-          S.PROCESS PROCESS_LOCKER,
-          s.schemaname,
-          O.OBJECT_NAME OBJECT_NAME,
-          O.OBJECT_TYPE OBJECT_TYPE,
-          DECODE(CONCAT('',S.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S.PROGRAM)) PROGRAM,
-          O.OWNER OWNER,
-          vs.sql_text
-        FROM v$lock l,
-          dba_objects o,
-          v$session s,
-          v$sqlarea vs
-        WHERE l.ID1 = o.OBJECT_ID
-        AND s.SID   =l.SID
-        AND l.TYPE IN ('TM','TX')
-        AND s.sql_id=vs.sql_id
-        AND (v_schema is null or s.schemaname like '%'||v_schema||'%')
-        AND (v_program is null or (DECODE(CONCAT('',S.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S.PROGRAM))) like '%'||v_program||'%')
-        AND (v_object is null or (O.OBJECT_NAME) like '%'||v_object||'%');
+      OPEN var_lista FOR
+         SELECT s.SID pSID_V,
+                s.SERIAL# pSERIAL_V,
+                S.OSUSER pPCUSER_V,
+                S.USERNAME pBDUSER_V,
+                DECODE (L.TYPE,  'TM', 'TABLE',  'TX', 'RECORDS') pTYPELOCK_V,
+                S.PROCESS pPROCESS_LOCKER_V,
+                s.schemaname pSCHEMA_V,
+                O.OBJECT_NAME pOBJECT_NAME_V,
+                O.OBJECT_TYPE pOBJECT_TYPE_V,
+                DECODE (CONCAT ('', S.PROGRAM),
+                        'JDBC Thin Client', 'ERP TUMI',
+                        CONCAT ('', S.PROGRAM))
+                   pPROGRAM_V,
+                O.OWNER pOWNER_V,
+                vs.sql_text pSQL_QUERY_V,
+                NULL pMACHINE_V,
+                NULL pSQLID_V
+           FROM v$lock l,
+                dba_objects o,
+                v$session s,
+                v$sqlarea vs
+          WHERE     l.ID1 = o.OBJECT_ID
+                AND s.SID = l.SID
+                AND l.TYPE IN ('TM', 'TX')
+                AND s.sql_id = vs.sql_id
+                AND (v_schema IS NULL
+                     OR s.schemaname LIKE '%' || v_schema || '%')
+                AND (v_program IS NULL
+                     OR (DECODE (CONCAT ('', S.PROGRAM),
+                                 'JDBC Thin Client', 'ERP TUMI',
+                                 CONCAT ('', S.PROGRAM))) LIKE
+                           '%' || v_program || '%')
+                AND (v_object IS NULL
+                     OR (O.OBJECT_NAME) LIKE '%' || v_object || '%');
+
       v_LISTA := var_lista;
    END getListBlockDB;
-  
-  PROCEDURE getListSessionDB(
-      v_LISTA OUT cursorlista,
-      v_schema IN VARCHAR2,
-      v_program IN VARCHAR2
-  )
-  IS
+
+   PROCEDURE getListSessionDB (v_LISTA        OUT cursorlista,
+                               v_schema    IN     VARCHAR2,
+                               v_program   IN     VARCHAR2)
+   IS
       var_lista   cursorlista;
    BEGIN
-     OPEN var_lista FOR
-         SELECT S.SID,
-          S.SERIAL#  AS SERIAL,
-          S.OSUSER   AS PC_USER,
-          S.USERNAME AS BD_USER,
-          DECODE(CONCAT('',S.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S.PROGRAM)) PROGRAM,
-          S.PROCESS PROCESS_LOCKER,
-          S.MACHINE MAQUINA,
-          s.schemaname,
-          S.SQL_ID,
-          VS.SQL_TEXT
-        FROM V$SESSION S
-        left join  V$SQLAREA VS on S.SQL_ID=VS.SQL_ID
-        WHERE S.OSUSER <> 'SYSTEM'
-        AND S.OSUSER <> 'SYS'
-        AND (v_schema is null or s.schemaname like '%'||v_schema||'%')
-        AND (v_program is null or DECODE(CONCAT('',S.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S.PROGRAM)) like '%'||v_program||'%')
-        --AND S.SQL_ID is not null
-        order by S.OSUSER asc;
+      OPEN var_lista FOR
+           SELECT S.SID pSID_V,
+                  S.SERIAL# AS pSERIAL_V,
+                  S.OSUSER AS pPCUSER_V,
+                  S.USERNAME pBDUSER_V,
+                  DECODE (CONCAT ('', S.PROGRAM),
+                          'JDBC Thin Client', 'ERP TUMI',
+                          CONCAT ('', S.PROGRAM))
+                     pPROGRAM_V,
+                  S.PROCESS pPROCESS_LOCKER_V,
+                  S.MACHINE pMACHINE_V,
+                  s.schemaname pSCHEMA_V,
+                  S.SQL_ID pSQLID_V,
+                  VS.SQL_TEXT pSQL_QUERY_V
+             FROM V$SESSION S LEFT JOIN V$SQLAREA VS ON S.SQL_ID = VS.SQL_ID
+            WHERE S.OSUSER <> 'SYSTEM' AND S.OSUSER <> 'SYS'
+                  AND (v_schema IS NULL
+                       OR s.schemaname LIKE '%' || v_schema || '%')
+                  AND (v_program IS NULL
+                       OR DECODE (CONCAT ('', S.PROGRAM),
+                                  'JDBC Thin Client', 'ERP TUMI',
+                                  CONCAT ('', S.PROGRAM)) LIKE
+                             '%' || v_program || '%')
+         --AND S.SQL_ID is not null
+         ORDER BY S.OSUSER ASC;
+
       v_LISTA := var_lista;
    END getListSessionDB;
-  -------------------------------------------------------------------------------------------------------------------------
+	   
+  PROCEDURE killSessionDB(
+	  v_pn_sid IN NUMBER,
+	  v_pn_serial IN NUMBER,
+	  v_result OUT NUMBER
+  )IS
+	nr_result NUMBER;
+	lv_user varchar2(30);
+  BEGIN
+	select username into lv_user from v$session where sid = v_pn_sid and serial# = v_pn_serial;
+	if lv_user is not null and lv_user not in ('SYS','SYSTEM') then
+	  execute immediate 'alter system kill session '''||v_pn_sid||','||v_pn_serial||'''';
+	  nr_result := 1;
+	else
+	  nr_result := 0;
+	  raise_application_error(-20000,'Attempt to kill protected system session has been blocked.');
+	end if;
+	v_result := nr_result;
+  END killSessionDB;
+-------------------------------------------------------------------------------------------------------------------------
 END PKG_SESSION;
+/
