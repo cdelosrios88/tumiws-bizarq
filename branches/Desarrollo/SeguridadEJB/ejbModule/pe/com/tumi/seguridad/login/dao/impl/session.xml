@@ -56,10 +56,10 @@
   
   <resultMap id="resSessionComp" class="SessionComp" >
      <result property="session.id.intSessionPk"    	column="pSess_idsession_n_pk" />
-     <result property="intPersonaPk"  				column="pIdPersonaPk" />
+     <result property="session.id.intPersPersonaPk" column="pIdPersonaPk" />
      <result property="strFullName"      			column="pFullName_V" />
      <result property="session.intIdEstado"   		column="pSess_idestadosession_n" />
-     <result property="intIdEmpresa" 				column="pPers_empresa_n_pk" />
+     <result property="session.id.intPersEmpresaPk" column="pPers_empresa_n_pk" />
      <result property="strEmpresa"   				column="pPers_razonsocial_v" />
      <result property="strEmpresaSiglas"  			column="pPers_siglas_v" />
      <result property="session.intIdSucursal"  		column="pPers_sucursal_n_pk" />
