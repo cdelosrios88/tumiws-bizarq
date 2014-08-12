@@ -1,5 +1,7 @@
 package pe.com.tumi.seguridad.permiso.controller;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -41,7 +43,16 @@ public class LiquidateSessionController {
 	private String strEsquema;
 	private String strObjecto;
 	private String strPrograma;
+	private SessionComp objSelSessionWeb;
 	
+
+	public SessionComp getObjSelSessionWeb() {
+		return objSelSessionWeb;
+	}
+
+	public void setObjSelSessionWeb(SessionComp objSelSessionWeb) {
+		this.objSelSessionWeb = objSelSessionWeb;
+	}
 
 	public String getStrEsquema() {
 		return strEsquema;
@@ -172,15 +183,28 @@ public class LiquidateSessionController {
 
 	}
 	public void mostrarBlockDataBase(ActionEvent event) {
+		strEsquema = "";
 		intTipoAcceso = Constante.PARAM_T_BLOCK_BD;
 
 	}
 	public void mostrarSessionDataBase(ActionEvent event) {
+		strEsquema = "";
 		intTipoAcceso = Constante.PARAM_T_SESSION_BD;
 
 	}
+	public void seleccionarRegistroSessionWeb(ActionEvent event){
+		objSelSessionWeb = (SessionComp)event.getComponent().getAttributes().get("item");
+	}
 	public void desactivarSesion(ActionEvent event){
-		
+		Session objSessionClose = objSelSessionWeb.getSession();
+		objSessionClose.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+		objSessionClose.setTsFechaTermino(new Timestamp(new Date().getTime()));
+		try {
+			loginFacade.modificarSession(objSessionClose);
+			buscarSesionWeb();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 	}
 	public void buscarSesionWeb()throws BusinessException, Exception{
 		Session objSession = null;
