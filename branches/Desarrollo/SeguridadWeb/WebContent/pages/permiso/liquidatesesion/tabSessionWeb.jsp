@@ -83,80 +83,75 @@
 	<rich:spacer height="12px" />
 
 	<h:panelGrid id="panelSesionWeb">
-		<rich:dataTable id="tblAccesosSW" sortMode="single" var="item" 
+		<rich:extendedDataTable id="tblAccesosSW" sortMode="single" var="item" 
                     value="#{liquidateSessionController.listaSesionWeb}"  
-					rowKeyVar="rowKey"  rows="5" width="860px"  align="center">
-                    
-                    <f:facet name="header">
-	                   	<rich:columnGroup>
-	                   		<rich:column width="15"/>
-                 			<rich:column width="100px">
-                 				<h:outputText value="Codigo"/>
-                 			</rich:column>
-                 			<rich:column width="200px">
-                 				<h:outputText value="Nombre de Usuario"/>
-                 			</rich:column>
-                 			<rich:column>
-                 				<h:outputText value="Estado Sesion"/>
-                 			</rich:column>
-                 			<rich:column width="150px">
-                 				<h:outputText value="Empresa"/>
-                 			</rich:column>
-                 			<rich:column width="120px">
-                 				<h:outputText value="Sucursal"/>
-                 			</rich:column>
-                 			<rich:column width="120px">
-                 				<h:outputText value="Fecha Inicio"/>
-                 			</rich:column>
-                 			<rich:column width="120px">
-                 				<h:outputText value="Fecha Fin"/>
-                 			</rich:column>
-                 			<rich:column width="150px">
-                 				<h:outputText value="MAC Address"/>
-                 			</rich:column>
-	                 	</rich:columnGroup>
-	                </f:facet>
-					<rich:column width="15px" style="text-align:center;">
+					rowKeyVar="rowKey"  rows="5" width="860px" 
+					height="170px" align="center"
+					enableContextMenu="false">
+                    <rich:column width="15px">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
-                    <rich:column >
+                    <rich:column width="80px">
+                    	<f:facet name="header">
+                        	<h:outputText value="Codigo"/>
+                      	</f:facet>
                       	<h:outputText value="#{item.intPersonaPk}"/>
                 	</rich:column>
-                    <rich:column>
+                    <rich:column width="150px">
+                    	<f:facet name="header">
+                        	<h:outputText value="Nombre de Usuario"/>
+                      	</f:facet>
                       	<h:outputText value="#{item.strFullName}"/>
                 	</rich:column>
                   	<rich:column style="text-align:center;">
+                  		<f:facet name="header">
+                        	<h:outputText value="Estado Sesion"/>
+                      	</f:facet>
                       	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL}" 
 							itemValue="intIdDetalle"
 							itemLabel="strDescripcion"
 							property="#{item.session.intIdEstado}"/>
                     </rich:column>
-                    <rich:column >
+                    <rich:column width="120px">
+                    	<f:facet name="header">
+                        	<h:outputText value="Empresa"/>
+                      	</f:facet>
                       	<h:outputText value="#{item.strEmpresa}"/>
                   	</rich:column>
-                    <rich:column>
+                    <rich:column width="120px">
+                    	<f:facet name="header">
+                        	<h:outputText value="Sucursal"/>
+                        </f:facet>
                         <h:outputText value="#{item.strSucursal}"/>
                   	</rich:column>
-                  	<rich:column>
+                  	<rich:column width="90px">
+                        <f:facet name="header">
+                        	<h:outputText value="Fecha Inicio"/>
+                        </f:facet>
                         <h:outputText value="#{item.session.tsFechaRegistro}">
                         	<f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                   	</rich:column>
-                    <rich:column>
+                    <rich:column width="90px">
+                    	<f:facet name="header">
+                        	<h:outputText value="Fecha Fin"/>
+                    	</f:facet>
                     	<h:outputText value="#{item.session.tsFechaTermino}">
                     		<f:convertDateTime pattern="dd/MM/yyyy" />
                     	</h:outputText>
                   	</rich:column>
                   	<rich:column>
+                  		<f:facet name="header">
+                        	<h:outputText value="MAC Address"/>
+                     	</f:facet>
                      	<h:outputText value="#{item.session.strMacAddress}"/>
                   	</rich:column>
                     <f:facet name="footer">   
 							<rich:datascroller for="tblAccesosSW" maxPages="20"/>   
 					</f:facet>
-    	</rich:dataTable>
+    	</rich:extendedDataTable>
 	</h:panelGrid>
-
-
+	
 	<h:panelGrid columns="2">
 						   	<h:outputLink value="#" id="linkPanelEmpr">
 						        <h:graphicImage value="/images/icons/mensaje1.jpg"
