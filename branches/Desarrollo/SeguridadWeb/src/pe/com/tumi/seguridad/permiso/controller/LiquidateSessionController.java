@@ -183,14 +183,18 @@ public class LiquidateSessionController {
 		
 	}
 	public void buscarSesionWeb()throws BusinessException, Exception{
-		Session objSession = new Session();
-		objSession.getId().setIntPersEmpresaPk(objLiqSess.getIntPersEmpresa());
-		objSession.setIntIdEstado(objLiqSess.getIntEstado());
-		objSession.setIntIdSucursal(objLiqSess.getIntCboSucursalEmp());
-		objSession.setTsFechaRegistro(objLiqSess.getFechaInicioFiltro());
-		objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
-		listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getStrUsuario());
-		
+		Session objSession = null;
+		try {
+			objSession = new Session();
+			objSession.getId().setIntPersEmpresaPk(objLiqSess.getIntPersEmpresa().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntPersEmpresa());
+			objSession.setIntIdSucursal(objLiqSess.getIntCboSucursalEmp().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntCboSucursalEmp());
+			objSession.setTsFechaRegistro(objLiqSess.getFechaInicioFiltro());
+			objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
+			objSession.setIntIdEstado(objLiqSess.getIntEstado().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntEstado());
+			listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getStrUsuario());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 	}
 	
 	public void buscarBlockDataBase ()throws BusinessException, Exception{
