@@ -95,7 +95,7 @@
                     	<f:facet name="header">
                         	<h:outputText value="Codigo"/>
                       	</f:facet>
-                      	<h:outputText value="#{item.intPersonaPk}"/>
+                      	<h:outputText value="#{item.session.id.intPersPersonaPk}"/>
                 	</rich:column>
                     <rich:column width="150px">
                     	<f:facet name="header">
@@ -149,6 +149,12 @@
                     <f:facet name="footer">   
 							<rich:datascroller for="tblAccesosSW" maxPages="20"/>   
 					</f:facet>
+					<a4j:support event="onRowClick"  
+						actionListener="#{liquidateSessionController.seleccionarRegistroSessionWeb}"
+						reRender="panelSesionWeb"
+						oncomplete="if(#{item.session.intIdEstado}!= 2){Richfaces.showModalPanel('panelInactiveSess')}">
+                        	<f:attribute name="item" value="#{item}"/>
+                   	</a4j:support>
     	</rich:extendedDataTable>
 	</h:panelGrid>
 	
