@@ -125,8 +125,11 @@
                     <rich:column>
                       	<h:outputText value="#{item.strFullName}"/>
                 	</rich:column>
-                  	<rich:column>
-                      	<h:outputText value="#{item.session.intIdEstado}"/>
+                  	<rich:column style="text-align:center;">
+                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL}" 
+							itemValue="intIdDetalle"
+							itemLabel="strDescripcion"
+							property="#{item.session.intIdEstado}"/>
                     </rich:column>
                     <rich:column >
                       	<h:outputText value="#{item.strEmpresa}"/>
