@@ -35,10 +35,10 @@
                 <h:panelGrid columns="2" border="0"  style="width: 200px;">
                     <h:commandButton value="Si" actionListener="#{liquidateSessionController.desactivarSesion}" styleClass="btnEstilos"  ></h:commandButton>
                     
-                    <h:commandButton value="No" 
-                      styleClass="btnEstilos" >
-                     	<rich:componentControl for="panelInactiveSess" operation="hide" event="onclick"/>
-                    </h:commandButton>
+                    <a4j:commandButton value="No" 
+                      styleClass="btnEstilos"  onclick="Richfaces.hideModalPanel('panelInactiveSess');">
+                     	
+                    </a4j:commandButton>
                 </h:panelGrid>
                 <h:panelGrid>
 					<h:inputHidden id="hiddenId"></h:inputHidden>
