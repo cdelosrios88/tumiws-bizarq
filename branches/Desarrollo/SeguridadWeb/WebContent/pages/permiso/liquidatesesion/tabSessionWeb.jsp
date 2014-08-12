@@ -20,7 +20,7 @@
 		<rich:column width="200px">
 			<h:selectOneMenu id="cboEmpresa" style="width: 150px;"
 				value="#{liquidateSessionController.objLiqSess.intPersEmpresa}">
-				<f:selectItem itemLabel="Seleccionar.." itemValue="0" />
+				<f:selectItem itemLabel="Seleccionar.." itemValue="-1" />
 				<tumih:selectItems var="sel"
 					value="#{liquidateSessionController.listaEmpresas}"
 					itemValue="#{sel.intIdPersona}" itemLabel="#{sel.strSiglas}" />
@@ -56,7 +56,7 @@
 		<rich:column width="190px">
 			<h:selectOneMenu id="idCboSucursalEmp" style="width: 150px;"
 				value="#{liquidateSessionController.objLiqSess.intCboSucursalEmp}">
-				<f:selectItem itemLabel="Seleccionar.." itemValue="0" />
+				<f:selectItem itemLabel="Seleccionar.." itemValue="-1" />
 				<tumih:selectItems var="sel"
 					value="#{liquidateSessionController.listaJuridicaSucursal}"
 					itemValue="#{sel.id.intIdSucursal}"
