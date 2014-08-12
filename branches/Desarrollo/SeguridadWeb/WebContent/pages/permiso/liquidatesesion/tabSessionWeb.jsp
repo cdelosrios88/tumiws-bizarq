@@ -5,10 +5,10 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 <!-- Empresa   : Cooperativa Tumi         	-->
-<!-- Autor     : Arturo Julca   			-->
-<!-- Modulo    :                			-->
-<!-- Prototipo :  Acceso fuera de hora		-->
-<!-- Fecha     :                			-->
+<!-- Autor     : Joao Rivera - BIZARQ		-->
+<!-- Modulo    : Seguridad         			-->
+<!-- Prototipo : Liquidación de Sesiones	-->
+<!-- Fecha     : 11/08/2014       			-->
 
 <rich:panel style="border: 0px solid #17356f;"
 	styleClass="rich-tabcell-noborder">
@@ -83,75 +83,74 @@
 	<rich:spacer height="12px" />
 
 	<h:panelGrid id="panelSesionWeb">
-		<rich:extendedDataTable id="tblAccesosSW" 
-	          		enableContextMenu="false" 
-	          		sortMode="single" 
-                    var="item" 
+		<rich:dataTable id="tblAccesosSW" sortMode="single" var="item" 
                     value="#{liquidateSessionController.listaSesionWeb}"  
-					rowKeyVar="rowKey" 
-					rows="5" 
-					width="860px" 
-					height="170px"
-					align="center">
-                                
-					<rich:column width="15px">
+					rowKeyVar="rowKey"  rows="5" width="860px"  align="center">
+                    
+                    <f:facet name="header">
+	                   	<rich:columnGroup>
+	                   		<rich:column width="15"/>
+                 			<rich:column width="100px">
+                 				<h:outputText value="Codigo"/>
+                 			</rich:column>
+                 			<rich:column width="200px">
+                 				<h:outputText value="Nombre de Usuario"/>
+                 			</rich:column>
+                 			<rich:column>
+                 				<h:outputText value="Estado Sesion"/>
+                 			</rich:column>
+                 			<rich:column width="150px">
+                 				<h:outputText value="Empresa"/>
+                 			</rich:column>
+                 			<rich:column width="120px">
+                 				<h:outputText value="Sucursal"/>
+                 			</rich:column>
+                 			<rich:column width="120px">
+                 				<h:outputText value="Fecha Inicio"/>
+                 			</rich:column>
+                 			<rich:column width="120px">
+                 				<h:outputText value="Fecha Fin"/>
+                 			</rich:column>
+                 			<rich:column width="150px">
+                 				<h:outputText value="MAC Address"/>
+                 			</rich:column>
+	                 	</rich:columnGroup>
+	                </f:facet>
+					<rich:column width="15px" style="text-align:center;">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
                     <rich:column >
-                    	<f:facet name="header">
-                        	<h:outputText value="Codigo"/>
-                      	</f:facet>
                       	<h:outputText value="#{item.intPersonaPk}"/>
                 	</rich:column>
                     <rich:column>
-                    	<f:facet name="header">
-                        	<h:outputText value="Nombre de Usuario"/>
-                      	</f:facet>
                       	<h:outputText value="#{item.strFullName}"/>
                 	</rich:column>
                   	<rich:column>
-                    	<f:facet name="header">
-                        	<h:outputText value="Estado Sesion"/>
-                      	</f:facet>
                       	<h:outputText value="#{item.session.intIdEstado}"/>
                     </rich:column>
                     <rich:column >
-                    	<f:facet name="header">
-                        	<h:outputText value="Empresa"/>
-                      	</f:facet>
-                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_INT}" 
-							itemValue="intIdDetalle" itemLabel="strDescripcion" 
-							property="#{item.session.intIdEstado}"/>
+                      	<h:outputText value="#{item.strEmpresa}"/>
                   	</rich:column>
                     <rich:column>
-                   		<f:facet name="header">
-                        	<h:outputText value="Sucursal"/>
-                        </f:facet>
                         <h:outputText value="#{item.strSucursal}"/>
                   	</rich:column>
                   	<rich:column>
-                   		<f:facet name="header">
-                        	<h:outputText value="Fecha Inicio"/>
-                        </f:facet>
-                        <h:outputText value="#{item.session.tsFechaRegistro}"/>
+                        <h:outputText value="#{item.session.tsFechaRegistro}">
+                        	<f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
                   	</rich:column>
-                    <rich:column >
-                    	<f:facet name="header">
-                        	<h:outputText value="Fecha Fin"/>
-                    	</f:facet>
-                    	<h:outputText value="#{item.session.tsFechaTermino}"/>
+                    <rich:column>
+                    	<h:outputText value="#{item.session.tsFechaTermino}">
+                    		<f:convertDateTime pattern="dd/MM/yyyy" />
+                    	</h:outputText>
                   	</rich:column>
-                  	<rich:column >
-                  		<f:facet name="header">
-                        	<h:outputText value="MAC Address"/>
-                     	</f:facet>
+                  	<rich:column>
                      	<h:outputText value="#{item.session.strMacAddress}"/>
                   	</rich:column>
-                    
                     <f:facet name="footer">   
 							<rich:datascroller for="tblAccesosSW" maxPages="20"/>   
 					</f:facet>
-            	</rich:extendedDataTable>
+    	</rich:dataTable>
 	</h:panelGrid>
 
 
