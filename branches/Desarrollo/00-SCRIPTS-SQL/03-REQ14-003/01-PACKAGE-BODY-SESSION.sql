@@ -1,5 +1,5 @@
-create or replace 
-PACKAGE BODY           PKG_SESSION
+/* Formatted on 12/08/2014 09:58:49 p.m. (QP5 v5.163.1008.3004) */
+CREATE OR REPLACE PACKAGE BODY SEGURIDAD.PKG_SESSION
 AS
    PROCEDURE getListaSession (v_LISTA OUT cursorlista)
    IS
@@ -194,9 +194,9 @@ AS
            SELECT sv.sess_idsession_n_pk pSess_idsession_n_pk,
                   sv.pers_persona_n_pk pIdPersonaPk,
                   (   pn0.natu_nombres_v
-                   || '-'
+                   || ' '
                    || pn0.natu_apellidopaterno_v
-                   || '-'
+                   || ' '
                    || pn0.natu_apellidopaterno_v)
                      AS pFullName_V,
                   sv.sess_idestadosession_n pSess_idestadosession_n,
@@ -218,17 +218,25 @@ AS
                      ON sc.sucu_idsucursal_n = sv.sucu_idsucursal_n
                   LEFT JOIN persona.per_juridica pj1
                      ON sc.pers_persona_n_pk = pj1.pers_persona_n
-            WHERE (v_pers_empresa_n_pk IS NULL OR sv.pers_empresa_n_pk = v_pers_empresa_n_pk)
-                  AND (v_sucu_idsucursal_n IS NULL OR SC.SUCU_IDSUCURSAL_N = v_sucu_idsucursal_n)
-                  AND (v_pers_natu_nombres IS NULL OR (pn0.natu_nombres_v
-                        || '-'
-                        || pn0.natu_apellidopaterno_v
-                        || '-'
-                        || pn0.natu_apellidopaterno_v) LIKE
-                        '%' || v_pers_natu_nombres || '%')
-                  AND (v_sess_fecharegistro_d IS NULL OR sv.sess_fecharegistro_d <= v_sess_fecharegistro_d)
-                  AND (v_sess_fechatermino_d IS NULL OR sv.sess_fechatermino_d <= v_sess_fechatermino_d)
-                  AND (v_sess_idestadosession_n IS NULL OR sv.sess_idestadosession_n <= v_sess_idestadosession_n)
+            WHERE (v_pers_empresa_n_pk IS NULL
+                   OR sv.pers_empresa_n_pk = v_pers_empresa_n_pk) /*AND v_sucu_idsucursal_n IS NULL
+                                                              OR sc.pers_persona_n_pk = v_sucu_idsucursal_n*/
+                  AND (v_sucu_idsucursal_n IS NULL
+                       OR SC.SUCU_IDSUCURSAL_N = v_sucu_idsucursal_n)
+                  AND (v_pers_natu_nombres IS NULL
+                       OR UPPER (
+                                pn0.natu_nombres_v
+                             || '-'
+                             || pn0.natu_apellidopaterno_v
+                             || '-'
+                             || pn0.natu_apellidopaterno_v) LIKE
+                             '%' || UPPER (v_pers_natu_nombres) || '%')
+                  AND (v_sess_fecharegistro_d IS NULL
+                       OR sv.sess_fecharegistro_d <= v_sess_fecharegistro_d)
+                  AND (v_sess_fechatermino_d IS NULL
+                       OR sv.sess_fechatermino_d <= v_sess_fechatermino_d)
+                  AND (v_sess_idestadosession_n IS NULL
+                       OR sv.sess_idestadosession_n <= v_sess_idestadosession_n)
          ORDER BY 1 ASC;
 
       v_LISTA := var_lista;
@@ -242,46 +250,43 @@ AS
       var_lista   cursorlista;
    BEGIN
       OPEN var_lista FOR
-         SELECT 
-          -------------------- USUARIO QUE BLOQUEA (LOCK) -------------------------------
-          s1.SID,
-          s1.SERIAL#,
-          S1.OSUSER PC_USER_LOCK,
-          S1.USERNAME BD_USER_LOCK,
-          DECODE(CONCAT('',S1.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S1.PROGRAM)) PROGRAM_LOCK,
-          -------------------- USUARIO BLOQUEADO (LOCK) -------------------------------
-          S2.OSUSER PC_USER_BLOQ,
-          S2.USERNAME BD_USER_BLOQ,
-          DECODE(CONCAT('',S2.PROGRAM),'JDBC Thin Client','ERP TUMI',CONCAT('',S2.PROGRAM)) PROGRAM_BLOQ,
-          ----------------------------------------------------------------------------
-          DECODE(L1.TYPE,'TM','TABLE','TX','RECORDS') TYPE_LOCK_OBJECT,
-          do.owner OWNER_OBJECT,
-          do.object_name OBJECT_NAME,
-          do.object_type OBJECT_TYPE,
-          vs.sql_text SQL_OBJECT
-        FROM v$lock l1,
-          v$session s1,
-          v$lock l2,
-          v$session s2,
-          dba_objects DO,
-          v$sqlarea vs
-        WHERE s1.sid         =l1.sid
-        AND s2.sid           =l2.sid
-        AND l1.BLOCK         =1
-        AND l2.request       > 0
-        AND l1.id1           = l2.id1
-        AND l2.id2           = l2.id2
-        AND s2.ROW_WAIT_OBJ# = do.object_id
-        AND s2.sql_id        =vs.sql_id
-        AND (v_schema IS NULL
-             OR do.owner LIKE '%' || v_schema || '%')
-        AND (v_program IS NULL
-             OR (DECODE (CONCAT ('', S2.PROGRAM),
-                         'JDBC Thin Client', 'ERP TUMI',
-                         CONCAT ('', S2.PROGRAM))) LIKE
-                   '%' || v_program || '%')
-        AND (v_object IS NULL
-             OR (do.OBJECT_NAME) LIKE '%' || v_object || '%');
+         SELECT s.SID pSID_V,
+                s.SERIAL# pSERIAL_V,
+                S.OSUSER pPCUSER_V,
+                S.USERNAME pBDUSER_V,
+                DECODE (L.TYPE,  'TM', 'TABLE',  'TX', 'RECORDS') pTYPELOCK_V,
+                S.PROCESS pPROCESS_LOCKER_V,
+                s.schemaname pSCHEMA_V,
+                O.OBJECT_NAME pOBJECT_NAME_V,
+                O.OBJECT_TYPE pOBJECT_TYPE_V,
+                DECODE (CONCAT ('', S.PROGRAM),
+                        'JDBC Thin Client', 'ERP TUMI',
+                        CONCAT ('', S.PROGRAM))
+                   pPROGRAM_V,
+                O.OWNER pOWNER_V,
+                vs.sql_text pSQL_QUERY_V,
+                NULL pMACHINE_V,
+                NULL pSQLID_V
+           FROM v$lock l,
+                dba_objects o,
+                v$session s,
+                v$sqlarea vs
+          WHERE     l.ID1 = o.OBJECT_ID
+                AND s.SID = l.SID
+                AND l.TYPE IN ('TM', 'TX')
+                AND s.sql_id = vs.sql_id
+                AND (v_schema IS NULL
+                     OR s.schemaname LIKE '%' || v_schema || '%')
+                AND (v_program IS NULL
+                     OR (DECODE (CONCAT ('', S.PROGRAM),
+                                 'JDBC Thin Client', 'ERP TUMI',
+                                 CONCAT ('', S.PROGRAM))) LIKE
+                           '%' || v_program || '%')
+                AND (v_object IS NULL
+                     OR (O.OBJECT_NAME) LIKE '%' || v_object || '%')
+                AND (S.STATUS != 'KILLED')
+                AND (S.SCHEMANAME NOT IN ('SYS', 'SYSTEM'));
+
       v_LISTA := var_lista;
    END getListBlockDB;
 
@@ -296,15 +301,19 @@ AS
                   S.SERIAL# AS pSERIAL_V,
                   S.OSUSER AS pPCUSER_V,
                   S.USERNAME pBDUSER_V,
+                  NULL pTYPELOCK_V,
+                  S.PROCESS pPROCESS_LOCKER_V,
+                  s.schemaname pSCHEMA_V,
+                  NULL pOBJECT_NAME_V,
+                  NULL pOBJECT_TYPE_V,
                   DECODE (CONCAT ('', S.PROGRAM),
                           'JDBC Thin Client', 'ERP TUMI',
                           CONCAT ('', S.PROGRAM))
                      pPROGRAM_V,
-                  S.PROCESS pPROCESS_LOCKER_V,
+                  NULL pOWNER_V,
+                  VS.SQL_TEXT pSQL_QUERY_V,
                   S.MACHINE pMACHINE_V,
-                  s.schemaname pSCHEMA_V,
-                  S.SQL_ID pSQLID_V,
-                  VS.SQL_TEXT pSQL_QUERY_V
+                  S.SQL_ID pSQLID_V
              FROM V$SESSION S LEFT JOIN V$SQLAREA VS ON S.SQL_ID = VS.SQL_ID
             WHERE S.OSUSER <> 'SYSTEM' AND S.OSUSER <> 'SYS'
                   AND (v_schema IS NULL
@@ -314,30 +323,61 @@ AS
                                   'JDBC Thin Client', 'ERP TUMI',
                                   CONCAT ('', S.PROGRAM)) LIKE
                              '%' || v_program || '%')
+                  AND (S.STATUS != 'KILLED')
+                  AND (S.SCHEMANAME NOT IN ('SYS', 'SYSTEM'))
          --AND S.SQL_ID is not null
          ORDER BY S.OSUSER ASC;
 
       v_LISTA := var_lista;
    END getListSessionDB;
-	   
-  PROCEDURE killSessionDB(
-	  v_pn_sid IN NUMBER,
-	  v_pn_serial IN NUMBER,
-	  v_result OUT NUMBER
-  )IS
-	nr_result NUMBER;
-	lv_user varchar2(30);
-  BEGIN
-	select username into lv_user from v$session where sid = v_pn_sid and serial# = v_pn_serial;
-	if lv_user is not null and lv_user not in ('SYS','SYSTEM') then
-	  execute immediate 'alter system kill session '''||v_pn_sid||','||v_pn_serial||'''';
-	  nr_result := 1;
-	else
-	  nr_result := 0;
-	  raise_application_error(-20000,'Attempt to kill protected system session has been blocked.');
-	end if;
-	v_result := nr_result;
-  END killSessionDB;
+
+   PROCEDURE killBlockDB (
+      V_SID            IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
+      V_NROSESSION     IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
+      V_ACTSESSION_N      OUT NUMBER)
+   IS
+   BEGIN
+      EXECUTE IMMEDIATE
+            'ALTER SYSTEM KILL SESSION '''
+         || v_sid
+         || ','
+         || V_NROSESSION
+         || '''';
+
+      V_ACTSESSION_N := 1;
+   END killBlockDB;
+
+   PROCEDURE killSessionDB (v_pn_sid      IN     NUMBER,
+                            v_pn_serial   IN     NUMBER,
+                            v_result         OUT NUMBER)
+   IS
+      nr_result   NUMBER;
+      lv_user     VARCHAR2 (30);
+   BEGIN
+      SELECT username
+        INTO lv_user
+        FROM v$session
+       WHERE sid = v_pn_sid AND serial# = v_pn_serial;
+
+      IF lv_user IS NOT NULL AND lv_user NOT IN ('SYS', 'SYSTEM')
+      THEN
+         EXECUTE IMMEDIATE
+               'alter system kill session '''
+            || v_pn_sid
+            || ','
+            || v_pn_serial
+            || '''';
+
+         nr_result := 1;
+      ELSE
+         nr_result := 0;
+         raise_application_error (
+            -20000,
+            'Attempt to kill protected system session has been blocked.');
+      END IF;
+
+      v_result := nr_result;
+   END killSessionDB;
 -------------------------------------------------------------------------------------------------------------------------
 END PKG_SESSION;
 /
