@@ -1,6 +1,7 @@
 package pe.com.tumi.seguridad.permiso.controller;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -185,16 +186,23 @@ public class LiquidateSessionController {
 	
 	public void mostrarSessionWeb(ActionEvent event) {
 		intTipoAcceso = Constante.PARAM_T_SESSION_WEB;
+		objLiqSess = new LiquidateSession();
+		listaSesionWeb = new ArrayList<SessionComp>();
 
 	}
 	public void mostrarBlockDataBase(ActionEvent event) {
-		strEsquema = "";
+		strEsquema = null;
+		strObjecto = null;
+		strPrograma = null;
 		intTipoAcceso = Constante.PARAM_T_BLOCK_BD;
+		listaBlockDataBase = new ArrayList<SessionDB>();
 
 	}
 	public void mostrarSessionDataBase(ActionEvent event) {
-		strEsquema = "";
+		strProgramaSessDB = null;
+		strEsquemaSessDB = null;
 		intTipoAcceso = Constante.PARAM_T_SESSION_BD;
+		listaSesionDataBase = new ArrayList<SessionDB>();
 
 	}
 	public void seleccionarRegistroSessionWeb(ActionEvent event){
@@ -203,6 +211,7 @@ public class LiquidateSessionController {
 	
 	public void seleccionarRegistroBlockDB(ActionEvent event){
 		objSelSessionDB = (SessionDB)event.getComponent().getAttributes().get("item");
+		log.info("objSelSessionDB: " + objSelSessionDB);
 	}
 	
 	public void seleccionarRegistroSessDB(ActionEvent event){
@@ -222,6 +231,9 @@ public class LiquidateSessionController {
 	public void buscarSesionWeb()throws BusinessException, Exception{
 		Session objSession = null;
 		try {
+			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			Session objSessionDB = (Session)request.getSession().getAttribute("objSession");
+			
 			objSession = new Session();
 			objSession.getId().setIntPersEmpresaPk(objLiqSess.getIntPersEmpresa().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntPersEmpresa());
 			objSession.setIntIdSucursal(objLiqSess.getIntCboSucursalEmp().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntCboSucursalEmp());
@@ -241,17 +253,33 @@ public class LiquidateSessionController {
 				(strObjecto!=null && strObjecto.equals(""))?null:strObjecto);
 	}
 	
-	public void killSessionDB(ActionEvent event){
-		log.info("entro a método killSessionDB ");
-		/*Session objSessionClose = objSelSessionWeb.getSession();
-		objSessionClose.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
-		objSessionClose.setTsFechaTermino(new Timestamp(new Date().getTime()));
+	public void killBlockDB(ActionEvent event){
+		log.info("entro a método killBlockDB ");
+		Integer intResult = null;
 		try {
-			loginFacade.modificarSession(objSessionClose);
-			buscarSesionWeb();
+			if(objSelSessionDB!=null){
+				intResult = loginFacade.killSessionDB(objSelSessionDB.getStrSID(), objSelSessionDB.getStrSerial());
+				if(intResult.equals(Integer.valueOf(Constante.PARAM_T_ESTADOUNIVERSAL))){
+					buscarBlockDataBase();
+				}
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-		}*/
+		}
+	}
+	
+	public void killSessionBlockDB(ActionEvent event){
+		Integer intResult = null;
+		try {
+			if(objSelSessionBlockDB!=null){
+				intResult = loginFacade.killSessionDB(objSelSessionBlockDB.getStrSID(), objSelSessionBlockDB.getStrSerial());
+				if(intResult.equals(Integer.valueOf(Constante.PARAM_T_ESTADOUNIVERSAL))){
+					buscarSesionDataBase();
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 	}
 	
 	public void buscarSesionDataBase () throws BusinessException, Exception {

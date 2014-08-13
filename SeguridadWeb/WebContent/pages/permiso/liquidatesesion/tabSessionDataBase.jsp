@@ -87,22 +87,20 @@
                         	<h:outputText value="Sentencia SQL"/>
                      	</f:facet>
                      	<h:outputText id="txtQueryDB" value="#{item.strSqlQuery}"/>
+                     	<rich:toolTip for="txtQueryDB" value="#{item.strSqlQuery}" followMouse="true"/>
                   	</rich:column>
                     
-                    <f:facet name="footer">   
+                    <f:facet name="footer">
 							<rich:datascroller for="edtSessionsDB" maxPages="20"/>   
 					</f:facet>
-            		<rich:toolTip for="txtQueryDB" value="#{item.strSqlQuery}" followMouse="true"  />
-					<%-- 
 					<a4j:support event="onRowClick"
 						actionListener="#{liquidateSessionController.seleccionarRegistroSessDB}"
 						reRender="panelBlockSesionWeb"
-						oncomplete="if(#{item.session.intIdEstado != applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO}){Richfaces.showModalPanel('panelInactiveBlockSessDB')}">
+						oncomplete="Richfaces.showModalPanel('panelInactiveBlockSessDB')">
                         	<f:attribute name="item" value="#{item}"/>
-                   	</a4j:support>--%>
+                   	</a4j:support>
             	</rich:extendedDataTable>
 	</h:panelGrid>
-
 
 	<h:panelGrid columns="2">
 	   	<h:outputLink value="#" id="linkPanelSessDB">
@@ -110,5 +108,6 @@
 				style="border:0px"/>
 	        <rich:componentControl for="panelInactiveBlockSessDB" attachTo="linkPanelSessDB" operation="show" event="onclick"/>
 	    </h:outputLink>
+	    <h:outputText value="Para culminar con la sesión hacer clic en el Registro" style="color:#8ca0bd"/>
 	</h:panelGrid>
 </rich:panel>
