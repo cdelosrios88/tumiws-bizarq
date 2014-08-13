@@ -93,7 +93,7 @@ public interface LoginFacadeRemote {
 	//Inicio: REQ14-003 - bizarq - 10/08/2014
 	public Session getSessionPorPk (Integer intSessionPk) throws BusinessException;
 	public List<SessionComp> getListaSessionWeb (Session o, String strFullName) throws BusinessException;
-	public List<SessionComp> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException;
+	public List<SessionDB> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException;
 	public List<SessionDB> getListaSessionDB (String strSchema, String strProgram) throws BusinessException;
 	public Integer killBlockDB(String strSID, String strSerial) throws BusinessException;
 	public Integer killSessionDB(String strSID, String strSerial) throws BusinessException;

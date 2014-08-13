@@ -164,11 +164,11 @@
 	{ call PKG_SESSION.getListSessionWeb(?,?,?,?,?,?,?) }
   </procedure>
   
-  <procedure id="getListBlockDB" parameterMap="parPorBlockBD" resultMap="resSessionComp">
+  <procedure id="getListBlockDB" parameterMap="parPorBlockBD" resultMap="resSessionDB">
 	{ call PKG_SESSION.getListBlockDB(?,?,?,?) }
   </procedure>
   
-  <procedure id="getListSessionDB" parameterMap="parPorSessionBD" resultMap="resSessionDB">
+  <procedure id="getListaSessionDB" parameterMap="parPorSessionBD" resultMap="resSessionDB">
 	{ call PKG_SESSION.getListSessionDB(?,?,?) }
   </procedure>
   
