@@ -218,8 +218,6 @@ public class LoginController{
 	//Inicio: REQ14-002 - bizarq - 28/07/2014
 	private String strMessageValidUserSession;
 	//Fin: REQ14-002 - bizarq - 28/07/2014
-	private Session objSessionTemp;
-	
 	/**
 	 * @return the strMessageValidMAC
 	 */
@@ -330,7 +328,13 @@ public class LoginController{
 			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			HttpSession session = null;
 			session = ((HttpServletRequest) request).getSession();
-			Session objSession = (Session) session.getAttribute("objSessionTemp");
+			Usuario objUsuarioTemp = (Usuario) session.getAttribute("usuario");
+			Session objSession = null;
+			if(objUsuarioTemp != null)
+				objSession = objUsuarioTemp.getObjSession();
+			else
+				objSession = null;
+			
 			if(objSession != null){
 				Timestamp tsUltimaActividad = objSession.getTsFechaActividad();
 				// se obtiene la fecha de sistema
@@ -352,13 +356,15 @@ public class LoginController{
 						.getId().getIntPersEmpresaPk());
 				long lngHoraConf = objEmpresa.getDtTiempoSesion().getHours();
 				long lngMinConf = objEmpresa.getDtTiempoSesion().getMinutes();
-				if(lngHoras > lngHoraConf)
+				if(lngHoras < lngHoraConf)
 				{
+					session.setAttribute("usuario", objUsuarioTemp);
 					return true;
 				}
 				// compara si el minuto de la diferencia es mayor a la configurada 
 				// de serlo retorna true para mostrar el mensaje
-				if(lngHoras <= lngHoraConf && lngMinutos > lngMinConf){
+				if(lngHoras >= lngHoraConf && lngMinutos < lngMinConf){
+					session.setAttribute("usuario", objUsuarioTemp);
 					return true;
 				}
 			}
@@ -411,12 +417,11 @@ public class LoginController{
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		Usuario objUsuario = (Usuario) session.getAttribute("usuario");
-		objSessionTemp = objUsuario.getObjSession();
 		//Fin: REQ14-002 - bizarq - 30/07/2014
 		if(!bolInicio){
-			cerrarSession();
+			//cerrarSession();
 			HttpSession sessionNew = ((HttpServletRequest) request).getSession();
-			sessionNew.setAttribute("objSessionTemp", objSessionTemp);
+			sessionNew.setAttribute("usuario", objUsuario);
 			limpiar();
 			bolInicio = true;
 			intNumeroIntentos = 0;
