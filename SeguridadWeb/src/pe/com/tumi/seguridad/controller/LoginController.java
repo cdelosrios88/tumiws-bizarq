@@ -1320,6 +1320,7 @@ public class LoginController{
 			updateUserSession(session);
 			session.removeAttribute(Constante.USUARIO_LOGIN);
 			session.invalidate();
+			SeguridadFactory.cancelarTicket(request);
 		} catch (SeguridadException e) {
 			e.printStackTrace();
 		}

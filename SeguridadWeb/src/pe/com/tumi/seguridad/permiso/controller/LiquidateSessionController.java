@@ -211,7 +211,6 @@ public class LiquidateSessionController {
 	
 	public void seleccionarRegistroBlockDB(ActionEvent event){
 		objSelSessionDB = (SessionDB)event.getComponent().getAttributes().get("item");
-		log.info("objSelSessionDB: " + objSelSessionDB);
 	}
 	
 	public void seleccionarRegistroSessDB(ActionEvent event){
@@ -221,6 +220,7 @@ public class LiquidateSessionController {
 		Session objSessionClose = objSelSessionWeb.getSession();
 		objSessionClose.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
 		objSessionClose.setTsFechaTermino(new Timestamp(new Date().getTime()));
+		objSessionClose.setIntInAccesoRemoto(Constante.INT_ZERO);
 		try {
 			loginFacade.modificarSession(objSessionClose);
 			buscarSesionWeb();
@@ -241,6 +241,14 @@ public class LiquidateSessionController {
 			objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
 			objSession.setIntIdEstado(objLiqSess.getIntEstado().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntEstado());
 			listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getStrUsuario());
+			if(listaSesionWeb!=null && !listaSesionWeb.isEmpty()){
+				for (SessionComp sessComp : listaSesionWeb) {
+					if(sessComp.getSession().getId().getIntSessionPk().equals(objSessionDB.getId().getIntSessionPk())){
+						listaSesionWeb.remove(sessComp);
+					}
+				}
+			}
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
