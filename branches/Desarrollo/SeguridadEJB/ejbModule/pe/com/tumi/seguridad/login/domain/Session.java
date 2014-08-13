@@ -15,7 +15,16 @@ public class Session extends TumiDomain {
 	private String intIdBDSession;
 	private String strMacAddress;
 	private Integer intIndCabina;
+	private Timestamp tsFechaActividad;
 	
+	public Timestamp getTsFechaActividad() {
+		return tsFechaActividad;
+	}
+
+	public void setTsFechaActividad(Timestamp tsFechaActividad) {
+		this.tsFechaActividad = tsFechaActividad;
+	}
+
 	public Session(){
 		id = new SessionId();
 	}
