@@ -30,9 +30,11 @@
           <rich:spacer height="4px"/><rich:spacer height="8px"/>
           <div align="center">
           	<h:panelGrid border="0" style="width: 200px;">
-          		<h:commandButton value="Aceptar" styleClass="btnEstilos">
-          			<rich:componentControl for="panelMostrarMensaje" operation="hide" event="onclick"/>
-          		</h:commandButton>
+          		<!-- Inicio REQ14-003 bizarq 08-08-2014 -->
+          		<a4j:commandButton value="Aceptar" 
+                      styleClass="btnEstilos"  onclick="Richfaces.hideModalPanel('panelMostrarMensaje');">
+                    </a4j:commandButton>
+          		<!-- Fin REQ14-003 bizarq 08-08-2014 -->
       		</h:panelGrid>
       	  </div>
      </h:form>    
