@@ -1,4 +1,3 @@
-/* Formatted on 10/08/2014 07:23:19 p.m. (QP5 v5.163.1008.3004) */
 CREATE OR REPLACE PACKAGE SEGURIDAD.PKG_SESSION
 AS
    TYPE cursorlista IS REF CURSOR;
@@ -66,12 +65,14 @@ AS
                                v_schema    IN     VARCHAR2,
                                v_program   IN     VARCHAR2);
 
+   PROCEDURE killBlockDB (
+      V_SID            IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
+      V_NROSESSION     IN     SEG_V_SESSION.PERS_PERSONA_N_PK%TYPE,
+      V_ACTSESSION_N      OUT NUMBER);
 
-    PROCEDURE killSessionDB(
-      v_pn_sid IN NUMBER,
-      v_pn_serial IN NUMBER,
-      v_result OUT NUMBER
-  );
+   PROCEDURE killSessionDB (v_pn_sid      IN     NUMBER,
+                            v_pn_serial   IN     NUMBER,
+                            v_result         OUT NUMBER);
 -------------------------------------------------------------------------------------------------------------------------
 END PKG_SESSION;
 /
