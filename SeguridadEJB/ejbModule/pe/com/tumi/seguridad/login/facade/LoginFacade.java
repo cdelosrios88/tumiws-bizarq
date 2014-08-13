@@ -441,8 +441,8 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 		return lista;
 	}
 	
-	public List<SessionComp> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException{ 
-		List<SessionComp> lista = null;
+	public List<SessionDB> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException{ 
+		List<SessionDB> lista = null;
 		try{
 			lista = boSession.getListBlockDB(strSchema,strProgram,strObject);
 		}catch(BusinessException e){

@@ -128,8 +128,8 @@ public class SessionBO {
 		return lista;
 	}
 	
-	public List<SessionComp> getListBlockDB(String strSchema, String strProgram, String strObject) throws BusinessException{
-		List<SessionComp> lista = null;
+	public List<SessionDB> getListBlockDB(String strSchema, String strProgram, String strObject) throws BusinessException{
+		List<SessionDB> lista = null;
 		try{
 			HashMap<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("strSchema", strSchema);

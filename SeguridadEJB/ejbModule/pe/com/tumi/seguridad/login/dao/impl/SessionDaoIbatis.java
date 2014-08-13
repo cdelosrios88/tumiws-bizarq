@@ -91,8 +91,8 @@ public class SessionDaoIbatis extends TumiDaoIbatis implements SessionDao {
 		return lista;
 	}
 	
-	public List<SessionComp> getListBlockDB(Object o) throws DAOException {
-		List<SessionComp> lista = null;
+	public List<SessionDB> getListBlockDB(Object o) throws DAOException {
+		List<SessionDB> lista = null;
 		try{
 			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListBlockDB", o);
 		}catch(Exception e) {
