@@ -87,7 +87,8 @@
                     value="#{liquidateSessionController.listaSesionWeb}"  
 					rowKeyVar="rowKey"  rows="5" width="860px" 
 					height="170px" align="center"
-					enableContextMenu="false">
+					enableContextMenu="false"
+					rendered="#{not empty liquidateSessionController.listaSesionWeb}">
                     <rich:column width="15px">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
@@ -152,7 +153,7 @@
 					<a4j:support event="onRowClick"  
 						actionListener="#{liquidateSessionController.seleccionarRegistroSessionWeb}"
 						reRender="panelSesionWeb"
-						oncomplete="if(#{item.session.intIdEstado}!= 2){Richfaces.showModalPanel('panelInactiveSess')}">
+						oncomplete="if(#{item.session.intIdEstado}!= #{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO}){Richfaces.showModalPanel('panelInactiveSess')}">
                         	<f:attribute name="item" value="#{item}"/>
                    	</a4j:support>
     	</rich:extendedDataTable>
