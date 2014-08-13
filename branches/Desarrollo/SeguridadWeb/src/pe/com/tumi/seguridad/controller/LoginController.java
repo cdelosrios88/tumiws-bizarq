@@ -218,6 +218,7 @@ public class LoginController{
 	//Inicio: REQ14-002 - bizarq - 28/07/2014
 	private String strMessageValidUserSession;
 	//Fin: REQ14-002 - bizarq - 28/07/2014
+	private Session objSessionTemp;
 	
 	/**
 	 * @return the strMessageValidMAC
@@ -322,20 +323,104 @@ public class LoginController{
 		}
 	}
 	
+	//Inicio: REQ14-003 - bizarq - 08/08/2014
+	public boolean validarUsuarioActividad() {
+		try {
+			//Session objSession = objSessionTemp;
+			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			HttpSession session = null;
+			session = ((HttpServletRequest) request).getSession();
+			Session objSession = (Session) session.getAttribute("objSessionTemp");
+			if(objSession != null){
+				Timestamp tsUltimaActividad = objSession.getTsFechaActividad();
+				// se obtiene la fecha de sistema
+				Timestamp tsFechaActual = new Timestamp(new Date().getTime());
+				// se realiza la diferencia entre las fechas del sistema y la ultima
+				// del logeo
+				long lngTimeMiliSegundo = tsFechaActual.getTime()- tsUltimaActividad.getTime();
+				// la diferencia en segundos
+				long lngSegundos = lngTimeMiliSegundo / 1000;
+				// obtenemos las horas de la diferencia
+				long lngHoras = lngSegundos / 3600;
+				// restamos las horas para continuar con minutos
+				lngSegundos -= lngHoras * 3600;
+				// igual que el paso anterior
+				long lngMinutos = lngSegundos / 60;
+				PersonaFacadeRemote remotePersona = (PersonaFacadeRemote) EJBFactory
+						.getRemote(PersonaFacadeRemote.class);
+				Empresa objEmpresa = remotePersona.getEmpresaPorPk(objSession
+						.getId().getIntPersEmpresaPk());
+				long lngHoraConf = objEmpresa.getDtTiempoSesion().getHours();
+				long lngMinConf = objEmpresa.getDtTiempoSesion().getMinutes();
+				if(lngHoras > lngHoraConf)
+				{
+					return true;
+				}
+				// compara si el minuto de la diferencia es mayor a la configurada 
+				// de serlo retorna true para mostrar el mensaje
+				if(lngHoras <= lngHoraConf && lngMinutos > lngMinConf){
+					return true;
+				}
+			}
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		} catch (EJBFactoryException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	//Fin: REQ14-003 - bizarq - 08/08/2014
+	
 	public String getInicializarPagina(){
 		//Inicio: REQ14-002 - bizarq - 30/07/2014
+		/*try {
+			
+			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			HttpSession session = null;
+			session = ((HttpServletRequest) request).getSession();
+			Session objSession = (Session) session.getAttribute("objSession");
+			Timestamp tsUltimaActividad = objSession.getTsFechaActividad();
+			// se obtiene la fecha del sistema
+			Timestamp tsFechaActual = new Timestamp(new Date().getTime());
+			//se realiza la diferencia entre las fechas del sistema y la ultima del logeo 
+			long lngTimeMiliSegundo = tsFechaActual.getTime() -tsUltimaActividad.getTime();
+			//la diferencia en segundos
+			long lngSegundos = lngTimeMiliSegundo / 1000;
+			//obtenemos las horas de la diferencia
+			long lngHoras = lngSegundos / 3600;
+			//restamos las horas para continuar con minutos
+			lngSegundos -= lngHoras*3600; 
+			//igual que el paso anterior
+			long lngMinutos = lngSegundos /60;
+			PersonaFacadeRemote remotePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+			Empresa objEmpresa = remotePersona.getEmpresaPorPk(objSession.getId().getIntPersEmpresaPk());
+			long lngHoraConf = objEmpresa.getDtTiempoSesion().getHours();
+			long lngMinConf = objEmpresa.getDtTiempoSesion().getMinutes();
+			
+			
+		}
+		catch (BusinessException e) {
+			e.printStackTrace();
+		}catch (EJBFactoryException e) {
+			e.printStackTrace();
+		}*/
+		//HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		//HttpSession session = null;
+		//session = ((HttpServletRequest) request).getSession();
+		//updateUserSession(session);
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		HttpSession session = null;
-		session = ((HttpServletRequest) request).getSession();
-		updateUserSession(session);
+		HttpSession session = ((HttpServletRequest) request).getSession();
+		Usuario objUsuario = (Usuario) session.getAttribute("usuario");
+		objSessionTemp = objUsuario.getObjSession();
 		//Fin: REQ14-002 - bizarq - 30/07/2014
 		if(!bolInicio){
 			cerrarSession();
+			HttpSession sessionNew = ((HttpServletRequest) request).getSession();
+			sessionNew.setAttribute("objSessionTemp", objSessionTemp);
 			limpiar();
 			bolInicio = true;
 			intNumeroIntentos = 0;
 		}
-		
 		return "";
 	}
 	
@@ -492,6 +577,12 @@ public class LoginController{
 						}
 						/**/
 						if(esClaveVigente){
+							//Inicio: REQ14-002 - bizarq - 08/08/2014
+							if(validarUsuarioActividad()){
+								activaPopup = 1;
+								return "portal.login";
+							}
+							//Fin: REQ14-002 - bizarq - 08/08/2014
 							remotePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
 							listaJuridicaEmpresa = remotePersona.getListaJuridicaPorInPk(csvPkEmpresa);
 							usuario = lUsuario;
@@ -502,7 +593,6 @@ public class LoginController{
 							esClaveVigente = false;
 							
 							session.setAttribute(Constante.USUARIO_LOGIN, lUsuario);
-							
 						}else{
 							msgPortal.setContrasena("* Su clave ya caducó");
 						}

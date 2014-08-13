@@ -1,6 +1,8 @@
 package pe.com.tumi.seguridad.login.filter;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -19,6 +21,7 @@ import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeRemote;
 import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeLocal;
@@ -80,6 +83,9 @@ public class SeguridadFilter implements Filter {
 			 */	
 			if(session != null){
 				Session objSession = (Session)session.getAttribute("objSession");
+				Usuario objUsuario = (Usuario)session.getAttribute("usuario");
+				objUsuario.getObjSession().setTsFechaActividad(new Timestamp(new Date().getTime()));
+				session.setAttribute("usuario", objUsuario);
 				Session objSessionDB = null;
 				if(objSession != null){
 					LoginFacadeLocal loginFacade;
@@ -92,19 +98,15 @@ public class SeguridadFilter implements Filter {
 					} catch (BusinessException e) {
 						e.printStackTrace();
 					}	
-					if(objSessionDB != null){
-						if(objSessionDB.getIntIdEstado()!= null &&
+					if(objSessionDB != null && objSessionDB.getIntIdEstado()!= null &&
 								objSessionDB.getIntIdEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)){
 							session.removeAttribute(Constante.USUARIO_LOGIN);
 							session.removeAttribute("objSession");
 							session.invalidate();
 							httpResponse.sendRedirect(httpRequest.getContextPath() + URL_REDIRECT[0]);
 							return;
-						}else{
-							chain.doFilter(request, response);
-							return;
-						}
 					}else{
+						
 						chain.doFilter(request, response);
 						return;
 					}
