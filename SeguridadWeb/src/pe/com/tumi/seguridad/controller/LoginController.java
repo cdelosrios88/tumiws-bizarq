@@ -1089,13 +1089,19 @@ public class LoginController{
 				usuario.setPersona(persona);
 				usuario.setEmpresa(remotePersona.getEmpresaPorPk(intIdEmpresa));
 				
-				SeguridadFactory.setTicket(request, usuario);
 				
 				//Inicio: REQ14-002 - bizarq - 20/07/2014
 				//HttpSession session = ((HttpServletRequest) request).getSession();
 				if(session.getAttribute("objSession")==null)
 					saveUserSession(usuario, session, bolUsuarioCabina);
 				//Fin: REQ14-002 - bizarq - 20/07/2014
+				
+				//Inicio: REQ14-003 - bizarq - 20/07/2014
+				Session objSession = (Session)session.getAttribute("objSession");
+				usuario.setObjSession(objSession);
+				//Inicio: REQ14-003 - bizarq - 20/07/2014
+				SeguridadFactory.setTicket(request, usuario);
+				
 				outcome = "portal.principal";
 			}
 		} catch (BusinessException e) {

@@ -1,6 +1,7 @@
 package pe.com.tumi.seguridad.login.filter;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,6 +15,13 @@ import javax.servlet.http.HttpSession;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.StringHelper;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
+import pe.com.tumi.framework.negocio.exception.BusinessException;
+import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
+import pe.com.tumi.seguridad.login.facade.LoginFacadeRemote;
+import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeLocal;
 
 /**
  * Servlet Filter implementation class SeguridadFilter
@@ -39,7 +47,6 @@ public class SeguridadFilter implements Filter {
 	 */
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		
 		//Obtiene request, response
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse)response;
@@ -57,11 +64,59 @@ public class SeguridadFilter implements Filter {
 				chain.doFilter(request, response);
 			}
 		}else{
+			//Inicio: REQ14-003 - Bizarq - 08/08/2014
+			if(httpRequest.getServletPath() != null
+					&& httpRequest.getServletPath().indexOf("login.jsf") != -1){
+				chain.doFilter(request, response);
+				return;
+			}
+			/*
+			 * 1- Buscar que el usuario autenticado tenga la sesion activa
+			 * 	1.1- Si la sesion esta activa en la BD 
+			 * 		-> chain.doFilter(request, response);
+			 * 	1.2- Si la sesion no esta activa en la BD 
+			 * 		-> Eliminar el objeto sesion 
+			 * 		-> httpResponse.sendRedirect(httpRequest.getContextPath() + URL_REDIRECT[0]);
+			 */	
+			if(session != null){
+				Session objSession = (Session)session.getAttribute("objSession");
+				Session objSessionDB = null;
+				if(objSession != null){
+					LoginFacadeLocal loginFacade;
+					try {
+						//Instanciar el loginFacade para consulta a base de datos
+						loginFacade = (LoginFacadeLocal)EJBFactory.getLocal(LoginFacadeLocal.class);
+						objSessionDB = loginFacade.getSessionPorPk(objSession.getId().getIntSessionPk());
+					} catch (EJBFactoryException e) {
+						e.printStackTrace();
+					} catch (BusinessException e) {
+						e.printStackTrace();
+					}	
+					if(objSessionDB != null){
+						if(objSessionDB.getIntIdEstado()!= null &&
+								objSessionDB.getIntIdEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)){
+							session.removeAttribute(Constante.USUARIO_LOGIN);
+							session.removeAttribute("objSession");
+							session.invalidate();
+							httpResponse.sendRedirect(httpRequest.getContextPath() + URL_REDIRECT[0]);
+							return;
+						}else{
+							chain.doFilter(request, response);
+							return;
+						}
+					}else{
+						chain.doFilter(request, response);
+						return;
+					}
+				}
+			}else{
+				chain.doFilter(request, response);
+				return;
+			}
 			//Continua
-			chain.doFilter(request, response);
-			return;
+			//chain.doFilter(request, response);
+			//return;
 		}
-
 	}
 	
 	/**
@@ -69,5 +124,4 @@ public class SeguridadFilter implements Filter {
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
-
 }
