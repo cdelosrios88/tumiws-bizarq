@@ -20,6 +20,7 @@ import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeLocal;
 import pe.com.tumi.seguridad.login.domain.Session;
+import pe.com.tumi.seguridad.login.domain.SessionDB;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.domain.composite.SessionComp;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
@@ -37,14 +38,18 @@ public class LiquidateSessionController {
 	private TablaFacadeRemote tablaFacade;
 	private List<Sucursal> listaJuridicaSucursal;
 	private List<SessionComp> listaSesionWeb;
-	private List listaBlockDataBase;
-	private List listaSesionDataBase;
+	private List<SessionDB> listaBlockDataBase;
+	private List<SessionDB> listaSesionDataBase;
 	private LoginFacadeLocal loginFacade;
 	private String strEsquema;
 	private String strObjecto;
 	private String strPrograma;
 	private SessionComp objSelSessionWeb;
+	private SessionDB objSelSessionDB;
+	private SessionDB objSelSessionBlockDB;
 	
+	private String strEsquemaSessDB;
+	private String strProgramaSessDB;
 
 	public SessionComp getObjSelSessionWeb() {
 		return objSelSessionWeb;
@@ -78,19 +83,19 @@ public class LiquidateSessionController {
 		this.strPrograma = strPrograma;
 	}
 
-	public List getListaBlockDataBase() {
+	public List<SessionDB> getListaBlockDataBase() {
 		return listaBlockDataBase;
 	}
 
-	public void setListaBlockDataBase(List listaBlockDataBase) {
+	public void setListaBlockDataBase(List<SessionDB> listaBlockDataBase) {
 		this.listaBlockDataBase = listaBlockDataBase;
-	}
+	}	
 
-	public List getListaSesionDataBase() {
+	public List<SessionDB> getListaSesionDataBase() {
 		return listaSesionDataBase;
 	}
 
-	public void setListaSesionDataBase(List listaSesionDataBase) {
+	public void setListaSesionDataBase(List<SessionDB> listaSesionDataBase) {
 		this.listaSesionDataBase = listaSesionDataBase;
 	}
 
@@ -195,6 +200,14 @@ public class LiquidateSessionController {
 	public void seleccionarRegistroSessionWeb(ActionEvent event){
 		objSelSessionWeb = (SessionComp)event.getComponent().getAttributes().get("item");
 	}
+	
+	public void seleccionarRegistroBlockDB(ActionEvent event){
+		objSelSessionDB = (SessionDB)event.getComponent().getAttributes().get("item");
+	}
+	
+	public void seleccionarRegistroSessDB(ActionEvent event){
+		objSelSessionBlockDB = (SessionDB)event.getComponent().getAttributes().get("item");
+	}
 	public void desactivarSesion(ActionEvent event){
 		Session objSessionClose = objSelSessionWeb.getSession();
 		objSessionClose.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
@@ -222,15 +235,57 @@ public class LiquidateSessionController {
 	}
 	
 	public void buscarBlockDataBase ()throws BusinessException, Exception{
-		listaBlockDataBase = loginFacade.getListBlockDB(strEsquema, strPrograma, strObjecto);
+		listaBlockDataBase = loginFacade.getListBlockDB(
+				(strEsquema!=null && strEsquema.equals(""))?null:strEsquema, 
+				(strPrograma!=null && strPrograma.equals(""))?null:strPrograma,
+				(strObjecto!=null && strObjecto.equals(""))?null:strObjecto);
+	}
+	
+	public void killSessionDB(ActionEvent event){
+		log.info("entro a método killSessionDB ");
+		/*Session objSessionClose = objSelSessionWeb.getSession();
+		objSessionClose.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
+		objSessionClose.setTsFechaTermino(new Timestamp(new Date().getTime()));
+		try {
+			loginFacade.modificarSession(objSessionClose);
+			buscarSesionWeb();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}*/
 	}
 	
 	public void buscarSesionDataBase () throws BusinessException, Exception {
-		listaSesionDataBase = loginFacade.getListaSessionDB(strEsquema, strPrograma);
+		listaSesionDataBase = loginFacade.getListaSessionDB(
+				(strEsquemaSessDB!=null && strEsquemaSessDB.equals(""))?null:strEsquemaSessDB, 
+				(strProgramaSessDB!=null && strProgramaSessDB.equals(""))?null:strProgramaSessDB);
 	}
 	
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+	}
+
+	public SessionDB getObjSelSessionDB() {
+		return objSelSessionDB;
+	}
+
+	public void setObjSelSessionDB(SessionDB objSelSessionDB) {
+		this.objSelSessionDB = objSelSessionDB;
+	}
+
+	public String getStrEsquemaSessDB() {
+		return strEsquemaSessDB;
+	}
+
+	public void setStrEsquemaSessDB(String strEsquemaSessDB) {
+		this.strEsquemaSessDB = strEsquemaSessDB;
+	}
+
+	public String getStrProgramaSessDB() {
+		return strProgramaSessDB;
+	}
+
+	public void setStrProgramaSessDB(String strProgramaSessDB) {
+		this.strProgramaSessDB = strProgramaSessDB;
 	}
 
 }
