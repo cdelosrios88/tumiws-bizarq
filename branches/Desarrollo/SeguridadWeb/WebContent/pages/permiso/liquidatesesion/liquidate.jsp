@@ -15,7 +15,7 @@
         <f:facet name="header">
             <h:panelGrid>
               <rich:column style="border: none;">
-                <h:outputText value="Desactivar Sesión" ></h:outputText>
+                <h:outputText value="Desactivar Sesión"/>
               </rich:column>
             </h:panelGrid>
         </f:facet>
@@ -47,6 +47,73 @@
              <rich:spacer height="4px"/><rich:spacer height="8px"/>
         </h:form>    
     </rich:modalPanel>
+    
+<rich:modalPanel id="panelInactiveBlockDB" width="380" height="130"
+	 resizeable="false" style="background-color:#DEEBF5" autosized="true">
+        <f:facet name="header">
+            <h:panelGrid>
+              <rich:column style="border: none;">
+                <h:outputText value="Desactivar Sesión"/>
+              </rich:column>
+            </h:panelGrid>
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+               <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+               		<rich:componentControl for="panelInactiveBlockDB" operation="hide" event="onclick"/>
+               </h:graphicImage>
+           </h:panelGroup>
+        </f:facet>
+        <h:form id="frmBlockDB">
+        	<rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5" >                 
+                <h:panelGrid columns="2"  border="0" cellspacing="4" >
+                    <h:outputText id="lblCodigo" value="¿Desea Ud. desactivar sesión?" style="padding-right: 35px;"/>
+                </h:panelGrid>
+                <rich:spacer height="16px"/>
+                <h:panelGrid columns="2" border="0"  style="width: 200px;">
+                    <h:commandButton value="Si" actionListener="#{liquidateSessionController.desactivarSesion}" styleClass="btnEstilos"/>
+                    <a4j:commandButton value="No" 
+                      styleClass="btnEstilos"  onclick="Richfaces.hideModalPanel('panelInactiveBlockDB');">
+                    </a4j:commandButton>
+                </h:panelGrid>
+             </rich:panel>
+             <rich:spacer height="4px"/><rich:spacer height="8px"/>
+        </h:form>    
+</rich:modalPanel>
+
+<rich:modalPanel id="panelInactiveBlockSessDB" width="380" height="130"
+	 resizeable="false" style="background-color:#DEEBF5" autosized="true">
+        <f:facet name="header">
+            <h:panelGrid>
+              <rich:column style="border: none;">
+                <h:outputText value="Eliminar Sesiones BD"/>
+              </rich:column>
+            </h:panelGrid>
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+               <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+               		<rich:componentControl for="panelInactiveBlockSessDB" operation="hide" event="onclick"/>
+               </h:graphicImage>
+           </h:panelGroup>
+        </f:facet>
+        <h:form id="frmBlockSessionDB">
+        	<rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5" >                 
+                <h:panelGrid columns="2"  border="0" cellspacing="4" >
+                    <h:outputText id="lblCodigo" value="¿Desea Ud. eliminar la sesión de BD seleccionada?" style="padding-right: 35px;"/>
+                </h:panelGrid>
+                <rich:spacer height="16px"/>
+                <h:panelGrid columns="2" border="0"  style="width: 200px;">
+                    <h:commandButton value="Si" actionListener="#{liquidateSessionController.killSessionDB}" styleClass="btnEstilos"/>
+                    <a4j:commandButton value="No" 
+                      styleClass="btnEstilos"  onclick="Richfaces.hideModalPanel('panelInactiveBlockSessDB');">
+                    </a4j:commandButton>
+                </h:panelGrid>
+             </rich:panel>
+             <rich:spacer height="4px"/><rich:spacer height="8px"/>
+        </h:form>    
+</rich:modalPanel>
+
 <h:panelGroup style="border:1px solid #17356f; width:1000px; background-color:#DEEBF5;">
 <rich:panel style="margin-left: auto; margin-right: auto;width:900px;">
 <h:form id="frmPrincipal">

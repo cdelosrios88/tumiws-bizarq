@@ -5,10 +5,10 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 <!-- Empresa   : Cooperativa Tumi         	-->
-<!-- Autor     : Arturo Julca   			-->
-<!-- Modulo    :                			-->
-<!-- Prototipo :  Acceso fuera de hora		-->
-<!-- Fecha     :                			-->
+<!-- Autor     : Christian De los Ríos		-->
+<!-- Modulo    : Seguridad         			-->
+<!-- Prototipo : Sesiones desde BD			-->
+<!-- Fecha     : 12/08/2014       			-->
 
 <rich:panel style="border: 0px solid #17356f;"
 	styleClass="rich-tabcell-noborder">
@@ -19,25 +19,25 @@
 		</rich:column>
 		<rich:column width="200px">
 			<h:inputText style="width: 150px;"
-				value="#{liquidateSessionController.strEsquema}" />
+				value="#{liquidateSessionController.strEsquemaSessDB}" />
 		</rich:column>
 		<rich:column style="width: 110px">
 			<h:outputText value="Programa : " />
 		</rich:column>
 		<rich:column width="200px">
 			<h:inputText style="width: 150px;"
-				value="#{liquidateSessionController.strPrograma}" />
+				value="#{liquidateSessionController.strProgramaSessDB}" />
 		</rich:column>
 		<rich:column  style="width: 110px">
         	<a4j:commandButton styleClass="btnEstilos" value="Buscar"
-            	action="#{liquidateSessionController.buscarSesionDataBase}" reRender="panelSesionWeb"/>
+            	action="#{liquidateSessionController.buscarSesionDataBase}" reRender="panelBlockSesionWeb"/>
         </rich:column> 
 	</h:panelGrid>
 
 	<rich:spacer height="12px" />
 
-	<h:panelGrid id="panelSesionWeb">
-		<rich:extendedDataTable id="tblAccesosSW" 
+	<h:panelGrid id="panelBlockSesionWeb">
+		<rich:extendedDataTable id="edtSessionsDB" 
 	          		enableContextMenu="false" 
 	          		sortMode="single" 
                     var="item" 
@@ -46,62 +46,69 @@
 					rows="5" 
 					width="860px" 
 					height="170px"
-					align="center">
+					align="center"
+					rendered="#{not empty liquidateSessionController.listaSesionDataBase}">
                                 
 					<rich:column width="15px">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
-                    <rich:column >
+                    <rich:column width="80px">
                     	<f:facet name="header">
                         	<h:outputText value="SID"/>
                       	</f:facet>
-                      	<h:outputText value=""/>
+                      	<h:outputText value="#{item.strSID}"/>
                 	</rich:column>
-                    <rich:column>
+                    <rich:column width="80px">
                     	<f:facet name="header">
                         	<h:outputText value="Serial"/>
                       	</f:facet>
-                      	<h:outputText value=""/>
+                      	<h:outputText value="#{item.strSerial}"/>
                 	</rich:column>
                   	<rich:column>
                     	<f:facet name="header">
                         	<h:outputText value="Usuario - PC"/>
                       	</f:facet>
-                      	<h:outputText value=""/>
+                      	<h:outputText value="#{item.strUserName}"/>
                     </rich:column>
                     <rich:column >
                     	<f:facet name="header">
                         	<h:outputText value="Usuario - BD"/>
                       	</f:facet>
-                      	<h:outputText value=""/>
+                      	<h:outputText value="#{item.strBdUser}"/>
                   	</rich:column>
                     <rich:column>
                    		<f:facet name="header">
                         	<h:outputText value="Programa"/>
                         </f:facet>
-                        <h:outputText value=""/>
+                        <h:outputText value="#{item.strProgram}"/>
                   	</rich:column>
-                  	<rich:column >
+                  	<rich:column width="350px">
                   		<f:facet name="header">
                         	<h:outputText value="Sentencia SQL"/>
                      	</f:facet>
-                     	<h:outputText value=""/>
+                     	<h:outputText id="txtQueryDB" value="#{item.strSqlQuery}"/>
                   	</rich:column>
                     
                     <f:facet name="footer">   
-							<rich:datascroller for="tblAccesosSW" maxPages="20"/>   
+							<rich:datascroller for="edtSessionsDB" maxPages="20"/>   
 					</f:facet>
+            		<rich:toolTip for="txtQueryDB" value="#{item.strSqlQuery}" followMouse="true"  />
+					<%-- 
+					<a4j:support event="onRowClick"
+						actionListener="#{liquidateSessionController.seleccionarRegistroSessDB}"
+						reRender="panelBlockSesionWeb"
+						oncomplete="if(#{item.session.intIdEstado != applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO}){Richfaces.showModalPanel('panelInactiveBlockSessDB')}">
+                        	<f:attribute name="item" value="#{item}"/>
+                   	</a4j:support>--%>
             	</rich:extendedDataTable>
 	</h:panelGrid>
 
 
 	<h:panelGrid columns="2">
-						   	<h:outputLink value="#" id="linkPanelEmpr">
-						        <h:graphicImage value="/images/icons/mensaje1.jpg"
-									style="border:0px"/>
-						        <rich:componentControl for="panelUpdateDelete" attachTo="linkPanelEmpr" operation="show" event="onclick"/>
-						    </h:outputLink>
-							<h:outputText value="Para Eliminar o Modificar Hacer click en Registro" style="color:#8ca0bd" ></h:outputText>                                     
-						</h:panelGrid>
-
+	   	<h:outputLink value="#" id="linkPanelSessDB">
+	        <h:graphicImage value="/images/icons/mensaje1.jpg"
+				style="border:0px"/>
+	        <rich:componentControl for="panelInactiveBlockSessDB" attachTo="linkPanelSessDB" operation="show" event="onclick"/>
+	    </h:outputLink>
+	</h:panelGrid>
 </rich:panel>
