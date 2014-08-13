@@ -115,13 +115,13 @@
                    	<f:facet name="footer">   
 						<rich:datascroller for="edtBlockSessionsDB" maxPages="20"/>   
 					</f:facet>
-					<%--
+					
 					<a4j:support event="onRowClick"
 						actionListener="#{liquidateSessionController.seleccionarRegistroBlockDB}"
 						reRender="panelBlockDB"
-						oncomplete="if(#{item.session.intIdEstado}!= #{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO}){Richfaces.showModalPanel('panelInactiveBlockDB')}">
+						oncomplete="Richfaces.showModalPanel('panelInactiveBlockDB')">
                         	<f:attribute name="item" value="#{item}"/>
-                   	</a4j:support> --%>
+                   	</a4j:support>
            	</rich:extendedDataTable>
 	</h:panelGrid>
 
@@ -131,5 +131,6 @@
 				style="border:0px"/>
 			<rich:componentControl for="panelInactiveBlockDB" attachTo="linkPanelBlockDB" operation="show" event="onclick"/>
 	    </h:outputLink>
+	    <h:outputText value="Para culminar con la sesión hacer clic en el Registro" style="color:#8ca0bd"/>
 	</h:panelGrid>
 </rich:panel>

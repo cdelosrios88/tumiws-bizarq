@@ -53,7 +53,7 @@
         <f:facet name="header">
             <h:panelGrid>
               <rich:column style="border: none;">
-                <h:outputText value="Desactivar Sesión"/>
+                <h:outputText value="Eliminar Bloqueos de BD"/>
               </rich:column>
             </h:panelGrid>
         </f:facet>
@@ -71,7 +71,7 @@
                 </h:panelGrid>
                 <rich:spacer height="16px"/>
                 <h:panelGrid columns="2" border="0"  style="width: 200px;">
-                    <h:commandButton value="Si" actionListener="#{liquidateSessionController.desactivarSesion}" styleClass="btnEstilos"/>
+                    <h:commandButton value="Si" actionListener="#{liquidateSessionController.killBlockDB}" styleClass="btnEstilos"/>
                     <a4j:commandButton value="No" 
                       styleClass="btnEstilos"  onclick="Richfaces.hideModalPanel('panelInactiveBlockDB');">
                     </a4j:commandButton>
@@ -104,7 +104,7 @@
                 </h:panelGrid>
                 <rich:spacer height="16px"/>
                 <h:panelGrid columns="2" border="0"  style="width: 200px;">
-                    <h:commandButton value="Si" actionListener="#{liquidateSessionController.killSessionDB}" styleClass="btnEstilos"/>
+                    <h:commandButton value="Si" actionListener="#{liquidateSessionController.killSessionBlockDB}" styleClass="btnEstilos"/>
                     <a4j:commandButton value="No" 
                       styleClass="btnEstilos"  onclick="Richfaces.hideModalPanel('panelInactiveBlockSessDB');">
                     </a4j:commandButton>
