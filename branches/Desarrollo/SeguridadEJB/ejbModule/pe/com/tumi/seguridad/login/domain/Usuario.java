@@ -29,6 +29,10 @@ public class Usuario extends TumiDomain {
 	private EmpresaUsuario empresaUsuario;
 	private Empresa empresa;
 	
+	//Inicio: REQ14-003 - bizarq - 11/08/2014
+	private Session objSession;
+	//Inicio: REQ14-003 - bizarq - 11/08/2014
+	
 	public Integer getIntPersPersonaPk() {
 		return intPersPersonaPk;
 	}
@@ -125,5 +129,20 @@ public class Usuario extends TumiDomain {
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
+	
+	//Inicio: REQ14-003 - bizarq - 11/08/2014
+	/**
+	 * @return the objSession
+	 */
+	public Session getObjSession() {
+		return objSession;
+	}
+	/**
+	 * @param objSession the objSession to set
+	 */
+	public void setObjSession(Session objSession) {
+		this.objSession = objSession;
+	}
+	//Fin: REQ14-003 - bizarq - 11/08/2014
 	
 }
