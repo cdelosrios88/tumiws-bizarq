@@ -1,9 +1,24 @@
+/************************************************************************
+/* Nombre de componente: SeguridadFilterRemote 
+ * Descripción: Componente que actua como filtro a todos los request
+ * del aplicativo - Modulo SeguridadWeb.
+ * Cod. Req.: REQ14-003   
+ * Autor : Cèsar Pèrez  Fecha:25/04/2013 16:20:00
+ * Versión : v1.0 - Creacion de componente 
+ * Fecha creación : 25/04/2013
+/* ********************************************************************* */
+/* 
+* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripcion
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-003                   08/08/2014       Bizarq Technologies         Modificacion para implementar nuevos criterios de filtro.                                                                        afectaci?n IGK no se modifique al obtenerlo o guardarlo
+*/ 
 package pe.com.tumi.seguridad.login.filter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,8 +38,6 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.login.facade.LoginFacadeLocal;
-import pe.com.tumi.seguridad.login.facade.LoginFacadeRemote;
-import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeLocal;
 
 /**
  * Servlet Filter implementation class SeguridadFilter
@@ -84,6 +97,9 @@ public class SeguridadFilter implements Filter {
 			if(session != null){
 				Session objSession = (Session)session.getAttribute("objSession");
 				Usuario objUsuario = (Usuario)session.getAttribute("usuario");
+				if(objSession == null){
+					objSession = objUsuario.getObjSession();
+				}
 				objUsuario.getObjSession().setTsFechaActividad(new Timestamp(new Date().getTime()));
 				session.setAttribute("usuario", objUsuario);
 				Session objSessionDB = null;
@@ -106,7 +122,6 @@ public class SeguridadFilter implements Filter {
 							httpResponse.sendRedirect(httpRequest.getContextPath() + URL_REDIRECT[0]);
 							return;
 					}else{
-						
 						chain.doFilter(request, response);
 						return;
 					}
@@ -118,6 +133,7 @@ public class SeguridadFilter implements Filter {
 			//Continua
 			//chain.doFilter(request, response);
 			//return;
+			//Fin: REQ14-003 - Bizarq - 08/08/2014
 		}
 	}
 	
