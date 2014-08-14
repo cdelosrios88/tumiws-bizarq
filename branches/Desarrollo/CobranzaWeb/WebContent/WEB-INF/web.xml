@@ -116,5 +116,18 @@
   	<url-pattern>
   	/Test</url-pattern>
   </servlet-mapping>
+
+	<!-- Inicio: REQ14-003 Bizarq - 08/08/2014 -->
+	<filter>
+		<filter-name>SessionFilter</filter-name>
+		<filter-class>pe.com.tumi.seguridad.login.filter.SeguridadFilterRemote</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>SessionFilter</filter-name>
+		<url-pattern>/portal/*</url-pattern>
+		<url-pattern>/pages/*</url-pattern>
+	</filter-mapping>
+	<!-- Fin: REQ14-003 Bizarq - 08/08/2014 -->
 	
 </web-app>
