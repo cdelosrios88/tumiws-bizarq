@@ -464,7 +464,7 @@
 	
 	<!--Convertidor Montos -->
 	
-	<!-- jrivera -->
+	<!-- Inicio REQ14-003 bizarq 08-08-2014 -->
 	<navigation-rule>
 		<from-view-id>/pages/permiso/liquidatesesion/*</from-view-id>
 		<navigation-case>
@@ -478,7 +478,7 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
-	<!--jrivera -->
+	<!-- Fin REQ14-003 bizarq 08-08-2014 -->
 	
 	<converter>
     	<description>Convertidor de montos al formato establecido por Tumi</description>
