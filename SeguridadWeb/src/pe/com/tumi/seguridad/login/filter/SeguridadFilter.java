@@ -3,9 +3,9 @@
  * Descripción: Componente que actua como filtro a todos los request
  * del aplicativo - Modulo SeguridadWeb.
  * Cod. Req.: REQ14-003   
- * Autor : Cèsar Pèrez  Fecha:25/04/2013 16:20:00
+ * Autor : Juan Perez Fecha:13/05/2012 16:20:00
  * Versión : v1.0 - Creacion de componente 
- * Fecha creación : 25/04/2013
+ * Fecha creación : 12/08/2014
 /* ********************************************************************* */
 /* 
 * -----------------------------------------------------------------------------------------------------------
