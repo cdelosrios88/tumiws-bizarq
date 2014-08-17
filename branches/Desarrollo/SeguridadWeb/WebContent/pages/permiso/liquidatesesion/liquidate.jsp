@@ -4,6 +4,7 @@
 <%@ taglib uri="http://richfaces.org/a4j" prefix="a4j"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
+	<!-- Cod. Req. : REQ14-003       			-->
 	<!-- Empresa   : Cooperativa Tumi         	-->
 	<!-- Autor     : Bizarq			   			-->
 	<!-- Modulo    : Seguridad	     			-->
