@@ -1,3 +1,19 @@
+/************************************************************************/
+/* Nombre de componente: LoginController */
+/* Descripción: Componente controlador que permite realizar  
+		SEG_V_SESSION de BD   */
+/* Cod. Req.: REQ14-002 - Modificación : Usuario no debe sesionar más de una vez */
+/* Autor : Christian De los Ríos */
+/* Versión : V1.1 */
+/* Fecha creación : 10/08/2014 */
+/* ********************************************************************* */
+/* 
+* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripcion
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-003                   08/08/2014       Bizarq Technologies         Modificación para implementar requerimiento conplementario al REQ14-002
+*/ 
 package pe.com.tumi.seguridad.controller;
 
 import java.io.IOException;
