@@ -1,3 +1,12 @@
+/************************************************************************
+/* Nombre de componente: LiquidateSessionController
+ * Descripción: Controller utilizado para el control de formularios de bloqueo
+ * 				de sesiones.
+ * Cod. Req.: REQ14-003   
+ * Autor : Luis Polanco  Fecha:12/08/2014 16:20:00
+ * Versión : v1.0 - Creacion de componente 
+ * Fecha creación : 12/08/2014
+/* ********************************************************************* */
 package pe.com.tumi.seguridad.permiso.controller;
 
 import java.sql.Timestamp;
