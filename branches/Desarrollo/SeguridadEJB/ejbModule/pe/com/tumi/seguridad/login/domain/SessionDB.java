@@ -1,3 +1,11 @@
+/************************************************************************
+/* Nombre de componente: SessionDB
+ * Descripción: Bean utilizado para controlar las sesiones bloqueadas en BD
+ * Cod. Req.: REQ14-003   
+ * Autor : Luis Polanco  Fecha:12/08/2014 16:20:00
+ * Versión : v1.0 - Creacion de componente 
+ * Fecha creación : 12/08/2014
+/* ********************************************************************* */
 package pe.com.tumi.seguridad.login.domain;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
