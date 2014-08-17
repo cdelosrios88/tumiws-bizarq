@@ -12,7 +12,7 @@
 * Modificaciones
 * Motivo                      Fecha            Nombre                      Descripcion
 * -----------------------------------------------------------------------------------------------------------
-* REQ14-003                   08/08/2014       Bizarq Technologies         Modificacion para implementar nuevos criterios de filtro.                                                                        afectaci?n IGK no se modifique al obtenerlo o guardarlo
+* REQ14-003                   08/08/2014       Bizarq Technologies         Modificacion para implementar nuevos criterios de filtro.
 */ 
 package pe.com.tumi.seguridad.login.filter;
 
