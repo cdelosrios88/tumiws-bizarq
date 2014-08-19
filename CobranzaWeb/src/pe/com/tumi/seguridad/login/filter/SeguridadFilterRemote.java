@@ -10,6 +10,7 @@
 package pe.com.tumi.seguridad.login.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -97,8 +98,8 @@ public class SeguridadFilterRemote implements Filter {
 						session.removeAttribute(USUARIO_LOGIN);
 						session.removeAttribute(OBJETO_SESSION);
 						session.invalidate();
-						httpResponse.sendRedirect(STR_CONTEXT_SEGURIDAD + URL_REDIRECT[0]);
-						return;
+						PrintWriter out = response.getWriter();
+						out.println("<script>console.log('entro');top.frames['alto'].document.getElementById('hdnIndSesionSalir').value=1;top.frames['alto'].document.getElementById('linkLogin').click();</script>");
 				}else{
 					chain.doFilter(request, response);
 					return;
