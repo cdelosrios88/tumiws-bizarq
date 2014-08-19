@@ -17,12 +17,14 @@
 package pe.com.tumi.seguridad.login.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -119,8 +121,8 @@ public class SeguridadFilter implements Filter {
 							session.removeAttribute(Constante.USUARIO_LOGIN);
 							session.removeAttribute("objSession");
 							session.invalidate();
-							httpResponse.sendRedirect(httpRequest.getContextPath() + URL_REDIRECT[0]);
-							return;
+							PrintWriter out = response.getWriter();
+							out.println("<script>console.log('entro');top.frames['alto'].document.getElementById('hdnIndSesionSalir').value=1;top.frames['alto'].document.getElementById('linkLogin').click();</script>");
 					}else{
 						chain.doFilter(request, response);
 						return;
