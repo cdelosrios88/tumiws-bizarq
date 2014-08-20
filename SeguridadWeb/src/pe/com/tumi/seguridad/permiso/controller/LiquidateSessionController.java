@@ -11,6 +11,8 @@ package pe.com.tumi.seguridad.permiso.controller;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +30,8 @@ import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
+import pe.com.tumi.persona.empresa.domain.Empresa;
+import pe.com.tumi.persona.empresa.domain.Juridica;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeLocal;
 import pe.com.tumi.seguridad.login.domain.Session;
 import pe.com.tumi.seguridad.login.domain.SessionDB;
@@ -144,7 +148,7 @@ public class LiquidateSessionController {
 	public LiquidateSession getObjLiqSess() {
 		return objLiqSess;
 	}
-
+	
 	public void setObjLiqSess(LiquidateSession objLiqSess) {
 		this.objLiqSess = objLiqSess;
 	}
@@ -166,12 +170,28 @@ public class LiquidateSessionController {
 				personaFacade = (PersonaFacadeRemote) EJBFactory
 						.getRemote(PersonaFacadeRemote.class);
 				tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
-				listaEmpresas = personaFacade.getListaJuridicaDeEmpresa();
-				listaEstados = tablaFacade.getListaTablaPorIdMaestroYNotInIdDetalle(Constante.INT_ONE, Constante.PARAM_T_ESTADO_ANULADO);
-				loginFacade = (LoginFacadeLocal) EJBFactory.getLocal(LoginFacadeLocal.class);
+				
+				init();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void init(){
+		try {
+			listaEmpresas = personaFacade.getListaJuridicaDeEmpresa();
+			listaEstados = tablaFacade.getListaTablaPorIdMaestroYNotInIdDetalle(Constante.INT_ONE, Constante.PARAM_T_ESTADO_ANULADO);
+			loginFacade = (LoginFacadeLocal) EJBFactory.getLocal(LoginFacadeLocal.class);
+			
+			Collections.sort(listaEmpresas, new Comparator<Juridica>(){
+				public int compare(Juridica uno, Juridica otro) {
+					return uno.getStrSiglas().compareTo(otro.getStrSiglas());
+				}
+			});
+			objLiqSess.setIntEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -185,6 +205,12 @@ public class LiquidateSessionController {
 			facade = (EmpresaFacadeLocal)EJBFactory.getLocal(EmpresaFacadeLocal.class);
 			listaJuridicaSucursal = facade.getListaSucursalPorPkEmpresa(intIdEmpresa);
 			log.info("listSucursal.size(): " + listaJuridicaSucursal.size());
+			
+			Collections.sort(listaJuridicaSucursal, new Comparator<Sucursal>(){
+				public int compare(Sucursal uno, Sucursal otro) {
+					return uno.getJuridica().getStrSiglas().compareTo(otro.getJuridica().getStrSiglas());
+				}
+			});
 		} catch (EJBFactoryException e) {
 			e.printStackTrace();
 		} catch (BusinessException e) {
@@ -246,10 +272,10 @@ public class LiquidateSessionController {
 			objSession = new Session();
 			objSession.getId().setIntPersEmpresaPk(objLiqSess.getIntPersEmpresa().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntPersEmpresa());
 			objSession.setIntIdSucursal(objLiqSess.getIntCboSucursalEmp().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntCboSucursalEmp());
-			objSession.setTsFechaRegistro(objLiqSess.getFechaInicioFiltro());
-			objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
+			//objSession.setTsFechaRegistro(objLiqSess.getFechaInicioFiltro());
+			//objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
 			objSession.setIntIdEstado(objLiqSess.getIntEstado().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntEstado());
-			listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getStrUsuario());
+			listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getFechaInicioFiltro(), objLiqSess.getFechaFinFiltro(), objLiqSess.getStrUsuario());
 			if(listaSesionWeb!=null && !listaSesionWeb.isEmpty()){
 				for (SessionComp sessComp : listaSesionWeb) {
 					if(sessComp.getSession().getId().getIntSessionPk().equals(objSessionDB.getId().getIntSessionPk())){
@@ -332,5 +358,4 @@ public class LiquidateSessionController {
 	public void setStrProgramaSessDB(String strProgramaSessDB) {
 		this.strProgramaSessDB = strProgramaSessDB;
 	}
-
 }
