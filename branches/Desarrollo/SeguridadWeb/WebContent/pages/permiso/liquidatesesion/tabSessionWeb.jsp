@@ -68,12 +68,12 @@
        			<h:outputText value="Rango de Fecha : "/>
        		</rich:column>
        		<rich:column>
-			<rich:calendar datePattern="dd/MM/yyyy"  value="#{liquidateSessionController.objLiqSess.fechaInicioFiltro}"						
-				jointPoint="down-right" direction="right" inputSize="17" showApplyButton="true"/> 
+			<rich:calendar datePattern="dd/MM/yyyy HH:mm"  value="#{liquidateSessionController.objLiqSess.fechaInicioFiltro}"						
+				jointPoint="down-right" direction="right" inputSize="17" showApplyButton="true" defaultTime="00:00"/> 
               </rich:column>
           	<rich:column style="width: 205px">
-       			<rich:calendar datePattern="dd/MM/yyyy"  value="#{liquidateSessionController.objLiqSess.fechaFinFiltro}"
-				jointPoint="down-right" direction="right" inputSize="17" showApplyButton="true"/> 
+       			<rich:calendar datePattern="dd/MM/yyyy HH:mm"  value="#{liquidateSessionController.objLiqSess.fechaFinFiltro}"
+				jointPoint="down-right" direction="right" inputSize="17" showApplyButton="true" defaultTime="00:00"/> 
        		</rich:column>
        		<rich:column>
          		<a4j:commandButton styleClass="btnEstilos" value="Buscar"
@@ -86,14 +86,14 @@
 	<h:panelGrid id="panelSesionWeb">
 		<rich:extendedDataTable id="tblAccesosSW" sortMode="single" var="item" 
                     value="#{liquidateSessionController.listaSesionWeb}"  
-					rowKeyVar="rowKey"  rows="5" width="860px" 
+					rowKeyVar="rowKey"  rows="5" width="900px" 
 					height="170px" align="center"
 					enableContextMenu="false"
 					rendered="#{not empty liquidateSessionController.listaSesionWeb}">
                     <rich:column width="15px">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
-                    <rich:column width="80px">
+                    <rich:column width="70px">
                     	<f:facet name="header">
                         	<h:outputText value="Codigo"/>
                       	</f:facet>
@@ -103,22 +103,24 @@
                     	<f:facet name="header">
                         	<h:outputText value="Nombre de Usuario"/>
                       	</f:facet>
-                      	<h:outputText value="#{item.strFullName}"/>
+                      	<h:outputText id="lblItemUsuario" value="#{item.strFullName}"/>
+                      	<rich:toolTip for="lblItemUsuario" value="#{item.strFullName}" followMouse="true"/>
                 	</rich:column>
-                  	<rich:column style="text-align:center;">
+                  	<rich:column style="text-align:center;" width="70px">
                   		<f:facet name="header">
-                        	<h:outputText value="Estado Sesion"/>
+                        	<h:outputText value="Estado"/>
                       	</f:facet>
                       	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL}" 
 							itemValue="intIdDetalle"
 							itemLabel="strDescripcion"
 							property="#{item.session.intIdEstado}"/>
                     </rich:column>
-                    <rich:column width="120px">
+                    <rich:column width="130px">
                     	<f:facet name="header">
                         	<h:outputText value="Empresa"/>
                       	</f:facet>
-                      	<h:outputText value="#{item.strEmpresa}"/>
+                      	<h:outputText id="lblItemEmpresa" value="#{item.strEmpresa}"/>
+                      	<rich:toolTip for="lblItemEmpresa" value="#{item.strEmpresa}" followMouse="true"/>
                   	</rich:column>
                     <rich:column width="120px">
                     	<f:facet name="header">
@@ -126,28 +128,29 @@
                         </f:facet>
                         <h:outputText value="#{item.strSucursal}"/>
                   	</rich:column>
-                  	<rich:column width="90px">
+                  	<rich:column width="110px">
                         <f:facet name="header">
                         	<h:outputText value="Fecha Inicio"/>
                         </f:facet>
                         <h:outputText value="#{item.session.tsFechaRegistro}">
-                        	<f:convertDateTime pattern="dd/MM/yyyy" />
+                        	<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                         </h:outputText>
                   	</rich:column>
-                    <rich:column width="90px">
+                    <rich:column width="110px">
                     	<f:facet name="header">
                         	<h:outputText value="Fecha Fin"/>
                     	</f:facet>
                     	<h:outputText value="#{item.session.tsFechaTermino}">
-                    		<f:convertDateTime pattern="dd/MM/yyyy" />
+                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                     	</h:outputText>
                   	</rich:column>
-                  	<rich:column>
+                  	<rich:column width="120px">
                   		<f:facet name="header">
                         	<h:outputText value="MAC Address"/>
                      	</f:facet>
-                     	<h:outputText value="#{item.session.strMacAddress}"/>
+                     	<h:outputText id="lblMacAddress" value="#{item.session.strMacAddress}"/>
                   	</rich:column>
+                  	
                     <f:facet name="footer">   
 							<rich:datascroller for="tblAccesosSW" maxPages="20"/>   
 					</f:facet>
