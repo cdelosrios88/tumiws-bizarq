@@ -8,6 +8,7 @@
 /* ********************************************************************* */
 
 package pe.com.tumi.seguridad.login.facade;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -92,7 +93,7 @@ public interface LoginFacadeRemote {
 	
 	//Inicio: REQ14-003 - bizarq - 10/08/2014
 	public Session getSessionPorPk (Integer intSessionPk) throws BusinessException;
-	public List<SessionComp> getListaSessionWeb (Session o, String strFullName) throws BusinessException;
+	public List<SessionComp> getListaSessionWeb (Session o, Date dtFecIni, Date dtFecFin, String strFullName) throws BusinessException;
 	public List<SessionDB> getListBlockDB (String strSchema, String strProgram, String strObject) throws BusinessException;
 	public List<SessionDB> getListaSessionDB (String strSchema, String strProgram) throws BusinessException;
 	public Integer killBlockDB(String strSID, String strSerial) throws BusinessException;

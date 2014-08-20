@@ -9,6 +9,7 @@
 
 package pe.com.tumi.seguridad.login.bo;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -109,15 +110,15 @@ public class SessionBO {
 		return domain;
 	}
 	
-	public List<SessionComp> getListaSessionWeb(Session o, String strFullName) throws BusinessException{
+	public List<SessionComp> getListaSessionWeb(Session o, Date dtFecIni, Date dtFecFin, String strFullName) throws BusinessException{
 		List<SessionComp> lista = null;
 		try{
 			HashMap<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("intIdEmpresa", o.getId().getIntPersEmpresaPk());
 			mapa.put("intIdSucursal", o.getIntIdSucursal());
 			mapa.put("strFullName", strFullName);
-			mapa.put("tsFechaRegistro", o.getTsFechaRegistro());
-			mapa.put("tsFechaTermino", o.getTsFechaTermino());
+			mapa.put("tsFechaRegistro", dtFecIni);
+			mapa.put("tsFechaTermino", dtFecFin);
 			mapa.put("intIdEstado", o.getIntIdEstado());
 			lista = dao.getListaSessionWeb(mapa);
 		}catch(DAOException e){
