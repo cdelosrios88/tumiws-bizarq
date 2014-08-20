@@ -9,6 +9,7 @@
 
 package pe.com.tumi.seguridad.login.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -427,10 +428,10 @@ public class LoginFacade extends TumiFacade implements LoginFacadeRemote, LoginF
 		return dto;
 	}
 	
-	public List<SessionComp> getListaSessionWeb (Session o, String strFullName) throws BusinessException{ 
+	public List<SessionComp> getListaSessionWeb (Session o, Date dtFecIni, Date dtFecFin, String strFullName) throws BusinessException{ 
 		List<SessionComp> lista = null;
 		try{
-			lista = boSession.getListaSessionWeb(o,strFullName);
+			lista = boSession.getListaSessionWeb(o,dtFecIni,dtFecFin,strFullName);
 		}catch(BusinessException e){
 			context.setRollbackOnly();
 			throw e;
