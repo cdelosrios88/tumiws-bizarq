@@ -24,13 +24,13 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.DaoException;
+import pe.com.tumi.common.util.FacesContextUtil;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
-import pe.com.tumi.persona.empresa.domain.Empresa;
 import pe.com.tumi.persona.empresa.domain.Juridica;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeLocal;
 import pe.com.tumi.seguridad.login.domain.Session;
@@ -252,13 +252,19 @@ public class LiquidateSessionController {
 		objSelSessionBlockDB = (SessionDB)event.getComponent().getAttributes().get("item");
 	}
 	public void desactivarSesion(ActionEvent event){
+		Session sessionTmp;
 		Session objSessionClose = objSelSessionWeb.getSession();
 		objSessionClose.setIntIdEstado(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO);
 		objSessionClose.setTsFechaTermino(new Timestamp(new Date().getTime()));
 		objSessionClose.setIntInAccesoRemoto(Constante.INT_ZERO);
 		try {
-			loginFacade.modificarSession(objSessionClose);
-			buscarSesionWeb();
+			sessionTmp = loginFacade.modificarSession(objSessionClose);
+			if(sessionTmp!=null){
+				FacesContextUtil.setMessageSuccess(FacesContextUtil.MESSAGE_SUCCESS_ONDISABLESESSION);
+				buscarSesionWeb();
+			}else {
+				FacesContextUtil.setMessageError("Error en el registro");
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -275,7 +281,11 @@ public class LiquidateSessionController {
 			//objSession.setTsFechaRegistro(objLiqSess.getFechaInicioFiltro());
 			//objSession.setTsFechaTermino(objLiqSess.getFechaFinFiltro());
 			objSession.setIntIdEstado(objLiqSess.getIntEstado().equals(Constante.PARAM_COMBO_TODOS)?null:objLiqSess.getIntEstado());
-			listaSesionWeb = loginFacade.getListaSessionWeb(objSession, objLiqSess.getFechaInicioFiltro(), objLiqSess.getFechaFinFiltro(), objLiqSess.getStrUsuario());
+			listaSesionWeb = loginFacade.getListaSessionWeb(
+					objSession, 
+					objLiqSess.getFechaInicioFiltro()==null?null:Constante.dateFormat.format(objLiqSess.getFechaInicioFiltro()),
+					objLiqSess.getFechaFinFiltro()==null?null:Constante.dateFormat.format(objLiqSess.getFechaFinFiltro()), 
+					objLiqSess.getStrUsuario());
 			if(listaSesionWeb!=null && !listaSesionWeb.isEmpty()){
 				for (SessionComp sessComp : listaSesionWeb) {
 					if(sessComp.getSession().getId().getIntSessionPk().equals(objSessionDB.getId().getIntSessionPk())){
@@ -303,6 +313,7 @@ public class LiquidateSessionController {
 			if(objSelSessionDB!=null){
 				intResult = loginFacade.killSessionDB(objSelSessionDB.getStrSID(), objSelSessionDB.getStrSerial());
 				if(intResult.equals(Integer.valueOf(Constante.PARAM_T_ESTADOUNIVERSAL))){
+					FacesContextUtil.setMessageSuccess(FacesContextUtil.MESSAGE_SUCCESS_ONKILLBLOCKDB);
 					buscarBlockDataBase();
 				}
 			}
@@ -317,6 +328,7 @@ public class LiquidateSessionController {
 			if(objSelSessionBlockDB!=null){
 				intResult = loginFacade.killSessionDB(objSelSessionBlockDB.getStrSID(), objSelSessionBlockDB.getStrSerial());
 				if(intResult.equals(Integer.valueOf(Constante.PARAM_T_ESTADOUNIVERSAL))){
+					FacesContextUtil.setMessageSuccess(FacesContextUtil.MESSAGE_SUCCESS_ONKILLSESSIONDB);
 					buscarSesionDataBase();
 				}
 			}
