@@ -107,8 +107,8 @@
    	 <parameter property="intIdEmpresa" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
    	 <parameter property="intIdSucursal" 		jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
    	 <parameter property="strFullName" 			jdbcType="VARCHAR"		 javaType="java.lang.String"  	mode="IN"/>
-   	 <parameter property="tsFechaRegistro" 		jdbcType="DATE"	 		 javaType="java.util.Date"  	mode="IN"/>
-   	 <parameter property="tsFechaTermino" 		jdbcType="DATE"	 		 javaType="java.util.Date"  	mode="IN"/>
+   	 <parameter property="tsFechaRegistro" 		jdbcType="VARCHAR" 		 javaType="java.lang.String"  	mode="IN"/>
+   	 <parameter property="tsFechaTermino" 		jdbcType="VARCHAR" 		 javaType="java.lang.String"  	mode="IN"/>
    	 <parameter property="intIdEstado" 			jdbcType="NUMERIC"		 javaType="java.lang.Integer"  	mode="IN"/>
   </parameterMap>
   
