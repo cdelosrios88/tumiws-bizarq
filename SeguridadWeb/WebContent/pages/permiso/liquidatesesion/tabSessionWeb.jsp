@@ -93,13 +93,13 @@
                     <rich:column width="15px">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
-                    <rich:column width="70px">
+                    <rich:column width="60px">
                     	<f:facet name="header">
                         	<h:outputText value="Codigo"/>
                       	</f:facet>
                       	<h:outputText value="#{item.session.id.intPersPersonaPk}"/>
                 	</rich:column>
-                    <rich:column width="150px">
+                    <rich:column width="140px">
                     	<f:facet name="header">
                         	<h:outputText value="Nombre de Usuario"/>
                       	</f:facet>
@@ -128,23 +128,23 @@
                         </f:facet>
                         <h:outputText value="#{item.strSucursal}"/>
                   	</rich:column>
-                  	<rich:column width="110px">
+                  	<rich:column width="130px">
                         <f:facet name="header">
                         	<h:outputText value="Fecha Inicio"/>
                         </f:facet>
                         <h:outputText value="#{item.session.tsFechaRegistro}">
-                        	<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        	<f:convertDateTime type="both" pattern="dd/MM/yyyy h:mm a" dateStyle="full"/>
                         </h:outputText>
                   	</rich:column>
-                    <rich:column width="110px">
+                    <rich:column width="130px">
                     	<f:facet name="header">
                         	<h:outputText value="Fecha Fin"/>
                     	</f:facet>
                     	<h:outputText value="#{item.session.tsFechaTermino}">
-                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    		<f:convertDateTime type="both" pattern="dd/MM/yyyy h:mm a" dateStyle="full"/>
                     	</h:outputText>
                   	</rich:column>
-                  	<rich:column width="120px">
+                  	<rich:column width="110px">
                   		<f:facet name="header">
                         	<h:outputText value="MAC Address"/>
                      	</f:facet>
