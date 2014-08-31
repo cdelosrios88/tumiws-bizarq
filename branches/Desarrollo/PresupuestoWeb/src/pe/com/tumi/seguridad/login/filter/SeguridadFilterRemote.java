@@ -93,15 +93,13 @@ public class SeguridadFilterRemote implements Filter {
 				} catch (BusinessException e) {
 					e.printStackTrace();
 				}	
-				if(objSessionDB != null){
-					if(objSessionDB.getIntIdEstado()!= null &&
+				if(objSessionDB != null && objSessionDB.getIntIdEstado()!= null &&
 							objSessionDB.getIntIdEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)){
 						session.removeAttribute(USUARIO_LOGIN);
 						session.removeAttribute(OBJETO_SESSION);
 						session.invalidate();
 						PrintWriter out = response.getWriter();
 						out.println("<script>console.log('entro');top.frames['alto'].document.getElementById('hdnIndSesionSalir').value=1;top.frames['alto'].document.getElementById('linkLogin').click();</script>");
-					}
 				}else{
 					chain.doFilter(request, response);
 					return;
