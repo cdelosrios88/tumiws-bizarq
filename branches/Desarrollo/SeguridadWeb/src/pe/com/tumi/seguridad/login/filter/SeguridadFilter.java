@@ -99,8 +99,13 @@ public class SeguridadFilter implements Filter {
 			if(session != null){
 				Session objSession = (Session)session.getAttribute("objSession");
 				Usuario objUsuario = (Usuario)session.getAttribute("usuario");
-				if(objSession == null){
-					objSession = objUsuario.getObjSession();
+				if(objSession == null ){
+					if(objUsuario == null){
+						chain.doFilter(request, response);
+						return;
+					}else {
+						objSession = objUsuario.getObjSession();
+					}
 				}
 				objUsuario.getObjSession().setTsFechaActividad(new Timestamp(new Date().getTime()));
 				session.setAttribute("usuario", objUsuario);
