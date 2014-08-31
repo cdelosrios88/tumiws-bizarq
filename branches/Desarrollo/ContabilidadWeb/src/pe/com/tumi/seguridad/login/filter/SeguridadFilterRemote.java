@@ -1,7 +1,7 @@
 /************************************************************************
 /* Nombre de componente: SeguridadFilterRemote 
  * Descripción: Componente que actua como filtro a todos los request
- * del aplicativo - Modulo ContabilidadWeb.
+ * del aplicativo - Modulo CobranzaWeb.
  * Cod. Req.: REQ14-003   
  * Autor : Bizarq Technologies 
  * Versión : v1.0 - Creacion de componente 
@@ -86,22 +86,20 @@ public class SeguridadFilterRemote implements Filter {
 				LoginFacadeRemote loginFacade;
 				try {
 					//Instanciar el loginFacade para consulta a base de datos
-					loginFacade = (LoginFacadeRemote)EJBFactory.getRemote(LoginFacadeRemote.class);
+					loginFacade = (LoginFacadeRemote) EJBFactory.getRemote(LoginFacadeRemote.class);
 					objSessionDB = loginFacade.getSessionPorPk(objSession.getId().getIntSessionPk());
 				} catch (EJBFactoryException e) {
 					e.printStackTrace();
 				} catch (BusinessException e) {
 					e.printStackTrace();
 				}	
-				if(objSessionDB != null){
-					if(objSessionDB.getIntIdEstado()!= null &&
+				if(objSessionDB != null && objSessionDB.getIntIdEstado()!= null &&
 							objSessionDB.getIntIdEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)){
 						session.removeAttribute(USUARIO_LOGIN);
 						session.removeAttribute(OBJETO_SESSION);
 						session.invalidate();
 						PrintWriter out = response.getWriter();
 						out.println("<script>console.log('entro');top.frames['alto'].document.getElementById('hdnIndSesionSalir').value=1;top.frames['alto'].document.getElementById('linkLogin').click();</script>");
-					}
 				}else{
 					chain.doFilter(request, response);
 					return;
