@@ -112,6 +112,12 @@
 			<from-outcome>mayorizacion.mayorizacion</from-outcome>
 			<to-view-id>/pages/mayorizacion/mayorizacion.jsp</to-view-id>
 		</navigation-case>
+		<!-- Inicio REQ14-004 bizarq 14-09-2014 -->
+		<navigation-case>
+			<from-outcome>mayorizacion.formulario</from-outcome>
+			<to-view-id>/pages/mayorizacion/mayorizacionForm.jsp</to-view-id>
+		</navigation-case>
+		<!-- Fin REQ14-004 bizarq 14-09-2014 -->
 	</navigation-rule>
 	<managed-bean>
 		<managed-bean-name>mayorizacionController</managed-bean-name>
