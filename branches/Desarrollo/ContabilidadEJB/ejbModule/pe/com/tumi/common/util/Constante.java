@@ -580,4 +580,8 @@ public class Constante {
 	public static final Integer PARAM_T_FRECUENCPAGOINT_BIMESTRAL = 4;
 	public static final Integer PARAM_T_FRECUENCPAGOINT_SEMESTRAL = 5;
 	public static final Integer PARAM_T_FRECUENCPAGOINT_ANUAL = 6;
+	
+	//Inicio: REQ14-004 - bizarq - 14/09/2014
+	public static final Integer INT_IDTRANSACCION_MAYORIZACION = 143;
+	//Fin: REQ14-004 - bizarq - 14/09/2014
 }
