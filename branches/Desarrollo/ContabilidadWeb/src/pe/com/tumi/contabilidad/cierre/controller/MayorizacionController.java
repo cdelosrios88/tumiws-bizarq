@@ -1,17 +1,16 @@
 package pe.com.tumi.contabilidad.cierre.controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
-import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
 import pe.com.tumi.seguridad.permiso.domain.PasswordId;
@@ -23,7 +22,7 @@ public class MayorizacionController {
 	private Usuario usuario;
 	private String strPassword;
 	private String strMsgError;
-	private List<Tabla> listaAnios;
+	private List<SelectItem> listYears;
 	
 	private PermisoFacadeRemote permisoFacade;
 	
@@ -49,17 +48,7 @@ public class MayorizacionController {
 	}
 	
 	private void cargarListaAnios(){
-		listaAnios = new ArrayList<Tabla>();
-		Calendar cal=Calendar.getInstance();
-		Tabla tabla = null;
-		for(int i=0;i<4;i++){
-			tabla = new Tabla();
-			int year = cal.get(Calendar.YEAR);
-			cal.add(Calendar.YEAR, 1);
-			tabla.setIntIdDetalle(year);
-			tabla.setStrDescripcion(""+year);
-			listaAnios.add(tabla);
-		}		
+		listYears = CommonUtils.getListAnios();
 	}
 	
 	protected HttpServletRequest getRequest() {
