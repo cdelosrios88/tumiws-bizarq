@@ -85,4 +85,20 @@ public class LibroMayorBO {
 		}
 		return lista;
 	}
+	
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public Integer processMayorizacion(Integer intPeriodo) throws BusinessException{
+		Integer intEscalar = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPeriodo", intPeriodo);
+			intEscalar = dao.processMayorizacion(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return intEscalar;
+	}
+	//Fin: REQ14-004 - bizarq - 16/09/2014
 }

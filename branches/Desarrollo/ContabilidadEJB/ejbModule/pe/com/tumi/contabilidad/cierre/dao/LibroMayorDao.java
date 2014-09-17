@@ -12,4 +12,7 @@ public interface LibroMayorDao extends TumiDao{
 	public LibroMayor modificar(LibroMayor o) throws DAOException;
 	public List<LibroMayor> getListaPorPk(Object o) throws DAOException;
 	public List<LibroMayor> getListaPorBuscar(Object o) throws DAOException;
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public Integer processMayorizacion(Object o) throws DAOException;
+	//Fin: REQ14-004 - bizarq - 16/09/2014
 }

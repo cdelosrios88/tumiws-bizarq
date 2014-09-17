@@ -39,6 +39,12 @@
 	 <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
 
+  <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
+  <parameterMap id="parPorProcessMayorDB" class="java.util.Map">
+	 <parameter property="intPeriodo"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
+	 <parameter property="intEscalar" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
+  </parameterMap>
+  <!-- Fin: REQ14-004 - bizarq - 16/09/2014 -->
   
   <procedure id="grabar" parameterMap="parLibroMayor">
 	{ call PKG_LIBROMAYOR.grabar(?,?,?,?,?,?,?) }  
@@ -55,5 +61,11 @@
   <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resLibroMayor">
 	{ call PKG_LIBROMAYOR.getListaPorBuscar(?,?,?,?) }
   </procedure>
+  
+  <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
+  <procedure id="processMayorizacion" parameterMap="parPorProcessMayorDB">
+	{ call PKG_LIBROMAYOR.processMayorizacion(?,?) }  
+  </procedure>
+  <!-- Fin: REQ14-004 - bizarq - 16/09/2014 -->
    	
 </sqlMap>
