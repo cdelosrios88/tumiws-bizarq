@@ -23,6 +23,8 @@ public class MayorizacionController {
 	private String strPassword;
 	private String strMsgError;
 	private List<SelectItem> listYears;
+	private Integer intAnio;
+	private Integer intMes;
 	
 	private PermisoFacadeRemote permisoFacade;
 	
@@ -77,6 +79,23 @@ public class MayorizacionController {
 		}
 		return outcome;
 	}
+	
+	public void procesarMayorizado(){
+		
+	}
+	
+	public void buscarMayorizado(){
+		Integer intPeriodo = null;
+		try {
+			intPeriodo = CommonUtils.concatPeriodo(intAnio, intMes);
+			
+			
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		
+	}
 
 	public String getStrPassword() {
 		return strPassword;
@@ -92,5 +111,29 @@ public class MayorizacionController {
 
 	public void setStrMsgError(String strMsgError) {
 		this.strMsgError = strMsgError;
+	}
+
+	public List<SelectItem> getListYears() {
+		return listYears;
+	}
+
+	public void setListYears(List<SelectItem> listYears) {
+		this.listYears = listYears;
+	}
+
+	public Integer getIntAnio() {
+		return intAnio;
+	}
+
+	public void setIntAnio(Integer intAnio) {
+		this.intAnio = intAnio;
+	}
+
+	public Integer getIntMes() {
+		return intMes;
+	}
+
+	public void setIntMes(Integer intMes) {
+		this.intMes = intMes;
 	}
 }
