@@ -1,5 +1,6 @@
 package pe.com.tumi.contabilidad.cierre.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import pe.com.tumi.contabilidad.cierre.dao.LibroMayorDao;
@@ -50,4 +51,19 @@ public class LibroMayorDaoIbatis extends TumiDaoIbatis implements LibroMayorDao{
 		}
 		return lista;
 	}
+	
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public Integer processMayorizacion(Object o) throws DAOException{
+		Integer escalar = null;
+		try{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".processMayorizacion",o);
+			m = (HashMap<String, Object>)o;
+			escalar = (Integer)m.get("intEscalar");
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return escalar;
+	}
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
 }
