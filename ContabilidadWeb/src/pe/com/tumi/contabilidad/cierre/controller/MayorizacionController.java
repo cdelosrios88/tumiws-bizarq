@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
@@ -25,6 +26,130 @@ public class MayorizacionController {
 	private List<SelectItem> listYears;
 	private Integer intAnio;
 	private Integer intMes;
+	private List listaLibroMayor;
+	private LibroMayor libroMayorFiltro;
+	private LibroMayor libroMayorNuevo;
+	private List listaAnios;
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public List getListaLibroMayor() {
+		return listaLibroMayor;
+	}
+
+	public void setListaLibroMayor(List listaLibroMayor) {
+		this.listaLibroMayor = listaLibroMayor;
+	}
+
+	public LibroMayor getLibroMayorFiltro() {
+		return libroMayorFiltro;
+	}
+
+	public void setLibroMayorFiltro(LibroMayor libroMayorFiltro) {
+		this.libroMayorFiltro = libroMayorFiltro;
+	}
+
+	public LibroMayor getLibroMayorNuevo() {
+		return libroMayorNuevo;
+	}
+
+	public void setLibroMayorNuevo(LibroMayor libroMayorNuevo) {
+		this.libroMayorNuevo = libroMayorNuevo;
+	}
+
+	public List getListaAnios() {
+		return listaAnios;
+	}
+
+	public void setListaAnios(List listaAnios) {
+		this.listaAnios = listaAnios;
+	}
+
+	public boolean isMostrarBtnEliminar() {
+		return mostrarBtnEliminar;
+	}
+
+	public void setMostrarBtnEliminar(boolean mostrarBtnEliminar) {
+		this.mostrarBtnEliminar = mostrarBtnEliminar;
+	}
+
+	public boolean isMostrarMensajeExito() {
+		return mostrarMensajeExito;
+	}
+
+	public void setMostrarMensajeExito(boolean mostrarMensajeExito) {
+		this.mostrarMensajeExito = mostrarMensajeExito;
+	}
+
+	public boolean isMostrarMensajeError() {
+		return mostrarMensajeError;
+	}
+
+	public void setMostrarMensajeError(boolean mostrarMensajeError) {
+		this.mostrarMensajeError = mostrarMensajeError;
+	}
+
+	public boolean isDeshabilitarNuevo() {
+		return deshabilitarNuevo;
+	}
+
+	public void setDeshabilitarNuevo(boolean deshabilitarNuevo) {
+		this.deshabilitarNuevo = deshabilitarNuevo;
+	}
+
+	public boolean isMostrarPanelInferior() {
+		return mostrarPanelInferior;
+	}
+
+	public void setMostrarPanelInferior(boolean mostrarPanelInferior) {
+		this.mostrarPanelInferior = mostrarPanelInferior;
+	}
+
+	public boolean isRegistrarNuevo() {
+		return registrarNuevo;
+	}
+
+	public void setRegistrarNuevo(boolean registrarNuevo) {
+		this.registrarNuevo = registrarNuevo;
+	}
+
+	public boolean isHabilitarGrabar() {
+		return habilitarGrabar;
+	}
+
+	public void setHabilitarGrabar(boolean habilitarGrabar) {
+		this.habilitarGrabar = habilitarGrabar;
+	}
+
+	public boolean isSeleccionaRegistro() {
+		return seleccionaRegistro;
+	}
+
+	public void setSeleccionaRegistro(boolean seleccionaRegistro) {
+		this.seleccionaRegistro = seleccionaRegistro;
+	}
+
+	public PermisoFacadeRemote getPermisoFacade() {
+		return permisoFacade;
+	}
+
+	public void setPermisoFacade(PermisoFacadeRemote permisoFacade) {
+		this.permisoFacade = permisoFacade;
+	}
+
+	private boolean mostrarBtnEliminar;
+	private boolean mostrarMensajeExito;
+	private boolean mostrarMensajeError;
+	private boolean deshabilitarNuevo;
+	private boolean mostrarPanelInferior;
+	private boolean registrarNuevo;
+	private boolean habilitarGrabar;
+	private boolean seleccionaRegistro;
 	
 	private PermisoFacadeRemote permisoFacade;
 	
@@ -70,6 +195,7 @@ public class MayorizacionController {
 			password = permisoFacade.getPasswordPorPkYPass(password);
 			log.info("password: " + password);
 			if(password!=null){
+				cargarValoresIniciales();
 				outcome = "mayorizacion.formulario";
 			}else {
 				strMsgError = "Clave incorrecta. Favor verificar";
