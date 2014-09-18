@@ -97,7 +97,7 @@
                	<h:selectOneMenu
 					style="width: 100px;"
 					value="#{mayorizacionController.libroMayorFiltro.intParaEstadoCierreCod}">
-					<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOCIERRE}" 
+					<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION}" 
 						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 						tipoVista="#{applicationScope.Constante.CACHE_TOTAL}"/>	
 				</h:selectOneMenu>
