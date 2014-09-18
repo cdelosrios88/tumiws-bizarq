@@ -163,6 +163,9 @@ public class Constante {
 	public static final String PARAM_T_OPCIONDEBEHABER = "181";
 	public static final String PARAM_T_TIPOREGISTROMODELO = "182";
 	public static final String PARAM_T_TIPOESTADOCIERRE = "186";
+	//Inicio: REQ14-004 - bizarq - 17/09/2014
+	public static final String PARAM_T_TIPOESTADOMAYORIZACION = "188";
+	//Fin: REQ14-004 - bizarq - 17/09/2014
 	public static final String PARAM_T_DOCUMENTOGENERAL = "189";
 	public static final String PARAM_T_TIPOOPERACIONANUAL = "190";
 	public static final String PARAM_T_TIPOOPLANTILLAANEXODET = "191";
