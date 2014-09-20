@@ -180,8 +180,9 @@ var intSegundoSession = 0;
 	  if(fechaHoraTranscurrido>fechaHoraSession){
 	  	  //Inicio REQ14-002 bizarq 04-08-2014
 	  	  document.getElementById('hdnIndSesionSalir').value="1";
+	  	  document.getElementById('frmPrincipal:linkCerrar').click();
+	  	  top.frames['alto'].document.getElementById('linkLogin').click();
 	  	  //Fin REQ14-002 bizarq 04-08-2014
-		  document.getElementById('frmPrincipal:linkCerrar').click();
 		  window.clearInterval(handleSegundo);
 		  window.clearInterval(handleSession);
 		  handleSegundo = null;
