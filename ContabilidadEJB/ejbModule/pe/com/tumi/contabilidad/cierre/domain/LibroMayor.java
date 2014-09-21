@@ -13,7 +13,23 @@ public class LibroMayor extends TumiDomain {
 	private Integer intParaEstadoCierreCod;
 	private Integer intPersEmpresaUsuario;
 	private Integer intPersPersonaUsuario;
+	private Integer intEstadoCod;
+	private String strTablaIdentificador;
+	public Integer getIntEstadoCod() {
+		return intEstadoCod;
+	}
 
+	public void setIntEstadoCod(Integer intEstadoCod) {
+		this.intEstadoCod = intEstadoCod;
+	}
+
+	public String getStrTablaIdentificador() {
+		return strTablaIdentificador;
+	}
+
+	public void setStrTablaIdentificador(String strTablaIdentificador) {
+		this.strTablaIdentificador = strTablaIdentificador;
+	}
 	//para interfaz
 	private Natural naturalPersonaUsuario;
 	private List<LibroMayorDetalle> listaLibroMayorDetalle;
