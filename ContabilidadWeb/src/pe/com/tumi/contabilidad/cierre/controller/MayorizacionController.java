@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
+import pe.com.tumi.contabilidad.cierre.facade.CierreFacadeLocal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
@@ -26,10 +27,11 @@ public class MayorizacionController {
 	private List<SelectItem> listYears;
 	private Integer intAnio;
 	private Integer intMes;
-	private List listaLibroMayor;
+	private List<LibroMayor> listaLibroMayor;
 	private LibroMayor libroMayorFiltro;
 	private LibroMayor libroMayorNuevo;
-	private List listaAnios;
+	private List<SelectItem> listaAnios;
+	private CierreFacadeLocal cierreFacade;
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -155,6 +157,11 @@ public class MayorizacionController {
 	
 	public MayorizacionController(){
 		log = Logger.getLogger(this.getClass());
+		try{
+			cierreFacade = (CierreFacadeLocal) EJBFactory.getLocal(CierreFacadeLocal.class);
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
 		cargarValoresIniciales();
 	}
 	
@@ -163,6 +170,8 @@ public class MayorizacionController {
 			usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
 			if(usuario!=null){
 				permisoFacade = (PermisoFacadeRemote) EJBFactory.getRemote(PermisoFacadeRemote.class);
+				libroMayorFiltro = new LibroMayor();
+				listaLibroMayor = null;
 				strMsgError = null;
 				cargarListaAnios();
 			}else{
@@ -211,12 +220,10 @@ public class MayorizacionController {
 	}
 	
 	public void buscarMayorizado(){
-		Integer intPeriodo = null;
 		try {
-			intPeriodo = CommonUtils.concatPeriodo(intAnio, intMes);
-			
-			
-			
+			libroMayorFiltro.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
+			listaLibroMayor = cierreFacade.buscarLibroMayoreHistorico(libroMayorFiltro);
+			System.out.println("entro a este metodo :::");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
