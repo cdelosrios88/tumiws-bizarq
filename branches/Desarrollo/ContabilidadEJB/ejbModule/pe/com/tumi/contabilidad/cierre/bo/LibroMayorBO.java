@@ -87,6 +87,23 @@ public class LibroMayorBO {
 	}
 	
 	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public List<LibroMayor> getListMayorHist(LibroMayor libroMayor) throws BusinessException{
+		List<LibroMayor> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intContMesMayor", libroMayor.getId().getIntContMesMayor());
+			mapa.put("intContPeriodoMayor", libroMayor.getId().getIntContPeriodoMayor());
+			mapa.put("intEstadoCod", libroMayor.getIntEstadoCod());
+			mapa.put("intPersEmpresaMayor", libroMayor.getId().getIntPersEmpresaMayor());
+			lista = dao.getListMayorHist(mapa);
+			
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
 	public Integer processMayorizacion(Integer intPeriodo) throws BusinessException{
 		Integer intEscalar = null;
 		try{
