@@ -13,6 +13,8 @@
     <result property="intParaEstadoCierreCod"      	column="pParaEstadoCierre"/>
     <result property="intPersEmpresaUsuario"    	column="pPersEmpresaUsuario"/>
     <result property="intPersPersonaUsuario"    	column="pPersPersonaUsuario"/>
+    <result property="intEstadoCod"    				column="pParaEstadoCod"/>
+    <result property="strTablaIdentificador"    	column="pTablaDescripcion"/>
   </resultMap>
   
   <parameterMap id="parLibroMayor" class="LibroMayor">
@@ -20,6 +22,8 @@
 	 <parameter property="id.intContPeriodoMayor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intContMesMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strTablaIdentificador"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
      <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intPersEmpresaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intPersPersonaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
@@ -36,7 +40,8 @@
    	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
 	 <parameter property="intContMesMayor"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intContPeriodoMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
 
   <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
@@ -57,12 +62,10 @@
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroMayor">
 	{ call PKG_LIBROMAYOR.getListaPorPk(?,?,?,?) }
   </procedure> 	
-    
-  <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resLibroMayor">
-	{ call PKG_LIBROMAYOR.getListaPorBuscar(?,?,?,?) }
-  </procedure>
-  
   <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
+  <procedure id="getListMayorHist" parameterMap="parPorBuscar" resultMap="resLibroMayor">
+	{ call PKG_LIBROMAYOR.getListMayorHist(?,?,?,?,?) }
+  </procedure>
   <procedure id="processMayorizacion" parameterMap="parPorProcessMayorDB">
 	{ call PKG_LIBROMAYOR.processMayorizacion(?,?) }  
   </procedure>

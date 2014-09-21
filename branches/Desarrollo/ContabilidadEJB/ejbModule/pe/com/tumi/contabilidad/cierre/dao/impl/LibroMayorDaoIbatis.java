@@ -53,6 +53,16 @@ public class LibroMayorDaoIbatis extends TumiDaoIbatis implements LibroMayorDao{
 	}
 	
 	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public List<LibroMayor> getListMayorHist(Object o) throws DAOException{
+		List<LibroMayor> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListMayorHist", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	
 	public Integer processMayorizacion(Object o) throws DAOException{
 		Integer escalar = null;
 		try{
