@@ -203,6 +203,49 @@
 				rendered="#{mayorizacionController.mostrarMensajeError}"/>	
 		</h:panelGroup>	
 		
-		
+		<rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5;" styleClass="rich-tabcell-noborder"
+			id="panelBotonesFH">
+			<h:panelGrid columns="4">
+				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
+					actionListener="#{mayorizacionController.habilitarPanelInferior}" reRender="contPanelInferiorProcMay" />      												                 
+			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
+			    	actionListener="#{mayorizacionController.deshabilitarPanelInferior}" reRender="contPanelInferiorProcMay"/>      
+			</h:panelGrid>
+		</rich:panel>
+		<rich:panel id="contPanelInferiorProcMay" style="border:0px;">
+			<rich:spacer height="3px"/>  	 
+				<rich:panel id="panelInferior" style="border:1px solid #17356f;" rendered="#{mayorizacionController.mostrarPanelInferior}">
+					<rich:spacer height="3px"/>
+					<rich:column width="70" style="text-align: center;">
+		         		<h:outputText value="Periodo : "/>
+		         	</rich:column>
+		         	<rich:column width="150">
+		               	<h:selectOneMenu
+							style="width: 150px;"
+							value="#{mayorizacionController.libroMayorNuevo.id.intContMesMayor}">
+							<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO_TODOS}" itemLabel="Todos los meses"/>
+							<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO}" 
+								itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
+								propertySort="intOrden"/>
+						</h:selectOneMenu>
+		            </rich:column>
+		            <rich:column width="70">
+		               	<h:selectOneMenu
+							style="width: 70px;"
+							value="#{mayorizacionController.libroMayorNuevo.id.intContPeriodoMayor}">
+							<tumih:selectItems var="sel"
+								value="#{mayorizacionController.listYears}" 
+								itemValue="#{sel.value}" 
+								itemLabel="#{sel.label}"/>
+						</h:selectOneMenu>
+		            </rich:column>
+		            <rich:column width="90" style="text-align: right;">
+		               	<a4j:commandButton styleClass="btnEstilos"
+		               		value="Procesar"
+		                   	action="#{mayorizacionController.procesarMayorizado}" style="width:70px"/>
+		            </rich:column>
+		            <rich:spacer height="3px"/>
+				</rich:panel>
+		</rich:panel>
     </h:panelGroup>
 </h:form>
