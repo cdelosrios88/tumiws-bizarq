@@ -8,11 +8,14 @@
 */
 package pe.com.tumi.contabilidad.core.facade;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import pe.com.tumi.contabilidad.cierre.bo.LibroMayorBO;
+import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.cierre.service.LibroMayorService;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
@@ -53,4 +56,18 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
 		return intIdLibroMayor;
 	}
     
+	//Inicio: REQ14-004 - bizarq - 16/09/2014ç
+	public List<LibroMayor> buscarLibroMayoreHistorico(LibroMayor o) throws BusinessException{
+		List<LibroMayor> lista = null;
+   		try{
+   			lista = boLibroMayor.getListMayorHist(o);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+   		return lista;
+	}
+	//Fin: REQ14-004 - bizarq - 16/09/2014
+
 }
