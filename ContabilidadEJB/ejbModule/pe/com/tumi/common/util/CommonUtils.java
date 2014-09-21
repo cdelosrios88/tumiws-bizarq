@@ -38,10 +38,10 @@ public class CommonUtils {
 	public static final List<SelectItem> getListAnios() {
 		List<SelectItem> listYears = new ArrayList<SelectItem>(); 
 		try {
-			int year=Calendar.getInstance().get(Calendar.YEAR)+5;
+			int year=Calendar.getInstance().get(Calendar.YEAR);
 			int cont=0;
 
-			for(int j=year; j>=year-6; j--){
+			for(int j=year; j>=year-5; j--){
 				cont++;
 			}			
 			for(int i=0; i<cont; i++){
