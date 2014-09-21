@@ -3,6 +3,7 @@ package pe.com.tumi.contabilidad.cierre.controller;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
@@ -172,8 +173,10 @@ public class MayorizacionController {
 			if(usuario!=null){
 				permisoFacade = (PermisoFacadeRemote) EJBFactory.getRemote(PermisoFacadeRemote.class);
 				libroMayorFiltro = new LibroMayor();
+				libroMayorNuevo = new LibroMayor();
 				listaLibroMayor = null;
 				strMsgError = null;
+				mostrarPanelInferior = Boolean.FALSE;
 				cargarListaAnios();
 			}else{
 				log.error("--Usuario obtenido es NULL.");
@@ -231,6 +234,13 @@ public class MayorizacionController {
 		
 	}
 
+	public void habilitarPanelInferior(ActionEvent event){
+		mostrarPanelInferior = Boolean.TRUE;
+	}
+	public void deshabilitarPanelInferior(ActionEvent event){
+		mostrarPanelInferior = Boolean.FALSE;
+	}
+	
 	public String getStrPassword() {
 		return strPassword;
 	}
