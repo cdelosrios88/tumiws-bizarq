@@ -12,6 +12,7 @@ import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.cierre.facade.CierreFacadeLocal;
+import pe.com.tumi.contabilidad.core.facade.MayorizacionFacadeLocal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
@@ -31,7 +32,7 @@ public class MayorizacionController {
 	private LibroMayor libroMayorFiltro;
 	private LibroMayor libroMayorNuevo;
 	private List<SelectItem> listaAnios;
-	private CierreFacadeLocal cierreFacade;
+	private MayorizacionFacadeLocal mayorizacionFacade;
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -158,7 +159,7 @@ public class MayorizacionController {
 	public MayorizacionController(){
 		log = Logger.getLogger(this.getClass());
 		try{
-			cierreFacade = (CierreFacadeLocal) EJBFactory.getLocal(CierreFacadeLocal.class);
+			mayorizacionFacade = (MayorizacionFacadeLocal) EJBFactory.getLocal(MayorizacionFacadeLocal.class);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -222,7 +223,7 @@ public class MayorizacionController {
 	public void buscarMayorizado(){
 		try {
 			libroMayorFiltro.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
-			listaLibroMayor = cierreFacade.buscarLibroMayoreHistorico(libroMayorFiltro);
+			listaLibroMayor = mayorizacionFacade.buscarLibroMayoreHistorico(libroMayorFiltro);
 			System.out.println("entro a este metodo :::");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
