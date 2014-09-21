@@ -107,7 +107,7 @@
          	<rich:column width="50" style="text-align: right;">
                	<a4j:commandButton styleClass="btnEstilos"
                		value="Buscar" reRender="panelTablaContabilidad,panelMensaje"
-                   	action="#{mayorizacionController.buscar}" style="width:70px"/>
+                   	action="#{mayorizacionController.buscarMayorizado}" style="width:70px"/>
             </rich:column>
 		</h:panelGrid>
 		
@@ -128,17 +128,15 @@
 					<rich:column width="30px" style="text-align: center">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
-                  	<rich:column width="200px" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Código"/>
-                      	</f:facet>
-						<h:outputText value="#{item.id.intContMesMayor}"/>
-                	</rich:column>
                     <rich:column width="250" style="text-align: center">
                     	<f:facet name="header">
                       		<h:outputText value="Periodo"/>                      		
                       	</f:facet>
-						<h:outputText value="#{item.id.intContPeriodoMayor}"/>
+                      	<h:outputText value="#{item.id.intContPeriodoMayor}"/> -
+                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO}" 
+							itemValue="intIdDetalle" itemLabel="strDescripcion" 
+							property="#{item.id.intContMesMayor}"/>
+						
                   	</rich:column>
                   	<rich:column width="170" style="text-align: center">
                    		<f:facet name="header">
