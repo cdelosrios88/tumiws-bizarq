@@ -104,11 +104,15 @@ public class LibroMayorBO {
 		}
 		return lista;
 	}
-	public Integer processMayorizacion(Integer intPeriodo) throws BusinessException{
+	public Integer processMayorizacion(LibroMayor o) throws BusinessException{
 		Integer intEscalar = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intPeriodo", intPeriodo);
+			mapa.put("intAnio", 	 o.getId().getIntContPeriodoMayor());
+			mapa.put("intMes", 		 o.getId().getIntContMesMayor());
+			mapa.put("intIdEmpresa", o.getId().getIntPersEmpresaMayor());
+			mapa.put("intIdEmpresaUsuario", o.getIntPersEmpresaUsuario());
+			mapa.put("intIdUsuario", o.getIntPersPersonaUsuario());
 			intEscalar = dao.processMayorizacion(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);

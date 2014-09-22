@@ -586,5 +586,12 @@ public class Constante {
 	
 	//Inicio: REQ14-004 - bizarq - 14/09/2014
 	public static final Integer INT_IDTRANSACCION_MAYORIZACION = 143;
+	public static final Integer PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO = 1;
+	public static final Integer PARAM_T_TIPOESTADOMAYORIZACION_ELIMINADO = 2;
+	public static final Integer PARAM_T_TIPOESTADOMAYORIZACION_REGISTRADO = 3;
+	public static final Integer PARAM_T_TIPOESTADOMAYORIZACION_FALLIDO = 4;
+	
+	public static final Integer ON_FAIL = 0;
+	public static final Integer ON_SUCCESS = 1;
 	//Fin: REQ14-004 - bizarq - 14/09/2014
 }

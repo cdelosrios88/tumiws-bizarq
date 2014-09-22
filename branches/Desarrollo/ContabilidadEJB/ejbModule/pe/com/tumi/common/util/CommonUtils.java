@@ -8,6 +8,7 @@ package pe.com.tumi.common.util;
  * Fecha: 24/05/2014
  * */
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -86,4 +87,14 @@ public class CommonUtils {
 		}
 		return intIdSucursal;
 	}
+	
+	public static final Calendar getPreviousMonth(Integer intYear, Integer intMonth){
+		//SimpleDateFormat format = new SimpleDateFormat(strDateFormat);
+		Calendar cal = Calendar.getInstance();
+		cal.set(intYear, intMonth, Calendar.DAY_OF_MONTH);
+		cal.add(Calendar.MONTH, -1);
+		//System.out.println(format.format(cal.getTime()));
+		return cal;
+	}
+	
 }

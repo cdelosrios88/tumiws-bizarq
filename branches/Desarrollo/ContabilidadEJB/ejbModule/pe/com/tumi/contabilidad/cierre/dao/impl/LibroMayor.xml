@@ -66,6 +66,7 @@
   <procedure id="getListMayorHist" parameterMap="parPorBuscar" resultMap="resLibroMayor">
 	{ call PKG_LIBROMAYOR.getListMayorHist(?,?,?,?,?) }
   </procedure>
+  
   <procedure id="processMayorizacion" parameterMap="parPorProcessMayorDB">
 	{ call PKG_LIBROMAYOR.processMayorizacion(?,?) }  
   </procedure>
