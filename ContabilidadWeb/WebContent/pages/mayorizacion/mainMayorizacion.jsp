@@ -12,7 +12,7 @@
 <h:form id="frmLoginMayorizacion">
 	<div align="center">
 		<br/>
-		<font size="5"><b>Mayorización - Favor ingresar el password de modo que pueda acceder al formulario principal</b></font>
+		<font size="5"><b>MayorizaciÃ³n - Favor ingresar el password de modo que pueda acceder al formulario principal</b></font>
 		<br/><br/>
 		<rich:panel id="tabla" style="width:960px;border:1px solid #17356f;background-color:#DEEBF5;">
 			<rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5;" >

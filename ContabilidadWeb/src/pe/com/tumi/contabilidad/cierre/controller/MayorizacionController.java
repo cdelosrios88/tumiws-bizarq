@@ -1,7 +1,9 @@
 package pe.com.tumi.contabilidad.cierre.controller;
 
+import java.util.Calendar;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -34,6 +36,9 @@ public class MayorizacionController {
 	private LibroMayor libroMayorNuevo;
 	private List<SelectItem> listaAnios;
 	private MayorizacionFacadeLocal mayorizacionFacade;
+	private CierreFacadeLocal cierreFacade;
+	private String strErrorValidateMsg;
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -161,6 +166,7 @@ public class MayorizacionController {
 		log = Logger.getLogger(this.getClass());
 		try{
 			mayorizacionFacade = (MayorizacionFacadeLocal) EJBFactory.getLocal(MayorizacionFacadeLocal.class);
+			cierreFacade = (CierreFacadeLocal) EJBFactory.getLocal(CierreFacadeLocal.class);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -220,7 +226,53 @@ public class MayorizacionController {
 	}
 	
 	public void procesarMayorizado(){
-		
+		boolean isValidProcess;
+		Integer intReturnResp;
+		try {
+			isValidProcess = isValidateMayorizadoProcess();
+			if(!isValidProcess){
+				intReturnResp = mayorizacionFacade.processMayorizacion(libroMayorNuevo);
+				if(intReturnResp!=null && intReturnResp.equals(Constante.ON_SUCCESS)){
+					FacesContext.getCurrentInstance().addMessage("", new FacesMessage("éxito!"));
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	private boolean isValidateMayorizadoProcess(){
+		boolean isReturn=false;
+		LibroMayor libroMayor = null;
+		Calendar calDate = null;
+		strErrorValidateMsg = null;
+		try {
+			libroMayorNuevo.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
+			libroMayor = cierreFacade.getLibroMayorPorPk(libroMayorNuevo.getId());
+			if(libroMayor!=null){
+				strErrorValidateMsg = "El proceso a ejecutar existe con el mismo periodo, favor verificar!";
+				return true;
+			}
+			//Si el mes anterior ya posee un proceso mayorizado.
+			calDate = pe.com.tumi.common.util.CommonUtils.getPreviousMonth(
+					libroMayorNuevo.getId().getIntContMesMayor(), 
+					libroMayorNuevo.getId().getIntContPeriodoMayor());
+			log.info("mes: " + calDate.get(Calendar.getInstance().MONTH)+1);
+			log.info("año: " + calDate.get(Calendar.getInstance().YEAR));
+			libroMayor = new LibroMayor();
+			libroMayor.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
+			libroMayor.getId().setIntContMesMayor(calDate.get(Calendar.getInstance().MONTH)+1);
+			libroMayor.getId().setIntContPeriodoMayor(calDate.get(Calendar.getInstance().YEAR));
+			libroMayor = cierreFacade.getLibroMayorPorPk(libroMayor.getId());
+			if(libroMayor!=null){
+				strErrorValidateMsg = "El Periodo ingresado no puede ser procesado debido a que no se ha procesado el mes anterior";
+				return true;
+			}
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return isReturn;
 	}
 	
 	public void buscarMayorizado(){
@@ -236,6 +288,8 @@ public class MayorizacionController {
 
 	public void habilitarPanelInferior(ActionEvent event){
 		mostrarPanelInferior = Boolean.TRUE;
+		libroMayorNuevo = new LibroMayor();
+		
 	}
 	public void deshabilitarPanelInferior(ActionEvent event){
 		mostrarPanelInferior = Boolean.FALSE;
@@ -279,5 +333,13 @@ public class MayorizacionController {
 
 	public void setIntMes(Integer intMes) {
 		this.intMes = intMes;
+	}
+
+	public String getStrErrorValidateMsg() {
+		return strErrorValidateMsg;
+	}
+
+	public void setStrErrorValidateMsg(String strErrorValidateMsg) {
+		this.strErrorValidateMsg = strErrorValidateMsg;
 	}
 }

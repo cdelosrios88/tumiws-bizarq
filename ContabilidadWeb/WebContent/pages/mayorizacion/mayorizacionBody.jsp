@@ -94,12 +94,10 @@
          		<h:outputText value="Estado : "/>
          	</rich:column>
          	<rich:column width="100">
-               	<h:selectOneMenu
-					style="width: 100px;"
+               	<h:selectOneMenu style="width: 100px;"
 					value="#{mayorizacionController.libroMayorFiltro.intParaEstadoCierreCod}">
-					<f:selectItem itemLabel="Todos" itemValue="-1"/>
 					<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION}" 
-						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
+						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}" propertySort="intOrden"
 						tipoVista="#{applicationScope.Constante.CACHE_TOTAL}"/>	
 				</h:selectOneMenu>
             </rich:column>
@@ -113,83 +111,72 @@
 		</h:panelGrid>
 		
 		<rich:spacer height="12px"/>           
-                
-        <h:panelGrid id="panelTablaContabilidad">
-	       	<rich:extendedDataTable id="tblContabilidad" 
-	         		enableContextMenu="false" 
-	          		sortMode="single" 
-                    var="item" 
-                    value="#{mayorizacionController.listaLibroMayor}"  
-					rowKeyVar="rowKey" 
-					rows="5" 
-					width="940px" 
-					height="225px" 
-					align="center">
-                                
-					<rich:column width="30px" style="text-align: center">
-                    	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
-                    </rich:column>
-                    <rich:column width="250" style="text-align: center">
-                    	<f:facet name="header">
-                      		<h:outputText value="Periodo"/>                      		
-                      	</f:facet>
-                      	<h:outputText value="#{item.id.intContPeriodoMayor}"/> -
-                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO}" 
-							itemValue="intIdDetalle" itemLabel="strDescripcion" 
-							property="#{item.id.intContMesMayor}"/>
-						
-                  	</rich:column>
-                  	<rich:column width="170" style="text-align: center">
-                   		<f:facet name="header">
-                        	<h:outputText value="Estado Cierre"/>
-                        </f:facet>
-						<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOCIERRE}" 
-							itemValue="intIdDetalle" itemLabel="strDescripcion" 
-							property="#{item.intParaEstadoCierreCod}"/>
-                  	</rich:column>
-                   	<rich:column width="200" style="text-align: center">
-                  		<f:facet name="header">
-                        	<h:outputText value="Estado Mayorizacion"/>
-                     	</f:facet>
-                     	<h:panelGroup rendered="#{item.esProcesado}">
-                     		<h:outputText value="Procesado"/>
-                     	</h:panelGroup>
-                     	<h:panelGroup rendered="#{!item.esProcesado}">
-                     		<h:outputText value="Por Procesar"/>
-                     	</h:panelGroup>
-                  	</rich:column>
-                  	<rich:column width="180" style="text-align: center">
-                  		<f:facet name="header">
-                        	<h:outputText value=""/>
-                     	</f:facet>
-                     	<h:panelGroup rendered="#{item.esProcesado}">
-                     		<a4j:commandButton styleClass="btnEstilos"
-	               				value="Procesado" style="width:90px"
-	               				disabled="true"/>
-                     	</h:panelGroup>
-                     	<h:panelGroup rendered="#{!item.esProcesado}">
-                     		<a4j:commandButton styleClass="btnEstilos"
-	               				value="Procesar" style="width:90px"
-	               				disabled="#{item.intParaEstadoCierreCod==applicationScope.Constante.PARAM_T_TIPOESTADOCIERRE_ABIERTO}"
-	               				reRender="panelTablaContabilidad,panelBotones,panelMensaje"
-	               				actionListener="#{mayorizacionController.seleccionarProcesar}">
-	               					<f:attribute name="item" value="#{item}"/>
-	               			</a4j:commandButton>
-                     	</h:panelGroup>                     	
-                  	</rich:column>
-                    <f:facet name="footer">
-						<rich:datascroller for="tblContabilidad" maxPages="10"/>   
-					</f:facet>
-					<a4j:support event="onRowClick"
-						actionListener="#{mayorizacionController.seleccionarRegistro}"
-						oncomplete="if(#{item.esProcesado}&&#{mayorizacionController.seleccionaRegistro}){Richfaces.showModalPanel('pAlertaRegistro');onCompleteFunction()}">
-                        	<f:attribute name="item" value="#{item}"/>
-                   	</a4j:support>
-                   	<a4j:jsFunction name="onCompleteFunction" reRender="frmAlertaRegistro" ajaxSingle="true"/>
-                   	
-            </rich:extendedDataTable>
-            	
-         </h:panelGrid>
+        
+        <div align="center">
+        	<h:panelGrid id="panelTablaContabilidad">
+		       	<rich:extendedDataTable id="tblContabilidad" 
+		         		enableContextMenu="false" 
+		          		sortMode="single" 
+	                    var="item" 
+	                    value="#{mayorizacionController.listaLibroMayor}"  
+						rowKeyVar="rowKey" 
+						rows="5"
+						width="715px" 
+						height="225px" 
+						align="center">
+	                                
+						<rich:column width="30px" style="text-align: center">
+	                    	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
+	                    </rich:column>
+	                    <rich:column width="200" style="text-align: center">
+	                    	<f:facet name="header">
+	                      		<h:outputText value="Periodo"/>                      		
+	                      	</f:facet>
+	                      	<h:outputText value="#{item.id.intContPeriodoMayor}"/> -
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO}" 
+								itemValue="intIdDetalle" itemLabel="strDescripcion" 
+								property="#{item.id.intContMesMayor}"/>
+							
+	                  	</rich:column>
+	                  	<rich:column width="170" style="text-align: center">
+	                   		<f:facet name="header">
+	                        	<h:outputText value="Estado Cierre"/>
+	                        </f:facet>
+							<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOCIERRE}" 
+								itemValue="intIdDetalle" itemLabel="strDescripcion" 
+								property="#{item.intParaEstadoCierreCod}"/>
+	                  	</rich:column>
+	                   	<rich:column width="200" style="text-align: center">
+	                  		<f:facet name="header">
+	                        	<h:outputText value="Estado Mayorizacion"/>
+	                     	</f:facet>
+	                     	<h:panelGroup rendered="#{item.esProcesado}">
+	                     		<h:outputText value="Procesado"/>
+	                     	</h:panelGroup>
+	                     	<h:panelGroup rendered="#{!item.esProcesado}">
+	                     		<h:outputText value="Por Procesar"/>
+	                     	</h:panelGroup>
+	                  	</rich:column>
+	                  	<rich:column width="60" style="text-align: center">
+	                  		<f:facet name="header">
+	                        	<h:outputText value=""/>
+	                     	</f:facet>
+	                     	<a4j:commandLink id="lnkDelete" styleClass="no-decor" reRender="tblContabilidad"
+			            		actionListener="#{mayorizacionController.deleteMayorizado}" 
+			            		rendered="#{item.intEstadoCod==applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO}"
+			            		onclick="if(!confirm('Está Ud. Seguro de Eliminar este Registro?'))return false;">
+			                    <h:graphicImage value="/images/icons/delete.png" alt="delete"/>
+			                    <f:param value="#{rowKey}" name="rowKeyCapacidadDscto"/>
+			            		<rich:toolTip for="lnkDelete" value="Eliminar" followMouse="true"/>
+			            	</a4j:commandLink>
+	                  	</rich:column>
+	                    <f:facet name="footer">
+							<rich:datascroller for="tblContabilidad" maxPages="10"/>   
+						</f:facet>
+	                   	<a4j:jsFunction name="onCompleteFunction" reRender="frmAlertaRegistro" ajaxSingle="true"/>
+	            </rich:extendedDataTable>
+         	</h:panelGrid>
+        </div>
 			
 		<h:panelGroup id="panelMensaje" style="border: 0px solid #17356f;background-color:#DEEBF5;width:100%"
 			styleClass="rich-tabcell-noborder">
@@ -242,10 +229,15 @@
 		            <rich:column width="90" style="text-align: right;">
 		               	<a4j:commandButton styleClass="btnEstilos"
 		               		value="Procesar"
-		                   	action="#{mayorizacionController.procesarMayorizado}" style="width:70px"/>
+		                   	action="#{mayorizacionController.procesarMayorizado}" style="width:70px"
+		                   	reRender="panelValidMsgError"/>
 		            </rich:column>
 		            <rich:spacer height="3px"/>
 				</rich:panel>
 		</rich:panel>
+		<h:panelGrid id="panelValidMsgError">
+			<h:outputText value="#{mayorizacionController.strErrorValidateMsg}" styleClass="msgError"/>
+		</h:panelGrid>
+		
     </h:panelGroup>
 </h:form>
