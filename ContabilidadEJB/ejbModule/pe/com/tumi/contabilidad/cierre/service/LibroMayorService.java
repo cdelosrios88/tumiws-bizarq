@@ -15,7 +15,7 @@ public class LibroMayorService {
 	//LibroDiarioDetalleBO boLibroDiarioDetalle = (LibroDiarioDetalleBO)TumiFactory.get(LibroDiarioDetalleBO.class);
 	LibroMayorBO boLibroMayor = (LibroMayorBO)TumiFactory.get(LibroMayorBO.class);
 	
-	public Integer processMayorizacion(Integer intPeriodo)throws Exception{
+	/*public Integer processMayorizacion(Integer intPeriodo)throws Exception{
 		LibroMayorComp libroMayorComp = null;
 		Integer intIdLibroMayor = null;
 		try{
@@ -25,5 +25,5 @@ public class LibroMayorService {
 		}
 			
 		return intIdLibroMayor;
-	}
+	}*/
 }

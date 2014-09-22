@@ -42,10 +42,10 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
         // TODO Auto-generated constructor stub
     }
     
-    public Integer processMayorizacion(Integer intPeriodo)throws BusinessException{
+    public Integer processMayorizacion(LibroMayor o)throws BusinessException{
     	Integer intIdLibroMayor = null;
 		try{
-			intIdLibroMayor = boLibroMayor.processMayorizacion(intPeriodo);
+			intIdLibroMayor = boLibroMayor.processMayorizacion(o);
 		}catch(BusinessException e){
 			context.setRollbackOnly();
 			throw e;
@@ -56,7 +56,7 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
 		return intIdLibroMayor;
 	}
     
-	//Inicio: REQ14-004 - bizarq - 16/09/2014ç
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
 	public List<LibroMayor> buscarLibroMayoreHistorico(LibroMayor o) throws BusinessException{
 		List<LibroMayor> lista = null;
    		try{

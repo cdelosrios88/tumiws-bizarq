@@ -14,8 +14,6 @@ import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 
 public interface MayorizacionFacadeLocal {
-	public Integer processMayorizacion(Integer intPeriodo)throws BusinessException;
-	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public Integer processMayorizacion(LibroMayor o)throws BusinessException;
 	public List<LibroMayor> buscarLibroMayoreHistorico(LibroMayor o) throws BusinessException;
-	//Fin: REQ14-004 - bizarq - 16/09/2014
 }
