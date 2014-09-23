@@ -91,7 +91,7 @@ public class CommonUtils {
 	public static final Calendar getPreviousMonth(Integer intYear, Integer intMonth){
 		//SimpleDateFormat format = new SimpleDateFormat(strDateFormat);
 		Calendar cal = Calendar.getInstance();
-		cal.set(intYear, intMonth, Calendar.DAY_OF_MONTH);
+		cal.set(intYear, intMonth-1, Calendar.DAY_OF_MONTH);
 		cal.add(Calendar.MONTH, -1);
 		//System.out.println(format.format(cal.getTime()));
 		return cal;
