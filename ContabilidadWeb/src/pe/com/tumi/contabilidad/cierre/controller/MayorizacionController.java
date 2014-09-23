@@ -254,9 +254,9 @@ public class MayorizacionController {
 				return true;
 			}
 			//Si el mes anterior ya posee un proceso mayorizado.
-			calDate = pe.com.tumi.common.util.CommonUtils.getPreviousMonth(
-					libroMayorNuevo.getId().getIntContMesMayor(), 
-					libroMayorNuevo.getId().getIntContPeriodoMayor());
+			calDate = CommonUtils.getPreviousMonth(
+					libroMayorNuevo.getId().getIntContPeriodoMayor(),
+					libroMayorNuevo.getId().getIntContMesMayor());
 			log.info("mes: " + calDate.get(Calendar.getInstance().MONTH)+1);
 			log.info("año: " + calDate.get(Calendar.getInstance().YEAR));
 			libroMayor = new LibroMayor();
