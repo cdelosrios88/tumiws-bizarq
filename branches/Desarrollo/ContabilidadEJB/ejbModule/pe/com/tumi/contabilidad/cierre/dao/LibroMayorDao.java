@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-004				   25/09/2014	     Christian De los Rios      Proceso de mayorización
+*/
 package pe.com.tumi.contabilidad.cierre.dao;
 
 import java.util.List;
