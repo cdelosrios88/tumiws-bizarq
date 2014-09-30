@@ -306,7 +306,7 @@ public class MayorizacionController {
 				return true;
 			}
 			//Validar cuentas padre
-			//isReturn = (validateBookAccounts(libroMayorNuevo.getId().getIntContPeriodoMayor()));
+			isReturn = (validateBookAccounts(libroMayorNuevo.getId().getIntContPeriodoMayor()));
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
