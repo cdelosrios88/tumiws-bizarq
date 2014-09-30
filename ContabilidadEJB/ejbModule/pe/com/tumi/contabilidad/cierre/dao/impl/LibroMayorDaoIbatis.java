@@ -2,7 +2,7 @@
 * Modificaciones
 * Motivo                      Fecha            Nombre                      Descripción
 * -----------------------------------------------------------------------------------------------------------
-* REQ14-004				   25/09/2014	     Christian De los Rios      Proceso de mayorización
+* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevos métodos para regularizar la mayorización
 */
 package pe.com.tumi.contabilidad.cierre.dao.impl;
 
@@ -75,11 +75,33 @@ public class LibroMayorDaoIbatis extends TumiDaoIbatis implements LibroMayorDao{
 			HashMap<String, Object> m = null;
 			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".processMayorizacion",o);
 			m = (HashMap<String, Object>)o;
-			escalar = (Integer)m.get("intEscalar");
+			escalar = (Integer)m.get("intResult");
 		}catch(Exception e) {
 			throw new DAOException(e);
 		}
 		return escalar;
+	}
+	
+	public List<LibroMayor> getListAfterProcessedMayorizado(Object o) throws DAOException{
+		List<LibroMayor> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListAfterProcessedMayorizado", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	
+	public LibroMayor eliminarMayorizado(LibroMayor o) throws DAOException{
+		LibroMayor dto = null;
+		try {
+			//getSqlMapClientTemplate().update(getNameSpace() + ".eliminarMayorizado", o);
+			getSqlMapClientTemplate().delete(getNameSpace() + ".eliminarMayorizado", o);
+			dto = o;
+		}catch(Exception e){
+			throw new DAOException(e);
+		}
+		return dto;
 	}
 	//Inicio: REQ14-004 - bizarq - 16/09/2014
 }

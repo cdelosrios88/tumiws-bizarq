@@ -1,9 +1,15 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevos métodos para regularizar la mayorización         
+*/
 package pe.com.tumi.contabilidad.cierre.bo;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.contabilidad.cierre.dao.LibroMayorDao;
 import pe.com.tumi.contabilidad.cierre.dao.impl.LibroMayorDaoIbatis;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
@@ -91,9 +97,9 @@ public class LibroMayorBO {
 		List<LibroMayor> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intContMesMayor", libroMayor.getId().getIntContMesMayor());
+			mapa.put("intContMesMayor", (libroMayor.getId().getIntContMesMayor().equals(Constante.PARAM_T_MES_CALENDARIO_TODOS)?null:libroMayor.getId().getIntContMesMayor()));
 			mapa.put("intContPeriodoMayor", libroMayor.getId().getIntContPeriodoMayor());
-			mapa.put("intEstadoCod", libroMayor.getIntEstadoCod());
+			mapa.put("intEstadoCod", libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TODOS)?null:libroMayor.getIntEstadoCod());
 			mapa.put("intPersEmpresaMayor", libroMayor.getId().getIntPersEmpresaMayor());
 			lista = dao.getListMayorHist(mapa);
 			
@@ -104,15 +110,16 @@ public class LibroMayorBO {
 		}
 		return lista;
 	}
-	public Integer processMayorizacion(LibroMayor o) throws BusinessException{
+	public Integer processMayorizacion(LibroMayor o, String strPeriodo) throws BusinessException{
 		Integer intEscalar = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intAnio", 	 o.getId().getIntContPeriodoMayor());
-			mapa.put("intMes", 		 o.getId().getIntContMesMayor());
-			mapa.put("intIdEmpresa", o.getId().getIntPersEmpresaMayor());
-			mapa.put("intIdEmpresaUsuario", o.getIntPersEmpresaUsuario());
-			mapa.put("intIdUsuario", o.getIntPersPersonaUsuario());
+			mapa.put("intMesMayor", 	 o.getId().getIntContMesMayor());
+			mapa.put("intAnioPeriodo",   o.getId().getIntContPeriodoMayor());
+			mapa.put("intParaEmpresaMayor", o.getId().getIntPersEmpresaMayor());
+			mapa.put("intParaEmpresaUsuario", o.getIntPersEmpresaUsuario());
+			mapa.put("intPersonaUsuarioPk", o.getIntPersPersonaUsuario());
+			mapa.put("intContPeriodoMayor", strPeriodo);
 			intEscalar = dao.processMayorizacion(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);
@@ -121,5 +128,34 @@ public class LibroMayorBO {
 		}
 		return intEscalar;
 	}
+	
+	public List<LibroMayor> getListAfterProcessedMayorizado(LibroMayor libroMayor) throws BusinessException{
+		List<LibroMayor> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intContMesMayor", libroMayor.getId().getIntContMesMayor());
+			mapa.put("intContPeriodoMayor", libroMayor.getId().getIntContPeriodoMayor());
+			mapa.put("intEstadoCod", libroMayor.getIntEstadoCod());
+			lista = dao.getListAfterProcessedMayorizado(mapa);
+			
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	public LibroMayor eliminarMayorizado(LibroMayor o) throws BusinessException{
+  		LibroMayor dto = null;
+     	try{
+		     dto = dao.eliminarMayorizado(o);
+	  	}catch(DAOException e){
+	  		 throw new BusinessException(e);
+	    }catch(Exception e){
+	    	 throw new BusinessException(e);
+	    }
+	    return dto;
+    }
 	//Fin: REQ14-004 - bizarq - 16/09/2014
 }

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
 	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<!-- 
+/************************************************************************/
+/* Nombre de componente: LibroMayor */
+/* Descripción: Componente mapeador de objetos entre la clase LibroMayor y la tabla 
+		CON_LIBROMAYOR  */
+/* Cod. Req.: REQ14-004   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1 */
+/* Fecha creación : 27/09/2014 */
+/* ********************************************************************* */
+-->
+	
 <sqlMap namespace="LibroMayorDaoIbatis">
 
   <typeAlias type="pe.com.tumi.contabilidad.cierre.domain.LibroMayor" alias="LibroMayor"/> 
@@ -23,11 +36,24 @@
 	 <parameter property="id.intContMesMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
 	 <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
-     <parameter property="strTablaIdentificador"	javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
      <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intPersEmpresaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intPersPersonaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
+  
+  <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
+  <parameterMap id="parLibroMayorYHist" class="LibroMayor">
+	 <parameter property="id.intPersEmpresaMayor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContPeriodoMayor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intContMesMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
+     <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersEmpresaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intPersPersonaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="strIpAddress"				javaType="java.lang.String" 	jdbcType="VARCHAR"		mode="INOUT"/>
+  </parameterMap>
+  <!-- Fin: REQ14-004 - bizarq - 16/09/2014 -->
   
   <parameterMap id="parPorPk" class="java.util.Map">
    	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
@@ -46,17 +72,29 @@
 
   <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
   <parameterMap id="parPorProcessMayorDB" class="java.util.Map">
-	 <parameter property="intPeriodo"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="IN"/>
-	 <parameter property="intEscalar" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="OUT"/>
+	 <parameter property="intResult"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="OUT"/>
+	 <parameter property="intMesMayor" 			jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="IN"/>
+	 <parameter property="intAnioPeriodo"		jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="IN"/>
+	 <parameter property="intParaEmpresaMayor"	jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="IN"/>
+	 <parameter property="intParaEmpresaUsuario" jdbcType="NUMERIC" 	javaType="java.lang.Integer"	mode="IN"/>
+	 <parameter property="intPersonaUsuarioPk" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="IN"/>
+	 <parameter property="intContPeriodoMayor"	jdbcType="VARCHAR" 		javaType="java.lang.String"		mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorProcessedPeriod" class="java.util.Map">
+   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intContMesMayor"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
   <!-- Fin: REQ14-004 - bizarq - 16/09/2014 -->
   
   <procedure id="grabar" parameterMap="parLibroMayor">
-	{ call PKG_LIBROMAYOR.grabar(?,?,?,?,?,?,?) }  
+	{ call PKG_LIBROMAYOR.grabar(?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parLibroMayor" >
-	{ call PKG_LIBROMAYOR.modificar(?,?,?,?,?,?,?) }  
+	{ call PKG_LIBROMAYOR.modificar(?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroMayor">
@@ -68,7 +106,15 @@
   </procedure>
   
   <procedure id="processMayorizacion" parameterMap="parPorProcessMayorDB">
-	{ call PKG_LIBROMAYOR.processMayorizacion(?,?) }  
+	{ call PKG_LIBROMAYOR.processMayorizacion(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListAfterProcessedMayorizado" parameterMap="parPorProcessedPeriod" resultMap="resLibroMayor">
+	{ call PKG_LIBROMAYOR.getAfterProcessedByPeriod(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="eliminarMayorizado" parameterMap="parLibroMayorYHist" >
+	{ call PKG_LIBROMAYOR.deleteMayorizado(?,?,?,?,?,?,?,?,?) }  
   </procedure>
   <!-- Fin: REQ14-004 - bizarq - 16/09/2014 -->
    	

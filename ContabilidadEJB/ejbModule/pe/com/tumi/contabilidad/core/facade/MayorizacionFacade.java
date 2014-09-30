@@ -14,6 +14,8 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
+import org.apache.openjpa.lib.log.Log;
+
 import pe.com.tumi.contabilidad.cierre.bo.LibroMayorBO;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.cierre.service.LibroMayorService;
@@ -42,10 +44,10 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
         // TODO Auto-generated constructor stub
     }
     
-    public Integer processMayorizacion(LibroMayor o)throws BusinessException{
+    public Integer processMayorizacion(LibroMayor o, String strPeriodo)throws BusinessException{
     	Integer intIdLibroMayor = null;
 		try{
-			intIdLibroMayor = boLibroMayor.processMayorizacion(o);
+			intIdLibroMayor = boLibroMayor.processMayorizacion(o, strPeriodo);
 		}catch(BusinessException e){
 			context.setRollbackOnly();
 			throw e;
@@ -68,6 +70,29 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
    		}
    		return lista;
 	}
+	
+	public List<LibroMayor> getListAfterProcessedMayorizado(LibroMayor o) throws BusinessException{
+		List<LibroMayor> lista = null;
+   		try{
+   			lista = boLibroMayor.getListAfterProcessedMayorizado(o);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+   		return lista;
+	}
 	//Fin: REQ14-004 - bizarq - 16/09/2014
-
+	
+	public void deleteMayorizado(LibroMayor libroMayor) throws BusinessException{
+		
+		try {
+			boLibroMayor.eliminarMayorizado(libroMayor);
+		} catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+	}
+	
 }
