@@ -2,7 +2,7 @@
 * Modificaciones
 * Motivo                      Fecha            Nombre                      Descripción
 * -----------------------------------------------------------------------------------------------------------
-* REQ14-004				   25/09/2014	     Christian De los Rios      Proceso de mayorización
+* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevos métodos para regularizar la mayorización         
 */
 package pe.com.tumi.contabilidad.cierre.dao;
 
@@ -21,5 +21,7 @@ public interface LibroMayorDao extends TumiDao{
 	//Inicio: REQ14-004 - bizarq - 16/09/2014
 	public List<LibroMayor> getListMayorHist(Object o) throws DAOException;
 	public Integer processMayorizacion(Object o) throws DAOException;
+	public List<LibroMayor> getListAfterProcessedMayorizado(Object o) throws DAOException;
+	public LibroMayor eliminarMayorizado(LibroMayor o) throws DAOException;
 	//Fin: REQ14-004 - bizarq - 16/09/2014
 }
