@@ -1,19 +1,21 @@
+/**
+* Resumen.
+* Objeto: MayorizacionFacade
+* Descripción:  Clase utilitaria que albergará los métodos más comunes usados en la implementación
+ * 				de métodos tales como fechas, periodos, sucursal, sub sucursal, etc.
+* Fecha de Creación: 17/09/2014.
+* Requerimiento de Creación: REQ14-004
+* Autor: Bizarq
+*/
 package pe.com.tumi.common.util;
 
-/**
- * @author Bizarq Technologies
- * Cod Req: REQ14-004
- * Descripción: Clase utilitaria que albergará los métodos más comunes usados en la implementación
- * 				de métodos tales como fechas, periodos, sucursal, sub sucursal, etc.
- * Fecha: 24/05/2014
- * */
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
@@ -89,12 +91,37 @@ public class CommonUtils {
 	}
 	
 	public static final Calendar getPreviousMonth(Integer intYear, Integer intMonth){
-		//SimpleDateFormat format = new SimpleDateFormat(strDateFormat);
 		Calendar cal = Calendar.getInstance();
 		cal.set(intYear, intMonth-1, Calendar.DAY_OF_MONTH);
 		cal.add(Calendar.MONTH, -1);
-		//System.out.println(format.format(cal.getTime()));
 		return cal;
 	}
 	
+	public static final String getRequestParameter(String name) {
+		return (String) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestParameterMap().get(name);
+	}
+	
+	private static final String[] HEADERS_TO_TRY = { 
+	    "X-Forwarded-For",
+	    "Proxy-Client-IP",
+	    "WL-Proxy-Client-IP",
+	    "HTTP_X_FORWARDED_FOR",
+	    "HTTP_X_FORWARDED",
+	    "HTTP_X_CLUSTER_CLIENT_IP",
+	    "HTTP_CLIENT_IP",
+	    "HTTP_FORWARDED_FOR",
+	    "HTTP_FORWARDED",
+	    "HTTP_VIA",
+	    "REMOTE_ADDR" };
+
+	public static final String getClientIpAddress(HttpServletRequest request) {
+	    for (String header : HEADERS_TO_TRY) {
+	        String ip = request.getHeader(header);
+	        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+	            return ip;
+	        }
+	    }
+	    return request.getRemoteAddr();
+	}
 }

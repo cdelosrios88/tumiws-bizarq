@@ -15,6 +15,8 @@ import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 
 public interface MayorizacionFacadeRemote {
-	public Integer processMayorizacion(LibroMayor o)throws BusinessException;
+	public Integer processMayorizacion(LibroMayor o, String strPeriodo)throws BusinessException;
 	public List<LibroMayor> buscarLibroMayoreHistorico(LibroMayor o) throws BusinessException;
+	public List<LibroMayor> getListAfterProcessedMayorizado(LibroMayor o) throws BusinessException;
+	public void deleteMayorizado(LibroMayor libroMayor) throws BusinessException;
 }

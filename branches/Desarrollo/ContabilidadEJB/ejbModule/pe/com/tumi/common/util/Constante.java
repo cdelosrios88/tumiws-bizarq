@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevas variables constantes a la mayorización         
+*/
 package pe.com.tumi.common.util;
 
 import java.text.SimpleDateFormat;
@@ -593,5 +599,18 @@ public class Constante {
 	
 	public static final Integer ON_FAIL = 0;
 	public static final Integer ON_SUCCESS = 1;
+	
+	public static final Integer PARAM_T_TODOS = -1;
+	public static final int INT_ZERO = 0;
+	public static final int INT_ONE = 1;
+	public static final int INT_TWO = 2;
+	public static final int INT_THREE = 3;
+	public static final int INT_FOUR = 4;
+	public static final int INT_FIVE = 5;
+	public static final int INT_SIX = 6;
+	public static final int INT_SEVEN = 7;
+	public static final int INT_EIGTH = 8;
+	public static final int INT_NINE = 9;
+	public static final int INT_TEN = 10;
 	//Fin: REQ14-004 - bizarq - 14/09/2014
 }

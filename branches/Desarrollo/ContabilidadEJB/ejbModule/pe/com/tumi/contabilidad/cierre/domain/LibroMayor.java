@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-004       			16/09/2014     Christian De los Ríos        Se agregan nuevos atributos al bean         
+*/
 package pe.com.tumi.contabilidad.cierre.domain;
 
 import java.sql.Timestamp;
@@ -14,15 +20,13 @@ public class LibroMayor extends TumiDomain {
 	private Integer intPersEmpresaUsuario;
 	private Integer intPersPersonaUsuario;
 	private Integer intEstadoCod;
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
 	private String strTablaIdentificador;
-	public Integer getIntEstadoCod() {
-		return intEstadoCod;
-	}
-
-	public void setIntEstadoCod(Integer intEstadoCod) {
-		this.intEstadoCod = intEstadoCod;
-	}
-
+	private String strIpAddress;
+	private Integer intPersPersonaUsuarioElimina;
+	private Timestamp tsFechaRegistroElimina;
+	//Fin: REQ14-004 - bizarq - 16/09/2014
+	
 	public String getStrTablaIdentificador() {
 		return strTablaIdentificador;
 	}
@@ -89,6 +93,33 @@ public class LibroMayor extends TumiDomain {
 	public void setEsProcesado(boolean esProcesado) {
 		this.esProcesado = esProcesado;
 	}
+	
+	//Inicio: REQ14-004 - bizarq - 16/09/2014
+	public Integer getIntEstadoCod() {
+		return intEstadoCod;
+	}
+	public void setIntEstadoCod(Integer intEstadoCod) {
+		this.intEstadoCod = intEstadoCod;
+	}
+	public String getStrIpAddress() {
+		return strIpAddress;
+	}
+	public void setStrIpAddress(String strIpAddress) {
+		this.strIpAddress = strIpAddress;
+	}
+	public Integer getIntPersPersonaUsuarioElimina() {
+		return intPersPersonaUsuarioElimina;
+	}
+	public void setIntPersPersonaUsuarioElimina(Integer intPersPersonaUsuarioElimina) {
+		this.intPersPersonaUsuarioElimina = intPersPersonaUsuarioElimina;
+	}
+	public Timestamp getTsFechaRegistroElimina() {
+		return tsFechaRegistroElimina;
+	}
+	public void setTsFechaRegistroElimina(Timestamp tsFechaRegistroElimina) {
+		this.tsFechaRegistroElimina = tsFechaRegistroElimina;
+	}
+	//Fin: REQ14-004 - bizarq - 16/09/2014
 	@Override
 	public String toString() {
 		return "LibroMayor [id=" + id + ", tsFechaRegistro=" + tsFechaRegistro
