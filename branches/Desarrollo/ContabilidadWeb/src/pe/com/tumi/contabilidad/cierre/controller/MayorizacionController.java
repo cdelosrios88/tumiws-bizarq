@@ -1,6 +1,18 @@
+/**
+* Resumen.
+* Objeto: MayorizacionController
+* Descripción:  Controller principal para los el manejo del formulario de mayorización
+* Fecha de Creación: 17/09/2014.
+* Requerimiento de Creación: REQ14-004
+* Autor: Bizarq
+*/
 package pe.com.tumi.contabilidad.cierre.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -15,8 +27,11 @@ import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.cierre.facade.CierreFacadeLocal;
+import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.contabilidad.core.facade.MayorizacionFacadeLocal;
+import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeLocal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
+import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
 import pe.com.tumi.seguridad.permiso.domain.PasswordId;
@@ -36,8 +51,14 @@ public class MayorizacionController {
 	private LibroMayor libroMayorNuevo;
 	private List<SelectItem> listaAnios;
 	private MayorizacionFacadeLocal mayorizacionFacade;
+	private PlanCuentaFacadeLocal planCuentaFacade;
 	private CierreFacadeLocal cierreFacade;
 	private String strErrorValidateMsg;
+	private List<String> lstResultMsgValidation;
+	private Integer intValidResultAccounts;
+	
+	public Integer INT_ID_EMPRESA;
+	public Integer INT_ID_USER;
 	
 	public Usuario getUsuario() {
 		return usuario;
@@ -167,6 +188,7 @@ public class MayorizacionController {
 		try{
 			mayorizacionFacade = (MayorizacionFacadeLocal) EJBFactory.getLocal(MayorizacionFacadeLocal.class);
 			cierreFacade = (CierreFacadeLocal) EJBFactory.getLocal(CierreFacadeLocal.class);
+			planCuentaFacade = (PlanCuentaFacadeLocal) EJBFactory.getLocal(PlanCuentaFacadeLocal.class);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -183,6 +205,10 @@ public class MayorizacionController {
 				listaLibroMayor = null;
 				strMsgError = null;
 				mostrarPanelInferior = Boolean.FALSE;
+				strErrorValidateMsg = null;
+				lstResultMsgValidation = new ArrayList<String>();
+				INT_ID_USER = usuario.getPersona().getIntIdPersona();
+				INT_ID_EMPRESA = usuario.getEmpresa().getIntIdEmpresa();
 				cargarListaAnios();
 			}else{
 				log.error("--Usuario obtenido es NULL.");
@@ -228,13 +254,18 @@ public class MayorizacionController {
 	public void procesarMayorizado(){
 		boolean isValidProcess;
 		Integer intReturnResp;
+		String strPeriodo = null;
 		try {
 			isValidProcess = isValidateMayorizadoProcess();
 			if(!isValidProcess){
-				intReturnResp = mayorizacionFacade.processMayorizacion(libroMayorNuevo);
+				strPeriodo = String.valueOf(CommonUtils.concatPeriodo(libroMayorNuevo.getId().getIntContPeriodoMayor(), libroMayorNuevo.getId().getIntContMesMayor()));
+				libroMayorNuevo.setIntPersEmpresaUsuario(INT_ID_EMPRESA);
+				libroMayorNuevo.setIntPersPersonaUsuario(INT_ID_USER);
+				intReturnResp = mayorizacionFacade.processMayorizacion(libroMayorNuevo, strPeriodo);
 				if(intReturnResp!=null && intReturnResp.equals(Constante.ON_SUCCESS)){
-					FacesContext.getCurrentInstance().addMessage("", new FacesMessage("éxito!"));
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("éxito!"));
 				}
+				buscarMayorizado();
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -249,25 +280,33 @@ public class MayorizacionController {
 		try {
 			libroMayorNuevo.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
 			libroMayor = cierreFacade.getLibroMayorPorPk(libroMayorNuevo.getId());
-			if(libroMayor!=null){
+			if(libroMayor!=null && 
+			(libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_REGISTRADO) || 
+			 libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO) )){
 				strErrorValidateMsg = "El proceso a ejecutar existe con el mismo periodo, favor verificar!";
 				return true;
 			}
 			//Si el mes anterior ya posee un proceso mayorizado.
+			SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
 			calDate = CommonUtils.getPreviousMonth(
 					libroMayorNuevo.getId().getIntContPeriodoMayor(),
 					libroMayorNuevo.getId().getIntContMesMayor());
-			log.info("mes: " + calDate.get(Calendar.getInstance().MONTH)+1);
-			log.info("año: " + calDate.get(Calendar.getInstance().YEAR));
+			log.info(format.format(calDate.getTime()));
+			String strPeriod = format.format(calDate.getTime());
+			Integer intYear = Integer.parseInt(strPeriod.substring(Constante.INT_ZERO,Constante.INT_FOUR));
+			Integer intMonth = Integer.parseInt(strPeriod.substring(Constante.INT_FOUR));
+			
 			libroMayor = new LibroMayor();
 			libroMayor.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
-			libroMayor.getId().setIntContMesMayor(calDate.get(Calendar.getInstance().MONTH)+1);
-			libroMayor.getId().setIntContPeriodoMayor(calDate.get(Calendar.getInstance().YEAR));
+			libroMayor.getId().setIntContMesMayor(intMonth);
+			libroMayor.getId().setIntContPeriodoMayor(intYear);
 			libroMayor = cierreFacade.getLibroMayorPorPk(libroMayor.getId());
-			if(libroMayor!=null){
+			if(libroMayor==null){
 				strErrorValidateMsg = "El Periodo ingresado no puede ser procesado debido a que no se ha procesado el mes anterior";
 				return true;
 			}
+			//Validar cuentas padre
+			//isReturn = (validateBookAccounts(libroMayorNuevo.getId().getIntContPeriodoMayor()));
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -275,24 +314,113 @@ public class MayorizacionController {
 		return isReturn;
 	}
 	
+	/**
+	 * @author Bizarq
+	 * 
+	 * */
+	private boolean validateBookAccounts(Integer intAnioPeriodo){
+		boolean isValid = false;
+		List<PlanCuenta> lstPlanCuenta = null;
+		String strNroCuenta = null;
+		String strNroCuentaSup = null;
+		int intSizeValidAccounts = 0;
+		lstResultMsgValidation = new ArrayList<String>();
+		try {
+			lstPlanCuenta = planCuentaFacade.getListaPlanCuentaPorEmpresaCuentaYPeriodoCuenta(INT_ID_EMPRESA, intAnioPeriodo);
+			if(lstPlanCuenta!=null && !lstPlanCuenta.isEmpty()){
+				intSizeValidAccounts = lstPlanCuenta.size();
+				for(PlanCuenta i : lstPlanCuenta){
+					strNroCuenta = i.getId().getStrNumeroCuenta();
+					if(strNroCuenta!=null && strNroCuenta.trim().length()>Constante.INT_TWO){
+						int cont = 0;
+						strNroCuentaSup = strNroCuenta.substring(0,(strNroCuenta.length()-2));
+						for(PlanCuenta j : lstPlanCuenta){
+							if(!strNroCuentaSup.equals(j.getId().getStrNumeroCuenta())){
+								cont++;
+							}else{
+								break;
+							}
+						}
+						if(intSizeValidAccounts==cont){
+							lstResultMsgValidation.add("La cuenta "+ strNroCuenta + " no tiene una cuenta Padre.");
+						}
+					}
+				}
+			}
+			if(lstResultMsgValidation.size()>Constante.INT_ZERO){
+				intValidResultAccounts = lstResultMsgValidation.size();
+				isValid = true;
+			}
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+		return isValid;
+	}
+	
 	public void buscarMayorizado(){
 		try {
-			libroMayorFiltro.getId().setIntPersEmpresaMayor(usuario.getEmpresa().getIntIdEmpresa());
+			libroMayorFiltro.getId().setIntPersEmpresaMayor(INT_ID_EMPRESA);
 			listaLibroMayor = mayorizacionFacade.buscarLibroMayoreHistorico(libroMayorFiltro);
 			System.out.println("entro a este metodo :::");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+	
+	public void deleteMayorizado(ActionEvent event){
+		LibroMayor itemLibroMayor = (LibroMayor)event.getComponent().getAttributes().get("item");
+		String strIPAddress = null;
+		try {
+			if(!isValidDeleteMayorizacion(itemLibroMayor)){
+				itemLibroMayor.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_ELIMINADO);
+				strIPAddress = CommonUtils.getClientIpAddress(getRequest());
+				log.info("strIp: " + strIPAddress);
+				itemLibroMayor.setStrIpAddress(strIPAddress);
+				itemLibroMayor.setIntPersPersonaUsuarioElimina(INT_ID_USER);
+				itemLibroMayor.setTsFechaRegistroElimina(new Timestamp(new Date().getTime()));
+				mayorizacionFacade.deleteMayorizado(itemLibroMayor);
+			}
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	private boolean isValidDeleteMayorizacion(LibroMayor o){
+		boolean isReturn = false;
+		List<LibroMayor> listLibroMayor = null;
 		
+		try {
+			listLibroMayor = mayorizacionFacade.getListAfterProcessedMayorizado(o);
+			if(listLibroMayor!=null && !listLibroMayor.isEmpty()){
+				strErrorValidateMsg = "No puede eliminar un periodo que mantiene un periodo mayorizado posterior. Favor eliminar desde el último periodo mayorizado";
+				isReturn = true;
+			}else {
+				strErrorValidateMsg = null;
+			}
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		
+		return isReturn;
 	}
 
 	public void habilitarPanelInferior(ActionEvent event){
+		cleanScreen();
 		mostrarPanelInferior = Boolean.TRUE;
-		libroMayorNuevo = new LibroMayor();
-		
 	}
+	
 	public void deshabilitarPanelInferior(ActionEvent event){
+		cleanScreen();
 		mostrarPanelInferior = Boolean.FALSE;
+	}
+	
+	public void cleanScreen(){
+		strErrorValidateMsg = null;
+		strMsgError = null;
+		lstResultMsgValidation = new ArrayList<String>();
+		libroMayorNuevo = new LibroMayor();
 	}
 	
 	public String getStrPassword() {
@@ -341,5 +469,21 @@ public class MayorizacionController {
 
 	public void setStrErrorValidateMsg(String strErrorValidateMsg) {
 		this.strErrorValidateMsg = strErrorValidateMsg;
+	}
+
+	public List<String> getLstResultMsgValidation() {
+		return lstResultMsgValidation;
+	}
+
+	public void setLstResultMsgValidation(List<String> lstResultMsgValidation) {
+		this.lstResultMsgValidation = lstResultMsgValidation;
+	}
+
+	public Integer getIntValidResultAccounts() {
+		return intValidResultAccounts;
+	}
+
+	public void setIntValidResultAccounts(Integer intValidResultAccounts) {
+		this.intValidResultAccounts = intValidResultAccounts;
 	}
 }
