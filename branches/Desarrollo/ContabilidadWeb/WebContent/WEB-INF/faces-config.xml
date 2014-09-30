@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
                               "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+                              
+<!-- 
+/************************************************************************/
+/* Nombre de componente: faces-config */
+/* Descripción: Componente que mapea las páginas jsp contra la clase controladora
+/* Cod. Req.: REQ14-004   */
+/* Autor : Christian De los Ríos */
+/* Versión : V1 */
+/* Fecha creación : 27/09/2014 */
+/* ********************************************************************* */
+-->
+
 <faces-config>
 	<application>
 		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
