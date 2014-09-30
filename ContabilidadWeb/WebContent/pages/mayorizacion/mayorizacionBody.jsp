@@ -12,49 +12,6 @@
 	<!-- Prototipo : Mayorizacion	 		-->
 	<!-- Fecha     : 14/09/2014             -->
 
-
-<rich:modalPanel id="pAlertaRegistro" width="400" height="170"
-	resizeable="false" style="background-color:#DEEBF5;">
-    <f:facet name="header">
-        <h:panelGrid>
-          <rich:column style="border: none;">
-            <h:outputText value="Alerta"></h:outputText>
-          </rich:column>
-        </h:panelGrid>
-    </f:facet>
-    <f:facet name="controls">
-        <h:panelGroup>
-           <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
-           		<rich:componentControl for="pAlertaRegistro" operation="hide" event="onclick"/>
-           </h:graphicImage>
-       </h:panelGroup>
-    </f:facet>
-    <h:form id="frmAlertaRegistro">
-    	<rich:panel style="background-color:#DEEBF5">
-    		<h:panelGrid columns="1">
-	    		<rich:column style="border:none">
-	        		<h:outputText value="¿Está seguro que desea eliminar el siguiente registro? Si elimina el registro, 
-	        		también se eliminaran todos los registros correspondientes a los meses consecutivos del registro
-	        		a eliminar."/>
-	        	</rich:column>
-	    	</h:panelGrid>
-	    	<rich:spacer height="12px"/>  
-	    	<h:panelGrid columns="2">
-	    		<rich:column width="150">
-	    		</rich:column>
-	    		<rich:column style="border:none" id="colBtnModificar">
-	    			<a4j:commandButton value="Eliminar" styleClass="btnEstilos"
-            			action="#{mayorizacionController.eliminarRegistro}"
-             			onclick="Richfaces.hideModalPanel('pAlertaRegistro')"
-             			reRender="panelTablaContabilidad,panelMensaje"
-        			/>
-	        	</rich:column>
-	    	</h:panelGrid>
-    	</rich:panel>
-    </h:form>
-</rich:modalPanel>
-
-
 <h:form id="frmMayorizacion">
    	<h:panelGroup id="divPlanCuentas" layout="block" style="padding:15px;border:1px solid #B3B3B3;">
    		
@@ -95,7 +52,7 @@
          	</rich:column>
          	<rich:column width="100">
                	<h:selectOneMenu style="width: 100px;"
-					value="#{mayorizacionController.libroMayorFiltro.intParaEstadoCierreCod}">
+					value="#{mayorizacionController.libroMayorFiltro.intEstadoCod}">
 					<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION}" 
 						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}" propertySort="intOrden"
 						tipoVista="#{applicationScope.Constante.CACHE_TOTAL}"/>	
@@ -121,8 +78,8 @@
 	                    value="#{mayorizacionController.listaLibroMayor}"  
 						rowKeyVar="rowKey" 
 						rows="5"
-						width="715px" 
-						height="225px" 
+						width="700px" 
+						height="195px" 
 						align="center">
 	                                
 						<rich:column width="30px" style="text-align: center">
@@ -150,23 +107,20 @@
 	                  		<f:facet name="header">
 	                        	<h:outputText value="Estado Mayorizacion"/>
 	                     	</f:facet>
-	                     	<h:panelGroup rendered="#{item.esProcesado}">
-	                     		<h:outputText value="Procesado"/>
-	                     	</h:panelGroup>
-	                     	<h:panelGroup rendered="#{!item.esProcesado}">
-	                     		<h:outputText value="Por Procesar"/>
-	                     	</h:panelGroup>
+	                     	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION}" 
+								itemValue="intIdDetalle" itemLabel="strDescripcion" 
+								property="#{item.intEstadoCod}"/>
 	                  	</rich:column>
 	                  	<rich:column width="60" style="text-align: center">
 	                  		<f:facet name="header">
 	                        	<h:outputText value=""/>
 	                     	</f:facet>
-	                     	<a4j:commandLink id="lnkDelete" styleClass="no-decor" reRender="tblContabilidad"
+	                     	<a4j:commandLink id="lnkDelete" styleClass="no-decor" reRender="tblContabilidad,panelValidMsgError"
 			            		actionListener="#{mayorizacionController.deleteMayorizado}" 
 			            		rendered="#{item.intEstadoCod==applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO}"
 			            		onclick="if(!confirm('Está Ud. Seguro de Eliminar este Registro?'))return false;">
 			                    <h:graphicImage value="/images/icons/delete.png" alt="delete"/>
-			                    <f:param value="#{rowKey}" name="rowKeyCapacidadDscto"/>
+			                    <f:attribute name="item" value="#{item}"/>
 			            		<rich:toolTip for="lnkDelete" value="Eliminar" followMouse="true"/>
 			            	</a4j:commandLink>
 	                  	</rich:column>
@@ -194,13 +148,15 @@
 			id="panelBotonesFH">
 			<h:panelGrid columns="4">
 				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
-					actionListener="#{mayorizacionController.habilitarPanelInferior}" reRender="contPanelInferiorProcMay" />      												                 
+					actionListener="#{mayorizacionController.habilitarPanelInferior}" 
+					reRender="contPanelInferiorProcMay,panelValidMsgError,dlValidAccounts" />
 			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
-			    	actionListener="#{mayorizacionController.deshabilitarPanelInferior}" reRender="contPanelInferiorProcMay"/>      
+			    	actionListener="#{mayorizacionController.deshabilitarPanelInferior}" 
+			    	reRender="contPanelInferiorProcMay,panelValidMsgError" />
 			</h:panelGrid>
 		</rich:panel>
 		<rich:panel id="contPanelInferiorProcMay" style="border:0px;">
-			<rich:spacer height="3px"/>  	 
+			<rich:spacer height="3px"/>
 				<rich:panel id="panelInferior" style="border:1px solid #17356f;" rendered="#{mayorizacionController.mostrarPanelInferior}">
 					<rich:spacer height="3px"/>
 					<rich:column width="70" style="text-align: center;">
@@ -237,6 +193,12 @@
 		</rich:panel>
 		<h:panelGrid id="panelValidMsgError">
 			<h:outputText value="#{mayorizacionController.strErrorValidateMsg}" styleClass="msgError"/>
+			<rich:dataList id="dlValidAccounts" var="item" value="#{mayorizacionController.lstResultMsgValidation}" 
+				rows="#{mayorizacionController.intValidResultAccounts}" type="disc"
+				title="Cuentas no válidas"
+				rendered="#{not empty mayorizacionController.lstResultMsgValidation}">
+                <h:outputText value="#{item}" styleClass="msgError"/>
+        	</rich:dataList>
 		</h:panelGrid>
 		
     </h:panelGroup>
