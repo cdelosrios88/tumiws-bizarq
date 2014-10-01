@@ -1,3 +1,4 @@
+/* Formatted on 30/09/2014 10:05:52 p.m. (QP5 v5.163.1008.3004) */
 CREATE OR REPLACE PACKAGE BODY CONTABILIDAD.PKG_LIBROMAYOR
 AS
    PROCEDURE grabar (
@@ -341,11 +342,108 @@ AS
       v_pers_personausuario_n_pk   IN     CON_LIBROMAYOR.PERS_PERSONAUSUARIO_N_PK%TYPE,
       v_cont_periodomayor_v        IN     VARCHAR2)
    IS
-      v_n_resp_proc                 NUMBER;
-      v_n_haber_soles_calculo       NUMBER;
-      v_n_debe_soles_calculo        NUMBER;
-      v_n_haber_soles_calculo_fin   NUMBER;
-      v_n_debe_soles_calculo_fin    NUMBER;
+      v_n_haber_soles_calculo        NUMBER;
+      v_n_debe_soles_calculo         NUMBER;
+      v_n_haber_soles_calculo_fin    NUMBER;
+      v_n_debe_soles_calculo_fin     NUMBER;
+      v_n_haber_soles_calculo_sal    NUMBER;
+      v_n_debe_soles_calculo_sal     NUMBER;
+      v_n_haber_extranjera_calculo   NUMBER;
+      v_n_debe_extranjera_calculo    NUMBER;
+      v_n_haber_ext_calc_fin         NUMBER;
+      v_n_debe_ext_calc_fin          NUMBER;
+      v_n_haber_ext_calc_sal         NUMBER;
+      v_n_debe_ext_calc_sal          NUMBER;
+      v_n_nivel_cuenta               NUMBER;
+      v_n_sz_cuenta_nv               NUMBER;
+
+      -- lista de cuentas integradoras por niveles
+      CURSOR v_lista_integradora_nivel (
+         c_niv_cu_n NUMBER)
+      IS
+           SELECT CLMD.PERS_EMPRESAMAYOR_N_PK,
+                  CLMD.PERS_EMPRESACUENTA_N_PK,
+                  CLMD.CONT_PERIODOCUENTA_N,
+                  SUBSTR (CLMD.cont_numerocuenta_v, 1, 2) || '0'
+                  || SUBSTR (CLMD.cont_numerocuenta_v,
+                             4,
+                             LENGTH (CLMD.cont_numerocuenta_v))
+                     AS cont_numerocuenta_v,
+                  SUM (LMDE_DEBESOLESSALDO_N) LMDE_DEBESOLESSALDO_N,
+                  SUM (LMDE_HABERSOLESSALDO_N) LMDE_HABERSOLESSALDO_N,
+                  SUM (LMDE_DEBEEXTRANJEROSALDO_N) LMDE_DEBEEXTRANJEROSALDO_N,
+                  SUM (LMDE_HABEREXTRANJEROSALDO_N) LMDE_HABEREXTRANJEROSALDO_N,
+                  SUM (LMDE_DEBESOLES_N) LMDE_DEBESOLES_N,
+                  SUM (LMDE_HABERSOLES_N) LMDE_HABERSOLES_N,
+                  SUM (LMDE_DEBEEXTRANJERO_N) LMDE_DEBEEXTRANJERO_N,
+                  SUM (LMDE_HABEREXTRANJERO_N) LMDE_HABEREXTRANJERO_N,
+                  SUM (LMDE_DEBESOLESSALDOFIN_N) LMDE_DEBESOLESSALDOFIN_N,
+                  SUM (LMDE_HABERSOLESSALDOFIN_N) LMDE_HABERSOLESSALDOFIN_N,
+                  SUM (LMDE_DEBEEXTRANJEROSALDOFIN_N)
+                     LMDE_DEBEEXTRANJEROSALDOFIN_N,
+                  SUM (LMDE_HABEREXTRANJEROSALDOFIN_N)
+                     LMDE_HABEREXTRANJEROSALDOFIN_N
+             FROM con_libromayordetalle CLMD
+            WHERE     SUBSTR (CLMD.cont_numerocuenta_v, 3, 1) != 0
+                  AND CLMD.CONT_PERIODOMAYOR_N = v_cont_periodomayor_n
+                  AND CLMD.CONT_MESMAYOR_N = v_cont_mesmayor_n
+                  AND CLMD.LMDE_NIVELCUENTA_N = c_niv_cu_n
+         GROUP BY (SUBSTR (CLMD.cont_numerocuenta_v, 1, 2) || '0'
+                   || SUBSTR (CLMD.cont_numerocuenta_v,
+                              4,
+                              LENGTH (CLMD.cont_numerocuenta_v)),
+                   PERS_EMPRESASUCURSAL_N_PK,
+                   CLMD.PERS_EMPRESAMAYOR_N_PK,
+                   CLMD.PERS_EMPRESACUENTA_N_PK,
+                   CLMD.CONT_PERIODOCUENTA_N)
+         ORDER BY 1, 2 ASC;
+
+      -- lista de cuentas mayorizadas por niveles
+      CURSOR v_lista_mayor_cuentas_nivel (
+         c_niv_cu_n NUMBER)
+      IS
+           SELECT CLMD.PERS_EMPRESAMAYOR_N_PK,
+                  CLMD.PERS_EMPRESACUENTA_N_PK,
+                  CLMD.CONT_PERIODOCUENTA_N,
+                  SUBSTR (CLMD.CONT_NUMEROCUENTA_V,
+                          1,
+                          LENGTH (CLMD.CONT_NUMEROCUENTA_V) - 2)
+                     AS CONT_NUMEROCUENTA_V,
+                  SUM (CLMD.LMDE_DEBESOLESSALDO_N) AS LMDE_DEBESOLESSALDO_N,
+                  SUM (CLMD.LMDE_HABERSOLESSALDO_N) AS LMDE_HABERSOLESSALDO_N,
+                  SUM (CLMD.LMDE_DEBEEXTRANJEROSALDO_N)
+                     AS LMDE_DEBEEXTRANJEROSALDO_N,
+                  SUM (CLMD.LMDE_HABEREXTRANJEROSALDO_N)
+                     AS LMDE_HABEREXTRANJEROSALDO_N,
+                  SUM (CLMD.LMDE_DEBESOLES_N) AS LMDE_DEBESOLES_N,
+                  SUM (CLMD.LMDE_HABERSOLES_N) AS LMDE_HABERSOLES_N,
+                  SUM (CLMD.LMDE_DEBEEXTRANJERO_N) AS LMDE_DEBEEXTRANJERO_N,
+                  SUM (CLMD.LMDE_HABEREXTRANJERO_N) AS LMDE_HABEREXTRANJERO_N,
+                  0 AS PERS_EMPRESASUCURSAL_N_PK,
+                  0 AS SUCU_IDSUCURSAL_N_PK,
+                  0 AS SUDE_IDSUBSUCURSAL_N_PK,
+                  SUM (CLMD.LMDE_DEBESOLESSALDOFIN_N)
+                     AS LMDE_DEBESOLESSALDOFIN_N,
+                  SUM (CLMD.LMDE_HABERSOLESSALDOFIN_N)
+                     AS LMDE_HABERSOLESSALDOFIN_N,
+                  SUM (CLMD.LMDE_DEBEEXTRANJEROSALDOFIN_N)
+                     AS LMDE_DEBEEXTRANJEROSALDOFIN_N,
+                  SUM (CLMD.LMDE_HABEREXTRANJEROSALDOFIN_N)
+                     AS LMDE_HABEREXTRANJEROSALDOFIN_N
+             FROM CON_LIBROMAYORDETALLE CLMD
+            WHERE     CLMD.CONT_PERIODOMAYOR_N = v_cont_periodomayor_n
+                  AND CLMD.CONT_MESMAYOR_N = v_cont_mesmayor_n
+                  AND CLMD.LMDE_NIVELCUENTA_N = c_niv_cu_n
+                  AND LENGTH (
+                         SUBSTR (CLMD.CONT_NUMEROCUENTA_V,
+                                 1,
+                                 LENGTH (CLMD.CONT_NUMEROCUENTA_V) - 2)) >= 2
+         GROUP BY (CLMD.PERS_EMPRESAMAYOR_N_PK,
+                   SUBSTR (CLMD.CONT_NUMEROCUENTA_V,
+                           1,
+                           LENGTH (CLMD.CONT_NUMEROCUENTA_V) - 2),
+                   CLMD.PERS_EMPRESACUENTA_N_PK,
+                   CLMD.CONT_PERIODOCUENTA_N);
 
       -- Lista de las cuentas registradas en el libro diario.
       CURSOR v_lista_detalle_libro_diario
@@ -413,33 +511,22 @@ AS
                       FROM CON_LIBRODIARIODETALLE CLD
                      WHERE CLD.CONT_PERIODOLIBRO_N = v_cont_periodomayor_v)
                 AND CLDANT.CONT_MESMAYOR_N = v_cont_mesmayor_n - 1
+                AND CLDANT.LMDE_NIVELCUENTA_N = 1
          ORDER BY PERS_EMPRESACUENTA_N_PK,
                   CONT_PERIODO_N,
                   CONT_NUMEROCUENTA_V;
    BEGIN
-      INSERT INTO CON_LIBROMAYOR (PERS_EMPRESAMAYOR_N_PK,
-                                  CONT_PERIODOMAYOR_N,
-                                  CONT_MESMAYOR_N,
-                                  LIMA_FECHAREGISTRO_D,
-                                  PARA_ESTADOCIERRE_N_COD,
-                                  PERS_EMPRESAUSUARIO_N_PK,
-                                  PERS_PERSONAUSUARIO_N_PK,
-                                  PARA_ESTADO_N_COD)
-           VALUES (v_pers_empresamayor_n_pk,
-                   v_cont_periodomayor_n,
-                   v_cont_mesmayor_n,
-                   SYSDATE,
-                   1,
-                   v_pers_empresauario_n_pk,
-                   v_pers_personausuario_n_pk,
-                   3);
-
-      COMMIT;
+      v_n_nivel_cuenta := 1;
+      v_n_sz_cuenta_nv := 0;
+      V_PROC_MAYOR_RETURN := 0;
 
       FOR listRec IN v_lista_detalle_libro_diario
       LOOP
          v_n_debe_soles_calculo := NVL (listRec.LDDE_DEBESOLES_N, 0);
          v_n_haber_soles_calculo := NVL (listRec.LDDE_HABERSOLES_N, 0);
+         v_n_debe_extranjera_calculo := NVL (listRec.LDDE_DEBEEXTRANJERO_N, 0);
+         v_n_haber_extranjera_calculo :=
+            NVL (listRec.LDDE_HABEREXTRANJERO_N, 0);
 
          -- calculando debe y haber soles x movimientos
          IF (v_n_debe_soles_calculo > v_n_haber_soles_calculo)
@@ -453,11 +540,31 @@ AS
             v_n_debe_soles_calculo := 0;
          END IF;
 
+         -- calculando debe y haber extranjera x movimientos
+         IF (v_n_debe_extranjera_calculo > v_n_haber_extranjera_calculo)
+         THEN
+            v_n_debe_extranjera_calculo :=
+               v_n_debe_extranjera_calculo - v_n_haber_extranjera_calculo;
+            v_n_haber_extranjera_calculo := 0;
+         ELSE
+            v_n_haber_extranjera_calculo :=
+               v_n_haber_extranjera_calculo - v_n_debe_extranjera_calculo;
+            v_n_debe_extranjera_calculo := 0;
+         END IF;
+
          -- sumando el saldo mas el haber o deber por movimiento.
+         -- soles
          v_n_debe_soles_calculo_fin :=
             v_n_debe_soles_calculo + NVL (listRec.LMDE_DEBESOLESSALDO_N, 0);
          v_n_haber_soles_calculo_fin :=
             v_n_haber_soles_calculo + NVL (listRec.LMDE_HABERSOLESSALDO_N, 0);
+         -- dolares
+         v_n_debe_ext_calc_fin :=
+            v_n_debe_extranjera_calculo
+            + NVL (listRec.LMDE_DEBEEXTRANJEROSALDO_N, 0);
+         v_n_haber_ext_calc_fin :=
+            v_n_haber_extranjera_calculo
+            + NVL (listRec.LMDE_HABEREXTRANJEROSALDO_N, 0);
 
          -- calcular saldo fin para soles
          IF (v_n_debe_soles_calculo_fin > v_n_haber_soles_calculo_fin)
@@ -469,6 +576,23 @@ AS
             v_n_haber_soles_calculo_fin :=
                v_n_haber_soles_calculo_fin - v_n_debe_soles_calculo_fin;
             v_n_debe_soles_calculo_fin := 0;
+         END IF;
+
+         -- calcular saldo fin para soles
+         IF (v_n_debe_ext_calc_fin > v_n_haber_ext_calc_fin)
+         THEN
+            v_n_debe_ext_calc_fin :=
+               v_n_debe_ext_calc_fin - v_n_haber_ext_calc_fin;
+            v_n_haber_ext_calc_fin := 0;
+         ELSE
+            v_n_haber_ext_calc_fin :=
+               v_n_haber_ext_calc_fin - v_n_debe_ext_calc_fin;
+            v_n_debe_ext_calc_fin := 0;
+         END IF;
+
+         IF (v_n_sz_cuenta_nv < LENGTH (listRec.CONT_NUMEROCUENTA_V))
+         THEN
+            v_n_sz_cuenta_nv := LENGTH (listRec.CONT_NUMEROCUENTA_V);
          END IF;
 
          INSERT INTO CON_LIBROMAYORDETALLE (PERS_EMPRESAMAYOR_N_PK,        --1
@@ -491,8 +615,8 @@ AS
                                             LMDE_DEBESOLESSALDOFIN_N,     --18
                                             LMDE_HABERSOLESSALDOFIN_N,    --19
                                             LMDE_DEBEEXTRANJEROSALDOFIN_N, --20
-                                            LMDE_HABEREXTRANJEROSALDOFIN_N --21
-                                                                          )
+                                            LMDE_HABEREXTRANJEROSALDOFIN_N, --21
+                                            LMDE_NIVELCUENTA_N)
               VALUES (v_pers_empresamayor_n_pk,                            --1
                       v_cont_periodomayor_n,                               --2
                       v_cont_mesmayor_n,                                   --3
@@ -505,33 +629,828 @@ AS
                       NVL (listRec.LMDE_HABEREXTRANJEROSALDO_N, 0),       --10
                       v_n_debe_soles_calculo,                             --11
                       v_n_haber_soles_calculo,                            --12
-                      NVL (listRec.LDDE_DEBEEXTRANJERO_N, 0),             --13
-                      NVL (listRec.LDDE_HABEREXTRANJERO_N, 0),            --14
+                      v_n_debe_extranjera_calculo,                        --13
+                      v_n_haber_extranjera_calculo,                       --14
                       listRec.PERS_EMPRESASUCURSAL_N_PK,                  --15
                       listRec.SUCU_IDSUCURSAL_N_PK,                       --16
                       NVL (listRec.SUDE_IDSUBSUCURSAL_N_PK, 0),           --17
                       v_n_debe_soles_calculo_fin,                         --18
                       v_n_haber_soles_calculo_fin,                        --19
-                      NVL (listRec.LDDE_DEBEEXTRANJERO_N, 0),             --20
-                      NVL (listRec.LDDE_HABEREXTRANJERO_N, 0)             --21
-                                                             );
+                      v_n_debe_ext_calc_fin,                              --20
+                      v_n_haber_ext_calc_fin,                             --21
+                      v_n_nivel_cuenta);
       END LOOP;
-      
-      V_PROC_MAYOR_RETURN := 1;
 
-      v_n_resp_proc := 55555;
+      v_n_sz_cuenta_nv := v_n_sz_cuenta_nv / 2;
+
+      FOR listRecIntegradoraDetalle
+         IN v_lista_integradora_nivel (v_n_nivel_cuenta)
+      LOOP
+         v_n_debe_soles_calculo_sal :=
+            NVL (listRecIntegradoraDetalle.LMDE_DEBESOLESSALDO_N, 0);
+         v_n_haber_soles_calculo_sal :=
+            NVL (listRecIntegradoraDetalle.LMDE_HABERSOLESSALDO_N, 0);
+         v_n_debe_ext_calc_sal :=
+            NVL (listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDO_N, 0);
+         v_n_haber_ext_calc_sal :=
+            NVL (listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDO_N, 0);
+
+         -- calculando debe y haber soles x movimientos
+         IF (v_n_debe_soles_calculo_sal > v_n_haber_soles_calculo_sal)
+         THEN
+            v_n_debe_soles_calculo_sal :=
+               v_n_debe_soles_calculo_sal - v_n_haber_soles_calculo_sal;
+            v_n_haber_soles_calculo_sal := 0;
+         ELSE
+            v_n_haber_soles_calculo_sal :=
+               v_n_haber_soles_calculo_sal - v_n_debe_soles_calculo_sal;
+            v_n_debe_soles_calculo_sal := 0;
+         END IF;
+
+         -- calculando debe y haber extranjera x movimientos
+         IF (v_n_debe_ext_calc_sal > v_n_haber_ext_calc_sal)
+         THEN
+            v_n_debe_ext_calc_sal :=
+               v_n_debe_ext_calc_sal - v_n_haber_ext_calc_sal;
+            v_n_haber_ext_calc_sal := 0;
+         ELSE
+            v_n_haber_ext_calc_sal :=
+               v_n_haber_ext_calc_sal - v_n_debe_ext_calc_sal;
+            v_n_debe_ext_calc_sal := 0;
+         END IF;
+
+         v_n_debe_soles_calculo :=
+            NVL (listRecIntegradoraDetalle.LMDE_DEBESOLES_N, 0);
+         v_n_haber_soles_calculo :=
+            NVL (listRecIntegradoraDetalle.LMDE_HABERSOLES_N, 0);
+         v_n_debe_extranjera_calculo :=
+            NVL (listRecIntegradoraDetalle.LMDE_DEBEEXTRANJERO_N, 0);
+         v_n_haber_extranjera_calculo :=
+            NVL (listRecIntegradoraDetalle.LMDE_HABEREXTRANJERO_N, 0);
+
+         -- calculando debe y haber soles x movimientos
+         IF (v_n_debe_soles_calculo > v_n_haber_soles_calculo)
+         THEN
+            v_n_debe_soles_calculo :=
+               v_n_debe_soles_calculo - v_n_haber_soles_calculo;
+            v_n_haber_soles_calculo := 0;
+         ELSE
+            v_n_haber_soles_calculo :=
+               v_n_haber_soles_calculo - v_n_debe_soles_calculo;
+            v_n_debe_soles_calculo := 0;
+         END IF;
+
+         -- calculando debe y haber extranjera x movimientos
+         IF (v_n_debe_extranjera_calculo > v_n_haber_extranjera_calculo)
+         THEN
+            v_n_debe_extranjera_calculo :=
+               v_n_debe_extranjera_calculo - v_n_haber_extranjera_calculo;
+            v_n_haber_extranjera_calculo := 0;
+         ELSE
+            v_n_haber_extranjera_calculo :=
+               v_n_haber_extranjera_calculo - v_n_debe_extranjera_calculo;
+            v_n_debe_extranjera_calculo := 0;
+         END IF;
+
+         -- sumando el saldo mas el haber o deber por movimiento.
+         -- soles
+         v_n_debe_soles_calculo_fin :=
+            v_n_debe_soles_calculo
+            + NVL (listRecIntegradoraDetalle.LMDE_DEBESOLESSALDO_N, 0);
+         v_n_haber_soles_calculo_fin :=
+            v_n_haber_soles_calculo
+            + NVL (listRecIntegradoraDetalle.LMDE_HABERSOLESSALDO_N, 0);
+         -- dolares
+         v_n_debe_ext_calc_fin :=
+            v_n_debe_extranjera_calculo
+            + NVL (listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDO_N, 0);
+         v_n_haber_ext_calc_fin :=
+            v_n_haber_extranjera_calculo
+            + NVL (listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDO_N, 0);
+
+         -- calcular saldo fin para soles
+         IF (v_n_debe_soles_calculo_fin > v_n_haber_soles_calculo_fin)
+         THEN
+            v_n_debe_soles_calculo_fin :=
+               v_n_debe_soles_calculo_fin - v_n_haber_soles_calculo_fin;
+            v_n_haber_soles_calculo_fin := 0;
+         ELSE
+            v_n_haber_soles_calculo_fin :=
+               v_n_haber_soles_calculo_fin - v_n_debe_soles_calculo_fin;
+            v_n_debe_soles_calculo_fin := 0;
+         END IF;
+
+         -- calcular saldo fin para soles
+         IF (v_n_debe_ext_calc_fin > v_n_haber_ext_calc_fin)
+         THEN
+            v_n_debe_ext_calc_fin :=
+               v_n_debe_ext_calc_fin - v_n_haber_ext_calc_fin;
+            v_n_haber_ext_calc_fin := 0;
+         ELSE
+            v_n_haber_ext_calc_fin :=
+               v_n_haber_ext_calc_fin - v_n_debe_ext_calc_fin;
+            v_n_debe_ext_calc_fin := 0;
+         END IF;
+
+         BEGIN
+            INSERT
+              INTO CON_LIBROMAYORDETALLE (PERS_EMPRESAMAYOR_N_PK,          --1
+                                          CONT_PERIODOMAYOR_N,             --2
+                                          CONT_MESMAYOR_N,                 --3
+                                          PERS_EMPRESACUENTA_N_PK,         --4
+                                          CONT_PERIODOCUENTA_N,            --5
+                                          CONT_NUMEROCUENTA_V,             --6
+                                          LMDE_DEBESOLESSALDO_N,           --7
+                                          LMDE_HABERSOLESSALDO_N,          --8
+                                          LMDE_DEBEEXTRANJEROSALDO_N,      --9
+                                          LMDE_HABEREXTRANJEROSALDO_N,    --10
+                                          LMDE_DEBESOLES_N,               --11
+                                          LMDE_HABERSOLES_N,              --12
+                                          LMDE_DEBEEXTRANJERO_N,          --13
+                                          LMDE_HABEREXTRANJERO_N,         --14
+                                          PERS_EMPRESASUCURSAL_N_PK,      --15
+                                          SUCU_IDSUCURSAL_N_PK,           --16
+                                          SUDE_IDSUBSUCURSAL_N_PK,        --17
+                                          LMDE_DEBESOLESSALDOFIN_N,       --18
+                                          LMDE_HABERSOLESSALDOFIN_N,      --19
+                                          LMDE_DEBEEXTRANJEROSALDOFIN_N,  --20
+                                          LMDE_HABEREXTRANJEROSALDOFIN_N, --21
+                                          LMDE_NIVELCUENTA_N)
+            VALUES (v_pers_empresamayor_n_pk,                              --1
+                    v_cont_periodomayor_n,                                 --2
+                    v_cont_mesmayor_n,                                     --3
+                    listRecIntegradoraDetalle.PERS_EMPRESACUENTA_N_PK,     --4
+                    listRecIntegradoraDetalle.CONT_PERIODOCUENTA_N,        --5
+                    listRecIntegradoraDetalle.CONT_NUMEROCUENTA_V,         --6
+                    v_n_debe_soles_calculo_sal,                            --7
+                    v_n_haber_soles_calculo_sal,                           --8
+                    v_n_debe_ext_calc_sal,                                 --9
+                    v_n_haber_ext_calc_sal,                               --10
+                    v_n_debe_soles_calculo,                               --11
+                    v_n_haber_soles_calculo,                              --12
+                    v_n_debe_extranjera_calculo,                          --13
+                    v_n_haber_extranjera_calculo,                         --14
+                    0,                                                    --15
+                    0,                                                    --16
+                    0,                                                    --17
+                    v_n_debe_soles_calculo_fin,                           --18
+                    v_n_haber_soles_calculo_fin,                          --19
+                    v_n_debe_ext_calc_fin,                                --20
+                    v_n_haber_ext_calc_fin,                               --21
+                    v_n_nivel_cuenta);
+         EXCEPTION
+            WHEN DUP_VAL_ON_INDEX
+            THEN
+               UPDATE CON_LIBROMAYORDETALLE
+                  SET LMDE_DEBESOLESSALDOFIN_N =
+                         (CASE
+                             WHEN ( (LMDE_HABERSOLESSALDOFIN_N
+                                     + listRecIntegradoraDetalle.LMDE_HABERSOLESSALDOFIN_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_DEBESOLESSALDOFIN_N,
+                                          0)
+                                       + LMDE_DEBESOLESSALDOFIN_N))
+                             THEN
+                                0
+                             ELSE
+                                (NVL (
+                                    listRecIntegradoraDetalle.LMDE_DEBESOLESSALDOFIN_N,
+                                    0)
+                                 + LMDE_DEBESOLESSALDOFIN_N)
+                                - (LMDE_HABERSOLESSALDOFIN_N
+                                   + listRecIntegradoraDetalle.LMDE_HABERSOLESSALDOFIN_N)
+                          END),
+                      LMDE_HABERSOLESSALDOFIN_N =
+                         (CASE
+                             WHEN ( (LMDE_DEBESOLESSALDOFIN_N
+                                     + listRecIntegradoraDetalle.LMDE_DEBESOLESSALDOFIN_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_HABERSOLESSALDOFIN_N,
+                                          0)
+                                       + LMDE_HABERSOLESSALDOFIN_N))
+                             THEN
+                                0
+                             ELSE
+                                NVL (
+                                   listRecIntegradoraDetalle.LMDE_HABERSOLESSALDOFIN_N,
+                                   0)
+                                + LMDE_HABERSOLESSALDOFIN_N
+                                - (LMDE_DEBESOLESSALDOFIN_N
+                                   + listRecIntegradoraDetalle.LMDE_DEBESOLESSALDOFIN_N)
+                          END),
+                      LMDE_DEBEEXTRANJEROSALDOFIN_N =
+                         (CASE
+                             WHEN ( (LMDE_HABEREXTRANJEROSALDOFIN_N
+                                     + listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N,
+                                          0)
+                                       + LMDE_DEBEEXTRANJEROSALDOFIN_N))
+                             THEN
+                                0
+                             ELSE
+                                (NVL (
+                                    listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N,
+                                    0)
+                                 + LMDE_DEBEEXTRANJEROSALDOFIN_N)
+                                - (LMDE_HABEREXTRANJEROSALDOFIN_N
+                                   + listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N)
+                          END),
+                      LMDE_HABEREXTRANJEROSALDOFIN_N =
+                         (CASE
+                             WHEN ( (LMDE_DEBEEXTRANJEROSALDOFIN_N
+                                     + listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N,
+                                          0)
+                                       + LMDE_HABEREXTRANJEROSALDOFIN_N))
+                             THEN
+                                0
+                             ELSE
+                                NVL (
+                                   listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N,
+                                   0)
+                                + LMDE_HABEREXTRANJEROSALDOFIN_N
+                                - (LMDE_DEBEEXTRANJEROSALDOFIN_N
+                                   + listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N)
+                          END),
+                      LMDE_DEBESOLESSALDO_N =
+                         (CASE
+                             WHEN ( (LMDE_HABERSOLESSALDO_N
+                                     + listRecIntegradoraDetalle.LMDE_HABERSOLESSALDO_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_DEBESOLESSALDO_N,
+                                          0)
+                                       + LMDE_DEBESOLESSALDO_N))
+                             THEN
+                                0
+                             ELSE
+                                (NVL (
+                                    listRecIntegradoraDetalle.LMDE_DEBESOLESSALDO_N,
+                                    0)
+                                 + LMDE_DEBESOLESSALDO_N)
+                                - (LMDE_HABERSOLESSALDO_N
+                                   + listRecIntegradoraDetalle.LMDE_HABERSOLESSALDO_N)
+                          END),
+                      LMDE_HABERSOLESSALDO_N =
+                         (CASE
+                             WHEN ( (LMDE_DEBESOLESSALDO_N
+                                     + listRecIntegradoraDetalle.LMDE_DEBESOLESSALDO_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_HABERSOLESSALDO_N,
+                                          0)
+                                       + LMDE_HABERSOLESSALDO_N))
+                             THEN
+                                0
+                             ELSE
+                                NVL (
+                                   listRecIntegradoraDetalle.LMDE_HABERSOLESSALDO_N,
+                                   0)
+                                + LMDE_HABERSOLESSALDO_N
+                                - (LMDE_DEBESOLESSALDO_N
+                                   + listRecIntegradoraDetalle.LMDE_DEBESOLESSALDO_N)
+                          END),
+                      LMDE_DEBEEXTRANJEROSALDO_N =
+                         (CASE
+                             WHEN ( (LMDE_HABEREXTRANJEROSALDO_N
+                                     + listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDO_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDO_N,
+                                          0)
+                                       + LMDE_DEBEEXTRANJEROSALDO_N))
+                             THEN
+                                0
+                             ELSE
+                                (NVL (
+                                    listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDO_N,
+                                    0)
+                                 + LMDE_DEBEEXTRANJEROSALDO_N)
+                                - (LMDE_HABEREXTRANJEROSALDO_N
+                                   + listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDO_N)
+                          END),
+                      LMDE_HABEREXTRANJEROSALDO_N =
+                         (CASE
+                             WHEN ( (LMDE_DEBEEXTRANJEROSALDO_N
+                                     + listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDO_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDO_N,
+                                          0)
+                                       + LMDE_HABEREXTRANJEROSALDO_N))
+                             THEN
+                                0
+                             ELSE
+                                NVL (
+                                   listRecIntegradoraDetalle.LMDE_HABEREXTRANJEROSALDO_N,
+                                   0)
+                                + LMDE_HABEREXTRANJEROSALDO_N
+                                - (LMDE_DEBEEXTRANJEROSALDO_N
+                                   + listRecIntegradoraDetalle.LMDE_DEBEEXTRANJEROSALDO_N)
+                          END),
+                      LMDE_DEBESOLES_N =
+                         (CASE
+                             WHEN ( (LMDE_HABERSOLES_N
+                                     + listRecIntegradoraDetalle.LMDE_HABERSOLES_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_DEBESOLES_N,
+                                          0)
+                                       + LMDE_DEBESOLES_N))
+                             THEN
+                                0
+                             ELSE
+                                (NVL (
+                                    listRecIntegradoraDetalle.LMDE_DEBESOLES_N,
+                                    0)
+                                 + LMDE_DEBESOLES_N)
+                                - (LMDE_HABERSOLES_N
+                                   + listRecIntegradoraDetalle.LMDE_HABERSOLES_N)
+                          END),
+                      LMDE_HABERSOLES_N =
+                         (CASE
+                             WHEN ( (LMDE_DEBESOLES_N
+                                     + listRecIntegradoraDetalle.LMDE_DEBESOLES_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_HABERSOLES_N,
+                                          0)
+                                       + LMDE_HABERSOLES_N))
+                             THEN
+                                0
+                             ELSE
+                                NVL (
+                                   listRecIntegradoraDetalle.LMDE_HABERSOLES_N,
+                                   0)
+                                + LMDE_HABERSOLES_N
+                                - (LMDE_DEBESOLES_N
+                                   + listRecIntegradoraDetalle.LMDE_DEBESOLES_N)
+                          END),
+                      LMDE_DEBEEXTRANJERO_N =
+                         (CASE
+                             WHEN ( (LMDE_HABEREXTRANJERO_N
+                                     + listRecIntegradoraDetalle.LMDE_HABEREXTRANJERO_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_DEBEEXTRANJERO_N,
+                                          0)
+                                       + LMDE_DEBEEXTRANJERO_N))
+                             THEN
+                                0
+                             ELSE
+                                (NVL (
+                                    listRecIntegradoraDetalle.LMDE_DEBEEXTRANJERO_N,
+                                    0)
+                                 + LMDE_DEBEEXTRANJERO_N)
+                                - (LMDE_HABEREXTRANJERO_N
+                                   + listRecIntegradoraDetalle.LMDE_HABEREXTRANJERO_N)
+                          END),
+                      LMDE_HABEREXTRANJERO_N =
+                         (CASE
+                             WHEN ( (LMDE_DEBEEXTRANJERO_N
+                                     + listRecIntegradoraDetalle.LMDE_DEBEEXTRANJERO_N) >
+                                      (NVL (
+                                          listRecIntegradoraDetalle.LMDE_HABEREXTRANJERO_N,
+                                          0)
+                                       + LMDE_HABEREXTRANJERO_N))
+                             THEN
+                                0
+                             ELSE
+                                NVL (
+                                   listRecIntegradoraDetalle.LMDE_HABEREXTRANJERO_N,
+                                   0)
+                                + LMDE_HABEREXTRANJERO_N
+                                - (LMDE_DEBEEXTRANJERO_N
+                                   + listRecIntegradoraDetalle.LMDE_DEBEEXTRANJERO_N)
+                          END)
+                WHERE     PERS_EMPRESAMAYOR_N_PK = v_pers_empresamayor_n_pk
+                      AND CONT_PERIODOMAYOR_N = v_cont_periodomayor_n
+                      AND CONT_MESMAYOR_N = v_cont_mesmayor_n
+                      AND PERS_EMPRESACUENTA_N_PK =
+                             listRecIntegradoraDetalle.PERS_EMPRESACUENTA_N_PK
+                      AND CONT_PERIODOCUENTA_N =
+                             listRecIntegradoraDetalle.CONT_PERIODOCUENTA_N
+                      AND CONT_NUMEROCUENTA_V =
+                             listRecIntegradoraDetalle.CONT_NUMEROCUENTA_V;
+            WHEN OTHERS
+            THEN
+               DBMS_OUTPUT.PUT_LINE (
+                     SQLCODE
+                  || ' - '
+                  || SQLERRM
+                  || ' -- '
+                  || v_pers_empresamayor_n_pk
+                  || ' - '
+                  || v_cont_periodomayor_n
+                  || ' - '
+                  || v_cont_mesmayor_n
+                  || ' - '
+                  || listRecIntegradoraDetalle.PERS_EMPRESACUENTA_N_PK
+                  || ' - '
+                  || listRecIntegradoraDetalle.CONT_PERIODOCUENTA_N
+                  || ' - '
+                  || listRecIntegradoraDetalle.CONT_NUMEROCUENTA_V);
+         END;
+      END LOOP;
+
+      -- INSERTANDO LOS PADRES
+      LOOP
+         FOR listRecMayorDetalle
+            IN v_lista_mayor_cuentas_nivel (v_n_nivel_cuenta)
+         LOOP
+            v_n_debe_soles_calculo_sal :=
+               NVL (listRecMayorDetalle.LMDE_DEBESOLESSALDO_N, 0);
+            v_n_haber_soles_calculo_sal :=
+               NVL (listRecMayorDetalle.LMDE_HABERSOLESSALDO_N, 0);
+            v_n_debe_ext_calc_sal :=
+               NVL (listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDO_N, 0);
+            v_n_haber_ext_calc_sal :=
+               NVL (listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDO_N, 0);
+
+            -- calculando debe y haber soles x movimientos
+            IF (v_n_debe_soles_calculo_sal > v_n_haber_soles_calculo_sal)
+            THEN
+               v_n_debe_soles_calculo_sal :=
+                  v_n_debe_soles_calculo_sal - v_n_haber_soles_calculo_sal;
+               v_n_haber_soles_calculo_sal := 0;
+            ELSE
+               v_n_haber_soles_calculo_sal :=
+                  v_n_haber_soles_calculo_sal - v_n_debe_soles_calculo_sal;
+               v_n_debe_soles_calculo_sal := 0;
+            END IF;
+
+            -- calculando debe y haber extranjera x movimientos
+            IF (v_n_debe_ext_calc_sal > v_n_haber_ext_calc_sal)
+            THEN
+               v_n_debe_ext_calc_sal :=
+                  v_n_debe_ext_calc_sal - v_n_haber_ext_calc_sal;
+               v_n_haber_ext_calc_sal := 0;
+            ELSE
+               v_n_haber_ext_calc_sal :=
+                  v_n_haber_ext_calc_sal - v_n_debe_ext_calc_sal;
+               v_n_debe_ext_calc_sal := 0;
+            END IF;
+
+            v_n_debe_soles_calculo :=
+               NVL (listRecMayorDetalle.LMDE_DEBESOLES_N, 0);
+            v_n_haber_soles_calculo :=
+               NVL (listRecMayorDetalle.LMDE_HABERSOLES_N, 0);
+            v_n_debe_extranjera_calculo :=
+               NVL (listRecMayorDetalle.LMDE_DEBEEXTRANJERO_N, 0);
+            v_n_haber_extranjera_calculo :=
+               NVL (listRecMayorDetalle.LMDE_HABEREXTRANJERO_N, 0);
+
+            -- calculando debe y haber soles x movimientos
+            IF (v_n_debe_soles_calculo > v_n_haber_soles_calculo)
+            THEN
+               v_n_debe_soles_calculo :=
+                  v_n_debe_soles_calculo - v_n_haber_soles_calculo;
+               v_n_haber_soles_calculo := 0;
+            ELSE
+               v_n_haber_soles_calculo :=
+                  v_n_haber_soles_calculo - v_n_debe_soles_calculo;
+               v_n_debe_soles_calculo := 0;
+            END IF;
+
+            -- calculando debe y haber extranjera x movimientos
+            IF (v_n_debe_extranjera_calculo > v_n_haber_extranjera_calculo)
+            THEN
+               v_n_debe_extranjera_calculo :=
+                  v_n_debe_extranjera_calculo - v_n_haber_extranjera_calculo;
+               v_n_haber_extranjera_calculo := 0;
+            ELSE
+               v_n_haber_extranjera_calculo :=
+                  v_n_haber_extranjera_calculo - v_n_debe_extranjera_calculo;
+               v_n_debe_extranjera_calculo := 0;
+            END IF;
+
+            -- sumando el saldo mas el haber o deber por movimiento.
+            -- soles
+            v_n_debe_soles_calculo_fin :=
+               v_n_debe_soles_calculo
+               + NVL (listRecMayorDetalle.LMDE_DEBESOLESSALDO_N, 0);
+            v_n_haber_soles_calculo_fin :=
+               v_n_haber_soles_calculo
+               + NVL (listRecMayorDetalle.LMDE_HABERSOLESSALDO_N, 0);
+            -- dolares
+            v_n_debe_ext_calc_fin :=
+               v_n_debe_extranjera_calculo
+               + NVL (listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDO_N, 0);
+            v_n_haber_ext_calc_fin :=
+               v_n_haber_extranjera_calculo
+               + NVL (listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDO_N, 0);
+
+            -- calcular saldo fin para soles
+            IF (v_n_debe_soles_calculo_fin > v_n_haber_soles_calculo_fin)
+            THEN
+               v_n_debe_soles_calculo_fin :=
+                  v_n_debe_soles_calculo_fin - v_n_haber_soles_calculo_fin;
+               v_n_haber_soles_calculo_fin := 0;
+            ELSE
+               v_n_haber_soles_calculo_fin :=
+                  v_n_haber_soles_calculo_fin - v_n_debe_soles_calculo_fin;
+               v_n_debe_soles_calculo_fin := 0;
+            END IF;
+
+            -- calcular saldo fin para soles
+            IF (v_n_debe_ext_calc_fin > v_n_haber_ext_calc_fin)
+            THEN
+               v_n_debe_ext_calc_fin :=
+                  v_n_debe_ext_calc_fin - v_n_haber_ext_calc_fin;
+               v_n_haber_ext_calc_fin := 0;
+            ELSE
+               v_n_haber_ext_calc_fin :=
+                  v_n_haber_ext_calc_fin - v_n_debe_ext_calc_fin;
+               v_n_debe_ext_calc_fin := 0;
+            END IF;
+
+            BEGIN
+               INSERT
+                 INTO CON_LIBROMAYORDETALLE (PERS_EMPRESAMAYOR_N_PK,       --1
+                                             CONT_PERIODOMAYOR_N,          --2
+                                             CONT_MESMAYOR_N,              --3
+                                             PERS_EMPRESACUENTA_N_PK,      --4
+                                             CONT_PERIODOCUENTA_N,         --5
+                                             CONT_NUMEROCUENTA_V,          --6
+                                             LMDE_DEBESOLESSALDO_N,        --7
+                                             LMDE_HABERSOLESSALDO_N,       --8
+                                             LMDE_DEBEEXTRANJEROSALDO_N,   --9
+                                             LMDE_HABEREXTRANJEROSALDO_N, --10
+                                             LMDE_DEBESOLES_N,            --11
+                                             LMDE_HABERSOLES_N,           --12
+                                             LMDE_DEBEEXTRANJERO_N,       --13
+                                             LMDE_HABEREXTRANJERO_N,      --14
+                                             PERS_EMPRESASUCURSAL_N_PK,   --15
+                                             SUCU_IDSUCURSAL_N_PK,        --16
+                                             SUDE_IDSUBSUCURSAL_N_PK,     --17
+                                             LMDE_DEBESOLESSALDOFIN_N,    --18
+                                             LMDE_HABERSOLESSALDOFIN_N,   --19
+                                             LMDE_DEBEEXTRANJEROSALDOFIN_N, --20
+                                             LMDE_HABEREXTRANJEROSALDOFIN_N, --21
+                                             LMDE_NIVELCUENTA_N)
+               VALUES (v_pers_empresamayor_n_pk,                           --1
+                       v_cont_periodomayor_n,                              --2
+                       v_cont_mesmayor_n,                                  --3
+                       listRecMayorDetalle.PERS_EMPRESACUENTA_N_PK,        --4
+                       listRecMayorDetalle.CONT_PERIODOCUENTA_N,           --5
+                       listRecMayorDetalle.CONT_NUMEROCUENTA_V,            --6
+                       v_n_debe_soles_calculo_sal,                         --7
+                       v_n_haber_soles_calculo_sal,                        --8
+                       v_n_debe_ext_calc_sal,                              --9
+                       v_n_haber_ext_calc_sal,                            --10
+                       v_n_debe_soles_calculo,                            --11
+                       v_n_haber_soles_calculo,                           --12
+                       v_n_debe_extranjera_calculo,                       --13
+                       v_n_haber_extranjera_calculo,                      --14
+                       listRecMayorDetalle.PERS_EMPRESASUCURSAL_N_PK,     --15
+                       listRecMayorDetalle.SUCU_IDSUCURSAL_N_PK,          --16
+                       NVL (listRecMayorDetalle.SUDE_IDSUBSUCURSAL_N_PK, 0), --17
+                       v_n_debe_soles_calculo_fin,                        --18
+                       v_n_haber_soles_calculo_fin,                       --19
+                       v_n_debe_ext_calc_fin,                             --20
+                       v_n_haber_ext_calc_fin,                            --21
+                       v_n_nivel_cuenta + 1);
+            EXCEPTION
+               WHEN DUP_VAL_ON_INDEX
+               THEN
+                  UPDATE CON_LIBROMAYORDETALLE
+                     SET LMDE_DEBESOLESSALDOFIN_N =
+                            (CASE
+                                WHEN ( (LMDE_HABERSOLESSALDOFIN_N
+                                        + listRecMayorDetalle.LMDE_HABERSOLESSALDOFIN_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_DEBESOLESSALDOFIN_N,
+                                             0)
+                                          + LMDE_DEBESOLESSALDOFIN_N))
+                                THEN
+                                   0
+                                ELSE
+                                   (NVL (
+                                       listRecMayorDetalle.LMDE_DEBESOLESSALDOFIN_N,
+                                       0)
+                                    + LMDE_DEBESOLESSALDOFIN_N)
+                                   - (LMDE_HABERSOLESSALDOFIN_N
+                                      + listRecMayorDetalle.LMDE_HABERSOLESSALDOFIN_N)
+                             END),
+                         LMDE_HABERSOLESSALDOFIN_N =
+                            (CASE
+                                WHEN ( (LMDE_DEBESOLESSALDOFIN_N
+                                        + listRecMayorDetalle.LMDE_DEBESOLESSALDOFIN_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_HABERSOLESSALDOFIN_N,
+                                             0)
+                                          + LMDE_HABERSOLESSALDOFIN_N))
+                                THEN
+                                   0
+                                ELSE
+                                   NVL (
+                                      listRecMayorDetalle.LMDE_HABERSOLESSALDOFIN_N,
+                                      0)
+                                   + LMDE_HABERSOLESSALDOFIN_N
+                                   - (LMDE_DEBESOLESSALDOFIN_N
+                                      + listRecMayorDetalle.LMDE_DEBESOLESSALDOFIN_N)
+                             END),
+                         LMDE_DEBEEXTRANJEROSALDOFIN_N =
+                            (CASE
+                                WHEN ( (LMDE_HABEREXTRANJEROSALDOFIN_N
+                                        + listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N,
+                                             0)
+                                          + LMDE_DEBEEXTRANJEROSALDOFIN_N))
+                                THEN
+                                   0
+                                ELSE
+                                   (NVL (
+                                       listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N,
+                                       0)
+                                    + LMDE_DEBEEXTRANJEROSALDOFIN_N)
+                                   - (LMDE_HABEREXTRANJEROSALDOFIN_N
+                                      + listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N)
+                             END),
+                         LMDE_HABEREXTRANJEROSALDOFIN_N =
+                            (CASE
+                                WHEN ( (LMDE_DEBEEXTRANJEROSALDOFIN_N
+                                        + listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N,
+                                             0)
+                                          + LMDE_HABEREXTRANJEROSALDOFIN_N))
+                                THEN
+                                   0
+                                ELSE
+                                   NVL (
+                                      listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDOFIN_N,
+                                      0)
+                                   + LMDE_HABEREXTRANJEROSALDOFIN_N
+                                   - (LMDE_DEBEEXTRANJEROSALDOFIN_N
+                                      + listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDOFIN_N)
+                             END),
+                         LMDE_DEBESOLESSALDO_N =
+                            (CASE
+                                WHEN ( (LMDE_HABERSOLESSALDO_N
+                                        + listRecMayorDetalle.LMDE_HABERSOLESSALDO_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_DEBESOLESSALDO_N,
+                                             0)
+                                          + LMDE_DEBESOLESSALDO_N))
+                                THEN
+                                   0
+                                ELSE
+                                   (NVL (
+                                       listRecMayorDetalle.LMDE_DEBESOLESSALDO_N,
+                                       0)
+                                    + LMDE_DEBESOLESSALDO_N)
+                                   - (LMDE_HABERSOLESSALDO_N
+                                      + listRecMayorDetalle.LMDE_HABERSOLESSALDO_N)
+                             END),
+                         LMDE_HABERSOLESSALDO_N =
+                            (CASE
+                                WHEN ( (LMDE_DEBESOLESSALDO_N
+                                        + listRecMayorDetalle.LMDE_DEBESOLESSALDO_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_HABERSOLESSALDO_N,
+                                             0)
+                                          + LMDE_HABERSOLESSALDO_N))
+                                THEN
+                                   0
+                                ELSE
+                                   NVL (
+                                      listRecMayorDetalle.LMDE_HABERSOLESSALDO_N,
+                                      0)
+                                   + LMDE_HABERSOLESSALDO_N
+                                   - (LMDE_DEBESOLESSALDO_N
+                                      + listRecMayorDetalle.LMDE_DEBESOLESSALDO_N)
+                             END),
+                         LMDE_DEBEEXTRANJEROSALDO_N =
+                            (CASE
+                                WHEN ( (LMDE_HABEREXTRANJEROSALDO_N
+                                        + listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDO_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDO_N,
+                                             0)
+                                          + LMDE_DEBEEXTRANJEROSALDO_N))
+                                THEN
+                                   0
+                                ELSE
+                                   (NVL (
+                                       listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDO_N,
+                                       0)
+                                    + LMDE_DEBEEXTRANJEROSALDO_N)
+                                   - (LMDE_HABEREXTRANJEROSALDO_N
+                                      + listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDO_N)
+                             END),
+                         LMDE_HABEREXTRANJEROSALDO_N =
+                            (CASE
+                                WHEN ( (LMDE_DEBEEXTRANJEROSALDO_N
+                                        + listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDO_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDO_N,
+                                             0)
+                                          + LMDE_HABEREXTRANJEROSALDO_N))
+                                THEN
+                                   0
+                                ELSE
+                                   NVL (
+                                      listRecMayorDetalle.LMDE_HABEREXTRANJEROSALDO_N,
+                                      0)
+                                   + LMDE_HABEREXTRANJEROSALDO_N
+                                   - (LMDE_DEBEEXTRANJEROSALDO_N
+                                      + listRecMayorDetalle.LMDE_DEBEEXTRANJEROSALDO_N)
+                             END),
+                         LMDE_DEBESOLES_N =
+                            (CASE
+                                WHEN ( (LMDE_HABERSOLES_N
+                                        + listRecMayorDetalle.LMDE_HABERSOLES_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_DEBESOLES_N,
+                                             0)
+                                          + LMDE_DEBESOLES_N))
+                                THEN
+                                   0
+                                ELSE
+                                   (NVL (
+                                       listRecMayorDetalle.LMDE_DEBESOLES_N,
+                                       0)
+                                    + LMDE_DEBESOLES_N)
+                                   - (LMDE_HABERSOLES_N
+                                      + listRecMayorDetalle.LMDE_HABERSOLES_N)
+                             END),
+                         LMDE_HABERSOLES_N =
+                            (CASE
+                                WHEN ( (LMDE_DEBESOLES_N
+                                        + listRecMayorDetalle.LMDE_DEBESOLES_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_HABERSOLES_N,
+                                             0)
+                                          + LMDE_HABERSOLES_N))
+                                THEN
+                                   0
+                                ELSE
+                                   NVL (
+                                      listRecMayorDetalle.LMDE_HABERSOLES_N,
+                                      0)
+                                   + LMDE_HABERSOLES_N
+                                   - (LMDE_DEBESOLES_N
+                                      + listRecMayorDetalle.LMDE_DEBESOLES_N)
+                             END),
+                         LMDE_DEBEEXTRANJERO_N =
+                            (CASE
+                                WHEN ( (LMDE_HABEREXTRANJERO_N
+                                        + listRecMayorDetalle.LMDE_HABEREXTRANJERO_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_DEBEEXTRANJERO_N,
+                                             0)
+                                          + LMDE_DEBEEXTRANJERO_N))
+                                THEN
+                                   0
+                                ELSE
+                                   (NVL (
+                                       listRecMayorDetalle.LMDE_DEBEEXTRANJERO_N,
+                                       0)
+                                    + LMDE_DEBEEXTRANJERO_N)
+                                   - (LMDE_HABEREXTRANJERO_N
+                                      + listRecMayorDetalle.LMDE_HABEREXTRANJERO_N)
+                             END),
+                         LMDE_HABEREXTRANJERO_N =
+                            (CASE
+                                WHEN ( (LMDE_DEBEEXTRANJERO_N
+                                        + listRecMayorDetalle.LMDE_DEBEEXTRANJERO_N) >
+                                         (NVL (
+                                             listRecMayorDetalle.LMDE_HABEREXTRANJERO_N,
+                                             0)
+                                          + LMDE_HABEREXTRANJERO_N))
+                                THEN
+                                   0
+                                ELSE
+                                   NVL (
+                                      listRecMayorDetalle.LMDE_HABEREXTRANJERO_N,
+                                      0)
+                                   + LMDE_HABEREXTRANJERO_N
+                                   - (LMDE_DEBEEXTRANJERO_N
+                                      + listRecMayorDetalle.LMDE_DEBEEXTRANJERO_N)
+                             END)
+                   WHERE PERS_EMPRESAMAYOR_N_PK = v_pers_empresamayor_n_pk
+                         AND CONT_PERIODOMAYOR_N = v_cont_periodomayor_n
+                         AND CONT_MESMAYOR_N = v_cont_mesmayor_n
+                         AND PERS_EMPRESACUENTA_N_PK =
+                                listRecMayorDetalle.PERS_EMPRESACUENTA_N_PK
+                         AND CONT_PERIODOCUENTA_N =
+                                listRecMayorDetalle.CONT_PERIODOCUENTA_N
+                         AND CONT_NUMEROCUENTA_V =
+                                listRecMayorDetalle.CONT_NUMEROCUENTA_V;
+            END;
+         END LOOP;
+
+         v_n_nivel_cuenta := v_n_nivel_cuenta + 1;
+         EXIT WHEN v_n_sz_cuenta_nv < v_n_nivel_cuenta;
+      END LOOP;
+
+      V_PROC_MAYOR_RETURN := 1;
    EXCEPTION
       WHEN OTHERS
       THEN
-         --ROLLBACK;
+         DELETE FROM CON_LIBROMAYORDETALLE
+               WHERE     PERS_EMPRESAMAYOR_N_PK = v_pers_empresamayor_n_pk
+                     AND CONT_PERIODOMAYOR_N = v_cont_periodomayor_n
+                     AND CONT_MESMAYOR_N = v_cont_mesmayor_n;
 
-         UPDATE CON_LIBROMAYOR
-            SET PARA_ESTADO_N_COD = 4
-          WHERE     PERS_EMPRESAMAYOR_N_PK = v_pers_empresamayor_n_pk
-                AND CONT_PERIODOMAYOR_N = v_cont_periodomayor_n
-                AND CONT_MESMAYOR_N = v_cont_mesmayor_n;
-        V_PROC_MAYOR_RETURN := 0;
-         --COMMIT;
+         V_PROC_MAYOR_RETURN := 0;
    END processMayorizacion;
 END PKG_LIBROMAYOR;
 /
