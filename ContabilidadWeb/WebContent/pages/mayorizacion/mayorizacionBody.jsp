@@ -149,12 +149,18 @@
 			<h:panelGrid columns="4">
 				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
 					actionListener="#{mayorizacionController.habilitarPanelInferior}" 
-					reRender="contPanelInferiorProcMay,panelValidMsgError,dlValidAccounts" />
+					reRender="contPanelInferiorProcMay,panelValidMsgError,panelValidMsgSuccess,dlValidAccounts" />
 			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
 			    	actionListener="#{mayorizacionController.deshabilitarPanelInferior}" 
-			    	reRender="contPanelInferiorProcMay,panelValidMsgError" />
+			    	reRender="contPanelInferiorProcMay,panelValidMsgError,panelValidMsgSuccess" />
 			</h:panelGrid>
 		</rich:panel>
+		
+		<h:panelGrid id="panelValidMsgSuccess">
+			<h:outputText value="#{mayorizacionController.strMsgSuccess}" styleClass="msgInfo"/>
+			<h:outputText value="#{mayorizacionController.strMsgFailed}" styleClass="msgInfo"/>
+		</h:panelGrid>
+		
 		<rich:panel id="contPanelInferiorProcMay" style="border:0px;">
 			<rich:spacer height="3px"/>
 				<rich:panel id="panelInferior" style="border:1px solid #17356f;" rendered="#{mayorizacionController.mostrarPanelInferior}">
@@ -186,7 +192,7 @@
 		               	<a4j:commandButton styleClass="btnEstilos"
 		               		value="Procesar"
 		                   	action="#{mayorizacionController.procesarMayorizado}" style="width:70px"
-		                   	reRender="panelValidMsgError"/>
+		                   	reRender="panelValidMsgError,panelValidMsgSuccess,tblContabilidad"/>
 		            </rich:column>
 		            <rich:spacer height="3px"/>
 				</rich:panel>

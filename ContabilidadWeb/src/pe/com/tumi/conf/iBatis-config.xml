@@ -27,4 +27,7 @@
 	<sqlMap resource="pe/com/tumi/contabilidad/legalizacion/dao/impl/PagoLegalizacion.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/AccesoPlanCuenta.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/AccesoPlanCuentaDetalle.xml"/>
+	<!-- Agregado por rvillareal on 28/07/2014 -->
+	<sqlMap resource="pe/com/tumi/contabilidad/cierreContabilidad/dao/impl/CierreContabilidad.xml"/>
+	<!-- Fin agregado por rvillareal on 28/07/2014 -->
 </sqlMapConfig>
