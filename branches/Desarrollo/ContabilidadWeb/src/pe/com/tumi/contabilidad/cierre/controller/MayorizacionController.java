@@ -31,6 +31,7 @@ import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.contabilidad.core.facade.MayorizacionFacadeLocal;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeLocal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
@@ -56,6 +57,8 @@ public class MayorizacionController {
 	private String strErrorValidateMsg;
 	private List<String> lstResultMsgValidation;
 	private Integer intValidResultAccounts;
+	private String strMsgSuccess;
+	private String strMsgFailed;
 	
 	public Integer INT_ID_EMPRESA;
 	public Integer INT_ID_USER;
@@ -204,6 +207,8 @@ public class MayorizacionController {
 				libroMayorNuevo = new LibroMayor();
 				listaLibroMayor = null;
 				strMsgError = null;
+				strMsgSuccess = null;
+				strMsgFailed = null;
 				mostrarPanelInferior = Boolean.FALSE;
 				strErrorValidateMsg = null;
 				lstResultMsgValidation = new ArrayList<String>();
@@ -255,6 +260,8 @@ public class MayorizacionController {
 		boolean isValidProcess;
 		Integer intReturnResp;
 		String strPeriodo = null;
+		strMsgSuccess = null;
+		strMsgFailed = null;
 		try {
 			isValidProcess = isValidateMayorizadoProcess();
 			if(!isValidProcess){
@@ -263,13 +270,21 @@ public class MayorizacionController {
 				libroMayorNuevo.setIntPersPersonaUsuario(INT_ID_USER);
 				intReturnResp = mayorizacionFacade.processMayorizacion(libroMayorNuevo, strPeriodo);
 				if(intReturnResp!=null && intReturnResp.equals(Constante.ON_SUCCESS)){
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("éxito!"));
+					libroMayorNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));
+					libroMayorNuevo.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO);
+					mayorizacionFacade.modificarLibroMayor(libroMayorNuevo);
+					strMsgSuccess = "El proceso de mayorización para el periodo " + strPeriodo + " ha sido generado éxitosamente.";
+				}else{
+					libroMayorNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));
+					libroMayorNuevo.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_FALLIDO);
+					mayorizacionFacade.modificarLibroMayor(libroMayorNuevo);
+					strMsgFailed = "El proceso de mayorización para el periodo " + strPeriodo + " falló en ejecución.";
 				}
 				buscarMayorizado();
 			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		} 
 	}
 	
 	private boolean isValidateMayorizadoProcess(){
@@ -306,7 +321,7 @@ public class MayorizacionController {
 				return true;
 			}
 			//Validar cuentas padre
-			isReturn = (validateBookAccounts(libroMayorNuevo.getId().getIntContPeriodoMayor()));
+			//isReturn = (validateBookAccounts(libroMayorNuevo.getId().getIntContPeriodoMayor()));
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -419,6 +434,8 @@ public class MayorizacionController {
 	public void cleanScreen(){
 		strErrorValidateMsg = null;
 		strMsgError = null;
+		strMsgSuccess = null;
+		strMsgFailed = null;
 		lstResultMsgValidation = new ArrayList<String>();
 		libroMayorNuevo = new LibroMayor();
 	}
@@ -485,5 +502,21 @@ public class MayorizacionController {
 
 	public void setIntValidResultAccounts(Integer intValidResultAccounts) {
 		this.intValidResultAccounts = intValidResultAccounts;
+	}
+
+	public String getStrMsgSuccess() {
+		return strMsgSuccess;
+	}
+
+	public void setStrMsgSuccess(String strMsgSuccess) {
+		this.strMsgSuccess = strMsgSuccess;
+	}
+
+	public String getStrMsgFailed() {
+		return strMsgFailed;
+	}
+
+	public void setStrMsgFailed(String strMsgFailed) {
+		this.strMsgFailed = strMsgFailed;
 	}
 }
