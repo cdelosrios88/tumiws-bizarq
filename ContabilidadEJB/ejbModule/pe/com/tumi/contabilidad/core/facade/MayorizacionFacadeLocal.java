@@ -18,4 +18,5 @@ public interface MayorizacionFacadeLocal {
 	public List<LibroMayor> buscarLibroMayoreHistorico(LibroMayor o) throws BusinessException;
 	public List<LibroMayor> getListAfterProcessedMayorizado(LibroMayor o) throws BusinessException;
 	public void deleteMayorizado(LibroMayor libroMayor) throws BusinessException;
+	public LibroMayor modificarLibroMayor(LibroMayor o)throws BusinessException;
 }

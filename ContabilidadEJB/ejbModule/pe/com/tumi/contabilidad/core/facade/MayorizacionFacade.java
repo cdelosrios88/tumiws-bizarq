@@ -14,11 +14,10 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
-import org.apache.openjpa.lib.log.Log;
-
 import pe.com.tumi.contabilidad.cierre.bo.LibroMayorBO;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.cierre.service.LibroMayorService;
+import pe.com.tumi.contabilidad.core.service.MayorizacionService;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
@@ -35,6 +34,7 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
 	//LibroDiarioService libroDiarioService = (LibroDiarioService)TumiFactory.get(LibroDiarioService.class);
 	LibroMayorBO boLibroMayor = (LibroMayorBO)TumiFactory.get(LibroMayorBO.class);
 	LibroMayorService libroMayorService = (LibroMayorService)TumiFactory.get(LibroMayorService.class);
+	MayorizacionService mayorizacionService = (MayorizacionService)TumiFactory.get(MayorizacionService.class);
 	
     /**
      * @see TumiFacade#TumiFacade()
@@ -47,7 +47,7 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
     public Integer processMayorizacion(LibroMayor o, String strPeriodo)throws BusinessException{
     	Integer intIdLibroMayor = null;
 		try{
-			intIdLibroMayor = boLibroMayor.processMayorizacion(o, strPeriodo);
+			intIdLibroMayor = mayorizacionService.processMayorizacion(o, strPeriodo);
 		}catch(BusinessException e){
 			context.setRollbackOnly();
 			throw e;
@@ -95,4 +95,17 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
    		}
 	}
 	
+	public LibroMayor modificarLibroMayor(LibroMayor o)throws BusinessException{
+		LibroMayor dto = null;
+		try{
+			dto = boLibroMayor.modificar(o);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return dto;
+	}
 }

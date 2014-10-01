@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreContabilidadDaoIbatis">
+
+		<!--Autor: Rodolfo Villarreal / Tarea: Creación / Fecha: 19.08.2014 /-->
+	
+	<typeAlias type="pe.com.tumi.contabilidad.cierreContabilidad.domain.CierreContabilidad" alias="CierreContabilidad"/>
+ 	<typeAlias type="pe.com.tumi.contabilidad.cierreContabilidad.domain.CierreContabilidadId" alias="CierreContabilidadId"/>
+ 	
+ 	<resultMap id="resBuscarCierre" class="CierreContabilidad" >
+     <result property="id.intPersEmpresaCieCob"   	column="pPERS_EMPRESACIECOB_N_PK" />
+     <result property="id.intCcobPeriodoCierre" 	column="pCCOB_PERIODOCIERRE_N" />
+     <result property="id.intEstadoCierreCod"      	column="pPARA_ESTADOCIERRE_N_COD" />
+     <result property="intPersEmpresaRegistroPk"   	column="pPERS_EMPRESAREGISTRO_N_PK" />
+     <result property="intPersPersonaRegistroPk" 	column="pPERS_PERSONAREGISTRO_N_PK" />
+     <result property="tsCicoFechaRegistro"      	column="pCICO_FECHAREGISTRO_D" />
+     <result property="strNombreUsuario"      		column="pNOMBRECOMPLETO" />
+     <result property="strDescripcionEstado"      	column="pDESCRIPCIONESTADO" />
+  	</resultMap>
+  	
+  	<resultMap id="resCierre" class="CierreContabilidad" >
+     <result property="id.intPersEmpresaCieCob"   	column="pPERS_EMPRESACIECOB_N_PK" />
+     <result property="id.intCcobPeriodoCierre" 	column="pCCOB_PERIODOCIERRE_N" />
+     <result property="id.intEstadoCierreCod"      	column="pPARA_ESTADOCIERRE_N_COD" />
+     <result property="intPersEmpresaRegistroPk"   	column="pPERS_EMPRESAREGISTRO_N_PK" />
+     <result property="intPersPersonaRegistroPk" 	column="pPERS_PERSONAREGISTRO_N_PK" />
+     <result property="tsCicoFechaRegistro"      	column="pCICO_FECHAREGISTRO_D" />
+  	</resultMap>
+ 	
+ 	<parameterMap id="parCierreContabilidad" class="CierreContabilidad">
+ 		<parameter property="id.intPersEmpresaCieCob"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intCcobPeriodoCierre"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intEstadoCierreCod"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaRegistroPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaRegistroPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsCicoFechaRegistro"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+ 	</parameterMap>
+ 	
+ 	<parameterMap id="parBuscarCierre" class="java.util.Map">
+ 		<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+		<parameter property="pIntCcobPeriodoCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+		<parameter property="pIntEstadoCierreCod"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+ 	</parameterMap>
+ 	
+ 	<parameterMap id="parCierre" class="java.util.Map">
+ 		<parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+		<parameter property="pIntEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+		<parameter property="pIntCcobPeriodo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+ 	</parameterMap>
+ 	
+ 	<procedure id="grabarCierreCon" parameterMap="parCierreContabilidad">
+		{ call PKG_CIERRECONTABILIDAD.grabarCierreContabilidad(?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="modificarCierreCon" parameterMap="parCierreContabilidad" >
+  		{ call PKG_CIERRECONTABILIDAD.modificarCierreContabilidad(?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaBuscarCierre" parameterMap="parBuscarCierre" resultMap="resBuscarCierre">
+		{ call PKG_CIERRECONTABILIDAD.getListaBuscar(?,?,?) }  
+  	</procedure>
+ 	
+ 	<procedure id="getListaCierre" parameterMap="parCierre" resultMap="resCierre">
+		{ call PKG_CIERRECONTABILIDAD.getListaCierreContabilidad(?,?,?) }  
+  	</procedure>
+</sqlMap> 
