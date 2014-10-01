@@ -35,10 +35,10 @@
 	 <parameter property="id.intContPeriodoMayor"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intContMesMayor"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaRegistro"			javaType="java.sql.Timestamp"	jdbcType="TIMESTAMP"	mode="INOUT"/>
-	 <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intParaEstadoCierreCod"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intPersEmpresaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intPersPersonaUsuario"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intEstadoCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <!-- Inicio: REQ14-004 - bizarq - 16/09/2014 -->
