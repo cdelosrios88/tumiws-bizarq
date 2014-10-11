@@ -158,7 +158,7 @@
 		
 		<h:panelGrid id="panelValidMsgSuccess">
 			<h:outputText value="#{mayorizacionController.strMsgSuccess}" styleClass="msgInfo"/>
-			<h:outputText value="#{mayorizacionController.strMsgFailed}" styleClass="msgInfo"/>
+			<h:outputText value="#{mayorizacionController.strMsgFailed}" styleClass="msgError"/>
 		</h:panelGrid>
 		
 		<rich:panel id="contPanelInferiorProcMay" style="border:0px;">
@@ -172,7 +172,7 @@
 		               	<h:selectOneMenu
 							style="width: 150px;"
 							value="#{mayorizacionController.libroMayorNuevo.id.intContMesMayor}">
-							<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO_TODOS}" itemLabel="Todos los meses"/>
+							
 							<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_MES_CALENDARIO}" 
 								itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 								propertySort="intOrden"/>
