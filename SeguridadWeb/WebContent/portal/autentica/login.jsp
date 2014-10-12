@@ -1,3 +1,8 @@
+<%
+try {
+
+
+ %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://richfaces.org/a4j" prefix="a4j"%>
@@ -26,7 +31,7 @@
 			<script type="text/javascript">Richfaces.showModalPanel('panelMostrarMensaje');
 			</script>
 	</c:if>
-<h:outputText value="#{loginController.inicializarPagina}"/>
+<h:outputText value="#{loginController.inicializarPagina}" id="asada" />
 <h:panelGrid id="tabla" columns="1" style="border:0px;width:100%;" columnClasses="columna">
 <h:column>
 <table id="tabla" width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -122,3 +127,14 @@
 </f:view>
 </body>
 </html>
+<%
+
+}catch (Exception e) {
+%>
+<script>
+location.reload(true);
+</script>
+<%
+System.out.println("Ocurrio error :::::::::::::::::::::::: "+e.getMessage());
+}
+%>
