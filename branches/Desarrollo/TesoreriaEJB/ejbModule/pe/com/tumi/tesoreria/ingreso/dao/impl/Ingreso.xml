@@ -51,6 +51,8 @@
     <result property="intItemFondoFijo"      				column="pitemfondofijo" />
     <result property="strNumeroOperacion"      				column="pnumerooperacion" />
     <result property="intParaEstadoDepositado"      		column="pestadodepositado" />
+    <result property="intParaModalidadPago"      			column="pmodalidadpago" />
+    <result property="intPeriodoSocio"      				column="pperiodosocio" />
   </resultMap>
   
   <parameterMap id="parIngreso" class="Ingreso">
@@ -99,6 +101,8 @@
 	 <parameter property="intItemFondoFijo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="strNumeroOperacion"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
 	 <parameter property="intParaEstadoDepositado"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaModalidadPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPeriodoSocio"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -139,6 +143,8 @@
   <parameterMap id="parPorEmpresa" class="java.util.Map">
    	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
    	 <parameter property="intIdEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
   
   
@@ -148,11 +154,11 @@
   </procedure>
   
   <procedure id="grabar" parameterMap="parIngreso">
-	{ call PKG_INGRESO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_INGRESO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parIngreso" >
-	{ call PKG_INGRESO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_INGRESO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resIngreso">
@@ -168,6 +174,6 @@
   </procedure>  
   
   <procedure id="getListaIngNoEnlazados" parameterMap="parPorEmpresa" resultMap="resIngreso">
-	{ call PKG_INGRESO.getListaIngNoEnlazados(?,?) }
+	{ call PKG_INGRESO.getListaIngNoEnlazados(?,?,?,?) }
   </procedure> 
 </sqlMap>

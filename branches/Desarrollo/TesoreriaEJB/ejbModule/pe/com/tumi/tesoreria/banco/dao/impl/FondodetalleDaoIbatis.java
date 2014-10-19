@@ -6,7 +6,6 @@ import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.persistencia.dao.impl.TumiDaoIbatis;
 
 import pe.com.tumi.tesoreria.banco.dao.FondodetalleDao;
-import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
 
 public class FondodetalleDaoIbatis extends TumiDaoIbatis implements FondodetalleDao{
@@ -63,4 +62,14 @@ public class FondodetalleDaoIbatis extends TumiDaoIbatis implements Fondodetalle
 		return lista;
 	}
 
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014
+	public List<Fondodetalle> getDocumentoPorFondoFijo(Object o) throws DAOException{
+		List<Fondodetalle> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getDocumentoPorFondoFijo", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
 }	

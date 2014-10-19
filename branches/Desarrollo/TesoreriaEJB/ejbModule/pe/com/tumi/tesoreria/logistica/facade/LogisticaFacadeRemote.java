@@ -1,5 +1,6 @@
 package pe.com.tumi.tesoreria.logistica.facade;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -88,4 +89,10 @@ public interface LogisticaFacadeRemote {
 	//Agregado por cdelosrios, 18/11/2013
     public List<DocumentoSunat> getListDocumentoSunatPorOrdenCompraYTipoDocumento(DocumentoSunat documentoSunat) throws BusinessException;
     //Fin agregado por cdelosrios, 18/11/2013
+    //Autor: jchavez / Tarea: Creación / Fecha: 03.10.2014
+    public boolean validarMontoOrdenCompraDetalle(OrdenCompraDetalle ocdNuevo, BigDecimal bdMontoValidar) throws BusinessException;
+    //Fin jchavez - 03.10.2014
+    //Autor: jchavez / Tarea: Creación / Fecha: 06.10.2014
+    public List<OrdenCompra> buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(Integer intIdPersona, Integer intIdEmpresa, Integer intParaTipoDocumento) throws BusinessException;
+    //Fin jchavez - 06.10.2014
 }

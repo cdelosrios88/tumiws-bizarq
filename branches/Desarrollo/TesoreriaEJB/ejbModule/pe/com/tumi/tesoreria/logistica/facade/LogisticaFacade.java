@@ -1,6 +1,7 @@
 package pe.com.tumi.tesoreria.logistica.facade;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -733,4 +734,32 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
 		return lista;
     }
     //Fin agregado por cdelosrios, 18/11/2013
+    
+    //Autor: jchavez / Tarea: Creación / Fecha: 03.10.2014
+    public boolean validarMontoOrdenCompraDetalle(OrdenCompraDetalle ocdNuevo, BigDecimal bdMontoValidar) throws BusinessException{
+    	Boolean blnValidacion = false;
+		try{
+			blnValidacion = ordenCompraService.validarMontoOrdenCompraDetalle(ocdNuevo, bdMontoValidar);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return blnValidacion;
+    }
+    //Fin jchavez - 03.10.2014
+    
+    //Autor: jchavez / Tarea: Creación / Fecha: 06.10.2014
+    public List<OrdenCompra> buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(Integer intIdPersona, Integer intIdEmpresa, Integer intParaTipoDocumento) throws BusinessException{
+    	List<OrdenCompra> lista = null;
+		try{
+			lista = ordenCompraService.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, intIdEmpresa, intParaTipoDocumento);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return lista;
+	}
+    //Fin jchavez - 06.10.2014
 }

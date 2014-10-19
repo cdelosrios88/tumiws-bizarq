@@ -72,4 +72,14 @@ public class ReciboManualDaoIbatis extends TumiDaoIbatis implements ReciboManual
 		
 		return vResult;
 	}	
+	
+	public List<ReciboManual> getReciboPorGestorYSucursal(Object o) throws DAOException{
+		List<ReciboManual> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getReciboPorGestorYSucursal", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}	
 }

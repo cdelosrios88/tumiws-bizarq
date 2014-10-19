@@ -37,6 +37,16 @@ public class OrdenCompraDocumento extends TumiDomain{
 	private BigDecimal	bdMontoUsarTotal;
 	private BigDecimal	bdMontoUsarDocumento;
 	
+	//Autor: jchavez / Tarea: Creación de nuevos campos / Fecha: 04.10.2014
+	private Timestamp tsFechaRegistro;
+	private Integer intPersEmpresaEgreso;
+	private Integer intItemEgresoGeneral;
+	private Integer intParaEstadoPago;
+	private Integer intPersEmpresaIngreso;
+	private Integer intItemIngresoGeneral;
+	private BigDecimal bdMontoSaldo;
+	//Fin jchavez - 04.10.2014
+	
 	public OrdenCompraDocumento(){
 		id = new OrdenCompraDocumentoId();
 	}
@@ -210,4 +220,48 @@ public class OrdenCompraDocumento extends TumiDomain{
 				+ ", bdMontoPagado=" + bdMontoPagado
 				+ ", bdMontoIngresado=" + bdMontoIngresado + "]";
 	}
+	//Autor: jchavez / Tarea: Creación de nuevos campos / Fecha: 04.10.2014
+	public Timestamp getTsFechaRegistro() {
+		return tsFechaRegistro;
+	}
+	public void setTsFechaRegistro(Timestamp tsFechaRegistro) {
+		this.tsFechaRegistro = tsFechaRegistro;
+	}
+	public Integer getIntPersEmpresaEgreso() {
+		return intPersEmpresaEgreso;
+	}
+	public void setIntPersEmpresaEgreso(Integer intPersEmpresaEgreso) {
+		this.intPersEmpresaEgreso = intPersEmpresaEgreso;
+	}
+	public Integer getIntItemEgresoGeneral() {
+		return intItemEgresoGeneral;
+	}
+	public void setIntItemEgresoGeneral(Integer intItemEgresoGeneral) {
+		this.intItemEgresoGeneral = intItemEgresoGeneral;
+	}
+	public Integer getIntParaEstadoPago() {
+		return intParaEstadoPago;
+	}
+	public void setIntParaEstadoPago(Integer intParaEstadoPago) {
+		this.intParaEstadoPago = intParaEstadoPago;
+	}
+	public Integer getIntPersEmpresaIngreso() {
+		return intPersEmpresaIngreso;
+	}
+	public void setIntPersEmpresaIngreso(Integer intPersEmpresaIngreso) {
+		this.intPersEmpresaIngreso = intPersEmpresaIngreso;
+	}
+	public Integer getIntItemIngresoGeneral() {
+		return intItemIngresoGeneral;
+	}
+	public void setIntItemIngresoGeneral(Integer intItemIngresoGeneral) {
+		this.intItemIngresoGeneral = intItemIngresoGeneral;
+	}
+	public BigDecimal getBdMontoSaldo() {
+		return bdMontoSaldo;
+	}
+	public void setBdMontoSaldo(BigDecimal bdMontoSaldo) {
+		this.bdMontoSaldo = bdMontoSaldo;
+	}
+	//Fin jchavez - 04.10.2014
 }

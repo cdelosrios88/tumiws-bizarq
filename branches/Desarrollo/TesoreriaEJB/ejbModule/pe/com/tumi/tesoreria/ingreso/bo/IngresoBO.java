@@ -126,11 +126,13 @@ public class IngresoBO{
 		}
 		return lista;
 	}
-	public List<Ingreso> getListaIngNoEnlazados(IngresoId pId) throws BusinessException{
+	public List<Ingreso> getListaIngNoEnlazados(Ingreso pIng) throws BusinessException{
 		List<Ingreso> lista = null;	
 		try{	
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intIdEmpresa", pId.getIntIdEmpresa());
+			mapa.put("intIdEmpresa", pIng.getId().getIntIdEmpresa());
+			mapa.put("intSucuIdSucursal", pIng.getIntSucuIdSucursal());
+			mapa.put("intSudeIdSubsucursal", pIng.getIntSudeIdSubsucursal());
 			lista = dao.getListaIngNoEnlazados(mapa);
 			
 		}catch(DAOException e){

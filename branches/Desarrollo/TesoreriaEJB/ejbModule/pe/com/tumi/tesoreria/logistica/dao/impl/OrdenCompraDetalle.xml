@@ -32,6 +32,12 @@
 	<result property="strContNumeroCuenta"   		column="pnumerocuenta" />
   </resultMap>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014-->
+  <resultMap id="resSumaPrecioTotalXCta" class="OrdenCompraDetalle" >
+	<result property="bdPrecioTotal"  			column="pSumPrecioTotal" />
+  </resultMap>
+  <!-- Fin jchavez - 02.10.2014 -->
+  
   <parameterMap id="parOrdenCompraDetalle" class="OrdenCompraDetalle">
 	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intItemOrdenCompra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
@@ -72,7 +78,17 @@
 	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
   
-  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014-->
+  <parameterMap id="parPorCtaPerfilSucu" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIdPerfil"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+  <!-- Fin jchavez - 02.10.2014 -->
   
   <procedure id="grabar" parameterMap="parOrdenCompraDetalle">
 	{ call PKG_ORDENCOMPRADETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
@@ -90,4 +106,9 @@
 	{ call PKG_ORDENCOMPRADETALLE.getListaPorOrdenCompra(?,?,?) }
   </procedure>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014-->
+  <procedure id="getSumPrecioTotalXCta" parameterMap="parPorCtaPerfilSucu" resultMap="resSumaPrecioTotalXCta">
+	{ call PKG_ORDENCOMPRADETALLE.getSumPrecioTotalXCta(?,?,?,?,?,?,?) }
+  </procedure>
+  <!-- Fin jchavez - 02.10.2014 -->
 </sqlMap>

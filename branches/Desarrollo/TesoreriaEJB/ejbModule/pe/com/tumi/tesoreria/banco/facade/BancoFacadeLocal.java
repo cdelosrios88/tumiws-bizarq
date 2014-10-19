@@ -50,7 +50,10 @@ public interface BancoFacadeLocal {
 	public List<Bancocuenta> getBancoCuentaPorBancoFondo(Bancofondo bancoFondo) throws BusinessException;
 	public Bancocuenta modificarBancoCuenta(Bancocuenta o) throws BusinessException;
 	public Bancofondo obtenerBancoFondoPorControl(ControlFondosFijos controlFondosFijos) throws BusinessException;
+	//Autor: jchavez / Tarea: Modificacion / Fecha: 30.09.2014
+	public Bancofondo obtenerBancoFondoParaIngreso(Usuario usuario, ControlFondosFijos controlFondosFijosCerrar) throws BusinessException; //Integer intMoneda
 	public Bancofondo obtenerBancoFondoParaIngreso(Usuario usuario, Integer intMoneda) throws BusinessException;
+	//Fin jchavez - 30.09.2014
 	public Bancofondo obtenerBancoFondoParaIngresoDesdeControl(ControlFondosFijos controlFondosFijos) throws BusinessException;
 	public List<Bancofondo> buscarBancoFondoParaDeposito(Bancofondo o, Usuario usuario) throws BusinessException;
 	public List<Bancofondo> obtenerListaFondoExistente(Integer intIdEmpresa)throws BusinessException;
@@ -60,4 +63,6 @@ public interface BancoFacadeLocal {
 	public Bancofondo obtenerBancoPorPlanCuenta(LibroDiarioDetalle libroDiarioDetalle) throws BusinessException;
 	public Acceso obtenerAccesoPorControlFondosFijos(ControlFondosFijos controlFondosFijos) throws BusinessException;
 	public List<Bancocuenta> buscarListaBancoCuenta(Bancocuenta bancoCuentaFiltro) throws BusinessException;
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014
+	public List<Fondodetalle> getDocumentoPorFondoFijo(Integer intEmpresa, Integer intTipoFondoFijo, Integer intMoneda) throws BusinessException;
 }

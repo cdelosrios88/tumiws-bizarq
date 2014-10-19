@@ -53,6 +53,7 @@ import pe.com.tumi.tesoreria.egreso.service.MovilidadService;
 import pe.com.tumi.tesoreria.egreso.service.SaldoService;
 import pe.com.tumi.tesoreria.egreso.service.SolicitudPersonalService;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.service.EgresoDocumentoSunatService;
 
 @Stateless
@@ -872,5 +873,92 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
 			throw new BusinessException(e);
 		}
 		return dto;
-	}    
+	}
+	
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public List<Egreso> buscarEgresoParaFondosFijos(List<Persona>listaPersona, Egreso egresoFiltro,
+		ControlFondosFijos controlFondosFijos, Date dtFechaDesde, Date dtFechaHasta) throws BusinessException{
+    	List<Egreso> lista = null;
+		try{
+			lista = egresoUtilService.buscarEgresoParaFondosFijos(listaPersona, egresoFiltro, controlFondosFijos, 
+					dtFechaDesde, dtFechaHasta);
+			
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return lista;
+	}
+    /**
+     * Autor: jchavez / Tarea: Creacion / Fecha: 06.10.2014
+     * Funcionalidad: Recupera lista egreso detalle interfaz a mostrar en el giro por tesoreria
+	 * @author jchavez
+	 * @param ordenCompra
+	 * @return lista - lista Egreso Detalle Interfaz
+	 * @throws Exception
+     */
+    public List<EgresoDetalleInterfaz> cargarListaEgresoDetalleInterfazOrdenCompra(OrdenCompra ordenCompra, Integer intTipoDocumento)throws BusinessException{
+    	List<EgresoDetalleInterfaz> lista = null;
+		try{
+			lista = egresoService.cargarListaEgresoDetalleInterfazOrdenCompra(ordenCompra, intTipoDocumento);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return lista;
+	}
+    /**
+     * Autor: jchavez / Tarea: Creacion / Fecha: 07.10.2014
+     * Funcionalidad: Realiza el proceso de generacion y grabacion del egreso y asiento contable
+	 * @author jchavez
+     * @param listaEgresoDetalleInterfaz
+     * @param controlFondosFijos
+     * @param usuario
+     * @return dto - egreso generado
+     * @throws BusinessException
+     */
+    public Egreso grabarGiroOrdenCompraDocumento(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, ControlFondosFijos controlFondosFijos, Usuario usuario, Integer intParaTipoDocumento)throws BusinessException{
+    	Egreso dto = null;
+		try{
+			dto = egresoService.grabarGiroOrdenCompraDocumento(listaEgresoDetalleInterfaz, controlFondosFijos, usuario, intParaTipoDocumento);			
+   		}catch(BusinessException e){
+   			context.setRollbackOnly();
+   			throw e;
+   		}catch(Exception e){
+   			context.setRollbackOnly();
+   			throw new BusinessException(e);
+   		}
+		return dto;
+	}
+    
+    public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
+    	Egreso dto = null;
+		try{
+			dto = egresoService.grabarGiroOrdenCompraDocumentoPorTesoreria(listaEgresoDetalleInterfaz, bancoCuenta, usuario, intParaTipoDocumento, intTipoDocumentoValidar);			
+   		}catch(BusinessException e){
+   			context.setRollbackOnly();
+   			throw e;
+   		}catch(Exception e){
+   			context.setRollbackOnly();
+   			throw new BusinessException(e);
+   		}
+		return dto;
+	}
+    
+    public Egreso grabarGiroOrdenCompraDocumentoPorCheque(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroCheque, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
+    	Egreso dto = null;
+		try{
+			dto = egresoService.grabarGiroOrdenCompraDocumentoPorCheque(listaEgresoDetalleInterfaz, bancoCuenta, usuario, intNroCheque, intParaTipoDocumento, intTipoDocumentoValidar);			
+   		}catch(BusinessException e){
+   			context.setRollbackOnly();
+   			throw e;
+   		}catch(Exception e){
+   			context.setRollbackOnly();
+   			throw new BusinessException(e);
+   		}
+		return dto;
+	}
+    
 }

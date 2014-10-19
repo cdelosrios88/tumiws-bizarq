@@ -63,7 +63,8 @@ public class Ingreso extends TumiDomain{
 	private List<IngresoDetalle> listaIngresoDetalle;
 	private LibroDiario	libroDiario;
 	private ReciboManual	reciboManual;
-	private	String	strNumeroIngreso;	
+	private	String	strNumeroIngreso;
+	private	String	strNumeroLibro;	
 	private	Date	dtDechaDesde;
 	private	Date	dtDechaHasta;
 	private Persona	persona;
@@ -72,6 +73,11 @@ public class Ingreso extends TumiDomain{
 	private List<DepositoIngreso> listaDepositoIngreso;
 	private Bancofondo 	bancoFondo;
 	private Archivo		archivoVoucher;
+	
+	//jchavez 08.07.2014
+	private Integer intParaModalidadPago;
+	private Integer intPeriodoSocio;
+//	private String strMontoDepositar;
 	
 	public Ingreso(){
 		id = new IngresoId();
@@ -455,4 +461,28 @@ public class Ingreso extends TumiDomain{
 				+ ", intIdSucursalCan=" + intIdSucursalCan + ", intItemFondoFijo="
 				+ intItemFondoFijo + "]";
 	}
+	public Integer getIntParaModalidadPago() {
+		return intParaModalidadPago;
+	}
+	public void setIntParaModalidadPago(Integer intParaModalidadPago) {
+		this.intParaModalidadPago = intParaModalidadPago;
+	}
+	public Integer getIntPeriodoSocio() {
+		return intPeriodoSocio;
+	}
+	public void setIntPeriodoSocio(Integer intPeriodoSocio) {
+		this.intPeriodoSocio = intPeriodoSocio;
+	}
+	public String getStrNumeroLibro() {
+		return strNumeroLibro;
+	}
+	public void setStrNumeroLibro(String strNumeroLibro) {
+		this.strNumeroLibro = strNumeroLibro;
+	}
+//	public String getStrMontoDepositar() {
+//		return strMontoDepositar;
+//	}
+//	public void setStrMontoDepositar(String strMontoDepositar) {
+//		this.strMontoDepositar = strMontoDepositar;
+//	}
 }

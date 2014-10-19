@@ -33,7 +33,7 @@ public class GiroMovilidadService {
 			for(LibroDiarioDetalle libroDiarioDetalle : egreso.getLibroDiario().getListaLibroDiarioDetalle()){
 				log.info(libroDiarioDetalle);
 			}
-			
+			egreso.setBlnEsGiroPorSedeCentral(true);
 			egreso = egresoFacade.grabarEgresoParaGiroPrestamo(egreso);
 			
 			for(Movilidad movilidad : listaMovilidad){

@@ -268,7 +268,12 @@ public class EgresoUtilService {
 					procesarItems(egreso);
 					listaEgresoTemp.add(egreso);
 				}
-				egreso.getControlFondosFijos().setIntParaMoneda(obtenerMonedaDeCFF(egreso.getControlFondosFijos()));
+				if (egreso.getControlFondosFijos().getId().getIntParaTipoFondoFijo().equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+					egreso.getControlFondosFijos().setIntParaMoneda(Constante.PARAM_T_TIPOMONEDA_SOLES);
+				}else{
+					egreso.getControlFondosFijos().setIntParaMoneda(obtenerMonedaDeCFF(egreso.getControlFondosFijos()));
+				}
+				
 			}
 			listaEgreso = listaEgresoTemp;
 		}catch(Exception e){
@@ -528,4 +533,98 @@ public class EgresoUtilService {
 		}
 		return controlFondosFijos;
 	}
+	
+	public List<Egreso> buscarEgresoParaFondosFijos(List<Persona>listaPersona, Egreso egresoFiltro, 
+			ControlFondosFijos controlFondosFijos, Date dtFechaDesde, Date dtFechaHasta)throws BusinessException{
+			List<Egreso> listaEgreso = new ArrayList<Egreso>();
+			try{
+				
+				List<Egreso> listaEgresoTemp = new ArrayList<Egreso>();
+				List<Egreso> listaEgresoTemp1 = new ArrayList<Egreso>();
+				listaEgresoTemp1 = boEgreso.getListaPorControlFondosFijos(controlFondosFijos);
+				listaEgreso = listaEgresoTemp1;
+				
+				
+				if(listaPersona!=null && !listaPersona.isEmpty()){
+					listaEgresoTemp = new ArrayList<Egreso>();
+					for(Egreso egreso : listaEgreso){
+						boolean egresoPoseePersona = Boolean.FALSE;
+						for(Persona persona : listaPersona){
+							if(egreso.getIntPersPersonaGirado().equals(persona.getIntIdPersona())){
+								egresoPoseePersona = Boolean.TRUE;
+								break;
+							}
+						}
+						if(egresoPoseePersona){
+							listaEgresoTemp.add(egreso);
+						}
+					}
+					listaEgreso = listaEgresoTemp;
+				}			
+				
+				listaEgresoTemp = new ArrayList<Egreso>();			
+				for(Egreso egreso : listaEgreso){
+					if(egresoFiltro.getIntParaEstado()!=null && egreso.getIntParaEstado().equals(egresoFiltro.getIntParaEstado())){
+						listaEgresoTemp.add(egreso);
+					}else if(egresoFiltro.getIntParaEstado()==null){
+						listaEgresoTemp.add(egreso);
+					}
+				}
+				listaEgreso = listaEgresoTemp;
+				
+				
+				listaEgresoTemp = new ArrayList<Egreso>();			
+				for(Egreso egreso : listaEgreso){
+					boolean pasoDesde = Boolean.FALSE;
+					boolean pasoHasta = Boolean.FALSE;
+					if(dtFechaDesde != null && egreso.getDtFechaEgreso().compareTo(dtFechaDesde) >= 0){
+						pasoDesde = Boolean.TRUE;
+					}else if(dtFechaDesde == null){
+						pasoDesde = Boolean.TRUE;
+					}
+					if(dtFechaHasta != null && egreso.getDtFechaEgreso().compareTo(dtFechaHasta) <= 0){
+						pasoHasta = Boolean.TRUE;
+					}else if(dtFechaHasta == null){
+						pasoHasta = Boolean.TRUE;
+					}
+					if(pasoDesde && pasoHasta){
+						listaEgresoTemp.add(egreso);
+					}
+				}
+				listaEgreso = listaEgresoTemp;
+				
+				
+				listaEgresoTemp = new ArrayList<Egreso>();			
+				for(Egreso egreso : listaEgreso){
+					egreso.setListaEgresoDetalle(boEgresoDetalle.getPorEgreso(egreso));
+//					if(egreso.getListaEgresoDetalle()==null || egreso.getListaEgresoDetalle().isEmpty()){
+//						continue;
+//					}
+//					EgresoDetalle egresoDetalle = egreso.getListaEgresoDetalle().get(0);
+//					if(egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)
+//					|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_PRESTAMOS) 
+//					|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_AES)
+//					|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
+//					|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)
+//					|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)
+//					|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS)){
+//						procesarItems(egreso);
+//						listaEgresoTemp.add(egreso);
+//					}
+//					if (egreso.getControlFondosFijos().getId().getIntParaTipoFondoFijo().equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+					egreso.setControlFondosFijos(controlFondosFijos);
+					egreso.getControlFondosFijos().setIntParaMoneda(Constante.PARAM_T_TIPOMONEDA_SOLES);
+					procesarItems(egreso);
+					listaEgresoTemp.add(egreso);
+//					}else{
+//						egreso.getControlFondosFijos().setIntParaMoneda(obtenerMonedaDeCFF(egreso.getControlFondosFijos()));
+//					}
+					
+				}
+				listaEgreso = listaEgresoTemp;
+			}catch(Exception e){
+				throw new BusinessException(e);
+			}
+			return listaEgreso;
+		}
 }

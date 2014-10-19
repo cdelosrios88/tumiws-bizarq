@@ -62,13 +62,30 @@ public class DepositoService {
 				listaIngresoTemp = listaIngreso;
 			}else if(intFormaPago.equals(Constante.PARAM_T_PAGOINGRESO_EFECTIVO)){
 				for(Ingreso ingreso : listaIngreso){
-					if(ingreso.getStrNumeroCheque() == null)
+					//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 /  
+//					if(ingreso.getStrNumeroCheque() == null)
+//						listaIngresoTemp.add(ingreso);
+					if (ingreso.getIntParaFormaPago().equals(Constante.PARAM_T_PAGOINGRESO_EFECTIVO)) {
 						listaIngresoTemp.add(ingreso);
+					}
 				}
 			}else if(intFormaPago.equals(Constante.PARAM_T_PAGOINGRESO_CHEQUE)){
 				for(Ingreso ingreso : listaIngreso){
-					if(ingreso.getStrNumeroCheque() != null)
+					//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 /  
+//					if(ingreso.getStrNumeroCheque() != null)
+//						listaIngresoTemp.add(ingreso);
+					if (ingreso.getIntParaFormaPago().equals(Constante.PARAM_T_PAGOINGRESO_CHEQUE)) {
 						listaIngresoTemp.add(ingreso);
+					}
+				}
+			}else if(intFormaPago.equals(Constante.PARAM_T_PAGOINGRESO_TRANSFERENCIA)){
+				for(Ingreso ingreso : listaIngreso){
+					//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 /  
+//					if(ingreso.getStrNumeroCheque() != null)
+//						listaIngresoTemp.add(ingreso);
+					if (ingreso.getIntParaFormaPago().equals(Constante.PARAM_T_PAGOINGRESO_TRANSFERENCIA)) {
+						listaIngresoTemp.add(ingreso);
+					}
 				}
 			}
 			
@@ -339,9 +356,12 @@ public class DepositoService {
 			List<ModeloDetalle> listaModeloDetalle = obtenerModelo(intIdEmpresa).getListModeloDetalle();
 			BigDecimal bdMontoDepositoIngresado = obtenerMontoDepositoIngreso(listaIngreso);
 			BigDecimal bdMontoDepositoTotal = obtenerMontoDepositoTotal(bdMontoDepositoIngresado, bdOtrosIngresos);
-			BigDecimal bdMontoDepositoAjustado = AjusteMonto.obtenerMontoAjustado(bdMontoDepositoTotal);
-			BigDecimal bdMontoAjuste = bdMontoDepositoAjustado.subtract(bdMontoDepositoTotal);
+			
 			Integer intFormaPago = ingresoReferencia.getIntParaFormaPago();
+			
+			BigDecimal bdMontoDepositoAjustado = (!intFormaPago.equals(Constante.PARAM_T_PAGOINGRESO_CHEQUE))?AjusteMonto.obtenerMontoAjustado(bdMontoDepositoTotal):bdMontoDepositoTotal;
+			BigDecimal bdMontoAjuste = bdMontoDepositoAjustado.subtract(bdMontoDepositoTotal);
+			
 			bancoFondoDepositar.setIntMonedaCod(bancoCuenta.getCuentaBancaria().getIntMonedaCod());
 			
 			ingreso.getId().setIntIdEmpresa(intIdEmpresa);

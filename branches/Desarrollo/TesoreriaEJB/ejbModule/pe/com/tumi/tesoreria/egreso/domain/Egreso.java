@@ -40,7 +40,10 @@ public class Egreso extends TumiDomain{
 	private	Integer	intCuentaGirado;
 //	se cambia a tipo string
 //	private	Integer	intPersCuentaBancariaGirado;
-	private	String	strPersCuentaBancariaGirado;
+	//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//	private	String	strPersCuentaBancariaGirado;
+	private	Integer	intPersCuentaBancariaGirado;
+	//Fin jchavez - 19.09.2014
 	
 	private	Integer	intPersEmpresaBeneficiario;
 	private	Integer	intPersPersonaBeneficiario;
@@ -80,13 +83,12 @@ public class Egreso extends TumiDomain{
 	//JCHAVEZ 07.01.2014
 	private Integer intPersEmpresaLibroExtorno;
 	private Integer intContPeriodoLibroExtorno;
-	private Integer intContCodigoLibroExtorno;
+	private Integer intContCodigoLibroExtorno;	
+	private Integer intEsGiroPorSedeCentral;	
+	private Boolean blnEsGiroPorSedeCentral;	
+	private ExpedienteCredito expedienteCredito;	
+	private String strNumeroLibro;
 	
-	private Integer intEsGiroPorSedeCentral;
-	
-	private Boolean blnEsGiroPorSedeCentral;
-	
-	private ExpedienteCredito expedienteCredito;
 	public Egreso(){
 		id = new EgresoId();
 		listaEgresoDetalle = new ArrayList<EgresoDetalle>();
@@ -375,12 +377,12 @@ public class Egreso extends TumiDomain{
 	public void setListaEgresoDetalle(List<EgresoDetalle> listaEgresoDetalle) {
 		this.listaEgresoDetalle = listaEgresoDetalle;
 	}	
-	public String getStrPersCuentaBancariaGirado() {
-		return strPersCuentaBancariaGirado;
-	}
-	public void setStrPersCuentaBancariaGirado(String strPersCuentaBancariaGirado) {
-		this.strPersCuentaBancariaGirado = strPersCuentaBancariaGirado;
-	}
+//	public String getStrPersCuentaBancariaGirado() {
+//		return strPersCuentaBancariaGirado;
+//	}
+//	public void setStrPersCuentaBancariaGirado(String strPersCuentaBancariaGirado) {
+//		this.strPersCuentaBancariaGirado = strPersCuentaBancariaGirado;
+//	}
 	public LibroDiario getLibroDiario() {
 		return libroDiario;
 	}
@@ -437,7 +439,7 @@ public class Egreso extends TumiDomain{
 				+ ", intPersPersonaGirado=" + intPersPersonaGirado
 				+ ", intCuentaGirado=" + intCuentaGirado
 				+ ", intPersCuentaBancariaGirado="
-				+ strPersCuentaBancariaGirado + ", intPersEmpresaBeneficiario="
+				+ intPersCuentaBancariaGirado + ", intPersEmpresaBeneficiario="
 				+ intPersEmpresaBeneficiario + ", intPersPersonaBeneficiario="
 				+ intPersPersonaBeneficiario
 				+ ", intPersCuentaBancariaBeneficiario="
@@ -509,5 +511,19 @@ public class Egreso extends TumiDomain{
 	}
 	public void setExpedienteCredito(ExpedienteCredito expedienteCredito) {
 		this.expedienteCredito = expedienteCredito;
+	}
+	public String getStrNumeroLibro() {
+		return strNumeroLibro;
+	}
+	public void setStrNumeroLibro(String strNumeroLibro) {
+		this.strNumeroLibro = strNumeroLibro;
+	}
+	//Autor jchavez / Tarea: Creación / Fecha: 19.09.2014
+	public Integer getIntPersCuentaBancariaGirado() {
+		return intPersCuentaBancariaGirado;
+	}
+	public void setIntPersCuentaBancariaGirado(Integer intPersCuentaBancariaGirado) {
+		this.intPersCuentaBancariaGirado = intPersCuentaBancariaGirado;
 	}	
+	//Fin jchavez - 19.09.2014
 }

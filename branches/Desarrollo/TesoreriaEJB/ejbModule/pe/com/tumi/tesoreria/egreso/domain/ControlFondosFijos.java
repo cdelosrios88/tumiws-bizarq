@@ -3,10 +3,11 @@ package pe.com.tumi.tesoreria.egreso.domain;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
+//import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
+import pe.com.tumi.persona.core.domain.CuentaBancaria;
 import pe.com.tumi.tesoreria.banco.domain.Acceso;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 
@@ -56,6 +57,8 @@ public class ControlFondosFijos extends TumiDomain{
 	private String 		strMovimientoAnterior;
 	//Agregado 11.12.2013 JCHAVEZ
 	private Integer 	intDocumentoGeneral;
+	
+	private CuentaBancaria cuentaBancaria;
 	
 	public ControlFondosFijos(){
 		id = new ControlFondosFijosId();
@@ -325,5 +328,13 @@ public class ControlFondosFijos extends TumiDomain{
 
 	public void setIntDocumentoGeneral(Integer intDocumentoGeneral) {
 		this.intDocumentoGeneral = intDocumentoGeneral;
+	}
+
+	public CuentaBancaria getCuentaBancaria() {
+		return cuentaBancaria;
+	}
+
+	public void setCuentaBancaria(CuentaBancaria cuentaBancaria) {
+		this.cuentaBancaria = cuentaBancaria;
 	}	
 }

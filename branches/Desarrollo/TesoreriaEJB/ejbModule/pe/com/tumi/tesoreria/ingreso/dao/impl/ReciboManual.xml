@@ -18,6 +18,14 @@
     <result property="intParaEstadoCierre"      		column="pestadocierre" />
   </resultMap>
   
+  <resultMap id="resReciboManualAAsignar" class="ReciboManual" >
+	<result property="id.intPersEmpresa"  											column="pempresarecibo" />
+	<result property="id.intItemReciboManual"   									column="pitemrecibomanual" />
+	<result property="reciboManualDetalleUltimo.id.intItemReciboManualDetalle"   	column="ppitemrecibomanualdetalle" />
+    <result property="intSerieRecibo"      											column="pserierecibo" />
+    <result property="reciboManualDetalleUltimo.intNumeroRecibo"      				column="pnumerorecibo" />
+  </resultMap>
+    
   <parameterMap id="parReciboManual" class="ReciboManual">
 	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intItemReciboManual"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
@@ -55,9 +63,18 @@
    	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intNroSerie"		        javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intNroRecibo"		        javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
   
+
+  <parameterMap id="parPorGestorSucursal" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersonaGestor"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSubsucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+  </parameterMap>   
  
   <procedure id="getListaPorBuscar" parameterMap="parBuscar" resultMap="resReciboManual">
 	{ call PKG_RECIBOMANUAL.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?) }
@@ -74,8 +91,12 @@
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resReciboManual">
 	{ call PKG_RECIBOMANUAL.getListaPorPk(?,?,?) }
   </procedure>
-
+	<!-- Autor : jbermudez / tarea : modificacion de parametro / Fecha : 19.09.2014 -->
   <procedure id="validarNroReciboPorSuc" parameterMap="parValidarNroRecibo">
-	{ call PKG_RECIBOMANUAL.validarNroReciboPorSuc(?,?,?,?,?) }
+	{ call PKG_RECIBOMANUAL.validarNroReciboPorSuc(?,?,?,?,?,?) }
   </procedure>
+  
+  <procedure id="getReciboPorGestorYSucursal" parameterMap="parPorGestorSucursal" resultMap="resReciboManualAAsignar">
+	{ call PKG_RECIBOMANUAL.getReciboPorGestorYSucursal(?,?,?,?,?) }
+  </procedure>  
 </sqlMap>

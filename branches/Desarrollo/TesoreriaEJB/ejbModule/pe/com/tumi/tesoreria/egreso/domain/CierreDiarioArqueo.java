@@ -32,6 +32,8 @@ public class CierreDiarioArqueo extends TumiDomain{
 	private Sucursal	sucursal;
 	private Persona		persona;
 	
+	private BigDecimal 	bdMontoIngresoPendiente;
+	
 	public CierreDiarioArqueo(){
 		id = new CierreDiarioArqueoId();
 		listaCierreDiarioArqueoDetalle = new ArrayList<CierreDiarioArqueoDetalle>();
@@ -163,6 +165,10 @@ public class CierreDiarioArqueo extends TumiDomain{
 				+ ", strObersvacionAnula=" + strObersvacionAnula
 				+ ", tsFechaCierreAnula=" + tsFechaCierreAnula + "]";
 	}
-	
-	
+	public BigDecimal getBdMontoIngresoPendiente() {
+		return bdMontoIngresoPendiente;
+	}
+	public void setBdMontoIngresoPendiente(BigDecimal bdMontoIngresoPendiente) {
+		this.bdMontoIngresoPendiente = bdMontoIngresoPendiente;
+	}	
 }

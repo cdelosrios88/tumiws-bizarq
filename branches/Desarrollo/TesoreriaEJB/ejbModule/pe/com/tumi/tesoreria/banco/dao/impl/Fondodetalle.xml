@@ -24,6 +24,16 @@
     <result property="intEstadoCod"      		column="pPARA_ESTADO_N_COD" />
   </resultMap>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014 -->
+  <resultMap id="resDocumentoFdoDet" class="Fondodetalle" >
+    <result property="intTotalsucursalCod"      column="pPARA_TOTALSUCURSAL_N_COD" />
+    <result property="intEmpresasucursalPk"     column="pPERS_EMPRESASUCURSAL_N_PK" />
+    <result property="intIdsucursal"      		column="pSUCU_IDSUCURSAL_N" />
+    <result property="intIdsubsucursal"      	column="pSUDE_IDSUBSUCURSAL_N" />
+    <result property="intDocumentogeneralCod"   column="pPARA_DOCUMENTOGENERAL_N_COD" />
+  </resultMap>  
+  <!-- Fin jchavez - 16.10.2014 -->
+  
   <parameterMap id="parFondodetalle" class="Fondodetalle">
 	 <parameter property="id.intEmpresaPk"			javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
 	 <parameter property="id.intItembancofondo"		javaType="java.lang.Integer"	jdbcType="NUMERIC"	mode="INOUT"/>
@@ -63,7 +73,16 @@
      <parameter property="intIdsubsucursal"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
      
   </parameterMap>
-    
+  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014 -->
+  <parameterMap id="parPorFdoFijoYMoneda" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet"	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intEmpresaPk"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intTipoFondoFijo"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+     <parameter property="intMonedaCod"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+  <!-- Fin jchavez - 16.10.2014 -->
+  
   <procedure id="grabar" parameterMap="parFondodetalle">
 	{ call PKG_FONDODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
@@ -82,5 +101,12 @@
 
   <procedure id="getListaPorSubSucursalPK" parameterMap="parPorSubSucursalPK" resultMap="resFondodetalle">
 	{ call PKG_FONDODETALLE.getListaPorSubSucursalPK(?,?,?,?) }
-  </procedure>    
+  </procedure>
+  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014 -->
+  <procedure id="getDocumentoPorFondoFijo" parameterMap="parPorFdoFijoYMoneda" resultMap="resDocumentoFdoDet">
+	{ call PKG_FONDODETALLE.getDocumentoPorFondoFijo(?,?,?,?) }
+  </procedure>
+  <!-- Fin jchavez - 16.10.2014 -->
+  
 </sqlMap>

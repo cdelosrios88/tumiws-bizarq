@@ -151,6 +151,7 @@ public class Constante {
 	public static final String PARAM_T_TIPOMODELOCONTABLE = "180";
 	public static final String PARAM_T_OPCIONDEBEHABER = "181";
 	public static final String PARAM_T_TIPOREGISTROMODELO = "182";
+	public static final String PARAM_T_TIPOBUSQUEDA_PERSONA = "184";
 	public static final String PARAM_T_ESTADOSOLICPRESTAMO = "185";
 	public static final String PARAM_T_TIPOESTADOCIERRE = "186";
 	public static final String PARAM_T_DOCUMENTOGENERAL = "189";
@@ -202,6 +203,20 @@ public class Constante {
 	public static final String PARAM_T_CONCEPTODESCUENTOSPLANILLASUELDO = "273";
 	public static final String PARAM_T_OPERACIONPAGOPLANILLA = "274";
 	public static final String PARAM_T_TIPODOCUMENTOINGRESO = "300";
+	public static final String PARAM_T_TIPOMODALIDADINGRESO = "301";
+	//JCHAVEZ 09.07.2014
+	public static final String PARAM_T_ESTADOPERSONA = "258";
+	public static final String PARAM_T_SITUACIONCUENTA = "172";
+	public static final String PARAM_T_TIPOCONCEPTOGENERAL = "212";
+	//JCHAVEZ 13.07.2014
+	public static final String PARAM_T_TIPOPAGOCUENTA = "302";
+	public static final String PARAM_T_TIPO_MOVIMIENTO = "226";
+	public static final String PARAM_T_CARGOABONO = "227";
+	public static final String PARAM_T_FORMADEPAGO = "159";
+	public static final String PARAM_T_TIPOBLOQUEOCONCEPTO = "250";
+	public static final String PARAM_T_MOTIVOSOLICITUDCTACTE = "249";
+	//Autor: jchavez / Tarea: creación / Fecha: 09.09.2014
+	public static final String PARAM_T_TIPOCUENTASOCIO = "147";
 	//----------------------------------------------------------------------------------------
 	//OPCIONES DE PARAMETROS
 	//----------------------------------------------------------------------------------------
@@ -402,6 +417,8 @@ public class Constante {
 	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_DOCUMENTOSUNAT = 38;
 	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_COMPRASCONTRATO = 39;
 	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_COMPRAS_EVALUACIONPROVEEDORES = 40;
+	//jchavez 08.07.2014
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_CHEQUE = 55;
 	//Fin agregado por cdelosrios, 03/11/2013
 	
 	//PARAM_T_TIPODOCUMENTO
@@ -455,6 +472,7 @@ public class Constante {
 	
 	//TIPO DE CUENTAS
 	public static final Integer PARAM_T_TIPOCUENTA_TODOS = -1;
+	
 	public static final Integer PARAM_T_TIPOCUENTA_FONDOSEPELIO = 2;
 	public static final Integer PARAM_T_TIPOCUENTA_FONDORETIRO = 3;
 	public static final Integer PARAM_T_TIPOCUENTA_MANTENIMIENTOCUENTA = 10;
@@ -519,7 +537,10 @@ public class Constante {
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_COMPRAS = 304;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD = 305;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_ORDENCOMPRA = 306;
+	//Autor: jchavez / Tarea: Creacion / Fecha: 10.10.2014
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_GARANTIA = 307;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_ADELANTO = 309;
+	//Fin jchavez - 10.10.2014
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_RENDICION = 313;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_CHEQUEGERENCIA = 314;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_CAJACHICA = 316;
@@ -660,7 +681,8 @@ public class Constante {
 	public static final Integer TRANSACCION_CIERRE_CIERREFONDOS = 209;
 	public static final Integer TRANSACCION_CIERRE_CIERREDIARIO = 210;
 	public static final Integer TRANSACCION_CIERRE_SALDOS = 211;
-	
+	//Autor: jchavez / Tarea: Creación / Fecha: 19.08.2014 / 
+	public static final Integer TRANSACCION_FONDOSFIJOS_TELECREDITO = 327;
 	//PARAM_T_TIPOMODELOCONTABLE
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_DEPOSITOBANCO = 106;
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_LIQUIDACIONCUENTA = 201;
@@ -674,7 +696,13 @@ public class Constante {
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_ORDENCOMPRA = 501;
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_CANCELACIONORDENCOMPRA = 502;
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_CANCELACIONPLANILLAEFECTUADA = 604;
-	
+	//JCHAVEZ 11.07.2014
+	public static final Integer PARAM_T_TIPOMODELOCONTABLE_INGRESOSOCIO_CAJA = 610;
+	//JCHAVEZ 07.10.2014
+	public static final Integer PARAM_T_TIPOMODELOCONTABLE_CANCELACIONADELANTOORDENCOMPRA = 504;
+	//JCHAVEZ 10.10.2014
+	public static final Integer PARAM_T_TIPOMODELOCONTABLE_CANCELACIONGARANTIAORDENCOMPRA = 512;
+		
 	//PARAM_T_TIPOCAMBIO
 	public static final Integer PARAM_T_TIPOCAMBIO_BANCARIO = 1;
 	public static final Integer PARAM_T_TIPOCAMBIO_PARALELO = 2;
@@ -691,6 +719,7 @@ public class Constante {
 	//PARAM_T_PAGOINGRESO
 	public static final Integer PARAM_T_PAGOINGRESO_EFECTIVO = 1;
 	public static final Integer PARAM_T_PAGOINGRESO_CHEQUE = 2;
+	public static final Integer PARAM_T_PAGOINGRESO_TRANSFERENCIA = 3;
 	
 	//PARAM_T_ESTADODEPOSITADO
 	public static final Integer PARAM_T_ESTADODEPOSITADO_PENDIENTE = 1;
@@ -891,4 +920,123 @@ public class Constante {
 	public static final Integer PARAM_T_TIPODOCUMENTOINGRESO_GARANTIASPROVEEDOR = 5;
 	public static final Integer PARAM_T_TIPODOCUMENTOINGRESO_DOCUMENTOINTERNO = 6;
 	public static final Integer PARAM_T_TIPODOCUMENTOINGRESO_AHORRO = 7;
+	
+	//jchavez 01.07.2014
+	public static final Integer PARAM_T_TIPOBUSQUEDA_PERSONA_NOMBRES = 2;
+	public static final Integer PARAM_T_TIPOBUSQUEDA_PERSONA_DOCUMENTO = 3;
+	
+	//JCHAVEZ 05.07.2014
+	//PARAM_T_TIPOMODALIDADINGRESO
+	public static final Integer PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION = 1;
+	public static final Integer PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION = 2;
+	public static final Integer PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE = 3;
+	public static final Integer PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES = 4;
+	public static final Integer PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA = 5;
+	
+	
+	//JCHAVEZ 12.07.2014
+	//PARAM_T_TIPOPAGOCUENTA 302
+	public static final Integer PARAM_T_TIPOPAGOCUENTA_CANCELACION = 1;
+	public static final Integer PARAM_T_TIPOPAGOCUENTA_ACUENTA = 2;
+	
+	//JCHAVEZ 09.07.2014
+	//PARAM_T_ESTADOPERSONA
+	public static final Integer PARAM_T_ESTADOPERSONA_ACTIVO = 1;
+	public static final Integer PARAM_T_ESTADOPERSONA_FALLECIDO = 2;
+	
+	//PARAM_T_SITUACIONCUENTA
+	public static final Integer PARAM_T_SITUACIONCUENTA_VIGENTE = 1;
+	public static final Integer PARAM_T_SITUACIONCUENTA_LIQUIDADO = 2;
+	
+	//PARAM_T_FECHAENVIOCOBRO
+	public static final Integer PARAM_T_FECHAENVIOCOBRO_ESTEMES = 1;
+	public static final Integer PARAM_T_FECHAENVIOCOBRO_MESSGTE = 2;
+	
+	public static final Integer PARAM_T_TIPO_CONDSOCIO_VIGENTE = 1;
+	public static final Integer PARAM_T_TIPO_CONDSOCIO_IRREGULAR = 2;
+	
+	//jchavez 13.07.2014
+	// Para_tipoconceptocr_n_cod  212
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_AMORTIZACION   = 1;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_INTERES 	   = 2;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_MORA 	       = 3;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_APORTACION 	   = 4;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_MANTENIMIENTO  = 5;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_FDOSEPELIO     = 6;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_FDORETIRO      = 7;
+	//jchavez 13.07.2014
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_AHORRO         = 8;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_DEPOSITO       = 9;
+	//
+	
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_CTAXPAGAR 	   = 13;
+	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_FDORETIRO_INTERES     = 14;
+	//PARAM_T_TIPO_MOVIMIENTO 226
+	public static final Integer PARAM_T_TIPO_MOVIMIENTO_INGRESO_POR_CAJA = 1;
+	public static final Integer PARAM_T_TIPO_MOVIMIENTO_EGRESO_POR_CAJA = 2;
+	public static final Integer PARAM_T_TIPO_MOVIMIENTO_PROCESO_POR_PLANILLA = 3;
+	public static final Integer PARAM_T_TIPO_MOVIMIENTO_TRANSFERENCIA = 4;
+	public static final Integer PARAM_T_TIPO_MOVIMIENTO_PROCESO_AUTOMATICO = 5;
+	//PARAM_T_CARGOABONO
+	public static final Integer PARAM_T_CARGOABONO_ABONO = 1;
+	public static final Integer PARAM_T_CARGOABONO_CARGO = 2;
+	//PARAM_T_FORMADEPAGO - 159
+	public static final Integer PARAM_T_FORMADEPAGO_CANCELADO = 1;
+	public static final Integer PARAM_T_FORMADEPAGO_PLANILLA = 2;
+	public static final Integer PARAM_T_FORMADEPAGO_CAJA = 3;
+	public static final Integer PARAM_T_FORMADEPAGO_TRANSFERENCIACONTABLE = 4;
+	public static final Integer PARAM_T_FORMADEPAGO_PROCESO_AUTOMATICO = 5;
+	public static final Integer PARAM_T_FORMADEPAGO_TRANSFERENCIA = 6;
+	//PARAM_T_TIPOBLOQUEOCONCEPTO 250
+	public static final Integer PARAM_T_TIPOBLOQUEOCONCEPTO_NOENVIODEPLANILLA = 1;
+	public static final Integer PARAM_T_TIPOBLOQUEOCONCEPTO_CONDONARDEUDAS = 2;
+	public static final Integer PARAM_T_TIPOBLOQUEOCONCEPTO_CONGELARRETIROS = 3;
+	public static final Integer PARAM_T_TIPOBLOQUEOCONCEPTO_PAGOPORCAJA = 4;
+	
+	//PARAM_T_MOTIVOSOLICITUDCTACTE 249
+	public static final Integer PARAM_T_MOTIVOSOLICITUDCTACTE_PAGOMESSGTE = 26;
+	public static final Integer PARAM_T_MOTIVOSOLICITUDCTACTE_REGULARIZACION = 26;
+	
+	//JCHAVEZ 21.07.2014 PARAMETROS DEL MODELO CONTABLE
+	public static final String PARAM_T_MODELO_INGRESOCAJA_CONFCREDITO = "Cso_ConfCredito";
+	public static final String PARAM_T_MODELO_INGRESOCAJA_CONCEPTOGRAL = "Para_ConceptoGeneral_N_Cod";
+	public static final String PARAM_T_MODELO_INGRESOCAJA_CATEGORIARIESGO= "Para_CategoriaRiesgo_N_Cod";
+	public static final String PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO = "Para_TipoConcepto_N_Cod";
+	public static final String PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO = "Csoc_ItemConcepto_N_Cod";
+	public static final String PARAM_T_MODELO_INGRESOCAJA_ROL = "Para_Rol_N";
+	
+	public static final Integer PARAM_T_TIPOCUENTASOCIO_SOCIO = 1;
+	public static final Integer PARAM_T_TIPOCUENTASOCIO_AHORRO = 2;
+	
+	public static final Integer PARAM_T_BANCO_BANCODECREDITO = 1;
+
+	//Autor: jchavez / Tarea: creación / Fecha: 09.09.2014
+	public static final Integer PARAM_T_TIPOCUENTASOCIO_CTACORRIENTE = 3;
+	public static final Integer PARAM_T_TIPOCUENTASOCIO_NOSOCIO = 4;
+
+	//Autor: jchavez / Tarea: creación / Fecha: 03.10.2014
+	//Para auditoria Tabla TES_ORDENCOMPRADOC
+	public static final Integer PARAM_T_AUDITORIA_TIPOREGISTRO_UPDATE = 1;
+	public static final Integer PARAM_T_AUDITORIA_TIPOREGISTRO_DELETE = 2;
+	public static final Integer PARAM_T_AUDITORIA_TIPOREGISTRO_INSERT = 3;
+	
+	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC = "TES_ORDENCOMPRADOC";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PARA_DOCUMENTO_GENERAL_N_COD = "PARA_DOCUMENTO_GENERAL_N_COD";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_FECHADOCUMENTO_D = "ORCD_FECHADOCUMENTO_D";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PARA_TIPOCANCELACION_N_COD = "PARA_TIPOCANCELACION_N_COD";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_MONTODOCUMENTO_N = "ORCD_MONTODOCUMENTO_N";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PARA_TIPOMONEDA_N_COD = "PARA_TIPOMONEDA_N_COD";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_SUCU_IDSUCURSAL_N = "SUCU_IDSUCURSAL_N";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_SUDE_IDSUBSUCURSAL_N = "SUDE_IDSUBSUCURSAL_N";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_AREA_IDAREA_N = "AREA_IDAREA_N";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_OBSERVACION_V = "ORCD_OBSERVACION_V";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PERS_EMPRESAUSUARIO_N_PK = "PERS_EMPRESAUSUARIO_N_PK";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PERS_PERSONAUSUARIO_N_PK = "PERS_PERSONAUSUARIO_N_PK";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_FECHAANULA_D = "ORCD_FECHAANULA_D";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PERS_EMPRESAANULA_N_PK = "PERS_EMPRESAANULA_N_PK";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PERS_PERSONAANULA_N_PK = "PERS_PERSONAANULA_N_PK";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_MONTOPAGADO_N = "ORCD_MONTOPAGADO_N";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_MONTOINGRESADO_N = "ORCD_MONTOINGRESADO_N";
+//	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PARA_ESTADO_N_COD = "PARA_ESTADO_N_COD";
+
 }

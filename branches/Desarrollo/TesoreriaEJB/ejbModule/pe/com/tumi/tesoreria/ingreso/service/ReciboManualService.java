@@ -107,50 +107,50 @@ public class ReciboManualService {
 		return reciboManual;
 	}
 	
-	public Integer validarNroReciboPorSuc(Integer idEmpresa,Integer sucursal,Integer subsuc,Integer nroRecibo) throws Exception{
+	//Autor : jbermudez / tarea : desactivado, ya no se invoca desde el FACADE / Fecha : 19.09.2014
+	public Integer validarNroReciboPorSuc(Integer idEmpresa, Integer sucursal, Integer subsuc, Integer nroSerie, Integer nroRecibo) throws Exception{
 			Integer  vResult = null;
 		try{
-			vResult = boReciboManual.validarNroReciboPorSuc(idEmpresa,sucursal,subsuc,nroRecibo);
+			vResult = boReciboManual.validarNroReciboPorSuc(idEmpresa, sucursal, subsuc, nroSerie, nroRecibo);
 		}catch(Exception e){
 			throw new BusinessException(e);
 		}
 		return vResult;
 	}
 	
-	public List<ReciboManualDetalle> buscarRecibosEnlazados(Integer idEmpresa,Integer idSucursal,Integer idSubSuc,Integer idEstadoCierre,
-			Integer nroRecibo)throws Exception{
+	public List<ReciboManualDetalle> buscarRecibosEnlazados(Integer idEmpresa,Integer idSucursal,Integer idSubSuc,Integer idEstadoRecibo,
+			Integer nroSerie, Integer nroRecibo)throws Exception{
 		
-		PersonaFacadeRemote personaFacade = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
-		EmpresaFacadeRemote empresaFacade = (EmpresaFacadeRemote)EJBFactory.getRemote(EmpresaFacadeRemote.class);
+		//PersonaFacadeRemote personaFacade = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+		//EmpresaFacadeRemote empresaFacade = (EmpresaFacadeRemote)EJBFactory.getRemote(EmpresaFacadeRemote.class);
 		
 		
-		List<ReciboManualDetalle> listaReciboManualDetalleTemp = new ArrayList<ReciboManualDetalle>();
+		//List<ReciboManualDetalle> listaReciboManualDetalleTemp = new ArrayList<ReciboManualDetalle>();
 		
-		List<ReciboManualDetalle> listaReciboManualDetalle = boReciboManualDetalle.getListaPorFiltros(idEmpresa, idSucursal, idSubSuc, 
-				idEstadoCierre, nroRecibo);
+		List<ReciboManualDetalle> listaReciboManualDetalle = boReciboManualDetalle.getListaPorFiltros(idEmpresa, idSucursal, idSubSuc, idEstadoRecibo, nroSerie, nroRecibo);
 		
-		for (ReciboManualDetalle reciboManualDetalle : listaReciboManualDetalle) {
-			IngresoId ingresoId = new IngresoId();
-			ingresoId.setIntIdEmpresa(idEmpresa);
-			ingresoId.setIntIdIngresoGeneral(reciboManualDetalle.getIntItemIngresoGeneral());
-			Ingreso ingreso = boIngreso.getPorId(ingresoId);
-			reciboManualDetalle.setIngreso(ingreso);
-			ReciboManualId reciboManualId = new ReciboManualId();
-			reciboManualId.setIntPersEmpresa(idEmpresa);
-			reciboManualId.setIntItemReciboManual(reciboManualDetalle.getId().getIntItemReciboManual());
-			ReciboManual reciboManual = boReciboManual.getPorId(reciboManualId);
-			reciboManualDetalle.setReciboManual(reciboManual);
-			Natural gestor = personaFacade.getNaturalPorPK(reciboManualDetalle.getIntPersPersonaGestor());
-			reciboManualDetalle.setGestor(gestor);
-			Sucursal sucursal = new Sucursal();
-			sucursal.getId().setIntIdSucursal(reciboManual.getIntSucuIdSucursal());
-			sucursal = empresaFacade.getSucursalPorPK(sucursal);
-			reciboManualDetalle.setStrDesSucursal(sucursal.getJuridica().getStrRazonSocial());
-			
-		    listaReciboManualDetalleTemp.add(reciboManualDetalle);
-		}
+//		for (ReciboManualDetalle reciboManualDetalle : listaReciboManualDetalle) {
+//			IngresoId ingresoId = new IngresoId();
+//			ingresoId.setIntIdEmpresa(idEmpresa);
+//			ingresoId.setIntIdIngresoGeneral(reciboManualDetalle.getIntItemIngresoGeneral());
+//			Ingreso ingreso = boIngreso.getPorId(ingresoId);
+//			reciboManualDetalle.setIngreso(ingreso); //DATOS DEL INGRESO
+//			ReciboManualId reciboManualId = new ReciboManualId();
+//			reciboManualId.setIntPersEmpresa(idEmpresa);
+//			reciboManualId.setIntItemReciboManual(reciboManualDetalle.getId().getIntItemReciboManual());
+//			ReciboManual reciboManual = boReciboManual.getPorId(reciboManualId);
+//			reciboManualDetalle.setReciboManual(reciboManual); //DATOS DEL RECIBO MANUAL
+//			Natural gestor = personaFacade.getNaturalPorPK(reciboManualDetalle.getIntPersPersonaGestor());
+//			reciboManualDetalle.setGestor(gestor); //DATOS DEL GESTOR
+//			Sucursal sucursal = new Sucursal();
+//			sucursal.getId().setIntIdSucursal(reciboManual.getIntSucuIdSucursal());
+//			sucursal = empresaFacade.getSucursalPorPK(sucursal);
+//			reciboManualDetalle.setStrDesSucursal(sucursal.getJuridica().getStrRazonSocial());
+//			
+//		    listaReciboManualDetalleTemp.add(reciboManualDetalle);
+//		}
 		
-		return listaReciboManualDetalleTemp;
+		return listaReciboManualDetalle;
 	}
 	
 }

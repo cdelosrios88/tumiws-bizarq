@@ -26,6 +26,15 @@
 	<result property="bdMontoPagado"   					column="pmontopago" />
 	<result property="bdMontoIngresado"   				column="pmontoingresado" />
 	<result property="intParaEstado"   					column="pestado" />
+	<!-- Autor: jchavez / Tarea: Creación / Fecha: 04.10.2014 -->
+	<result property="tsFechaRegistro"   				column="pFechaRegistro" />
+	<result property="intPersEmpresaEgreso"   			column="pEmpresaEgreso" />
+	<result property="intItemEgresoGeneral"   			column="pItemEgresoGral" />
+	<result property="intParaEstadoPago"   				column="pEstadoPago" />
+	<result property="intPersEmpresaIngreso"   			column="pEmpresaIngreso" />
+	<result property="intItemIngresoGeneral"   			column="pItemIngresoGral" />
+	<result property="bdMontoSaldo"   					column="pMontoSaldo" />
+	<!-- Fin jchavez - 04.10.2014 -->
   </resultMap>
   
   <parameterMap id="parOrdenCompraDocumento" class="OrdenCompraDocumento">
@@ -49,6 +58,15 @@
 	 <parameter property="bdMontoPagado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="bdMontoIngresado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <!-- Autor: jchavez / Tarea: Creación / Fecha: 04.10.2014 -->
+	 <parameter property="tsFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaEgreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemEgresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstadoPago"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaIngreso"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemIngresoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoSaldo"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <!-- Fin jchavez - 04.10.2014 -->
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -66,11 +84,11 @@
   
   
   <procedure id="grabar" parameterMap="parOrdenCompraDocumento">
-	{ call PKG_ORDENCOMPRADOCUMENTO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_ORDENCOMPRADOCUMENTO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parOrdenCompraDocumento" >
-	{ call PKG_ORDENCOMPRADOCUMENTO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_ORDENCOMPRADOCUMENTO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resOrdenCompraDocumento">

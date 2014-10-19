@@ -31,7 +31,7 @@
     <result property="intPersEmpresaGirado"      			column="pPers_empresagirado" />
     <result property="intPersPersonaGirado"      			column="pPers_personagirado" />
     <result property="intCuentaGirado"      				column="pCsoc_cuentagirado" />
-    <result property="strPersCuentaBancariaGirado"      	column="pPers_cuentabancariagirado" />
+    <result property="intPersCuentaBancariaGirado"      	column="pPers_cuentabancariagirado" />
     <result property="intPersEmpresaBeneficiario"      		column="pPers_empresabeneficiario" />
     <result property="intPersPersonaBeneficiario"      		column="pPers_personabeneficiario" />
     <result property="intPersCuentaBancariaBeneficiario"    column="pPers_ctabancbeneficiario" />
@@ -82,7 +82,7 @@
 	 <parameter property="intPersEmpresaGirado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaGirado"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intCuentaGirado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="strPersCuentaBancariaGirado"	javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="intPersCuentaBancariaGirado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersEmpresaBeneficiario"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaBeneficiario"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersCuentaBancariaBeneficiario"   javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
