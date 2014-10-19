@@ -6,15 +6,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 	
-	<h:form id="frmBuscarCuentaBancaria">
+	<h:form id="frmBuscarCuentaBancariaT">
 	   	<h:panelGroup layout="block">	    	
 
 
 			<h:panelGroup>
 	    		<rich:dataTable
-	    			id="tablaCuenta"
+	    			id="tablaCuentaT"
 	    			var="item" 
-	                value="#{transferenciaController.personaSeleccionada.listaCuentaBancaria}" 
+	                value="#{telecreditoController.personaSeleccionada.listaCuentaBancaria}" 
 			  		rowKeyVar="rowKey" 
 			  		rows="5" 
 			  		sortMode="single" 
@@ -32,15 +32,15 @@
 	                 	</f:facet>
 			        	<a4j:commandLink 
 			    			value="Seleccionar"
-							actionListener="#{transferenciaController.seleccionarCuentaBancaria}"
-							oncomplete="Richfaces.hideModalPanel('pBuscarCuentaBancaria')"
+							actionListener="#{telecreditoController.seleccionarCuentaBancaria}"
+							oncomplete="Richfaces.hideModalPanel('pBuscarCuentaBancariaT')"
 							reRender="panelCuentaT">
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
 			      	</rich:column>
 			      	
 			      	<f:facet name="footer">
-						<rich:datascroller for="tablaCuenta" maxPages="5"/>   
+						<rich:datascroller for="tablaCuentaT" maxPages="5"/>   
 					</f:facet>
 					
 	            </rich:dataTable>

@@ -208,6 +208,12 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
+	<!-- Autor: jchavez / Tarea: Modificación / Fecha: 08.08.2014 -->
+	<managed-bean>
+		<managed-bean-name>telecreditoController</managed-bean-name>
+			<managed-bean-class>pe.com.tumi.tesoreria.fondosFijos.controller.TelecreditoController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	
 	<!--Compras-->
 	<navigation-rule>

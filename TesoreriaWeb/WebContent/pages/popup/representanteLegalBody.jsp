@@ -115,7 +115,7 @@
 		        <a4j:commandButton value="Grabar" 
 		        	actionListener="#{naturalController.addRepLegal}" 
 		        	styleClass="btnEstilos"
-		        	reRender="rpRepLegal,pgRepLegal,rpContactoNatu,pgContactoNatu" 
+		        	reRender="opRepLegal,opContactoNatu,mpRepLegal" 
 		        	disabled="#{(!naturalController.datosValidados)  || (!naturalController.habilitarEditar)}"
 		        	oncomplete="Richfaces.hideModalPanel('mpRepLegal')"/>
 		    	<a4j:commandButton value="Cancelar" 

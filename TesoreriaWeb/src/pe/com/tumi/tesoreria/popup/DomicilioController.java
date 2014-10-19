@@ -19,6 +19,8 @@ import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.parametro.general.domain.ArchivoId;
 import pe.com.tumi.parametro.general.domain.Ubigeo;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
+import pe.com.tumi.parametro.tabla.domain.Tabla;
+import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.contacto.domain.Domicilio;
 import pe.com.tumi.persona.contacto.domain.DomicilioPK;
 import pe.com.tumi.persona.contacto.facade.ContactoFacadeRemote;
@@ -195,14 +197,66 @@ public class DomicilioController {
 	/*  Retorno : Nuevo Domicilio generado correctamente	 		*/
 	/**************************************************************/
 	public void grabarDomicilio(ActionEvent event){
+		String strDescDpto = "";
+		String strDescProvincia = "";
+		String strDescDistrito = "";
+		String strDescTipoVia = "";
+		String strDescTipoZona = "";
+		List<Tabla> lstTablaTipoVia;
+		List<Tabla> lstTablaTipoZona;
+		TablaFacadeRemote tablaFacade;
 	  try{
+		  tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
+		  lstTablaTipoVia = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOVIA));
+		  lstTablaTipoZona = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOZONA));
 		//log.info("-----------------------Debugging DomicilioController.grabarDomicilio-------------------------");
 		//log.info(beanDomicilio);  
-		Domicilio dom = new Domicilio();
+		  Domicilio dom = new Domicilio();
 	      dom = (Domicilio) getBeanDomicilio();
+
+	      //Descripcion Tipo de Via
+	      for (Tabla tabla : lstTablaTipoVia) {
+	    	  if (tabla.getIntIdDetalle().equals(dom.getIntTipoViaCod())) {
+	    		  strDescTipoVia = tabla.getStrAbreviatura();
+	    		  break;
+	    	  }
+	      }
+	      //Descripcion Departamento
+	      for (Ubigeo dpto : listaUbigeoDepartamento) {
+	    	  if (dpto.getIntIdUbigeo().equals(dom.getIntParaUbigeoPkDpto())) {
+	    		  strDescDpto = dpto.getStrDescripcion();
+	    		  break;
+	    	  }
+	      }
+	      //Descripcion Provincia
+	      for (Ubigeo prov : listaUbigeoProvincia) {
+	    	  if (prov.getIntIdUbigeo().equals(dom.getIntParaUbigeoPkProvincia())) {
+	    		  strDescProvincia = prov.getStrDescripcion();
+	    		  break;
+	    	  }
+	      }
+	      //Descripcion Distrito
+	      for (Ubigeo dist : listaUbigeoDistrito) {
+	    	  if (dist.getIntIdUbigeo().equals(dom.getIntParaUbigeoPkDistrito())) {
+	    		  strDescDistrito = dist.getStrDescripcion();
+	    		  break;
+	    	  }
+	      }
+	      //Descripcion Tipo de Zona
+	      for (Tabla tabla : lstTablaTipoZona) {
+	    	  if (tabla.getIntIdDetalle().equals(dom.getIntTipoZonaCod())) {
+	    		  strDescTipoZona = tabla.getStrAbreviatura();
+	    		  break;
+	    	  }
+	      }
 	      
-	      String direccion = (dom.getStrNombreVia()+ " Nº "+ dom.getIntNumeroVia() + " "+ 
-	    		  			dom.getStrNombreZona()+" / Referencia: "+ dom.getStrReferencia());
+	      String direccion = (strDescTipoVia + ". " + dom.getStrNombreVia()+ " Nro. "+ dom.getIntNumeroVia() + " "+ 
+	    		  (dom.getStrInterior().trim()==""?(" - Int. "+dom.getStrInterior()+" "):"") +
+	    		  strDescTipoZona + ". "+dom.getStrNombreZona()+
+	    		  " - Referencia: "+ dom.getStrReferencia())
+	    		  			+" - "+ strDescDpto
+	    		  			+" - "+ strDescProvincia
+	    		  			+" - "+ strDescDistrito;
 	      dom.setStrDireccion(direccion);
 	      
 	      ArrayList arrDom = new ArrayList();

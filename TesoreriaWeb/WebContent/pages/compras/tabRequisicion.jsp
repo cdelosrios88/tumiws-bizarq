@@ -458,7 +458,7 @@
 			</rich:column>
 			<rich:column width="470">
 				<h:inputTextarea cols="88" 
-					disabled="#{not empty requisicionController.requisicionNuevo.bdMontoJefatura}"
+					disabled="#{not empty requisicionController.requisicionNuevo.bdMontoJefatura && not empty requisicionController.requisicionNuevo.strFundamentoJefatura}"
 					value="#{requisicionController.requisicionNuevo.strFundamentoJefatura}"/>
 			</rich:column>
 		</h:panelGrid>		
@@ -542,7 +542,7 @@
 			</rich:column>
 			<rich:column width="470">
 				<h:inputTextarea cols="88" 
-					disabled="#{not empty requisicionController.requisicionNuevo.bdMontoLogistica}"
+					disabled="#{not empty requisicionController.requisicionNuevo.bdMontoLogistica && not empty requisicionController.requisicionNuevo.strFundamentoLogistica}"
 					value="#{requisicionController.requisicionNuevo.strFundamentoLogistica}"/>
 			</rich:column>
 		</h:panelGrid>		

@@ -114,7 +114,7 @@
 				</rich:column>				
             	<rich:column width="160" style="text-align: right;">
                 	<a4j:commandButton styleClass="btnEstilos"
-                		value="Buscar" reRender="panelTablaResultadosC,panelMensaje"
+                		value="Buscar" reRender="panelTablaResultadosC,panelMensajeC"
                     	action="#{chequesController.buscar}" style="width:160px"/>
             	</rich:column>
             </h:panelGrid>
@@ -343,7 +343,7 @@
 					
 				<rich:spacer height="5px"/>
 					
-				<h:panelGrid id="panelCuentaOrigen" columns="6">
+				<h:panelGrid id="panelCuentaOrigen" columns="8">
 					<rich:column width="120">
 						<h:outputText value="Cuenta Bancaria :"/>
 					</rich:column>
@@ -357,9 +357,9 @@
 								itemLabel="#{sel.strDescripcion}"/>
 						</h:selectOneMenu>
 			       	</rich:column>
-			       	<rich:column width="380">
+			       	<rich:column width="340">
 			               <h:selectOneMenu
-			               	style="width: 380px;"
+			               	style="width: 340px;"
 							value="#{chequesController.intBancoCuentaSeleccionado}"
 							disabled="#{chequesController.datosValidados}">
 							<tumih:selectItems var="sel"
@@ -369,7 +369,7 @@
 						</h:selectOneMenu>
 			      	</rich:column>
 			      	<rich:column width="100" style="text-align: left;">
-						<h:outputText value="Documento : "/>
+						<h:outputText value="Documento"/>
 			     	</rich:column>
 			        <rich:column width="200">
 						<tumih:inputText property="#{chequesController.intTipoDocumentoValidar}"
@@ -377,12 +377,23 @@
 							style="background-color: #BFBFBF;" readonly="true"
 							itemLabel="strDescripcion" itemValue="intIdDetalle"
 							cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}"/>
-			    	</rich:column>	             	
+			    	</rich:column>	   
+			    	<rich:column width="100" style="text-align: left;" rendered="#{!chequesController.habilitarGrabar}">
+							<h:outputText value="Egreso"/>
+						</rich:column>
+						<rich:column width="150" rendered="#{!chequesController.habilitarGrabar}">
+							<h:inputText readonly="true"
+								value="#{chequesController.egresoGeneradoTrasGrabacion.strNumeroEgreso}"
+								style="background-color: #BFBFBF; text-align:center;"
+								size="23">
+							</h:inputText>
+						</rich:column>
+						         	
 				</h:panelGrid>
 					
 				<rich:spacer height="3px"/>
 					
-				<h:panelGrid columns="6">
+				<h:panelGrid columns="8">
 					<rich:column width="120">
 						<h:outputText value="Sucursal :"/>
 					</rich:column>
@@ -410,6 +421,16 @@
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:inputText>
 					</rich:column>
+					<rich:column width="100" style="text-align: left;" rendered="#{!chequesController.habilitarGrabar}">
+						<h:outputText value="Asiento :"/>
+					</rich:column>
+					<rich:column width="150" rendered="#{!chequesController.habilitarGrabar}">
+						<h:inputText readonly="true"
+							value="#{chequesController.egresoGeneradoTrasGrabacion.strNumeroLibro}"
+							style="background-color: #BFBFBF; text-align:center;"
+							size="23">
+						</h:inputText>
+					</rich:column> 
 				</h:panelGrid>
 				
 				<rich:spacer height="5px"/>
@@ -430,7 +451,7 @@
 							size="124"/>
 						<h:inputText readonly="true"
 							rendered="#{chequesController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
-							value="RUC : #{chequesController.personaSeleccionada.strRuc} - #{chequesController.personaSeleccionada.juridica.strRazonSocial} - Cuenta : #{chequesController.cuentaActual.strNumeroCuenta}"
+							value="RUC : #{chequesController.personaSeleccionada.strRuc} - #{chequesController.personaSeleccionada.juridica.strRazonSocial}"
 							style="background-color: #BFBFBF;"
 							size="124"/>
 					</rich:column>
@@ -471,6 +492,8 @@
 								<f:selectItem itemValue="103" itemLabel="Fondo de Retiro"/>
 								<f:selectItem itemValue="104" itemLabel="Liquidación de cuenta"/>
 								<f:selectItem itemValue="305" itemLabel="Planilla de movilidad"/>
+								<f:selectItem itemValue="309" itemLabel="Adelanto"/>
+								<f:selectItem itemValue="307" itemLabel="Garantía"/>
 							</h:selectOneMenu>
 				        </rich:column>
 				        <rich:column width="503">
@@ -807,7 +830,7 @@
 			               		<f:facet name="header">
 			                      	<h:outputText value="Adjunto"/>                      		
 			                    </f:facet>
-								<h:commandLink  value=" Descargar"
+								<h:commandLink  value=" Descargar" rendered="#{item.archivoAdjuntoGiro != null}"
 									actionListener="#{fileUploadController.descargarArchivo}">
 									<f:attribute name="archivo" value="#{item.archivoAdjuntoGiro}"/>
 								</h:commandLink>

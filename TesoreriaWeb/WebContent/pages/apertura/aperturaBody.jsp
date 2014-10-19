@@ -30,7 +30,28 @@
     <a4j:include viewId="/pages/apertura/popup/seleccionResponsable.jsp"/>
 </rich:modalPanel>
 
-
+<!-- Autor: jchavez / Tarea: Creación / Fecha: 23.08.2014 /  -->
+<!-- Autor: jchavez / Tarea: Modificación / Fecha: 08.09.2014 / Se vuelve a su estado original - OBS. TESORERIA -->
+<!-- 
+<rich:modalPanel id="pBuscarCuentaBancariaAFF" width="450" height="200"
+	resizeable="false" style="background-color:#DEEBF5;">
+    <f:facet name="header">
+        <h:panelGrid>
+          <rich:column style="border: none;">
+            <h:outputText value="Buscar Cuenta Bancaria"/>
+          </rich:column>
+        </h:panelGrid>
+    </f:facet>
+    <f:facet name="controls">
+        <h:panelGroup>
+           <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+           		<rich:componentControl for="pBuscarCuentaBancariaAFF" operation="hide" event="onclick"/>
+           </h:graphicImage>
+       </h:panelGroup>
+    </f:facet>
+   <a4j:include viewId="/pages/apertura/popup/buscarCuentaBancariaAperturaFondos.jsp"/>
+</rich:modalPanel>
+-->
 <h:outputText value="#{aperturaController.inicioPage}" />
 <h:form id="frmApertura">
    	<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
@@ -399,11 +420,8 @@
 			
 			</h:panelGroup>
 			
-			
-			<h:panelGroup rendered="#{aperturaController.datosValidados}">
-				
-					
-					
+			<a4j:outputPanel>			
+				<h:panelGroup rendered="#{aperturaController.datosValidados}">
 					<h:panelGrid columns="6" rendered="#{aperturaController.deshabilitarNuevo}">
 						<rich:column width=	"140">
 							<h:outputText value="Número de Egreso : "/>
@@ -518,7 +536,7 @@
 										itemValue="#{sel.intIdDetalle}"
 										itemLabel="#{sel.strDescripcion}"/>
 									<a4j:support event="onchange" action="#{aperturaController.seleccionarFondoFijoRendicion}" 
-										reRender="panelFondoFijoRendicion"/>
+										reRender="panelFondoFijoRendicion, panelCuentaAFF,pgTipoDocNroDoc"/>
 								</h:selectOneMenu>
 			                </rich:column>
 			                <rich:column width="400">
@@ -556,7 +574,7 @@
 					
 					<rich:spacer height="10px"/>
 					
-					<h:panelGrid columns="6">
+					<h:panelGrid columns="6" id="pgTipoDocNroDoc">
 						<rich:column width="140">
 							<h:outputText value="Tipo de Documento : "/>
 						</rich:column>
@@ -567,10 +585,10 @@
 								cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}"/>
 						</rich:column>
 						<rich:column width="120" style="text-align: left">
-							<h:outputText value="Número de Cheque : " rendered="#{!(aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_TRANSFERENCIATERCEROS)}"/>
-							<h:outputText value="Número de Transf : " rendered="#{(aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_TRANSFERENCIATERCEROS)}"/>
+							<h:outputText value="Número de Cheque : " rendered="#{(aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUERAEMPRESA || aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUEGERENCIA || aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUEGERENCIA)}"/>
+							<h:outputText value="Número de Transf : " rendered="#{(aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_TRANSFERENCIATERCEROS) || (aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION && aperturaController.intTipoFondoFijoRendicion == applicationScope.Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)}"/>
 						</rich:column>
-						<rich:column width="150">
+						<rich:column width="150" rendered="#{aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUERAEMPRESA || aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUEGERENCIA || aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_TRANSFERENCIATERCEROS || (aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION && aperturaController.intTipoFondoFijoRendicion == applicationScope.Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)}">
 							<h:inputText id="txtNroChequeTransf" size="22" value="#{aperturaController.intNumeroCheque}"
 								disabled="#{aperturaController.deshabilitarNuevo}" onkeypress="return soloNumerosNaturales(event)" 
 								readonly="#{(aperturaController.intTipoDocumentoValidar == applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUERAEMPRESA)}" 
@@ -661,6 +679,8 @@
 					
 					<rich:spacer height="5px"/>
 					
+					<rich:spacer height="5px"/>
+					
 					<h:panelGrid columns="4">
 						<rich:column width="140">
 							<h:outputText value="Fondo Anterior : "/>
@@ -708,10 +728,7 @@
 						</rich:column>						
 					</h:panelGrid>
 				</h:panelGroup>
-
-				
-			
-
+			</a4j:outputPanel>
 		</rich:panel>
 		
 	</h:panelGroup>	

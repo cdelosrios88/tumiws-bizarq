@@ -784,6 +784,12 @@
 						itemLabel="strDescripcion"
 						property="#{item.intParaDocumentoGeneral}"/>
 		   		</rich:column>
+		   		<rich:column width="50" style="text-align: center">
+		        	<f:facet name="header">
+		            	<h:outputText value="Nro.Doc."/>
+		          	</f:facet>
+		          	<h:outputText value="#{item.id.intItemOrdenCompraDocumento}"/>
+		    	</rich:column>
 		        <rich:column width="100" style="text-align: center">
 		        	<f:facet name="header">
 		            	<h:outputText value="Fecha"/>

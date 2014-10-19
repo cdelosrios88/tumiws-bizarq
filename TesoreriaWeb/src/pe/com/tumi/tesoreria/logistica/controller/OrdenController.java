@@ -2,6 +2,7 @@ package pe.com.tumi.tesoreria.logistica.controller;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import pe.com.tumi.empresa.domain.Area;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
+import pe.com.tumi.parametro.auditoria.facade.AuditoriaFacadeRemote;
 import pe.com.tumi.parametro.general.domain.Detraccion;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
@@ -133,7 +135,19 @@ public class OrdenController {
 	private Boolean blnHabilitarAdmin;
 
 	// Fin agregado por cdelosrios, 29/09/2013
-
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 01.10.2014
+	private List<Tabla> lstTablaEstadoContribuyente;
+	private List<Tabla> lstTablaCondicionContribuyente;
+	private String		strMsgErrorBusquedaProveedor;
+	private	List<Tabla> listaTablaTipoCtaBancaria;
+	private	List<Tabla> listaTablaTipoMoneda;
+	//Fin jchavez - 01.10.2014
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 03.10.2014
+	private AuditoriaFacadeRemote auditoriaFacade;
+	//Fin jchavez - 03.10.2014
+	
 	public OrdenController() {
 		cargarUsuario();
 		// poseePermiso = Boolean.TRUE;
@@ -154,6 +168,7 @@ public class OrdenController {
 			cargarValoresIniciales();
 			//Agregado por cdelosrios, 25/11/2013
 			deshabilitarPanelInferior();
+			strMsgErrorBusquedaProveedor = "";
 			//Fin agregado por cdelosrios, 25/11/2013
 		}	
 		else
@@ -193,7 +208,13 @@ public class OrdenController {
 			listaTablaDocumentoGeneral = tablaFacade
 					.getListaTablaPorAgrupamientoA(Integer
 							.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "O");
-
+			//Autor: jchavez / Tarea: Creacion / Fecha: 01.10.2014
+			lstTablaEstadoContribuyente = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOESTADOCONTRIB));
+			lstTablaCondicionContribuyente = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCONDCONTRIBUYENTE));
+			strMsgErrorBusquedaProveedor = "";
+			listaTablaTipoCtaBancaria = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTABANCARIA));
+			listaTablaTipoMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
+			//Fin jchavez - 01.10.2014
 			cargarListaSucursal();
 			cargarListaAnios();
 			intTipoPersonaFiltro = Constante.PARAM_T_TIPOPERSONA_JURIDICA;
@@ -493,11 +514,15 @@ public class OrdenController {
 						.getIntPersCuentaBancariaTransaccion());
 				CuentaBancaria cuentaBancariaPago = personaFacade
 						.getCuentaBancariaPorPK(cuentaBancariaIdPago);
+//				//Autor: jchavez / Tarea: Se agrega descripcion / Fecha: 01.10.2014
+//				cuentaBancariaPago
+//				.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancariaPago
+//						.getIntBancoCod())
+//						+ " "
+//						+ cuentaBancariaPago.getStrNroCuentaBancaria());
 				cuentaBancariaPago
-						.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancariaPago
-								.getIntBancoCod())
-								+ " "
-								+ cuentaBancariaPago.getStrNroCuentaBancaria());
+				.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancariaPago));
+//				//Fin jchavez - 01.10.2014
 				ordenCompraNuevo.setCuentaBancariaPago(cuentaBancariaPago);
 			}
 
@@ -510,12 +535,18 @@ public class OrdenController {
 								.getIntPersCuentaBancariaDetraccion());
 				CuentaBancaria cuentaBancariaImpuesto = personaFacade
 						.getCuentaBancariaPorPK(cuentaBancariaIdImpuesto);
+				
+				
+//				//Autor: jchavez / Tarea: Se agrega descripcion / Fecha: 01.10.2014
+//				cuentaBancariaImpuesto
+//				.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancariaImpuesto
+//						.getIntBancoCod())
+//						+ " "
+//						+ cuentaBancariaImpuesto
+//								.getStrNroCuentaBancaria());
 				cuentaBancariaImpuesto
-						.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancariaImpuesto
-								.getIntBancoCod())
-								+ " "
-								+ cuentaBancariaImpuesto
-										.getStrNroCuentaBancaria());
+				.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancariaImpuesto));
+//				//Fin jchavez - 01.10.2014
 				ordenCompraNuevo
 						.setCuentaBancariaImpuesto(cuentaBancariaImpuesto);
 			}
@@ -653,45 +684,29 @@ public class OrdenController {
 			log.error(e.getMessage(), e);
 		}
 	}
-
+	//Autor: jchavez / Tarea: Se modifican filtros de obtencion de la cuenta / Fecha: 02.10.2014
 	public void abrirPopUpBuscarCuentaBancaria(ActionEvent event) {
 		try {
+			
 			log.info(ordenCompraNuevo.getPersonaProveedor());
-			intTipoCuentaBancaria = Integer.parseInt((String) event
-					.getComponent().getAttributes().get("item"));
-			ordenCompraNuevo
-					.setListaCuentaBancariaUsar(new ArrayList<CuentaBancaria>());
+			intTipoCuentaBancaria = Integer.parseInt((String) event.getComponent().getAttributes().get("item"));
+			ordenCompraNuevo.setListaCuentaBancariaUsar(new ArrayList<CuentaBancaria>());
 
-			if (intTipoCuentaBancaria
-					.equals(Constante.ORDERCOMPRA_CUENTA_FORMAPAGO)) {
-				for (CuentaBancaria cuentaBancaria : ordenCompraNuevo
-						.getPersonaProveedor().getListaCuentaBancaria()) {
-					for (CuentaBancariaFin cuentaBancariaFin : cuentaBancaria
-							.getListaCuentaBancariaFin()) {
-						if (cuentaBancariaFin
-								.getId()
-								.getIntParaTipoFinCuenta()
-								.equals(Constante.PARAM_T_TIPORAZONCUENTA_ABONOS)) {
-							ordenCompraNuevo.getListaCuentaBancariaUsar().add(
-									cuentaBancaria);
+			if (intTipoCuentaBancaria.equals(Constante.ORDERCOMPRA_CUENTA_FORMAPAGO)) {
+				for (CuentaBancaria cuentaBancaria : ordenCompraNuevo.getPersonaProveedor().getListaCuentaBancaria()) {
+					for (CuentaBancariaFin cuentaBancariaFin : cuentaBancaria.getListaCuentaBancariaFin()) {
+						if (cuentaBancariaFin.getId().getIntParaTipoFinCuenta().equals(Constante.PARAM_T_TIPORAZONCUENTA_ABONOS)) {
+							ordenCompraNuevo.getListaCuentaBancariaUsar().add(cuentaBancaria);
 							break;
 						}
 					}
 				}
-			} else if (intTipoCuentaBancaria
-					.equals(Constante.ORDERCOMPRA_CUENTA_IMPUESTO)) {
-				for (CuentaBancaria cuentaBancaria : ordenCompraNuevo
-						.getPersonaProveedor().getListaCuentaBancaria()) {
-					if (cuentaBancaria.getIntBancoCod().equals(
-							Constante.PARAM_T_BANCOS_BANCONACION))
-						for (CuentaBancariaFin cuentaBancariaFin : cuentaBancaria
-								.getListaCuentaBancariaFin()) {
-							if (cuentaBancariaFin
-									.getId()
-									.getIntParaTipoFinCuenta()
-									.equals(Constante.PARAM_T_TIPORAZONCUENTA_DETRACCION)) {
-								ordenCompraNuevo.getListaCuentaBancariaUsar()
-										.add(cuentaBancaria);
+			} else if (intTipoCuentaBancaria.equals(Constante.ORDERCOMPRA_CUENTA_IMPUESTO)) {
+				for (CuentaBancaria cuentaBancaria : ordenCompraNuevo.getPersonaProveedor().getListaCuentaBancaria()) {
+					if (cuentaBancaria.getIntBancoCod().equals(Constante.PARAM_T_BANCOS_BANCONACION))
+						for (CuentaBancariaFin cuentaBancariaFin : cuentaBancaria.getListaCuentaBancariaFin()) {
+							if (cuentaBancariaFin.getId().getIntParaTipoFinCuenta().equals(Constante.PARAM_T_TIPORAZONCUENTA_DETRACCION)) {
+								ordenCompraNuevo.getListaCuentaBancariaUsar().add(cuentaBancaria);
 								break;
 							}
 						}
@@ -703,35 +718,54 @@ public class OrdenController {
 	}
 
 	public void buscarPersona() {
+		String strDescEstadoContribuyente = "";
+		String strDescCondicionContribuyente = "";
 		try {
 			log.info("--buscarPersona");
 			Persona persona = null;
 			boolean proveedorValido = Boolean.TRUE;
 			if (intTipoPersona.equals(Constante.PARAM_T_TIPOPERSONA_NATURAL)) {
-				persona = personaFacade
-						.getPersonaNaturalPorDocIdentidadYIdEmpresa(
-								Constante.PARAM_T_INT_TIPODOCUMENTO_DNI,
-								strFiltroTextoPersona, EMPRESA_USUARIO);
+				persona = personaFacade.getPersonaNaturalPorDocIdentidadYIdEmpresa(Constante.PARAM_T_INT_TIPODOCUMENTO_DNI,
+																				   strFiltroTextoPersona, EMPRESA_USUARIO);
 
-				proveedorValido = MyUtil.poseeRol(persona,
-						Constante.PARAM_T_TIPOROL_PROVEEDOR);
+				proveedorValido = MyUtil.poseeRol(persona,Constante.PARAM_T_TIPOROL_PROVEEDOR);
 
-			} else if (intTipoPersona
-					.equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA)) {
-				persona = personaFacade
-						.getPersonaJuridicaYListaPersonaPorRucYIdEmpresa2(
-								strFiltroTextoPersona, EMPRESA_USUARIO);
-				proveedorValido = MyUtil.poseeRol(persona,
-						Constante.PARAM_T_TIPOROL_PROVEEDOR)
-						&& (persona.getJuridica().getIntCondContribuyente() != null && !persona
-								.getJuridica()
-								.getIntCondContribuyente()
-								.equals(Constante.PARAM_T_TIPOCONDCONTRIBUYENTE_NOHABIDO))
-						&& (persona.getJuridica()
-								.getIntEstadoContribuyenteCod() != null && !persona
-								.getJuridica()
-								.getIntEstadoContribuyenteCod()
-								.equals(Constante.PARAM_T_TIPOESTADOCONTRIB_INACTIVO));
+			} else if (intTipoPersona.equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA)) {
+				persona = personaFacade.getPersonaJuridicaYListaPersonaPorRucYIdEmpresa2(strFiltroTextoPersona, EMPRESA_USUARIO);
+				/* Autor: jchavez / Tarea: Modificacion / Fecha: 01.10.2014
+				 * Funcionalidad: Se retringe busqueda a:
+				 * Estado Contribuyente: Activo
+				 * Condición Contribuyente: Habido
+				 */ 
+				proveedorValido = MyUtil.poseeRol(persona,Constante.PARAM_T_TIPOROL_PROVEEDOR)
+								&& (persona.getJuridica().getIntCondContribuyente() != null 
+										&& persona.getJuridica().getIntCondContribuyente().equals(Constante.PARAM_T_TIPOCONDCONTRIBUYENTE_HABIDO))
+								&& (persona.getJuridica().getIntEstadoContribuyenteCod() != null 
+										&& persona.getJuridica().getIntEstadoContribuyenteCod().equals(Constante.PARAM_T_TIPOESTADOCONTRIB_ACTIVO));
+				
+				      
+				if (proveedorValido) {
+					strMsgErrorBusquedaProveedor = "";
+				}else{
+					//Descripcion Estado Contribuyente
+					for (Tabla tabla : lstTablaEstadoContribuyente) {
+						if (tabla.getIntIdDetalle().equals(persona.getJuridica().getIntEstadoContribuyenteCod())) {
+							strDescEstadoContribuyente = tabla.getStrDescripcion();
+							break;
+						}
+					}
+				      
+					//Descripcion Condicion Contribuyente
+					for (Tabla tabla : lstTablaCondicionContribuyente) {
+						if (tabla.getIntIdDetalle().equals(persona.getJuridica().getIntCondContribuyente())) {
+							strDescCondicionContribuyente = tabla.getStrDescripcion();
+							break;
+						}
+					}		
+					strMsgErrorBusquedaProveedor = "El proveedor se encuentra Estado: "+strDescEstadoContribuyente+
+					   " Condición: "+strDescCondicionContribuyente+", no puede seleccionarse ";
+				}
+				//Fin jchavez - 01.10.2014
 			}
 
 			// proveedorValido = Boolean.TRUE;
@@ -1362,40 +1396,31 @@ public class OrdenController {
 		mostrarMensajeError = Boolean.FALSE;
 	}
 
-	private boolean validarMontoPlanCuentaAcumulado(
-			OrdenCompraDetalle ordenCompraDetalleValidar) throws Exception {
-		//Modificado por cdelosrios, 11/11/2013
-		/*if (ordenCompraNuevo.getListaOrdenCompraDetalle() == null
-				|| ordenCompraNuevo.getListaOrdenCompraDetalle().isEmpty())
-			return Boolean.TRUE;*/
-		//Fin modificado por cdelosrios, 11/11/2013
-
-		BigDecimal bdMontoPlanCuenta = ordenCompraDetalleValidar
-				.getBdPrecioTotal();
-		for (OrdenCompraDetalle ordenCompraDetalle : ordenCompraNuevo
-				.getListaOrdenCompraDetalle()) {
-			//Modificado por cdelosrios, 11/11/2013
-			if (ordenCompraDetalle.getPlanCuenta()!=null &&
-					//Fin modificado por cdelosrios, 11/11/2013
-				ordenCompraDetalle
-					.getPlanCuenta()
-					.getId()
-					.getStrNumeroCuenta()
-					.equalsIgnoreCase(
-							ordenCompraDetalleValidar.getPlanCuenta().getId()
-									.getStrNumeroCuenta())) {
-				bdMontoPlanCuenta = bdMontoPlanCuenta
-						.add(ordenCompraDetalleValidar.getBdPrecioTotal());
-			}
-		}
-
-		if (planCuentaFacade.validarMontoPlanCuenta(
-				ordenCompraDetalleValidar.getPlanCuenta(), bdMontoPlanCuenta))
-			return Boolean.TRUE;
-		else
-			return Boolean.FALSE;
-	}
-
+//	private boolean validarMontoPlanCuentaAcumulado(
+//			OrdenCompraDetalle ordenCompraDetalleValidar) throws Exception {
+//		//Modificado por cdelosrios, 11/11/2013
+//		/*if (ordenCompraNuevo.getListaOrdenCompraDetalle() == null
+//				|| ordenCompraNuevo.getListaOrdenCompraDetalle().isEmpty())
+//			return Boolean.TRUE;*/
+//		//Fin modificado por cdelosrios, 11/11/2013
+//
+//		BigDecimal bdMontoPlanCuenta = ordenCompraDetalleValidar.getBdPrecioTotal();
+//		for (OrdenCompraDetalle ordenCompraDetalle : ordenCompraNuevo.getListaOrdenCompraDetalle()) {
+//			//Modificado por cdelosrios, 11/11/2013
+//			if (ordenCompraDetalle.getPlanCuenta()!=null &&
+//					//Fin modificado por cdelosrios, 11/11/2013
+//				ordenCompraDetalle.getPlanCuenta().getId().getStrNumeroCuenta()
+//					.equalsIgnoreCase(ordenCompraDetalleValidar.getPlanCuenta().getId().getStrNumeroCuenta())) {
+//					bdMontoPlanCuenta = bdMontoPlanCuenta.add(ordenCompraDetalleValidar.getBdPrecioTotal());
+//			}
+//		}
+//
+//		if (planCuentaFacade.validarMontoPlanCuenta(ordenCompraDetalleValidar.getPlanCuenta(), bdMontoPlanCuenta))
+//			return Boolean.TRUE;
+//		else
+//			return Boolean.FALSE;
+//	}
+	
 	public void agregarOrdenCompraDetalle() {
 		try {
 			mostrarMensajeDetalle = Boolean.TRUE;
@@ -1443,18 +1468,25 @@ public class OrdenController {
 			 * "El monto ingresado no es valido para la configuración de la cuenta contable."
 			 * ; return; }
 			 */
-			if (!validarMontoPlanCuentaAcumulado(ordenCompraDetalle)) {
-				strMensajeDetalle = "El monto ingresado no es valido para la configuración de la cuenta contable.";
-				return;
-			}
-
+			
+			ordenCompraDetalle.setIntIdPerfil(usuario.getPerfil().getId().getIntIdPerfil());
+			
 			ordenCompraDetalle.setBdMontoSaldo(ordenCompraDetalle
 					.getBdPrecioTotal());
 			ordenCompraDetalle
 					.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
 			ordenCompraDetalle.setIntPersEmpresaUsuario(EMPRESA_USUARIO);
 			ordenCompraDetalle.setIntPersPersonaUsuario(PERSONA_USUARIO);
-
+			
+//			if (!validarMontoPlanCuentaAcumulado(ordenCompraDetalle)) {
+//				strMensajeDetalle = "El monto ingresado no es valido para la configuración de la cuenta contable.";
+//				return;
+//			}
+			if (!logisticaFacade.validarMontoOrdenCompraDetalle(ordenCompraDetalle, ordenCompraDetalle.getBdPrecioTotal())) {
+				strMensajeDetalle = "El monto ingresado no es valido para la configuración de la cuenta contable.";
+				return;
+			}
+			
 			for (Area area : ordenCompraDetalle.getSucursal().getListaArea())
 				if (area.getId().getIntIdArea()
 						.equals(ordenCompraDetalle.getIntIdArea()))
@@ -1497,6 +1529,13 @@ public class OrdenController {
 				strMensajeDocumento = "Debe de ingresar una fecha.";
 				return;
 			}
+			//Autor: jchavez / Tarea: Nueva Validación / Fecha: 12.09.2014
+			log.info("TIME EN DATE: "+new SimpleDateFormat("dd/MM/yyyy").format(new Date(ordenCompraDocumento.getTsFechaDocumento().getTime())));
+			if (ordenCompraDocumento.getTsFechaDocumento() != null && new SimpleDateFormat("dd/MM/yyyy").format(new Date(ordenCompraDocumento.getTsFechaDocumento().getTime())).compareTo(new SimpleDateFormat("dd/MM/yyyy").format(new Date(ordenCompraNuevo.getTsFechaRegistro().getTime())))==-1) {
+				strMensajeDocumento = "La fecha ingresada debe ser mayor o igual a la fecha de registro de la Orden Contable.";
+				return;
+			}
+			//Fin jchavez - 12.09.2014
 			if (ordenCompraDocumento.getBdMontoDocumento() == null
 					|| ordenCompraDocumento.getBdMontoDocumento().signum() <= 0) {
 				strMensajeDocumento = "Debe de ingresar un precio unitario válido.";
@@ -1532,6 +1571,10 @@ public class OrdenController {
 					break;
 				}
 			}
+			
+			//Autor: jchavez / Tarea: Se agregan nuevos campos / Fecha: 04.10.2014
+			ordenCompraDocumento.setTsFechaRegistro(new Timestamp(new Date().getTime()));
+			//Fin jchavez - 04.10.2014
 
 			if (!ordenCompraNuevo.getListaOrdenCompraDocumento().contains(
 					ordenCompraDocumento))
@@ -1560,33 +1603,66 @@ public class OrdenController {
 		return Boolean.TRUE;
 	}
 
-	private String obtenerEtiquetaBanco(Integer intBancoCod) {
-		for (Tabla tablaBanco : listaTablaBancos)
-			if (tablaBanco.getIntIdDetalle().equals(intBancoCod))
-				return tablaBanco.getStrDescripcion();
-
-		return "";
+	private String obtenerEtiquetaBanco(CuentaBancaria cuentaBancaria) {
+		String strDescBanco = "";
+		String strDescTipoCuenta = "";
+		String strDescTipoMoneda = "";
+		try {
+			//Autor: jchavez / Tarea: Se agrega descripcion / Fecha: 01.10.2014
+			//Descripcion Banco
+			for (Tabla tabla : listaTablaBancos) {
+				if (tabla.getIntIdDetalle().equals(cuentaBancaria.getIntBancoCod())) {
+					strDescBanco = tabla.getStrDescripcion();
+					break;
+				}
+		    }
+			//Descripcion Tipo Cuenta
+			for (Tabla tabla : listaTablaTipoCtaBancaria) {
+				if (tabla.getIntIdDetalle().equals(cuentaBancaria.getIntTipoCuentaCod())) {
+					strDescTipoCuenta = tabla.getStrDescripcion();
+					break;
+				}
+		    }
+			//Descripcion Tipo Moneda
+			for (Tabla tabla : listaTablaTipoMoneda) {
+				if (tabla.getIntIdDetalle().equals(cuentaBancaria.getIntMonedaCod())) {
+					strDescTipoMoneda = tabla.getStrDescripcion();
+					break;
+				}
+		    }
+			//Concatenamos descripcion Cuenta Bancaria:
+			//Nombre de Banco – Tipo de Cuenta – Moneda – Nro. de Cuenta
+			cuentaBancaria.setStrEtiqueta(strDescBanco +" - "+ strDescTipoCuenta +" - "+ strDescTipoMoneda +" - "+ cuentaBancaria.getStrNroCuentaBancaria());
+			//Fin jchavez - 01.10.2014
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return cuentaBancaria.getStrEtiqueta();
+//		for (Tabla tablaBanco : listaTablaBancos)
+//		if (tablaBanco.getIntIdDetalle().equals(intBancoCod))
+//			return tablaBanco.getStrDescripcion();
+//
+//	return "";
 	}
 
 	public void seleccionarCuentaBancaria(ActionEvent event) {
 		try {
 			CuentaBancaria cuentaBancaria = (CuentaBancaria) event
 					.getComponent().getAttributes().get("item");
-			cuentaBancaria.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancaria
-					.getIntBancoCod())
-					+ " "
-					+ cuentaBancaria.getStrNroCuentaBancaria());
-
+//			//Autor: jchavez / Tarea: Se agrega descripcion / Fecha: 01.10.2014
+//			cuentaBancaria.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancaria
+//					.getIntBancoCod())
+//					+ " "
+//					+ cuentaBancaria.getStrNroCuentaBancaria());
+			cuentaBancaria
+			.setStrEtiqueta(obtenerEtiquetaBanco(cuentaBancaria));
+//			//Fin jchavez - 01.10.2014
 			if (intTipoCuentaBancaria.equals(new Integer(1))) {
-				ordenCompraNuevo
-						.setIntPersCuentaBancariaTransaccion(cuentaBancaria
-								.getId().getIntIdCuentaBancaria());
+				ordenCompraNuevo.setIntPersCuentaBancariaTransaccion(cuentaBancaria.getId().getIntIdCuentaBancaria());
 				ordenCompraNuevo.setCuentaBancariaPago(cuentaBancaria);
 
 			} else if (intTipoCuentaBancaria.equals(new Integer(2))) {
-				ordenCompraNuevo
-						.setIntPersCuentaBancariaDetraccion(cuentaBancaria
-								.getId().getIntIdCuentaBancaria());
+				ordenCompraNuevo.setIntPersCuentaBancariaDetraccion(cuentaBancaria.getId().getIntIdCuentaBancaria());
 				ordenCompraNuevo.setCuentaBancariaImpuesto(cuentaBancaria);
 			}
 		} catch (Exception e) {
@@ -1682,7 +1758,7 @@ public class OrdenController {
 	public void imprimirOrdenCompra(){
 		String strNombreReporte = "";
 		//Requisicion requisicion = (Requisicion)event.getComponent().getAttributes().get("requisicion");
-		OrdenCompra ordenCompra = registroSeleccionado;
+//		OrdenCompra ordenCompra = registroSeleccionado;
 		HashMap<String,Object> parametro = new HashMap<String,Object>();
 		String direccion = "";
 		String telefono = "";
@@ -1756,7 +1832,17 @@ public class OrdenController {
 			parametro.put("P_GARANTIA_PRODUCTO", new java.text.DecimalFormat("#,##0.00").format((ordenCompraNuevo.getBdGarantiaProductoServicio()==null?BigDecimal.ZERO:ordenCompraNuevo.getBdGarantiaProductoServicio())) + " " +tablaFrecPago.getStrDescripcion());
 			
 			//parametro.put("P_AREA", ordenCompraNuevo.getDocumentoRequisicion().getRequisicion().getArea().getStrDescripcion());
-			
+			//Autor: jchavez / Tarea: Modificacion / Fecha: 03.10.2014
+			if (ordenCompraNuevo.getListaOrdenCompraDetalle()!=null && !ordenCompraNuevo.getListaOrdenCompraDetalle().isEmpty()) {
+				for (OrdenCompraDetalle o : ordenCompraNuevo.getListaOrdenCompraDetalle()) {
+					if (o.getIntAfectoIGV().equals(1)) {
+						o.setStrAfecto("X");
+					}else{
+						o.setStrAfecto("");
+					}
+				}
+			}
+			//Fin jchavez - 03.10.2014
 			strNombreReporte = "ordenCompra";
 			UtilManagerReport.generateReport(strNombreReporte, parametro, 
 					new ArrayList<Object>(ordenCompraNuevo.getListaOrdenCompraDetalle()), Constante.PARAM_T_TIPOREPORTE_PDF);
@@ -1766,6 +1852,51 @@ public class OrdenController {
 	}
 	//Fin agregado por cdelosrios, 26/11/2013
 
+//	public Auditoria beanAuditoria(Integer intTipoCambio, OrdenCompraDocumento beanAuditarOrdenCompraDocumento) {
+//		Auditoria auditoria = new Auditoria();
+//		Calendar fecHoy = Calendar.getInstance();
+//		
+//		auditoria.setListaAuditoriaMotivo(null);
+//		auditoria.setStrTabla(Constante.PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC);
+//		auditoria.setIntEmpresaPk(EMPRESA_USUARIO);
+//		auditoria.setStrLlave1(""+beanAuditarOrdenCompraDocumento.getId().getIntPersEmpresa());
+//		auditoria.setStrLlave2(""+beanAuditarOrdenCompraDocumento.getId().getIntItemOrdenCompra());
+//		auditoria.setStrLlave3(""+beanAuditarOrdenCompraDocumento.getId().getIntItemOrdenCompraDocumento());
+//		auditoria.setIntTipo(intTipoCambio);
+//		auditoria.setTsFecharegistro(new Timestamp(new Date().getTime()));
+//		auditoria.setIntPersonaPk(PERSONA_USUARIO);
+//		return auditoria;
+//	}
+//	
+//	public List<Auditoria> generarAuditoria(Integer intTipoCambio, OrdenCompraDocumento beanAuditarOrdenCompraDocumento) throws BusinessException{
+//		Auditoria auditoria = null;
+//		List<Auditoria> lista = new ArrayList<Auditoria>();
+//		try {
+//			//Procedo de REGISTRO
+//			if (intTipoCambio.equals(Constante.PARAM_T_AUDITORIA_TIPOREGISTRO_INSERT)) {
+//				auditoria = beanAuditoria(intTipoCambio, beanAuditarOrdenCompraDocumento);
+//				auditoria.setStrColumna("FECHA_REGISTRO");
+//				auditoria.setStrValoranterior(null);
+//				auditoria.setStrValornuevo(""+new Timestamp(new Date().getTime()));
+//				
+//				lista.add(auditoria);
+//			}
+//		} catch (Exception e) {
+//			log.error("Error en generarAuditoria --> "+e);
+//		}
+//		return lista;
+//	}
+//	//
+//	public Auditoria grabarAuditoria(Auditoria auditoria)throws BusinessException {		
+//		try {
+//			//En el proceso de grabar Auditoria, para el caso de Presupuestos no se grabará tabla AUDITORIA_MOTIVO
+//			auditoriaFacade.grabarAuditoria(auditoria);
+//			
+//		} catch (Exception e) {
+//			log.error("Error en grabarAuditoria ---> "+e);
+//		}		
+//		return auditoria;
+//	}
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest();
@@ -2117,4 +2248,12 @@ public class OrdenController {
 		this.blnHabilitarAdmin = blnHabilitarAdmin;
 	}
 	// Fin agregado por cdelosrios, 29/09/2013
+	//Autor: jchavez / Tarea: Creacion / Fecha: 01.10.2014
+	public String getStrMsgErrorBusquedaProveedor() {
+		return strMsgErrorBusquedaProveedor;
+	}
+	public void setStrMsgErrorBusquedaProveedor(String strMsgErrorBusquedaProveedor) {
+		this.strMsgErrorBusquedaProveedor = strMsgErrorBusquedaProveedor;
+	}	
+	//Fin jchavez - 01.10.2014
 }

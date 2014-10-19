@@ -70,7 +70,7 @@
 						<f:selectItem itemValue="0" itemLabel="Seleccione"/>
 						<tumih:selectItems var="sel"
 							value="#{fondosFijosController.listaControlFondosFijosBusqueda}"
-							itemValue="#{sel.id.intItemFondoFijo}"
+							itemValue="#{sel.intItemFiltro}"
 							itemLabel="#{sel.strNumeroApertura}"/>
 					</h:selectOneMenu>
             	</rich:column>
@@ -207,7 +207,8 @@
 							title="#{item.personaApoderado.juridica.strRazonSocial}"
 						/>
                   	</rich:column>
-                  	<rich:column width="150" style="text-align: center">
+                  	<!-- Autor: jchavez / Tarea: Eliminación / Fecha: 08.09.2014 -->
+                  	<rich:column width="150" style="text-align: center" rendered="false">
                    		<f:facet name="header">
                         	<h:outputText value="Número"/>
                         </f:facet>
@@ -312,10 +313,10 @@
 								action="#{fondosFijosController.seleccionarTipoFondoFijo}"/>
 						</h:selectOneMenu>
 	            	</rich:column>
-	            	<rich:column width="110">
+	            	<rich:column width="110" rendered="#{fondosFijosController.blnActivarNroApertura}">
 						<h:outputText value="Nro. de Apertura :"/>
 					</rich:column>
-					<rich:column width="300">
+					<rich:column width="300" rendered="#{fondosFijosController.blnActivarNroApertura}">
 	                	<h:selectOneMenu
 	                		value="#{fondosFijosController.intControlSeleccionado}"
 							style="width: 290px;">
@@ -362,10 +363,10 @@
 				<rich:spacer height="3px"/>
 				
 				<h:panelGrid columns="8">
-					<rich:column width="120">
+					<rich:column width="120" rendered="#{fondosFijosController.blnActivarNroApertura}">
 						<h:outputText value="Nro. Apertura :"/>
 					</rich:column>
-					<rich:column width="175">
+					<rich:column width="175" rendered="#{fondosFijosController.blnActivarNroApertura}">
 						<h:inputText readonly="true"
 							value="#{fondosFijosController.controlFondosFijos.strNumeroApertura}"
 							style="background-color: #BFBFBF;"
@@ -456,7 +457,7 @@
 							size="124"/>
 						<h:inputText readonly="true"
 							rendered="#{fondosFijosController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
-							value="RUC : #{fondosFijosController.personaSeleccionada.strRuc} - #{fondosFijosController.personaSeleccionada.juridica.strRazonSocial} - Cuenta : #{fondosFijosController.cuentaActual.strNumeroCuenta}"
+							value="RUC : #{fondosFijosController.personaSeleccionada.strRuc} - #{fondosFijosController.personaSeleccionada.juridica.strRazonSocial}"
 							style="background-color: #BFBFBF;"
 							size="124"/>
 					</rich:column>
@@ -504,17 +505,15 @@
 						<h:outputText value="Tipo de Documento : "/>
 			        </rich:column>
 			        <rich:column width="175">
-
 						<h:selectOneMenu
 							style="width: 160px;"
 							disabled="#{(not empty fondosFijosController.listaEgresoDetalleInterfazAgregado)||(fondosFijosController.deshabilitarNuevo)}"
 							value="#{fondosFijosController.intTipoDocumentoAgregar}">
-							<f:selectItem itemValue="100" itemLabel="Préstamos"/>
-							<f:selectItem itemValue="101" itemLabel="AES"/>
-							<f:selectItem itemValue="102" itemLabel="Fondo de Sepelio"/>
-							<f:selectItem itemValue="103" itemLabel="Fondo de Retiro"/>
-							<f:selectItem itemValue="104" itemLabel="Liquidación de cuenta"/>
-							<f:selectItem itemValue="305" itemLabel="Planilla de movilidad"/>
+							<f:selectItem itemValue="0" itemLabel="Seleccione"/>
+							<tumih:selectItems var="sel"
+								value="#{fondosFijosController.listaTablaTipoDocumento}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>
 						</h:selectOneMenu>
 			        </rich:column>
 			        <rich:column width="503">
@@ -824,7 +823,7 @@
 				               		<f:facet name="header">
 				                      	<h:outputText value="Adjunto"/>                      		
 				                    </f:facet>
-									<h:commandLink  value=" Descargar"
+									<h:commandLink  value=" Descargar" rendered="#{item.archivoAdjuntoGiro!=null}"
 										actionListener="#{fileUploadController.descargarArchivo}">
 										<f:attribute name="archivo" value="#{item.archivoAdjuntoGiro}"/>
 									</h:commandLink>

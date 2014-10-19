@@ -9,8 +9,6 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 
-import com.ibm.ObjectQuery.crud.util.Array;
-
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
@@ -19,8 +17,6 @@ import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.empresa.domain.ActividadEconomica;
 import pe.com.tumi.persona.empresa.domain.ActividadEconomicaPK;
-import pe.com.tumi.persona.empresa.domain.TipoComprobante;
-import pe.com.tumi.tesoreria.egreso.domain.Movilidad;
 
 public class ActividadEconomicaController {
 	protected   static Logger 		    	log = Logger.getLogger(ActividadEconomicaController.class);

@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.ConvertirLetras;
+import pe.com.tumi.common.util.MyUtilFormatoFecha;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
@@ -111,6 +112,10 @@ public class CierreFondosController {
 	private	ControlFondosFijos 	controlFondosFijosAnular;
 	private CierreFondoFijoFacadeLocal cierreFdoFijoFacade;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 14.08.2014 / 
+	private Boolean blnHabilitarValidarDatos;
+	private String strMsgFueraDeFecha;
+	private Bancofondo			bancoFondoIngreso;
 	
 	public CierreFondosController(){
 		cargarUsuario();
@@ -144,6 +149,8 @@ public class CierreFondosController {
 		intAnioBusqueda = 0;
 		intTipoFondoFijo = 0;
 		deshabilitarPanelInferior();
+		blnHabilitarValidarDatos = false;
+		strMsgFueraDeFecha = "";
 	}
 	private void cargarUsuario(){
 //		usuarioSesion = (Usuario)getRequest().getSession().getAttribute("usuario");
@@ -186,6 +193,10 @@ public class CierreFondosController {
 			if (SESION_IDSUCURSAL.equals(59)) {
 				blnDisabledSucursal = Boolean.FALSE;
 			}else blnDisabledSucursal = Boolean.TRUE;
+			
+			blnHabilitarValidarDatos = false;
+			strMsgFueraDeFecha = "";
+			intTipoCierre = 0;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -240,6 +251,9 @@ public class CierreFondosController {
 		mostrarMensajeError = Boolean.FALSE;
 		mostrarMensajeExito = Boolean.FALSE;
 		habilitarGrabar = Boolean.FALSE;
+		intTipoCierre = 0;
+		blnHabilitarValidarDatos = false;
+		strMsgFueraDeFecha="";
 	}
 	
 	public void habilitarPanelInferior(){
@@ -381,6 +395,7 @@ public class CierreFondosController {
 	public void validarDatos(){
 		try{
 			bancoFondoIngresar = null;
+			bancoFondoIngreso = null;//jchavez 01.10.2014
 			//if(intTipoCierre.equals(Constante.PARAM_T_CIERREFONDOFIJO_RENOVACION)){
 			controlFondosFijosCerrar.setTsFechaCierre(obtenerFechaActual());
 			controlFondosFijosCerrar.setStrDescripcionPersona(obtenerDescripcionPersona(controlFondosFijosCerrar.getIntPersPersonaResponsable()));			
@@ -394,12 +409,15 @@ public class CierreFondosController {
 				listaIngresoDetalleInterfaz = new ArrayList<IngresoDetalleInterfaz>();
 				listaIngresoDetalleInterfaz.add(cargarIngresoDetalleInterfaz(controlFondosFijosCerrar));
 				
-				bancoFondoIngresar = bancoFacade.obtenerBancoFondoParaIngreso(usuarioSesion, controlFondosFijosCerrar.getIntParaMoneda());
-				if(bancoFondoIngresar==null || bancoFondoIngresar.getFondoDetalleUsar()==null){
+//				listaControlFondosFijosCerrar.get(0).getId().getIntParaTipoFondoFijo()
+				bancoFondoIngreso = bancoFacade.obtenerBancoFondoParaIngreso(usuarioSesion, controlFondosFijosCerrar.getIntParaMoneda());
+				bancoFondoIngresar = bancoFacade.obtenerBancoFondoParaIngreso(usuarioSesion, controlFondosFijosCerrar); //.getIntParaMoneda()
+				//Autor: jchavez / Tarea: Modificacion / Fecha: 01.10.2014
+				if(bancoFondoIngreso==null || bancoFondoIngreso.getFondoDetalleUsar()==null){
 					mostrarMensaje(Boolean.FALSE, "No existe un fondo de caja creado para "+
 							usuarioSesion.getSucursal().getJuridica().getStrRazonSocial()+"-"+usuarioSesion.getSubSucursal().getStrDescripcion());
 					return;
-				}				
+				}//Fin jchavez - 01.10.2014
 			}
 			
 			datosValidados = Boolean.TRUE;
@@ -515,11 +533,14 @@ public class CierreFondosController {
 						mensaje = "Se registró correctamente el Cierre de Fondos Fijos por renovación.";
 					}else if(intTipoCierre.equals(Constante.PARAM_T_CIERREFONDOFIJO_LIQUIDACION)){
 						controlFondosFijosCerrar.setBdMontoUtilizado(controlFondosFijosCerrar.getBdMontoApertura());
-						controlFondosFijosCerrar.setBdMontoSaldo(BigDecimal.ZERO);
+						//Autor: jchavez / Tarea: no se debe setear a 0 el saldo / Fecha: 01.10.2014
+//						controlFondosFijosCerrar.setBdMontoSaldo(BigDecimal.ZERO);
+						//Fin jchavez - 01.10.2014
 						if(strObservacion==null || strObservacion.isEmpty()){
 							mensaje = "Debe de ingresar una observación.";return;
 						}						
-						ingresoFacade.grabarIngresoCierreFondo(controlFondosFijosCerrar, bancoFondoIngresar, usuarioSesion, strObservacion);
+						//Autor: jchavez / Tarea: se agrega bancoFondoIngreso / Fecha: 01.10.2014
+						ingresoFacade.grabarIngresoCierreFondo(controlFondosFijosCerrar, bancoFondoIngresar, usuarioSesion, strObservacion, bancoFondoIngreso);
 						mensaje = "Se registró correctamente el Cierre de Fondos Fijos por liquidación.";
 					}
 				}
@@ -613,6 +634,25 @@ public class CierreFondosController {
 		}
 	}
 	
+	public void validarMes(ActionEvent event){
+		blnHabilitarValidarDatos = false;
+		strMsgFueraDeFecha = "";
+		Calendar cal = Calendar.getInstance();
+		try {
+			if (intTipoCierre.equals(Constante.PARAM_T_CIERREFONDOFIJO_LIQUIDACION)) {
+				//Autor: jchavez / Tarea: filtro no aplica si la sucursal es sede / Fecha: 29.09.2014
+				if (!(SESION_IDSUCURSAL.equals(59))) {
+					if (cal.get(Calendar.MONTH)!=11) {
+						blnHabilitarValidarDatos = true;
+						strMsgFueraDeFecha = "Tipo cierre Liquidación solo será habilitado el mes de Diciembre";
+					}	
+				}
+				//Fin jchavez - 29.09.2014	
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}
@@ -1014,4 +1054,25 @@ public class CierreFondosController {
 			List<ControlFondosFijos> listaControlFondosFijosTemp) {
 		this.listaControlFondosFijosTemp = listaControlFondosFijosTemp;
 	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 14.08.2014 / 
+	public Boolean getBlnHabilitarValidarDatos() {
+		return blnHabilitarValidarDatos;
+	}
+	public void setBlnHabilitarValidarDatos(Boolean blnHabilitarValidarDatos) {
+		this.blnHabilitarValidarDatos = blnHabilitarValidarDatos;
+	}
+	public String getStrMsgFueraDeFecha() {
+		return strMsgFueraDeFecha;
+	}
+	public void setStrMsgFueraDeFecha(String strMsgFueraDeFecha) {
+		this.strMsgFueraDeFecha = strMsgFueraDeFecha;
+	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 01.10.2014 / 
+	public Bancofondo getBancoFondoIngreso() {
+		return bancoFondoIngreso;
+	}
+	public void setBancoFondoIngreso(Bancofondo bancoFondoIngreso) {
+		this.bancoFondoIngreso = bancoFondoIngreso;
+	}
+	//Fin jchavez - 01.10.2014
 }

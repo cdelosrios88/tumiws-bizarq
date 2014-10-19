@@ -164,7 +164,7 @@
                       		title="#{item.personaApoderado.natural.strNombreCompleto}"/>
                       	<h:outputText 
                       		rendered="#{item.personaApoderado.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
-                      		value="#{item.personaApoderado.juridica.strRazonSocial}"
+                      		value="#{item.bancoCuenta.strEtiqueta}"
                       		title="#{item.personaApoderado.juridica.strRazonSocial}"/>	
                   	</rich:column>
                   	<rich:column width="150" style="text-align: center">
@@ -180,7 +180,7 @@
                     	<f:facet name="header">
                       		<h:outputText value="Cuenta"/>                      		
                       	</f:facet>
-                      	<h:outputText value="#{item.listaEgresoDetalle[0].strNumeroDocumento}"/>
+                      	<h:outputText value="#{item.bancoCuenta.cuentaBancaria.strNroCuentaBancaria}"/>
                   	</rich:column>
                   	<rich:column width="100" style="text-align: center">
                     	<f:facet name="header">
@@ -543,7 +543,10 @@
 							<h:outputText value="Descripción :"/>
 						</rich:column>
 						<rich:column width="190">
-							<h:inputText size="112" readonly="true" style="background-color: #BFBFBF;"/>
+							<h:inputText size="112" 
+								value="#{transferenciaController.strMontoGirarDescripcion}" 
+								readonly="true" 
+								style="background-color: #BFBFBF;"/>
 						</rich:column>
 					</h:panelGrid>
 					
@@ -574,6 +577,31 @@
 					</h:panelGrid>
 					
 					<rich:spacer height="5px"/>
+					<h:panelGrid columns="6" rendered="#{transferenciaController.egresoNuevo.strNumeroEgreso!=null}">
+						<rich:column width="120">
+							<h:outputText value="Número de Egreso : "/>
+						</rich:column>						
+						<rich:column width="140">
+							<h:inputText size="28" 
+								value="#{transferenciaController.egresoNuevo.strNumeroEgreso}"
+								readonly="true" 
+								style="background-color: #BFBFBF;font-weight:bold;"/>
+						</rich:column>
+						<rich:column width="125">
+							<h:outputText value="Número de Asiento :"/>
+						</rich:column>
+						<rich:column width="100">
+							<h:inputText size="17" 
+								rendered="#{empty transferenciaController.libroDiario}"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"/>
+							<h:inputText size="17" 
+								rendered="#{not empty transferenciaController.libroDiario}"
+								value="#{transferenciaController.libroDiario.strNumeroAsiento}"
+								readonly="true" 
+								style="background-color: #BFBFBF;font-weight:bold;"/>								
+						</rich:column>
+					</h:panelGrid>
 					
 					<h:panelGrid id="panelCuentaOrigen" columns="6">
 						<rich:column width="120">
@@ -675,7 +703,7 @@
 								size="124"/>
 							<h:inputText readonly="true"
 								rendered="#{transferenciaController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
-								value="RUC : #{transferenciaController.personaSeleccionada.strRuc} - #{transferenciaController.personaSeleccionada.juridica.strRazonSocial} - Cuenta : #{transferenciaController.cuentaActual.strNumeroCuenta}"
+								value="RUC : #{transferenciaController.personaSeleccionada.strRuc} - #{transferenciaController.personaSeleccionada.juridica.strRazonSocial}"
 								style="background-color: #BFBFBF;"
 								size="124"/>
 						</rich:column>
@@ -706,11 +734,13 @@
 						<rich:column width="685">
 							<h:inputText size="124" 
 								rendered="#{empty transferenciaController.cuentaBancariaSeleccionada}"
+								style="background-color: #BFBFBF;font-weight:bold;"
 								readonly="true"/>
 							<h:inputText size="124" 
 								rendered="#{not empty transferenciaController.cuentaBancariaSeleccionada}"
 								readonly="true" 
-								value="#{transferenciaController.cuentaBancariaSeleccionada.strNroCuentaBancaria}"/>
+								style="background-color: #BFBFBF;font-weight:bold;"
+								value="#{transferenciaController.cuentaBancariaSeleccionada.strEtiqueta}"/>
 						</rich:column>
 						<rich:column width="80">
 							<a4j:commandButton styleClass="btnEstilos"
@@ -741,6 +771,8 @@
 								<f:selectItem itemValue="103" itemLabel="Fondo de Retiro"/>
 								<f:selectItem itemValue="104" itemLabel="Liquidación de cuenta"/>
 								<f:selectItem itemValue="305" itemLabel="Planilla de movilidad"/>
+								<f:selectItem itemValue="309" itemLabel="Adelanto"/>
+								<f:selectItem itemValue="307" itemLabel="Garantía"/>
 							</h:selectOneMenu>
 				        </rich:column>
 				        <rich:column width="503">
@@ -953,20 +985,30 @@
 						<rich:column>
 							<h:inputText size="89" 
 								readonly="true" 
+								style="background-color: #BFBFBF;font-weight:bold; width : 546px;"
 								value="#{transferenciaController.strMontoGirarDescripcion}"/>
 						</rich:column>
 					</h:panelGrid>
 					
 					<rich:spacer height="3px"/>
 					
-					<h:panelGrid columns="6">
+					<h:panelGrid columns="6" rendered="#{transferenciaController.bdDiferencialGirar > 0}">
 						<rich:column width="120">
 							<h:outputText value="Diferencial Cambiario :"/>
 						</rich:column>
 						<rich:column width="175">
-							<h:inputText size="22"
-								readonly="true" 
-								style="background-color: #BFBFBF;font-weight:bold;"/>
+							<h:inputText size="20"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"
+								value="#{transferenciaController.bdDiferencialGirar}">
+								<f:converter converterId="ConvertidorMontos" />
+							</h:inputText>
+						</rich:column>
+						<rich:column width="350">
+							<h:inputText size="74"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold; width : 546px;"
+								value="#{transferenciaController.strDiferencialGirarDescripcion}"/>
 						</rich:column>
 					</h:panelGrid>
 					
@@ -1055,7 +1097,7 @@
 				               		<f:facet name="header">
 				                      	<h:outputText value="Adjunto"/>                      		
 				                    </f:facet>
-									<h:commandLink  value=" Descargar"
+									<h:commandLink  value=" Descargar" rendered="#{item.archivoAdjuntoGiro != null}"
 										actionListener="#{fileUploadController.descargarArchivo}">
 										<f:attribute name="archivo" value="#{item.archivoAdjuntoGiro}"/>
 									</h:commandLink>
@@ -1077,6 +1119,32 @@
 					</h:panelGrid>
 					
 					<rich:spacer height="5px"/>
+					
+					<h:panelGrid columns="6" rendered="#{transferenciaController.egresoNuevo.strNumeroEgreso!=null}">
+						<rich:column width="120">
+							<h:outputText value="Número de Egreso : "/>
+						</rich:column>						
+						<rich:column width="140">
+							<h:inputText size="28" 
+								value="#{transferenciaController.egresoNuevo.strNumeroEgreso}"
+								readonly="true" 
+								style="background-color: #BFBFBF;font-weight:bold;"/>
+						</rich:column>
+						<rich:column width="125">
+							<h:outputText value="Número de Asiento :"/>
+						</rich:column>
+						<rich:column width="100">
+							<h:inputText size="17" 
+								rendered="#{empty transferenciaController.libroDiario}"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"/>
+							<h:inputText size="17" 
+								rendered="#{not empty transferenciaController.libroDiario}"
+								value="#{transferenciaController.libroDiario.strNumeroAsiento}"
+								readonly="true" 
+								style="background-color: #BFBFBF;font-weight:bold;"/>								
+						</rich:column>
+					</h:panelGrid>
 					
 					<h:panelGrid id="panelCuentaOrigenTT" columns="6">
 						<rich:column width="120">

@@ -237,7 +237,7 @@
                    	
                    	<a4j:support event="onRowClick"
                    		actionListener="#{cajaController.verRegistro}"
-						reRender="panelMensajeC, panelBotonesC, contPanelInferiorC">
+						reRender="panelMensajeC, panelBotonesC, contPanelInferiorC, panelPersonaC">
                     	<f:attribute name="item" value="#{item}"/>
                    	</a4j:support>
                    	
@@ -324,6 +324,7 @@
 							style="width: 140px;">
 							<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_PAGOINGRESO_EFECTIVO}" itemLabel="Efectivo"/>
 							<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_PAGOINGRESO_CHEQUE}" itemLabel="Cheque"/>
+							<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_PAGOINGRESO_TRANSFERENCIA}" itemLabel="Transferencia"/>
 						</h:selectOneMenu>
 	            	</rich:column>
 	            	<rich:column width="60" style="text-align: left;">
@@ -344,7 +345,7 @@
 					<rich:column width="950">
 						<a4j:commandButton styleClass="btnEstilos"
 		                	value="Validar Datos"
-		                	reRender="contPanelInferiorC,panelBotonesC,panelMensajeC"
+		                	reRender="contPanelInferiorC,panelBotonesC,panelMensajeC,panelDocumentoC"
 		                    action="#{cajaController.validarDatos}" 
 		                    style="width:950px"/>
 					</rich:column>
@@ -397,6 +398,17 @@
 							style="background-color: #BFBFBF;"
 							size="23"/>
 					</rich:column>
+					<rich:column width="110" style="text-align: left;" rendered="#{!cajaController.habilitarGrabar}">
+						<h:outputText value="Ingreso :"/>
+					</rich:column>
+					<rich:column width="150" rendered="#{!cajaController.habilitarGrabar}">
+						<h:inputText readonly="true"
+							value="#{cajaController.ingresoGeneradoTrasGrabacion.strNumeroIngreso}"
+							style="background-color: #BFBFBF; text-align:center;"
+							size="23">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:inputText>
+					</rich:column>
 				</h:panelGrid>
 				
 				<rich:spacer height="3px"/>
@@ -435,12 +447,23 @@
 							<f:convertDateTime pattern="dd/MM/yyyy"/>
 						</h:inputText>
 					</rich:column>
+					<rich:column width="110" style="text-align: left;" rendered="#{!cajaController.habilitarGrabar}">
+						<h:outputText value="Asiento :"/>
+					</rich:column>
+					<rich:column width="150" rendered="#{!cajaController.habilitarGrabar}">
+						<h:inputText readonly="true"
+							value="#{cajaController.ingresoGeneradoTrasGrabacion.strNumeroLibro}"
+							style="background-color: #BFBFBF; text-align:center;"
+							size="23">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:inputText>
+					</rich:column>
 				</h:panelGrid>
 				
 				<rich:spacer height="8px"/>
 				
-				<h:panelGrid columns="1">
-					<rich:column width="200">
+				<h:panelGrid columns="3">
+					<rich:column width="280">
 						<h:outputText value="PERSONA QUE REALIZO EL INGRESO"/>
 					</rich:column>
 				</h:panelGrid>
@@ -448,85 +471,97 @@
 				<rich:spacer height="3px"/>
 				
 				<h:panelGroup id="panelPersonaC">
+				<a4j:outputPanel id="opTipoDePersona">
+					<h:panelGrid columns="11" rendered="#{!cajaController.blnIngresoCajaView}">
+						<rich:column width="120">
+							<h:outputText value="Tipo de Persona :"/>
+						</rich:column>
+						<!--  -->
+						<rich:column width="100">
+							<h:selectOneMenu id="cboTipoPersonaC"
+								onchange="getPersonaRolC(#{applicationScope.Constante.ONCHANGE_VALUE})"
+								style="width: 100px;"
+								value="#{cajaController.intTipoPersonaC}">
+								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+								<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOPERSONA}" 
+									itemValue="#{sel.intIdDetalle}"
+									itemLabel="#{sel.strDescripcion}"/>
+							</h:selectOneMenu>
+						</rich:column>
+						<!--  -->
+						<rich:column width="130">
+							<h:selectOneMenu id="cboPersonaRolC"
+								onchange="getTipoDocumentoC(#{applicationScope.Constante.ONCHANGE_VALUE})"
+								style="width: 130px;"
+								value="#{cajaController.intPersonaRolC}">
+								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+								<tumih:selectItems var="sel"
+									value="#{cajaController.lstPersonaRol}"
+									itemValue="#{sel.intIdDetalle}"
+									itemLabel="#{sel.strDescripcion}"/>
+							</h:selectOneMenu>
+						</rich:column>
+					</h:panelGrid>
+				</a4j:outputPanel>
+				<a4j:outputPanel id="opDatosPersonaSelect">
+					<h:panelGrid columns="11" id="pgDatosPersonaSelect">
+						<rich:column width="120">
+							
+						</rich:column>
+						<rich:column width="630">
+							<h:inputText readonly="true"
+								rendered="#{empty cajaController.socioSeleccionado && empty cajaController.entidadSeleccionada && !cajaController.blnIngresoCajaView}"
+								style="background-color: #BFBFBF;"
+								size="120"/>
+							<h:inputText readonly="true"
+								rendered="#{cajaController.intTipoPersonaC==applicationScope.Constante.PARAM_T_TIPOPERSONA_NATURAL  && cajaController.intPersonaRolC==applicationScope.Constante.PARAM_T_TIPOROL_SOCIO && cajaController.socioSeleccionado.strIngCajaNroDocumento!=null && !cajaController.blnIngresoCajaView}"
+								value="DNI : #{cajaController.socioSeleccionado.strIngCajaNroDocumento} - #{cajaController.socioSeleccionado.strIngCajaDescripcion}"
+								style="background-color: #BFBFBF;"
+								size="120"/>
+							<h:inputText readonly="true"
+								rendered="#{cajaController.intTipoPersonaC==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA && cajaController.intPersonaRolC==applicationScope.Constante.PARAM_T_TIPOROL_SOCIO && cajaController.socioSeleccionado.strIngCajaNroDocumento!=null && !cajaController.blnIngresoCajaView}"
+								value="RUC : #{cajaController.socioSeleccionado.strIngCajaNroDocumento} - #{cajaController.socioSeleccionado.strIngCajaDescripcion}"
+								style="background-color: #BFBFBF;"
+								size="120"/>
+							<h:inputText readonly="true"
+								rendered="#{(cajaController.intTipoPersonaC==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA && cajaController.intPersonaRolC==applicationScope.Constante.PARAM_T_TIPOROL_ENTIDAD && cajaController.entidadSeleccionada.strSucursalConcatenado!=null && !cajaController.blnIngresoCajaView)}"
+								value="RUC: #{cajaController.entidadSeleccionada.strSucursalConcatenado} - Tipo Socio: #{cajaController.entidadSeleccionada.strTipoSocioConcatenado} - Modalidad: #{cajaController.entidadSeleccionada.strModalidadConcatenado}"
+								style="background-color: #BFBFBF;"
+								size="120"/>
+							<h:inputText readonly="true"
+								rendered="#{cajaController.blnIngresoCajaView}"
+								value="#{cajaController.strIngCajaViewDescPersona}"
+								style="background-color: #BFBFBF;"
+								size="120"/>
+						</rich:column>
+		            	<rich:column width="80">
+		                	<a4j:commandButton styleClass="btnEstilos" id="btnBuscarEntidadC"
+		                		rendered="#{empty cajaController.entidadSeleccionada && !cajaController.blnEsNaturalSocio}"
+		                		value="Buscar"
+		                		disabled = "#{cajaController.blnDeshabilitarBusqSocioEntidadC}"
+		                		reRender="pBuscarEntidadCaja,panelPopUpBuscarEntidadC,tablaEntidadC"
+		                    	action="#{cajaController.abrirPopUpBuscarEntidad}"
+		                    	oncomplete="Richfaces.showModalPanel('pBuscarEntidadCaja')"
+		                    	style="width:80x"/>	                    
+		                    <a4j:commandButton styleClass="btnEstilos" id="btnBuscarPersonaC"
+		                		rendered="#{empty cajaController.personaSeleccionada  && cajaController.blnEsNaturalSocio}"
+		                		value="Buscar"
+		                		disabled = "#{cajaController.blnDeshabilitarBusqSocioEntidadC}"
+		                		reRender="pBuscarPersonaCaja,panelPopUpBuscarPersonaC,tablaPersonaC,cboTipoDocumentoC"
+		                    	action="#{cajaController.abrirPopUpBuscarPersona}"
+		                    	oncomplete="Richfaces.showModalPanel('pBuscarPersonaCaja')"
+		                    	style="width:80x"/> 
+		                    <a4j:commandButton styleClass="btnEstilos"
+		                		rendered="#{not empty cajaController.entidadSeleccionada}"
+		                		value="Quitar"
+		                		reRender="contPanelInferiorC,pBuscarEntidadCaja"
+		                    	action="#{cajaController.quitarPersonaSeleccionada}"
+		                    	disabled="#{cajaController.deshabilitarNuevo}"
+		                    	style="width:80x"/>
+		            	</rich:column>
+		            </h:panelGrid>
+				</a4j:outputPanel>
 				
-				<h:panelGrid columns="11" >
-					<rich:column width="140">
-						<h:outputText value="Tipo de Persona :"/>
-					</rich:column>
-					<!--  -->
-					<rich:column width="100">
-						<h:selectOneMenu id="cboTipoPersonaC"
-							onchange="getPersonaRolC(#{applicationScope.Constante.ONCHANGE_VALUE})"
-							style="width: 100px;"
-							value="#{cajaController.intTipoPersonaC}">
-							<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
-							<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOPERSONA}" 
-								itemValue="#{sel.intIdDetalle}"
-								itemLabel="#{sel.strDescripcion}"/>
-						</h:selectOneMenu>
-					</rich:column>
-					<!--  -->
-					<rich:column width="130">
-						<h:selectOneMenu id="cboPersonaRolC"
-							onchange="getTipoDocumentoC(#{applicationScope.Constante.ONCHANGE_VALUE})"
-							style="width: 130px;"
-							value="#{cajaController.intPersonaRolC}">
-							<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
-							<tumih:selectItems var="sel"
-								value="#{cajaController.lstPersonaRol}"
-								itemValue="#{sel.intIdDetalle}"
-								itemLabel="#{sel.strDescripcion}"/>
-						</h:selectOneMenu>
-					</rich:column>
-					<rich:column width="630">
-						<h:inputText readonly="true"
-							rendered="#{empty cajaController.personaSeleccionada && empty cajaController.entidadSeleccionada}"
-							style="background-color: #BFBFBF;"
-							size="100"/>
-						<h:inputText readonly="true"
-							rendered="#{(cajaController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_NATURAL)}"
-							value="DNI : #{cajaController.personaSeleccionada.documento.strNumeroIdentidad} - #{cajaController.personaSeleccionada.natural.strNombreCompleto}
-							 - Roles : #{cajaController.strListaPersonaRolUsar}"
-							style="background-color: #BFBFBF;"
-							size="100"/>
-						<h:inputText readonly="true"
-							rendered="#{cajaController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
-							value="RUC : #{cajaController.personaSeleccionada.strRuc} - #{cajaController.personaSeleccionada.juridica.strRazonSocial}
-							 - Roles : #{cajaController.strListaPersonaRolUsar}"
-							style="background-color: #BFBFBF;"
-							size="100"/>
-						<h:inputText readonly="true"
-							rendered="#{(cajaController.intTipoPersonaC==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA && cajaController.intPersonaRolC==applicationScope.Constante.PARAM_T_TIPOROL_ENTIDAD && cajaController.entidadSeleccionada.strSucursalConcatenado!=null)}"
-							value="RUC: #{cajaController.entidadSeleccionada.strSucursalConcatenado} - Tipo Socio: #{cajaController.entidadSeleccionada.strTipoSocioConcatenado} - Modalidad: #{cajaController.entidadSeleccionada.strModalidadConcatenado}"
-							style="background-color: #BFBFBF;"
-							size="100"/>
-					</rich:column>
-	            	<rich:column width="80">
-	                	<a4j:commandButton styleClass="btnEstilos"
-	                		rendered="#{empty cajaController.entidadSeleccionada}"
-	                		value="Buscar"
-	                		reRender="pBuscarPersonaCaja"
-	                    	action="#{cajaController.abrirPopUpBuscarEntidad}"
-	                    	oncomplete="Richfaces.showModalPanel('pBuscarEntidadCaja')"
-	                    	reRender="panelPopUpBuscarEntidadC"
-	                    	style="width:80x"/>
-	                    	<!-- 
-	                    <a4j:commandButton styleClass="btnEstilos"
-	                		rendered="#{empty cajaController.personaSeleccionada}"
-	                		value="Buscar"
-	                		reRender="pBuscarPersonaCaja"
-	                    	action="#{cajaController.abrirPopUpBuscarPersona}"
-	                    	oncomplete="Richfaces.showModalPanel('pBuscarPersonaCaja')"
-	                    	style="width:80x"/> -->
-	                    <a4j:commandButton styleClass="btnEstilos"
-	                		rendered="#{not empty cajaController.personaSeleccionada}"
-	                		value="Quitar"
-	                		reRender="contPanelInferiorC"
-	                    	action="#{cajaController.quitarPersonaSeleccionada}"
-	                    	disabled="#{cajaController.deshabilitarNuevo}"
-	                    	style="width:80x"/>
-	            	</rich:column>
-	            </h:panelGrid>
 	            	            
 	            </h:panelGroup>
 	            
@@ -535,14 +570,14 @@
 				
 				<h:panelGroup id="panelDocumentoC">
 	            
-	            <h:panelGrid columns="8">
+	            <h:panelGrid columns="8" rendered="#{!cajaController.blnEsNaturalSocio}">
 					<rich:column width="120" style="text-align: left;">
 						<h:outputText value="Tipo de Documento : "/>
 			        </rich:column>
 			        <!--  ||(cajaController.deshabilitarTipoDocumento) -->
 			        <rich:column width="175">
 						<h:selectOneMenu id="cboTipoDocumentoC"
-							style="width: 150px;"
+							style="width: 160;"
 							disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)}"
 							value="#{cajaController.intTipoDocumentoAgregar}">
 							<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
@@ -561,6 +596,7 @@
 					<rich:column width="80">
 
 	                    <a4j:commandButton styleClass="btnEstilos"
+	                    	disabled="#{cajaController.deshabilitarNuevo}"
 	                		value="Buscar"
 	                		reRender="pBuscarDocPlanillaEfectuadaCaja"
 	                    	action="#{cajaController.abrirPopUpBuscarDocumento}"
@@ -572,21 +608,62 @@
 	                	<a4j:commandButton styleClass="btnEstilos"
 	                		disabled="#{(empty cajaController.documentoGeneralSeleccionado) || (cajaController.deshabilitarNuevo)}"
 	                		value="Agregar"
-	                		reRender="panelMontoC,panelDocumentosAgregadosC,panelDocumentoC,panelMensajeC"
+	                		reRender="panelDocumentosAgregadosC,panelDocumentoC,panelMensajeC,panelDetallePlanillaEfectuadaC"
 	                    	action="#{cajaController.agregarDocumento}"
 	                    	style="width:80px"/>
 	            	</rich:column>				
 				</h:panelGrid>				
 				
 				<rich:spacer height="3px"/>
-				<a4j:outputPanel id="opCuentaSocioC">
-					<h:panelGrid id="pgCuentaSocioC" columns="6" rendered="#{cajaController.blnEsNaturalSocio}" >
+				<a4j:outputPanel id="opCuentaSocioC" rendered="#{cajaController.blnEsNaturalSocio}">
+					<h:panelGrid id="pgCuentaSocioC" columns="6">
+						<rich:column width="120" style="text-align: left;">
+							<h:outputText value="Cuenta Socio :"/>
+						</rich:column>						
+						<rich:column width="175" rendered="#{!cajaController.blnIngresoCajaView}">
+							<h:selectOneMenu id="cboCuentaSocioC"
+								onchange="getCuentaC(#{applicationScope.Constante.ONCHANGE_VALUE})"
+								style="width: 160;"
+								disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)}"
+								value="#{cajaController.intCuentaSocioC}">
+								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+								<tumih:selectItems var="sel"
+									value="#{cajaController.listaSocioCuentaIngresoCaja}"
+									itemValue="#{sel.intIngCajaIdCta}"
+									itemLabel="#{sel.strIngCajaDescTipoCta} - #{sel.strIngCajaNroCta}"/>
+							</h:selectOneMenu>
+				        </rich:column>
+				        <rich:column width="120" style="text-align: left;" rendered="#{cajaController.blnIngresoCajaView}">
+					        <h:inputText size="22" 
+								readonly="true"
+								style="background-color: #BFBFBF;"
+								value="#{cajaController.strIngCajaViewDescTipoCta} - #{cajaController.strIngCajaViewNroCta}"/>
+						</rich:column>	
+					</h:panelGrid>
+					<h:panelGrid id="pgModalidadC" columns="6" rendered="#{cajaController.blnEsNaturalSocio}" >
+					
 					<rich:column width="120" style="text-align: left;">
-						<h:outputText value="Cuenta Socio / Cliente :"/>
-					</rich:column>
-					<rich:column width="175">
-						
-					</rich:column>
+							<h:outputText value="Modalidad :"/>
+						</rich:column>
+					<rich:column width="175" rendered="#{!cajaController.blnIngresoCajaView}">
+						<h:selectOneMenu id="cboModalidadC"
+								onchange="getValorModalidadC(#{applicationScope.Constante.ONCHANGE_VALUE})"
+								style="width: 160;"
+								disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo) }"
+								value="#{cajaController.intModalidadC}">
+								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+								<tumih:selectItems var="sel" 
+									value="#{cajaController.listaTablaModalidadSocio}" 
+									itemValue="#{sel.intIdDetalle}"
+									itemLabel="#{sel.strDescripcion}"/>
+							</h:selectOneMenu>
+			        </rich:column>
+					<rich:column width="120" style="text-align: left;" rendered="#{cajaController.blnIngresoCajaView}">
+						<h:inputText size="22" 
+							readonly="true"
+							style="background-color: #BFBFBF;"
+							value="#{cajaController.strIngCajaViewDescModalidadPago}"/>
+			        </rich:column>
 					<rich:column width="503">
 						<h:inputText size="89" 
 							readonly="true"
@@ -595,26 +672,38 @@
 					</rich:column>
 					<rich:column width="80">
 	                	<a4j:commandButton styleClass="btnEstilos"
-	                		disabled="#{(empty cajaController.personaSeleccionada) || (cajaController.deshabilitarNuevo)}"
+	                		disabled="#{(empty cajaController.socioSeleccionado) || (cajaController.deshabilitarNuevo) || (!cajaController.blnValidacionesOK)}"
 	                		value="Detalle"
-	                		reRender="pBuscarDocumentoCaja"
+	                		reRender="pBuscarMovimientoIngresoSocio, pBuscarAportacionIngresoSocio, opTablaIngresoSocioAportacionC"
 	                    	action="#{cajaController.abrirPopUpBuscarDocumento}"
-	                    	oncomplete="Richfaces.showModalPanel('pBuscarDocumentoCaja')"
+	                    	oncomplete="if(#{cajaController.intModalidadC != applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES}){Richfaces.showModalPanel('pBuscarMovimientoIngresoSocio')}
+	                    				else if(#{cajaController.intModalidadC == applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES}){Richfaces.showModalPanel('pBuscarAportacionIngresoSocio')}"
 	                    	style="width:80px"/>
 	            	</rich:column>
+				</h:panelGrid>
+				<h:panelGrid id="msgErrorSubCondCta" columns="6">
+					<rich:column width="120" style="text-align: left;">
+					</rich:column>
+					<rich:column width="600">
+						<h:outputText value="#{cajaController.strMsgSubCondicionCuenta}" 
+							styleClass="msgError"
+							style="font-weight:bold"
+							rendered="#{not empty cajaController.strMsgSubCondicionCuenta}"/>	
+					</rich:column>
 				</h:panelGrid>
 				</a4j:outputPanel>
 				
 				
 				<rich:spacer height="3px"/>
-				
+				<!-- 
 				<h:panelGrid columns="6" rendered="#{!cajaController.deshabilitarNuevo}">
 					<rich:column width="120" style="text-align: left;">
-						<h:outputText value="Monto a Ingresar :"/>
+						<h:outputText value="Monto Ingresado :"/>
 					</rich:column>
 					<rich:column width="200">
 						<h:inputText size="24"
-							disabled="#{cajaController.deshabilitarNuevo}"
+							readonly="true"
+							style="background-color: #BFBFBF;"
 							value="#{cajaController.bdMontoIngresar}"
 							onkeypress="return soloNumerosDecimales(this)">							
 						</h:inputText>
@@ -622,21 +711,21 @@
 				</h:panelGrid>
 				
 				<rich:spacer height="3px"/>
-				
-				<h:panelGrid columns="6">
+				 -->
+				<h:panelGrid columns="6" id="pgMontoIngresadoC">
 					<rich:column width="120">
-						<h:outputText value="Monto Total :"/>
+						<h:outputText value="Monto Ingresado :"/>
 					</rich:column>
 					<rich:column width="175">
-						<h:inputText size="20"
+						<h:inputText
 							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"
-							value="#{cajaController.bdMontoIngresarTotal}">
+							style="background-color: #BFBFBF;font-weight:bold; width: 160;"
+							value="#{cajaController.bdMontoIngresadoTotal}">
 							<f:converter converterId="ConvertidorMontos" />
 						</h:inputText>
 					</rich:column>
 					<rich:column width="350">
-						<h:inputText size="74"
+						<h:inputText size="76"
 							readonly="true"
 							style="background-color: #BFBFBF;font-weight:bold;"
 							value="#{cajaController.strMontoIngresarTotalDescripcion}"/>
@@ -650,8 +739,14 @@
 				
 				
 				<h:panelGroup id="panelGestorC">
-				
-				<h:panelGrid columns="11" >
+					<h:panelGrid columns="11"  rendered="#{not empty cajaController.strMensajeErrorGestor}">
+						<rich:column width="600" colspan="11">
+							<h:outputText value="#{cajaController.strMensajeErrorGestor}"
+										  styleClass="msgError"
+										  style="font-weight:bold"/>
+						</rich:column>
+					</h:panelGrid>
+				<h:panelGrid columns="11" rendered="#{cajaController.reciboManual != null || cajaController.habilitarGrabar}">
 					<rich:column width="120">
 						<h:outputText value="Gestor de Ingreso :"/>
 					</rich:column>
@@ -662,7 +757,7 @@
 							size="100"/>
 						<h:inputText readonly="true"
 							rendered="#{(not empty cajaController.gestorCobranzaSeleccionado)}"
-							value="DNI : #{cajaController.gestorCobranzaSeleccionado.persona.documento.strNumeroIdentidad} - #{cajaController.gestorCobranzaSeleccionado.persona.natural.strNombreCompleto} - Recibo Manual: #{cajaController.reciboManual.intSerieRecibo} - #{cajaController.reciboManual.intNumeroActual}"
+							value="DNI : #{cajaController.gestorCobranzaSeleccionado.persona.documento.strNumeroIdentidad} - #{cajaController.gestorCobranzaSeleccionado.persona.natural.strNombreCompleto}"
 							style="background-color: #BFBFBF;"
 							size="100"/>
 					</rich:column>
@@ -683,26 +778,76 @@
 	                    	disabled="#{cajaController.deshabilitarNuevo}"
 	                    	style="width:80x"/>
 	            	</rich:column>
-	            	<rich:column width="90">
+	            </h:panelGrid>
+	            <h:panelGrid columns="11" rendered="#{cajaController.reciboManual!= null || cajaController.habilitarGrabar}">
+	            	<rich:column width="120">
 						<h:outputText value="Recibo manual :"/>
 					</rich:column>
 					<rich:column width="100">
 						<h:inputText size="10"
-							disabled="#{cajaController.deshabilitarNuevo}"
-							value="#{cajaController.bdMontoIngresar}"
+							readonly="true"
+							style="background-color: #BFBFBF;"
+							value="#{cajaController.reciboManual.intSerieRecibo}"
 							onkeypress="return soloNumerosDecimales(this)">							
 						</h:inputText>
 					</rich:column>
 					<rich:column width="120">
 						<h:inputText size="15"
-							disabled="#{cajaController.deshabilitarNuevo}"
-							value="#{cajaController.bdMontoIngresar}"
+							readonly="true"
+							style="background-color: #BFBFBF;"
+							value="#{cajaController.reciboManual.reciboManualDetalleUltimo.intNumeroRecibo}"
 							onkeypress="return soloNumerosDecimales(this)">							
 						</h:inputText>
 					</rich:column>
 	            </h:panelGrid>
 	            
 	            <rich:spacer height="3px"/>
+	            
+	            <!-- JCHAVEZ 01.02.2014 Adjunto de cheque -->
+				<a4j:outputPanel id="panelAdjuntoChequeIngreso">
+					<h:panelGrid columns="11"  rendered="#{cajaController.mostrarPanelAdjuntoCheque}">
+						<rich:column width="120">
+							<h:outputText value="Adjunto Cheque :"/>
+						</rich:column>
+						<rich:column width="150">
+							<h:inputText rendered="#{empty cajaController.archivoAdjuntoCheque}" 
+								size="77"
+								readonly="true" 
+								style="background-color: #BFBFBF;"/>
+							<h:inputText rendered="#{not empty cajaController.archivoAdjuntoCheque}"
+								value="#{cajaController.archivoAdjuntoCheque.strNombrearchivo}"
+								size="77"
+								readonly="true" 
+								style="background-color: #BFBFBF;"/>
+						</rich:column>
+						<rich:column width="120">
+							<a4j:commandButton
+								rendered="#{empty cajaController.archivoAdjuntoCheque}"
+		                		styleClass="btnEstilos1"
+		                		value="Adjunto Cheque"
+		                		reRender="pAdjuntarChequeIngreso,panelAdjuntoChequeIngreso"
+		                		oncomplete="Richfaces.showModalPanel('pAdjuntarChequeIngreso')"
+		                		style="width:130px"/>                 		
+		                	<a4j:commandButton
+								rendered="#{not empty cajaController.archivoAdjuntoCheque}"
+								disabled="#{cajaController.deshabilitarNuevo}"
+		                		styleClass="btnEstilos"
+		                		value="Quitar Adjunto "
+		                		reRender="pAdjuntarChequeIngreso,panelAdjuntoChequeIngreso"
+		                		action="#{cajaController.quitarAdjuntoCheque}"
+		                		style="width:130px"/>
+						</rich:column>
+						<rich:column width="130" 
+							rendered="#{(not empty cajaController.archivoAdjuntoCheque)&&(cajaController.deshabilitarNuevo)}">
+							<h:commandLink  value=" Descargar"
+								actionListener="#{fileUploadController.descargarArchivo}">
+								<f:attribute name="archivo" value="#{cajaController.archivoAdjuntoCheque}"/>
+							</h:commandLink>
+						</rich:column>
+		           </h:panelGrid>
+				</a4j:outputPanel>
+			   
+	            
 	            
 	            </h:panelGroup>
 				
@@ -720,7 +865,7 @@
 				
 				<rich:spacer height="3px"/>
 				
-				<h:panelGrid columns="1" id="panelDocumentosAgregadosC">
+				<h:panelGrid columns="1" id="panelDocumentosAgregadosC" rendered="#{not empty cajaController.listaIngresoDetalleInterfaz}">
 					<rich:column>
 						<rich:dataTable
 				    		var="item"
@@ -740,12 +885,6 @@
 			                   	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}"
 									itemValue="intIdDetalle" itemLabel="strDescripcion"
 									property="#{item.intDocumentoGeneral}"/>
-			                </rich:column>
-			                <rich:column width="100" style="text-align: left">
-			                   	<f:facet name="header">
-			                   		<h:outputText value="Nro de Documento"/>
-			                   	</f:facet>
-			                  	<h:outputText value="#{item.strNroDocumento}"/>
 			                </rich:column>
 			                <rich:column width="150" style="text-align: left">
 			                  	<f:facet name="header">
@@ -778,25 +917,176 @@
 			                      	<f:converter converterId="ConvertidorMontos" />
 			                    </h:outputText>
 			              	</rich:column>
-			               	<rich:column width="80" style="text-align: right">
-			                    <f:facet name="header">
-			                      	<h:outputText value="Sub Total"/>                      		
-			                    </f:facet>
-			                    <h:outputText value="#{item.bdSubtotal}">
-			                      	<f:converter converterId="ConvertidorMontos" />
-			                     </h:outputText>
-			               	</rich:column>
-			               	<rich:column width="110" style="text-align: right">
-			                    <f:facet name="header">
-			                      	<h:outputText value="Asiento"/>                      		
-			                    </f:facet>
-			                    <h:outputText rendered="#{not empty item.libroDiario}" 
-			                    	value="#{item.libroDiario.strNumeroAsiento}"/>
-			               	</rich:column>
+
 			           	</rich:dataTable>
 					</rich:column>
 				</h:panelGrid>
+				<a4j:outputPanel id="panelDetallePlanillaEfectuadaC">				
+					<h:panelGrid columns="1" rendered="#{not empty cajaController.listaDetallePlanillaEfectuada}">
+						<rich:column>
+							<rich:dataTable
+								var="item"
+								styleClass="datatable"
+								value="#{cajaController.listaDetallePlanillaEfectuada}"
+								sortMode="single"
+								width="840"
+								rows="#{fn:length(cajaController.listaDetallePlanillaEfectuada)}">
+									
+								<rich:column width="100" style="text-align: center">
+									<f:facet name="header">
+										<h:outputText value="Periodo Planilla"/>
+									</f:facet>
+									<h:outputText value="#{item.intPeriodoPlanilla}"/>
+								</rich:column>
+								<rich:column width="100" style="text-align: center">
+									<f:facet name="header">
+										<h:outputText value="Nro EfecT. Resumen"/>
+									</f:facet>
+									<h:outputText value="#{item.id.intItemEfectuadoResumen}"/>
+								</rich:column>
+								<rich:column width="250" style="text-align: left">
+									<f:facet name="header">
+										<h:outputText value="Entidad"/>
+									</f:facet>
+									<h:outputText value="#{cajaController.entidadSeleccionada.estructuraDetalle.estructura.juridica.strRazonSocial}"/>
+								</rich:column>
+								<rich:column width="160" style="text-align: center">
+									<f:facet name="header">
+										<h:outputText value="Sucursal Administra"/>                      		
+									</f:facet>
+									<h:outputText value="#{item.juridicaSucursal.strRazonSocial}"/>						
+								</rich:column>
+								<rich:column width="100" style="text-align: right">
+									<f:facet name="header">
+										<h:outputText value="Monto de Planilla"/>                      		
+									</f:facet>
+									<h:outputText value="#{item.bdMontoTotal}">
+										<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>
+								</rich:column>
+								<rich:column width="100" style="text-align: right">
+									<f:facet name="header">
+										<h:outputText value="Monto Cancelado"/>                      		
+									</f:facet>
+									<h:outputText value="#{item.bdIngCajaDetalleMontoIngresado}">
+										<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>
+								</rich:column>
+								<f:facet name="footer">     
+									<rich:columnGroup>
+										<rich:column width="630" colspan="4" style="text-align: center">
+											<b><h:outputText value="TOTAL" /></b>
+										</rich:column>
+										
+										<rich:column width="100" style="text-align: right; font-weight: bold;">
+											<b><h:outputText value="#{cajaController.documentoGeneralSeleccionado.bdMonto}">
+												<f:converter converterId="ConvertidorMontos"/>
+											</h:outputText></b>
+										</rich:column>
+										<rich:column width="100" style="text-align: right; color:red; font-weight: bold;">
+											<b><h:outputText value="#{cajaController.bdMontoIngresadoTotal}">
+												<f:converter converterId="ConvertidorMontos"/>
+											</h:outputText></b>
+										</rich:column>
+									</rich:columnGroup>
+							   	</f:facet>
+							</rich:dataTable>
+						</rich:column>
+					</h:panelGrid>
+				</a4j:outputPanel>
 				
+				<a4j:outputPanel id="panelDetalleIngresoSocioC">				
+					<h:panelGrid columns="1" rendered="#{not empty cajaController.listaIngresoSocio}">
+						<rich:dataTable
+			    			id="tablaDetalleIngresoSocioC"
+			    			var="item" 
+			                value="#{cajaController.listaIngresoSocio}" 
+					  		rowKeyVar="rowKey" 
+					  		width="1080px">
+					        <f:facet name="header">
+									<rich:columnGroup columnClasses="rich-sdt-header-cell">
+										<rich:column width="150px" style="text-align: center">
+											<h:outputText value="Tipo Concepto" />
+										</rich:column>
+										<rich:column width="100px" style="text-align: center">
+											<h:outputText value="Nro. de Solicitud" />
+										</rich:column>
+										<rich:column width="150px" style="text-align: center">
+											<h:outputText value="Persona" />
+										</rich:column>
+										<rich:column width="150px" style="text-align: center">
+											<h:outputText value="Sucursal" />
+										</rich:column>
+										<rich:column width="140px" style="text-align: center">
+											<h:outputText value="Modalidad" />
+										</rich:column>
+										<rich:column width="120px" style="text-align: center">
+											<h:outputText value="Descripcion" />
+										</rich:column>
+										<rich:column width="80px" style="text-align: center">
+											<h:outputText value="Pendiente" rendered="#{cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION || cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE || cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION}"/>
+											<h:outputText value="Monto" rendered="#{cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES}"/>
+										</rich:column>
+										<rich:column width="80px" style="text-align: center">
+											<h:outputText value="Monto Cancelado" />
+										</rich:column>
+										<rich:column width="80px" style="text-align: center" rendered="#{cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION || cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE || cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION}">
+											<h:outputText value="Tipo Pago" />
+										</rich:column>
+									</rich:columnGroup>
+							</f:facet> 
+	
+								<rich:column width="150px" style="text-align: center">
+									<h:outputText value="#{item.strIngCajaDescTipo}" />
+								</rich:column>
+								<rich:column width="100px" style="text-align: center">
+									<h:outputText value="#{item.strIngCajaNroSolicitud}" />
+								</rich:column>
+								<rich:column width="150px" style="text-align: center">
+									<h:outputText value="#{cajaController.socioSeleccionado.strIngCajaDescripcion}" />
+								</rich:column>
+								<rich:column width="150px" style="text-align: center">
+									<h:outputText value="#{item.strIngCajaSocioSucursalAdministra}" />
+								</rich:column>
+								<rich:column width="140px" style="text-align: center">
+									<h:outputText value="Pago mes siguiente" rendered="#{cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE}"/>
+									<h:outputText value="Regularización" rendered="#{cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION}"/>
+								</rich:column>
+								<rich:column width="120px" style="text-align: center">
+									<h:outputText value="#{item.strIngCajaDescTipoConceptoGeneral}" />
+								</rich:column>		
+								<rich:column width="80px" style="text-align: right; font-weight: bold;">
+									<h:outputText value="#{item.bdIngCajaSumCapitalInteres}" >
+										<f:converter converterId="ConvertidorMontos"/>
+									</h:outputText>
+								</rich:column>					
+								<rich:column width="80px" style="text-align: right; font-weight: bold;">
+									<h:outputText value="#{item.bdIngCajaMontoPagado}" >
+										<f:converter converterId="ConvertidorMontos"/>
+									</h:outputText>
+								</rich:column>
+								<rich:column width="80px" style="text-align: center;" rendered="#{cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION || cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE || cajaController.intModalidadC==applicationScope.Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION}">
+									<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOPAGOCUENTA}"
+										itemValue="intIdDetalle" itemLabel="strDescripcion" 
+										property="#{item.intIngCajaParaTipoPagoCuenta}"/>
+								</rich:column>							
+								
+					      	<f:facet name="footer">
+								<rich:columnGroup>
+									<rich:column width="840px" colspan="7" style="text-align: right">
+										<b><h:outputText value="TOTAL CANCELADO" /></b>
+									</rich:column>
+									<rich:column width="80px" style="text-align: right; color:red; font-weight: bold;">
+										<h:outputText value="#{cajaController.bdMontoIngresadoTotal}">
+											<f:converter converterId="ConvertidorMontos"/>
+										</h:outputText>
+									</rich:column>
+								</rich:columnGroup>   
+							</f:facet>
+							
+			            </rich:dataTable>
+					</h:panelGrid>
+				</a4j:outputPanel>
 			</h:panelGroup>
 			
 			
@@ -811,38 +1101,77 @@
 				
 				<rich:spacer height="3px"/>
 				
-				<h:panelGrid columns="8" id="panelCuentaBancaria">
-					<rich:column width="120">
-						<h:outputText value="Cuenta :"/>
-					</rich:column>
-					<rich:column width="297">
-						<h:selectOneMenu
-							style="width: 290px;"
-							disabled="#{cajaController.deshabilitarNuevo}"
-							value="#{cajaController.intBancoSeleccionado}">
-							<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
-							<tumih:selectItems var="sel" 
-								value="#{cajaController.listaBancoFondo}"
-								itemValue="#{sel.id.intItembancofondo}"
-								itemLabel="#{sel.personaEmpresa.persona.juridica.strRazonSocial}"/>
-							<a4j:support event="onchange"
-								action="#{cajaController.seleccionarBanco}" 
-								reRender="panelCuentaBancaria"/>
-						</h:selectOneMenu>
-			        </rich:column>
-			        <rich:column width="380">
-			        	<h:selectOneMenu
-			            	style="width: 372px;"
-							value="#{cajaController.intBancoCuentaSeleccionado}"
-							disabled="#{cajaController.deshabilitarNuevo}">
-							<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
-							<tumih:selectItems var="sel"
-								value="#{cajaController.listaBancoCuenta}"
-								itemValue="#{sel.id.intItembancocuenta}"
-								itemLabel="#{sel.strEtiqueta}"/>
-						</h:selectOneMenu>
-			       	</rich:column>		
-				</h:panelGrid>
+				<h:panelGroup id="panelCuentaBancaria">
+					<h:panelGrid columns="8">
+						<rich:column width="120">
+							<h:outputText value="Cuenta :"/>
+						</rich:column>
+						<rich:column width="297">
+							<h:selectOneMenu
+								style="width: 290px;"
+								disabled="#{cajaController.deshabilitarNuevo}"
+								value="#{cajaController.intBancoSeleccionado}">
+								<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
+								<tumih:selectItems var="sel" 
+									value="#{cajaController.listaBancoFondo}"
+									itemValue="#{sel.id.intItembancofondo}"
+									itemLabel="#{sel.personaEmpresa.persona.juridica.strRazonSocial}"/>
+								<a4j:support event="onchange"
+									action="#{cajaController.seleccionarBanco}" 
+									reRender="panelCuentaBancaria"/>
+							</h:selectOneMenu>
+				        </rich:column>
+				        <rich:column width="380">
+				        	<h:selectOneMenu
+				            	style="width: 372px;"
+								value="#{cajaController.intBancoCuentaSeleccionado}"
+								disabled="#{cajaController.deshabilitarNuevo}">
+								<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
+								<tumih:selectItems var="sel"
+									value="#{cajaController.listaBancoCuenta}"
+									itemValue="#{sel.id.intItembancocuenta}"
+									itemLabel="#{sel.strEtiqueta}"/>
+							</h:selectOneMenu>
+				       	</rich:column>	
+					</h:panelGrid>
+					<h:panelGrid columns="8">
+				       	<rich:column width="120" style="text-align: left;" rendered="#{!cajaController.habilitarGrabar}">
+							<h:outputText value="Depósito :"/>
+						</rich:column>
+						<rich:column width="150" rendered="#{!cajaController.habilitarGrabar}">
+							<h:inputText readonly="true"
+								value="#{cajaController.depositoGeneradoTrasGrabacion.strNumeroIngreso}"
+								style="background-color: #BFBFBF; text-align:center;"
+								size="23">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+						</rich:column>
+						<rich:column width="110" style="text-align: left;" rendered="#{!cajaController.habilitarGrabar}">
+							<h:outputText value="Asiento :"/>
+						</rich:column>
+						<rich:column width="150" rendered="#{!cajaController.habilitarGrabar}">
+							<h:inputText readonly="true"
+								value="#{cajaController.depositoGeneradoTrasGrabacion.strNumeroLibro}"
+								style="background-color: #BFBFBF; text-align:center;"
+								size="23">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+						</rich:column>		
+						<rich:column width="100" style="text-align: left;">
+							<h:outputText value="Forma de Pago :"/>
+						</rich:column>
+						<rich:column width="120">
+							<tumih:inputText
+								cache="#{applicationScope.Constante.PARAM_T_PAGOINGRESO}"
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion"
+								property="#{cajaController.intFormaPagoValidar}"
+								readonly="true"
+								style="background-color: #BFBFBF;"
+								size="15"/>
+						</rich:column>					
+					</h:panelGrid>
+				</h:panelGroup>
 				
 				<rich:spacer height="3px"/>
 				
@@ -867,7 +1196,7 @@
 							<f:convertDateTime pattern="dd/MM/yyyy"/>
 						</h:inputText>
 					</rich:column>
-					<rich:column width="110" style="text-align: left;">
+					<rich:column width="130" style="text-align: left;">
 						<h:outputText value="Tipo de Documento :"/>
 					</rich:column>
 					<rich:column width="150">
@@ -894,6 +1223,8 @@
 							value="#{cajaController.strNumeroOperacion}"
 							size="30"/>
 					</rich:column>
+					<!-- Autor: jchavez / Tarea: Creación / Fecha: 13.06.2014 / 
+						 Se quita segun observaciones Reunion Modulo Tesoreria 13.08.2014
 					<rich:column width="110" style="text-align: left;">
 						<h:outputText value="Otros Ingresos :"/>
 					</rich:column>
@@ -902,7 +1233,7 @@
 							disabled="#{cajaController.deshabilitarNuevo}"
 							value="#{cajaController.bdOtrosIngresos}"
 							size="15"/>
-					</rich:column>					
+					</rich:column>		 -->			
 				</h:panelGrid>
 				
 				<rich:spacer height="8px"/>
@@ -918,11 +1249,13 @@
 				<h:panelGrid columns="1">
 					<rich:column>
 						<rich:dataTable
+							id="dtIngresos"
 				    		var="item"
 				    		styleClass="datatable"
 				            value="#{cajaController.listaIngresoDepositar}"
 					 		sortMode="single"
 						  	width="753px"
+						  	rows="5"
 			                rows="#{fn:length(cajaController.listaIngresoDepositar)}">
 			                    
 							<rich:column width="120" style="text-align: left">
@@ -984,21 +1317,30 @@
 			                    <h:inputText size="10"
 			                    	disabled="#{cajaController.deshabilitarNuevo}"
 			                    	value="#{item.bdMontoDepositar}" 
-			                    	onkeypress="return soloNumerosDecimales(this)">
+			                    	onkeypress="return soloNumerosDecimales(this)"
+			                    	style="text-align: right;"
+			                    	rendered="#{!cajaController.blnDepositoCajaView}" >
+			                    	<a4j:support event="onchange"
+										actionListener="#{cajaController.getCalculoTotalDepositado}"
+										reRender="txtMontoDepositadoTotalC" />
 			                    </h:inputText>
+			                    <h:outputText rendered="#{cajaController.blnDepositoCajaView}" 
+			                    	value="#{item.bdMontoDepositar}">
+			                    	<f:converter converterId="ConvertidorMontos"/>
+			                    </h:outputText>
 			              	</rich:column>
-			              	<rich:column width="50" style="text-align: center">
-			                    <f:facet name="header">
-			                    	<h:outputText value="Acción"/>      		
-			                    </f:facet>
-			                    <a4j:commandLink
-									value="Quitar"
-					            	actionListener="#{cajaController.quitarIngresoDeposito}"
-									reRender="panelIngresosDepositar"
-									disabled="#{cajaController.deshabilitarNuevo}">
-									<f:attribute name="item" value="#{item}"/>
-								</a4j:commandLink>
-			              	</rich:column>			               
+						   	<f:facet name="footer">
+								<rich:columnGroup>
+									<rich:column width="613" colspan="6" style="text-align: center">
+										<b><h:outputText value="TOTAL DEPÓSITOS" /></b>
+									</rich:column>
+									<rich:column width="80" style="text-align: right; color:red; font-weight: bold; font-size:17px">
+										<h:outputText id="txtMontoDepositadoTotalC" value="#{cajaController.bdMontoDepositadoTotal}">
+											<f:converter converterId="ConvertidorMontos"/>
+										</h:outputText>
+									</rich:column>
+								</rich:columnGroup>   
+							</f:facet>               
 			           	</rich:dataTable>
 					</rich:column>
 				</h:panelGrid>
@@ -1027,9 +1369,9 @@
 				
 				<rich:spacer height="3px"/>
 				
-				<h:panelGrid columns="6">
+				<h:panelGrid columns="6" rendered="#{cajaController.blnExisteRedondeo}">
 					<rich:column width="120">
-						<h:outputText value="Ajuste de Redondeo :"/>
+						<h:outputText value="Ajuste Redondeo :"/>
 					</rich:column>
 					<rich:column width="180">
 						<h:inputText size="24"	
