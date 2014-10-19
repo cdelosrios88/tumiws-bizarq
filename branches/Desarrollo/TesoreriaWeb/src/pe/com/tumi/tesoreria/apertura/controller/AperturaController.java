@@ -35,6 +35,7 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.contacto.domain.Documento;
+//import pe.com.tumi.persona.core.domain.CuentaBancaria;
 import pe.com.tumi.persona.core.domain.Natural;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
@@ -130,6 +131,13 @@ public class AperturaController {
 	private boolean habilitarEditarPopUp;
 	private boolean datosValidados;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 23.08.2014 /
+//	private	CuentaBancaria	cuentaBancariaSeleccionada;
+//	private	Persona 		personaSeleccionada;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 25.08.2014 /
+//	private List<Tabla> listaTablaTipoMoneda;
+//	private List<Tabla> listaTablaTipoCuentaBancaria;
 	
 	
 	public AperturaController(){
@@ -154,6 +162,7 @@ public class AperturaController {
 	private void limpiarFormulario(){
 		controlFondosFijosFiltro.getId().setIntSucuIdSucursal(0);
 		controlFondosFijosFiltro.getId().setIntParaTipoFondoFijo(0);
+//		cuentaBancariaSeleccionada = null;
 		ocultarMensaje();
 	}
 
@@ -193,7 +202,10 @@ public class AperturaController {
 			listaMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
 			listaTipoFondoFijo = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOFONDOFIJO), "A");
 			listaTipoFondoFijoRendicion = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOFONDOFIJO), "B");			
-			
+			//Autor: jchavez / Tarea: Creación / Fecha: 25.08.2014 /
+//			listaTablaTipoCuentaBancaria = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTABANCARIA));
+//			listaTablaTipoMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
+			//fin jchavez - 25.08.2014
 			listaSubsucursal = new ArrayList<Subsucursal>();
 			cargarListaSucursal();
 			cargarListaSucursalBus();
@@ -289,6 +301,8 @@ public class AperturaController {
 			registrarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.TRUE;
 			deshabilitarNuevo = Boolean.FALSE;
+			
+//			cuentaBancariaSeleccionada = null;
 			ocultarMensaje();
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -440,6 +454,11 @@ public class AperturaController {
 					mensaje = "El cheque que ha seleccionado ha superado el número máximo de usos.";
 					return;
 				}
+			}else if(intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUEGERENCIA)){
+				if(intNumeroCheque==null  || intNumeroCheque.equals(new Integer(0))){
+					mensaje = "Debe ingresar un numero de cheque.";
+					return;
+				}
 			}
 			
 			if (controlFondosFijosNuevo.getBdMontoGirado().compareTo(BigDecimal.ZERO)<0) {
@@ -456,22 +475,33 @@ public class AperturaController {
 					if(intControlSeleccionado.equals(new Integer(0))){
 						mensaje = "Debe seleccionar un control de fondo fijo.";	return;	
 					}
-					if(!(controlFondosFijosRendicion.getBdMontoSaldo().compareTo(controlFondosFijosNuevo.getBdMontoGirado())<0)){
+					//Autor: jchavez / Tarea: Se quita el ! de la validacion if / Fecha: 30.09.2014
+					if(controlFondosFijosRendicion.getBdMontoSaldo().compareTo(controlFondosFijosNuevo.getBdMontoGirado())<0){
 						mensaje = "El control de fondo fijo seleccionado no posee suficiente saldo para girar.";return;
-					}
+					}//Fin jchavez - 30.09.2014
 				}else if(intTipoFondoFijoRendicion.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)){
 					fondoTelecredito = obtenerFondoTelecredito();
 					if(fondoTelecredito == null){
 						mensaje = "Existe un problema con el fondo de telecrédito, puede que no este configurado correctamente.";return;
 					}
+					if(intNumeroCheque==null  || intNumeroCheque.equals(new Integer(0))){
+						mensaje = "Debe ingresar un numero de transferencia.";
+						return;
+					}
+//					if (cuentaBancariaSeleccionada == null) {
+//						mensaje = "Debe de seleccionar la cuenta bancaria del responsable.";return;
+//					}
 				}
 				
 			}
-			
-			if(intNumeroCheque==null  || intNumeroCheque.equals(new Integer(0))){
-				mensaje = "Debe ingresar un numero de cheque.";
-				return;
+			//Autor: jchavez / Tarea: Se agrea validacion en transferencia a terceros / Fecha: 01.10.2014
+			if(intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_TRANSFERENCIATERCEROS)){
+				if(intNumeroCheque==null  || intNumeroCheque.equals(new Integer(0))){
+					mensaje = "Debe ingresar un numero de transferencia.";
+					return;
+				}
 			}
+			
 			if(strObservacion==null  || strObservacion.isEmpty()){
 				mensaje = "Debe ingresar una observación (ira a la glosa del asiento).";
 				return;
@@ -495,6 +525,7 @@ public class AperturaController {
 				
 				}else if(intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION)
 					&& intTipoFondoFijoRendicion.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)){
+					
 					egresoFacade.grabarAperturaFondoRendicion(egresoApertura, null);
 					controlFondosFijosNuevo.setEgreso(egresoApertura);
 					/*Egreso egreso = controlFondosFijosNuevo.getEgreso();
@@ -722,7 +753,20 @@ public class AperturaController {
 		Egreso egreso = new Egreso();
 		egreso.getId().setIntPersEmpresaEgreso(EMPRESA_USUARIO);
 		egreso.setIntParaTipoOperacion(Constante.PARAM_T_TIPODEOPERACION_EGRESO);
-		egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_CHEQUE);
+		
+		if(intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUEGERENCIA) 
+				|| intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_CHEQUERAEMPRESA)){
+			egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_CHEQUE);
+		}else if(intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_TRANSFERENCIATERCEROS)){
+			egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_TRANSFERENCIA);
+		}else if(intTipoDocumentoValidar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION)){
+			if (intTipoFondoFijoRendicion.equals(Constante.PARAM_T_TIPOFONDOFIJO_ENTREGARENDIR)) {
+				egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_EFECTIVO);
+			}else if (intTipoFondoFijoRendicion.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+				egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_TRANSFERENCIA);
+			}			
+		}
+				
 		egreso.setIntParaDocumentoGeneral(intTipoDocumentoValidar);
 //		egreso.setIntParaDocumentoGeneral(obtenerDocumentoGeneralTipoFondo());
 		egreso.setIntItemPeriodoEgreso(obtenerPeriodoActual());
@@ -766,8 +810,23 @@ public class AperturaController {
 		egreso.setIntPersEmpresaGirado(sucursalDestino.getId().getIntPersEmpresaPk());
 		egreso.setIntPersPersonaGirado(sucursalDestino.getIntPersPersonaPk());
 		egreso.setIntCuentaGirado(null);
-		//jchavez 20.05.2014 cambio de tipo de dato
-		egreso.setStrPersCuentaBancariaGirado(null);
+
+		//Autor: jchavez / Tarea: Creación / Fecha: 25.08.2014 /
+		//Autor: jchavez / Tarea: Modificación / Fecha: 25.08.2014 / Se vuelve a su estado original - OBS. TESORERIA
+//		if(intTipoFondoFijoRendicion.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)){
+//			//Autor: jchavez / Tarea: Modificación / Fecha: 20.05.2014 / Cambio de tipo de dato.
+//			egreso.setStrPersCuentaBancariaGirado(cuentaBancariaSeleccionada.getStrNroCuentaBancaria());
+//		}else {
+//			//Autor: jchavez / Tarea: Modificación / Fecha: 20.05.2014 / Cambio de tipo de dato.
+//			egreso.setStrPersCuentaBancariaGirado(null);
+//		}
+		
+		//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//		egreso.setStrPersCuentaBancariaGirado(null);
+		egreso.setIntPersCuentaBancariaGirado(null);
+		//Fin jchavez - 19.09.2014
+		
+		
 		egreso.setIntPersEmpresaBeneficiario(null);
 		egreso.setIntPersPersonaBeneficiario(null);
 		egreso.setIntPersCuentaBancariaBeneficiario(null);
@@ -1186,6 +1245,7 @@ public class AperturaController {
 		String strDes = "";
 		strDes = persona.getIntIdPersona() + " - " + persona.getNatural().getStrNombreCompleto() + 
 			" - DNI : " + obtenerDNI(persona); 
+//		buscarPersona(obtenerDNI(persona));
 		return strDes;
 	}
 	
@@ -1254,10 +1314,14 @@ public class AperturaController {
 	}
 	
 	public void seleccionarResponsable(ActionEvent event){
+//		String strFiltro = "";
 		try{
 			AccesoDetalleRes accesoDetalleRes = (AccesoDetalleRes)event.getComponent().getAttributes().get("item");
 			controlFondosFijosNuevo.setIntPersPersonaResponsable(accesoDetalleRes.getIntPersPersonaResponsable());
 			controlFondosFijosNuevo.setStrDescripcionPersona(obtenerDescripcionPersona(accesoDetalleRes.getPersona()));
+			//Autor: jchavez / Tarea: Creación / Fecha: 23.08.2014 /
+//			strFiltro = obtenerDNI(accesoDetalleRes.getPersona());
+//			buscarPersona(strFiltro);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -1366,19 +1430,51 @@ public class AperturaController {
 			obtenerDescripcionControlFondosFijos2(controlUltimo, egresoDetalle);
 			listaControlFondosFijosRendicion.add(controlUltimo);
 			
-			
+			log.info("Tipo de fondo seleccionado: "+intTipoFondoFijoRendicion);
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
 	}
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 23.08.2014 /
+//	public void buscarPersona(String strFiltroTextoPersona){
+//		try{
+//			personaSeleccionada = personaFacade.getPersonaNaturalPorDocIdentidadYIdEmpresa(
+//				Constante.PARAM_T_INT_TIPODOCUMENTO_DNI, 
+//				strFiltroTextoPersona,
+//				EMPRESA_USUARIO);
+//		}catch(Exception e){
+//			log.error(e.getMessage(), e);
+//		}
+//	}
+	
+//	public void seleccionarCuentaBancaria(ActionEvent event){
+//		String strTipoCuenta = "";
+//		String strTipoMoneda = "";
+//		try{
+//			cuentaBancariaSeleccionada = (CuentaBancaria)event.getComponent().getAttributes().get("item");
+//			for (Tabla x : listaTablaTipoCuentaBancaria) {
+//				if (x.getIntIdDetalle().equals(cuentaBancariaSeleccionada.getIntTipoCuentaCod())) {
+//					strTipoCuenta = "Tipo Cuenta: "+x.getStrDescripcion();
+//					break;
+//				}
+//			}
+//			for (Tabla y : listaTablaTipoMoneda) {
+//				if (y.getIntIdDetalle().equals(cuentaBancariaSeleccionada.getIntMonedaCod())) {
+//					strTipoMoneda = " - Moneda: "+y.getStrDescripcion();
+//					break;
+//				}
+//			}
+//			cuentaBancariaSeleccionada.setStrEtiqueta(strTipoCuenta+strTipoMoneda+" - Nro. Cuenta: "+cuentaBancariaSeleccionada.getStrNroCuentaBancaria());
+//			log.info(personaSeleccionada);
+//		}catch(Exception e){
+//			log.error(e.getMessage(), e);
+//		}
+//	}
+	
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}
-
-	
-	
-
 	public String getMensajeOperacion() {
 		return mensajeOperacion;
 	}
@@ -1815,7 +1911,35 @@ public class AperturaController {
 	public void setHERMES_RUC(String hERMES_RUC) {
 		HERMES_RUC = hERMES_RUC;
 	}
-
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 23.08.2014 /
+//	public CuentaBancaria getCuentaBancariaSeleccionada() {
+//		return cuentaBancariaSeleccionada;
+//	}
+//	public void setCuentaBancariaSeleccionada(
+//			CuentaBancaria cuentaBancariaSeleccionada) {
+//		this.cuentaBancariaSeleccionada = cuentaBancariaSeleccionada;
+//	}
+//	public Persona getPersonaSeleccionada() {
+//		return personaSeleccionada;
+//	}
+//	public void setPersonaSeleccionada(Persona personaSeleccionada) {
+//		this.personaSeleccionada = personaSeleccionada;
+//	}
+//	//Autor: jchavez / Tarea: Creación / Fecha: 25.08.2014 /
+//	public List<Tabla> getListaTablaTipoMoneda() {
+//		return listaTablaTipoMoneda;
+//	}
+//	public void setListaTablaTipoMoneda(List<Tabla> listaTablaTipoMoneda) {
+//		this.listaTablaTipoMoneda = listaTablaTipoMoneda;
+//	}
+//	public List<Tabla> getListaTablaTipoCuentaBancaria() {
+//		return listaTablaTipoCuentaBancaria;
+//	}
+//	public void setListaTablaTipoCuentaBancaria(
+//			List<Tabla> listaTablaTipoCuentaBancaria) {
+//		this.listaTablaTipoCuentaBancaria = listaTablaTipoCuentaBancaria;
+//	}	
 }
 
 /*

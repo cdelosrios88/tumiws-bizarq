@@ -108,7 +108,7 @@
 	</h:form>
 </rich:modalPanel>
 
-<rich:modalPanel id="pBuscarCuentaBancaria" width="450" height="200"
+<rich:modalPanel id="pBuscarCuentaBancaria" width="650" height="200"
 	resizeable="false" style="background-color:#DEEBF5;">
     <f:facet name="header">
         <h:panelGrid>

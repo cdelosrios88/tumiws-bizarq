@@ -11,17 +11,12 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
-import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
-import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
-import pe.com.tumi.persona.contacto.domain.Comunicacion;
-import pe.com.tumi.persona.contacto.domain.Domicilio;
 import pe.com.tumi.persona.core.domain.CuentaBancaria;
 import pe.com.tumi.persona.core.domain.CuentaBancariaFin;
 import pe.com.tumi.persona.core.domain.CuentaBancariaFinId;
 import pe.com.tumi.persona.core.domain.CuentaBancariaPK;
-import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 
 public class CuentaBancariaController {
 	
@@ -45,11 +40,15 @@ public class CuentaBancariaController {
 	private		List<Tabla>					listaTablaFin;
 	private		TablaFacadeRemote 			tablaFacade;
 	private		boolean						habilitarEditar;
-	
+	//Autor: jchavez / Tarea: Creación / Fecha: 01.10.2014
+	private		List<Tabla>					listaTablaBancos;
+	private		List<Tabla>					listaTablaTipoCtaBancaria;
+	private		List<Tabla>					listaTablaTipoMoneda;
+	//Fin jchavez - 01.10.2014
 	public CuentaBancariaController(){
 		try{
 			strIdModalPanel = "mpCuentaBancaria"; 
-			pgListCtaBancaria = "pgContacto,pgCuentaBancaria";
+			pgListCtaBancaria = "pgContactoNatu,pgCuentaBancaria";
 			
 			strNombCompleto = "000300199 - Yessica Margot Tucto Ricra";
 			intRol = 2;
@@ -70,6 +69,11 @@ public class CuentaBancariaController {
 			
 			tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
 			listaTablaFin = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPORAZONCUENTA));
+			//Autor: jchavez / Tarea: Modificacion / Fecha: 01.10.2014
+			listaTablaBancos = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_BANCOS));
+			listaTablaTipoCtaBancaria = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTABANCARIA));
+			listaTablaTipoMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
+			//Fin jchavez - 01.10.2014
 			/*for(Tabla tabla : listaTablaFin){
 				log.info("tab:"+tabla.getIntIdMaestro()+" "+tabla.getIntIdDetalle());
 			}*/
@@ -78,7 +82,12 @@ public class CuentaBancariaController {
 		}
 	}
 	
+	
+	
 	public void addCtaBancaria(ActionEvent event){
+		String strDescBanco = "";
+		String strDescTipoCuenta = "";
+		String strDescTipoMoneda = "";
 		try{
 			log.info("-------------------------------------Debugging addCtaBancaria-------------------------------------");
 		ArrayList<CuentaBancaria> listCtaBancaria = new ArrayList<CuentaBancaria>();
@@ -111,6 +120,32 @@ public class CuentaBancariaController {
 		ctaban.setIntEstadoCod(cta.getIntEstadoCod());
 		ctaban.setStrObservacion(cta.getStrObservacion());
 		ctaban.setStrCodigoInterbancario(cta.getStrCodigoInterbancario());
+		//Autor: jchavez / Tarea: Se agrega descripcion / Fecha: 01.10.2014
+		//Descripcion Banco
+		for (Tabla tabla : listaTablaBancos) {
+			if (tabla.getIntIdDetalle().equals(cta.getIntBancoCod())) {
+				strDescBanco = tabla.getStrDescripcion();
+				break;
+			}
+	    }
+		//Descripcion Tipo Cuenta
+		for (Tabla tabla : listaTablaTipoCtaBancaria) {
+			if (tabla.getIntIdDetalle().equals(cta.getIntTipoCuentaCod())) {
+				strDescTipoCuenta = tabla.getStrDescripcion();
+				break;
+			}
+	    }
+		//Descripcion Tipo Moneda
+		for (Tabla tabla : listaTablaTipoMoneda) {
+			if (tabla.getIntIdDetalle().equals(cta.getIntMonedaCod())) {
+				strDescTipoMoneda = tabla.getStrDescripcion();
+				break;
+			}
+	    }
+		//Concatenamos descripcion Cuenta Bancaria:
+		//Nombre de Banco – Tipo de Cuenta – Moneda – Nro. de Cuenta
+		ctaban.setStrEtiqueta(strDescBanco +" - "+ strDescTipoCuenta +" - "+ strDescTipoMoneda +" - "+ cta.getStrNroCuentaBancaria());
+		//Fin jchavez - 01.10.2014
 		
 		/**Parche para soportar cuentaBancariaFin**/
 		ctaban.setListaCuentaBancariaFin(new ArrayList<CuentaBancariaFin>());		
@@ -240,12 +275,13 @@ public class CuentaBancariaController {
 			}
 	    }
 		
-	    if(cuentaBancaria.getId()!=null && cuentaBancaria.getId().getIntIdCuentaBancaria()!=null){
-	    	habilitarEditar = Boolean.TRUE;
-	    }else{
-	    	habilitarEditar = Boolean.FALSE;
-	    }
-	    
+//	    if(cuentaBancaria.getId()!=null && cuentaBancaria.getId().getIntIdCuentaBancaria()!=null){
+//	    	habilitarEditar = Boolean.TRUE;
+//	    }else{
+//	    	habilitarEditar = Boolean.FALSE;
+//	    }
+	    //jchavez 01.08.2014 el ver no debe de modificar.
+	    habilitarEditar = Boolean.FALSE;
 	    /**Inicio parche para sar soporte a CuentaBancariaFin**/
 	    limpiarListaTablaFin();
 	    if(cuentaBancaria.getListaCuentaBancariaFin()!=null){

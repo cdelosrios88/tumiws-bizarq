@@ -1,6 +1,9 @@
 package pe.com.tumi.tesoreria.logistica.controller;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -172,7 +175,9 @@ public class RequisicionController {
 						mostrarMensaje(Boolean.FALSE, "Debe ingresar un fundamento de la decisión de jefatura."); return;
 					}
 					
-				}else if(habilitarLogistica){
+				}
+				
+				if(habilitarLogistica){
 					if(requisicionNuevo.getBdMontoLogistica()==null){
 						mostrarMensaje(Boolean.FALSE, "Debe de ingresar un monto de logística"); return;
 					}
@@ -189,7 +194,8 @@ public class RequisicionController {
 				mostrarMensaje(Boolean.TRUE, "Se modificó correctamente la requisición.");
 			}
 			
-			
+			registroSeleccionado = requisicionNuevo;
+			agregarSolcittante(registroSeleccionado);
 			
 			habilitarGrabar = Boolean.FALSE;
 			deshabilitarNuevo = Boolean.TRUE;
@@ -269,6 +275,7 @@ public class RequisicionController {
 			if(registroSeleccionado.getIntParaEstadoAprobacionJefatura()!=null
 			&& registroSeleccionado.getIntParaEstadoAprobacionJefatura().equals(Constante.PARAM_T_ESTADOREQUISICION_APROBADO)			
 			&& registroSeleccionado.getIntParaEstadoAprobacionLogistica()==null){
+//				habilitarJefatura = Boolean.FALSE;
 				habilitarLogistica = Boolean.TRUE;
 			}
 			
@@ -369,6 +376,7 @@ public class RequisicionController {
 					if(sucursal.getId().getIntIdSucursal().equals(requisicionNuevo.getIntSucuIdSucursalJefatura()))
 						requisicionNuevo.setSucursalJefatura(sucursal);
 				}
+				//Autor: jchavez / Tarea: Modificación / Fecha: 12.09.2014
 				habilitarJefatura = Boolean.TRUE;
 			}
 			
@@ -631,6 +639,10 @@ public class RequisicionController {
 		HashMap<String,Object> parametro = new HashMap<String,Object>();
 		Natural natural = null;
 		String strPersonaSolicitante =null;
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		NumberFormat formato = new DecimalFormat("#,###.00",otherSymbols);
 		
 		try {
 			natural = personaFacade.getNaturalPorPK(requisicion.getIntPersPersonaSolicitante());
@@ -644,6 +656,27 @@ public class RequisicionController {
 			parametro.put("P_SOLICITANTE", strPersonaSolicitante);
 			parametro.put("P_FECHA", Constante.sdf.format(requisicion.getTsFechaRequisicion()));
 			parametro.put("P_REQUISICION", requisicion.getIntParaTipoRequisicion());
+			//Agregado por Rodolfo Villarreal
+			parametro.put("P_OBSERVACION", (requisicion.getStrFundamentoLogistica()!=null?requisicion.getStrFundamentoLogistica():""));
+			//Autor: jchavez / Tarea: Modificación / Fecha: 12.09.2014 / requisicion.getBdMontoLogistica() antes de ser aprobado es null, se realiza validación del caso.
+			parametro.put("P_MONTO", "S/. " + (requisicion.getBdMontoLogistica()!=null?formato.format(requisicion.getBdMontoLogistica()):""));
+			//FIN AGREGADO RVILLARREAL
+			if(requisicion.getIntParaEstadoAprobacionJefatura()!=null && requisicion.getIntParaEstadoAprobacionLogistica()!=null){
+				if(requisicion.getIntParaEstadoAprobacionJefatura()==1 && requisicion.getIntParaEstadoAprobacionLogistica()==1)
+					parametro.put("P_PRECEDE", "X");
+				else
+					parametro.put("P_PRECEDE", "");
+			}else{
+				parametro.put("P_PRECEDE", "");
+			}
+			if(requisicion.getIntParaEstadoAprobacionJefatura()!=null && requisicion.getIntParaEstadoAprobacionLogistica()!=null){
+				if(requisicion.getIntParaEstadoAprobacionJefatura()==2 && requisicion.getIntParaEstadoAprobacionLogistica()==2)
+					parametro.put("P_NOPRECEDE", "X");
+				else
+					parametro.put("P_NOPRECEDE", "");
+			}else{
+				parametro.put("P_NOPRECEDE", "");
+			}
 			
 			strNombreReporte = "requisicion";
 			UtilManagerReport.generateReport(strNombreReporte, parametro, 

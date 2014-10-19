@@ -90,7 +90,7 @@ public class ProveedorController {
 			contactoFacade = (ContactoFacadeRemote)EJBFactory.getRemote(ContactoFacadeRemote.class);
 			
 			listaTablaTipoProveedor = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOPROVEEDOR));
-			
+			listaProveedor = new ArrayList<Proveedor>();
 			cargarEmpresas();
 			
 			for(Tabla tabla : listaTablaTipoProveedor)
@@ -116,8 +116,12 @@ public class ProveedorController {
 				proveedorId.setIntPersPersona(persona.getIntIdPersona());
 				
 				Proveedor proveedor = logisticaFacade.getProveedorPorPK(proveedorId);
-				proveedor.setPersona(persona);
-				listaProveedor.add(proveedor);
+				//Autor: jchavez / Tarea: Creación / Fecha: 22.09.2014
+				if (proveedor!=null) {
+					proveedor.setPersona(persona);
+					listaProveedor.add(proveedor);
+				}
+				//Fin jchavez 22.09.2014
 			}
 			
 			//Filtra de acuerdo a tipo de proveedor
@@ -509,6 +513,13 @@ public class ProveedorController {
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
+	}
+	
+	public String getInicioPage() {
+		deshabilitarPanelInferior(null);
+		listaProveedor.clear();
+		strTextoFiltro = "";
+		return "";
 	}
 	
 	protected HttpServletRequest getRequest() {

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#pages#param#bancoFondo.jsf"
+  PATH="/pages/param/bancoFondo.jsf" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#param#bancoFondo.jsf:0" NAME="item"
+   PATH="/pages/param/bancoFondo.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="bancoFondo.bancoFondo::#pages#param#bancoFondo.jsp"
+    NAME="output" PATH="/pages/param/bancoFondo.jsp"
+    TARGET="rules:#pages#param#bancoFondo.jsp"
+    TITLE="bancoFondo.bancoFondo" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#param#acceso.jsf"
+  PATH="/pages/param/acceso.jsf" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#param#acceso.jsf:0" NAME="item"
+   PATH="/pages/param/acceso.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="acceso.acceso::#pages#param#acceso.jsp"
+    NAME="output" PATH="/pages/param/acceso.jsp"
+    TARGET="rules:#pages#param#acceso.jsp" TITLE="acceso.acceso" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#movilidad#movilidad.jsf"
+  PATH="/pages/movilidad/movilidad.jsf" SHAPE="32,241,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#movilidad#movilidad.jsf:0" NAME="item"
+   PATH="/pages/movilidad/movilidad.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="movilidad.movilidad::#pages#movilidad#movilidad.jsp"
+    NAME="output" PATH="/pages/movilidad/movilidad.jsp"
+    TARGET="rules:#pages#movilidad#movilidad.jsp"
+    TITLE="movilidad.movilidad" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#proveedor#proveedor.jsf"
+  PATH="/pages/proveedor/proveedor.jsf" SHAPE="32,353,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#proveedor#proveedor.jsf:0" NAME="item"
+   PATH="/pages/proveedor/proveedor.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="proveedor.proveedor::#pages#proveedor#proveedor.jsp"
+    NAME="output" PATH="/pages/proveedor/proveedor.jsp"
+    TARGET="rules:#pages#proveedor#proveedor.jsp"
+    TITLE="proveedor.proveedor" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#apertura#apertura.jsf"
+  PATH="/pages/apertura/apertura.jsf" SHAPE="32,465,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#apertura#apertura.jsf:0" NAME="item"
+   PATH="/pages/apertura/apertura.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="apertura.apertura::#pages#apertura#apertura.jsp" NAME="output"
+    PATH="/pages/apertura/apertura.jsp"
+    TARGET="rules:#pages#apertura#apertura.jsp"
+    TITLE="apertura.apertura" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#cierre#cierre.jsf"
+  PATH="/pages/cierre/cierre.jsf" SHAPE="32,577,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#cierre#cierre.jsf:0" NAME="item"
+   PATH="/pages/cierre/cierre.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="cierre.cierre::#pages#cierre#cierre.jsp"
+    NAME="output" PATH="/pages/cierre/cierre.jsp"
+    TARGET="rules:#pages#cierre#cierre.jsp" TITLE="cierre.cierre" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#banco#bancoBody.jsf"
+  PATH="/pages/banco/bancoBody.jsf" SHAPE="32,689,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#banco#bancoBody.jsf:0" NAME="item"
+   PATH="/pages/banco/bancoBody.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="transferencia.transferencia::#pages#banco#banco.jsp"
+    NAME="output" PATH="/pages/banco/banco.jsp"
+    TARGET="rules:#pages#banco#banco.jsp"
+    TITLE="transferencia.transferencia" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#fondosFijos#fondosFijos.jsf"
+  PATH="/pages/fondosFijos/fondosFijos.jsf" SHAPE="32,801,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#fondosFijos#fondosFijos.jsf:0"
+   NAME="item" PATH="/pages/fondosFijos/fondosFijos.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="fondosFijos.fondosFijos::#pages#fondosFijos#fondosFijos.jsp"
+    NAME="output" PATH="/pages/fondosFijos/fondosFijos.jsp"
+    TARGET="rules:#pages#fondosFijos#fondosFijos.jsp"
+    TITLE="fondosFijos.fondosFijos" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#compras#compras.jsf"
+  PATH="/pages/compras/compras.jsf" SHAPE="32,913,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#compras#compras.jsf:0" NAME="item"
+   PATH="/pages/compras/compras.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="compras.compras::#pages#compras#compras.jsp"
+    NAME="output" PATH="/pages/compras/compras.jsp"
+    TARGET="rules:#pages#compras#compras.jsp" TITLE="compras.compras" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#conciliacion#conciliacion.jsf"
+  PATH="/pages/conciliacion/conciliacion.jsf" SHAPE="32,1025,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#conciliacion#conciliacion.jsf:0"
+   NAME="item" PATH="/pages/conciliacion/conciliacion.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="conciliacion.conciliacion::#pages#conciliacion#conciliacion.jsp"
+    NAME="output" PATH="/pages/conciliacion/conciliacion.jsp"
+    TARGET="rules:#pages#conciliacion#conciliacion.jsp"
+    TITLE="conciliacion.conciliacion" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#solicitudPersonal#solicitudPersonal.jsf"
+  PATH="/pages/solicitudPersonal/solicitudPersonal.jsf"
+  SHAPE="32,1137,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#solicitudPersonal#solicitudPersonal.jsf:0"
+   NAME="item" PATH="/pages/solicitudPersonal/solicitudPersonal.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="solicitudPersonal.solicitudPersonal::#pages#solicitudPersonal#solicitudPersonal.jsp"
+    NAME="output" PATH="/pages/solicitudPersonal/solicitudPersonal.jsp"
+    TARGET="rules:#pages#solicitudPersonal#solicitudPersonal.jsp"
+    TITLE="solicitudPersonal.solicitudPersonal" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#compras#compras.jsp"
+  PATH="/pages/compras/compras.jsp" SHAPE="240,929,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#movilidad#movilidad.jsp"
+  PATH="/pages/movilidad/movilidad.jsp" SHAPE="240,257,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#proveedor#proveedor.jsp"
+  PATH="/pages/proveedor/proveedor.jsp" SHAPE="240,369,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#param#bancoFondo.jsp"
+  PATH="/pages/param/bancoFondo.jsp" SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#fondosFijos#fondosFijos.jsp"
+  PATH="/pages/fondosFijos/fondosFijos.jsp" SHAPE="240,817,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#conciliacion#conciliacion.jsp"
+  PATH="/pages/conciliacion/conciliacion.jsp" SHAPE="240,1041,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#banco#banco.jsp"
+  PATH="/pages/banco/banco.jsp" SHAPE="240,705,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#cierre#cierre.jsp"
+  PATH="/pages/cierre/cierre.jsp" SHAPE="240,593,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#apertura#apertura.jsp"
+  PATH="/pages/apertura/apertura.jsp" SHAPE="240,481,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#param#acceso.jsp"
+  PATH="/pages/param/acceso.jsp" SHAPE="240,145,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#solicitudPersonal#solicitudPersonal.jsp"
+  PATH="/pages/solicitudPersonal/solicitudPersonal.jsp"
+  SHAPE="240,1153,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

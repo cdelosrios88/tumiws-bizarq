@@ -142,7 +142,7 @@
                    		<f:facet name="header">
                         	<h:outputText value="Ingreso Pendiente"/>
                         </f:facet>
-                        <h:outputText value="#{item.bdMontoTotalEfectivo}">
+                        <h:outputText value="#{item.bdMontoIngresoPendiente}">
                       		<f:converter converterId="ConvertidorMontos"/>
                       	</h:outputText>
                   	</rich:column>
@@ -388,7 +388,7 @@
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Apertura"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"><h:outputText value="#{item.strNumeroApertura}"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{item.bdMontoApertura}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{item.bdMontoApertura}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 							<tr>
@@ -396,14 +396,14 @@
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px">
 									<h:inputText size="70" value="#{item.strDetalleRendido}" disabled="#{cierreDiarioController.deshabilitarNuevo}"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{item.bdMontoRendido}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{item.bdMontoRendido}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 							<tr>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Sub Total"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{item.bdMontoApertura - item.bdMontoRendido}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{item.bdMontoApertura - item.bdMontoRendido}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 							<tr>
@@ -446,7 +446,7 @@
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="SALDO EFECTIVO"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{item.bdMontoSaldoEfectivo}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{item.bdMontoSaldoEfectivo}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 						</tbody>
@@ -480,36 +480,39 @@
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Ingresos a Caja"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoIngreso}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoIngreso}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 							<tr>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Depósitos al Banco"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"/>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoDeposito}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoDeposito}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 							<tr>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Ajuste de Redondeo"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-								</td>
+									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoAjuste}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
+										<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
 							</tr>
 							<tr>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Ingresos Pendiente de Depósito"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"/>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
-									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoIngPendiente}" readonly="true" style="background-color: #BFBFBF;" size="25">
+									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoIngPendiente}" readonly="true" style="background-color: #BFBFBF;text-align: right;" size="25">
 									<f:converter converterId="ConvertidorMontos"/></h:inputText></td>							
 							</tr>
+							<!-- Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 /
+								 Funcionalidad: Se quita esta parte, segun REUNION MOD TESORERIA 13.08.2014  
 							<tr>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:200px;height: 27px"><h:outputText value="Saldo Efectivo"/></td>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:435px;height: 27px"/>
 								<td  style="background-color:white;border: solid 1px #6699CC;text-align: center;width:150px;height: 27px">
 									<h:inputText value="#{cierreDiarioController.cierreDiarioArqueoDetalleIngresos.bdMontoSaldoEfectivo}" readonly="true" style="background-color: #BFBFBF;" size="25">
 									<f:converter converterId="ConvertidorMontos"/></h:inputText></td>
-							</tr>
+							</tr> -->
 						</tbody>
 					</table>
 				</rich:column>

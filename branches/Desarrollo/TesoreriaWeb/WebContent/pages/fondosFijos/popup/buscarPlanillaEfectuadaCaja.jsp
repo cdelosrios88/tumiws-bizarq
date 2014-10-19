@@ -10,7 +10,12 @@
 	   	<h:panelGroup layout="block">
 			<!-- 							<a4j:support event="onclick" ajaxSingle="true" reRender="divFormCambioGarante,divListCambioGarante,btnGrabar,divFormTransferencia"
 										oncomplete="Richfaces.hideModalPanel('mpBusqGarante')"></a4j:support>
+				
 										 -->
+			<h:outputText id="msgErrorMontoPllaEfect" value="#{cajaController.strMsgErrorMontoIngresado}" 
+				styleClass="msgError"
+				style="font-weight:bold"
+				rendered="#{!cajaController.strMsgErrorMontoIngresado}"/>											
 			<h:panelGroup>
 	    		<rich:dataTable
 	    			id="tablaDocPlanillaEfectuadaC"
@@ -91,21 +96,24 @@
 						<f:facet name="header">
 	                    	<h:outputText value="Seleccionar"/>
 	                 	</f:facet>
-			        	<a4j:commandLink 
-			    			value="Seleccionar"
-							actionListener="#{cajaController.seleccionarDocumento}"
-							oncomplete="Richfaces.hideModalPanel('pBuscarDocPlanillaEfectuadaCaja')"
-							reRender="panelDocumentoC">
-							<f:attribute name="item" value="#{item}"/>
-						</a4j:commandLink>
+	                 	<a4j:commandButton 
+	                 		id="linkSelect"
+	                 		value="Seleccionar" actionListener="#{cajaController.seleccionarPlanillaEfectuada}" 
+	                 		disabled="#{item.isDisabledDocPlanillaEfect==null || item.isDisabledDocPlanillaEfect}"
+	   						styleClass="btnEstilos1"
+	   						oncomplete="if(#{cajaController.blnMontoIngresadoOK}){Richfaces.hideModalPanel('pBuscarDocPlanillaEfectuadaCaja')}"
+	   						reRender="panelDocumentoC,tablaDocPlanillaEfectuadaC,msgErrorMontoPllaEfect">
+	   						<f:attribute name="item" value="#{item}"/>
+	   					</a4j:commandButton>
+			        	
 			      	</rich:column>
 			      	
 			      	<f:facet name="footer">
 						<rich:datascroller for="tablaDocPlanillaEfectuadaC" maxPages="5"/>   
 					</f:facet>
-					
 	            </rich:dataTable>
 	    	</h:panelGroup>
-			
+	    	
+
 	   	</h:panelGroup>
 	</h:form>

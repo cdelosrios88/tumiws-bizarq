@@ -14,6 +14,10 @@ import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
+import pe.com.tumi.parametro.general.domain.Ubigeo;
+import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
+import pe.com.tumi.parametro.tabla.domain.Tabla;
+import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.contacto.domain.Comunicacion;
 import pe.com.tumi.persona.contacto.domain.Documento;
 import pe.com.tumi.persona.contacto.domain.Domicilio;
@@ -56,6 +60,13 @@ public class JuridicaController {
 	//Atributos de sesión
 	private 	Integer 					SESION_IDEMPRESA;	
 	
+	private 	List<Ubigeo>				listaUbigeoDepartamento = new ArrayList<Ubigeo>();
+	private 	List<Ubigeo>				listaUbigeoProvincia = new ArrayList<Ubigeo>();
+	private 	List<Ubigeo>				listaUbigeoDistrito = new ArrayList<Ubigeo>();
+	//
+	private		List<Tabla>					listaTablaBancos;
+	private		List<Tabla>					listaTablaTipoCtaBancaria;
+	private		List<Tabla>					listaTablaTipoMoneda;
 	
 	public JuridicaController(){
 		perJuridica = new Persona();
@@ -205,10 +216,20 @@ public class JuridicaController {
 		log.info(persona);
 		log.info(persona.getNatural());
 		log.info(persona.getPersonaEmpresa());
+		TablaFacadeRemote tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
+		List<Tabla> lstRoles = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOROL));
 		if(persona.getPersonaEmpresa()!=null){
-			if(persona.getPersonaEmpresa().getListaPersonaRol()!=null)
-				for(PersonaRol personaRol : persona.getPersonaEmpresa().getListaPersonaRol())
-					log.info(personaRol);
+			if(persona.getPersonaEmpresa().getListaPersonaRol()!=null){
+				strRoles = "";
+				for(PersonaRol personaRol : persona.getPersonaEmpresa().getListaPersonaRol()) {
+					for (Tabla tabla : lstRoles) {
+						if (tabla.getIntIdDetalle().equals(personaRol.getId().getIntParaRolPk())) {
+							strRoles = (strRoles.trim().equalsIgnoreCase("")?(strRoles.trim()+" / "):"") + tabla.getStrDescripcion();
+							log.info(personaRol);
+						}
+					}
+				}
+			}
 			else
 				log.info("listaPersonaRol:null");
 		}
@@ -412,7 +433,28 @@ public class JuridicaController {
 	
 	public Persona validarProveedor(Integer intTipoPersona, String strTextoFiltro) throws Exception {
 		perJuridica = null;
+		//
+		String strDescDpto = "";
+		String strDescProvincia = "";
+		String strDescDistrito = "";
+		String strDescTipoVia = "";
+		String strDescTipoZona = "";
+		List<Tabla> lstTablaTipoVia;
+		List<Tabla> lstTablaTipoZona;
+		TablaFacadeRemote tablaFacade;
+		//
+		String strDescBanco = "";
+		String strDescTipoCuenta = "";
+		String strDescTipoMoneda = "";
+		//
 		try{
+			tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
+			lstTablaTipoVia = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOVIA));
+			lstTablaTipoZona = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOZONA));
+			listaTablaBancos = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_BANCOS));
+			listaTablaTipoCtaBancaria = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTABANCARIA));
+			listaTablaTipoMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
+			
 			perJuridica = validarPersona(intTipoPersona, strTextoFiltro);
 			//perjuri = validarPerJuridicayNatural(intTipoPersona, strTextoFiltro);
 			
@@ -429,12 +471,101 @@ public class JuridicaController {
 			}else{
 				domicilioController.setBeanListDirecProveedor(new ArrayList<Domicilio>());
 			}
+			if (perJuridica.getListaDomicilio()!=null && !perJuridica.getListaDomicilio().isEmpty()) {
+				for (Domicilio o : perJuridica.getListaDomicilio()) {
+					GeneralFacadeRemote remote = (GeneralFacadeRemote)EJBFactory.getRemote(GeneralFacadeRemote.class);
+				    listaUbigeoDepartamento = remote.getListaUbigeoDeDepartamento();
+				    listaUbigeoProvincia = remote.getListaUbigeoDeProvinciaPorIdUbigeo(o.getIntParaUbigeoPkProvincia());
+				    listaUbigeoDistrito = remote.getListaUbigeoDeDistritoPorIdUbigeo(o.getIntParaUbigeoPkDistrito());
+				    
+				      //Descripcion Tipo de Via
+				      for (Tabla tabla : lstTablaTipoVia) {
+				    	  if (tabla.getIntIdDetalle().equals(o.getIntTipoViaCod())) {
+				    		  strDescTipoVia = tabla.getStrAbreviatura();
+				    		  break;
+				    	  }
+				      }
+				      //Descripcion Departamento
+				      for (Ubigeo dpto : listaUbigeoDepartamento) {
+				    	  if (dpto.getIntIdUbigeo().equals(o.getIntParaUbigeoPkDpto())) {
+				    		  strDescDpto = dpto.getStrDescripcion();
+				    		  break;
+				    	  }
+				      }
+				      //Descripcion Provincia
+				      for (Ubigeo prov : listaUbigeoProvincia) {
+				    	  if (prov.getIntIdUbigeo().equals(o.getIntParaUbigeoPkProvincia())) {
+				    		  strDescProvincia = prov.getStrDescripcion();
+				    		  break;
+				    	  }
+				      }
+				      //Descripcion Distrito
+				      for (Ubigeo dist : listaUbigeoDistrito) {
+				    	  if (dist.getIntIdUbigeo().equals(o.getIntParaUbigeoPkDistrito())) {
+				    		  strDescDistrito = dist.getStrDescripcion();
+				    		  break;
+				    	  }
+				      }
+				      
+				      //Descripcion Tipo de Zona
+				      for (Tabla tabla : lstTablaTipoZona) {
+				    	  if (tabla.getIntIdDetalle().equals(o.getIntTipoZonaCod())) {
+				    		  strDescTipoZona = tabla.getStrAbreviatura();
+				    		  break;
+				    	  }
+				      }
+				      if(o.getStrInterior()==null) o.setStrInterior("");
+				      String direccion = (strDescTipoVia + ". " + o.getStrNombreVia()+ " Nro. "+ o.getIntNumeroVia() + " "+ 
+				    		  (o.getStrInterior().trim()!=""?(" - Int. "+o.getStrInterior()+" "):"") +
+				    		  (strDescTipoZona!=null?strDescTipoZona:"") + ". "+(o.getStrNombreZona()!=null?o.getStrNombreZona():"")+
+				    		  " - Referencia: "+ o.getStrReferencia())
+				    		  			+" - "+ strDescDpto
+				    		  			+" - "+ strDescProvincia
+				    		  			+" - "+ strDescDistrito;
+//				      String direccion = (dom.getStrNombreVia()+ " Nº "+ dom.getIntNumeroVia() + " "+ 
+//				    		  			dom.getStrNombreZona()+" / Referencia: "+ dom.getStrReferencia());
+				      log.info("dom.getIntParaUbigeoPk(): "+ o.getIntParaUbigeoPk());
+				      log.info("dom.getIntParaUbigeoPkDpto(): "+ o.getIntParaUbigeoPkDpto());
+				      log.info("dom.getIntParaUbigeoPkProvincia(): "+ o.getIntParaUbigeoPkProvincia());
+				      log.info("dom.getIntParaUbigeoPkDistrito(): "+ o.getIntParaUbigeoPkDistrito());
+				      o.setStrDireccion(direccion);
+				}
+			}
 			
 			CuentaBancariaController ctaBancariaController = (CuentaBancariaController)getSessionBean("ctaBancariaController");
 			if(perJuridica.getListaCuentaBancaria()!=null){
 				ctaBancariaController.setListCtaBancariaProveedor(perJuridica.getListaCuentaBancaria());
 			}else{
 				ctaBancariaController.setListCtaBancariaProveedor(new ArrayList<CuentaBancaria>());
+			}
+			if (ctaBancariaController.getListCtaBancariaProveedor()!=null && !ctaBancariaController.getListCtaBancariaProveedor().isEmpty()) {
+				for (CuentaBancaria o : ctaBancariaController.getListCtaBancariaProveedor()) {
+					//Descripcion Banco
+					for (Tabla tabla : listaTablaBancos) {
+						if (tabla.getIntIdDetalle().equals(o.getIntBancoCod())) {
+							strDescBanco = tabla.getStrDescripcion();
+							break;
+						}
+				    }
+					//Descripcion Tipo Cuenta
+					for (Tabla tabla : listaTablaTipoCtaBancaria) {
+						if (tabla.getIntIdDetalle().equals(o.getIntTipoCuentaCod())) {
+							strDescTipoCuenta = tabla.getStrDescripcion();
+							break;
+						}
+				    }
+					//Descripcion Tipo Moneda
+					for (Tabla tabla : listaTablaTipoMoneda) {
+						if (tabla.getIntIdDetalle().equals(o.getIntMonedaCod())) {
+							strDescTipoMoneda = tabla.getStrDescripcion();
+							break;
+						}
+				    }
+					//Concatenamos descripcion Cuenta Bancaria:
+					//Nombre de Banco – Tipo de Cuenta – Moneda – Nro. de Cuenta
+					o.setStrEtiqueta(strDescBanco +" - "+ strDescTipoCuenta +" - "+ strDescTipoMoneda +" - "+ o.getStrNroCuentaBancaria());
+					//Fin jchavez - 01.10.2014
+				}
 			}
 			
 			NaturalController naturalController = (NaturalController)getSessionBean("naturalController");

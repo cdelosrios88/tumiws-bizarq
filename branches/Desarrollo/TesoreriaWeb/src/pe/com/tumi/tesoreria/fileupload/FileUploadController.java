@@ -56,6 +56,7 @@ public class FileUploadController {
 	private Archivo archivoVoucher = null;
 	private Archivo archivoDocumento = null;
 	private Archivo archivoSustento = null;
+	private Archivo archivoCheque = null;
 	private List<SolicitudPersonal> listaSolicitudPersonal;
 	
 	private String fileType = null;
@@ -202,6 +203,20 @@ public class FileUploadController {
 			log.info("rutaAntigua:"+archivoFirma.getRutaAntigua());
 			log.info("rutaNueva:"+archivoFirma.getRutaActual());
 			renombrarArchivo(archivoFirma.getRutaAntigua(), archivoFirma.getRutaActual());
+			
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	//jchavez 08.07.2014
+	public void adjuntarCheque(UploadEvent event){
+		try{
+			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_CHEQUE;
+			
+			archivoCheque = procesarArchivo(event, intTipoArchivo);
+			log.info("rutaAntigua:"+archivoCheque.getRutaAntigua());
+			log.info("rutaNueva:"+archivoCheque.getRutaActual());
+			renombrarArchivo(archivoCheque.getRutaAntigua(), archivoCheque.getRutaActual());
 			
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
@@ -529,5 +544,11 @@ public class FileUploadController {
 	}
 	public void setListaSolicitudPersonal(List<SolicitudPersonal> listaSolicitudPersonal) {
 		this.listaSolicitudPersonal = listaSolicitudPersonal;
+	}
+	public Archivo getArchivoCheque() {
+		return archivoCheque;
+	}
+	public void setArchivoCheque(Archivo archivoCheque) {
+		this.archivoCheque = archivoCheque;
 	}
 }

@@ -193,7 +193,8 @@
 		
 	<h:panelGroup id="contPanelInferior">
 			
-		<rich:panel  rendered="#{cierreFondosController.mostrarPanelInferior}"	style="border:1px solid #17356f;background-color:#DEEBF5;">	 		
+		<rich:panel rendered="#{cierreFondosController.mostrarPanelInferior}"	style="border:1px solid #17356f;background-color:#DEEBF5;">	 		
+			<a4j:outputPanel id="opCabeceraCierre">
 			
 			<h:panelGrid columns="2">
 				<rich:column width="120">
@@ -204,12 +205,23 @@
 						style="width: 200px;"
 						disabled="#{cierreFondosController.datosValidados}"
 						value="#{cierreFondosController.intTipoCierre}">
+						<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 						<tumih:selectItems var="sel" 
 							cache="#{applicationScope.Constante.PARAM_T_CIERREFONDOFIJO}" 
 							itemValue="#{sel.intIdDetalle}" 
-							itemLabel="#{sel.strDescripcion}"/>	
+							itemLabel="#{sel.strDescripcion}"/>
+						<a4j:support event="onchange"
+							actionListener="#{cierreFondosController.validarMes}"
+							reRender="opCabeceraCierre" />	
 					</h:selectOneMenu>
             	</rich:column>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<h:outputText value="#{cierreFondosController.strMsgFueraDeFecha}" 
+					id="msgFueraDeFecha"
+					styleClass="msgError"
+					style="font-weight:bold; font-size:17px"
+					rendered="#{not empty cierreFondosController.strMsgFueraDeFecha}"/>	
 			</h:panelGrid>
 			
 			<rich:spacer height="12px"/>
@@ -289,23 +301,25 @@
 			<rich:spacer height="12px"/>
 			
 			
-			<h:panelGroup id="panelValidar">
+			
 
 			<h:panelGroup rendered="#{!cierreFondosController.datosValidados}">
 				
 				<h:panelGrid columns="1">
-					<rich:column width="820">
+					<rich:column width="820" >
 						<a4j:commandButton styleClass="btnEstilos"	
 			               	value="Validar Datos" 
 			               	reRender="contPanelInferior,panelBotones"
 			               	action="#{cierreFondosController.validarDatos}" 
-			               	style="width:820px"/>
+			               	style="width:820px"
+			               	id="btnValidarDatos"
+			               	disabled="#{cierreFondosController.blnHabilitarValidarDatos}"/>
 					</rich:column>
 				</h:panelGrid>
-				
 			</h:panelGroup>
+			</a4j:outputPanel>
 			
-			
+			<h:panelGroup id="panelValidar">
 			<h:panelGroup rendered="#{cierreFondosController.datosValidados}">
 			
 				<rich:spacer height="10px"/>

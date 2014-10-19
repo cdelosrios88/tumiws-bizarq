@@ -215,6 +215,7 @@ resizeable="false" style="background-color:#DEEBF5;">
 
 
 <h:form id="frmProveedor">
+	<h:outputLabel value="#{proveedorController.inicioPage}"/>
    	<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
         	
         	<h:inputHidden value="#{messageController.strTypeMessage}"/>
@@ -892,280 +893,286 @@ resizeable="false" style="background-color:#DEEBF5;">
 
 				<rich:spacer height="15px"/>
 			    
-			    <h:panelGrid columns="2" style="vertical-align: top">
-			    	<rich:column id="rpRepLegal" style="vertical-align: top">
-							<h:panelGrid columns="4" style="vertical-align: top">
-				    			<rich:column style="width:137px">
-				    				<h:outputText value="Representante Legal"/>
-				    			</rich:column>
-				    			<rich:column style="width:215px">
-				    				<a4j:commandButton value="Agregar" 
-				    					actionListener="#{naturalController.nuevoRepLegal}"
-				    					disabled="#{proveedorController.deshabilitarNuevo}"
-				    					styleClass="btnEstilos1"
-				    					style="width:213px"
-				    					oncomplete="Richfaces.showModalPanel('mpRepLegal')"
-				    					reRender="frmRepLegal">
-			          	 			</a4j:commandButton>
-				    			</rich:column>
-				    		</h:panelGrid>
-				    		<h:panelGrid id="pgRepLegal" style="vertical-align: top">
-				    			<rich:dataTable value="#{naturalController.beanListRepLegal}" 
-				    				id="tbRepreLegal" 
-				    				rows="5" 
-				    				styleClass="dataTable1"
-		                            width="443px" 
-		                            var="item" 
-		                            rowKeyVar="rowKey" 
-		                            sortMode="single">
-		                            <rich:column width="343">
-						            	<h:outputText value="#{item.natural.strNombres} #{item.natural.strApellidoPaterno} #{item.natural.strApellidoMaterno}"/>
-						            </rich:column>
-						            <rich:column width="50">
-						            	<a4j:commandLink value="Ver"
-						                	actionListener="#{naturalController.verRepLegal}"
-						                    reRender="frmRepLegal"
-						                    disabled="#{proveedorController.deshabilitarNuevo}"
-						                    oncomplete="Richfaces.showModalPanel('mpRepLegal')">
-						                    <f:param name="rowKeyRepLegal" value="#{rowKey}"></f:param>
-						                </a4j:commandLink>
-						        	</rich:column>
-						            <rich:column width="50">
-						            	<a4j:commandLink value="Quitar" 
-						                	actionListener="#{naturalController.quitarRepLegal}" 
-	                     					disabled="#{proveedorController.deshabilitarNuevo}"
-	                     					reRender="tbRepreLegal">
-	                     					<f:param name="rowKeyRepLegal" value="#{rowKey}"></f:param>
-	                     				</a4j:commandLink>
-						          	</rich:column>
-					                <f:facet name="footer">   
-					                    <rich:datascroller for="tbRepreLegal" maxPages="5"/>   
-					                </f:facet> 
-				                </rich:dataTable>
-				    		</h:panelGrid>			    		
-			    	</rich:column>
-			    	<rich:column style="vertical-align: top">
-			    			<h:panelGrid id="pAgregarComunicacion" columns="4" style="vertical-align: top">
-				    			<rich:column style="width:133px;text-align: left">
-				    				<h:outputText value="Comunicaciones"/>
-				    			</rich:column>
-				    			<rich:column>
-				    				<a4j:commandButton id="btnPerJuriComunicacion" 
-				    					value="Agregar"
-				    					actionListener="#{comunicacionController.showComuniPerProveedor}"  
-				    					reRender="frmComunicacion" 
-				    					oncomplete="Richfaces.showModalPanel('pAgregarComunicacion')" 
-				    					disabled="#{proveedorController.deshabilitarNuevo}"
-				    					style="width:165px"
-				    					styleClass="btnEstilos1">				    					
-			          	 			</a4j:commandButton>
-				    			</rich:column>
-				    		</h:panelGrid>
-				    		<h:panelGrid id="pgListComunicacion" style="vertical-align: top">
-				    			<rich:dataTable id="tbComunicaciones" 
-				    				value="#{comunicacionController.beanListComuniProveedor}" 
-				    				rows="5" 
-				    				var="item"
-				    				width="410px"
-				    				rowKeyVar="rowKey" 
-				    				sortMode="single" 
-				    				styleClass="dataTable1"> 
-				    				<rich:columnGroup rendered="#{item.intEstadoCod!=applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}">
-				    					<rich:column width="310">
-						                    <h:outputText value="#{item.strComunicacion}"></h:outputText>
-						                </rich:column>
-						                <rich:column width="50">
-						                    <a4j:commandLink value="Ver"
-						                    	actionListener="#{comunicacionController.viewComunicacionProveedor}"
-						                    	reRender="frmComunicacion"
-						                    	disabled="#{proveedorController.deshabilitarNuevo}"
-						                    	oncomplete="Richfaces.showModalPanel('pAgregarComunicacion')">						                    	
-						                    	<f:param name="rowKeyComunicacionProveedor" value="#{rowKey}" />
-						                    </a4j:commandLink>
-						                </rich:column>
-						                <rich:column width="50">
-						                    <a4j:commandLink value="Quitar" 
-						                    	actionListener="#{comunicacionController.quitarComunicacionProveedor}" 
-	                     						disabled="#{proveedorController.deshabilitarNuevo}"
-	                     						reRender="tbComunicaciones">
-	                     						<f:param name="rowKeyComunicacionProveedor" value="#{rowKey}" />
-	                     					</a4j:commandLink>
-						                </rich:column>
-						           	</rich:columnGroup>
-					                <f:facet name="footer">   
-					                    <rich:datascroller for="tbComunicaciones" maxPages="5"/>   
-					                </f:facet> 
-				                </rich:dataTable>
-				    		</h:panelGrid>
-			    	</rich:column>
-			    </h:panelGrid>
+		    	<a4j:outputPanel id="opRepLegal">
+				    <h:panelGrid columns="2" style="vertical-align: top">
+				    	<rich:column id="rpRepLegal" style="vertical-align: top">
+								<h:panelGrid columns="4" style="vertical-align: top">
+					    			<rich:column style="width:137px">
+					    				<h:outputText value="Representante Legal"/>
+					    			</rich:column>
+					    			<rich:column style="width:215px">
+					    				<a4j:commandButton value="Agregar" 
+					    					actionListener="#{naturalController.nuevoRepLegal}"
+					    					disabled="#{proveedorController.deshabilitarNuevo}"
+					    					styleClass="btnEstilos1"
+					    					style="width:213px"
+					    					oncomplete="Richfaces.showModalPanel('mpRepLegal')"
+					    					reRender="frmRepLegal">
+				          	 			</a4j:commandButton>
+					    			</rich:column>
+					    		</h:panelGrid>
+					    		<h:panelGrid id="pgRepLegal" style="vertical-align: top">
+					    			<rich:dataTable value="#{naturalController.beanListRepLegal}" 
+					    				id="tbRepreLegal" 
+					    				rows="5" 
+					    				styleClass="dataTable1"
+			                            width="443px" 
+			                            var="item" 
+			                            rowKeyVar="rowKey" 
+			                            sortMode="single">
+			                            <rich:column width="343">
+							            	<h:outputText value="#{item.natural.strNombres} #{item.natural.strApellidoPaterno} #{item.natural.strApellidoMaterno} - DNI:#{item.documento.strNumeroIdentidad}"/>
+							            </rich:column>
+							            <rich:column width="50">
+							            	<a4j:commandLink value="Ver"
+							                	actionListener="#{naturalController.verRepLegal}"
+							                    reRender="frmRepLegal"
+							                    disabled="#{proveedorController.deshabilitarNuevo}"
+							                    oncomplete="Richfaces.showModalPanel('mpRepLegal')">
+							                    <f:param name="rowKeyRepLegal" value="#{rowKey}"></f:param>
+							                </a4j:commandLink>
+							        	</rich:column>
+							            <rich:column width="50">
+							            	<a4j:commandLink value="Quitar" 
+							                	actionListener="#{naturalController.quitarRepLegal}" 
+		                     					disabled="#{proveedorController.deshabilitarNuevo}"
+		                     					reRender="tbRepreLegal">
+		                     					<f:param name="rowKeyRepLegal" value="#{rowKey}"></f:param>
+		                     				</a4j:commandLink>
+							          	</rich:column>
+						                <f:facet name="footer">   
+						                    <rich:datascroller for="tbRepreLegal" maxPages="5"/>   
+						                </f:facet> 
+					                </rich:dataTable>
+					    		</h:panelGrid>			    		
+				    	</rich:column>
+				    	<rich:column style="vertical-align: top">
+				    			<h:panelGrid id="pAgregarComunicacion" columns="4" style="vertical-align: top">
+					    			<rich:column style="width:133px;text-align: left">
+					    				<h:outputText value="Comunicaciones"/>
+					    			</rich:column>
+					    			<rich:column>
+					    				<a4j:commandButton id="btnPerJuriComunicacion" 
+					    					value="Agregar"
+					    					actionListener="#{comunicacionController.showComuniPerProveedor}"  
+					    					reRender="frmComunicacion" 
+					    					oncomplete="Richfaces.showModalPanel('pAgregarComunicacion')" 
+					    					disabled="#{proveedorController.deshabilitarNuevo}"
+					    					style="width:165px"
+					    					styleClass="btnEstilos1">				    					
+				          	 			</a4j:commandButton>
+					    			</rich:column>
+					    		</h:panelGrid>
+					    		<h:panelGrid id="pgListComunicacion" style="vertical-align: top">
+					    			<rich:dataTable id="tbComunicaciones" 
+					    				value="#{comunicacionController.beanListComuniProveedor}" 
+					    				rows="5" 
+					    				var="item"
+					    				width="410px"
+					    				rowKeyVar="rowKey" 
+					    				sortMode="single" 
+					    				styleClass="dataTable1"> 
+					    				<rich:columnGroup rendered="#{item.intEstadoCod!=applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}">
+					    					<rich:column width="310">
+							                    <h:outputText value="#{item.strComunicacion}"></h:outputText>
+							                </rich:column>
+							                <rich:column width="50">
+							                    <a4j:commandLink value="Ver"
+							                    	actionListener="#{comunicacionController.viewComunicacionProveedor}"
+							                    	reRender="frmComunicacion"
+							                    	disabled="#{proveedorController.deshabilitarNuevo}"
+							                    	oncomplete="Richfaces.showModalPanel('pAgregarComunicacion')">						                    	
+							                    	<f:param name="rowKeyComunicacionProveedor" value="#{rowKey}" />
+							                    </a4j:commandLink>
+							                </rich:column>
+							                <rich:column width="50">
+							                    <a4j:commandLink value="Quitar" 
+							                    	actionListener="#{comunicacionController.quitarComunicacionProveedor}" 
+		                     						disabled="#{proveedorController.deshabilitarNuevo}"
+		                     						reRender="tbComunicaciones">
+		                     						<f:param name="rowKeyComunicacionProveedor" value="#{rowKey}" />
+		                     					</a4j:commandLink>
+							                </rich:column>
+							           	</rich:columnGroup>
+						                <f:facet name="footer">   
+						                    <rich:datascroller for="tbComunicaciones" maxPages="5"/>   
+						                </f:facet> 
+					                </rich:dataTable>
+					    		</h:panelGrid>
+				    	</rich:column>
+				    </h:panelGrid>
+				</a4j:outputPanel>
 			    	
 			    <rich:spacer height="15px"/>
-			    
-			    <h:panelGrid columns="2" style="vertical-align: top">
-			    	<rich:column>
-			    			<h:panelGrid columns="2" style="vertical-align: top">
-				    			<rich:column style="width:137px">
-				    				<h:outputText value="Direcciones"></h:outputText>
-				    			</rich:column>
-				    			<rich:column style="width:215px">
-				    				<a4j:commandButton id="btnPerJuriDireccion" value="Agregar" 
-				    					actionListener="#{domicilioController.showDomicilioJuriProveedor}"
-				    					styleClass="btnEstilos1" 
-				    					reRender="pgFormDomicilio,frmDomicilio" 
-				    					disabled="#{proveedorController.deshabilitarNuevo}"
-				    					style="width:213px"
-				    					oncomplete="Richfaces.showModalPanel('pAgregarDomicilio')">
-			          	 			</a4j:commandButton>
-				    			</rich:column>
-				    		</h:panelGrid>
-				    		<h:panelGrid id="pgListDomicilio" style="vertical-align: top">
-				    			<rich:dataTable id="tbDirecciones" 
-				    				value="#{domicilioController.beanListDirecProveedor}"
-				    				rows="5" 
-				    				var="item"
-				    				width="443px" 
-				    				rowKeyVar="rowKey" 
-				    				sortMode="single" 
-				    				styleClass="dataTable1">
-				    				<rich:columnGroup rendered="#{item.intEstadoCod!=applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}">
-				    					<rich:column width="343">
-						                    <h:outputText value="#{item.strDireccion}"/>
-						                </rich:column>
-						                <rich:column width="50">
-						                    <a4j:commandLink value="Ver" 
-						                    	actionListener="#{domicilioController.viewDomicilioProveedor}"
-						                    	reRender="pAgregarDomicilio" 
-						                    	disabled="#{proveedorController.deshabilitarNuevo}"
-						                    	oncomplete="Richfaces.showModalPanel('pAgregarDomicilio')">
-						                    	<f:param name="rowKey" value="#{rowKey}" />
-						                    </a4j:commandLink>
-						                </rich:column>
-						                <rich:column width="50">
-						                    <a4j:commandLink value="Quitar"
-						                    	disabled="#{proveedorController.deshabilitarNuevo}"
-						                    	actionListener="#{domicilioController.quitarDomicilioProveedor}" 
-	                     						reRender="tbDirecciones">
-	                     						<f:param name="rowKey" value="#{rowKey}"></f:param>
-	                     					</a4j:commandLink>
-						                </rich:column>
-						            </rich:columnGroup>
-					                <f:facet name="footer">   
-					                    <rich:datascroller for="tbDirecciones" maxPages="5"/>   
-					                </f:facet> 
-				                </rich:dataTable>
-				    		</h:panelGrid>
-			    	</rich:column>
+			    <a4j:outputPanel id="opCuentaBancaria">
+				    <h:panelGrid columns="2" style="vertical-align: top">
+				    	<rich:column>
+				    			<h:panelGrid columns="2" style="vertical-align: top">
+					    			<rich:column style="width:137px">
+					    				<h:outputText value="Direcciones"></h:outputText>
+					    			</rich:column>
+					    			<rich:column style="width:215px">
+					    				<a4j:commandButton id="btnPerJuriDireccion" value="Agregar" 
+					    					actionListener="#{domicilioController.showDomicilioJuriProveedor}"
+					    					styleClass="btnEstilos1" 
+					    					reRender="pgFormDomicilio,frmDomicilio" 
+					    					disabled="#{proveedorController.deshabilitarNuevo}"
+					    					style="width:213px"
+					    					oncomplete="Richfaces.showModalPanel('pAgregarDomicilio')">
+				          	 			</a4j:commandButton>
+					    			</rich:column>
+					    		</h:panelGrid>
+					    		<h:panelGrid id="pgListDomicilio" style="vertical-align: top">
+					    			<rich:dataTable id="tbDirecciones" 
+					    				value="#{domicilioController.beanListDirecProveedor}"
+					    				rows="5" 
+					    				var="item"
+					    				width="443px" 
+					    				rowKeyVar="rowKey" 
+					    				sortMode="single" 
+					    				styleClass="dataTable1">
+					    				<rich:columnGroup rendered="#{item.intEstadoCod!=applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}">
+					    					<rich:column width="343">
+							                    <h:outputText value="#{item.strDireccion}"/>
+							                </rich:column>
+							                <rich:column width="50">
+							                    <a4j:commandLink value="Ver" 
+							                    	actionListener="#{domicilioController.viewDomicilioProveedor}"
+							                    	reRender="pAgregarDomicilio" 
+							                    	disabled="#{proveedorController.deshabilitarNuevo}"
+							                    	oncomplete="Richfaces.showModalPanel('pAgregarDomicilio')">
+							                    	<f:param name="rowKey" value="#{rowKey}" />
+							                    </a4j:commandLink>
+							                </rich:column>
+							                <rich:column width="50">
+							                    <a4j:commandLink value="Quitar"
+							                    	disabled="#{proveedorController.deshabilitarNuevo}"
+							                    	actionListener="#{domicilioController.quitarDomicilioProveedor}" 
+		                     						reRender="tbDirecciones">
+		                     						<f:param name="rowKey" value="#{rowKey}"></f:param>
+		                     					</a4j:commandLink>
+							                </rich:column>
+							            </rich:columnGroup>
+						                <f:facet name="footer">   
+						                    <rich:datascroller for="tbDirecciones" maxPages="5"/>   
+						                </f:facet> 
+					                </rich:dataTable>
+					    		</h:panelGrid>
+				    	</rich:column>
 			    	
-			    	<rich:column id="pgCuentaBancaria" style="vertical-align: top">
-			    		<h:panelGrid columns="4" style="vertical-align: top">
-				    			<rich:column style="width:133px;text-align: left">
-				    				<h:outputText value="Cuenta Bancaria"></h:outputText>
-				    			</rich:column>
-				    			<rich:column style="border:none">
-				    				<a4j:commandButton value="Agregar" 
-				    					actionListener="#{ctaBancariaController.showCtaBancariaPerProveedor}"
-				    					reRender="mpCuentaBancaria"
-				    					oncomplete="Richfaces.showModalPanel('mpCuentaBancaria')"
-				    					disabled="#{proveedorController.deshabilitarNuevo}"
-				    					style="width:165px"
-				    					styleClass="btnEstilos1">
-			          	 			</a4j:commandButton>
-				    			</rich:column>
-				    		</h:panelGrid>
-				    		<h:panelGrid style="vertical-align: top">
-				    		<rich:dataTable value="#{ctaBancariaController.listCtaBancariaProveedor}" 
-				    			id="tbCuentaBancaria" 
-				    			rows="5" 
-				    			styleClass="dataTable1"
-		                        var="item"
-		                        width="410px"
-		                        rowKeyVar="rowKey" 
-		                        sortMode="single">
-		                        <rich:columnGroup rendered="#{item.intEstadoCod!=applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}">
-		                        <rich:column width="310">
-						        	<h:outputText value="#{item.strNroCuentaBancaria}"></h:outputText>
-						        </rich:column>
-						        <rich:column width="50">
-						         	<a4j:commandLink value="Ver" 
-						         		actionListener="#{ctaBancariaController.verCtaBancariaProveedor}"
-						            	reRender="frmCtaBancaria"
-						            	disabled="#{proveedorController.deshabilitarNuevo}"
-						            	oncomplete="Richfaces.showModalPanel('mpCuentaBancaria')">
-						                <f:param name="rowKey" value="#{rowKey}"/>
-						           	</a4j:commandLink>
-						   		</rich:column>
-						        <rich:column width="50">
-						  			<a4j:commandLink value="Quitar"
-						  				actionListener="#{ctaBancariaController.quitarCtaBancariaProveedor}"
-						  				disabled="#{proveedorController.deshabilitarNuevo}" 
-	                     				reRender="tbCuentaBancaria">
-	                     				<f:param name="rowKey" value="#{rowKey}"/>
-	                     			</a4j:commandLink>
-						      	</rich:column>
-						      	</rich:columnGroup>
-					            <f:facet name="footer">   
-					            	<rich:datascroller for="tbCuentaBancaria" maxPages="5"/>   
-					            </f:facet> 
-				       		</rich:dataTable>
-				       	</h:panelGrid>
-			    	</rich:column>
-			    </h:panelGrid>
+				    	<rich:column style="vertical-align: top">
+				    		<h:panelGrid columns="4" style="vertical-align: top">
+					    			<rich:column style="width:133px;text-align: left">
+					    				<h:outputText value="Cuenta Bancaria"></h:outputText>
+					    			</rich:column>
+					    			<rich:column style="border:none">
+					    				<a4j:commandButton value="Agregar" 
+					    					actionListener="#{ctaBancariaController.showCtaBancariaPerProveedor}"
+					    					reRender="mpCuentaBancaria"
+					    					oncomplete="Richfaces.showModalPanel('mpCuentaBancaria')"
+					    					disabled="#{proveedorController.deshabilitarNuevo}"
+					    					style="width:165px"
+					    					styleClass="btnEstilos1">
+				          	 			</a4j:commandButton>
+					    			</rich:column>
+					    		</h:panelGrid>
+					    		<h:panelGrid style="vertical-align: top">
+					    		<rich:dataTable value="#{ctaBancariaController.listCtaBancariaProveedor}" 
+					    			id="tbCuentaBancaria" 
+					    			rows="5" 
+					    			styleClass="dataTable1"
+			                        var="item"
+			                        width="410px"
+			                        rowKeyVar="rowKey" 
+			                        sortMode="single">
+			                        <rich:columnGroup rendered="#{item.intEstadoCod!=applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}">
+			                        <rich:column width="310">
+			                        	<!-- Autor: jchavez / Tarea: Modificacion / Fecha: 01.10.2014 -->
+							        	<h:outputText value="#{item.strEtiqueta}"></h:outputText>
+							        	<!-- Fin jchavez - 01.10.2014 -->
+							        </rich:column>
+							        <rich:column width="50">
+							         	<a4j:commandLink value="Ver" 
+							         		actionListener="#{ctaBancariaController.verCtaBancariaProveedor}"
+							            	reRender="frmCtaBancaria"
+							            	disabled="#{proveedorController.deshabilitarNuevo}"
+							            	oncomplete="Richfaces.showModalPanel('mpCuentaBancaria')">
+							                <f:param name="rowKey" value="#{rowKey}"/>
+							           	</a4j:commandLink>
+							   		</rich:column>
+							        <rich:column width="50">
+							  			<a4j:commandLink value="Quitar"
+							  				actionListener="#{ctaBancariaController.quitarCtaBancariaProveedor}"
+							  				disabled="#{proveedorController.deshabilitarNuevo}" 
+		                     				reRender="tbCuentaBancaria">
+		                     				<f:param name="rowKey" value="#{rowKey}"/>
+		                     			</a4j:commandLink>
+							      	</rich:column>
+							      	</rich:columnGroup>
+						            <f:facet name="footer">   
+						            	<rich:datascroller for="tbCuentaBancaria" maxPages="5"/>   
+						            </f:facet> 
+					       		</rich:dataTable>
+					       	</h:panelGrid>
+				    	</rich:column>
+			    	</h:panelGrid>
+			    </a4j:outputPanel>
 			    
 			    <rich:spacer height="15px"/>
-
-			    <h:panelGrid columns="2" style="vertical-align: top">
-			    	<rich:column id="rpContactoNatu" style="vertical-align: top">
-			    			<h:panelGrid columns="4" style="vertical-align: top">
-				    			<rich:column style="width:137px">
-				    				<h:outputText value="Contacto"/>
-				    			</rich:column>
-				    			<rich:column style="width:215px">
-				    				<a4j:commandButton value="Agregar" 
-				    					actionListener="#{naturalController.nuevoContactoNatu}"
-				    					styleClass="btnEstilos1" 
-				    					oncomplete="Richfaces.showModalPanel('mpContactoNatu')"
-				    					disabled="#{proveedorController.deshabilitarNuevo}"
-				    					style="width:213px"
-				    					reRender="frmContactoNatu">
-			          	 			</a4j:commandButton>
-				    			</rich:column>
-				    		</h:panelGrid>
-				    		<h:panelGrid id="pgContactoNatu" style="vertical-align: top">
-				    			<rich:dataTable value="#{naturalController.beanListContactoNatu}" 
-				    					id="tbContactoNatu" 
-				    					rows="5"
-				    					width="443px"
-		                            	var="item" 
-		                            	rowKeyVar="rowKey" 
-		                            	sortMode="single">		                             		
-					                	<rich:column width="343">
-						                    <h:outputText value="#{item.natural.strNombreCompleto}"/>
-						                </rich:column>
-						                <rich:column width="50"> 
-						                    <a4j:commandLink value="Ver"
-						                    	actionListener="#{naturalController.verContactoNatu}"
-						                    	reRender="frmContactoNatu"
-						                    	disabled="#{proveedorController.deshabilitarNuevo}"
-						                    	oncomplete="Richfaces.showModalPanel('mpContactoNatu')">
-						                    	<f:param name="rowKeyContactoNatu" value="#{rowKey}"/>
-						                    </a4j:commandLink>
-						                </rich:column>
-						                <rich:column width="50">
-						                    <a4j:commandLink value="Quitar" 
-						                    	actionListener="#{naturalController.quitarContactoNatu}"
-						                    	disabled="#{proveedorController.deshabilitarNuevo}">
-	                     						<f:param name="rowKeyContactoNatu" value="#{rowKey}"/>
-	                     					</a4j:commandLink>
-						                </rich:column>						            
-					                <f:facet name="footer">   
-					                    <rich:datascroller for="tbContactoNatu" maxPages="5"/>   
-					                </f:facet> 
-				                </rich:dataTable>
-				    		</h:panelGrid>
-			    	</rich:column>
-			    	
-			    </h:panelGrid>
+				<a4j:outputPanel id="opContactoNatu">
+				    <h:panelGrid columns="2" style="vertical-align: top">
+				    	<rich:column id="rpContactoNatu" style="vertical-align: top">
+				    			<h:panelGrid columns="4" style="vertical-align: top">
+					    			<rich:column style="width:137px">
+					    				<h:outputText value="Contacto"/>
+					    			</rich:column>
+					    			<rich:column style="width:215px">
+					    				<a4j:commandButton value="Agregar" 
+					    					actionListener="#{naturalController.nuevoContactoNatu}"
+					    					styleClass="btnEstilos1" 
+					    					oncomplete="Richfaces.showModalPanel('mpContactoNatu')"
+					    					disabled="#{proveedorController.deshabilitarNuevo}"
+					    					style="width:213px"
+					    					reRender="frmContactoNatu">
+				          	 			</a4j:commandButton>
+					    			</rich:column>
+					    		</h:panelGrid>
+					    		<h:panelGrid id="pgContactoNatu" style="vertical-align: top">
+					    			<rich:dataTable value="#{naturalController.beanListContactoNatu}" 
+					    					id="tbContactoNatu" 
+					    					rows="5"
+					    					width="443px"
+			                            	var="item" 
+			                            	rowKeyVar="rowKey" 
+			                            	sortMode="single">		                             		
+						                	<rich:column width="343">
+							                    <h:outputText value="#{item.natural.strNombreCompleto}"/>
+							                </rich:column>
+							                <rich:column width="50"> 
+							                    <a4j:commandLink value="Ver"
+							                    	actionListener="#{naturalController.verContactoNatu}"
+							                    	reRender="frmContactoNatu"
+							                    	disabled="#{proveedorController.deshabilitarNuevo}"
+							                    	oncomplete="Richfaces.showModalPanel('mpContactoNatu')">
+							                    	<f:param name="rowKeyContactoNatu" value="#{rowKey}"/>
+							                    </a4j:commandLink>
+							                </rich:column>
+							                <rich:column width="50">
+							                    <a4j:commandLink value="Quitar" 
+							                    	actionListener="#{naturalController.quitarContactoNatu}"
+							                    	disabled="#{proveedorController.deshabilitarNuevo}">
+		                     						<f:param name="rowKeyContactoNatu" value="#{rowKey}"/>
+		                     					</a4j:commandLink>
+							                </rich:column>						            
+						                <f:facet name="footer">   
+						                    <rich:datascroller for="tbContactoNatu" maxPages="5"/>   
+						                </f:facet> 
+					                </rich:dataTable>
+					    		</h:panelGrid>
+				    	</rich:column>
+				    	
+				    </h:panelGrid>
+			   	</a4j:outputPanel>
 
 			    
 

@@ -22,12 +22,11 @@ import org.apache.log4j.Logger;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.ConvertirLetras;
 import pe.com.tumi.common.util.DocumentoGeneral;
+import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioId;
 import pe.com.tumi.contabilidad.cierre.facade.LibroDiarioFacadeRemote;
-import pe.com.tumi.contabilidad.legalizacion.domain.PagoLegalizacion;
-import pe.com.tumi.contabilidad.legalizacion.facade.LegalizacionFacadeRemote;
 import pe.com.tumi.credito.socio.core.domain.SocioEstructura;
 import pe.com.tumi.credito.socio.core.facade.SocioFacadeRemote;
 import pe.com.tumi.empresa.domain.Subsucursal;
@@ -59,9 +58,7 @@ import pe.com.tumi.servicio.prevision.domain.ExpedientePrevision;
 import pe.com.tumi.servicio.prevision.domain.RequisitoLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.RequisitoPrevision;
 import pe.com.tumi.servicio.prevision.domain.composite.RequisitoLiquidacionComp;
-//import pe.com.tumi.servicio.prevision.domain.composite.RequisitoLiquidacionComp2;
 import pe.com.tumi.servicio.prevision.domain.composite.RequisitoPrevisionComp;
-//import pe.com.tumi.servicio.prevision.domain.composite.RequisitoPrevisionComp2;
 import pe.com.tumi.servicio.prevision.facade.LiquidacionFacadeRemote;
 import pe.com.tumi.servicio.prevision.facade.PrevisionFacadeRemote;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.CancelacionCredito;
@@ -70,7 +67,6 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.EstadoCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.RequisitoCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp;
-//import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp2;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.PrestamoFacadeRemote;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuentacheque;
@@ -81,6 +77,9 @@ import pe.com.tumi.tesoreria.egreso.domain.EgresoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.Movilidad;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.fileupload.FileUploadController;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
+import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
 
 public class ChequesController {
 
@@ -91,7 +90,7 @@ public class ChequesController {
 	private TablaFacadeRemote 			tablaFacade;
 	private BancoFacadeLocal 			bancoFacade;
 	private EgresoFacadeLocal 			egresoFacade;
-	private LegalizacionFacadeRemote 	legalizacionFacade;
+//	private LegalizacionFacadeRemote 	legalizacionFacade;
 	private PrestamoFacadeRemote 		prestamoFacade;
 	private PrevisionFacadeRemote		previsionFacade;
 	private LiquidacionFacadeRemote		liquidacionFacade;
@@ -211,6 +210,11 @@ public class ChequesController {
 	
 	private Integer intCuenta;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014
+	private Egreso egresoGeneradoTrasGrabacion;
+	//Autor: jchavez / Tarea: Creación / Fecha: 11.10.2014
+	private LogisticaFacadeLocal		logisticaFacade;
+	
 	public ChequesController(){
 		cargarUsuario();
 		poseePermiso = PermisoUtil.poseePermiso(Constante.TRANSACCION_BANCOS_CHEQUES);
@@ -239,9 +243,10 @@ public class ChequesController {
 			previsionFacade = (PrevisionFacadeRemote) EJBFactory.getRemote(PrevisionFacadeRemote.class);
 			liquidacionFacade = (LiquidacionFacadeRemote) EJBFactory.getRemote(LiquidacionFacadeRemote.class);
 			egresoFacade = (EgresoFacadeLocal) EJBFactory.getLocal(EgresoFacadeLocal.class);
-			legalizacionFacade = (LegalizacionFacadeRemote) EJBFactory.getRemote(LegalizacionFacadeRemote.class);
+//			legalizacionFacade = (LegalizacionFacadeRemote) EJBFactory.getRemote(LegalizacionFacadeRemote.class);
 			libroDiarioFacade = (LibroDiarioFacadeRemote) EJBFactory.getRemote(LibroDiarioFacadeRemote.class);
 			conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
+			logisticaFacade = (LogisticaFacadeLocal) EJBFactory.getLocal(LogisticaFacadeLocal.class);
 			
 			listaTipoVinculo = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOVINCULO));			
 			listaTipoDocumento = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "C");
@@ -431,7 +436,17 @@ public class ChequesController {
 				Egreso egreso = egresoFacade.generarEgresoMovilidadCheque(listaMovilidad, bancoCuentaSeleccionado, usuario, intNumeroCheque, 
 						intTipoDocumentoValidar);
 				egresoFacade.grabarGiroMovilidad(egreso, listaMovilidad);
-			}		
+			//Autor: jchavez / Tarea: Creacion / Fecha: 11.10.2014
+			}else if (listaDocumentoGeneral.get(0).getOrdenCompra()!=null && 
+					(listaDocumentoGeneral.get(0).getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
+							|| listaDocumentoGeneral.get(0).getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))) {
+				List<OrdenCompra> listaOrdenCompra = new ArrayList<OrdenCompra>();
+				for(DocumentoGeneral documentoGeneral: listaDocumentoAgregados){
+					listaOrdenCompra.add(documentoGeneral.getOrdenCompra());
+				}
+				egresoGeneradoTrasGrabacion = egresoFacade.grabarGiroOrdenCompraDocumentoPorCheque(listaEgresoDetalleInterfazAgregado, bancoCuentaSeleccionado, usuario, intNumeroCheque, intTipoDocumentoAgregar, intTipoDocumentoValidar);
+				procesarItems(egresoGeneradoTrasGrabacion);
+			}//Fin jchavez - 11.10.2014	
 
 			
 			for(DocumentoGeneral documentoGeneral : listaDocumentoGeneral){
@@ -444,7 +459,11 @@ public class ChequesController {
 					//jchavez 24.06.2014
 					expedienteCredito = egreso.getExpedienteCredito();
 					expedienteCredito.setEgreso(egreso);
-					prestamoFacade.grabarGiroPrestamoPorTesoreria(expedienteCredito);
+					//Autor: jchavez / Tarea: Creación / Fecha: 15.10.2014
+					expedienteCredito = prestamoFacade.grabarGiroPrestamoPorTesoreria(expedienteCredito);
+					egresoGeneradoTrasGrabacion = expedienteCredito.getEgreso();
+					procesarItems(egresoGeneradoTrasGrabacion);
+					//Fin jchavez - 15.10.2014
 					log.info("Se realizó la grabación de forma satisfactoria");
 					
 				}else if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_AES) 
@@ -454,7 +473,11 @@ public class ChequesController {
 					Egreso egreso = previsionFacade.generarEgresoPrevisionCheque(expedientePrevision, bancoCuentaSeleccionado, usuario, intNumeroCheque, 
 							intTipoDocumentoValidar);
 					expedientePrevision.setEgreso(egreso);
-					previsionFacade.grabarGiroPrevisionPorTesoreria(expedientePrevision);
+					//Autor: jchavez / Tarea: Creación / Fecha: 15.10.2014
+					expedientePrevision = previsionFacade.grabarGiroPrevisionPorTesoreria(expedientePrevision);
+					egresoGeneradoTrasGrabacion = expedientePrevision.getEgreso();
+					procesarItems(egresoGeneradoTrasGrabacion);
+					//Fin jchavez - 15.10.2014
 					
 				}else if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)){
 					ExpedienteLiquidacion expedienteLiquidacion = documentoGeneral.getExpedienteLiquidacion();
@@ -464,7 +487,11 @@ public class ChequesController {
 					Egreso egreso = liquidacionFacade.generarEgresoLiquidacionCheque(expedienteLiquidacion, bancoCuentaSeleccionado, usuario, intNumeroCheque, 
 							intTipoDocumentoValidar);
 					expedienteLiquidacion.setEgreso(egreso);
-					liquidacionFacade.grabarGiroLiquidacionPorTesoreria(expedienteLiquidacion);
+					//Autor: jchavez / Tarea: Creación / Fecha: 15.10.2014
+					expedienteLiquidacion = liquidacionFacade.grabarGiroLiquidacionPorTesoreria(expedienteLiquidacion);
+					egresoGeneradoTrasGrabacion = expedienteLiquidacion.getEgreso();
+					procesarItems(egresoGeneradoTrasGrabacion);
+					//Fin jchavez - 15.10.2014
 					log.info("La grabacion fue exitosa");
 				}
 			}
@@ -494,7 +521,13 @@ public class ChequesController {
 			}else if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)){
 				ExpedienteLiquidacion expedienteLiquidacion = documentoGeneral.getExpedienteLiquidacion();
 				expedienteLiquidacion.setStrGlosaEgreso(strObservacion);
-			}
+			//Autor: jchavez / Tarea: Creación / Fecha: 11.10.2014
+			}else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && 
+					(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
+							|| documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))){
+				OrdenCompra ordCmp = documentoGeneral.getOrdenCompra();
+				ordCmp.setStrGlosaEgreso(strObservacion);
+			}//fin jchavez - 11.10.2014
 		}
 		return listaDocumentoGeneral;
 	}
@@ -521,6 +554,15 @@ public class ChequesController {
 			Egreso egreso = (Egreso)event.getComponent().getAttributes().get("item");
 			EgresoDetalle egresoDetalle = egreso.getListaEgresoDetalle().get(0);
 			libroDiario = obtenerLibroDiario(egreso);
+			
+			//Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014
+			egresoGeneradoTrasGrabacion = new Egreso();
+			egresoGeneradoTrasGrabacion.setIntItemPeriodoEgreso(egreso.getIntItemPeriodoEgreso());
+			egresoGeneradoTrasGrabacion.setIntItemEgreso(egreso.getIntItemEgreso());
+			egresoGeneradoTrasGrabacion.setIntContPeriodoLibro(egreso.getIntContPeriodoLibro());
+			egresoGeneradoTrasGrabacion.setIntContCodigoLibro(egreso.getIntContCodigoLibro());
+			procesarItems(egresoGeneradoTrasGrabacion);
+			//Fin jchavez - 11.09.2014
 			
 			log.info(egreso);
 			dtFechaActual = egreso.getDtFechaEgreso();
@@ -620,6 +662,30 @@ public class ChequesController {
 		}
 	}
 	
+	public void procesarItems(Egreso egreso){ 
+		egreso.setStrNumeroEgreso(
+				obtenerPeriodoItem(	egreso.getIntItemPeriodoEgreso(), 
+									egreso.getIntItemEgreso(), 
+									"000000"));
+			
+		if(egreso.getIntContPeriodoLibro()!=null){
+			egreso.setStrNumeroLibro(
+					obtenerPeriodoItem(	egreso.getIntContPeriodoLibro(),
+										egreso.getIntContCodigoLibro(), 
+										"000000"));
+		}		
+	}
+	
+	private String obtenerPeriodoItem(Integer intPeriodo, Integer item, String patron){
+		try{
+			DecimalFormat formato = new DecimalFormat(patron);
+			return intPeriodo+"-"+formato.format(Double.parseDouble(""+item));
+		}catch (Exception e) {
+			log.error(intPeriodo+" "+item+" "+patron+e.getMessage());
+			return intPeriodo+"-"+item;
+		}
+	}
+	
 	public void ocultarMensaje(){
 		mostrarMensajeExito = Boolean.FALSE;
 		mostrarMensajeError = Boolean.FALSE;		
@@ -689,7 +755,9 @@ public class ChequesController {
 			Subsucursal s = (Subsucursal)o;
 			log.info(s.getStrDescripcion());
 		}*/
-		subsucursalSedeCentral = obtenerSubsucursal(ID_SUBSUCURSAL_SEDECENTRAL);		
+		subsucursalSedeCentral = obtenerSubsucursal(ID_SUBSUCURSAL_SEDECENTRAL);
+		log.info("Sucursal: "+sucursalSedeCentral.getId().getIntIdSucursal());
+		log.info("SubSucursal: "+subsucursalSedeCentral.getId().getIntIdSubSucursal());
 	}
 	
 	private Sucursal obtenerSucursal(Integer intIdSucursal) throws Exception{
@@ -898,15 +966,18 @@ public class ChequesController {
 			if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)){
 				List<Movilidad> listaMovilidad = egresoFacade.buscarMovilidadPorIdPersona(intIdPersona, EMPRESA_USUARIO);
 				for(Movilidad movilidad : listaMovilidad){
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD);
-					documentoGeneral.setStrNroDocumento(""+movilidad.getId().getIntItemMovilidad());
-					documentoGeneral.setSucursal(movilidad.getSucursal());
-					documentoGeneral.setSubsucursal(movilidad.getSubsucursal());
-					documentoGeneral.setBdMonto(movilidad.getBdMontoAcumulado());
-					
-					documentoGeneral.setMovilidad(movilidad);
-					listaDocumentoPorAgregar.add(documentoGeneral);
+					//Autor: jchavez / Tarea: Se agrega validación solo listar pendientes de pago / Fecha: 26.09.2014
+					if (movilidad.getIntParaEstadoPago().equals(Constante.PARAM_T_ESTADOPAGO_PENDIENTE)) {
+						DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+						documentoGeneral.setIntTipoDocumento(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD);
+						documentoGeneral.setStrNroDocumento(""+movilidad.getId().getIntItemMovilidad());
+						documentoGeneral.setSucursal(movilidad.getSucursal());
+						documentoGeneral.setSubsucursal(movilidad.getSubsucursal());
+						documentoGeneral.setBdMonto(movilidad.getBdMontoAcumulado());
+						
+						documentoGeneral.setMovilidad(movilidad);
+						listaDocumentoPorAgregar.add(documentoGeneral);
+					}					
 				}
 			//GIRO PRÉSTAMO
 			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PRESTAMOS)){
@@ -928,20 +999,21 @@ public class ChequesController {
 //					}
 				}
 			//MISTERIO SIN RESOLVER CONTINUA...
-			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PAGOLEGALIZACIONLIBROS)){
-				List<PagoLegalizacion> listaPagoLegalizacion = legalizacionFacade.obtenerPagoLegalizacionPorPersona(intIdPersona, EMPRESA_USUARIO);
-				for(PagoLegalizacion pagoLegalizacion : listaPagoLegalizacion){
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(Constante.PARAM_T_DOCUMENTOGENERAL_PAGOLEGALIZACIONLIBROS);
-					documentoGeneral.setStrNroDocumento(""+pagoLegalizacion.getId().getIntItemPagoLegalizacion());
-					documentoGeneral.setSucursal(sucursalSedeCentral);
-					documentoGeneral.setSubsucursal(subsucursalSedeCentral);
-					documentoGeneral.setBdMonto(pagoLegalizacion.getBdMonto());
-					documentoGeneral.setStrMonto(formato.format(documentoGeneral.getBdMonto()));					
-					
-					documentoGeneral.setPagoLegalizacion(pagoLegalizacion);
-					listaDocumentoPorAgregar.add(documentoGeneral);
-				}
+			//NO VA, SE RESUELVE MISTERIO. JCHAVEZ 16.07.2014
+//			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PAGOLEGALIZACIONLIBROS)){
+//				List<PagoLegalizacion> listaPagoLegalizacion = legalizacionFacade.obtenerPagoLegalizacionPorPersona(intIdPersona, EMPRESA_USUARIO);
+//				for(PagoLegalizacion pagoLegalizacion : listaPagoLegalizacion){
+//					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+//					documentoGeneral.setIntTipoDocumento(Constante.PARAM_T_DOCUMENTOGENERAL_PAGOLEGALIZACIONLIBROS);
+//					documentoGeneral.setStrNroDocumento(""+pagoLegalizacion.getId().getIntItemPagoLegalizacion());
+//					documentoGeneral.setSucursal(sucursalSedeCentral);
+//					documentoGeneral.setSubsucursal(subsucursalSedeCentral);
+//					documentoGeneral.setBdMonto(pagoLegalizacion.getBdMonto());
+//					documentoGeneral.setStrMonto(formato.format(documentoGeneral.getBdMonto()));					
+//					
+//					documentoGeneral.setPagoLegalizacion(pagoLegalizacion);
+//					listaDocumentoPorAgregar.add(documentoGeneral);
+//				}
 			//GIRO PREVISIÓN
 			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_AES) 
 					|| intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
@@ -984,7 +1056,39 @@ public class ChequesController {
 						}
 //					}
 				}
+			}//Autor: jchavez / Tarea: Creación / Fecha: 11.10.2014
+			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
+				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+					log.info(ordenCompra);
+					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+					BigDecimal bdMonto = BigDecimal.ZERO;
+					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+					}
+					documentoGeneral.setBdMonto(bdMonto);
+					documentoGeneral.setOrdenCompra(ordenCompra);
+					listaDocumentoPorAgregar.add(documentoGeneral);
+				}
+			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
+				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+					log.info(ordenCompra);
+					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+					BigDecimal bdMonto = BigDecimal.ZERO;
+					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+					}
+					documentoGeneral.setBdMonto(bdMonto);
+					documentoGeneral.setOrdenCompra(ordenCompra);
+					listaDocumentoPorAgregar.add(documentoGeneral);
+				}
 			}
+			//Fin jchavez - 11.10.2014
 			
 			listaDocumentoPorAgregar = egresoFacade.filtrarDuplicidadDocumentoGeneralParaEgreso(listaDocumentoPorAgregar, 
 					intTipoDocumentoAgregar, listaDocumentoAgregados);
@@ -1268,6 +1372,13 @@ public class ChequesController {
 			if(documentoGeneralSeleccionado.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)){
 				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(Constante.PARAM_T_TIPOMONEDA_SOLES)+" ";
 			}
+			//Autor: jchavez / Tarea: Creacion / Fecha: 11.10.2014
+			if(documentoGeneralSeleccionado.getOrdenCompra()!=null && 
+					(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
+							|| documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))){
+				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaTipoMoneda())+" ";
+			}//Fin jchavez - 11.10.2014
+			
 			strEtiqueta = strEtiqueta + formato.format(documentoGeneralSeleccionado.getBdMonto());
 			
 			documentoGeneralSeleccionado.setStrEtiqueta(strEtiqueta);
@@ -1635,14 +1746,39 @@ public class ChequesController {
 					eDI.setPersona(personaSeleccionada);
 					eDI.setSucursal(socioEstructura.getSucursal());
 					eDI.setSubsucursal(socioEstructura.getSubsucursal());
-					eDI.setStrDescripcion(eDI.getExpedienteLiquidacionDetalle().getCuentaConcepto().getDetalle().getCaptacion().getStrDescripcion());
+					//Autor: jchavez / Tarea: Modificación / Fecha: 18.08.2014 /  
+					eDI.setStrDescripcion(obtenerEtiquetaTipoDocumentoGeneral(eDI.getIntParaDocumentoGeneral()));//eDI.getExpedienteLiquidacionDetalle().getCuentaConcepto().getDetalle().getCaptacion().getStrDescripcion()
 					eDI.setBdMonto(eDI.getBdSubTotal());
 					eDI.setLibroDiario(libroDiario);
 					eDI.setArchivoAdjuntoGiro(archivoAdjuntoGiro);
 					listaEgresoDetalleInterfazAgregado.add(eDI);
 				}
 			}			
-
+			//Autor: jchavez / Tarea: Creacion / Fecha: 11.10.2014
+			else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
+				OrdenCompra ordenCompra = documentoGeneralSeleccionado.getOrdenCompra();
+				List<EgresoDetalleInterfaz> listaEDI = egresoFacade.cargarListaEgresoDetalleInterfazOrdenCompra(ordenCompra, intTipoDocumentoAgregar);
+				for(EgresoDetalleInterfaz eDI : listaEDI){
+					log.info(eDI.getIntParaDocumentoGeneral());
+					eDI.setStrDescripcion(MyUtil.obtenerEtiquetaTabla(eDI.getIntParaDocumentoGeneral(), listaTablaDocumentoGeneral));
+					eDI.setPersona(personaSeleccionada);
+					eDI.setLibroDiario(libroDiario);
+					eDI.setOrdenCompra(ordenCompra);
+					listaEgresoDetalleInterfazAgregado.add(eDI);
+				}
+			}else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				OrdenCompra ordenCompra = documentoGeneralSeleccionado.getOrdenCompra();
+				List<EgresoDetalleInterfaz> listaEDI = egresoFacade.cargarListaEgresoDetalleInterfazOrdenCompra(ordenCompra, intTipoDocumentoAgregar);
+				for(EgresoDetalleInterfaz eDI : listaEDI){
+					log.info(eDI.getIntParaDocumentoGeneral());
+					eDI.setStrDescripcion(MyUtil.obtenerEtiquetaTabla(eDI.getIntParaDocumentoGeneral(), listaTablaDocumentoGeneral));
+					eDI.setPersona(personaSeleccionada);
+					eDI.setLibroDiario(libroDiario);
+					eDI.setOrdenCompra(ordenCompra);
+					listaEgresoDetalleInterfazAgregado.add(eDI);
+				}
+			}//Fin jchavez - 11.10.2014
+			
 			for(Object o : listaEgresoDetalleInterfazAgregado){
 				EgresoDetalleInterfaz egresoDetalleInterfaz = (EgresoDetalleInterfaz)o;
 				if(egresoDetalleInterfaz.getIntOrden()==null){
@@ -2333,6 +2469,14 @@ public class ChequesController {
 
 	public void setBlnHabilitarObservacion(Boolean blnHabilitarObservacion) {
 		this.blnHabilitarObservacion = blnHabilitarObservacion;
+	}
+
+	public Egreso getEgresoGeneradoTrasGrabacion() {
+		return egresoGeneradoTrasGrabacion;
+	}
+
+	public void setEgresoGeneradoTrasGrabacion(Egreso egresoGeneradoTrasGrabacion) {
+		this.egresoGeneradoTrasGrabacion = egresoGeneradoTrasGrabacion;
 	}
 	
 }

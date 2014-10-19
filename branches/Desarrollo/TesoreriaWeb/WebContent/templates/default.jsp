@@ -22,13 +22,15 @@
 	</script>
 	
 	<script language="JavaScript" src="${pageContext.request.contextPath}/js/main.js"  type="text/javascript"></script>
+	
 </head>
 
-<body id="mainBody" onmousemove="moverMouse();" oncontextmenu="return false">
+<body id="mainBody" onload="iniciar();" onmousemove="moverMouse();" oncontextmenu="return false">
 <f:view>
 	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr><td align="center">
-		<table border="0" cellpadding="0" cellspacing="0" width="1000px">
+
+	<tr><td>
+		<table border="0" cellpadding="0" cellspacing="0" width="1000px" style="margin:0 auto">
 		<%--
 		<tr style="width:100%;">
 			<td><tiles:insert definition="page.header" flush="false" /></td>
@@ -40,13 +42,13 @@
 				<tiles:insert definition="page.left" flush="false" />
 			</td>
 			--%>
-			<td align="center" style="width:100%;">
-				<div class="messages">
-					<a4j:outputPanel id="opMessages" ajaxRendered="true">
-						<h:messages id="messages" errorClass="errorMessage" infoClass="infoMessage" >
-						</h:messages>
-					</a4j:outputPanel>
-				</div>
+			<td style="width:100%;">
+
+
+
+
+
+
 				<div id="pageTitle">
 					<tiles:getAsString name="pageTitle" ignore="true" />
 						<a4j:status id="staEstadoGeneral">

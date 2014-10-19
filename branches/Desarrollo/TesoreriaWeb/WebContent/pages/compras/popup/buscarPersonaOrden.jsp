@@ -59,12 +59,20 @@
            		<rich:column>
            			<a4j:commandButton styleClass="btnEstilos"
                 		value="Buscar" 
-                		reRender="tablaPersonaContrato"
+                		reRender="tablaPersonaContrato,panelMsgErrorProveedor"
                     	action="#{ordenController.buscarPersona}" 
                     	style="width:100px"/>
            		</rich:column>
-	    	</h:panelGrid>	    	
-
+	    	</h:panelGrid>	   
+	    	<!-- Autor: jchavez / Tarea: Creacion / Fecha: 01.10.2014 -->
+	    	<h:panelGrid columns="12" id="panelMsgErrorProveedor">
+	    		<rich:column width="600">
+					<h:outputText value="#{ordenController.strMsgErrorBusquedaProveedor}"
+						styleClass="msgError"
+						style="font-weight:bold"/>
+				</rich:column>
+	    	</h:panelGrid>
+			<!-- Fin jchavez - 01.10.2014 -->
 			<h:panelGroup id="tablaPersonaContrato">
 	    		<rich:dataTable
 	    			var="item"

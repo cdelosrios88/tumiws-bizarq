@@ -25,8 +25,8 @@
 		        	actionListener="#{ctaBancariaController.addCtaBancaria}" 
 		        	disabled="#{!ctaBancariaController.habilitarEditar}"
 		        	styleClass="btnEstilos"
-		        	reRender="#{ctaBancariaController.pgListCtaBancaria}" 
-		        	oncomplete="Richfaces.hideModalPanel('#{ctaBancariaController.strIdModalPanel}')"/>
+		        	reRender="opCuentaBancaria" 
+		        	oncomplete="Richfaces.hideModalPanel('mpCuentaBancaria')"/>
 		    	<a4j:commandButton value="Cancelar" styleClass="btnEstilos">
 		    		<rich:componentControl for="mpCuentaBancaria" operation="hide" event="onclick"/>
 		    	</a4j:commandButton>

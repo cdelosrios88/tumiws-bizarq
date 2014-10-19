@@ -22,7 +22,6 @@ import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.ConvertirLetras;
 import pe.com.tumi.common.util.DocumentoGeneral;
 import pe.com.tumi.common.util.MyUtil;
-import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioId;
 import pe.com.tumi.contabilidad.cierre.facade.LibroDiarioFacadeRemote;
@@ -47,7 +46,11 @@ import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.persona.vinculo.domain.Vinculo;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
-//import pe.com.tumi.servicio.configuracion.domain.ConfServDetalleId;
+import pe.com.tumi.seguridad.permiso.domain.PermisoPerfil;
+import pe.com.tumi.seguridad.permiso.domain.PermisoPerfilId;
+import pe.com.tumi.seguridad.permiso.domain.Transaccion;
+import pe.com.tumi.seguridad.permiso.domain.TransaccionId;
+import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeRemote;
 import pe.com.tumi.servicio.configuracion.domain.ConfServDetalleId;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioPrevision;
@@ -69,11 +72,10 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.RequisitoCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.PrestamoFacadeRemote;
-//import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
-//import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
 import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
+import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijosId;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.egreso.domain.EgresoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.Movilidad;
@@ -85,10 +87,11 @@ import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
 
-public class FondosFijosController {
-
-	protected static Logger log = Logger.getLogger(FondosFijosController.class);
+public class TelecreditoController {
 	
+	protected static Logger log = Logger.getLogger(CajaController.class);
+
+	private Boolean		estadoTab;
 	private EmpresaFacadeRemote 		empresaFacade;
 	private PersonaFacadeRemote 		personaFacade;
 	private TablaFacadeRemote 			tablaFacade;
@@ -100,6 +103,7 @@ public class FondosFijosController {
 	private	CierreDiarioArqueoFacadeRemote 	cierreDiarioArqueoFacade;
 	private PrestamoFacadeRemote 		prestamoFacade;
 	private LogisticaFacadeLocal		logisticaFacade;
+	private PermisoFacadeRemote			permisoFacade;
 	
 	private	List<Egreso>	listaEgreso;
 	private	List<Tabla>		listaTablaSucursal;
@@ -108,7 +112,7 @@ public class FondosFijosController {
 	private	List<Tabla>		listaSubTipoOperacion;
 //	private	List<Tabla>	 		listaTablaTipoCredito;
 	private	List<EgresoDetalleInterfaz>	listaEgresoDetalleInterfazAgregado;
-	private List<ControlFondosFijos>	listaControlFondosFijosBusqueda;
+	private List<ControlFondosFijos>	listaControlFondosFijosBusqueda; 
 	/****/
 	private	List<Tabla>	listaTablaTipoFondoFijo;
 	private	List<ControlFondosFijos>		listaControlFondosFijos;
@@ -136,7 +140,7 @@ public class FondosFijosController {
 	private Cuenta		cuentaActual;
 	private LibroDiario libroDiario;
 	
-	private Usuario 	usuario;
+	private Usuario 	usuarioSesion;
 	private String 		mensajeOperacion;
 	private String 		mensajePopUp;
 	private	BigDecimal	bdMontoGirar;
@@ -165,9 +169,10 @@ public class FondosFijosController {
 	private	Integer		intTipoDocumentoAgregar;
 	private	DocumentoGeneral	documentoGeneralSeleccionado;
 	
-	private	Integer		EMPRESA_USUARIO;
-//	private	Integer		PERSONA_USUARIO;
-	private	Integer		ID_SUCURSAL_USUARIO;
+	private	Integer		SESION_IDEMPRESA;
+	private	Integer		SESION_IDUSUARIO;
+	private	Integer		SESION_IDSUCURSAL;
+	private	Integer		SESION_IDSUBSUCURSAL;
 	private	Integer		BUSCAR_PERSONA = 1;
 	private	Integer		BUSCAR_APODERADO = 2;
 	
@@ -178,7 +183,7 @@ public class FondosFijosController {
 	private boolean mostrarPanelInferior;
 	private boolean registrarNuevo;
 	private boolean habilitarGrabar;
-	private boolean datosValidados;
+//	private boolean datosValidados;
 	private boolean poseePermiso;
 	
 	//jchavez 29.04.2014
@@ -204,24 +209,30 @@ public class FondosFijosController {
 	private Boolean blnHabilitarObservacion;
 	private ConceptoFacadeRemote conceptoFacade;
 	
-	//Autor: jchavez / Tarea: Creación / Fecha: 19.08.2014 /
-	private Boolean blnActivarNroApertura;
+	private List<Tabla> listaTablaTipoMoneda;
+	private List<Tabla> listaTablaTipoCuentaBancaria;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014 /
+	private Egreso egresoGeneradoTrasGrabacion;
 	private List<Tabla> listaTablaTipoDocumento;
 	
-	public FondosFijosController(){
-		cargarUsuario();
-		poseePermiso = PermisoUtil.poseePermiso(Constante.TRANSACCION_FONDOSFIJOS_FONDOS);
-		if(usuario!=null && poseePermiso)	cargarValoresIniciales();
-		else	log.error("--Usuario obtenido es NULL.");
 		
+	public TelecreditoController(){
+		cargarUsuario();
+		if(usuarioSesion!=null && poseePermiso() && estadoTab()){
+			cargarValoresIniciales();
+		}else{
+			log.error("--Usuario obtenido es NULL.");
+		}
 	}
 	
 	public String getInicioPage() {
-		cargarUsuario();		
-		if(usuario!=null){
+		cargarUsuario();	
+		estadoTab();
+		if(usuarioSesion!=null){
 			limpiarFormulario();
 			deshabilitarPanelInferior();
-			habilitarFiltroSucu();
+			cargarListaCCF();
 		}else{
 			log.error("--Usuario obtenido es NULL o no posee permiso.");
 		}		
@@ -229,18 +240,62 @@ public class FondosFijosController {
 	}
 	
 	private void cargarUsuario(){
-		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
-//		PERSONA_USUARIO = usuario.getIntPersPersonaPk();
-		EMPRESA_USUARIO = usuario.getPerfil().getId().getIntPersEmpresaPk();
-		ID_SUCURSAL_USUARIO = usuario.getSucursal().getId().getIntIdSucursal();
+		usuarioSesion = (Usuario)getRequest().getSession().getAttribute("usuario");
 		
-		sucursalUsuario = usuario.getSucursal();
-		subsucursalUsuario = usuario.getSubSucursal();		
+		SESION_IDUSUARIO = usuarioSesion.getIntPersPersonaPk();
+		SESION_IDEMPRESA = usuarioSesion.getPerfil().getId().getIntPersEmpresaPk();
+		SESION_IDSUCURSAL = usuarioSesion.getSucursal().getId().getIntIdSucursal();
+		SESION_IDSUBSUCURSAL = usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal();
+		
+		setSucursalUsuario(usuarioSesion.getSucursal());
+		setSubsucursalUsuario(usuarioSesion.getSubSucursal());	
+
+	}
+	
+	private boolean poseePermiso(){
+		poseePermiso = Boolean.FALSE;
+		try{			
+			PermisoPerfilId permisoPerfilid = null;
+			permisoPerfilid = new PermisoPerfilId();
+			permisoPerfilid.setIntPersEmpresaPk(SESION_IDEMPRESA);
+			permisoPerfilid.setIntIdTransaccion(Constante.TRANSACCION_FONDOSFIJOS_CAJA);
+			permisoPerfilid.setIntIdPerfil(usuarioSesion.getPerfil().getId().getIntIdPerfil());
+			permisoFacade = (PermisoFacadeRemote)EJBFactory.getRemote(PermisoFacadeRemote.class);
+			
+			PermisoPerfil permisoPerfil = permisoFacade.getPermisoPerfilPorPk(permisoPerfilid);
+			
+			if(permisoPerfil != null && permisoPerfil.getId()!=null){
+				poseePermiso= Boolean.TRUE;
+			}
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}		
+		return poseePermiso;
+	}
+	
+	private boolean estadoTab(){
+		estadoTab = false;
+		try {
+			Transaccion transaccion = new Transaccion();
+			transaccion.setId(new TransaccionId());
+			transaccion.getId().setIntPersEmpresaPk(SESION_IDEMPRESA);
+			transaccion.getId().setIntIdTransaccion(Constante.TRANSACCION_FONDOSFIJOS_TELECREDITO);
+			
+			permisoFacade = (PermisoFacadeRemote)EJBFactory.getRemote(PermisoFacadeRemote.class);
+			transaccion = permisoFacade.getTransaccionPorPk(transaccion.getId());
+			if (transaccion!=null) {
+				if (transaccion.getIntIdEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)) {
+					estadoTab = true;
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		return estadoTab;		
 	}
 	
 	private void cargarValoresIniciales(){
-		try{
-			
+		try {
 			empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 			egresoFacade = (EgresoFacadeLocal) EJBFactory.getLocal(EgresoFacadeLocal.class);
@@ -255,25 +310,27 @@ public class FondosFijosController {
 			conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
 //			listaTablaTipoCredito = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPO_CREDITO));
 			listaTablaDocumentoGeneral = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL));
+			listaTablaTipoCuentaBancaria = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTABANCARIA));
+			listaTablaTipoMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
+			listaTablaTipoDocumento = new ArrayList<Tabla>();
 			
 			listaMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
-			listaSubTipoOperacion = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPODESUBOPERACION), "A");
-			listaTablaTipoFondoFijo = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOFONDOFIJO),"A");
+			setListaSubTipoOperacion(tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPODESUBOPERACION), "A"));
+			setListaTablaTipoFondoFijo(tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOFONDOFIJO),"A"));
 			listaTipoVinculo = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOVINCULO));
 			listaTablaEstado = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOUNIVERSAL),"B");
 			listaTablaTipoMovilidad = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_PLANILLAMOVILIDAD));
 			intTipoPersonaFiltro = Constante.PARAM_T_TIPOPERSONA_NATURAL;
-			listaTablaTipoDocumento = new ArrayList<Tabla>();
 			
-			listaTablaSucursal = MyUtil.cargarListaTablaSucursal(listaTablaSucursal, EMPRESA_USUARIO);
+			listaTablaSucursal = MyUtil.cargarListaTablaSucursal(listaTablaSucursal, SESION_IDEMPRESA);
 			cargarUsuario();
 			listaAño = MyUtil.obtenerListaAnios();
 			egresoFiltro = new Egreso();
 			egresoFiltro.setIntParaTipoFondoFijo(Constante.PARAM_T_TIPOFONDOFIJO_ENTREGARENDIR);
-			egresoFiltro.setIntSucuIdSucursal(usuario.getSucursal().getId().getIntIdSucursal());
+			egresoFiltro.setIntSucuIdSucursal(usuarioSesion.getSucursal().getId().getIntIdSucursal());
 			intAñoFiltro = listaAño.get(0).getIntIdDetalle();
 //			habilitarFiltroSucu();
-			obtenerListaNumeroApertura();
+//			obtenerListaNumeroApertura();
 //			strMensajeError = "";
 			lstRequisitoCreditoComp = new ArrayList<RequisitoCreditoComp>();
 			lstRequisitoCredito = new ArrayList<RequisitoCredito>();
@@ -292,33 +349,60 @@ public class FondosFijosController {
 			lstRequisitoLiquidacionComp = new ArrayList<RequisitoLiquidacionComp>();
 			listaEgresoDetalleInterfazAgregado = new ArrayList<EgresoDetalleInterfaz>();
 			blnBeneficiarioSinAutorizacion = false;
-			
-			blnActivarNroApertura = true;
-		}catch (Exception e) {
-			log.error(e.getMessage(),e);
+			//
+			listaEgreso = new ArrayList<Egreso>();
+//			blnActivarNroApertura = true;
+			intTipoFondoFijoValidar = Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO;
+			deshabilitarPanelInferior();
+			listaControlFondosFijosBusqueda = new ArrayList<ControlFondosFijos>();
+			cargarListaCCF();
+		} catch (Exception e) {
+			log.info("Error en cargarValoresIniciales() ---> "+e.getMessage());
 		}
 	}
 	
-	private void habilitarFiltroSucu(){
-		habilitarFiltroSucursal = Boolean.FALSE;
-		if(usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL))
-			habilitarFiltroSucursal = Boolean.TRUE;		
-		egresoFiltro.setIntSucuIdSucursal(usuario.getSucursal().getId().getIntIdSucursal());
+	//
+	
+	
+	//Funcionalidad: Simula una lista de CFF, dado que en telecrédito el FF no existe en este punto. 
+	public void cargarListaCCF(){
+		ControlFondosFijos cff = new ControlFondosFijos();
+		cff.setId(new ControlFondosFijosId());
+		cff.getId().setIntPersEmpresa(SESION_IDEMPRESA);
+		cff.getId().setIntParaTipoFondoFijo(intTipoFondoFijoValidar);
+		cff.getId().setIntSucuIdSucursal(SESION_IDSUCURSAL);
+		cff.setIntSudeIdSubsucursal(SESION_IDSUBSUCURSAL);
+		listaControlFondosFijosBusqueda.add(cff);
+		controlFondosFijos = cff;
 	}
+	
+	/*******************************************************************************************************************************/
+//
+//	private void habilitarFiltroSucu(){
+//		habilitarFiltroSucursal = Boolean.FALSE;
+//		if(usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL))
+//			habilitarFiltroSucursal = Boolean.TRUE;		
+//		egresoFiltro.setIntSucuIdSucursal(usuarioSesion.getSucursal().getId().getIntIdSucursal());
+//	}
 	
 	public void habilitarPanelInferior(){
 		try{
-			datosValidados = Boolean.FALSE;
-			intTipoFondoFijoValidar = null;
+//			datosValidados = Boolean.FALSE;
+//			intTipoFondoFijoValidar = null;
 			cargarUsuario();
+			limpiarFormulario();
 			listaControlFondosFijos = new ArrayList<ControlFondosFijos>();
 			intControlSeleccionado = new Integer(0);
 			
+			habilitarGrabar = Boolean.TRUE;
 			registrarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.TRUE;
 			deshabilitarNuevo = false;
-			
-			blnActivarNroApertura = true;
+			egresoNuevo = new Egreso();
+			egresoNuevo.setDtFechaEgreso(MyUtil.obtenerFechaActual());
+			cuentaBancariaSeleccionada = null;
+//			blnActivarNroApertura = true;
+			obtenerListaTipoDocumentoGeneral();
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -348,7 +432,7 @@ public class FondosFijosController {
 		log.info("Observacion: "+strObservacion);
 		try {			
 			// 1. Valida Cierre Diario Arqueo, si existe un cierre diario para la sucursal que hace el giro, se procede a la siguiente validación
-			if(cierreDiarioArqueoFacade.existeCierreDiarioArqueo(controlFondosFijos.getId().getIntPersEmpresa(), controlFondosFijos.getId().getIntSucuIdSucursal(), null)){
+			if(cierreDiarioArqueoFacade.existeCierreDiarioArqueo(SESION_IDEMPRESA, SESION_IDSUCURSAL, null)){
 				log.info(controlFondosFijos);
 				// 1.1. Valida si la caja asociada a la sucursal se encuentra cerrada el dia anterior
 				if(!cierreDiarioArqueoFacade.existeCierreDiaAnterior(controlFondosFijos)){
@@ -373,16 +457,22 @@ public class FondosFijosController {
 			if(strObservacion==null || strObservacion.isEmpty()){
 				mensaje = "Debe ingresar una observación.";	return;
 			}
-			if(bdMontoGirar==null || bdMontoGirar.compareTo(controlFondosFijos.getBdMontoSaldo())>0){
-				mensaje = "No queda suficiente saldo en la apertura para realizar esa operación.";	return;
+			if(bdMontoGirar==null ){
+				mensaje = "El monto a girar no puede ser nulo.";	return;
 			}
+			if(cuentaBancariaSeleccionada==null ){
+				mensaje = "Debe de seleccionar una cuenta bancaria.";	return;
+			}
+//			if(bdMontoGirar==null || bdMontoGirar.compareTo(controlFondosFijos.getBdMontoSaldo())>0){
+//				mensaje = "No queda suficiente saldo en la apertura para realizar esa operación.";	return;
+//			}
 			//fin validaciones
 			
 			agregarStrGlosa(listaDocumentoAgregados);
 			
-			grabarGiro(listaDocumentoAgregados, controlFondosFijos, usuario);
+			grabarGiro(listaDocumentoAgregados, controlFondosFijos, usuarioSesion, cuentaBancariaSeleccionada);
 			
-			mensaje = "Se registró correctamente el giro mediante el fondo de cambio.";
+			mensaje = "Se registró correctamente el giro mediante la Planilla de Telecrédito.";
 			
 			exito = Boolean.TRUE;
 			habilitarGrabar = Boolean.FALSE;
@@ -390,55 +480,12 @@ public class FondosFijosController {
 			blnHabilitarObservacion = true;
 			buscar();
 		} catch (Exception e) {
-			mensaje = "Ocurrio un error durante el giro mediante el fondo de cambio.";
+			mensaje = "Ocurrio un error durante el giro mediante la Planilla de Telecrédito.";
 			log.error(e.getMessage(),e);
 		}finally{
 			mostrarMensaje(exito,mensaje);
 		}
 	}
-	
-//	/**
-//	 * 24.04.2014 jchavez
-//	 * Metodo que se encarga de la validacion de existencia de requisito para que se realice el giro por 
-//	 * medio de la sede.
-//	 * @return
-//	 */
-//	public boolean validarNoExisteRequisito(){
-//		log.info("--validarExisteRequisito()");
-//		blnNoExisteRequisito = true;
-//		deshabilitarNuevo = false;
-//		ExpedienteCredito expedienteCredito = null;
-//		lstRequisitoCredito.clear();
-//		lstRequisitoCreditoComp.clear();
-//		
-//		try {
-//			//0. Recuperamos el expediente credito seleccionado...
-//			expedienteCredito = documentoGeneralSeleccionado.getExpedienteCredito();
-//			//1. Recuperamos la lista de requisitos necesarios para realizar e giro en Sede
-//			lstRequisitoCreditoComp = prestamoFacade.getRequisitoGiroPrestamo(expedienteCredito);
-//			//2. validamos si existe registro en requisito credito
-//			if (lstRequisitoCreditoComp!=null && !lstRequisitoCreditoComp.isEmpty()) {
-//				Integer requisitoSize = lstRequisitoCreditoComp.size();
-//				
-//				for (RequisitoCreditoComp o : lstRequisitoCreditoComp) {
-//					ConfServDetalleId reqAutDetalleId = new ConfServDetalleId();
-//					reqAutDetalleId.setIntPersEmpresaPk(o.getIntEmpresa());
-//					reqAutDetalleId.setIntItemSolicitud(o.getIntItemRequisito());
-//					reqAutDetalleId.setIntItemDetalle(o.getIntItemRequisitoDetalle());
-//					lstRequisitoCredito.addAll(prestamoFacade.getListaPorPkExpedienteCreditoYRequisitoDetalle(expedienteCredito.getId(), reqAutDetalleId));
-//				}
-//				if (lstRequisitoCredito!=null && !lstRequisitoCredito.isEmpty()) {
-//					if (requisitoSize.equals(lstRequisitoCredito.size())) {
-//						blnNoExisteRequisito = false;	
-//						deshabilitarNuevo = true;
-//					}
-//				}
-//			}
-//		}catch (Exception e){
-//			log.error(e.getMessage(),e);
-//		}
-//		return blnNoExisteRequisito;
-//	}
 	
 	/**
 	 * Agregado 12.05.2014 jchavez
@@ -640,8 +687,9 @@ public class FondosFijosController {
 		return blnNoExisteRequisito;
 	}	
 	
-	public void grabarGiro(List<DocumentoGeneral> listaDocumentoGeneral, ControlFondosFijos controlFondosFijos, Usuario usuario) 
+	public void grabarGiro(List<DocumentoGeneral> listaDocumentoGeneral, ControlFondosFijos controlFondosFijos, Usuario usuario, CuentaBancaria cuentaBancaria) 
 	throws Exception {		
+		controlFondosFijos.setCuentaBancaria(cuentaBancariaSeleccionada);
 		Integer intTipoDocumentoGeneral = listaDocumentoGeneral.get(0).getIntTipoDocumento();
 		//Solo pata el caso de documentos de movilidad, todos los documentoGeneral se giraran en un solo egreso
 		if(intTipoDocumentoGeneral.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)){
@@ -649,14 +697,16 @@ public class FondosFijosController {
 			for(DocumentoGeneral documentoGeneral: listaDocumentoAgregados)
 				listaMovilidad.add(documentoGeneral.getMovilidad());			
 			Egreso egreso = egresoFacade.generarEgresoMovilidad(listaMovilidad, controlFondosFijos, usuario);
-			egresoFacade.grabarGiroMovilidad(egreso, listaMovilidad);
+			egresoGeneradoTrasGrabacion = egresoFacade.grabarGiroMovilidad(egreso, listaMovilidad);
+			procesarItems(egresoGeneradoTrasGrabacion);
 		
 		}else if(intTipoDocumentoGeneral.equals(Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS)){
 			List<DocumentoSunat> listaDocumentoSunat = new ArrayList<DocumentoSunat>();
 			for(DocumentoGeneral documentoGeneral: listaDocumentoAgregados)
 				listaDocumentoSunat.add(documentoGeneral.getDocumentoSunat());
-			egresoFacade.grabarGiroDocumentoSunat(listaEgresoDetalleInterfazAgregado, controlFondosFijos, usuario);
-		//Autor: jchavez / Tarea: Creacion / Fecha: 07.10.2014
+			egresoGeneradoTrasGrabacion = egresoFacade.grabarGiroDocumentoSunat(listaEgresoDetalleInterfazAgregado, controlFondosFijos, usuario);
+			procesarItems(egresoGeneradoTrasGrabacion);
+		//Autor: jchavez / Tarea: Creacion / Fecha: 15.10.2014
 		}else if (listaDocumentoGeneral.get(0).getOrdenCompra()!=null && 
 				(listaDocumentoGeneral.get(0).getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
 						|| listaDocumentoGeneral.get(0).getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))) {
@@ -664,8 +714,9 @@ public class FondosFijosController {
 			for(DocumentoGeneral documentoGeneral: listaDocumentoAgregados){
 				listaOrdenCompra.add(documentoGeneral.getOrdenCompra());
 			}
-			egresoFacade.grabarGiroOrdenCompraDocumento(listaEgresoDetalleInterfazAgregado, controlFondosFijos, usuario, intTipoDocumentoAgregar);
-		}//Fin jchavez - 07.10.2014
+			egresoGeneradoTrasGrabacion = egresoFacade.grabarGiroOrdenCompraDocumento(listaEgresoDetalleInterfazAgregado, controlFondosFijos, usuario, intTipoDocumentoAgregar);
+			procesarItems(egresoGeneradoTrasGrabacion);
+		}//Fin jchavez - 15.10.2014
 		
 		for(DocumentoGeneral documentoGeneral : listaDocumentoGeneral){
 			if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)){				
@@ -676,7 +727,9 @@ public class FondosFijosController {
 				//jchavez 24.06.2014
 				expedienteCredito = egreso.getExpedienteCredito();
 				expedienteCredito.setEgreso(egreso);
-				prestamoFacade.grabarGiroPrestamoPorTesoreria(expedienteCredito);
+				expedienteCredito = prestamoFacade.grabarGiroPrestamoPorTesoreria(expedienteCredito);
+				egresoGeneradoTrasGrabacion = expedienteCredito.getEgreso();
+				procesarItems(egresoGeneradoTrasGrabacion);
 					
 			}else if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_AES) 
 				|| documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
@@ -684,7 +737,9 @@ public class FondosFijosController {
 				ExpedientePrevision expedientePrevision = documentoGeneral.getExpedientePrevision();
 				Egreso egreso = previsionFacade.generarEgresoGiroPrevision(expedientePrevision, controlFondosFijos, usuario);
 				expedientePrevision.setEgreso(egreso);
-				previsionFacade.grabarGiroPrevisionPorTesoreria(expedientePrevision);
+				expedientePrevision = previsionFacade.grabarGiroPrevisionPorTesoreria(expedientePrevision);
+				egresoGeneradoTrasGrabacion = expedientePrevision.getEgreso();
+				procesarItems(egresoGeneradoTrasGrabacion);
 				
 			}else if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)){
 				ExpedienteLiquidacion expedienteLiquidacion = documentoGeneral.getExpedienteLiquidacion();
@@ -700,7 +755,9 @@ public class FondosFijosController {
 				expedienteLiquidacion.getBeneficiarioLiquidacionGirar().setArchivoCartaPoder(archivoCartaPoder);
 				Egreso egreso = liquidacionFacade.generarEgresoGiroLiquidacion(expedienteLiquidacion, controlFondosFijos, usuario);
 				expedienteLiquidacion.setEgreso(egreso);
-				liquidacionFacade.grabarGiroLiquidacionPorTesoreria(expedienteLiquidacion);
+				expedienteLiquidacion = liquidacionFacade.grabarGiroLiquidacionPorTesoreria(expedienteLiquidacion);
+				egresoGeneradoTrasGrabacion = expedienteLiquidacion.getEgreso();
+				procesarItems(egresoGeneradoTrasGrabacion);
 			}
 		}
 	}
@@ -724,35 +781,73 @@ public class FondosFijosController {
 			}else if(documentoGeneral.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)){
 				ExpedienteLiquidacion expedienteLiquidacion = documentoGeneral.getExpedienteLiquidacion();
 				expedienteLiquidacion.setStrGlosaEgreso(strObservacion);
-			//Autor: jchavez / Tarea: Creación / Fecha: 07.10.2014
+			//Autor: jchavez / Tarea: Creación / Fecha: 15.10.2014
 			}else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && 
 					(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
 							|| documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))){
 				OrdenCompra ordCmp = documentoGeneral.getOrdenCompra();
 				ordCmp.setStrGlosaEgreso(strObservacion);
-			}//fin jchavez - 07.10.2014
+			}//fin jchavez - 15 .10.2014
 		}
 		return listaDocumentoGeneral;
 	}
 	
+//	public void buscar(){
+//		log.info("--buscar");
+//		try{
+//			List<ControlFondosFijos> listaControl = new ArrayList<ControlFondosFijos>();
+//			if(intItemControlFiltro.equals(new Integer(0))){
+//				for(ControlFondosFijos cff : listaControlFondosFijosBusqueda)
+//					listaControl.add(cff);				
+//			}else{
+//				listaControl.add(obtenerCFFSeleccionado());			
+//			}
+//			listaPersonaFiltro = new ArrayList<Persona>();
+//			if(strTextoPersonaFiltro!=null && !strTextoPersonaFiltro.isEmpty())
+//				listaPersonaFiltro = personaFacade.buscarListaPersonaParaFiltro(intTipoBusquedaPersona, strTextoPersonaFiltro);							
+//			
+//			listaEgreso = egresoFacade.buscarEgresoParaFondosFijos(listaPersonaFiltro, egresoFiltro, listaControl, dtDesdeFiltro, dtHastaFiltro);
+//			
+//			for(Egreso egreso : listaEgreso)
+//				egreso.setPersonaApoderado(personaFacade.devolverPersonaCargada(egreso.getIntPersPersonaGirado()));
+//			
+//			//ordenamos
+//			Collections.sort(listaEgreso, new Comparator<Egreso>(){
+//				public int compare(Egreso uno, Egreso otro) {
+//					return otro.getStrNumeroEgreso().compareTo(uno.getStrNumeroEgreso());
+//				}
+//			});
+//		}catch (Exception e) {
+//			log.error(e.getMessage(),e);
+//		}
+//	}	
+//	
 	public void buscar(){
 		log.info("--buscar");
-		try{
-			List<ControlFondosFijos> listaControl = new ArrayList<ControlFondosFijos>();
-			if(intItemControlFiltro.equals(new Integer(0))){
-				for(ControlFondosFijos cff : listaControlFondosFijosBusqueda)
-					listaControl.add(cff);				
-			}else{
-				listaControl.add(obtenerCFFSeleccionado());			
+		List<Persona> listaPersonaFiltro = null;
+		listaEgreso.clear();
+//		List<ControlFondosFijos> listaControl = new ArrayList<ControlFondosFijos>();
+		ControlFondosFijos controlFondosFijosBusqueda = new ControlFondosFijos();
+		
+		try{			
+			if(strTextoPersonaFiltro!=null && !strTextoPersonaFiltro.trim().isEmpty()){
+				listaPersonaFiltro = personaFacade.buscarListaPersonaParaFiltro(intTipoBusquedaPersona, strTextoPersonaFiltro);
 			}
-			listaPersonaFiltro = new ArrayList<Persona>();
-			if(strTextoPersonaFiltro!=null && !strTextoPersonaFiltro.isEmpty())
-				listaPersonaFiltro = personaFacade.buscarListaPersonaParaFiltro(intTipoBusquedaPersona, strTextoPersonaFiltro);							
 			
-			listaEgreso = egresoFacade.buscarEgresoParaFondosFijos(listaPersonaFiltro, egresoFiltro, listaControl, dtDesdeFiltro, dtHastaFiltro);
+			controlFondosFijosBusqueda.setId(new ControlFondosFijosId());
+			controlFondosFijosBusqueda.getId().setIntPersEmpresa(SESION_IDEMPRESA);
+			controlFondosFijosBusqueda.getId().setIntParaTipoFondoFijo(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO);
+			controlFondosFijosBusqueda.getId().setIntItemPeriodoFondo(null);
+			controlFondosFijosBusqueda.getId().setIntSucuIdSucursal(SESION_IDSUCURSAL);
+			controlFondosFijosBusqueda.getId().setIntItemFondoFijo(null);
 			
-			for(Egreso egreso : listaEgreso)
-				egreso.setPersonaApoderado(personaFacade.devolverPersonaCargada(egreso.getIntPersPersonaGirado()));
+			listaEgreso = egresoFacade.buscarEgresoParaFondosFijos(listaPersonaFiltro, egresoFiltro, controlFondosFijosBusqueda, dtDesdeFiltro, dtHastaFiltro);
+			
+			if (!listaEgreso.isEmpty()) {
+				for(Egreso egreso : listaEgreso){
+					egreso.setPersonaApoderado(personaFacade.devolverPersonaCargada(egreso.getIntPersPersonaGirado()));
+				}
+			}
 			
 			//ordenamos
 			Collections.sort(listaEgreso, new Comparator<Egreso>(){
@@ -765,34 +860,34 @@ public class FondosFijosController {
 		}
 	}	
 	
-	private ControlFondosFijos obtenerCFFSeleccionado()throws Exception{
-		ControlFondosFijos cffSeleccionado = null;
-		for(ControlFondosFijos cff : listaControlFondosFijosBusqueda)
-			if(cff.getIntItemFiltro().equals(intItemControlFiltro))
-				cffSeleccionado = cff;
-		return cffSeleccionado;
-	}
+//	private ControlFondosFijos obtenerCFFSeleccionado()throws Exception{
+//		ControlFondosFijos cffSeleccionado = null;
+//		for(ControlFondosFijos cff : listaControlFondosFijosBusqueda)
+//			if(cff.getIntItemFiltro().equals(intItemControlFiltro))
+//				cffSeleccionado = cff;
+//		return cffSeleccionado;
+//	}
 	
-	public void obtenerListaNumeroApertura()throws Exception{
-		try{
-			listaControlFondosFijosBusqueda = egresoFacade.obtenerListaNumeroApertura(
-					egresoFiltro.getIntParaTipoFondoFijo(), intAñoFiltro, egresoFiltro.getIntSucuIdSucursal());
-			int intItemInterfaz = 0;
-			for(ControlFondosFijos cff : listaControlFondosFijosBusqueda){
-				intItemInterfaz ++;
-				cff.setIntItemFiltro(intItemInterfaz);
-			}
-			
-			//ordenamos
-			Collections.sort(listaControlFondosFijosBusqueda, new Comparator<ControlFondosFijos>(){
-				public int compare(ControlFondosFijos uno, ControlFondosFijos otro) {
-					return otro.getStrNumeroApertura().compareTo(uno.getStrNumeroApertura());
-				}
-			});
-		}catch (Exception e) {
-			log.error(e.getMessage(),e);
-		}			
-	}
+//	public void obtenerListaNumeroApertura()throws Exception{
+//		try{
+//			listaControlFondosFijosBusqueda = egresoFacade.obtenerListaNumeroApertura(
+//					egresoFiltro.getIntParaTipoFondoFijo(), intAñoFiltro, egresoFiltro.getIntSucuIdSucursal());
+//			int intItemInterfaz = 0;
+//			for(ControlFondosFijos cff : listaControlFondosFijosBusqueda){
+//				intItemInterfaz ++;
+//				cff.setIntItemFiltro(intItemInterfaz);
+//			}
+//			
+//			//ordenamos
+//			Collections.sort(listaControlFondosFijosBusqueda, new Comparator<ControlFondosFijos>(){
+//				public int compare(ControlFondosFijos uno, ControlFondosFijos otro) {
+//					return otro.getStrNumeroApertura().compareTo(uno.getStrNumeroApertura());
+//				}
+//			});
+//		}catch (Exception e) {
+//			log.error(e.getMessage(),e);
+//		}			
+//	}
 	
 	public void deshabilitarPanelInferior(){
 		registrarNuevo = Boolean.FALSE; 
@@ -828,13 +923,25 @@ public class FondosFijosController {
 			limpiarFormulario();
 			deshabilitarNuevo = Boolean.TRUE;
 			habilitarGrabar = Boolean.FALSE;
-			datosValidados = Boolean.TRUE;
+//			datosValidados = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.TRUE;
 			
 			Egreso egreso = (Egreso)event.getComponent().getAttributes().get("item");
 			EgresoDetalle egresoDetalle = obtenerEgresoDetalle(egreso);
 			libroDiario = obtenerLibroDiario(egreso);
 			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 11.09.2014
+			egresoGeneradoTrasGrabacion = new Egreso();
+			egresoGeneradoTrasGrabacion.setIntItemPeriodoEgreso(egreso.getIntItemPeriodoEgreso());
+			egresoGeneradoTrasGrabacion.setIntItemEgreso(egreso.getIntItemEgreso());
+			egresoGeneradoTrasGrabacion.setIntContPeriodoLibro(egreso.getIntContPeriodoLibro());
+			egresoGeneradoTrasGrabacion.setIntContCodigoLibro(egreso.getIntContCodigoLibro());
+			procesarItems(egresoGeneradoTrasGrabacion);
+			
+			
+			
+			
+			//Fin jchavez - 11.09.2014
 			log.info(egreso);
 			egresoNuevo = egreso;
 			/*bdMontoGirar = egreso.getBdMontoTotal();
@@ -842,7 +949,7 @@ public class FondosFijosController {
 			*/
 			strObservacion = egreso.getStrObservacion();
 			controlFondosFijos = egreso.getControlFondosFijos();
-			intTipoFondoFijoValidar = controlFondosFijos.getId().getIntParaTipoFondoFijo();
+//			intTipoFondoFijoValidar = controlFondosFijos.getId().getIntParaTipoFondoFijo();
 			personaSeleccionada = egreso.getPersonaApoderado();
 			intTipoDocumentoAgregar = egresoDetalle.getIntParaDocumentoGeneral();
 			
@@ -860,7 +967,42 @@ public class FondosFijosController {
 				agregarDocumentoDNI(personaSeleccionada);
 			}			
 //			filtrarListaTablaDocumentoGeneral();
-			/****/
+			/* Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014
+			 * Se recupera cuenta bancaria del socio*/
+			String strTipoCuenta = "";
+			String strTipoMoneda = "";
+			Persona pers = personaFacade.getPersonaDetalladaPorIdPersonaYEmpresa(personaSeleccionada.getNatural().getIntIdPersona(), SESION_IDEMPRESA);
+			//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+			if (egreso.getIntPersCuentaBancariaGirado()!=null) {
+				if (pers.getListaCuentaBancaria()!=null && !pers.getListaCuentaBancaria().isEmpty()) {
+					for (CuentaBancaria cb : pers.getListaCuentaBancaria()) {
+						if (cb.getId().getIntIdCuentaBancaria().equals(egreso.getIntPersCuentaBancariaGirado())) {
+							//Fin jchavez - 19.09.2014
+							cuentaBancariaSeleccionada = cb;
+							break;
+						}
+					}
+				}
+				for (Tabla x : listaTablaTipoCuentaBancaria) {
+					if (x.getIntIdDetalle().equals(cuentaBancariaSeleccionada.getIntTipoCuentaCod())) {
+						strTipoCuenta = "Tipo Cuenta: "+x.getStrDescripcion();
+						break;
+					}
+				}
+				for (Tabla y : listaTablaTipoMoneda) {
+					if (y.getIntIdDetalle().equals(cuentaBancariaSeleccionada.getIntMonedaCod())) {
+						strTipoMoneda = " - Moneda: "+y.getStrDescripcion();
+						break;
+					}
+				}
+				cuentaBancariaSeleccionada.setStrEtiqueta(strTipoCuenta+strTipoMoneda+" - Nro. Cuenta: "+cuentaBancariaSeleccionada.getStrNroCuentaBancaria());
+			}else {
+				cuentaBancariaSeleccionada = new CuentaBancaria();
+				cuentaBancariaSeleccionada.setStrEtiqueta("ERROR: No se grabó la cuenta bancaria del apoderado. Verifique.");
+			}
+			
+			
+			
 			
 			
 			documentoGeneralSeleccionado = new DocumentoGeneral();
@@ -948,65 +1090,65 @@ public class FondosFijosController {
 		}
 	}
 	
-	public void seleccionarTipoFondoFijo(){
-		blnActivarNroApertura = true;
-		try{			
-			//Autor: jchavez / Tarea: Modificación / Fecha: 19.08.2014 / 
-			if (intTipoFondoFijoValidar.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
-				blnActivarNroApertura = false;
-			}else{
-				listaControlFondosFijos = new ArrayList<ControlFondosFijos>();
-				if(intTipoFondoFijoValidar.equals(new Integer(0)))
-					return;			
-				ControlFondosFijos controlFondosFijosValidar = new ControlFondosFijos();
-				controlFondosFijosValidar.getId().setIntPersEmpresa(EMPRESA_USUARIO);
-				controlFondosFijosValidar.getId().setIntParaTipoFondoFijo(intTipoFondoFijoValidar);
-				controlFondosFijosValidar.getId().setIntSucuIdSucursal(ID_SUCURSAL_USUARIO);
-				
-				List<ControlFondosFijos> listaTemp1 = egresoFacade.buscarControlFondosFijos(controlFondosFijosValidar);
-				List<ControlFondosFijos> listaTemp = new ArrayList<ControlFondosFijos>();
-				for(ControlFondosFijos cFF : listaTemp1){
-					if(cFF.getIntEstadoFondo().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)) listaTemp.add(cFF);				
-				}
-				
-				HashSet<Integer> hashTipoMonedas = new HashSet<Integer>();
-				for(ControlFondosFijos cFF : listaTemp){
-					Integer intTipoMoneda = egresoFacade.obtenerMonedaDeCFF(cFF);
-					hashTipoMonedas.add(intTipoMoneda);
-				}
-				
-				for(Integer intTipoMoneda : hashTipoMonedas){
-					List<ControlFondosFijos> listaCFF = new ArrayList<ControlFondosFijos>();
-					for(ControlFondosFijos cFF : listaTemp){
-						if(cFF.getIntParaMoneda().equals(intTipoMoneda))	listaCFF.add(cFF);					
-					}
-					listaControlFondosFijos.add(egresoFacade.obtenerControlFondosFijosUltimo(listaCFF));
-				}
-				
-				int intItemInterfaz = 0;
-				for(ControlFondosFijos cff : listaControlFondosFijos){
-					if(cff==null)	continue;				
-					intItemInterfaz = intItemInterfaz + 1 ;				
-					String strEtiqueta = cff.getStrNumeroApertura()+ " - " +
-					MyUtil.obtenerEtiquetaTabla(cff.getIntParaMoneda(), listaMoneda)+" Saldo : "+ cff.getBdMontoSaldo();
-					
-					cff.setStrDescripcion(strEtiqueta);
-					cff.setIntItemFiltro(intItemInterfaz);
-				}
-			}			
-			
-		}catch(Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
+//	public void seleccionarTipoFondoFijo(){
+////		blnActivarNroApertura = true;
+//		try{			
+//			//Autor: jchavez / Tarea: Modificación / Fecha: 19.08.2014 / 
+//			if (intTipoFondoFijoValidar.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+////				blnActivarNroApertura = false;
+//			}else{
+//				listaControlFondosFijos = new ArrayList<ControlFondosFijos>();
+//				if(intTipoFondoFijoValidar.equals(new Integer(0)))
+//					return;			
+//				ControlFondosFijos controlFondosFijosValidar = new ControlFondosFijos();
+//				controlFondosFijosValidar.getId().setIntPersEmpresa(SESION_IDEMPRESA);
+//				controlFondosFijosValidar.getId().setIntParaTipoFondoFijo(intTipoFondoFijoValidar);
+//				controlFondosFijosValidar.getId().setIntSucuIdSucursal(SESION_IDSUCURSAL);
+//				
+//				List<ControlFondosFijos> listaTemp1 = egresoFacade.buscarControlFondosFijos(controlFondosFijosValidar);
+//				List<ControlFondosFijos> listaTemp = new ArrayList<ControlFondosFijos>();
+//				for(ControlFondosFijos cFF : listaTemp1){
+//					if(cFF.getIntEstadoFondo().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)) listaTemp.add(cFF);				
+//				}
+//				
+//				HashSet<Integer> hashTipoMonedas = new HashSet<Integer>();
+//				for(ControlFondosFijos cFF : listaTemp){
+//					Integer intTipoMoneda = egresoFacade.obtenerMonedaDeCFF(cFF);
+//					hashTipoMonedas.add(intTipoMoneda);
+//				}
+//				
+//				for(Integer intTipoMoneda : hashTipoMonedas){
+//					List<ControlFondosFijos> listaCFF = new ArrayList<ControlFondosFijos>();
+//					for(ControlFondosFijos cFF : listaTemp){
+//						if(cFF.getIntParaMoneda().equals(intTipoMoneda))	listaCFF.add(cFF);					
+//					}
+//					listaControlFondosFijos.add(egresoFacade.obtenerControlFondosFijosUltimo(listaCFF));
+//				}
+//				
+//				int intItemInterfaz = 0;
+//				for(ControlFondosFijos cff : listaControlFondosFijos){
+//					if(cff==null)	continue;				
+//					intItemInterfaz = intItemInterfaz + 1 ;				
+//					String strEtiqueta = cff.getStrNumeroApertura()+ " - " +
+//					MyUtil.obtenerEtiquetaTabla(cff.getIntParaMoneda(), listaMoneda)+" Saldo : "+ cff.getBdMontoSaldo();
+//					
+//					cff.setStrDescripcion(strEtiqueta);
+//					cff.setIntItemFiltro(intItemInterfaz);
+//				}
+//			}			
+//			
+//		}catch(Exception e){
+//			log.error(e.getMessage(),e);
+//		}
+//	}
 	
-	private ControlFondosFijos obtenerControlFondosFijosSeleccionado(){
-		for(ControlFondosFijos cff : listaControlFondosFijos){
-			log.info("cff filtro:"+cff.getIntItemFiltro());
-			if(cff.getIntItemFiltro().equals(intControlSeleccionado))	return cff;			
-		}
-		return null;
-	}	
+//	private ControlFondosFijos obtenerControlFondosFijosSeleccionado(){
+//		for(ControlFondosFijos cff : listaControlFondosFijos){
+//			log.info("cff filtro:"+cff.getIntItemFiltro());
+//			if(cff.getIntItemFiltro().equals(intControlSeleccionado))	return cff;			
+//		}
+//		return null;
+//	}	
 	
 //	private void cargarListaTablaDocumentoGeneral() throws Exception{
 //		Bancofondo bancoFondo = controlFondosFijos.getBancoFondo();
@@ -1049,58 +1191,58 @@ public class FondosFijosController {
 		strListaPersonaRolUsar = "";
 		strObservacion = "";
 		intBeneficiarioSeleccionar = null;
-		cuentaActual = null;
+		setCuentaActual(null);
 		bdMontoGirar = null;
 		strMontoGirarDescripcion = "";
 		libroDiario = null;
 		strDiferencialGirarDescripcion = "";
 		bdDiferencialGirar = null;
-		blnActivarNroApertura = true;
+		cuentaBancariaSeleccionada = null;
+//		blnActivarNroApertura = true;
 		listaTablaTipoDocumento.clear();
 	}
 	
-	public void validarDatos(){
-		String mensaje = "";
-		strMensajeErrorPorBeneficiario = "";
-		blnBeneficiarioSinAutorizacion = false;
-		try{
-			log.info("intTipoFondoFijoValidar:"+intTipoFondoFijoValidar);
-			datosValidados = Boolean.FALSE;
-			habilitarGrabar = Boolean.FALSE;
-			deshabilitarNuevo = Boolean.FALSE;
-			limpiarFormulario();
-			
-			if(intTipoFondoFijoValidar.equals(new Integer(0)))
-				return;			
-			//Autor: jchavez / Tarea: Modificación / Fecha: 19.08.2014 / 
-			if (intTipoFondoFijoValidar.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
-				blnActivarNroApertura = false;
-				//pergunta: no se va a obtener el control de fondos fijos????
-			}else{
-				if(intControlSeleccionado.equals(new Integer(0)))
-					return;				
-				controlFondosFijos = obtenerControlFondosFijosSeleccionado();
-				log.info(controlFondosFijos);
-				controlFondosFijos.setEgreso(egresoFacade.getEgresoPorControlFondosFijos(controlFondosFijos));
-				controlFondosFijos.setBancoFondo(bancoFacade.obtenerBancoFondoPorControl(controlFondosFijos));
-				controlFondosFijos.setSucursal(usuario.getSucursal());
-				controlFondosFijos.setSubsucursal(usuario.getSubSucursal());
-//				cargarListaTablaDocumentoGeneral();
-			}			
-			
-			egresoNuevo = new Egreso();
-			egresoNuevo.setDtFechaEgreso(MyUtil.obtenerFechaActual());
-			
-			datosValidados = Boolean.TRUE;
-			habilitarGrabar = Boolean.TRUE;
-			obtenerListaTipoDocumentoGeneral();
-		}catch (Exception e) {
-			log.error(e.getMessage(),e);
-		}finally{
-			if(datosValidados)	ocultarMensaje();
-			else	mostrarMensaje(datosValidados, mensaje);			
-		}
-	}
+//	public void validarDatos(){
+//		String mensaje = "";
+//		strMensajeErrorPorBeneficiario = "";
+//		blnBeneficiarioSinAutorizacion = false;
+//		try{
+//			log.info("intTipoFondoFijoValidar:"+intTipoFondoFijoValidar);
+////			datosValidados = Boolean.FALSE;
+//			habilitarGrabar = Boolean.FALSE;
+//			deshabilitarNuevo = Boolean.FALSE;
+//			limpiarFormulario();
+//			
+//			if(intTipoFondoFijoValidar.equals(new Integer(0)))
+//				return;			
+//			//Autor: jchavez / Tarea: Modificación / Fecha: 19.08.2014 / 
+//			if (intTipoFondoFijoValidar.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+////				blnActivarNroApertura = false;
+//				//pergunta: no se va a obtener el control de fondos fijos????
+//			}else{
+//				if(intControlSeleccionado.equals(new Integer(0)))
+//					return;				
+//				controlFondosFijos = obtenerControlFondosFijosSeleccionado();
+//				log.info(controlFondosFijos);
+//				controlFondosFijos.setEgreso(egresoFacade.getEgresoPorControlFondosFijos(controlFondosFijos));
+//				controlFondosFijos.setBancoFondo(bancoFacade.obtenerBancoFondoPorControl(controlFondosFijos));
+//				controlFondosFijos.setSucursal(usuarioSesion.getSucursal());
+//				controlFondosFijos.setSubsucursal(usuarioSesion.getSubSucursal());
+////				cargarListaTablaDocumentoGeneral();
+//			}			
+//			
+//			egresoNuevo = new Egreso();
+//			egresoNuevo.setDtFechaEgreso(MyUtil.obtenerFechaActual());
+//			
+////			datosValidados = Boolean.TRUE;
+//			habilitarGrabar = Boolean.TRUE;
+//		}catch (Exception e) {
+//			log.error(e.getMessage(),e);
+//		}finally{
+////			if(datosValidados)	ocultarMensaje();
+////			else	mostrarMensaje(datosValidados, mensaje);			
+//		}
+//	}
 	/**Transferencia con Fondos Fijos**/
 		
 	public void abrirPopUpBuscarPersona(){
@@ -1131,6 +1273,7 @@ public class FondosFijosController {
 			documentoGeneralSeleccionado = null;
 			personaApoderado = null;
 			archivoCartaPoder = null;
+			cuentaBancariaSeleccionada = null;
 //			limpiarFormulario();
 		}catch(Exception e){
 			log.error(e.getMessage(), e);
@@ -1145,10 +1288,10 @@ public class FondosFijosController {
 				persona = personaFacade.getPersonaNaturalPorDocIdentidadYIdEmpresa(
 						Constante.PARAM_T_INT_TIPODOCUMENTO_DNI, 
 						strFiltroTextoPersona, 
-						EMPRESA_USUARIO);
+						SESION_IDEMPRESA);
 			
 			}else if(intTipoPersona.equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA)){
-				persona = personaFacade.getPersonaJuridicaYListaPersonaPorRucYIdEmpresa2(strFiltroTextoPersona,EMPRESA_USUARIO);
+				persona = personaFacade.getPersonaJuridicaYListaPersonaPorRucYIdEmpresa2(strFiltroTextoPersona,SESION_IDEMPRESA);
 			}
 			
 			if(persona!=null)listaPersona.add(persona);
@@ -1233,56 +1376,14 @@ public class FondosFijosController {
 			if(!strListaPersonaRolUsar.isEmpty()) strListaPersonaRolUsar = strListaPersonaRolUsar.substring(1);
 
 		} catch (Exception e) {
-			log.info("Error en mostrarRolPersona()---> "+e.getMessage());
+			log.info("Error en mostrarRolPersona() ---> "+e.getMessage());
 		}
 		
 	}
-//	private void filtrarListaTablaDocumentoGeneral() throws Exception{
-//		listaPersonaRolUsar = new ArrayList<PersonaRol>();
-//		strListaPersonaRolUsar = "";
-//		List<Tabla> listaTablaDocumentoGeneralTemp = new ArrayList<Tabla>();
-//		List<Tabla> listaTablaDocumentoGeneralTemp2 = new ArrayList<Tabla>();
-//		List<Tabla> listaTablaRolPermitidos = new ArrayList<Tabla>();
-//		
-//		if(personaSeleccionada.getIntTipoPersonaCod().equals(Constante.PARAM_T_TIPOPERSONA_NATURAL)){
-//			listaTablaRolPermitidos = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOROL), "F");
-//			
-//		}else if(intTipoPersona.equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA)){
-//			listaTablaRolPermitidos = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOROL), "G");
-//		}
-//		
-//		for(PersonaRol personaRol : personaSeleccionada.getPersonaEmpresa().getListaPersonaRol()){
-//			for(Tabla tablaRolPermitido : listaTablaRolPermitidos){
-//				if(personaRol.getId().getIntParaRolPk().equals(tablaRolPermitido.getIntIdDetalle())){
-//					listaPersonaRolUsar.add(personaRol);
-//					strListaPersonaRolUsar = strListaPersonaRolUsar + "/" + tablaRolPermitido.getStrDescripcion();
-//					break;
-//				}
-//			}
-//		}
-//		
-//		//quitamos el 1er caracter de la cadena "/"
-//		if(!strListaPersonaRolUsar.isEmpty()) strListaPersonaRolUsar = strListaPersonaRolUsar.substring(1);
-//		manejarSocioPersona(listaPersonaRolUsar);
-//		
-//		for(PersonaRol personaRolUsar : listaPersonaRolUsar){
-//			listaTablaDocumentoGeneralTemp.addAll(obtenerListaTipoDocumentoGeneral(personaRolUsar.getId().getIntParaRolPk()));
-//		}		
-//		
-//		for(Tabla tablaDocumentoGeneral : listaTablaDocumentoGeneral){
-//			for(Tabla tablaDocumentoGeneralTemp : listaTablaDocumentoGeneralTemp){
-//				if(tablaDocumentoGeneral.getIntIdDetalle().equals(tablaDocumentoGeneralTemp.getIntIdDetalle())){
-//					listaTablaDocumentoGeneralTemp2.add(tablaDocumentoGeneral);
-//					break;
-//				}
-//			}
-//		}
-//		listaTablaDocumentoGeneral = listaTablaDocumentoGeneralTemp2;
-//		//listaTablaDocumentoGeneral = listaTablaDocumentoGeneralTemp;	
-//	}
-	
 	
 	public void seleccionarPersona(ActionEvent event){
+		String strTipoCuenta = "";
+		String strTipoMoneda = "";
 		try{
 			log.info("intTipoBuscarPersona:"+intTipoBuscarPersona);
 			if(intTipoBuscarPersona.equals(BUSCAR_PERSONA)){
@@ -1291,12 +1392,36 @@ public class FondosFijosController {
 					agregarNombreCompleto(personaSeleccionada);
 					agregarDocumentoDNI(personaSeleccionada);
 				}				
-//				filtrarListaTablaDocumentoGeneral();
 			
 			}else if(intTipoBuscarPersona.equals(BUSCAR_APODERADO)){
 				personaApoderado = (Persona)event.getComponent().getAttributes().get("item");
 				agregarNombreCompleto(personaApoderado);
 				agregarDocumentoDNI(personaApoderado);
+			}
+			if (personaSeleccionada.getListaCuentaBancaria()!=null && !personaSeleccionada.getListaCuentaBancaria().isEmpty()) {
+				List<CuentaBancaria> lstCtaBancaria = new ArrayList<CuentaBancaria>();
+				for (CuentaBancaria x : personaSeleccionada.getListaCuentaBancaria()) {
+					if (x.getIntBancoCod().equals(Constante.PARAM_T_BANCO_BANCODECREDITO)) {
+						lstCtaBancaria.add(x);
+						for (Tabla ctaBca : listaTablaTipoCuentaBancaria) {
+							if (ctaBca.getIntIdDetalle().equals(x.getIntTipoCuentaCod())) {
+								strTipoCuenta = "Tipo Cuenta: "+ctaBca.getStrDescripcion();
+								break;
+							}
+						}
+						for (Tabla tipMda : listaTablaTipoMoneda) {
+							if (tipMda.getIntIdDetalle().equals(x.getIntMonedaCod())) {
+								strTipoMoneda = " - Moneda: "+tipMda.getStrDescripcion();
+								break;
+							}
+						}
+						x.setStrEtiqueta(strTipoCuenta+strTipoMoneda+" - Nro. Cuenta: "+x.getStrNroCuentaBancaria());
+					}
+				}
+				personaSeleccionada.getListaCuentaBancaria().clear();
+				if (!lstCtaBancaria.isEmpty()) {
+					personaSeleccionada.getListaCuentaBancaria().addAll(lstCtaBancaria);
+				}
 			}
 			mostrarRolPersona();
 		}catch(Exception e){
@@ -1314,7 +1439,7 @@ public class FondosFijosController {
 			log.info("intTipoDocumentoAgregar:"+intTipoDocumentoAgregar);
 			
 			if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)){
-				List<Movilidad> listaMovilidad = egresoFacade.buscarMovilidadParaGiroDesdeFondo(intIdPersona, EMPRESA_USUARIO);
+				List<Movilidad> listaMovilidad = egresoFacade.buscarMovilidadParaGiroDesdeFondo(intIdPersona, SESION_IDEMPRESA);
 				for(Movilidad movilidad : listaMovilidad){
 					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
 					documentoGeneral.setIntTipoDocumento(intTipoDocumentoAgregar);
@@ -1328,7 +1453,7 @@ public class FondosFijosController {
 				}
 			
 			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_PRESTAMOS)){
-				List<ExpedienteCredito> listaExpedienteCredito = prestamoFacade.obtenerExpedientePorIdPersonayIdEmpresa(intIdPersona, EMPRESA_USUARIO);
+				List<ExpedienteCredito> listaExpedienteCredito = prestamoFacade.obtenerExpedientePorIdPersonayIdEmpresa(intIdPersona, SESION_IDEMPRESA);
 				for(ExpedienteCredito expedienteCredito : listaExpedienteCredito){
 					EstadoCredito estadoCredito = expedienteCredito.getListaEstadoCredito().get(0);
 					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
@@ -1346,7 +1471,7 @@ public class FondosFijosController {
 				|| intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
 				|| intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)){
 				List<ExpedientePrevision> listaExpedientePrevision = previsionFacade.buscarExpedienteParaGiroDesdeFondo(intIdPersona, 
-						EMPRESA_USUARIO, intTipoDocumentoAgregar);
+						SESION_IDEMPRESA, intTipoDocumentoAgregar);
 				for(ExpedientePrevision expedientePrevision : listaExpedientePrevision){
 					EstadoPrevision estadoPrevision = expedientePrevision.getEstadoPrevisionUltimo();
 					if (estadoPrevision.getIntParaEstado().equals(Constante.PARAM_T_ESTADOSOLICITUD_APROBADO)) {
@@ -1365,7 +1490,7 @@ public class FondosFijosController {
 				
 			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)){
 				List<ExpedienteLiquidacion> listaExpedienteLiquidacion = liquidacionFacade.buscarExpedienteParaGiroDesdeFondo(intIdPersona, 
-						EMPRESA_USUARIO);
+						SESION_IDEMPRESA);
 				for(ExpedienteLiquidacion expedienteLiquidacion : listaExpedienteLiquidacion){
 					EstadoLiquidacion estadoLiquidacion = expedienteLiquidacion.getEstadoLiquidacionUltimo();
 					if (estadoLiquidacion.getIntParaEstado().equals(Constante.PARAM_T_ESTADOSOLICITUD_APROBADO)) {
@@ -1381,7 +1506,7 @@ public class FondosFijosController {
 					}					
 				}
 			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS)){
-				List<DocumentoSunat> listaDocumentoSunat = logisticaFacade.buscarDocumentoSunatParaGiroDesdeFondo(intIdPersona, EMPRESA_USUARIO);
+				List<DocumentoSunat> listaDocumentoSunat = logisticaFacade.buscarDocumentoSunatParaGiroDesdeFondo(intIdPersona, SESION_IDEMPRESA);
 				for(DocumentoSunat documentoSunat : listaDocumentoSunat){
 					log.info(documentoSunat);
 					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
@@ -1392,10 +1517,24 @@ public class FondosFijosController {
 					documentoGeneral.setDocumentoSunat(documentoSunat);
 					listaDocumentoPorAgregar.add(documentoGeneral);
 				}
-			}
-			//Autor: jchavez / Tarea: Creación / Fecha: 04.10.2014
+			}//Autor: jchavez / Tarea: Creación / Fecha: 11.10.2014
 			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
-				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
+				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+					log.info(ordenCompra);
+					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+					BigDecimal bdMonto = BigDecimal.ZERO;
+					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+					}
+					documentoGeneral.setBdMonto(bdMonto);
+					documentoGeneral.setOrdenCompra(ordenCompra);
+					listaDocumentoPorAgregar.add(documentoGeneral);
+				}
+			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
 				for (OrdenCompra ordenCompra : listaOrdenCompra) {
 					log.info(ordenCompra);
 					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
@@ -1410,27 +1549,8 @@ public class FondosFijosController {
 					listaDocumentoPorAgregar.add(documentoGeneral);
 				}
 			}
-			//Fin jchavez - 04.10.2014
-			//Autor: jchavez / Tarea: Creación / Fecha: 10.10.2014
-			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
-				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
-				for (OrdenCompra ordenCompra : listaOrdenCompra) {
-					log.info(ordenCompra);
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
-					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
-					BigDecimal bdMonto = BigDecimal.ZERO;
-					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
-						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
-					}
-					documentoGeneral.setBdMonto(bdMonto);
-					documentoGeneral.setOrdenCompra(ordenCompra);
-					listaDocumentoPorAgregar.add(documentoGeneral);
-				}
-			}
-			//Fin jchavez - 10.10.2014
+			//Fin jchavez - 11.10.2014
 			
-			//listaDocumentoPorAgregar = filtrarDuplicidadDocumentoGeneral(listaDocumentoPorAgregar, intTipoDocumentoAgregar);
 			listaDocumentoPorAgregar = egresoFacade.filtrarDuplicidadDocumentoGeneralParaEgreso(listaDocumentoPorAgregar, 
 					intTipoDocumentoAgregar, listaDocumentoAgregados);
 		}catch(Exception e){
@@ -1514,40 +1634,8 @@ public class FondosFijosController {
 		}
 		expedienteLiquidacion.setListaPersona(listaPersona);
 		listaBeneficiarioPersona.addAll(listaPersona);
-		
-		
-//		HashSet<Integer> hashIntIdPersona = new HashSet<Integer>();
-//		for(BeneficiarioLiquidacion beneficiarioLiquidacion : listaBeneficiarioLiquidacionTemp){
-//			log.info(beneficiarioLiquidacion);
-//			//Solo listaremos los beneficiarios que aun no hayan girado
-//			if(beneficiarioLiquidacion.getIntItemEgresoGeneral()==null || deshabilitarNuevo==Boolean.TRUE){
-//				hashIntIdPersona.add(beneficiarioLiquidacion.getIntPersPersonaBeneficiario());
-//			}
-//		}
-//		
-//		List<Persona> listaPersona = new ArrayList<Persona>();
-//		for(Integer intIdPersona : hashIntIdPersona){
-//			log.info(intIdPersona);
-//			Integer intItemVinculo = null;
-//			for(BeneficiarioLiquidacion beneficiarioLiquidacion : listaBeneficiarioLiquidacionTemp){
-//				log.info(beneficiarioLiquidacion);
-//				if(beneficiarioLiquidacion.getIntPersPersonaBeneficiario().equals(intIdPersona)){
-//					intItemVinculo = beneficiarioLiquidacion.getIntItemViculo();
-//					break;
-//				}
-//			}
-//			String strEtiqueta = "";
-//			Persona persona = personaFacade.devolverPersonaCargada(intIdPersona);
-//			strEtiqueta = intItemVinculo + " - " + persona.getNatural().getStrNombreCompleto();
-//			strEtiqueta = strEtiqueta + " - DNI : " + persona.getDocumento().getStrNumeroIdentidad();
-//			strEtiqueta = strEtiqueta + " - VINCULO : "+MyUtil.obtenerEtiquetaTabla(intItemVinculo,listaTipoVinculo);
-//			persona.setStrEtiqueta(strEtiqueta);
-//			
-//			listaPersona.add(persona);
-//		}
-//		expedienteLiquidacion.setListaPersona(listaPersona);
-//		listaBeneficiarioPersona.addAll(listaPersona);
 	}
+	
 	//10.06.2014
 	private Persona devolverPersonaCargada(Integer intIdPersona) throws Exception{
 		//log.info(intIdPersona);
@@ -1563,6 +1651,7 @@ public class FondosFijosController {
 		
 		return persona;
 	}
+	
 	//10.06.2014
 	private String obtenerEtiquetaVinculo(Integer intItemVinculo) throws Exception{
 		Vinculo vinculo = personaFacade.getVinculoPorId(intItemVinculo);
@@ -1573,6 +1662,7 @@ public class FondosFijosController {
 		}
 		return null;
 	}
+	
 	public void seleccionarDocumento(ActionEvent event){
 		blnBeneficiarioSinAutorizacion = false;
 		documentoGeneralSeleccionado = null;
@@ -1586,12 +1676,12 @@ public class FondosFijosController {
 			if(documentoGeneralSeleccionado.getIntTipoDocumento().equals(Constante.PARAM_T_DOCUMENTOGENERAL_PLANILLAMOVILIDAD)){
 				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(Constante.PARAM_T_TIPOMONEDA_SOLES)+" ";
 			}
-			
+			//Autor: jchavez / Tarea: Creacion / Fecha: 15.10.2014
 			if(documentoGeneralSeleccionado.getOrdenCompra()!=null && 
 					(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
 							|| documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))){
 				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaTipoMoneda())+" ";
-			}
+			}//Fin jchavez - 15.10.2014
 			strEtiqueta = strEtiqueta + formato.format(documentoGeneralSeleccionado.getBdMonto());
 			
 			documentoGeneralSeleccionado.setStrEtiqueta(strEtiqueta);
@@ -1623,8 +1713,6 @@ public class FondosFijosController {
 					blnVerBotonApoderado = true;
 				}
 			}
-			
-			
 			log.info("mensajito: "+strMensajeError);
 			log.info("No Existe Requisito: "+blnNoExisteRequisito);
 		}catch(Exception e){
@@ -1649,16 +1737,6 @@ public class FondosFijosController {
 		}
 		return "";
 	}
-	
-//	private String obtenerEtiquetaTipoCredito(Integer intTipoCredito){
-//		for(Tabla tabla : listaTablaTipoCredito){
-//			if(tabla.getIntIdDetalle().equals(intTipoCredito)){
-//				return tabla.getStrDescripcion();
-//			}
-//		}
-//		return "";
-//	}
-	
 	
 	/**
 	 * Metodo que recupera el movimiento generado en cuenta por pagar
@@ -1743,12 +1821,6 @@ public class FondosFijosController {
 		}else{
 			expedienteLiquidacion.setEsUltimoBeneficiarioAGirar(Boolean.FALSE);
 		}
-//		for (BeneficiarioLiquidacion x : listaBeneficiarioLiquidacion) {
-//			if (x.getIntPersPersonaBeneficiario().equals(intBeneficiarioSeleccionar)) {
-//				expedienteLiquidacion.setBeneficiarioLiquidacionGirar(x);		
-//				break;
-//			}
-//		}
 		
 		expedienteLiquidacion.setIntIdPersonaBeneficiarioGirar(intBeneficiarioSeleccionar);
 		
@@ -1857,7 +1929,7 @@ public class FondosFijosController {
 				expedienteCredito.setPersonaGirar(personaSeleccionada);
 				expedienteCredito.setPersonaApoderado(personaApoderado);
 				expedienteCredito.setArchivoCartaPoder(archivoCartaPoder);
-				SocioEstructura socioEstructura = obtenerSocioEstructura(personaSeleccionada, EMPRESA_USUARIO);
+				SocioEstructura socioEstructura = obtenerSocioEstructura(personaSeleccionada, SESION_IDEMPRESA);
 				
 				expedienteCredito.setListaCancelacionCredito(prestamoFacade.getListaCancelacionCreditoPorExpedienteCredito(expedienteCredito));
 				List<EgresoDetalleInterfaz> listaEDI = prestamoFacade.cargarListaEgresoDetalleInterfaz(expedienteCredito);
@@ -1888,7 +1960,7 @@ public class FondosFijosController {
 				}
 				manejarAgregarExpedientePrevision();
 				ExpedientePrevision expedientePrevision = documentoGeneralSeleccionado.getExpedientePrevision();
-				SocioEstructura socioEstructura = obtenerSocioEstructura(personaSeleccionada, EMPRESA_USUARIO);				
+				SocioEstructura socioEstructura = obtenerSocioEstructura(personaSeleccionada, SESION_IDEMPRESA);				
 				List<EgresoDetalleInterfaz> listaEDI = expedientePrevision.getListaEgresoDetalleInterfaz();
 				expedientePrevision.setPersonaGirar(personaSeleccionada);
 				expedientePrevision.setListaEgresoDetalleInterfaz(listaEDI);
@@ -1913,7 +1985,7 @@ public class FondosFijosController {
 				expedienteLiquidacion.setPersonaGirar(personaSeleccionada);
 				expedienteLiquidacion.setListaEgresoDetalleInterfaz(listaEDI);
 				
-				SocioEstructura socioEstructura = obtenerSocioEstructura(personaSeleccionada, EMPRESA_USUARIO);
+				SocioEstructura socioEstructura = obtenerSocioEstructura(personaSeleccionada, SESION_IDEMPRESA);
 				
 				for(EgresoDetalleInterfaz eDI : listaEDI){
 					eDI.setIntParaDocumentoGeneral(expedienteLiquidacion.getIntParaDocumentoGeneral());
@@ -1939,8 +2011,7 @@ public class FondosFijosController {
 					listaEgresoDetalleInterfazAgregado.add(eDI);
 				}
 				documentoSunat.setPersonaGirar(personaSeleccionada);
-			}
-			//Autor: jchavez / Tarea: Creacion / Fecha: 06.10.2014
+			}//Autor: jchavez / Tarea: Creacion / Fecha: 15.10.2014
 			else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
 				OrdenCompra ordenCompra = documentoGeneralSeleccionado.getOrdenCompra();
 				List<EgresoDetalleInterfaz> listaEDI = egresoFacade.cargarListaEgresoDetalleInterfazOrdenCompra(ordenCompra, intTipoDocumentoAgregar);
@@ -1952,11 +2023,7 @@ public class FondosFijosController {
 					eDI.setOrdenCompra(ordenCompra);
 					listaEgresoDetalleInterfazAgregado.add(eDI);
 				}
-//				documentoSunat.setPersonaGirar(personaSeleccionada);
-			}
-			//Fin jchavez - 06.10.2014
-			//Autor: jchavez / Tarea: Creacion / Fecha: 10.10.2014
-			else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+			}else if(documentoGeneralSeleccionado.getOrdenCompra()!=null && documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
 				OrdenCompra ordenCompra = documentoGeneralSeleccionado.getOrdenCompra();
 				List<EgresoDetalleInterfaz> listaEDI = egresoFacade.cargarListaEgresoDetalleInterfazOrdenCompra(ordenCompra, intTipoDocumentoAgregar);
 				for(EgresoDetalleInterfaz eDI : listaEDI){
@@ -1967,8 +2034,8 @@ public class FondosFijosController {
 					eDI.setOrdenCompra(ordenCompra);
 					listaEgresoDetalleInterfazAgregado.add(eDI);
 				}
-			}
-			//Fin jchavez - 10.10.2014
+			}//Fin jchavez - 15.10.2014
+			
 			
 			for(EgresoDetalleInterfaz egresoDetalleInterfaz : listaEgresoDetalleInterfazAgregado){
 				if(egresoDetalleInterfaz.getIntOrden()==null){
@@ -1980,16 +2047,10 @@ public class FondosFijosController {
 					intOrden++;
 				}
 			}
-			//Autor: jchavez / Tarea: Modificación / Fecha: 19.08.2014 / Para telecrédito se envía por defecto soles
-			if (intTipoFondoFijoValidar.equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
-				strMontoGirarDescripcion = ConvertirLetras.convertirMontoALetras(bdMontoGirar, Constante.PARAM_T_TIPOMONEDA_SOLES);
-				strDiferencialGirarDescripcion = ConvertirLetras.convertirMontoALetras(bdDiferencialGirar, Constante.PARAM_T_TIPOMONEDA_SOLES);
-			}else{
-				strMontoGirarDescripcion = ConvertirLetras.convertirMontoALetras(bdMontoGirar, controlFondosFijos.getIntParaMoneda());
-				strDiferencialGirarDescripcion = ConvertirLetras.convertirMontoALetras(bdDiferencialGirar, controlFondosFijos.getIntParaMoneda());
-				
-			}
 			
+			strMontoGirarDescripcion = ConvertirLetras.convertirMontoALetras(bdMontoGirar, Constante.PARAM_T_TIPOMONEDA_SOLES);
+			strDiferencialGirarDescripcion = ConvertirLetras.convertirMontoALetras(bdDiferencialGirar, Constante.PARAM_T_TIPOMONEDA_SOLES);
+		
 			listaDocumentoAgregados.add(documentoGeneralSeleccionado);
 			
 			//Ordenamos por intOrden
@@ -2016,7 +2077,6 @@ public class FondosFijosController {
 			blnVerBotonApoderado = false;
 			deshabilitarNuevo = true;
 			blnHabilitarObservacion = false;
-//			documentoGeneralSeleccionado = null;
 			ocultarMensaje();
 		}catch(Exception e){
 			mostrarMensaje(Boolean.FALSE,"Ocurrió un error al agregar el documento.");
@@ -2024,48 +2084,59 @@ public class FondosFijosController {
 		}
 	}	
 	
-//	private List<Tabla> obtenerListaTipoDocumentoGeneral(Integer intTipoRol){
-//		List<Tabla> listaTablaTipoDocumento = new ArrayList<Tabla>();
-//		try{
-//			log.info("--obtenerListaTipoDocumentoGeneral");
-//			if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_PERSONAL)){
-//				listaTablaTipoDocumento  = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "P");
-//				
-//			}else if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_SOCIO)){
-//				listaTablaTipoDocumento  = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "S");
-//				
-//			}else if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_USUARIO)){
-//				listaTablaTipoDocumento  = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "U");
-//				
-//			}else if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_ENTIDADREGULADORA)){
-//				listaTablaTipoDocumento = new ArrayList<Tabla>();
-//				
-//			}else if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_ENTIDADDESCUENTOS)){
-//				listaTablaTipoDocumento = new ArrayList<Tabla>();
-//				
-//			}else if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_UNIDADEJECUTORA)){
-//				listaTablaTipoDocumento  = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "E");
-//				
-//			}else if(intTipoRol.equals(Constante.PARAM_T_TIPOROL_PROVEEDOR)){
-//				listaTablaTipoDocumento  = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "V");
-//				
-//			}
-//			
-//			Tabla tabla = tablaFacade.getTablaPorIdMaestroYIdDetalle(
-//					Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS);
-//			log.info(tabla);
-//			listaTablaTipoDocumento.add(tabla);
-//		}catch(Exception e){
-//			log.error(e.getMessage(), e);
-//		}
-//		return listaTablaTipoDocumento;
-//	}	
+	public void seleccionarCuentaBancaria(ActionEvent event){
+		String strTipoCuenta = "";
+		String strTipoMoneda = "";
+		try{
+			cuentaBancariaSeleccionada = (CuentaBancaria)event.getComponent().getAttributes().get("item");
+			for (Tabla x : listaTablaTipoCuentaBancaria) {
+				if (x.getIntIdDetalle().equals(cuentaBancariaSeleccionada.getIntTipoCuentaCod())) {
+					strTipoCuenta = "Tipo Cuenta: "+x.getStrDescripcion();
+					break;
+				}
+			}
+			for (Tabla y : listaTablaTipoMoneda) {
+				if (y.getIntIdDetalle().equals(cuentaBancariaSeleccionada.getIntMonedaCod())) {
+					strTipoMoneda = " - Moneda: "+y.getStrDescripcion();
+					break;
+				}
+			}
+			cuentaBancariaSeleccionada.setStrEtiqueta(strTipoCuenta+strTipoMoneda+" - Nro. Cuenta: "+cuentaBancariaSeleccionada.getStrNroCuentaBancaria());
+			log.info(personaSeleccionada);
+		}catch(Exception e){
+			log.error(e.getMessage(), e);
+		}
+	}
+
+	public void procesarItems(Egreso egreso){ 
+		egreso.setStrNumeroEgreso(
+				obtenerPeriodoItem(	egreso.getIntItemPeriodoEgreso(), 
+									egreso.getIntItemEgreso(), 
+									"000000"));
+			
+		if(egreso.getIntContPeriodoLibro()!=null){
+			egreso.setStrNumeroLibro(
+					obtenerPeriodoItem(	egreso.getIntContPeriodoLibro(),
+										egreso.getIntContCodigoLibro(), 
+										"000000"));
+		}		
+	}
+	
+	private String obtenerPeriodoItem(Integer intPeriodo, Integer item, String patron){
+		try{
+			DecimalFormat formato = new DecimalFormat(patron);
+			return intPeriodo+"-"+formato.format(Double.parseDouble(""+item));
+		}catch (Exception e) {
+			log.error(intPeriodo+" "+item+" "+patron+e.getMessage());
+			return intPeriodo+"-"+item;
+		}
+	}
 	
 	public void obtenerListaTipoDocumentoGeneral(){
 		listaTablaTipoDocumento.clear();
 		List<Fondodetalle> lstFdoDetalle = null;
 		try {
-			lstFdoDetalle = bancoFacade.getDocumentoPorFondoFijo(EMPRESA_USUARIO, intTipoFondoFijoValidar, controlFondosFijos.getIntParaMoneda());
+			lstFdoDetalle = bancoFacade.getDocumentoPorFondoFijo(SESION_IDEMPRESA, intTipoFondoFijoValidar, (controlFondosFijos.getIntParaMoneda()!=null?controlFondosFijos.getIntParaMoneda():Constante.PARAM_T_TIPOMONEDA_SOLES));
 			if (lstFdoDetalle!=null && !lstFdoDetalle.isEmpty()) {
 				for (Fondodetalle fondodetalle : lstFdoDetalle) {
 					if (fondodetalle.getIntTotalsucursalCod()!=null) {						
@@ -2077,7 +2148,7 @@ public class FondosFijosController {
 								}
 							}
 						}else if (fondodetalle.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_AGENCIAS)) {
-							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_AGENCIA)) {
+							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_AGENCIA)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
 										listaTablaTipoDocumento.add(o);
@@ -2086,7 +2157,7 @@ public class FondosFijosController {
 								}
 							}							
 						}else if (fondodetalle.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_FILIALES)) {
-							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_FILIAL)) {
+							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_FILIAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
 										listaTablaTipoDocumento.add(o);
@@ -2095,7 +2166,7 @@ public class FondosFijosController {
 								}
 							}							
 						}else if (fondodetalle.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_OFICINAPRINCIPAL)) {
-							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_OFICINAPRINCIPAL)) {
+							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_OFICINAPRINCIPAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
 										listaTablaTipoDocumento.add(o);
@@ -2104,7 +2175,7 @@ public class FondosFijosController {
 								}
 							}							
 						}else if (fondodetalle.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_SEDE)) {
-							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL)) {
+							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
 										listaTablaTipoDocumento.add(o);
@@ -2134,108 +2205,44 @@ public class FondosFijosController {
 	
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-	}
-	
+	}	
 	public Object getSessionBean(String beanName) {
 		HttpSession sesion = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);		
 		return sesion.getAttribute(beanName);
+	}	
+	protected String getRequestParameter(String name) {
+		return (String) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestParameterMap().get(name);
 	}
-	
-	public String getMensajeOperacion() {
-		return mensajeOperacion;
+	public Boolean getPermiso() {
+		return poseePermiso;
 	}
-	public void setMensajeOperacion(String mensajeOperacion) {
-		this.mensajeOperacion = mensajeOperacion;
+	public void setPermiso(Boolean permiso) {
+		this.poseePermiso = permiso;
 	}
-	public String getMensajePopUp() {
-		return mensajePopUp;
+	public Boolean getEstadoTab() {
+		return estadoTab;
 	}
-	public void setMensajePopUp(String mensajePopUp) {
-		this.mensajePopUp = mensajePopUp;
+	public void setEstadoTab(Boolean estadoTab) {
+		this.estadoTab = estadoTab;
+	}	
+	public void setIntTipoPersonaFiltro(Integer intTipoPersonaFiltro) {
+		this.intTipoPersonaFiltro = intTipoPersonaFiltro;
 	}
-	public boolean isMostrarBtnEliminar() {
-		return mostrarBtnEliminar;
+	public Integer getIntTipoPersonaFiltro() {
+		return intTipoPersonaFiltro;
 	}
-	public void setMostrarBtnEliminar(boolean mostrarBtnEliminar) {
-		this.mostrarBtnEliminar = mostrarBtnEliminar;
+	public String getStrMensajeError() {
+		return strMensajeError;
 	}
-	public boolean isMostrarMensajeExito() {
-		return mostrarMensajeExito;
+	public void setStrMensajeError(String strMensajeError) {
+		this.strMensajeError = strMensajeError;
 	}
-	public void setMostrarMensajeExito(boolean mostrarMensajeExito) {
-		this.mostrarMensajeExito = mostrarMensajeExito;
+	public Egreso getEgresoFiltro() {
+		return egresoFiltro;
 	}
-	public boolean isMostrarMensajeError() {
-		return mostrarMensajeError;
-	}
-	public void setMostrarMensajeError(boolean mostrarMensajeError) {
-		this.mostrarMensajeError = mostrarMensajeError;
-	}
-	public boolean isDeshabilitarNuevo() {
-		return deshabilitarNuevo;
-	}
-	public void setDeshabilitarNuevo(boolean deshabilitarNuevo) {
-		this.deshabilitarNuevo = deshabilitarNuevo;
-	}
-	public boolean isMostrarPanelInferior() {
-		return mostrarPanelInferior;
-	}
-	public void setMostrarPanelInferior(boolean mostrarPanelInferior) {
-		this.mostrarPanelInferior = mostrarPanelInferior;
-	}
-	public boolean isRegistrarNuevo() {
-		return registrarNuevo;
-	}
-	public void setRegistrarNuevo(boolean registrarNuevo) {
-		this.registrarNuevo = registrarNuevo;
-	}
-	public boolean isHabilitarGrabar() {
-		return habilitarGrabar;
-	}
-	public void setHabilitarGrabar(boolean habilitarGrabar) {
-		this.habilitarGrabar = habilitarGrabar;
-	}
-	public boolean isDatosValidados() {
-		return datosValidados;
-	}
-	public void setDatosValidados(boolean datosValidados) {
-		this.datosValidados = datosValidados;
-	}
-	public List<Egreso> getListaEgreso() {
-		return listaEgreso;
-	}
-	public void setListaEgreso(List<Egreso> listaEgreso) {
-		this.listaEgreso = listaEgreso;
-	}
-	public Sucursal getSucursalUsuario() {
-		return sucursalUsuario;
-	}
-	public void setSucursalUsuario(Sucursal sucursalUsuario) {
-		this.sucursalUsuario = sucursalUsuario;
-	}
-	public Subsucursal getSubsucursalUsuario() {
-		return subsucursalUsuario;
-	}
-	public void setSubsucursalUsuario(Subsucursal subsucursalUsuario) {
-		this.subsucursalUsuario = subsucursalUsuario;
-	}
-	public Egreso getEgresoNuevo() {
-		return egresoNuevo;
-	}
-	public void setEgresoNuevo(Egreso egresoNuevo) {
-		this.egresoNuevo = egresoNuevo;
-	}
-	public List<Tabla> getListaSubTipoOperacion() {
-		return listaSubTipoOperacion;
-	}
-	public void setListaSubTipoOperacion(List<Tabla> listaSubTipoOperacion) {
-		this.listaSubTipoOperacion = listaSubTipoOperacion;
-	}
-	public BigDecimal getBdMontoGirar() {
-		return bdMontoGirar;
-	}
-	public void setBdMontoGirar(BigDecimal bdMontoGirar) {
-		this.bdMontoGirar = bdMontoGirar;
+	public void setEgresoFiltro(Egreso egresoFiltro) {
+		this.egresoFiltro = egresoFiltro;
 	}
 	public Date getDtDesdeFiltro() {
 		return dtDesdeFiltro;
@@ -2249,95 +2256,174 @@ public class FondosFijosController {
 	public void setDtHastaFiltro(Date dtHastaFiltro) {
 		this.dtHastaFiltro = dtHastaFiltro;
 	}
-	public Egreso getEgresoFiltro() {
-		return egresoFiltro;
+	public String getStrTextoPersonaFiltro() {
+		return strTextoPersonaFiltro;
 	}
-	public void setEgresoFiltro(Egreso egresoFiltro) {
-		this.egresoFiltro = egresoFiltro;
+	public void setStrTextoPersonaFiltro(String strTextoPersonaFiltro) {
+		this.strTextoPersonaFiltro = strTextoPersonaFiltro;
 	}
-	public Integer getIntTipoPersona() {
-		return intTipoPersona;
+	public List<Egreso> getListaEgreso() {
+		return listaEgreso;
 	}
-	public void setIntTipoPersona(Integer intTipoPersona) {
-		this.intTipoPersona = intTipoPersona;
+	public void setListaEgreso(List<Egreso> listaEgreso) {
+		this.listaEgreso = listaEgreso;
+	}	
+	public List<Tabla> getListaTablaEstado() {
+		return listaTablaEstado;
 	}
-	public List<Persona> getListaPersona() {
-		return listaPersona;
+	public void setListaTablaEstado(List<Tabla> listaTablaEstado) {
+		this.listaTablaEstado = listaTablaEstado;
 	}
-	public void setListaPersona(List<Persona> listaPersona) {
-		this.listaPersona = listaPersona;
+	public void setMostrarMensajeExito(Boolean mostrarMensajeExito) {
+		this.mostrarMensajeExito = mostrarMensajeExito;
 	}
-	public String getStrFiltroTextoPersona() {
-		return strFiltroTextoPersona;
+	public Boolean getMostrarMensajeExito() {
+		return mostrarMensajeExito;
 	}
-	public void setStrFiltroTextoPersona(String strFiltroTextoPersona) {
-		this.strFiltroTextoPersona = strFiltroTextoPersona;
+	public void setMostrarMensajeError(Boolean mostrarMensajeError) {
+		this.mostrarMensajeError = mostrarMensajeError;
 	}
-	public Persona getPersonaSeleccionada() {
-		return personaSeleccionada;
+	public Boolean getMostrarMensajeError() {
+		return mostrarMensajeError;
 	}
-	public void setPersonaSeleccionada(Persona personaSeleccionada) {
-		this.personaSeleccionada = personaSeleccionada;
+	public void setMostrarPanelInferior(Boolean mostrarPanelInferior) {
+		this.mostrarPanelInferior = mostrarPanelInferior;
 	}
-	public CuentaBancaria getCuentaBancariaSeleccionada() {
-		return cuentaBancariaSeleccionada;
+	public Boolean getMostrarPanelInferior() {
+		return mostrarPanelInferior;
 	}
-	public void setCuentaBancariaSeleccionada(CuentaBancaria cuentaBancariaSeleccionada) {
-		this.cuentaBancariaSeleccionada = cuentaBancariaSeleccionada;
+	public Integer getIntTipoBusquedaPersona() {
+		return intTipoBusquedaPersona;
 	}
-	public Integer getIntTipoDocumentoAgregar() {
-		return intTipoDocumentoAgregar;
+	public void setIntTipoBusquedaPersona(Integer intTipoBusquedaPersona) {
+		this.intTipoBusquedaPersona = intTipoBusquedaPersona;
 	}
-	public void setIntTipoDocumentoAgregar(Integer intTipoDocumentoAgregar) {
-		this.intTipoDocumentoAgregar = intTipoDocumentoAgregar;
+	public void setListaSubTipoOperacion(List<Tabla> listaSubTipoOperacion) {
+		this.listaSubTipoOperacion = listaSubTipoOperacion;
 	}
-	public DocumentoGeneral getDocumentoGeneralSeleccionado() {
-		return documentoGeneralSeleccionado;
-	}
-	public void setDocumentoGeneralSeleccionado(DocumentoGeneral documentoGeneralSeleccionado) {
-		this.documentoGeneralSeleccionado = documentoGeneralSeleccionado;
-	}
-	public List<DocumentoGeneral> getListaDocumentoPorAgregar() {
-		return listaDocumentoPorAgregar;
-	}
-	public void setListaDocumentoPorAgregar(List<DocumentoGeneral> listaDocumentoPorAgregar) {
-		this.listaDocumentoPorAgregar = listaDocumentoPorAgregar;
-	}
-	public String getStrMontoGirarDescripcion(){
-		return strMontoGirarDescripcion;
-	}
-	public void setStrMontoGirarDescripcion(String strMontoGirarDescripcion) {
-		this.strMontoGirarDescripcion = strMontoGirarDescripcion;
-	}
-	public List<Tabla> getListaTablaTipoFondoFijo() {
-		return listaTablaTipoFondoFijo;
+	public List<Tabla> getListaSubTipoOperacion() {
+		return listaSubTipoOperacion;
 	}
 	public void setListaTablaTipoFondoFijo(List<Tabla> listaTablaTipoFondoFijo) {
 		this.listaTablaTipoFondoFijo = listaTablaTipoFondoFijo;
 	}
-	public ControlFondosFijos getControlFondosFijos() {
-		return controlFondosFijos;
+	public List<Tabla> getListaTablaTipoFondoFijo() {
+		return listaTablaTipoFondoFijo;
 	}
-	public void setControlFondosFijos(ControlFondosFijos controlFondosFijos) {
-		this.controlFondosFijos = controlFondosFijos;
+	public void setListaPersonaFiltro(List<Persona> listaPersonaFiltro) {
+		this.listaPersonaFiltro = listaPersonaFiltro;
 	}
-	public Integer getIntTipoFondoFijoValidar() {
-		return intTipoFondoFijoValidar;
+	public List<Persona> getListaPersonaFiltro() {
+		return listaPersonaFiltro;
 	}
-	public void setIntTipoFondoFijoValidar(Integer intTipoFondoFijoValidar) {
-		this.intTipoFondoFijoValidar = intTipoFondoFijoValidar;
+	public void setSucursalUsuario(Sucursal sucursalUsuario) {
+		this.sucursalUsuario = sucursalUsuario;
 	}
-	public List<ControlFondosFijos> getListaControlFondosFijos() {
-		return listaControlFondosFijos;
+	public Sucursal getSucursalUsuario() {
+		return sucursalUsuario;
 	}
-	public void setListaControlFondosFijos(List<ControlFondosFijos> listaControlFondosFijos) {
-		this.listaControlFondosFijos = listaControlFondosFijos;
+	public void setSubsucursalUsuario(Subsucursal subsucursalUsuario) {
+		this.subsucursalUsuario = subsucursalUsuario;
 	}
-	public Integer getIntControlSeleccionado() {
-		return intControlSeleccionado;
+	public Subsucursal getSubsucursalUsuario() {
+		return subsucursalUsuario;
 	}
-	public void setIntControlSeleccionado(Integer intControlSeleccionado) {
-		this.intControlSeleccionado = intControlSeleccionado;
+	public void setCuentaBancariaSeleccionada(CuentaBancaria cuentaBancariaSeleccionada) {
+		this.cuentaBancariaSeleccionada = cuentaBancariaSeleccionada;
+	}
+	public CuentaBancaria getCuentaBancariaSeleccionada() {
+		return cuentaBancariaSeleccionada;
+	}
+	public void setCuentaActual(Cuenta cuentaActual) {
+		this.cuentaActual = cuentaActual;
+	}
+	public Cuenta getCuentaActual() {
+		return cuentaActual;
+	}
+	public EmpresaFacadeRemote getEmpresaFacade() {
+		return empresaFacade;
+	}
+	public void setEmpresaFacade(EmpresaFacadeRemote empresaFacade) {
+		this.empresaFacade = empresaFacade;
+	}
+	public PersonaFacadeRemote getPersonaFacade() {
+		return personaFacade;
+	}
+	public void setPersonaFacade(PersonaFacadeRemote personaFacade) {
+		this.personaFacade = personaFacade;
+	}
+	public TablaFacadeRemote getTablaFacade() {
+		return tablaFacade;
+	}
+	public void setTablaFacade(TablaFacadeRemote tablaFacade) {
+		this.tablaFacade = tablaFacade;
+	}
+	public BancoFacadeLocal getBancoFacade() {
+		return bancoFacade;
+	}
+	public void setBancoFacade(BancoFacadeLocal bancoFacade) {
+		this.bancoFacade = bancoFacade;
+	}
+	public EgresoFacadeLocal getEgresoFacade() {
+		return egresoFacade;
+	}
+	public void setEgresoFacade(EgresoFacadeLocal egresoFacade) {
+		this.egresoFacade = egresoFacade;
+	}
+	public PrevisionFacadeRemote getPrevisionFacade() {
+		return previsionFacade;
+	}
+	public void setPrevisionFacade(PrevisionFacadeRemote previsionFacade) {
+		this.previsionFacade = previsionFacade;
+	}
+	public LiquidacionFacadeRemote getLiquidacionFacade() {
+		return liquidacionFacade;
+	}
+	public void setLiquidacionFacade(LiquidacionFacadeRemote liquidacionFacade) {
+		this.liquidacionFacade = liquidacionFacade;
+	}
+	public LibroDiarioFacadeRemote getLibroDiarioFacade() {
+		return libroDiarioFacade;
+	}
+	public void setLibroDiarioFacade(LibroDiarioFacadeRemote libroDiarioFacade) {
+		this.libroDiarioFacade = libroDiarioFacade;
+	}
+	public CierreDiarioArqueoFacadeRemote getCierreDiarioArqueoFacade() {
+		return cierreDiarioArqueoFacade;
+	}
+	public void setCierreDiarioArqueoFacade(
+			CierreDiarioArqueoFacadeRemote cierreDiarioArqueoFacade) {
+		this.cierreDiarioArqueoFacade = cierreDiarioArqueoFacade;
+	}
+	public PrestamoFacadeRemote getPrestamoFacade() {
+		return prestamoFacade;
+	}
+	public void setPrestamoFacade(PrestamoFacadeRemote prestamoFacade) {
+		this.prestamoFacade = prestamoFacade;
+	}
+	public LogisticaFacadeLocal getLogisticaFacade() {
+		return logisticaFacade;
+	}
+	public void setLogisticaFacade(LogisticaFacadeLocal logisticaFacade) {
+		this.logisticaFacade = logisticaFacade;
+	}
+	public PermisoFacadeRemote getPermisoFacade() {
+		return permisoFacade;
+	}
+	public void setPermisoFacade(PermisoFacadeRemote permisoFacade) {
+		this.permisoFacade = permisoFacade;
+	}
+	public List<Tabla> getListaTablaSucursal() {
+		return listaTablaSucursal;
+	}
+	public void setListaTablaSucursal(List<Tabla> listaTablaSucursal) {
+		this.listaTablaSucursal = listaTablaSucursal;
+	}
+	public List<Tabla> getListaMoneda() {
+		return listaMoneda;
+	}
+	public void setListaMoneda(List<Tabla> listaMoneda) {
+		this.listaMoneda = listaMoneda;
 	}
 	public List<Tabla> getListaTablaDocumentoGeneral() {
 		return listaTablaDocumentoGeneral;
@@ -2345,23 +2431,107 @@ public class FondosFijosController {
 	public void setListaTablaDocumentoGeneral(List<Tabla> listaTablaDocumentoGeneral) {
 		this.listaTablaDocumentoGeneral = listaTablaDocumentoGeneral;
 	}
+	public List<EgresoDetalleInterfaz> getListaEgresoDetalleInterfazAgregado() {
+		return listaEgresoDetalleInterfazAgregado;
+	}
+	public void setListaEgresoDetalleInterfazAgregado(
+			List<EgresoDetalleInterfaz> listaEgresoDetalleInterfazAgregado) {
+		this.listaEgresoDetalleInterfazAgregado = listaEgresoDetalleInterfazAgregado;
+	}
+	public List<ControlFondosFijos> getListaControlFondosFijosBusqueda() {
+		return listaControlFondosFijosBusqueda;
+	}
+	public void setListaControlFondosFijosBusqueda(
+			List<ControlFondosFijos> listaControlFondosFijosBusqueda) {
+		this.listaControlFondosFijosBusqueda = listaControlFondosFijosBusqueda;
+	}
+	public List<ControlFondosFijos> getListaControlFondosFijos() {
+		return listaControlFondosFijos;
+	}
+	public void setListaControlFondosFijos(
+			List<ControlFondosFijos> listaControlFondosFijos) {
+		this.listaControlFondosFijos = listaControlFondosFijos;
+	}
+	public List<BeneficiarioPrevision> getListaBeneficiarioPrevision() {
+		return listaBeneficiarioPrevision;
+	}
+	public void setListaBeneficiarioPrevision(
+			List<BeneficiarioPrevision> listaBeneficiarioPrevision) {
+		this.listaBeneficiarioPrevision = listaBeneficiarioPrevision;
+	}
+	public List<Persona> getListaBeneficiarioPersona() {
+		return listaBeneficiarioPersona;
+	}
+	public void setListaBeneficiarioPersona(List<Persona> listaBeneficiarioPersona) {
+		this.listaBeneficiarioPersona = listaBeneficiarioPersona;
+	}
+	public List<Persona> getListaPersona() {
+		return listaPersona;
+	}
+	public void setListaPersona(List<Persona> listaPersona) {
+		this.listaPersona = listaPersona;
+	}
 	public List<PersonaRol> getListaPersonaRolUsar() {
 		return listaPersonaRolUsar;
 	}
 	public void setListaPersonaRolUsar(List<PersonaRol> listaPersonaRolUsar) {
 		this.listaPersonaRolUsar = listaPersonaRolUsar;
 	}
-	public String getStrListaPersonaRolUsar() {
-		return strListaPersonaRolUsar;
+	public List<DocumentoGeneral> getListaDocumentoAgregados() {
+		return listaDocumentoAgregados;
 	}
-	public void setStrListaPersonaRolUsar(String strListaPersonaRolUsar) {
-		this.strListaPersonaRolUsar = strListaPersonaRolUsar;
+	public void setListaDocumentoAgregados(
+			List<DocumentoGeneral> listaDocumentoAgregados) {
+		this.listaDocumentoAgregados = listaDocumentoAgregados;
 	}
-	public boolean isPoseePermiso() {
-		return poseePermiso;
+	public List<DocumentoGeneral> getListaDocumentoPorAgregar() {
+		return listaDocumentoPorAgregar;
 	}
-	public void setPoseePermiso(boolean poseePermiso) {
-		this.poseePermiso = poseePermiso;
+	public void setListaDocumentoPorAgregar(
+			List<DocumentoGeneral> listaDocumentoPorAgregar) {
+		this.listaDocumentoPorAgregar = listaDocumentoPorAgregar;
+	}
+	public List<Tabla> getListaTipoVinculo() {
+		return listaTipoVinculo;
+	}
+	public void setListaTipoVinculo(List<Tabla> listaTipoVinculo) {
+		this.listaTipoVinculo = listaTipoVinculo;
+	}
+	public List<Tabla> getListaAño() {
+		return listaAño;
+	}
+	public void setListaAño(List<Tabla> listaAño) {
+		this.listaAño = listaAño;
+	}
+	public List<Tabla> getListaTablaTipoMovilidad() {
+		return listaTablaTipoMovilidad;
+	}
+	public void setListaTablaTipoMovilidad(List<Tabla> listaTablaTipoMovilidad) {
+		this.listaTablaTipoMovilidad = listaTablaTipoMovilidad;
+	}
+	public Egreso getEgresoNuevo() {
+		return egresoNuevo;
+	}
+	public void setEgresoNuevo(Egreso egresoNuevo) {
+		this.egresoNuevo = egresoNuevo;
+	}
+	public Persona getPersonaSeleccionada() {
+		return personaSeleccionada;
+	}
+	public void setPersonaSeleccionada(Persona personaSeleccionada) {
+		this.personaSeleccionada = personaSeleccionada;
+	}
+	public ControlFondosFijos getControlFondosFijos() {
+		return controlFondosFijos;
+	}
+	public void setControlFondosFijos(ControlFondosFijos controlFondosFijos) {
+		this.controlFondosFijos = controlFondosFijos;
+	}
+	public NumberFormat getFormato() {
+		return formato;
+	}
+	public void setFormato(NumberFormat formato) {
+		this.formato = formato;
 	}
 	public Persona getPersonaApoderado() {
 		return personaApoderado;
@@ -2375,6 +2545,79 @@ public class FondosFijosController {
 	public void setArchivoCartaPoder(Archivo archivoCartaPoder) {
 		this.archivoCartaPoder = archivoCartaPoder;
 	}
+	public LibroDiario getLibroDiario() {
+		return libroDiario;
+	}
+	public void setLibroDiario(LibroDiario libroDiario) {
+		this.libroDiario = libroDiario;
+	}
+	public Usuario getUsuarioSesion() {
+		return usuarioSesion;
+	}
+	public void setUsuarioSesion(Usuario usuarioSesion) {
+		this.usuarioSesion = usuarioSesion;
+	}
+	public String getMensajeOperacion() {
+		return mensajeOperacion;
+	}
+	public void setMensajeOperacion(String mensajeOperacion) {
+		this.mensajeOperacion = mensajeOperacion;
+	}
+	public String getMensajePopUp() {
+		return mensajePopUp;
+	}
+	public void setMensajePopUp(String mensajePopUp) {
+		this.mensajePopUp = mensajePopUp;
+	}
+	public BigDecimal getBdMontoGirar() {
+		return bdMontoGirar;
+	}
+	public void setBdMontoGirar(BigDecimal bdMontoGirar) {
+		this.bdMontoGirar = bdMontoGirar;
+	}
+	public BigDecimal getBdDiferencialGirar() {
+		return bdDiferencialGirar;
+	}
+	public void setBdDiferencialGirar(BigDecimal bdDiferencialGirar) {
+		this.bdDiferencialGirar = bdDiferencialGirar;
+	}
+	public String getStrObservacion() {
+		return strObservacion;
+	}
+	public void setStrObservacion(String strObservacion) {
+		this.strObservacion = strObservacion;
+	}
+	public String getStrMontoGirarDescripcion() {
+		return strMontoGirarDescripcion;
+	}
+	public void setStrMontoGirarDescripcion(String strMontoGirarDescripcion) {
+		this.strMontoGirarDescripcion = strMontoGirarDescripcion;
+	}
+	public String getStrDiferencialGirarDescripcion() {
+		return strDiferencialGirarDescripcion;
+	}
+	public void setStrDiferencialGirarDescripcion(
+			String strDiferencialGirarDescripcion) {
+		this.strDiferencialGirarDescripcion = strDiferencialGirarDescripcion;
+	}
+	public Integer getIntTipoFondoFijoValidar() {
+		return intTipoFondoFijoValidar;
+	}
+	public void setIntTipoFondoFijoValidar(Integer intTipoFondoFijoValidar) {
+		this.intTipoFondoFijoValidar = intTipoFondoFijoValidar;
+	}
+	public Integer getIntControlSeleccionado() {
+		return intControlSeleccionado;
+	}
+	public void setIntControlSeleccionado(Integer intControlSeleccionado) {
+		this.intControlSeleccionado = intControlSeleccionado;
+	}
+	public String getStrListaPersonaRolUsar() {
+		return strListaPersonaRolUsar;
+	}
+	public void setStrListaPersonaRolUsar(String strListaPersonaRolUsar) {
+		this.strListaPersonaRolUsar = strListaPersonaRolUsar;
+	}
 	public Integer getIntTipoBuscarPersona() {
 		return intTipoBuscarPersona;
 	}
@@ -2387,71 +2630,11 @@ public class FondosFijosController {
 	public void setIntBeneficiarioSeleccionar(Integer intBeneficiarioSeleccionar) {
 		this.intBeneficiarioSeleccionar = intBeneficiarioSeleccionar;
 	}
-	public Cuenta getCuentaActual() {
-		return cuentaActual;
-	}
-	public void setCuentaActual(Cuenta cuentaActual) {
-		this.cuentaActual = cuentaActual;
-	}
-	public List<EgresoDetalleInterfaz> getListaEgresoDetalleInterfazAgregado() {
-		return listaEgresoDetalleInterfazAgregado;
-	}
-	public void setListaEgresoDetalleInterfazAgregado(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfazAgregado) {
-		this.listaEgresoDetalleInterfazAgregado = listaEgresoDetalleInterfazAgregado;
-	}
-	public List<Persona> getListaBeneficiarioPersona() {
-		return listaBeneficiarioPersona;
-	}
-	public void setListaBeneficiarioPersona(List<Persona> listaBeneficiarioPersona) {
-		this.listaBeneficiarioPersona = listaBeneficiarioPersona;
-	}
-	public List<BeneficiarioPrevision> getListaBeneficiarioPrevision() {
-		return listaBeneficiarioPrevision;
-	}
-	public void setListaBeneficiarioPrevision(List<BeneficiarioPrevision> listaBeneficiarioPrevision) {
-		this.listaBeneficiarioPrevision = listaBeneficiarioPrevision;
-	}
-	public List<Tabla> getListaAño() {
-		return listaAño;
-	}
-	public void setListaAño(List<Tabla> listaAño) {
-		this.listaAño = listaAño;
-	}
 	public Integer getIntAñoFiltro() {
 		return intAñoFiltro;
 	}
 	public void setIntAñoFiltro(Integer intAñoFiltro) {
 		this.intAñoFiltro = intAñoFiltro;
-	}
-	public List<Tabla> getListaTablaEstado() {
-		return listaTablaEstado;
-	}
-	public void setListaTablaEstado(List<Tabla> listaTablaEstado) {
-		this.listaTablaEstado = listaTablaEstado;
-	}
-	public Integer getIntTipoPersonaFiltro() {
-		return intTipoPersonaFiltro;
-	}
-	public void setIntTipoPersonaFiltro(Integer intTipoPersonaFiltro) {
-		this.intTipoPersonaFiltro = intTipoPersonaFiltro;
-	}
-	public String getStrTextoPersonaFiltro() {
-		return strTextoPersonaFiltro;
-	}
-	public void setStrTextoPersonaFiltro(String strTextoPersonaFiltro) {
-		this.strTextoPersonaFiltro = strTextoPersonaFiltro;
-	}
-	public Integer getIntTipoBusquedaPersona() {
-		return intTipoBusquedaPersona;
-	}
-	public void setIntTipoBusquedaPersona(Integer intTipoBusquedaPersona) {
-		this.intTipoBusquedaPersona = intTipoBusquedaPersona;
-	}
-	public List<Tabla> getListaTablaSucursal() {
-		return listaTablaSucursal;
-	}
-	public void setListaTablaSucursal(List<Tabla> listaTablaSucursal) {
-		this.listaTablaSucursal = listaTablaSucursal;
 	}
 	public boolean isHabilitarFiltroSucursal() {
 		return habilitarFiltroSucursal;
@@ -2459,35 +2642,121 @@ public class FondosFijosController {
 	public void setHabilitarFiltroSucursal(boolean habilitarFiltroSucursal) {
 		this.habilitarFiltroSucursal = habilitarFiltroSucursal;
 	}
-	public List<ControlFondosFijos> getListaControlFondosFijosBusqueda() {
-		return listaControlFondosFijosBusqueda;
-	}
-	public void setListaControlFondosFijosBusqueda(List<ControlFondosFijos> listaControlFondosFijosBusqueda) {
-		this.listaControlFondosFijosBusqueda = listaControlFondosFijosBusqueda;
-	}
 	public Integer getIntItemControlFiltro() {
 		return intItemControlFiltro;
 	}
 	public void setIntItemControlFiltro(Integer intItemControlFiltro) {
 		this.intItemControlFiltro = intItemControlFiltro;
 	}
-	public BigDecimal getBdDiferencialGirar() {
-		return bdDiferencialGirar;
+	public Integer getIntTipoPersona() {
+		return intTipoPersona;
 	}
-	public void setBdDiferencialGirar(BigDecimal bdDiferencialGirar) {
-		this.bdDiferencialGirar = bdDiferencialGirar;
+	public void setIntTipoPersona(Integer intTipoPersona) {
+		this.intTipoPersona = intTipoPersona;
 	}
-	public String getStrDiferencialGirarDescripcion() {
-		return strDiferencialGirarDescripcion;
+	public String getStrFiltroTextoPersona() {
+		return strFiltroTextoPersona;
 	}
-	public void setStrDiferencialGirarDescripcion(String strDiferencialGirarDescripcion) {
-		this.strDiferencialGirarDescripcion = strDiferencialGirarDescripcion;
+	public void setStrFiltroTextoPersona(String strFiltroTextoPersona) {
+		this.strFiltroTextoPersona = strFiltroTextoPersona;
 	}
-	public String getStrMensajeError() {
-		return strMensajeError;
+	public Integer getIntTipoDocumentoAgregar() {
+		return intTipoDocumentoAgregar;
 	}
-	public void setStrMensajeError(String strMensajeError) {
-		this.strMensajeError = strMensajeError;
+	public void setIntTipoDocumentoAgregar(Integer intTipoDocumentoAgregar) {
+		this.intTipoDocumentoAgregar = intTipoDocumentoAgregar;
+	}
+	public DocumentoGeneral getDocumentoGeneralSeleccionado() {
+		return documentoGeneralSeleccionado;
+	}
+	public void setDocumentoGeneralSeleccionado(
+			DocumentoGeneral documentoGeneralSeleccionado) {
+		this.documentoGeneralSeleccionado = documentoGeneralSeleccionado;
+	}
+	public Integer getSESION_IDEMPRESA() {
+		return SESION_IDEMPRESA;
+	}
+	public void setSESION_IDEMPRESA(Integer sESION_IDEMPRESA) {
+		SESION_IDEMPRESA = sESION_IDEMPRESA;
+	}
+	public Integer getSESION_IDUSUARIO() {
+		return SESION_IDUSUARIO;
+	}
+	public void setSESION_IDUSUARIO(Integer sESION_IDUSUARIO) {
+		SESION_IDUSUARIO = sESION_IDUSUARIO;
+	}
+	public Integer getSESION_IDSUCURSAL() {
+		return SESION_IDSUCURSAL;
+	}
+	public void setSESION_IDSUCURSAL(Integer sESION_IDSUCURSAL) {
+		SESION_IDSUCURSAL = sESION_IDSUCURSAL;
+	}
+	public Integer getSESION_IDSUBSUCURSAL() {
+		return SESION_IDSUBSUCURSAL;
+	}
+	public void setSESION_IDSUBSUCURSAL(Integer sESION_IDSUBSUCURSAL) {
+		SESION_IDSUBSUCURSAL = sESION_IDSUBSUCURSAL;
+	}
+	public Integer getBUSCAR_PERSONA() {
+		return BUSCAR_PERSONA;
+	}
+	public void setBUSCAR_PERSONA(Integer bUSCAR_PERSONA) {
+		BUSCAR_PERSONA = bUSCAR_PERSONA;
+	}
+	public Integer getBUSCAR_APODERADO() {
+		return BUSCAR_APODERADO;
+	}
+	public void setBUSCAR_APODERADO(Integer bUSCAR_APODERADO) {
+		BUSCAR_APODERADO = bUSCAR_APODERADO;
+	}
+	public boolean isMostrarBtnEliminar() {
+		return mostrarBtnEliminar;
+	}
+	public void setMostrarBtnEliminar(boolean mostrarBtnEliminar) {
+		this.mostrarBtnEliminar = mostrarBtnEliminar;
+	}
+	public boolean isDeshabilitarNuevo() {
+		return deshabilitarNuevo;
+	}
+	public void setDeshabilitarNuevo(boolean deshabilitarNuevo) {
+		this.deshabilitarNuevo = deshabilitarNuevo;
+	}
+	public boolean isRegistrarNuevo() {
+		return registrarNuevo;
+	}
+	public void setRegistrarNuevo(boolean registrarNuevo) {
+		this.registrarNuevo = registrarNuevo;
+	}
+	public boolean isHabilitarGrabar() {
+		return habilitarGrabar;
+	}
+	public void setHabilitarGrabar(boolean habilitarGrabar) {
+		this.habilitarGrabar = habilitarGrabar;
+	}
+//	public boolean isDatosValidados() {
+//		return datosValidados;
+//	}
+//	public void setDatosValidados(boolean datosValidados) {
+//		this.datosValidados = datosValidados;
+//	}
+	public boolean isPoseePermiso() {
+		return poseePermiso;
+	}
+	public void setPoseePermiso(boolean poseePermiso) {
+		this.poseePermiso = poseePermiso;
+	}
+	public List<RequisitoCredito> getLstRequisitoCredito() {
+		return lstRequisitoCredito;
+	}
+	public void setLstRequisitoCredito(List<RequisitoCredito> lstRequisitoCredito) {
+		this.lstRequisitoCredito = lstRequisitoCredito;
+	}
+	public List<RequisitoCreditoComp> getLstRequisitoCreditoComp() {
+		return lstRequisitoCreditoComp;
+	}
+	public void setLstRequisitoCreditoComp(
+			List<RequisitoCreditoComp> lstRequisitoCreditoComp) {
+		this.lstRequisitoCreditoComp = lstRequisitoCreditoComp;
 	}
 	public Boolean getBlnNoExisteRequisito() {
 		return blnNoExisteRequisito;
@@ -2501,12 +2770,60 @@ public class FondosFijosController {
 	public void setBlnVerBotonApoderado(Boolean blnVerBotonApoderado) {
 		this.blnVerBotonApoderado = blnVerBotonApoderado;
 	}
+	public List<RequisitoPrevision> getLstRequisitoPrevision() {
+		return lstRequisitoPrevision;
+	}
+	public void setLstRequisitoPrevision(
+			List<RequisitoPrevision> lstRequisitoPrevision) {
+		this.lstRequisitoPrevision = lstRequisitoPrevision;
+	}
+	public List<RequisitoPrevisionComp> getLstRequisitoPrevisionComp() {
+		return lstRequisitoPrevisionComp;
+	}
+	public void setLstRequisitoPrevisionComp(
+			List<RequisitoPrevisionComp> lstRequisitoPrevisionComp) {
+		this.lstRequisitoPrevisionComp = lstRequisitoPrevisionComp;
+	}
+	public BeneficiarioPrevision getBeneficiarioPrevisionSeleccionado() {
+		return beneficiarioPrevisionSeleccionado;
+	}
+	public void setBeneficiarioPrevisionSeleccionado(
+			BeneficiarioPrevision beneficiarioPrevisionSeleccionado) {
+		this.beneficiarioPrevisionSeleccionado = beneficiarioPrevisionSeleccionado;
+	}
 	public String getStrMensajeErrorPorBeneficiario() {
 		return strMensajeErrorPorBeneficiario;
 	}
 	public void setStrMensajeErrorPorBeneficiario(
 			String strMensajeErrorPorBeneficiario) {
 		this.strMensajeErrorPorBeneficiario = strMensajeErrorPorBeneficiario;
+	}
+	public List<RequisitoLiquidacion> getLstRequisitoLiquidacion() {
+		return lstRequisitoLiquidacion;
+	}
+	public void setLstRequisitoLiquidacion(
+			List<RequisitoLiquidacion> lstRequisitoLiquidacion) {
+		this.lstRequisitoLiquidacion = lstRequisitoLiquidacion;
+	}
+	public List<RequisitoLiquidacionComp> getLstRequisitoLiquidacionComp() {
+		return lstRequisitoLiquidacionComp;
+	}
+	public void setLstRequisitoLiquidacionComp(
+			List<RequisitoLiquidacionComp> lstRequisitoLiquidacionComp) {
+		this.lstRequisitoLiquidacionComp = lstRequisitoLiquidacionComp;
+	}
+	public BeneficiarioLiquidacion getBeneficiarioLiquidacionSeleccionado() {
+		return beneficiarioLiquidacionSeleccionado;
+	}
+	public void setBeneficiarioLiquidacionSeleccionado(
+			BeneficiarioLiquidacion beneficiarioLiquidacionSeleccionado) {
+		this.beneficiarioLiquidacionSeleccionado = beneficiarioLiquidacionSeleccionado;
+	}
+	public Archivo getArchivoAdjuntoGiro() {
+		return archivoAdjuntoGiro;
+	}
+	public void setArchivoAdjuntoGiro(Archivo archivoAdjuntoGiro) {
+		this.archivoAdjuntoGiro = archivoAdjuntoGiro;
 	}
 	public Boolean getBlnBeneficiarioSinAutorizacion() {
 		return blnBeneficiarioSinAutorizacion;
@@ -2515,42 +2832,51 @@ public class FondosFijosController {
 			Boolean blnBeneficiarioSinAutorizacion) {
 		this.blnBeneficiarioSinAutorizacion = blnBeneficiarioSinAutorizacion;
 	}
-	public Archivo getArchivoAdjuntoGiro() {
-		return archivoAdjuntoGiro;
+	public List<BeneficiarioLiquidacion> getListaBeneficiarioLiquidacion() {
+		return listaBeneficiarioLiquidacion;
 	}
-	public void setArchivoAdjuntoGiro(Archivo archivoAdjuntoGiro) {
-		this.archivoAdjuntoGiro = archivoAdjuntoGiro;
+	public void setListaBeneficiarioLiquidacion(
+			List<BeneficiarioLiquidacion> listaBeneficiarioLiquidacion) {
+		this.listaBeneficiarioLiquidacion = listaBeneficiarioLiquidacion;
 	}
-
 	public String getStrObs() {
 		return strObs;
 	}
-
 	public void setStrObs(String strObs) {
 		this.strObs = strObs;
 	}
-
-	public String getStrObservacion() {
-		return strObservacion;
-	}
-
-	public void setStrObservacion(String strObservacion) {
-		this.strObservacion = strObservacion;
-	}
-
 	public Boolean getBlnHabilitarObservacion() {
 		return blnHabilitarObservacion;
 	}
-
 	public void setBlnHabilitarObservacion(Boolean blnHabilitarObservacion) {
 		this.blnHabilitarObservacion = blnHabilitarObservacion;
 	}
-	//Autor: jchavez / Tarea: Creación / Fecha: 19.08.2014 /
-	public Boolean getBlnActivarNroApertura() {
-		return blnActivarNroApertura;
+	public ConceptoFacadeRemote getConceptoFacade() {
+		return conceptoFacade;
 	}
-	public void setBlnActivarNroApertura(Boolean blnActivarNroApertura) {
-		this.blnActivarNroApertura = blnActivarNroApertura;
+	public void setConceptoFacade(ConceptoFacadeRemote conceptoFacade) {
+		this.conceptoFacade = conceptoFacade;
+	}
+//	public Boolean getBlnActivarNroApertura() {
+//		return blnActivarNroApertura;
+//	}
+//	public void setBlnActivarNroApertura(Boolean blnActivarNroApertura) {
+//		this.blnActivarNroApertura = blnActivarNroApertura;
+//	}
+	public void setMostrarMensajeExito(boolean mostrarMensajeExito) {
+		this.mostrarMensajeExito = mostrarMensajeExito;
+	}
+	public void setMostrarMensajeError(boolean mostrarMensajeError) {
+		this.mostrarMensajeError = mostrarMensajeError;
+	}
+	public void setMostrarPanelInferior(boolean mostrarPanelInferior) {
+		this.mostrarPanelInferior = mostrarPanelInferior;
+	}
+	public Egreso getEgresoGeneradoTrasGrabacion() {
+		return egresoGeneradoTrasGrabacion;
+	}
+	public void setEgresoGeneradoTrasGrabacion(Egreso egresoGeneradoTrasGrabacion) {
+		this.egresoGeneradoTrasGrabacion = egresoGeneradoTrasGrabacion;
 	}
 	public List<Tabla> getListaTablaTipoDocumento() {
 		return listaTablaTipoDocumento;

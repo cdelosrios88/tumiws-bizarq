@@ -9,19 +9,41 @@
 	<h:form>
 	   	<h:panelGroup>	    	
 	    	<h:panelGrid columns="12" id="panelPopUpBuscarGestorIngresoC">
-	    		<rich:column width="30">
-           			<h:outputText  value="DNI :"/>
-           		</rich:column>
+	    		<rich:column width="102">
+					<h:outputText value="Tipo Búsqueda :"/>
+				</rich:column>
+				<rich:column width="100">
+					<h:selectOneMenu 
+						id="idTipoDeBusqueda" 
+						value="#{cajaController.intTipoBusqDocuRazonSocial}" > 
+						<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+							<tumih:selectItems var="sel"
+								value="#{cajaController.listaTablaTipoBusqueda}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>					
+
+						<a4j:support event="onchange" reRender="panelPopUpBuscarGestorIngresoC"/>
+					</h:selectOneMenu>	
+ 				</rich:column>
+
            		<rich:column width="150">
-           			<h:inputText size="20"
+           			<h:inputText readonly="true"
+							rendered="#{cajaController.intTipoBusqDocuRazonSocial==0}"
+							style="background-color: #BFBFBF;"
+							size="32"/>
+           			<h:inputText size="32"
+           				rendered="#{cajaController.intTipoBusqDocuRazonSocial==applicationScope.Constante.PARAM_T_TIPOBUSQUEDA_PERSONA_NOMBRES}"
+           				value="#{cajaController.strFiltroTextoPersonaNombres}"/>
+           			<h:inputText size="32"
+           				rendered="#{cajaController.intTipoBusqDocuRazonSocial==applicationScope.Constante.PARAM_T_TIPOBUSQUEDA_PERSONA_DOCUMENTO}"
            				onkeydown="return validarNumDocIdentidad(this,event,8)"
-           				value="#{cajaController.strFiltroTextoPersona}"/>
+           				value="#{cajaController.strFiltroTextoPersonaDocumento}"/>
            		</rich:column>
            		<rich:column>
            			<a4j:commandButton styleClass="btnEstilos"
                 		value="Buscar" 
                 		reRender="tablaGestorIngresoC"
-                    	action="#{cajaController.buscarPersona}" 
+                    	action="#{cajaController.buscarGestor}" 
                     	style="width:100px"/>
            		</rich:column>
 	    	</h:panelGrid>	    	
@@ -29,18 +51,32 @@
 			<h:panelGroup id="tablaGestorIngresoC">
 	    		<rich:dataTable
 	    			var="item"
-	                value="#{cajaController.listaGestorIngreso}"
+	                value="#{cajaController.listaGestorCobranza}"
 			  		rowKeyVar="rowKey"
 			  		rows="5"
 			  		sortMode="single" 
-			  		width="520px">
+			  		width="520px" style=" width : 648px;">
 			        
-					<rich:column width="400" style="text-align: center;">
+					<rich:column width="10" style="text-align: center;">
+						<f:facet name="header">
+	                    	<h:outputText value=""/>
+	                 	</f:facet>
+			        	<h:outputText
+			        		value="#{item.id.intPersPersonaGestorPk}"/>
+			      	</rich:column>
+			      	<rich:column width="350" style="text-align: center;">
 						<f:facet name="header">
 	                    	<h:outputText value="Nombre"/>
 	                 	</f:facet>
 			        	<h:outputText
-			        		value="#{item.natural.strNombres} #{item.natural.strApellidoPaterno} #{item.natural.strApellidoMaterno}"/>
+			        		value="#{item.persona.natural.strNombreCompleto}"/>
+			      	</rich:column>
+					<rich:column width="100" style="text-align: center;">
+						<f:facet name="header">
+	                    	<h:outputText value="DNI"/>
+	                 	</f:facet>
+			        	<h:outputText
+			        		value="#{item.persona.documento.strNumeroIdentidad}"/>
 			      	</rich:column>
 					<rich:column width="120" style="text-align: center;">
 						<f:facet name="header">
