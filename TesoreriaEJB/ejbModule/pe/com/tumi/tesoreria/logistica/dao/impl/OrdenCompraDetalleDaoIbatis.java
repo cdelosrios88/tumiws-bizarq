@@ -51,4 +51,15 @@ public class OrdenCompraDetalleDaoIbatis extends TumiDaoIbatis implements OrdenC
 		}
 		return lista;
 	}	
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014
+	public List<OrdenCompraDetalle> getSumPrecioTotalXCta(Object o) throws DAOException{
+		List<OrdenCompraDetalle> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getSumPrecioTotalXCta", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
 }

@@ -125,6 +125,10 @@
 	 <!-- Agregado por cdelosrios, 29/09/2013 -->
 	 <parameter property="intItemOrdenCompra"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <!-- Fin agregado por cdelosrios, 29/09/2013 -->
+	 <!-- Autor: jchavez / Tarea: Creacion / Fecha: 06.10.2014 -->
+	 <parameter property="intPersEmpresaProveedor"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersonaProveedor"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <!-- Fin jchavez - 06.10.2014 -->
   </parameterMap>
   
   <procedure id="grabar" parameterMap="parOrdenCompra">
@@ -140,7 +144,7 @@
   </procedure>
 
   <procedure id="getListaPorBuscar" parameterMap="parPorBuscar" resultMap="resOrdenCompra">
-	{ call PKG_ORDENCOMPRA.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	{ call PKG_ORDENCOMPRA.getListaPorBuscar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
   </procedure>
   
 </sqlMap>

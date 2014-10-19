@@ -76,6 +76,7 @@ public class ReciboManualDetalleDaoIbatis extends TumiDaoIbatis implements Recib
 		}
 		return vResult;
 	}
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ReciboManualDetalle> getListaPorFiltros(Object o) throws DAOException{
 		List<ReciboManualDetalle> lista = null;
 		try{

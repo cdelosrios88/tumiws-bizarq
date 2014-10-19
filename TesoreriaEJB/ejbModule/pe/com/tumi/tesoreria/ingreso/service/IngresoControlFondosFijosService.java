@@ -26,6 +26,8 @@ import pe.com.tumi.tesoreria.egreso.bo.ControlFondoFijoBO;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
 import pe.com.tumi.tesoreria.ingreso.domain.Ingreso;
 import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalle;
+import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalleId;
+import pe.com.tumi.tesoreria.ingreso.domain.IngresoId;
 
 public class IngresoControlFondosFijosService {
 
@@ -34,7 +36,7 @@ public class IngresoControlFondosFijosService {
 	IngresoService ingresoService = (IngresoService)TumiFactory.get(IngresoService.class);
 	ControlFondoFijoBO boControlFondosFijos = (ControlFondoFijoBO)TumiFactory.get(ControlFondoFijoBO.class);
 	
-	public Ingreso generarIngreso(ControlFondosFijos controlFondosFijos, Bancofondo bancoFondo, Usuario usuario, String strObservacion) 
+	public Ingreso generarIngreso(ControlFondosFijos controlFondosFijos, Bancofondo bancoFondo, Usuario usuario, String strObservacion, Bancofondo bancoFondoIngreso) 
 		throws BusinessException{
 		Ingreso ingreso = new Ingreso();
 		Integer intDocumentoGeneral = 0;
@@ -59,6 +61,7 @@ public class IngresoControlFondosFijosService {
 			Bancofondo bancoFondoControl = bancoFacade.obtenerBancoFondoParaIngresoDesdeControl(controlFondosFijos);
 			Sucursal getSucursal = empresaFacade.getSucursalPorId(controlFondosFijos.getId().getIntSucuIdSucursal());
 			
+			ingreso.setId(new IngresoId());
 			ingreso.getId().setIntIdEmpresa(intIdEmpresa);
 			ingreso.getId().setIntIdIngresoGeneral(null);
 			ingreso.setIntParaTipoOperacion(Constante.PARAM_T_TIPODEOPERACION_INGRESO);
@@ -71,8 +74,10 @@ public class IngresoControlFondosFijosService {
 			ingreso.setIntParaTipoSuboperacion(Constante.PARAM_T_TIPODESUBOPERACION_CIERRE);
 			ingreso.setTsFechaProceso(obtenerFechaActual());
 			ingreso.setDtFechaIngreso(obtenerFechaActual());
-			ingreso.setIntParaFondoFijo(bancoFondo.getIntTipoFondoFijo());
-			ingreso.setIntItemBancoFondo(bancoFondo.getId().getIntItembancofondo());
+			//Autor:jchavez / Tarea: modificacion / Fecha: 01.10.2014
+			ingreso.setIntParaFondoFijo(bancoFondoIngreso.getIntTipoFondoFijo());
+			ingreso.setIntItemBancoFondo(bancoFondoIngreso.getId().getIntItembancofondo());
+			//Fin jchavez - 01.10.2014
 			ingreso.setIntItemBancoCuenta(null);
 			ingreso.setStrNumeroCheque(null);
 			ingreso.setIntPersEmpresaGirado(intIdEmpresa);
@@ -99,6 +104,8 @@ public class IngresoControlFondosFijosService {
 			
 			
 			IngresoDetalle ingresoDetalle = new IngresoDetalle();
+			ingresoDetalle.setId(new IngresoDetalleId());
+			ingreso.setListaIngresoDetalle(new ArrayList<IngresoDetalle>());
 			ingresoDetalle.getId().setIntPersEmpresa(intIdEmpresa);
 			ingresoDetalle.getId().setIntIdIngresoGeneral(null);
 			ingresoDetalle.getId().setIntIdIngresoDetalle(null);
@@ -136,12 +143,9 @@ public class IngresoControlFondosFijosService {
 			ingresoDetalle.setIntPersEmpresaCuenta(planCuenta.getId().getIntEmpresaCuentaPk());
 			ingresoDetalle.setIntContPeriodoCuenta(planCuenta.getId().getIntPeriodoCuenta());
 			ingresoDetalle.setStrContNumeroCuenta(planCuenta.getId().getStrNumeroCuenta());
-			
-			
-			
+
 			ingreso.getListaIngresoDetalle().add(ingresoDetalle);
-			
-			
+
 			LibroDiario libroDiario = new LibroDiario();
 			libroDiario.setId(new LibroDiarioId());
 			libroDiario.setListaLibroDiarioDetalle(new ArrayList<LibroDiarioDetalle>());
@@ -176,7 +180,9 @@ public class IngresoControlFondosFijosService {
 			libroDiarioDetalleHaber.setBdDebeSoles(null);
 			libroDiarioDetalleHaber.setBdHaberExtranjero(null);
 			libroDiarioDetalleHaber.setBdDebeExtranjero(null);
-			
+			//Autor: jchavez / Tarea: se agrega descripcion de la cuenta / Fecha: 01.10.2014
+			libroDiarioDetalleHaber.setStrComentario(bancoFondoControl.getFondoDetalleUsar().getPlanCuenta().getStrDescripcion());
+			//Fin jchavez - 01.10.2014
 			libroDiario.getListaLibroDiarioDetalle().add(libroDiarioDetalleHaber);
 			
 			
@@ -199,7 +205,9 @@ public class IngresoControlFondosFijosService {
 			libroDiarioDetalleDebe.setBdDebeSoles(controlFondosFijos.getBdMontoSaldo());			
 			libroDiarioDetalleDebe.setBdHaberExtranjero(null);
 			libroDiarioDetalleDebe.setBdDebeExtranjero(null);
-			
+			//Autor: jchavez / Tarea: se agrega descripcion de la cuenta / Fecha: 01.10.2014
+			libroDiarioDetalleDebe.setStrComentario(planCuenta.getStrDescripcion());
+			//Fin jchavez - 01.10.2014
 			libroDiario.getListaLibroDiarioDetalle().add(libroDiarioDetalleDebe);
 			
 			ingreso.setLibroDiario(libroDiario);
@@ -228,10 +236,10 @@ public class IngresoControlFondosFijosService {
 		return new Timestamp(new Date().getTime());
 	}	
 	
-	public Ingreso grabarIngresoCierreFondos(ControlFondosFijos controlFondosFijos, Bancofondo bancoFondo, Usuario usuario, String strObservacion) throws BusinessException{
+	public Ingreso grabarIngresoCierreFondos(ControlFondosFijos controlFondosFijos, Bancofondo bancoFondo, Usuario usuario, String strObservacion, Bancofondo bancoFondoIngreso) throws BusinessException{
 		Ingreso ingreso = null;
 		try{
-			ingreso = generarIngreso(controlFondosFijos, bancoFondo, usuario, strObservacion);			
+			ingreso = generarIngreso(controlFondosFijos, bancoFondo, usuario, strObservacion, bancoFondoIngreso);			
 			
 			ingresoService.grabarIngresoGeneral(ingreso);
 			

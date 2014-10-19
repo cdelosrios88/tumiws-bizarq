@@ -76,6 +76,9 @@ public class OrdenCompra extends TumiDomain{
 	private List<CuentaBancaria>	listaCuentaBancariaUsar;
 	private String			strEtiqueta;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 07.10.2014
+	private String 			strGlosaEgreso;
+	//Fin jchavez - 07.10.2014
 	
 	public OrdenCompra(){
 		id = new OrdenCompraId();
@@ -434,7 +437,14 @@ public class OrdenCompra extends TumiDomain{
 	public void setStrEtiqueta(String strEtiqueta) {
 		this.strEtiqueta = strEtiqueta;
 	}
-
+	//Autor: jchavez / Tarea: Creación / Fecha: 04.10.2014
+	public String getStrGlosaEgreso() {
+		return strGlosaEgreso;
+	}
+	public void setStrGlosaEgreso(String strGlosaEgreso) {
+		this.strGlosaEgreso = strGlosaEgreso;
+	}
+	//Fin jchavez - 07.10.2014
 	@Override
 	public String toString() {
 		return "OrdenCompra [id=" + id + ", intParaTipoDocumentoGeneral="

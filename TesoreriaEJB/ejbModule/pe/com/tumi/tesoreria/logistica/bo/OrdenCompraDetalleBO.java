@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.openjpa.lib.log.Log;
 
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;
@@ -15,8 +14,6 @@ import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDetalle;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalleId;
-import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraId;
-
 
 public class OrdenCompraDetalleBO{
 
@@ -99,6 +96,37 @@ public class OrdenCompraDetalleBO{
 			ordenCompraDetalleId.setIntItemOrdenCompraDetalle(documentoSunatDetalle.getIntItemOrdenCompraDetalle());
 			log.info(ordenCompraDetalleId);
 			domain = getPorPk(ordenCompraDetalleId);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return domain;
+	}
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014
+	public OrdenCompraDetalle getSumPrecioTotalXCta(OrdenCompraDetalle ordenCompraDetalle) throws BusinessException{
+		List<OrdenCompraDetalle> lista = null;
+		OrdenCompraDetalle domain = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresaCuenta", ordenCompraDetalle.getIntPersEmpresaCuenta());
+			mapa.put("intContPeriodoCuenta", ordenCompraDetalle.getIntContPeriodoCuenta());
+			mapa.put("strContNumeroCuenta", ordenCompraDetalle.getStrContNumeroCuenta());
+			mapa.put("intSucuIdSucursal", ordenCompraDetalle.getIntSucuIdSucursal());
+			mapa.put("intSudeIdSubsucursal", ordenCompraDetalle.getIntSudeIdSubsucursal());
+			mapa.put("intIdPerfil", ordenCompraDetalle.getIntIdPerfil());
+			lista = dao.getSumPrecioTotalXCta(mapa);	
+
+			if(lista!=null){
+				if(lista.size()==1){
+				   domain = lista.get(0);
+				}else if(lista.size()==0){
+				   domain = null;
+				}else{
+				   throw new BusinessException("Obtención de mas de un registro coincidente");
+				}
+			}	
+		}catch(DAOException e){
+			throw new BusinessException(e);
 		}catch(Exception e) {
 			throw new BusinessException(e);
 		}

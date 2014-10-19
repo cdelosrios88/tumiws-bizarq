@@ -14,5 +14,4 @@ public interface ReciboManualDetalleDao extends TumiDao{
 	public List<ReciboManualDetalle> getListaPorIngreso(Object o) throws DAOException;
 	public String existeNroReciboEnlazado(Object o) throws DAOException;
 	public List<ReciboManualDetalle> getListaPorFiltros(Object o) throws DAOException;
-		
 }

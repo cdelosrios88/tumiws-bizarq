@@ -12,4 +12,6 @@ public interface FondodetalleDao extends TumiDao{
 	public List<Fondodetalle> getListaPorPk(Object o) throws DAOException;
 	public List<Fondodetalle> getListaPorBancoFondo(Object o) throws DAOException;
 	public List<Fondodetalle> getListaPorSubSucursalPK(Object o) throws DAOException;
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014
+	public List<Fondodetalle> getDocumentoPorFondoFijo(Object o) throws DAOException;
 }	

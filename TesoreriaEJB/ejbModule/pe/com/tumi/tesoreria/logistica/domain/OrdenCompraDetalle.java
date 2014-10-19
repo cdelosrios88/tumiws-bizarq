@@ -41,6 +41,11 @@ public class OrdenCompraDetalle extends TumiDomain{
 	private BigDecimal	bdMontoUsar;
 	private BigDecimal	bdMontoSaldoTemp;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014
+	private Integer 	intIdPerfil;
+	private String 		strAfecto;
+	//Fin jchavez - 02.10.2014
+	
 	public OrdenCompraDetalle(){
 		id = new OrdenCompraDetalleId();
 	}
@@ -234,5 +239,19 @@ public class OrdenCompraDetalle extends TumiDomain{
 				+ intPersEmpresaCuenta + ", intContPeriodoCuenta="
 				+ intContPeriodoCuenta + ", strContNumeroCuenta="
 				+ strContNumeroCuenta + "]";
+	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014
+	public Integer getIntIdPerfil() {
+		return intIdPerfil;
+	}
+	public void setIntIdPerfil(Integer intIdPerfil) {
+		this.intIdPerfil = intIdPerfil;
 	}	
+	public String getStrAfecto() {
+		return strAfecto;
+	}
+	public void setStrAfecto(String strAfecto) {
+		this.strAfecto = strAfecto;
+	}
+	//Fin jchavez - 02.10.2014
 }

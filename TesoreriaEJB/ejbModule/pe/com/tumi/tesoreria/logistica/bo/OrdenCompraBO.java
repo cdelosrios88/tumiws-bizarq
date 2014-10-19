@@ -92,10 +92,13 @@ public class OrdenCompraBO{
 			mapa.put("intItemInformeGerencia", ordenCompra.getIntItemInformeGerencia());
 			mapa.put("intPersEmpresaCuadroComparativo", ordenCompra.getIntPersEmpresaCuadroComparativo());
 			mapa.put("intItemCuadroComparativo", ordenCompra.getIntItemCuadroComparativo());
-			mapa.put("intPersPersonaProveedor", ordenCompra.getIntPersPersonaProveedor());
 			//Agregado por cdelosrios, 29/09/2013
 			mapa.put("intItemOrdenCompra", ordenCompra.getId().getIntItemOrdenCompra());
 			//Fin agregado por cdelosrios, 29/09/2013
+			//Autor: jchavez / Tarea: Creacion / Fecha: 06.10.2014
+			mapa.put("intPersEmpresaProveedor", ordenCompra.getIntPersEmpresaProveedor());
+			mapa.put("intPersPersonaProveedor", ordenCompra.getIntPersPersonaProveedor());
+			//Fin jchavez - 06.10.2014
 			lista = dao.getListaPorBuscar(mapa);
 			
 		}catch(DAOException e){

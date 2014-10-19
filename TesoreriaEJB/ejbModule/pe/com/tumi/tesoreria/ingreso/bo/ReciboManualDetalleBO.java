@@ -112,15 +112,15 @@ public class ReciboManualDetalleBO{
 		return domain;
 	}
 	
-	public String existeNroReciboEnlazado(Integer idEmpresa,Integer idSucursal,Integer idSubSuc,Integer nroRecibo) throws BusinessException{
+	public String existeNroReciboEnlazado(Integer idEmpresa, Integer idSucursal, Integer idSubSuc, Integer nroSerie, Integer nroRecibo) throws BusinessException{
 		String vResult = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
 			mapa.put("intPersEmpresaIngreso", idEmpresa);
 			mapa.put("intSucuIdSucursal", idSucursal);
 			mapa.put("intSudeIdSubsucursal", idSubSuc);
+			mapa.put("intNroSerie", nroSerie);
 			mapa.put("intNroRecibo", nroRecibo);
-			
 			vResult = dao.existeNroReciboEnlazado(mapa);				
 		}catch(DAOException e){
 			throw new BusinessException(e);
@@ -130,14 +130,15 @@ public class ReciboManualDetalleBO{
 		return vResult;
 	}
 	
-	public List<ReciboManualDetalle> getListaPorFiltros(Integer idEmpresa,Integer idSucursal,Integer idSubSuc,Integer idEstadoCierre,Integer nroRecibo) throws BusinessException{
+	public List<ReciboManualDetalle> getListaPorFiltros(Integer idEmpresa,Integer idSucursal,Integer idSubSuc,Integer idEstadoRecibo,Integer nroSerie,Integer nroRecibo) throws BusinessException{
 		List<ReciboManualDetalle> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
 			mapa.put("intPersEmpresaIngreso", idEmpresa);
 			mapa.put("intSucuIdSucursal", idSucursal);
 			mapa.put("intSudeIdSubsucursal", idSubSuc);
-			mapa.put("intEstadoCierre", idEstadoCierre);
+			mapa.put("intEstadoRecibo", idEstadoRecibo);
+			mapa.put("intNroSerie", nroSerie);
 			mapa.put("intNroRecibo", nroRecibo);
 			lista = dao.getListaPorFiltros(mapa);				
 		}catch(DAOException e){

@@ -100,4 +100,21 @@ public class FondodetalleBO{
 		}
 		return lista;
 	}
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014
+	public List<Fondodetalle> getDocumentoPorFondoFijo(Integer intEmpresa, Integer intTipoFondoFijo, Integer intMoneda) throws BusinessException{
+		List<Fondodetalle> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intEmpresaPk", intEmpresa);
+			mapa.put("intTipoFondoFijo", intTipoFondoFijo);
+			mapa.put("intMonedaCod", intMoneda);
+			lista = dao.getDocumentoPorFondoFijo(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
 }

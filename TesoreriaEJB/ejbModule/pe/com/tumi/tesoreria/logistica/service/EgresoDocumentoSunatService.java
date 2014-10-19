@@ -501,7 +501,10 @@ public class EgresoDocumentoSunatService {
 			egreso.setIntPersPersonaGirado(personaGirar.getIntIdPersona());
 			egreso.setIntCuentaGirado(null);
 			//jchavez 20.05.2014 cambio de tipo de dato
-			egreso.setStrPersCuentaBancariaGirado(null);
+			//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//			egreso.setStrPersCuentaBancariaGirado(null);
+			egreso.setIntPersCuentaBancariaGirado(null);
+			//Fin jchavez - 19.09.2014
 			egreso.setIntPersEmpresaBeneficiario(null);
 			egreso.setIntPersPersonaBeneficiario(null);
 			egreso.setIntPersCuentaBancariaBeneficiario(null);

@@ -105,22 +105,70 @@ public class ReciboManualBO{
 		return domain;
 	}
 	
-	public Integer validarNroReciboPorSuc(Integer idEmpresa,Integer sucursal,Integer subsuc,Integer nroRecibo) throws BusinessException{
+	/**
+	 * jbermudez 19.09.2014
+	 * Procedimiento que válida la serie y numero de recibo manual para una agencia
+	 * Se agrego el parametro nroSerie  
+	 * @param intEmpresa
+	 * @param sucursal
+	 * @param subsuc
+	 * @param nroSerie
+	 * @param nroRecibo
+	 * @return
+	 * @throws BusinessException
+	 */
+	public Integer validarNroReciboPorSuc(Integer idEmpresa, Integer sucursal, Integer subsuc, Integer nroSerie, Integer nroRecibo) throws BusinessException{
 		
 		Integer vResult = null;
 		HashMap<String,Object> mapa = new HashMap<String,Object>();
 		mapa.put("intPersEmpresa", idEmpresa);
 		mapa.put("intSucuIdSucursal", sucursal);
 		mapa.put("intSudeIdSubsucursal", subsuc);
+		mapa.put("intNroSerie", nroSerie);
 		mapa.put("intNroRecibo", nroRecibo);
-		
 		try{
-			
 		  vResult = dao.validarNroReciboPorSuc(mapa);
-		
 		}catch(Exception e) {
 			throw new BusinessException(e);
 		}
 		return vResult;
+	}
+	/**
+	 * jchavez 02.07.2014
+	 * Procedimiento que retorna la serie y el ultimo numero de recibo del gestor de ingreso 
+	 * @param intEmpresa
+	 * @param intIdGestor
+	 * @param intIdSucursal
+	 * @param intIdSubsucursal
+	 * @return
+	 * @throws BusinessException
+	 */
+	public ReciboManual getReciboPorGestorYSucursal(Integer intEmpresa, Integer intIdGestor, Integer intIdSucursal, Integer intIdSubsucursal) throws BusinessException{
+		ReciboManual domain = null;
+		List<ReciboManual> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", 			intEmpresa);
+			mapa.put("intPersPersonaGestor", 	intIdGestor);
+			mapa.put("intSucuIdSucursal", 		intIdSucursal);
+			mapa.put("intSudeIdSubsucursal", 	intIdSubsucursal);
+			lista = dao.getReciboPorGestorYSucursal(mapa);
+			if(lista!=null){
+				if(lista.size()==1){
+				   domain = lista.get(0);
+				}else if(lista.size()==0){
+				   domain = null;
+				}else{
+				   throw new BusinessException("Obtención de mas de un registro coincidente");
+				}
+			}	
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return domain;
 	}
 }

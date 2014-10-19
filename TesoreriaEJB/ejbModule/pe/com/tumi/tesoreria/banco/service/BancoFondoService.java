@@ -280,7 +280,8 @@ public class BancoFondoService {
 		PersonaFacadeRemote personaFacade =  (PersonaFacadeRemote) EJBFactory.getRemote(PersonaFacadeRemote.class);
 		
 		CuentaBancariaPK cuentaBancariaPK = new CuentaBancariaPK();
-		cuentaBancariaPK.setIntIdPersona(bancoCuenta.getIntPersona());
+		//Autor: jchavez / Tarea: Modificación / Fecha: 19.08.2014 / Se coloca en persona el id de la cooperativa
+		cuentaBancariaPK.setIntIdPersona(bancoCuenta.getId().getIntEmpresaPk());//bancoCuenta.getIntPersona());
 		cuentaBancariaPK.setIntIdCuentaBancaria(bancoCuenta.getIntCuentabancaria());
 		return personaFacade.getCuentaBancariaPorPK(cuentaBancariaPK);
 	}
@@ -463,7 +464,32 @@ public class BancoFondoService {
 		return bancoFondo;
 	}	
 	
-	
+	//Autor: jchavez / Tarea: Modificacion / Fecha: 30.09.2014
+	public Bancofondo obtenerBancoFondoParaIngreso(Usuario usuario, ControlFondosFijos controlFondosFijosCerrar) throws BusinessException{ //Integer intMoneda
+		Bancofondo bancoFondo = new Bancofondo();
+		try{
+			Sucursal sucursal = usuario.getSucursal();
+			Subsucursal	subsucursal = usuario.getSubSucursal();
+			Integer intIdEmpresa = sucursal.getId().getIntPersEmpresaPk();
+			
+			bancoFondo.getId().setIntEmpresaPk(intIdEmpresa);
+			//Autor: jchavez / Tarea: Modificacion / Fecha: 30.09.2014
+			bancoFondo.setIntTipoFondoFijo(controlFondosFijosCerrar.getId().getIntParaTipoFondoFijo()); //Constante.PARAM_T_TIPOFONDOFIJO_CAJA
+			//Fin jchavez - 30.09.2014
+			bancoFondo.setIntMonedaCod(controlFondosFijosCerrar.getIntParaMoneda());
+			bancoFondo = boBancoFondo.getPorTipoFondoFijoYMoneda(bancoFondo);
+			
+			if(bancoFondo==null) return null;
+			
+			bancoFondo.setListaFondodetalle(boFondoDetalle.getPorBancoFondo(bancoFondo));
+			
+			bancoFondo.setFondoDetalleUsar(obtenerFondoDetalleContable(bancoFondo, sucursal, subsucursal));
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return bancoFondo;
+	}
+
 	public Bancofondo obtenerBancoFondoParaIngreso(Usuario usuario, Integer intMoneda) throws BusinessException{
 		Bancofondo bancoFondo = new Bancofondo();
 		try{
@@ -486,6 +512,7 @@ public class BancoFondoService {
 		}
 		return bancoFondo;
 	}
+	
 	
 	public Fondodetalle obtenerFondoDetalleContable(Bancofondo bancoFondo, Sucursal sucursal, Subsucursal subsucursal)throws Exception{
 		Fondodetalle fondoDetalleContable = null;

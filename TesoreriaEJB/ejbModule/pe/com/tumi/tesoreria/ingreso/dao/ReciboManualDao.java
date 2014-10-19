@@ -12,4 +12,6 @@ public interface ReciboManualDao extends TumiDao{
 	public List<ReciboManual> getListaPorPk(Object o) throws DAOException;
 	public List<ReciboManual> getListaPorBuscar(Object o) throws DAOException;
 	public Integer validarNroReciboPorSuc(Object o) throws DAOException;
+	//jchavez 02.07.2014
+	public List<ReciboManual> getReciboPorGestorYSucursal(Object o) throws DAOException;
 }

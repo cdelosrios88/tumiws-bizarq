@@ -30,6 +30,7 @@ import pe.com.tumi.tesoreria.egreso.domain.SolicitudPersonal;
 import pe.com.tumi.tesoreria.egreso.domain.SolicitudPersonalDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.SolicitudPersonalPago;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 
 
 @Local
@@ -101,4 +102,18 @@ public interface EgresoFacadeLocal {
 	public Egreso procesarItems(Egreso egreso)throws BusinessException;
 	//Agregado 05.12.2013 JCHAVEZ
 	public ControlFondoFijoAnula grabarAnulaCierre(ControlFondosFijos o, Integer intEmpresa, Integer intPersona, String strObservacion, Integer intParaTipoAnulaFondo) throws BusinessException;
+	public List<Egreso> buscarEgresoParaFondosFijos(List<Persona>listaPersona, Egreso egresoFiltro,
+			ControlFondosFijos controlFondosFijos, Date dtFechaDesde, Date dtFechaHasta) throws BusinessException;
+	//Autor: jchavez / Tarea: Creacion / Fecha: 06.10.2014
+	public List<EgresoDetalleInterfaz> cargarListaEgresoDetalleInterfazOrdenCompra(OrdenCompra ordenCompra, Integer intTipoDocumento)throws BusinessException;
+	//Fin jchavez - 06.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 07.10.2014
+	public Egreso grabarGiroOrdenCompraDocumento(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, ControlFondosFijos controlFondosFijos, Usuario usuario, Integer intParaTipoDocumento)throws BusinessException;
+	//Fin jchavez - 07.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 07.10.2014
+	public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException;
+	//Fin jchavez - 13.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 15.10.2014
+	public Egreso grabarGiroOrdenCompraDocumentoPorCheque(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroCheque, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException;
+	//Fin jchavez - 15.10.2014
 }

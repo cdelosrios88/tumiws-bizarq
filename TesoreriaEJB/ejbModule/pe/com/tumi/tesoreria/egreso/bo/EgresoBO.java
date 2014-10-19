@@ -23,7 +23,7 @@ public class EgresoBO{
 	public Egreso grabar(Egreso o) throws BusinessException{
 		Egreso dto = null;
 		try{
-			if(o.getStrObservacion() == null) o.setStrObservacion("Egreso observacion x defeccto. BO");
+			if(o.getStrObservacion() == null) o.setStrObservacion(" "); //Egreso observacion x defeccto. BO
 		    dto = dao.grabar(o);
 		}catch(DAOException e){
 	  		throw new BusinessException(e);

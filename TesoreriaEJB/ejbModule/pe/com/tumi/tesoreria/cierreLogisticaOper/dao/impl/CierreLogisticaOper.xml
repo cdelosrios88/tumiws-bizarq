@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CierreLogisticaOperDaoIbatis">
+
+		<!--Autor: Rodolfo Villarreal / Tarea: Creación / Fecha: 27.08.2014 /-->
+	
+	<typeAlias type="pe.com.tumi.tesoreria.cierreLogisticaOper.domain.CierreLogisticaOper" alias="CierreLogisticaOper"/>
+	
+	<resultMap id="resListCierreLogis" class="CierreLogisticaOper" >
+	     <result property="id.intPersEmpresaCietes"      	column="pPERS_EMPRESACIETES_N_PK" />
+	     <result property="id.intParaTipoRegistroLogis" 	column="pPARA_TIPOREGISTROLOGIS_N_COD" />
+	     <result property="id.intCcobPeriodoCierre"      	column="pTESO_PERIODOCIERRE_N" />
+	     <result property="intParaEstadoCierreCod"      	column="pPARA_ESTADOCIERRE_N_COD" />
+	     <result property="intPersEmpresaRegistroPk" 		column="pPERS_EMPRESAREGISTRO_N_PK" />
+	     <result property="intPersPersonaRegistroPk"      	column="pPERS_PERSONAREGISTRO_N_PK" />
+	     <result property="tsCicoFechaRegistro"      		column="pCILOG_FECHAREGISTRO_D" />
+  	</resultMap>
+  	
+  	<resultMap id="resBuscarCierre" class="CierreLogisticaOper" >
+	     <result property="id.intPersEmpresaCietes"      	column="pPERS_EMPRESACIETES_N_PK" />
+	     <result property="id.intParaTipoRegistroLogis" 	column="pPARA_TIPOREGISTROLOGIS_N_COD" />
+	     <result property="id.intCcobPeriodoCierre"      	column="pTESO_PERIODOCIERRE_N" />
+	     <result property="intParaEstadoCierreCod"      	column="pPARA_ESTADOCIERRE_N_COD" />
+	     <result property="intPersEmpresaRegistroPk" 		column="pPERS_EMPRESAREGISTRO_N_PK" />
+	     <result property="intPersPersonaRegistroPk"      	column="pPERS_PERSONAREGISTRO_N_PK" />
+	     <result property="tsCicoFechaRegistro"      		column="pCILOG_FECHAREGISTRO_D" />
+	     <result property="strNombreUsuario"      			column="pNOMBRECOMPLETO" />
+	     <result property="strDescripcionEstado"      		column="pDESCRIPCION_ESTADO" />
+	     <result property="strDescripcionTipo"      		column="pDESCRIPCION_TIPO_REGISTRO" />
+	     <result property="strPeriodoNombre"      			column="pPERIODO_NOMBRE" />
+  	</resultMap>
+ 	
+ 	<parameterMap id="parCierreLogistica" class="CierreLogisticaOper">
+ 		<parameter property="id.intPersEmpresaCietes"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intParaTipoRegistroLogis"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intCcobPeriodoCierre"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoCierreCod"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaRegistroPk"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaRegistroPk"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsCicoFechaRegistro"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+ 	</parameterMap>
+ 	
+ 	<parameterMap id="parListCierreLogis" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntPersEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntCcoPeriodoCierre" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parListCie" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntPerEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntCoPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntTipoRegistro"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+  
+  <parameterMap id="parBuscarCierre" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntTipoRegistro"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntCoPeriodo" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntEstadoCie"			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+ 	
+ 	<procedure id="grabarCierreLogistica" parameterMap="parCierreLogistica">
+		{ call PKG_CIERRELOGISTICAOPER.grabarCierreLogistica(?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="modificarCierreLogistica" parameterMap="parCierreLogistica">
+		{ call PKG_CIERRELOGISTICAOPER.modificarCierreLogistica(?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaCierreLogistica" parameterMap="parListCierreLogis" resultMap="resListCierreLogis">
+		{ call PKG_CIERRELOGISTICAOPER.getListaCierreLogisticaVista(?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaLogis" parameterMap="parListCie" resultMap="resListCierreLogis">
+		{ call PKG_CIERRELOGISTICAOPER.getListaCierreLogistica(?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaBuscarCierre" parameterMap="parBuscarCierre" resultMap="resBuscarCierre">
+		{ call PKG_CIERRELOGISTICAOPER.getListaCierreLogisticaBuscar(?,?,?,?) }  
+  	</procedure>
+ 	
+</sqlMap> 

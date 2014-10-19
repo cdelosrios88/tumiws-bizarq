@@ -415,6 +415,21 @@ public class BancoFacade extends TumiFacade implements BancoFacadeRemote, BancoF
    		}
 		return dto;
 	}
+  //Autor: jchavez / Tarea: Modificacion / Fecha: 30.09.2014
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Bancofondo obtenerBancoFondoParaIngreso(Usuario usuario, ControlFondosFijos 	controlFondosFijosCerrar) throws BusinessException{ //Integer intMoneda
+    	Bancofondo dto = null;
+		try{
+			//Autor: jchavez / Tarea: Modificacion / Fecha: 30.09.2014
+			dto = bancoFondoService.obtenerBancoFondoParaIngreso(usuario, controlFondosFijosCerrar);//intMoneda);
+			//Fin jchavez - 30.09.2014
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return dto;
+	}
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Bancofondo obtenerBancoFondoParaIngreso(Usuario usuario, Integer intMoneda) throws BusinessException{
@@ -555,5 +570,27 @@ public class BancoFacade extends TumiFacade implements BancoFacadeRemote, BancoF
    			throw new BusinessException(e);
    		}
 		return lista;
-	}    
+	}
+    
+    /**
+     * Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014
+     * Funcionalidad: Método que retorna lista de documentos configurados para el Fondo Fijo seleccionado
+     * @author jchavez
+     * @param intEmpresa
+     * @param intTipoDocumento
+     * @param intMoneda
+     * @return lista - Lista de documentos configurados.
+     * @throws BusinessException
+     */
+    public List<Fondodetalle> getDocumentoPorFondoFijo(Integer intEmpresa, Integer intTipoFondoFijo, Integer intMoneda) throws BusinessException{
+    	List<Fondodetalle> lista = null;
+		try{
+			lista = boFondodetalle.getDocumentoPorFondoFijo(intEmpresa, intTipoFondoFijo, intMoneda);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return lista;
+	} 
 }

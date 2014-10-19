@@ -1,11 +1,12 @@
 package pe.com.tumi.tesoreria.ingreso.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 import pe.com.tumi.persona.core.domain.Natural;
-import pe.com.tumi.seguridad.domain.Usuario;
 
+@SuppressWarnings("serial")
 public class ReciboManualDetalle extends TumiDomain{
 
 	private ReciboManualDetalleId	id;
@@ -20,14 +21,27 @@ public class ReciboManualDetalle extends TumiDomain{
 	private	Integer	intPersPersonaGestor;
 	private Integer intParaTipoEnlace;
 	private Integer intParaTipoDesenlace;
+	private String	strDesSucursal;
+	//inicio Autor : jchavez 	/ Tarea : nuevos campos	/ 17.09.2014
+	private Integer intPersonaRegistro;
+	private Timestamp	tsFechaRegistro;
+	//fin jchavez - 17.09.2014
+	//inicio Autor : jbermudez 	/ Tarea : nuevos campos	/ 17.09.2014
+	private String	strEstadoRecibo;
+	private Natural	usuario;
 	private Ingreso ingreso;
-	private Natural gestor;
-	private String  strDesSucursal;
-	private ReciboManual reciboManual;
-	
-	
+	private Natural	gestor;
+	private ReciboManual	reciboManual;
+	//fin jbermudez - 17.09.2014
+
 	public ReciboManualDetalle(){
 		id = new ReciboManualDetalleId();
+		//inicio Autor : jbermudez 	/ Tarea : agregado	/ 17.09.2014
+		ingreso = new Ingreso();
+		gestor = new Natural();
+		reciboManual = new ReciboManual();
+		usuario = new Natural();
+		//fin jbermudez - 17.09.2014
 	}
 	
 	public ReciboManualDetalleId getId() {
@@ -59,30 +73,6 @@ public class ReciboManualDetalle extends TumiDomain{
 	}
 	public void setIntParaEstado(Integer intParaEstado) {
 		this.intParaEstado = intParaEstado;
-	}
-	public Date getDtFechaAnula() {
-		return dtFechaAnula;
-	}
-	public void setDtFechaAnula(Date dtFechaAnula) {
-		this.dtFechaAnula = dtFechaAnula;
-	}
-	public Integer getIntPersEmpresaAnula() {
-		return intPersEmpresaAnula;
-	}
-	public void setIntPersEmpresaAnula(Integer intPersEmpresaAnula) {
-		this.intPersEmpresaAnula = intPersEmpresaAnula;
-	}
-	public Integer getIntPersPersonaAnula() {
-		return intPersPersonaAnula;
-	}
-	public void setIntPersPersonaAnula(Integer intPersPersonaAnula) {
-		this.intPersPersonaAnula = intPersPersonaAnula;
-	}
-	public String getStrObservacionAnula() {
-		return strObservacionAnula;
-	}
-	public void setStrObservacionAnula(String strObservacionAnula) {
-		this.strObservacionAnula = strObservacionAnula;
 	}
 	public Integer getIntPersPersonaGestor() {
 		return intPersPersonaGestor;
@@ -116,16 +106,6 @@ public class ReciboManualDetalle extends TumiDomain{
 		this.reciboManual = reciboManual;
 	}
 
-	public String getStrDesSucursal() {
-		return strDesSucursal;
-	}
-
-	public void setStrDesSucursal(String strDesSucursal) {
-		this.strDesSucursal = strDesSucursal;
-	}
-	
-		
-
 	public Integer getIntParaTipoEnlace() {
 		return intParaTipoEnlace;
 	}
@@ -143,6 +123,78 @@ public class ReciboManualDetalle extends TumiDomain{
 		this.intParaTipoDesenlace = intParaTipoDesenlace;
 	}
 
+	public String getStrEstadoRecibo() {
+		return strEstadoRecibo;
+	}
+
+	public void setStrEstadoRecibo(String strEstadoRecibo) {
+		this.strEstadoRecibo = strEstadoRecibo;
+	}
+
+	public Integer getIntPersonaRegistro() {
+		return intPersonaRegistro;
+	}
+
+	public void setIntPersonaRegistro(Integer intPersonaRegistro) {
+		this.intPersonaRegistro = intPersonaRegistro;
+	}
+
+	public String getStrDesSucursal() {
+		return strDesSucursal;
+	}
+
+	public void setStrDesSucursal(String strDesSucursal) {
+		this.strDesSucursal = strDesSucursal;
+	}
+
+	public Natural getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Natural usuario) {
+		this.usuario = usuario;
+	}
+
+	public Timestamp getTsFechaRegistro() {
+		return tsFechaRegistro;
+	}
+
+	public void setTsFechaRegistro(Timestamp tsFechaRegistro) {
+		this.tsFechaRegistro = tsFechaRegistro;
+	}
+
+	public Integer getIntPersEmpresaAnula() {
+		return intPersEmpresaAnula;
+	}
+
+	public void setIntPersEmpresaAnula(Integer intPersEmpresaAnula) {
+		this.intPersEmpresaAnula = intPersEmpresaAnula;
+	}
+
+	public Integer getIntPersPersonaAnula() {
+		return intPersPersonaAnula;
+	}
+
+	public void setIntPersPersonaAnula(Integer intPersPersonaAnula) {
+		this.intPersPersonaAnula = intPersPersonaAnula;
+	}
+
+	public Date getDtFechaAnula() {
+		return dtFechaAnula;
+	}
+
+	public void setDtFechaAnula(Date dtFechaAnula) {
+		this.dtFechaAnula = dtFechaAnula;
+	}
+
+	public String getStrObservacionAnula() {
+		return strObservacionAnula;
+	}
+
+	public void setStrObservacionAnula(String strObservacionAnula) {
+		this.strObservacionAnula = strObservacionAnula;
+	}
+
 	@Override
 	public String toString() {
 		return "ReciboManualDetalle [id=" + id + ", intNumeroRecibo="
@@ -153,8 +205,13 @@ public class ReciboManualDetalle extends TumiDomain{
 				+ ", intPersPersonaAnula=" + intPersPersonaAnula
 				+ ", dtFechaAnula=" + dtFechaAnula + ", strObservacionAnula="
 				+ strObservacionAnula + ", intPersPersonaGestor="
-				+ intPersPersonaGestor + "]";
+				+ intPersPersonaGestor + ", intParaTipoEnlace="
+				+ intParaTipoEnlace + ", intParaTipoDesenlace="
+				+ intParaTipoDesenlace + ", strDesSucursal=" + strDesSucursal
+				+ ", intPersonaRegistro=" + intPersonaRegistro
+				+ ", tsFechaRegistro=" + tsFechaRegistro + ", strEstadoRecibo="
+				+ strEstadoRecibo + ", usuario=" + usuario + ", ingreso="
+				+ ingreso + ", gestor=" + gestor + ", reciboManual="
+				+ reciboManual + "]";
 	}
-	
-	
 }

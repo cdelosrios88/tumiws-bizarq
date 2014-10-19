@@ -27,7 +27,9 @@ import pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoBillete;
 import pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijosId;
+import pe.com.tumi.tesoreria.ingreso.bo.IngresoDetalleBO;
 import pe.com.tumi.tesoreria.ingreso.domain.Ingreso;
+import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalle;
 import pe.com.tumi.tesoreria.ingreso.service.IngresoService;
 
 public class CierreDiarioArqueoService {
@@ -39,7 +41,7 @@ public class CierreDiarioArqueoService {
 	CierreDiarioArqueoDetalleBO boCierreDiarioArqueoDetalle = (CierreDiarioArqueoDetalleBO)TumiFactory.get(CierreDiarioArqueoDetalleBO.class);
 	CierreDiarioArqueoBilleteBO boCierreDiarioArqueoBillete = (CierreDiarioArqueoBilleteBO)TumiFactory.get(CierreDiarioArqueoBilleteBO.class);
 	IngresoService ingresoService = (IngresoService)TumiFactory.get(IngresoService.class);
-	
+	IngresoDetalleBO boIngresoDetalle = (IngresoDetalleBO)TumiFactory.get(IngresoDetalleBO.class);
 	
 	private Date obtenerDate(Timestamp timestamp)throws Exception{
 		Calendar cal = Calendar.getInstance();
@@ -74,7 +76,7 @@ public class CierreDiarioArqueoService {
 			List<Ingreso> listaIngreso = ingresoService.buscarIngresoParaCaja(ingresoFiltro, null);
 			BigDecimal bdMontoIngresos = new BigDecimal(0);
 			for(Ingreso ingreso : listaIngreso){
-				log.info(ingreso);
+				log.info("Ingresos Recuperados: "+ingreso);
 				bdMontoIngresos = bdMontoIngresos.add(ingreso.getBdMontoTotal());
 			}
 
@@ -91,26 +93,49 @@ public class CierreDiarioArqueoService {
 			
 			List<Ingreso> listaDeposito = ingresoService.buscarIngresoParaCaja(depositoFiltro, null);
 			BigDecimal bdMontoDepositos = new BigDecimal(0);
+			List<IngresoDetalle> listaAjuste = new ArrayList<IngresoDetalle>();
 			for(Ingreso deposito : listaDeposito){
-				log.info(deposito);
+				log.info("Despósitos Recuperados: "+deposito);
 				bdMontoDepositos = bdMontoDepositos.add(deposito.getBdMontoTotal());
+				//Autor: jchavez / Tarea: Creación / Fecha: 14.08.2014 / Se agrega suma del monto Ajuste
+				List<IngresoDetalle> lstAjuste = boIngresoDetalle.getPorIngreso(deposito);
+				if (lstAjuste!=null && !lstAjuste.isEmpty()) {
+					for (IngresoDetalle ingresoDetalle : lstAjuste) {
+						listaAjuste.add(ingresoDetalle);					}
+				}
+				
 			}
-			cierreDiarioArqueoDetalleIngresos.setBdMontoDeposito(bdMontoDepositos);			
-			cierreDiarioArqueoDetalleIngresos.setBdMontoIngPendiente(bdMontoIngresos.subtract(bdMontoDepositos));		
-			
-			BigDecimal bdMontoSaldoEfectivoAnterior = new BigDecimal(0);
-			CierreDiarioArqueo cierreDiarioArqueoUltimo = boCierreDiarioArqueo.getCierreDiarioArqueoAnterior(cierreDiarioArqueo);			
-			if(cierreDiarioArqueoUltimo!=null){
-				cierreDiarioArqueoUltimo.setListaCierreDiarioArqueoDetalle(boCierreDiarioArqueoDetalle.getListaPorCierreDiarioArqueo(cierreDiarioArqueoUltimo));
-				for(CierreDiarioArqueoDetalle cierreDiarioArqueoDetalle : cierreDiarioArqueoUltimo.getListaCierreDiarioArqueoDetalle()){
-					if(cierreDiarioArqueoDetalle.getBdMontoApertura()==null){
-						bdMontoSaldoEfectivoAnterior = cierreDiarioArqueoDetalle.getBdMontoSaldoEfectivo();
+			BigDecimal bdMontoAjustes = new BigDecimal(0);
+			if (listaAjuste!=null && !listaAjuste.isEmpty()) {
+				for (IngresoDetalle ingresoDetalle : listaAjuste) {
+					if (ingresoDetalle.getBdAjusteDeposito()!=null) {
+						bdMontoAjustes = bdMontoAjustes.add(ingresoDetalle.getBdAjusteDeposito());
 					}
 				}
 			}
 			
-			cierreDiarioArqueoDetalleIngresos.setBdMontoSaldoEfectivo(bdMontoSaldoEfectivoAnterior.add(cierreDiarioArqueoDetalleIngresos.getBdMontoIngPendiente()));			
+			cierreDiarioArqueoDetalleIngresos.setBdMontoAjuste(bdMontoAjustes);
+			//Fin jchavez - 14.08.2014
 			
+			cierreDiarioArqueoDetalleIngresos.setBdMontoDeposito(bdMontoDepositos);			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 /
+			cierreDiarioArqueoDetalleIngresos.setBdMontoIngPendiente(bdMontoIngresos.add(bdMontoAjustes).subtract(bdMontoDepositos));	
+			//Fin jchavez - 14.08.2014
+			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 / Se quita, segun REUNION MOD TESORERIA 13.08.2014 
+//			BigDecimal bdMontoSaldoEfectivoAnterior = new BigDecimal(0);
+//			CierreDiarioArqueo cierreDiarioArqueoUltimo = boCierreDiarioArqueo.getCierreDiarioArqueoAnterior(cierreDiarioArqueo);			
+//			if(cierreDiarioArqueoUltimo!=null){
+//				cierreDiarioArqueoUltimo.setListaCierreDiarioArqueoDetalle(boCierreDiarioArqueoDetalle.getListaPorCierreDiarioArqueo(cierreDiarioArqueoUltimo));
+//				for(CierreDiarioArqueoDetalle cierreDiarioArqueoDetalle : cierreDiarioArqueoUltimo.getListaCierreDiarioArqueoDetalle()){
+//					if(cierreDiarioArqueoDetalle.getBdMontoApertura()==null){
+//						bdMontoSaldoEfectivoAnterior = cierreDiarioArqueoDetalle.getBdMontoSaldoEfectivo();
+//					}
+//				}
+//			}
+//			
+//			cierreDiarioArqueoDetalleIngresos.setBdMontoSaldoEfectivo(bdMontoSaldoEfectivoAnterior.add(cierreDiarioArqueoDetalleIngresos.getBdMontoIngPendiente()));			
+
 		}catch(Exception e){
 			throw new BusinessException(e);
 		}
@@ -325,7 +350,10 @@ public class CierreDiarioArqueoService {
 				
 				for(CierreDiarioArqueoDetalle cierreDiarioArqueoDetalle : cierreDiarioArqueoTemp.getListaCierreDiarioArqueoDetalle()){
 					ControlFondosFijos controlFondosFijos = obtenerControlFondosFijos(cierreDiarioArqueoDetalle);
-					if(controlFondosFijos!=null)cierreDiarioArqueoDetalle.setStrNumeroApertura(controlFondosFijos.getStrNumeroApertura());					
+					if(controlFondosFijos!=null)cierreDiarioArqueoDetalle.setStrNumeroApertura(controlFondosFijos.getStrNumeroApertura());
+					if (cierreDiarioArqueoDetalle.getBdMontoIngPendiente()!=null) {
+						cierreDiarioArqueoTemp.setBdMontoIngresoPendiente(cierreDiarioArqueoDetalle.getBdMontoIngPendiente());
+					}
 				}
 			}
 		}catch (Exception e) {
@@ -402,7 +430,7 @@ public class CierreDiarioArqueoService {
 						strFechaRegistro = ingreso.getDtFechaIngreso().toString();
 					}
 				}					
-				log.info(ingreso);
+				log.info("Ingreso Recuperado: "+ingreso);
 				bdMontoIngresos = bdMontoIngresos.add(ingreso.getBdMontoTotal());
 			}
 			cierreDiarioArqueoDetalleIngresos.setStrFechaRegistro(strFechaRegistro);
@@ -419,14 +447,36 @@ public class CierreDiarioArqueoService {
 			
 			List<Ingreso> listaDeposito = ingresoService.buscarIngresoParaCaja(depositoFiltro, null);
 			BigDecimal bdMontoDepositos = new BigDecimal(0);
+			List<IngresoDetalle> listaAjuste = new ArrayList<IngresoDetalle>();
 			for(Ingreso deposito : listaDeposito){
-				log.info(deposito);
+				log.info("Depósito Recuperado: "+deposito);
 				bdMontoDepositos = bdMontoDepositos.add(deposito.getBdMontoTotal());
+				//Autor: jchavez / Tarea: Creación / Fecha: 14.08.2014 / Se agrega suma del monto Ajuste
+				List<IngresoDetalle> lstAjuste = boIngresoDetalle.getPorIngreso(deposito);
+				if (lstAjuste!=null && !lstAjuste.isEmpty()) {
+					for (IngresoDetalle ingresoDetalle : lstAjuste) {
+						listaAjuste.add(ingresoDetalle);					}
+				}
+				
 			}
-			cierreDiarioArqueoDetalleIngresos.setBdMontoDeposito(bdMontoDepositos);			
-			cierreDiarioArqueoDetalleIngresos.setBdMontoIngPendiente(bdMontoIngresos.subtract(bdMontoDepositos));		
+			BigDecimal bdMontoAjustes = new BigDecimal(0);
+			if (listaAjuste!=null && !listaAjuste.isEmpty()) {
+				for (IngresoDetalle ingresoDetalle : listaAjuste) {
+					if (ingresoDetalle.getBdAjusteDeposito()!=null) {
+						bdMontoAjustes = bdMontoAjustes.add(ingresoDetalle.getBdAjusteDeposito());
+					}
+				}
+			}
 			
-			BigDecimal bdMontoSaldoEfectivoAnterior = new BigDecimal(0);
+			cierreDiarioArqueoDetalleIngresos.setBdMontoAjuste(bdMontoAjustes);
+			//Fin jchavez - 14.08.2014
+			cierreDiarioArqueoDetalleIngresos.setBdMontoDeposito(bdMontoDepositos);			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 / 
+			cierreDiarioArqueoDetalleIngresos.setBdMontoIngPendiente(bdMontoIngresos.add(bdMontoAjustes).subtract(bdMontoDepositos));	
+			//Fin jchavez - 14.08.2014
+			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 14.08.2014 / Se quita, segun REUNION MOD TESORERIA 13.08.2014
+//			BigDecimal bdMontoSaldoEfectivoAnterior = new BigDecimal(0);
 //			CierreDiarioArqueo cierreDiarioArqueoUltimo = boCierreDiarioArqueo.getCierreDiarioArqueoAnterior(cierreDiarioArqueo);			
 //			if(cierreDiarioArqueoUltimo!=null){
 //				cierreDiarioArqueoUltimo.setListaCierreDiarioArqueoDetalle(boCierreDiarioArqueoDetalle.getListaPorCierreDiarioArqueo(cierreDiarioArqueoUltimo));
@@ -437,7 +487,7 @@ public class CierreDiarioArqueoService {
 //				}
 //			}
 			
-			cierreDiarioArqueoDetalleIngresos.setBdMontoSaldoEfectivo(bdMontoSaldoEfectivoAnterior.add(cierreDiarioArqueoDetalleIngresos.getBdMontoIngPendiente()));			
+//			cierreDiarioArqueoDetalleIngresos.setBdMontoSaldoEfectivo(bdMontoSaldoEfectivoAnterior.add(cierreDiarioArqueoDetalleIngresos.getBdMontoIngPendiente()));			
 			
 		}catch(Exception e){
 			throw new BusinessException(e);

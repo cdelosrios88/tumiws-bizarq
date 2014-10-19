@@ -32,6 +32,9 @@ public class CierreDiarioArqueoDetalle extends TumiDomain{
 	
 	private String 		strFechaRegistro;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+	private BigDecimal	bdMontoAjuste;
+	
 	public CierreDiarioArqueoDetalle(){
 		id = new CierreDiarioArqueoDetalleId();
 	}
@@ -199,5 +202,11 @@ public class CierreDiarioArqueoDetalle extends TumiDomain{
 				+ strDetalleIngPendiente + ", bdAjusteRedondeo="
 				+ bdAjusteRedondeo + ", bdMontoSaldoEfectivo="
 				+ bdMontoSaldoEfectivo + "]";
+	}
+	public BigDecimal getBdMontoAjuste() {
+		return bdMontoAjuste;
+	}
+	public void setBdMontoAjuste(BigDecimal bdMontoAjuste) {
+		this.bdMontoAjuste = bdMontoAjuste;
 	}
 }
