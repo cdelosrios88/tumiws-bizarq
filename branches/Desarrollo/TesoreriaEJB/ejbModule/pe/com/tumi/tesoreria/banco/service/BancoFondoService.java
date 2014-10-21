@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.FileUtil;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalle;
+import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalleId;
 import pe.com.tumi.contabilidad.core.domain.PlanCuentaId;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Subsucursal;
@@ -657,6 +658,9 @@ public class BancoFondoService {
 		List<Bancocuenta> listaBancoCuenta = null;
 		try{
 			LibroDiarioDetalle libroDiarioDetalle = new LibroDiarioDetalle();
+			//Inicio: REQ14-006 - bizarq - 20/10/2014
+			libroDiarioDetalle.setId(new LibroDiarioDetalleId());
+			//Fin: REQ14-006 - bizarq - 20/10/2014
 			libroDiarioDetalle.getId().setIntPersEmpresaLibro(bancoCuentaFiltro.getIntEmpresacuentaPk());
 			libroDiarioDetalle.setIntPersEmpresaCuenta(bancoCuentaFiltro.getIntEmpresacuentaPk());
 			libroDiarioDetalle.setIntContPeriodo(bancoCuentaFiltro.getIntPeriodocuenta());
