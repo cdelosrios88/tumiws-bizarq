@@ -1,5 +1,10 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			19/10/2014     Christian De los Ríos        Se modificó el método de anulación de saldos         
+*/
 package pe.com.tumi.tesoreria.egreso.facade;
-
 
 import java.util.Date;
 import java.util.List;
@@ -581,6 +586,19 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
    		}
 	}
     
+    public Integer processDailyAmount(Date dtFechaInicio, Date dtFechaFin, Usuario usuario) 
+    throws BusinessException{
+    	Integer intResult = null;
+		try{
+			intResult = boSaldo.processDailyAmount(dtFechaInicio, dtFechaFin, usuario);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return intResult;
+	}
+    
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Saldo obtenerSaldoUltimaFechaRegistro(Integer intIdEmpresa) throws BusinessException{
     	Saldo dto = null;
@@ -649,9 +667,30 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
 	}
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio)throws BusinessException{
+    //Inicio: REQ14-005 - bizarq - 19/10/2014
+    //public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio)throws BusinessException{
+    /**
+	 * Método encargado de realizar la anulación de saldos diarios
+	 * 
+     * @author Bizarq
+     * @param objUsuario 	: Objeto usuario de sesión
+     * @param dtFechaInicio : Fecha de inicio hasta donde llegará la anulación
+     * */
+    public void anularSaldo(Usuario usuario, Date dtFechaInicio)throws BusinessException{
     	try{
-			saldoService.anularSaldo(intIdEmpresa, dtFechaInicio);
+			//saldoService.anularSaldo(intIdEmpresa, dtFechaInicio);
+    		saldoService.anularSaldo(usuario, null);
+	//Fin: REQ14-005 - bizarq - 19/10/2014
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+	}
+    
+    public void anularSaldo(Usuario usuario, Saldo saldoFiltro)throws BusinessException{
+    	try{
+    		saldoService.anularSaldo(usuario, saldoFiltro);
    		}catch(BusinessException e){
    			throw e;
    		}catch(Exception e){

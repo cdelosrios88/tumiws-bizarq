@@ -102,8 +102,10 @@
   </procedure>
   
   <resultMap id="saldoHash" class="java.util.HashMap">
-  	<result property="idSubsucursal" 	column="sude_idsubsucursal_n" />
-    <result property="fechaMaxima" 		column="max_fecha" />
+  	<!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+  	<!-- <result property="idSubsucursal" 	column="sude_idsubsucursal_n" /> -->
+  	<!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
+    <result property="fechaMaxima" 		column="max_fecha" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
   </resultMap>
       
   <procedure id="getListaSaldoFechas" parameterMap="parPersEmpresa" resultMap="saldoHash">

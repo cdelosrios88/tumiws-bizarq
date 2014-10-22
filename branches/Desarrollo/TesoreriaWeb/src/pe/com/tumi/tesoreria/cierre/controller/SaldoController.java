@@ -1,11 +1,19 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			19/10/2014     Christian De los Ríos        Se modificó la lógica interna relacionada al formulario de saldos diarios         
+*/
 package pe.com.tumi.tesoreria.cierre.controller;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +25,15 @@ import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
+import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
+import pe.com.tumi.seguridad.permiso.domain.Password;
+import pe.com.tumi.seguridad.permiso.domain.PasswordId;
+import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeRemote;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.Saldo;
@@ -68,6 +81,13 @@ public class SaldoController {
 	private boolean habilitarGrabar;
 	private boolean poseePermiso;
 	
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	private String strPassword;
+	private String strPasswordAnula;
+	private String strAnulReason;
+	private PermisoFacadeRemote permisoFacade;
+	//Fin: REQ14-005 - bizarq - 19/10/2014
+	
 	public SaldoController(){
 		cargarUsuario();
 		poseePermiso = PermisoUtil.poseePermiso(Constante.TRANSACCION_CIERRE_SALDOS);
@@ -98,6 +118,9 @@ public class SaldoController {
 			tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 			egresoFacade = (EgresoFacadeLocal) EJBFactory.getLocal(EgresoFacadeLocal.class);
 			bancoFacade = (BancoFacadeLocal) EJBFactory.getLocal(BancoFacadeLocal.class);
+			//Inicio: REQ14-005 - bizarq - 19/10/2014
+			permisoFacade = (PermisoFacadeRemote) EJBFactory.getRemote(PermisoFacadeRemote.class);
+			//Fin: REQ14-005 - bizarq - 19/10/2014
 			
 			listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			listaFondo = bancoFacade.obtenerListaFondoExistente(EMPRESA_USUARIO);
@@ -257,7 +280,10 @@ public class SaldoController {
 				if(dtFechaInicioSaldo==null){
 					mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de inicio de anulación de saldos."); return;			
 				}
-				egresoFacade.anularSaldo(EMPRESA_USUARIO, dtFechaInicioSaldo);
+				//Inicio: REQ14-005 - bizarq - 19/10/2014
+				//egresoFacade.anularSaldo(EMPRESA_USUARIO, dtFechaInicioSaldo);
+				egresoFacade.anularSaldo(usuario, dtFechaInicioSaldo);
+				//Fin: REQ14-005 - bizarq - 19/10/2014
 				mostrarMensaje(Boolean.TRUE, "Se anularon correctamene todos los saldos desde la fecha "+dtFechaInicioSaldo+".");
 			}
 			
@@ -270,6 +296,147 @@ public class SaldoController {
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	/**
+	 * processDailyAmount:  Método encargado de realizar el proceso de saldos diarios
+	 * 
+	 * @author bizarq
+	 * @throws EJBFactoryException
+	 * 
+	 * */
+	public void processDailyAmount() throws EJBFactoryException {
+		Integer intResult = null;
+		try {
+			if(!isValidDailyAmountProcess()){
+				//egresoFacade.procesarSaldo(dtFechaInicioSaldo, dtFechaFinSaldo, usuario, listaBanco, listaFondo);
+				if(intResult!=null && intResult.equals(Constante.ON_SUCCESS)){
+					egresoFacade.processDailyAmount(dtFechaInicioSaldo, dtFechaFinSaldo, usuario);
+					mostrarMensaje(Boolean.TRUE, "Se registro correctamene el saldo para el rango de fechas indicadas.");
+				}else{
+					mostrarMensaje(Boolean.FALSE, "Ocurrió un error en el proceso de Saldos Diarios.");
+				}
+				buscar();
+			}
+			
+		} catch (BusinessException e) {
+			mostrarMensaje(Boolean.FALSE, "Ocurrio un error durante el proceso de cierre de fondos.");
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * anulateDailyAmount:  Método encargado de realizar la anulación de algún saldo diario en un determinado
+	 * 						periodo de fechas
+	 * 
+	 * @author bizarq
+	 * @throws EJBFactoryException
+	 * */
+	public void anulateDailyAmount() throws EJBFactoryException {
+		Saldo saldo = null;
+		try {
+			if(!isValidAmountAnulation()){
+				saldo = new Saldo();
+				saldo.setDtFechaDesde(dtFechaInicioSaldo);
+				saldo.setStrMotivoAnula(strAnulReason);
+				egresoFacade.anularSaldo(usuario, saldo);
+				mostrarMensaje(Boolean.TRUE, "Se anularon correctamene todos los saldos desde la fecha "+ Constante.sdf.format(dtFechaInicioSaldo)+".");
+			}
+		} catch (BusinessException e) {
+			mostrarMensaje(Boolean.FALSE, "Ocurrio un error durante el proceso de anulación de saldos diarios.");
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * isValidDailyAmountProcess: Método encargado de realizar validaciones al formulario de 
+	 * generación de saldos diarios. 
+	 * 
+	 * @author bizarq
+	 * @return <boolean> retorna true o false según la validación de los campos de generación de saldos </boolean>
+	 * */
+	private boolean isValidDailyAmountProcess(){
+		boolean isValid = Boolean.FALSE;
+		try {
+			if(dtFechaInicioSaldo==null){
+				mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de inicio a calcular el saldo.");
+				return Boolean.TRUE;
+			}
+			if(dtFechaFinSaldo==null){
+				mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de fin a calcular el saldo.");
+				return Boolean.TRUE;
+			}			
+			if(dtFechaInicioSaldo.compareTo(dtFechaFinSaldo)>0){
+				mostrarMensaje(Boolean.FALSE, "La fecha de inicio no puede ser mayor a la fecha de fin.");
+				return Boolean.TRUE;
+			}
+			if(dtUltimaFechaGenerada!=null && dtFechaInicioSaldo.compareTo(dtUltimaFechaGenerada)<=0){
+				mostrarMensaje(Boolean.FALSE, "La fecha de inicio debe ser mayor a la ultima fecha generada.");
+				return Boolean.TRUE;
+			}
+			
+			isValid = isValidPassword(this.strPassword);
+			
+		} catch (Exception e) {
+			mostrarMensaje(Boolean.FALSE, "Ocurrio un error durante el proceso de anulación de saldos diarios.");
+			log.error(e.getMessage(),e );
+		}
+		return isValid;
+	}
+	
+	/**
+	 * Descripción: Método encargado de realizar validaciones al formulario de anulación de saldos diarios
+	 * 
+	 * @author bizarq
+	 * @return <boolean> retorna true o false según la validación de los campos de anulación </boolean>
+	 * */
+	private boolean isValidAmountAnulation(){
+		boolean isValid = Boolean.FALSE;
+		
+		if(dtFechaInicioSaldo==null){
+			mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de inicio de anulación de saldos.");
+			return Boolean.TRUE;
+		}
+		if(strAnulReason==null || strAnulReason.equals(Constante.STR_EMPTY)){
+			mostrarMensaje(Boolean.FALSE, "Debe ingresar el motivo de anulación de saldos.");
+			return Boolean.TRUE;
+		}
+		
+		isValid = isValidPassword(this.strPasswordAnula);
+		
+		return isValid;
+	}
+	
+	/**
+	 * @author bizarq
+	 * @param <String> strPassword </String>
+	 * @return <boolean> retorna true o false según la validación del password </boolean>
+	 * */
+	private boolean isValidPassword(String strPassword){
+		Password password = null;
+		try {
+			if(strPassword==null || strPassword.equals(Constante.STR_EMPTY)){
+				mostrarMensaje(Boolean.FALSE, "Ingrese el Password por favor.");
+				return Boolean.TRUE;
+			}
+			password = new Password();
+			password.setId(new PasswordId());
+			password.getId().setIntEmpresaPk(usuario.getEmpresa().getIntIdEmpresa());
+			password.getId().setIntIdTransaccion(Constante.INT_IDTRANSACCION_CIERRE_SALDOCAJA);
+			password.setStrContrasena(strPassword);
+			password = permisoFacade.getPasswordPorPkYPass(password);
+			if(password==null){
+				mostrarMensaje(Boolean.FALSE, "Clave incorrecta. Por favor intente nuevamente.");
+				return Boolean.TRUE;
+			}
+			
+		} catch (BusinessException e) {
+			log.error(e.getMessage(), e);
+		}
+		return Boolean.FALSE;
+	}
+	
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 	
 	public void habilitarPanelInferiorNuevo(){
 		try{
@@ -295,9 +462,13 @@ public class SaldoController {
 	private void obtenerFechasSaldo()throws Exception{
 		Saldo saldoUltimaFechaRegistro = egresoFacade.obtenerSaldoUltimaFechaRegistro(EMPRESA_USUARIO);		
 		log.info("saldoUltimaFechaRegistro:"+saldoUltimaFechaRegistro);		
-		if(saldoUltimaFechaRegistro!=null)dtUltimaFechaCierreGeneral = saldoUltimaFechaRegistro.getTsFechaRegistro();
+		//Inicio: REQ14-005 - bizarq - 19/10/2014
+		//if(saldoUltimaFechaRegistro!=null)dtUltimaFechaCierreGeneral = saldoUltimaFechaRegistro.getTsFechaRegistro();
+		if(saldoUltimaFechaRegistro!=null)dtUltimaFechaGenerada = saldoUltimaFechaRegistro.getTsFechaRegistro();
 		
-		dtUltimaFechaGenerada = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);	
+		//dtUltimaFechaGenerada = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+		dtUltimaFechaCierreGeneral = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+		//Fin: REQ14-005 - bizarq - 19/10/2014
 	}
 	
 	public void habilitarPanelInferiorAnular(){
@@ -468,4 +639,25 @@ public class SaldoController {
 	public void setMostrarPanelInferiorAnular(boolean mostrarPanelInferiorAnular) {
 		this.mostrarPanelInferiorAnular = mostrarPanelInferiorAnular;
 	}
+
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public String getStrPassword() {
+		return strPassword;
+	}
+	public void setStrPassword(String strPassword) {
+		this.strPassword = strPassword;
+	}
+	public String getStrPasswordAnula() {
+		return strPasswordAnula;
+	}
+	public void setStrPasswordAnula(String strPasswordAnula) {
+		this.strPasswordAnula = strPasswordAnula;
+	}
+	public String getStrAnulReason() {
+		return strAnulReason;
+	}
+	public void setStrAnulReason(String strAnulReason) {
+		this.strAnulReason = strAnulReason;
+	}
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 }

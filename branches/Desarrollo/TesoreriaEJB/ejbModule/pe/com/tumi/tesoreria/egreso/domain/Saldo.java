@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			19/10/2014     Christian De los Ríos        Se agregó el atributo 'strMotivoAnula'        
+*/
 package pe.com.tumi.tesoreria.egreso.domain;
 
 import java.math.BigDecimal;
@@ -25,7 +31,9 @@ public class Saldo extends TumiDomain{
 	private Integer		intPersEmpresaAnula;
 	private Integer		intPersPersonaAnula;
 	private Timestamp	tsFechaAnula;
-	
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	private String 	strMotivoAnula;
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 	
 	private List<LibroDiarioDetalle> listaLibroDiarioDetalle;
 	private List<Ingreso>	listaIngreso;
@@ -165,6 +173,14 @@ public class Saldo extends TumiDomain{
 	public void setStrEtiquetaSucursal(String strEtiquetaSucursal) {
 		this.strEtiquetaSucursal = strEtiquetaSucursal;
 	}
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public String getStrMotivoAnula() {
+		return strMotivoAnula;
+	}
+	public void setStrMotivoAnula(String strMotivoAnula) {
+		this.strMotivoAnula = strMotivoAnula;
+	}
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 
 	@Override
 	public String toString() {

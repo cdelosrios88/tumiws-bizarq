@@ -1,5 +1,6 @@
 package pe.com.tumi.tesoreria.egreso.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,4 +93,18 @@ public class SaldoDaoIbatis extends TumiDaoIbatis implements SaldoDao{
 		}
 		return lista;
 	}
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public Integer processDailyAmount(Object o) throws DAOException{
+		Integer escalar = null;
+		try{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".processDailyAmount",o);
+			m = (HashMap<String, Object>)o;
+			escalar = (Integer)m.get("intResult");
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return escalar;
+	}
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
 }
