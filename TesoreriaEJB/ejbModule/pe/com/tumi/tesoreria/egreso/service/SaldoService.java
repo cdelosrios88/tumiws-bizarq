@@ -527,6 +527,8 @@ public class SaldoService {
      * @author Bizarq
      * @param objUsuario 	: Objeto usuario de sesión
      * @param dtFechaInicio : Fecha de inicio hasta donde llegará la anulación
+     * 
+     * @throws BusinessException
      * */
 	public void anularSaldo(Usuario objUsuario, Saldo objSaldo) throws BusinessException{
 	//Fin: REQ14-005 - bizarq - 19/10/2014

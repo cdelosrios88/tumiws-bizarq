@@ -84,7 +84,7 @@ public interface EgresoFacadeRemote {
 	//Inicio: REQ14-005 - bizarq - 19/10/2014
 	public Integer processDailyAmount(Date dtFechaInicio, Date dtFechaFin, Usuario usuario) 
 		throws BusinessException;
-	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 	public Saldo obtenerSaldoUltimaFechaRegistro(Integer intIdEmpresa) throws BusinessException;
 	public Date  obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException;
 	public List<Saldo> buscarSaldo(Saldo saldo)throws BusinessException;

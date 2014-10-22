@@ -675,6 +675,8 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
      * @author Bizarq
      * @param objUsuario 	: Objeto usuario de sesión
      * @param dtFechaInicio : Fecha de inicio hasta donde llegará la anulación
+     * 
+     * @throws BusinessException
      * */
     public void anularSaldo(Usuario usuario, Date dtFechaInicio)throws BusinessException{
     	try{

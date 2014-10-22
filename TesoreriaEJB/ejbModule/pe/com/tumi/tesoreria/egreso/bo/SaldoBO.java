@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			  19/10/2014       Christian De los Ríos       Se agrego el metodo processDailyAmount()        
+*/
 package pe.com.tumi.tesoreria.egreso.bo;
 
 import java.util.Date;
@@ -176,6 +182,16 @@ public class SaldoBO{
 	}
 	
 	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	/**
+	 * Método encargado de procesar los montos diarios.
+	 * 
+     * @author Bizarq
+     * @param dtFechaInicio: Fecha inicio para el procesamiento de los montos <code>Date</code>
+     * @param dtFechaFin: Fecha fin para el procesamiento de los montos <code>Date</code>
+     * @param usuario: Objeto con la informacion del usuario autenticado (auditoria) <code>Usuario</code>
+     * 
+     * @throws BusinessException
+     * */
 	public Integer processDailyAmount(Date dtFechaInicio, Date dtFechaFin, Usuario usuario) throws BusinessException{
 		Integer intEscalar = null;
 		try{
