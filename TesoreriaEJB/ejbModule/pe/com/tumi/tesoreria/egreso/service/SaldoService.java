@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			19/10/2014     Christian De los Ríos        Se modificó el método de anulación de saldos         
+*/
 package pe.com.tumi.tesoreria.egreso.service;
 
 import java.math.BigDecimal;
@@ -14,6 +20,7 @@ import org.apache.log4j.Logger;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalle;
+import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioId;
 import pe.com.tumi.contabilidad.cierre.facade.LibroDiarioFacadeRemote;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
@@ -469,6 +476,7 @@ public class SaldoService {
 		List<LibroDiarioDetalle> listaLibroDiarioDetalle = new ArrayList<LibroDiarioDetalle>();
 		
 		LibroDiario libroDiarioFiltro = new LibroDiario();
+		libroDiarioFiltro.setId(new LibroDiarioId());
 		libroDiarioFiltro.getId().setIntPersEmpresaLibro(intIdEmpresa);
 		libroDiarioFiltro.setTsFechaRegistro(new Timestamp(dtFecha.getTime()));
 		
@@ -511,15 +519,35 @@ public class SaldoService {
 		}
 	}
 	
-	public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio) throws BusinessException{
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	//public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio) throws BusinessException{
+	/**
+	 * Método encargado de realizar la anulación de saldos diarios
+	 * 
+     * @author Bizarq
+     * @param objUsuario 	: Objeto usuario de sesión
+     * @param dtFechaInicio : Fecha de inicio hasta donde llegará la anulación
+     * */
+	public void anularSaldo(Usuario objUsuario, Saldo objSaldo) throws BusinessException{
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 		try{			
 			Saldo saldoFiltro = new Saldo();
-			saldoFiltro.getId().setIntPersEmpresa(intIdEmpresa);
-			saldoFiltro.setDtFechaDesde(dtFechaInicio);
+			//Inicio: REQ14-005 - bizarq - 19/10/2014
+			//saldoFiltro.getId().setIntPersEmpresa(intIdEmpresa);
+			saldoFiltro.getId().setIntPersEmpresa(objUsuario.getEmpresa().getIntIdEmpresa());
+			//saldoFiltro.setDtFechaDesde(dtFechaInicio);
+			saldoFiltro.setDtFechaDesde(objSaldo.getDtFechaDesde());
+			//Fin: REQ14-005 - bizarq - 19/10/2014
 			
 			List<Saldo> listaSaldo = boSaldo.getListaPorBuscar(saldoFiltro);
 			
 			for(Saldo saldo : listaSaldo){
+				//Inicio: REQ14-005 - bizarq - 19/10/2014
+				saldo.setIntPersEmpresaAnula(objUsuario.getEmpresa().getIntIdEmpresa());
+				saldo.setIntPersPersonaAnula(objUsuario.getIntPersPersonaPk());
+				saldo.setTsFechaAnula(new Timestamp(new Date().getTime()));
+				saldo.setStrMotivoAnula(objSaldo.getStrMotivoAnula());
+				//Fin: REQ14-005 - bizarq - 19/10/2014
 				saldo.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO);
 				boSaldo.modificar(saldo);
 			}
@@ -528,7 +556,8 @@ public class SaldoService {
 		}
 	}
 	
-	public Date obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException{
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	/*public Date obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException{
 		Date dtUltimaFecha = null;
 		try{
 			EmpresaFacadeRemote empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
@@ -565,5 +594,19 @@ public class SaldoService {
 			throw new BusinessException(e);
 		}
 		return dtUltimaFecha;
+	}*/
+	public Date obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException{
+		Date dtUltimaFecha = null;
+		try {
+			List<HashMap> listaFechas = boCierreDiarioArqueo.getListaFechas(intIdEmpresa);
+			for(HashMap<String,Object> mapa : listaFechas){
+				dtUltimaFecha = (Timestamp)mapa.get("fechaMaxima");
+				break;
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		return dtUltimaFecha;
 	}
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 }

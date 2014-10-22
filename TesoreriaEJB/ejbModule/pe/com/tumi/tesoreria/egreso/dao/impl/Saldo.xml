@@ -45,6 +45,9 @@
 	 <parameter property="intPersEmpresaAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaAnula"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+	 <parameter property="strMotivoAnula"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
   </parameterMap>
   
   <parameterMap id="parPorPk" class="Saldo">
@@ -78,14 +81,27 @@
 	 <parameter property="dtFechaDesde"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
 	 <parameter property="dtFechaHasta"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
   </parameterMap>
-
+  
+  <!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+  <parameterMap id="parPorProcessDailyAmountDB" class="java.util.Map">
+	 <parameter property="intResult"			jdbcType="NUMERIC"  	javaType="java.lang.Integer" 	mode="OUT"/>
+	 <parameter property="dtFechaInicio" 		jdbcType="DATE" 		javaType="java.util.Date"		mode="IN"/>
+	 <parameter property="dtFechaFin" 			jdbcType="DATE" 		javaType="java.util.Date"		mode="IN"/>
+	 <parameter property="intIdEmpresaUsuario"	jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="IN"/>
+	 <parameter property="intIdUsuario"			jdbcType="NUMERIC" 		javaType="java.lang.Integer"	mode="IN"/>
+  </parameterMap>
+  <!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
   
   <procedure id="grabar" parameterMap="parSaldo">
-	{ call PKG_SALDOS.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  <!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+	{ call PKG_SALDOS.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  <!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->  
   </procedure>
   
   <procedure id="modificar" parameterMap="parSaldo" >
-	{ call PKG_SALDOS.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  <!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+	{ call PKG_SALDOS.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  <!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resSaldo">
@@ -116,4 +132,11 @@
   <procedure id="getListaSaldoFechas" parameterMap="parPersEmpresa" resultMap="saldoHash">
 	{ call PKG_SALDOS.getListaSaldoFechas(?,?) }
   </procedure>
+  
+  <!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+  <procedure id="processDailyAmount" parameterMap="parPorProcessDailyAmountDB">
+	{ call PKG_SALDOS.processDailyAmount(?,?,?,?,?) }  
+  </procedure>
+  <!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
+  
 </sqlMap>

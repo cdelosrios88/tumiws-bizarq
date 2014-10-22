@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			19/10/2014     Christian De los Ríos        Se modificó el método de anulación de saldos         
+*/
 package pe.com.tumi.tesoreria.egreso.facade;
 
 import java.util.Date;
@@ -75,13 +81,21 @@ public interface EgresoFacadeRemote {
 	public CierreDiarioArqueo grabarCierreDiarioArqueo(CierreDiarioArqueo cierreDiarioArqueo) throws BusinessException;
 	public List<CierreDiarioArqueo> buscarCierreDiarioArqueo(CierreDiarioArqueo cierreDiarioArqueo, List<Persona> listaPersona)throws BusinessException;
 	public void procesarSaldo(Date dtFechaInicio, Date dtFechaFin, Usuario usuario, List<Bancofondo> listaBanco, List<Bancofondo> listaFondo) throws BusinessException;
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public Integer processDailyAmount(Date dtFechaInicio, Date dtFechaFin, Usuario usuario) 
+		throws BusinessException;
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
 	public Saldo obtenerSaldoUltimaFechaRegistro(Integer intIdEmpresa) throws BusinessException;
 	public Date  obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException;
 	public List<Saldo> buscarSaldo(Saldo saldo)throws BusinessException;
 	public Egreso generarEgresoMovilidadCheque(List<Movilidad> listaMovilidad, Bancocuenta bancoCuenta, Usuario usuario, Integer intNumeroCheque, 
 			Integer intTipoDocumentoValidar) throws BusinessException;
 	public List<Egreso> buscarEgresoParaCaja(List<Persona>listaPersona, Egreso egresoFiltro, Date dtDesdeFiltro, Date dtHastaFiltro)throws BusinessException;
-	public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio)throws BusinessException;
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	//public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio)throws BusinessException;
+	public void anularSaldo(Usuario usuario, Date dtFechaInicio)throws BusinessException;
+	public void anularSaldo(Usuario usuario, Saldo saldoFiltro)throws BusinessException;
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 	public List<Egreso> buscarEgresoParaTelecredito(Egreso egreso)throws BusinessException;
 	public Egreso grabarTransferenciaTelecredito(Egreso egreso, List<Egreso> listaEgresoTelecredito) throws BusinessException;
 	public Egreso generarEgresoMovilidadTransferencia(List<Movilidad> listaMovilidad, Bancocuenta bancoCuenta, Usuario usuario, Integer intNumeroCheque, 

@@ -1,12 +1,13 @@
 package pe.com.tumi.tesoreria.egreso.bo;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
+import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.tesoreria.egreso.dao.SaldoDao;
 import pe.com.tumi.tesoreria.egreso.dao.impl.SaldoDaoIbatis;
 import pe.com.tumi.tesoreria.egreso.domain.Saldo;
@@ -173,4 +174,23 @@ public class SaldoBO{
 		}
 		return lista;
 	}
+	
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public Integer processDailyAmount(Date dtFechaInicio, Date dtFechaFin, Usuario usuario) throws BusinessException{
+		Integer intEscalar = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("dtFechaInicio", 		dtFechaInicio);
+			mapa.put("dtFechaFin",   		dtFechaFin);
+			mapa.put("intIdEmpresaUsuario", usuario.getEmpresa().getIntIdEmpresa());
+			mapa.put("intIdUsuario", 		usuario.getIntPersPersonaPk());
+			intEscalar = dao.processDailyAmount(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return intEscalar;
+	}
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 }

@@ -1038,5 +1038,25 @@ public class Constante {
 //	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_MONTOPAGADO_N = "ORCD_MONTOPAGADO_N";
 //	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_MONTOINGRESADO_N = "ORCD_MONTOINGRESADO_N";
 //	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PARA_ESTADO_N_COD = "PARA_ESTADO_N_COD";
-
+	
+	//Inicio: REQ14-005 - bizarq - 20/10/2014
+	public static final String STR_EMPTY = "";
+	public static final Integer INT_IDTRANSACCION_CIERRE_SALDOCAJA = 211;
+	
+	public static final Integer ON_FAIL = 0;
+	public static final Integer ON_SUCCESS = 1;
+	
+	public static final Integer PARAM_T_TODOS = -1;
+	public static final int INT_ZERO = 0;
+	public static final int INT_ONE = 1;
+	public static final int INT_TWO = 2;
+	public static final int INT_THREE = 3;
+	public static final int INT_FOUR = 4;
+	public static final int INT_FIVE = 5;
+	public static final int INT_SIX = 6;
+	public static final int INT_SEVEN = 7;
+	public static final int INT_EIGTH = 8;
+	public static final int INT_NINE = 9;
+	public static final int INT_TEN = 10;
+	//Fin: REQ14-005 - bizarq - 20/10/2014
 }

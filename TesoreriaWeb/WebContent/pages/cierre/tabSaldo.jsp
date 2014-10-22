@@ -10,10 +10,6 @@
 	<!-- Modulo    :                	-->
 	<!-- Fecha     :                	-->
 
-
-
-
-
 <h:form>
    	<rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;">
         	
@@ -94,11 +90,8 @@
             	</rich:column>
             </h:panelGrid>
             
-            
-            
-            
             <rich:spacer height="12px"/>           
-                
+            
             <h:panelGrid id="panelTablaResultadosS">
 	        	<rich:extendedDataTable id="tblResultadoS" 
 	          		enableContextMenu="false" 
@@ -183,6 +176,8 @@
 		<h:panelGroup style="border: 0px solid #17356f;background-color:#DEEBF5;" styleClass="rich-tabcell-noborder"
 			id="panelBotonesS">
 			<h:panelGrid columns="4">
+				<!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+				<%--
 				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px"
 					action="#{saldoController.habilitarPanelInferiorNuevo}"
 					reRender="contPanelInferiorS,panelMensajeS,panelBotonesS"/>
@@ -195,11 +190,19 @@
 			    	disabled="#{!saldoController.habilitarGrabar}"/>
 			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
 			    	action="#{saldoController.deshabilitarPanelInferior}"
+			    	reRender="contPanelInferiorS,panelMensajeS,panelBotonesS"/> --%>
+			    <a4j:commandButton value="Generar Saldos" styleClass="btnEstilos" style="width:150px"
+					action="#{saldoController.habilitarPanelInferiorNuevo}"
+					reRender="contPanelInferiorS,panelMensajeS,panelBotonesS"/>
+				<a4j:commandButton value="Anular Saldos" styleClass="btnEstilos" style="width:150px"
+					action="#{saldoController.habilitarPanelInferiorAnular}"
+					reRender="contPanelInferiorS,panelMensajeS,panelBotonesS"/>
+				<a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
+			    	action="#{saldoController.deshabilitarPanelInferior}"
 			    	reRender="contPanelInferiorS,panelMensajeS,panelBotonesS"/>
+			    <!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
 			</h:panelGrid>
 		</h:panelGroup>
-		
-		
 		
 	<h:panelGroup id="contPanelInferiorS">
 			
@@ -230,12 +233,12 @@
 				</rich:column>
 			</h:panelGrid>
 			
-			<h:panelGrid columns="6">
+			<h:panelGrid columns="5">
 				<rich:column width="160">
 					<h:outputText value="Rango de Fechas a Generar"/>
 				</rich:column>
-				<rich:column width="20">
-					<h:outputText value="Inicio : "/>
+				<rich:column width="35">
+					<h:outputText value="Inicio :"/>
 				</rich:column>
 				<rich:column width="150" style="text-align: left;">	               	
 	               	<rich:calendar datePattern="dd/MM/yyyy"  
@@ -246,10 +249,10 @@
 						inputSize="16"
 						showApplyButton="true"/>
 	            </rich:column>
-	            <rich:column width="35">
+	            <rich:column width="40">
 					<h:outputText value="Fin :"/>
 				</rich:column>
-				<rich:column width="200">
+				<rich:column width="210">
 					<rich:calendar datePattern="dd/MM/yyyy"  
 						value="#{saldoController.dtFechaFinSaldo}"  
 						disabled="#{saldoController.deshabilitarNuevo}"
@@ -259,13 +262,28 @@
 						showApplyButton="true"/>
 				</rich:column>
 			</h:panelGrid>
-
+			<!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+			<h:panelGrid columns="3">
+				<rich:column width="200">
+					<h:outputText value="Contraseña :"/>
+				</rich:column>
+				<rich:column width="150" style="text-align: left;">	               	
+	               	<h:inputSecret value="#{saldoController.strPassword}" size="20"
+	               		disabled="#{saldoController.deshabilitarNuevo}"/>
+	            </rich:column>
+	            <rich:column>
+	            	<a4j:commandButton value="Procesar" styleClass="btnEstilos"
+	            		action="#{saldoController.processDailyAmount}"
+	            		reRender="contPanelInferiorS,panelMensajeS,panelBotonesS,panelTablaResultadosS"
+	            		disabled="#{saldoController.deshabilitarNuevo}"/>
+	            </rich:column>
+			</h:panelGrid>
+			<!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
 		</rich:panel>
 		
 		<rich:panel rendered="#{saldoController.mostrarPanelInferiorAnular}" style="border:1px solid #17356f;background-color:#DEEBF5;">
 
 			<rich:spacer height="8px"/>
-			
 			<h:panelGrid columns="6">
 				<rich:column width="160">
 					<h:outputText value="Ultima Fecha Generada :"/>
@@ -303,11 +321,34 @@
 						showApplyButton="true"/>
 	            </rich:column>	            
 			</h:panelGrid>
-
+			
+			<!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+			<h:panelGrid columns="3">
+				<rich:column width="160">
+					<h:outputText value="Motivo :"/>
+				</rich:column>
+	            <rich:column>
+	            	<h:inputTextarea value="#{saldoController.strAnulReason}" cols="80" rows="3"
+	            					 disabled="#{saldoController.deshabilitarNuevo}"/>
+	            </rich:column>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="3">
+				<rich:column width="160">
+					<h:outputText value="Contraseña :"/>
+				</rich:column>
+				<rich:column width="150" style="text-align: left;">	               	
+	               	<h:inputSecret value="#{saldoController.strPasswordAnula}" size="20"/>
+	            </rich:column>
+	            <rich:column>
+	            	<a4j:commandButton value="Procesar" styleClass="btnEstilos"
+	            		action="#{saldoController.anulateDailyAmount}"
+	            		reRender="contPanelInferiorS,panelMensajeS,panelBotonesS,panelTablaResultadosS"
+	            		disabled="#{saldoController.deshabilitarNuevo}"/>
+	            </rich:column>
+			</h:panelGrid>
+			<!-- Fin: REQ14-005 - bizarq - 19/10/2014 -->
 		</rich:panel>
-		
 	</h:panelGroup>	
-
 	</rich:panel>
-
 </h:form>
