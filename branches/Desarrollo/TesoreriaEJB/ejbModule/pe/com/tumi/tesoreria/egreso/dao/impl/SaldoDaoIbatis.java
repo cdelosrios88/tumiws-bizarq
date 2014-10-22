@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			  19/10/2014       Christian De los Ríos       Se agrego el metodo processDailyAmount()     
+*/
 package pe.com.tumi.tesoreria.egreso.dao.impl;
 
 import java.util.HashMap;
@@ -94,6 +100,15 @@ public class SaldoDaoIbatis extends TumiDaoIbatis implements SaldoDao{
 		return lista;
 	}
 	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	/**
+	 * Método encargado de procesar los montos diarios y mapearlo en la capa de
+	 * persistencia del sistema.
+	 * 
+     * @author Bizarq
+     * @param o: Objeto con la informacion a procesar en el cierre diario <code>Object</code>
+     * 
+     * @throws DAOException
+     * */
 	public Integer processDailyAmount(Object o) throws DAOException{
 		Integer escalar = null;
 		try{
@@ -106,5 +121,5 @@ public class SaldoDaoIbatis extends TumiDaoIbatis implements SaldoDao{
 		}
 		return escalar;
 	}
-	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 }

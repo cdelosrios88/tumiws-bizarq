@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			  20/10/2014       Christian De los Ríos       Se agregaron constantes.        
+*/
 package pe.com.tumi.common.util;
 
 import java.math.BigDecimal;

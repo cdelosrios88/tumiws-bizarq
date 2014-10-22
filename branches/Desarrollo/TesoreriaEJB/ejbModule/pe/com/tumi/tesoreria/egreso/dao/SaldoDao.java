@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-005       			  19/10/2014       Christian De los Ríos       Se agrego el metodo processDailyAmount()       
+*/
 package pe.com.tumi.tesoreria.egreso.dao;
 
 import java.util.List;
