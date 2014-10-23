@@ -309,9 +309,8 @@ public class SaldoController {
 		Integer intResult = null;
 		try {
 			if(!isValidDailyAmountProcess()){
-				//egresoFacade.procesarSaldo(dtFechaInicioSaldo, dtFechaFinSaldo, usuario, listaBanco, listaFondo);
-				if(intResult!=null && intResult.equals(Constante.ON_SUCCESS)){
-					egresoFacade.processDailyAmount(dtFechaInicioSaldo, dtFechaFinSaldo, usuario);
+				intResult = egresoFacade.processDailyAmount(dtFechaInicioSaldo, dtFechaFinSaldo, usuario);
+				if(intResult!=null && intResult.equals(Constante.ON_SUCCESS)){					
 					mostrarMensaje(Boolean.TRUE, "Se registro correctamene el saldo para el rango de fechas indicadas.");
 				}else{
 					mostrarMensaje(Boolean.FALSE, "Ocurrió un error en el proceso de Saldos Diarios.");
