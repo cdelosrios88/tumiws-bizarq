@@ -10,6 +10,7 @@ import pe.com.tumi.tesoreria.egreso.dao.ConciliacionDao;
 import pe.com.tumi.tesoreria.egreso.dao.impl.ConciliacionDaoIbatis;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
+import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 
 
 public class ConciliacionBO{
@@ -66,4 +67,30 @@ public class ConciliacionBO{
 		}
 		return domain;
 	}
+	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	/**
+	 * 
+	 */
+	public List<Conciliacion> getListFilter(ConciliacionComp conciliacionCompBusq) throws BusinessException{
+		List<Conciliacion> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("dtBusqFechaDesde", 		conciliacionCompBusq.getDtBusqFechaDesde());
+			mapa.put("dtBusqFechaHasta", 		conciliacionCompBusq.getDtBusqFechaHasta());
+			mapa.put("intBusqPersEmpresa", 		conciliacionCompBusq.getIntBusqPersEmpresa());
+			mapa.put("intBusqItemBancoFondo", 		conciliacionCompBusq.getIntBusqItemBancoFondo());
+			mapa.put("intBusqItemBancoCuenta", 		conciliacionCompBusq.getIntBusqItemBancoCuenta());
+
+			lista = dao.getListFilter(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
+	
+	
 }
