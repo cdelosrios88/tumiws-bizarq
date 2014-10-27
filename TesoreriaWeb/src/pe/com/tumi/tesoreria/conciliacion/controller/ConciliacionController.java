@@ -1,6 +1,8 @@
 package pe.com.tumi.tesoreria.conciliacion.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +24,14 @@ import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
+import pe.com.tumi.tesoreria.conciliacion.facade.ConciliacionFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
+import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
 
 
-public class ConciliacionController {
+public class ConciliacionController{
 
 	protected static Logger log = Logger.getLogger(ConciliacionController.class);
 	
@@ -40,13 +44,20 @@ public class ConciliacionController {
 	PlanCuentaFacadeRemote	planCuentaFacade;
 	EgresoFacadeLocal		egresoFacade;
 	BancoFacadeLocal		bancoFacade;
-	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	ConciliacionFacadeLocal conciliacionFacade;
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private	Conciliacion	conciliacionNuevo;
 	private Conciliacion	conciliacionFiltro;
 	private Conciliacion	registroSeleccionado;
 	private Bancocuenta		bancoCuentaFiltro;
-	
-	private List<Conciliacion>	listaConciliacion;
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	//private List<Conciliacion>	listaConciliacion;
+	private List<Conciliacion>	listaConciliacionBusq;
+	private ConciliacionComp conciliacionCompBusq;
+	private List<Bancofondo>	listaBanco;
+	private List<Tabla> listaTablaTipoDoc;
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	
 	private Usuario 	usuario;
@@ -88,11 +99,83 @@ public class ConciliacionController {
 			planCuentaFacade  = (PlanCuentaFacadeRemote) EJBFactory.getRemote(PlanCuentaFacadeRemote.class);
 			egresoFacade  = (EgresoFacadeLocal) EJBFactory.getLocal(EgresoFacadeLocal.class);			
 			bancoFacade  = (BancoFacadeLocal) EJBFactory.getLocal(BancoFacadeLocal.class);
+			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+			conciliacionFacade = (ConciliacionFacadeLocal) EJBFactory.getLocal(ConciliacionFacadeLocal.class);
 			
+			//listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
+			//cargarListaBanco();
+			cargarListaTipoDocumento();
+			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}	
+	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	private void cargarListaBanco()throws Exception{
+
+		List<Tabla> listaTablaTipoBanco = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_BANCOS));
+		for(Bancofondo banco : listaBanco){
+			for(Tabla tabla : listaTablaTipoBanco){
+				if(banco.getIntBancoCod().equals(tabla.getIntIdDetalle())){
+					banco.setStrEtiqueta(tabla.getStrDescripcion());
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * Carga Combo de Cuentas Banacarias
+	 * @throws Exception
+	 */
+	private void cargarListaCuentas()throws Exception{
+		
+		try {
+			String strIdCuenta = null;
+			Integer intIdCuenta = null;
+			
+			strIdCuenta = getRequestParameter("pIntIdCuenta");
+			intIdCuenta = new Integer(strIdCuenta);
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		
+	}
+	
+	/**
+	 * carga Combo de Tipo de Documento
+	 */
+	private void cargarListaTipoDocumento()throws Exception{
+		
+		try {
+			listaTablaTipoDoc = tablaFacade.getListaTablaPorAgrupamientoA(new Integer(Constante.PARAM_T_DOCUMENTOGENERAL), "B");
+
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}	
+	}
+	
+	
+	/**
+	 * Recupera Ingresos y egresos para conciliacion
+	 */
+	private void buscarEgresoIngreso()throws Exception{
+		
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		
+	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void deshabilitarPanelInferior(){
 		registrarNuevo = Boolean.FALSE; 
@@ -116,11 +199,16 @@ public class ConciliacionController {
 	}	
 	
 	public void buscar(){
+		/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
+		listaConciliacionBusq = new ArrayList<Conciliacion>();		
+		/* Fin: REQ14-006 Bizarq - 18/10/2014 */
+	
 		try{
-			cargarUsuario();
-
 			
-			ocultarMensaje();
+			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
+			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
+			/* Fin: REQ14-006 Bizarq - 18/10/2014 */
+			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -333,12 +421,14 @@ public class ConciliacionController {
 	public void setConciliacionFiltro(Conciliacion conciliacionFiltro) {
 		this.conciliacionFiltro = conciliacionFiltro;
 	}
-	public List<Conciliacion> getListaConciliacion() {
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	/*public List<Conciliacion> getListaConciliacion() {
 		return listaConciliacion;
 	}
 	public void setListaConciliacion(List<Conciliacion> listaConciliacion) {
 		this.listaConciliacion = listaConciliacion;
-	}
+	}*/
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	public List<Bancocuenta> getListaBancoCuenta() {
 		return listaBancoCuenta;
 	}
@@ -357,4 +447,45 @@ public class ConciliacionController {
 	public void setDatosValidados(boolean datosValidados) {
 		this.datosValidados = datosValidados;
 	}
+
+	
+	/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
+	public List<Conciliacion> getListaConciliacionBusq() {
+		return listaConciliacionBusq;
+	}
+
+	public void setListaConciliacionBusq(List<Conciliacion> listaConciliacionBusq) {
+		this.listaConciliacionBusq = listaConciliacionBusq;
+	}
+
+	protected String getRequestParameter(String name) {
+		return (String) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestParameterMap().get(name);
+	}
+
+	public Conciliacion getRegistroSeleccionado() {
+		return registroSeleccionado;
+	}
+
+	public void setRegistroSeleccionado(Conciliacion registroSeleccionado) {
+		this.registroSeleccionado = registroSeleccionado;
+	}
+
+	public ConciliacionComp getConciliacionCompBusq() {
+		return conciliacionCompBusq;
+	}
+
+	public void setConciliacionCompBusq(ConciliacionComp conciliacionCompBusq) {
+		this.conciliacionCompBusq = conciliacionCompBusq;
+	}
+
+	public List<Tabla> getListaTablaTipoDoc() {
+		return listaTablaTipoDoc;
+	}
+
+	public void setListaTablaTipoDoc(List<Tabla> listaTablaTipoDoc) {
+		this.listaTablaTipoDoc = listaTablaTipoDoc;
+	}
+
+	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
