@@ -32,6 +32,21 @@ public class Conciliacion extends TumiDomain{
 	private Integer intParaDocumentoGeneralFiltro;
 	private Integer intEstadoCheckFiltro;
 	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	// 
+	private String strBanco;	
+	private String strTipoCuenta;	
+	private String strMoneda;	
+	private String strNumeroCuenta;	
+	private BigDecimal bdSaldoAnterior;	
+	private BigDecimal bdDebe;	
+	private BigDecimal bdHaber;	
+	private BigDecimal bdSaldoCaja;	
+	private BigDecimal bdSaldoConciliacion;	
+	private Integer intNroMovimientos;	
+	private BigDecimal bdPorConciliar;
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
+	
 	public Conciliacion(){
 		id = new ConciliacionId();
 	}
@@ -162,6 +177,99 @@ public class Conciliacion extends TumiDomain{
 	public void setListaConciliacionDetalle(List<ConciliacionDetalle> listaConciliacionDetalle) {
 		this.listaConciliacionDetalle = listaConciliacionDetalle;
 	}
+	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	
+	public String getStrBanco() {
+		return strBanco;
+	}
+
+	public void setStrBanco(String strBanco) {
+		this.strBanco = strBanco;
+	}
+
+	public String getStrTipoCuenta() {
+		return strTipoCuenta;
+	}
+
+	public void setStrTipoCuenta(String strTipoCuenta) {
+		this.strTipoCuenta = strTipoCuenta;
+	}
+
+	public String getStrMoneda() {
+		return strMoneda;
+	}
+
+	public void setStrMoneda(String strMoneda) {
+		this.strMoneda = strMoneda;
+	}
+
+	public String getStrNumeroCuenta() {
+		return strNumeroCuenta;
+	}
+
+	public void setStrNumeroCuenta(String strNumeroCuenta) {
+		this.strNumeroCuenta = strNumeroCuenta;
+	}
+
+	public BigDecimal getBdSaldoAnterior() {
+		return bdSaldoAnterior;
+	}
+
+	public void setBdSaldoAnterior(BigDecimal bdSaldoAnterior) {
+		this.bdSaldoAnterior = bdSaldoAnterior;
+	}
+
+	public BigDecimal getBdDebe() {
+		return bdDebe;
+	}
+
+	public void setBdDebe(BigDecimal bdDebe) {
+		this.bdDebe = bdDebe;
+	}
+
+	public BigDecimal getBdHaber() {
+		return bdHaber;
+	}
+
+	public void setBdHaber(BigDecimal bdHaber) {
+		this.bdHaber = bdHaber;
+	}
+
+	public BigDecimal getBdSaldoCaja() {
+		return bdSaldoCaja;
+	}
+
+	public void setBdSaldoCaja(BigDecimal bdSaldoCaja) {
+		this.bdSaldoCaja = bdSaldoCaja;
+	}
+
+	public BigDecimal getBdSaldoConciliacion() {
+		return bdSaldoConciliacion;
+	}
+
+	public void setBdSaldoConciliacion(BigDecimal bdSaldoConciliacion) {
+		this.bdSaldoConciliacion = bdSaldoConciliacion;
+	}
+
+	public Integer getIntNroMovimientos() {
+		return intNroMovimientos;
+	}
+
+	public void setIntNroMovimientos(Integer intNroMovimientos) {
+		this.intNroMovimientos = intNroMovimientos;
+	}
+
+	public BigDecimal getBdPorConciliar() {
+		return bdPorConciliar;
+	}
+
+	public void setBdPorConciliar(BigDecimal bdPorConciliar) {
+		this.bdPorConciliar = bdPorConciliar;
+	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
+	
+
 
 	@Override
 	public String toString() {
@@ -181,4 +289,6 @@ public class Conciliacion extends TumiDomain{
 				+ ", strObservaciónAnula=" + strObservaciónAnula
 				+ ", intParaEstado=" + intParaEstado + "]";
 	}
+
+
 }
