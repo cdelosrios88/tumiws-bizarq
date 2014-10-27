@@ -49,6 +49,10 @@
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/AdelantoSunat.xml"/>
 	<!-- Agregado por cdelosrios, 02/11/2013 -->
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatDoc.xml"/>
-	<sqlMap resource="pe/com/tumi/tesoreria/cierreLogisticaOper/dao/impl/CierreLogisticaOper.xml"/>
 	<!-- Fin agregado por cdelosrios, 02/11/2013 -->
+	<!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/Conciliacion.xml"/>
+	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/ConciliacionDetalle.xml"/>
+	<!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
+	
 </sqlMapConfig>
