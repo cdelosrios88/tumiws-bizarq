@@ -4,7 +4,6 @@ import java.util.List;
 
 import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.persistencia.dao.impl.TumiDaoIbatis;
-
 import pe.com.tumi.tesoreria.egreso.dao.ConciliacionDao;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 
@@ -41,4 +40,23 @@ public class ConciliacionDaoIbatis extends TumiDaoIbatis implements Conciliacion
 		}
 		return lista;
 	}
+	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	/**
+	 * Recupera las conciliaciones  segun filtros de grilla.
+	 * @param o
+	 * @return
+	 * @throws DAOException
+	 */
+	public List<Conciliacion> getListFilter(Object o) throws DAOException{
+		List<Conciliacion> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListFilter", o);
+		}catch(Exception e) {
+			System.out.println("Error en getListFilter --->  "+e);
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 }
