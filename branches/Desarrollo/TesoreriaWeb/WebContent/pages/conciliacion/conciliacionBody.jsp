@@ -23,6 +23,50 @@
     		</h:panelGrid>
              
             <h:panelGrid columns="11">
+            <!-- Inicio: REQ14-06 Bizarq - 18/10/2014 -->
+            	<rich:column width="120px">
+					<h:outputText value="Fecha" styleClass="estiloLetra1"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value=":" styleClass="estiloLetra1"/>
+				</rich:column>
+				<rich:column>
+					<rich:calendar popup="true" enableManualInput="true" value="#{conciliacionController.conciliacionCompBusq.dtBusqFechaDesde}"
+						datePattern="dd/MM/yyyy" inputStyle="width:70px;" />
+				</rich:column>
+				<rich:column>
+					<rich:calendar popup="true" enableManualInput="true" value="#{conciliacionController.conciliacionCompBusq.dtBusqFechaHasta}"
+						datePattern="dd/MM/yyyy" inputStyle="width:70px;" />
+				</rich:column>
+				
+				<rich:column width="160">
+    				<!--
+    				<h:selectOneMenu style="width: 160px;" 
+    					value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
+    					<tumih:selectItems var="sel" 
+    						cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
+							itemValue="#{sel.intIdDetalle}" 
+							itemLabel="#{sel.strDescripcion}"/>
+    				</h:selectOneMenu>
+    				-->
+	    		</rich:column>
+	    		
+	    		
+	    		<rich:column width="160">
+    				<!--
+    				<h:selectOneMenu style="width: 160px;" 
+    					value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
+    					<tumih:selectItems var="sel" 
+    						cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
+							itemValue="#{sel.intIdDetalle}" 
+							itemLabel="#{sel.strDescripcion}"/>
+    				</h:selectOneMenu>
+    				-->
+	    		</rich:column>
+				
+			<!-- Fin: REQ14-006 Bizarq - 18/10/2014 -->
+
+
 				<rich:column width="130" style="text-align: right;">
                 	<a4j:commandButton styleClass="btnEstilos"
                 		value="Buscar" 
@@ -39,57 +83,87 @@
 	          		enableContextMenu="false" 
 	          		sortMode="single" 
                     var="item" 
-                    value="#{conciliacionController.listaConciliacion}"  
+                    value="#{conciliacionController.listaConciliacionBusq}"  
 					rowKeyVar="rowKey" 
 					rows="5" 
 					width="1030px" 
 					height="160px" 
 					align="center">
                                 
-					<rich:column width="40" style="text-align: center">
+					<rich:column width="50" style="text-align: center">
                     	<f:facet name="header">
-                        	<h:outputText value="Nro"/>
+                        	<h:outputText value="Fecha Conciliación"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.tsFechaConciliacion}"/>
                     </rich:column>
-                    <rich:column width="130" style="text-align: center">
+                    <rich:column width="60" style="text-align: center">
                     	<f:facet name="header">
-                        	<h:outputText value="Documento"/>
+                        	<h:outputText value="Banco"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.strBanco}"/>
                     </rich:column>
-					<rich:column width="250" style="text-align: center">
+					<rich:column width="75" style="text-align: center">
                     	<f:facet name="header">
-                        	<h:outputText value="Entidad de Pago"/>
-                      	</f:facet>	
-                    </rich:column>
-                  	<rich:column width="180" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Sucursal"/>
+                        	<h:outputText value="Tipo de Cuenta"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.strTipoCuenta}"/>	
+                    </rich:column>
+                  	<rich:column width="70" style="text-align: center">
+                    	<f:facet name="header">
+                        	<h:outputText value="Moneda"/>
+                      	</f:facet>
+                      	<h:outputText value="#{item.strMoneda}"/>
                     </rich:column>
                     <rich:column width="80" style="text-align: center">
                     	<f:facet name="header">
-                      		<h:outputText value="Fecha"/>
+                      		<h:outputText value="Número Cuenta"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.strNumeroCuenta}"/>
                   	</rich:column>
                     <rich:column width="100" style="text-align: center">
                     	<f:facet name="header">
-                        	<h:outputText value="Tipo Operación"/>
+                        	<h:outputText value="Saldo Anterior"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.bdMontoSaldoInicial}"/>
                     </rich:column>
                     <rich:column width="80" style="text-align: center">
                     	<f:facet name="header">
-                      		<h:outputText value="Periodo"/>
+                      		<h:outputText value="Debe"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.bdMontoDebe}"/>
                   	</rich:column>
                     <rich:column width="80" style="text-align: center">
                     	<f:facet name="header">
-                      		<h:outputText value="Monto"/>
+                      		<h:outputText value="Haber"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.bdMontoHaber}"/>
                   	</rich:column>
                     <rich:column width="100" style="text-align: center">
                     	<f:facet name="header">
-                        	<h:outputText value="Estado Pago"/>
+                        	<h:outputText value="Saldo Caja"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.bdSaldoCaja}"/>
+                    </rich:column>
+                    
+                    <rich:column width="100" style="text-align: center">
+                    	<f:facet name="header">
+                        	<h:outputText value="Saldo Conciliación"/>
+                      	</f:facet>
+                      	<h:outputText value="#{item.bdSaldoConciliacion}"/>
+                    </rich:column>
+                    
+                    <rich:column width="100" style="text-align: center">
+                    	<f:facet name="header">
+                        	<h:outputText value="Nro. Mov."/>
+                      	</f:facet>
+                      	<h:outputText value="#{item.intNroMovimientos}"/>
+                    </rich:column>
+                    
+                    <rich:column width="100" style="text-align: center">
+                    	<f:facet name="header">
+                        	<h:outputText value="Por Conciliar"/>
+                      	</f:facet>
+                      	<h:outputText value="#{item.intNroMovimientos}"/>
                     </rich:column>
                     
                   	<a4j:support event="onRowClick"
@@ -172,7 +246,8 @@
 				<h:outputText value="Tipo de Documento : "/>
 			</rich:column>
 			<rich:column width="160">
-				<h:selectOneMenu
+			<!-- 
+			 -	<h:selectOneMenu
 					style="width: 150px;"
 					value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}"
 					disabled="#{conciliacionController.datosValidados}">
@@ -182,28 +257,19 @@
 						itemLabel="#{sel.strDescripcion}"/>
 				</h:selectOneMenu>
 			</rich:column>
-			<rich:column width=	"140">
-				<h:outputText value="Estado de Registro : "/>
-			</rich:column>
-			<rich:column width="160">
-				<h:selectOneMenu
-					disabled="#{conciliacionController.datosValidados}"
-					style="width: 150px;"
-					value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
-					<f:selectItem itemValue="1" itemLabel="Todos"/>
-					<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
-					<f:selectItem itemValue="1" itemLabel="Chekeado"/>
-				</h:selectOneMenu>
-			</rich:column>
-		</h:panelGrid>
-		
-		<rich:spacer height="10px"/>
-		
-		<h:panelGrid columns="8">
+			-->
+			
+			<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
+					<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
+						<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
+						 itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
+			</h:selectOneMenu>	
+			
 			<rich:column width=	"120">
 				<h:outputText value="Cuenta Bancaria : "/>
 			</rich:column>
-			<rich:column width="450">
+			
+			<rich:column width="200">
 				<h:inputText
 					rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
 					size="70"
@@ -225,8 +291,86 @@
 	                action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
 	                style="width:150px"/>
 			</rich:column>
+			
+			<!-- 
+			<rich:column width=	"140">
+				<h:outputText value="Estado de Registro : "/>
+			</rich:column>
+			<rich:column width="160">
+				<h:selectOneMenu
+					disabled="#{conciliacionController.datosValidados}"
+					style="width: 150px;"
+					value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
+					<f:selectItem itemValue="1" itemLabel="Todos"/>
+					<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
+					<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+				</h:selectOneMenu>
+			</rich:column>
+			-->
 		</h:panelGrid>
 		
+		<rich:spacer height="10px"/>
+		
+		<h:panelGrid columns="8">
+			<!--
+			<rich:column width=	"120">
+				<h:outputText value="Cuenta Bancaria : "/>
+			</rich:column>
+			
+			<rich:column width="450">
+				<h:inputText
+					rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+					size="70"
+					readonly="true"
+					style="background-color: #BFBFBF;font-weight:bold;"/>
+				<h:inputText
+					rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+					value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
+					size="70"
+					readonly="true"
+					style="background-color: #BFBFBF;font-weight:bold;"/>
+			</rich:column>
+			-->
+			<rich:column width=	"140">
+				<h:outputText value="Estado de Registro : "/>
+			</rich:column>
+			<rich:column width="160">
+				<h:selectOneMenu
+					disabled="#{conciliacionController.datosValidados}"
+					style="width: 150px;"
+					value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
+					<f:selectItem itemValue="1" itemLabel="Todos"/>
+					<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
+					<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+				</h:selectOneMenu>
+			</rich:column>
+			<!--
+			<rich:column width="150">
+				<a4j:commandButton styleClass="btnEstilos"
+					value="Buscar Cuenta"
+	                disabled="#{conciliacionController.datosValidados}"
+	                reRender="pBuscarBancoCuenta"
+	                oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
+	                action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
+	                style="width:150px"/>
+			</rich:column>
+			
+			-->
+		</h:panelGrid>
+		
+		<rich:spacer height="5px"/>
+		
+		<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
+			<rich:column width="150">
+				<a4j:commandButton styleClass="btnEstilos"
+		        	disabled="flase"
+		        	value="Buscar"
+		            reRender="contPanelInferior,panelBotones"
+		            action="#{conciliacionController.buscarEgresoIngreso}"
+		            style="width:150px"/>
+			</rich:column>
+		</h:panelGrid>
+			
 		<rich:spacer height="5px"/>
 		
 		<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
