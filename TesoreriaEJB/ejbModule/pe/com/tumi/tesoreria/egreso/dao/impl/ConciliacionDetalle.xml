@@ -6,6 +6,8 @@
   <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle" alias="ConciliacionDetalle"/> 
 	
   <resultMap id="resConciliacionDetalle" class="ConciliacionDetalle" >
+	<!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
+	<!--
 	<result property="id.intPersEmpresa"  				column="pempresaconciliacion" />
 	<result property="id.intItemConciliacion"   		column="pitemconciliacion" />
 	<result property="id.intItemConciliacionDetalle" 	column="pfechaconciliacion" />
@@ -22,6 +24,26 @@
     <result property="intPersPersonaCheckConciliacion"  column="pempresaconcianula" />
     <result property="tsFechaCheck"      				column="ppersonaconcianula" />
     <result property="intNumeroOperacion"      			column="pfechaanula" />
+    -->
+    <result property="id.intPersEmpresa"  				column="pempresaconciliacion" />
+	<result property="id.intItemConciliacion"   		column="pitemconciliacion" />
+	<result property="id.intItemConciliacionDetalle" 	column="pitemconciliaciondet" />
+    <result property="intPersEmpresaEgreso"     		column="pempresaegreso" />
+    <result property="intItemEgresoGeneral" 			column="pitemingresogeneral" />
+    <result property="intPersEmpresaIngreso"   			column="pempresaingreso" />
+    <result property="intItemIngresoGeneral"    		column="pitemingresogeneral" />
+    <result property="intIndicadorCheck"    			column="pindicadorcheck" />
+    <result property="intIndicadorConci"      			column="pindicadorconci" />
+    <result property="bdSaldoInicial"      				column="psaldoinicial" />
+    <result property="bdMontoDebe"    					column="pmontodebe" />
+    <result property="bdMontoHaber"      				column="pmontohaber" />
+    <result property="intPersEmpresaCheckConciliacion"  column="pempresacheckcon" />
+    <result property="intPersPersonaCheckConciliacion"  column="ppersonacheckcon" />
+    <result property="tsFechaCheck"      				column="pfechacheck" />
+    <result property="intNumeroOperacion"      			column="pnumerooperacion" />     
+     <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
+                
+                
   </resultMap>
   
   <parameterMap id="parConciliacionDetalle" class="ConciliacionDetalle">
@@ -40,7 +62,7 @@
 	 <parameter property="intPersEmpresaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaCheck"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
-	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>   
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -50,9 +72,9 @@
 	 <parameter property="intItemConciliacionDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
 
-
-    
-  <procedure id="grabar" parameterMap="parConciliacionDetalle">
+<!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
+   <!--
+     <procedure id="grabar" parameterMap="parConciliacionDetalle">
 	{ call PKG_CONCILIACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
@@ -63,5 +85,17 @@
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacionDetalle">
 	{ call PKG_CONCILIACION.getListaPorPk(?,?,?,?) }
   </procedure>
-
+  --> 
+  <procedure id="grabar" parameterMap="parConciliacionDetalle">
+	{ call PKG_CONCILIACIONDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parConciliacionDetalle" >
+	{ call PKG_CONCILIACIONDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacionDetalle">
+	{ call PKG_CONCILIACIONDET.getListaPorPk(?,?,?,?) }
+  </procedure>
+<!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
 </sqlMap>
