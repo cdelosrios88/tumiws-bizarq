@@ -101,7 +101,7 @@ public class ConciliacionController{
 			bancoFacade  = (BancoFacadeLocal) EJBFactory.getLocal(BancoFacadeLocal.class);
 			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			conciliacionFacade = (ConciliacionFacadeLocal) EJBFactory.getLocal(ConciliacionFacadeLocal.class);
-			
+			conciliacionCompBusq = new ConciliacionComp();
 			//listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			//cargarListaBanco();
 			cargarListaTipoDocumento();
@@ -200,6 +200,7 @@ public class ConciliacionController{
 	
 	public void buscar(){
 		/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
+		conciliacionCompBusq = new ConciliacionComp();
 		listaConciliacionBusq = new ArrayList<Conciliacion>();		
 		/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 	
