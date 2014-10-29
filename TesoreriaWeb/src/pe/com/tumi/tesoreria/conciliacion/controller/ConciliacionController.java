@@ -2,6 +2,8 @@ package pe.com.tumi.tesoreria.conciliacion.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.richfaces.event.UploadEvent;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
@@ -26,8 +29,11 @@ import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.conciliacion.facade.ConciliacionFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
+import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
+import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
+import pe.com.tumi.tesoreria.fileupload.FileUploadController;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
 
 
@@ -74,7 +80,6 @@ public class ConciliacionController{
 	private boolean registrarNuevo;
 	private boolean habilitarGrabar;
 	private boolean datosValidados;
-	
 	
 	public ConciliacionController(){
 		cargarUsuario();
@@ -271,7 +276,7 @@ public class ConciliacionController{
 	
 	public void habilitarPanelInferior(){
 		try{
-			cargarUsuario();
+			//cargarUsuario();
 			registrarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.TRUE;
 			deshabilitarNuevo = Boolean.FALSE;
@@ -281,12 +286,11 @@ public class ConciliacionController{
 			conciliacionNuevo.getId().setIntPersEmpresa(EMPRESA_USUARIO);
 			conciliacionNuevo.setTsFechaConciliacion(MyUtil.obtenerFechaActual());
 			
-			
 			habilitarGrabar = Boolean.TRUE;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
-	}	
+	}
 	
 	public void mostrarMensaje(boolean exito, String mensaje){
 		if(exito){
@@ -349,9 +353,70 @@ public class ConciliacionController{
 		}
 	}
 	
-	
-	
-	
+	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
+	public void adjuntarDocTelecredito(UploadEvent event){
+		TelecreditoFileComp telecreditoFileComp = null;
+		TelecreditoDetailFile telecreditoDetail = null;
+		List<TelecreditoDetailFile> lstDetailTelecreditoFile = new ArrayList<TelecreditoDetailFile>();
+		try {
+			telecreditoFileComp = new TelecreditoFileComp();
+			Map<String, Object> mpTelecreditoFile = FileUploadController.processExcelFiles(event);
+
+			telecreditoFileComp.setStrNroCuenta(mpTelecreditoFile.get("0,1").toString().replaceAll("[^\\.0123456789]",""));
+			telecreditoFileComp.setStrMoneda(mpTelecreditoFile.get("1,1").toString());
+			telecreditoFileComp.setStrTipoCuenta(mpTelecreditoFile.get("2,1").toString());
+			//telecreditoFileComp.setLstTelecreditoFileDetail(new ArrayList<TelecreditoDetailFile>());
+			Integer intCont = (Integer) mpTelecreditoFile.get("size");
+			
+			for(int i=5; i<intCont; i++){
+				int indexCol=0;
+				telecreditoDetail = new TelecreditoDetailFile();
+				telecreditoDetail.setStrFecRegistro(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrFecValuta(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrDescOperacion(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrMonto(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrSaldo(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrSucursal(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrNroOperacion(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrHoraOperacion(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrUsuario(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrUTC(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				telecreditoDetail.setStrReferencia(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
+				lstDetailTelecreditoFile.add(telecreditoDetail);
+			}
+			telecreditoFileComp.setLstTelecreditoFileDetail(lstDetailTelecreditoFile);
+			
+			List<Entry> entryList = new ArrayList<Entry>(mpTelecreditoFile.entrySet());
+			/*for (Entry temp : entryList) {
+				System.out.println(temp.getKey());
+				System.out.println(temp.getValue());
+				
+				String rowIndex = temp.getKey().toString().substring(Constante.INT_ZERO,temp.getKey().toString().lastIndexOf(Constante.STR_COMMA));
+				//String colIndex = temp.getKey().toString().substring(temp.getKey().toString().lastIndexOf(Constante.STR_COMMA)+1);
+				
+				int indexCol = 0;
+				telecreditoDetail = new TelecreditoDetailFile();
+				
+				if(Integer.parseInt(rowIndex)>4){
+					telecreditoDetail.setStrFecRegistro(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrFecValuta(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrDescOperacion(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrMonto(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrSaldo(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrSucursal(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrNroOperacion(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrHoraOperacion(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrUsuario(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrUTC(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrReferencia(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+				}
+				telecreditoFileComp.getLstTelecreditoFileDetail().add(telecreditoDetail);
+			}*/
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
