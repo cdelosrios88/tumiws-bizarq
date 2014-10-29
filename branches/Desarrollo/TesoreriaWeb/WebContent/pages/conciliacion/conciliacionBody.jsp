@@ -31,37 +31,38 @@
 					<h:outputText value=":" styleClass="estiloLetra1"/>
 				</rich:column>
 				<rich:column>
-					<rich:calendar popup="true" enableManualInput="true" value="#{conciliacionController.conciliacionCompBusq.dtBusqFechaDesde}"
-						datePattern="dd/MM/yyyy" inputStyle="width:70px;" />
+				<%--
+					<rich:calendar popup="true" enableManualInput="true" 
+						value="#{conciliacionController.conciliacionCompBusq.dtBusqFechaDesde}" 
+						datePattern="dd/MM/yyyy" inputStyle="width:70px;" /> --%>
 				</rich:column>
 				<rich:column>
-					<rich:calendar popup="true" enableManualInput="true" value="#{conciliacionController.conciliacionCompBusq.dtBusqFechaHasta}"
-						datePattern="dd/MM/yyyy" inputStyle="width:70px;" />
+				<%-- 
+					<rich:calendar popup="true" enableManualInput="true" 
+						 value="#{conciliacionController.conciliacionCompBusq.dtBusqFechaHasta}"
+						datePattern="dd/MM/yyyy" inputStyle="width:70px;" /> --%>
 				</rich:column>
 				
 				<rich:column width="160">
-    				<!--
+    				<%--
     				<h:selectOneMenu style="width: 160px;" 
     					value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
     					<tumih:selectItems var="sel" 
     						cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
 							itemValue="#{sel.intIdDetalle}" 
 							itemLabel="#{sel.strDescripcion}"/>
-    				</h:selectOneMenu>
-    				-->
+    				</h:selectOneMenu>--%>
 	    		</rich:column>
 	    		
-	    		
 	    		<rich:column width="160">
-    				<!--
+	    		<%--
     				<h:selectOneMenu style="width: 160px;" 
     					value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
     					<tumih:selectItems var="sel" 
     						cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
 							itemValue="#{sel.intIdDetalle}" 
 							itemLabel="#{sel.strDescripcion}"/>
-    				</h:selectOneMenu>
-    				-->
+    				</h:selectOneMenu> --%>
 	    		</rich:column>
 				
 			<!-- Fin: REQ14-006 Bizarq - 18/10/2014 -->
@@ -225,208 +226,215 @@
 		
 		
 	<h:panelGroup id="contPanelInferior">
-	
-	<rich:panel  rendered="#{conciliacionController.mostrarPanelInferior}"	style="border:1px solid #17356f;background-color:#DEEBF5;">
-	<rich:spacer height="12px"/>
-		
-		<h:panelGroup id="panelDatosSinValidar">
-		<h:panelGrid columns="16" id="panelMonto">
-			<rich:column width=	"120">
-				<h:outputText value="Fecha Conciliación : "/>
-			</rich:column>
-			<rich:column width="160">
-				<h:inputText size="20"
-					readonly="true"
-					value="#{conciliacionController.conciliacionNuevo.tsFechaConciliacion}"
-					style="background-color: #BFBFBF;font-weight:bold;">
-					<f:convertDateTime pattern="dd/MM/yyyy"/>
-				</h:inputText>
-			</rich:column>
-			<rich:column width=	"140">
-				<h:outputText value="Tipo de Documento : "/>
-			</rich:column>
-			<rich:column width="160">
-			<!-- 
-			 -	<h:selectOneMenu
-					style="width: 150px;"
-					value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}"
-					disabled="#{conciliacionController.datosValidados}">
-					<tumih:selectItems var="sel"
-						cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}"
-						itemValue="#{sel.intIdDetalle}"
-						itemLabel="#{sel.strDescripcion}"/>
-				</h:selectOneMenu>
-			</rich:column>
-			-->
+		<rich:panel  rendered="#{conciliacionController.mostrarPanelInferior}"	style="border:1px solid #17356f;background-color:#DEEBF5;">
+		<rich:spacer height="12px"/>
 			
-			<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
-					<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
-						<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
-						 itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
-			</h:selectOneMenu>	
-			
-			<rich:column width=	"120">
-				<h:outputText value="Cuenta Bancaria : "/>
-			</rich:column>
-			
-			<rich:column width="200">
-				<h:inputText
-					rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-					size="70"
-					readonly="true"
-					style="background-color: #BFBFBF;font-weight:bold;"/>
-				<h:inputText
-					rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-					value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
-					size="70"
-					readonly="true"
-					style="background-color: #BFBFBF;font-weight:bold;"/>
-			</rich:column>
-			<rich:column width="150">
-				<a4j:commandButton styleClass="btnEstilos"
-					value="Buscar Cuenta"
-	                disabled="#{conciliacionController.datosValidados}"
-	                reRender="pBuscarBancoCuenta"
-	                oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
-	                action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
-	                style="width:150px"/>
-			</rich:column>
-			
-			<!-- 
-			<rich:column width=	"140">
-				<h:outputText value="Estado de Registro : "/>
-			</rich:column>
-			<rich:column width="160">
-				<h:selectOneMenu
-					disabled="#{conciliacionController.datosValidados}"
-					style="width: 150px;"
-					value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
-					<f:selectItem itemValue="1" itemLabel="Todos"/>
-					<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
-					<f:selectItem itemValue="1" itemLabel="Chekeado"/>
-				</h:selectOneMenu>
-			</rich:column>
-			-->
-		</h:panelGrid>
-		
-		<rich:spacer height="10px"/>
-		
-		<h:panelGrid columns="8">
-			<!--
-			<rich:column width=	"120">
-				<h:outputText value="Cuenta Bancaria : "/>
-			</rich:column>
-			
-			<rich:column width="450">
-				<h:inputText
-					rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-					size="70"
-					readonly="true"
-					style="background-color: #BFBFBF;font-weight:bold;"/>
-				<h:inputText
-					rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-					value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
-					size="70"
-					readonly="true"
-					style="background-color: #BFBFBF;font-weight:bold;"/>
-			</rich:column>
-			-->
-			<rich:column width=	"140">
-				<h:outputText value="Estado de Registro : "/>
-			</rich:column>
-			<rich:column width="160">
-				<h:selectOneMenu
-					disabled="#{conciliacionController.datosValidados}"
-					style="width: 150px;"
-					value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
-					<f:selectItem itemValue="1" itemLabel="Todos"/>
-					<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
-					<f:selectItem itemValue="1" itemLabel="Chekeado"/>
-				</h:selectOneMenu>
-			</rich:column>
-			<!--
-			<rich:column width="150">
-				<a4j:commandButton styleClass="btnEstilos"
-					value="Buscar Cuenta"
-	                disabled="#{conciliacionController.datosValidados}"
-	                reRender="pBuscarBancoCuenta"
-	                oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
-	                action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
-	                style="width:150px"/>
-			</rich:column>
-			
-			-->
-		</h:panelGrid>
-		
-		<rich:spacer height="5px"/>
-		
-		<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
-			<rich:column width="150">
-				<a4j:commandButton styleClass="btnEstilos"
-		        	disabled="flase"
-		        	value="Buscar"
-		            reRender="contPanelInferior,panelBotones"
-		            action="#{conciliacionController.buscarEgresoIngreso}"
-		            style="width:150px"/>
-			</rich:column>
-		</h:panelGrid>
-			
-		<rich:spacer height="5px"/>
-		
-		<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
-			<rich:column width="940">
-				<a4j:commandButton styleClass="btnEstilos"
-		        	disabled="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-		        	value="Validar Datos"
-		            reRender="contPanelInferior,panelBotones"
-		            action="#{conciliacionController.validarDatos}"
-		            style="width:940px"/>
-			</rich:column>
-		</h:panelGrid>
-	
-		</h:panelGroup>
-		
-		
-		<h:panelGrid id="panelDatosValidados" rendered="#{conciliacionController.datosValidados}">
-		
-		<rich:column width=	"910">
-			<rich:dataTable
-				sortMode="single"
-				var="item"
-				value="#{conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
-				rowKeyVar="rowKey"
-				width="955px"
-				rows="#{fn:length(conciliacionController.conciliacionNuevo.listaConciliacionDetalle)}">
-				
-				<rich:column width="30" style="text-align: center">
-					<f:facet name="header">
-		           		<h:outputText value="Tipo"/>
-		         	</f:facet>
-		         	<h:outputText rendered="#{not empty item.egreso}" value="E"/>
-		         	<h:outputText rendered="#{not empty item.ingreso}" value="I"/>
+			<h:panelGroup id="panelDatosSinValidar">
+			<h:panelGrid columns="16" id="panelMonto">
+				<rich:column width=	"120">
+					<h:outputText value="Fecha Conciliación : "/>
 				</rich:column>
-				<rich:column width="150" style="text-align: right">
-		        	<f:facet name="header">
-		           		<h:outputText value="Documento"/>
-		         	</f:facet>
-		         	<h:panelGroup rendered="#{not empty item.egreso}">
-		         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
-						itemValue="intIdDetalle"
-						itemLabel="strDescripcion" 
-						property="#{item.egreso.intParaDocumentoGeneral}"/>
-		         	</h:panelGroup>
-		         	<h:panelGroup rendered="#{not empty item.ingreso}">
-		         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
-						itemValue="intIdDetalle"
-						itemLabel="strDescripcion" 
-						property="#{item.ingreso.intParaDocumentoGeneral}"/>
-		         	</h:panelGroup>
-		   		</rich:column>
-		  	</rich:dataTable>
-		</rich:column>
+				<rich:column width="160">
+					<h:inputText size="20"
+						readonly="true"
+						value="#{conciliacionController.conciliacionNuevo.tsFechaConciliacion}"
+						style="background-color: #BFBFBF;font-weight:bold;">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:inputText>
+				</rich:column>
+				<rich:column width=	"140">
+					<h:outputText value="Tipo de Documento : "/>
+				</rich:column>
+				<rich:column width="160">
+				<!-- 
+				 -	<h:selectOneMenu
+						style="width: 150px;"
+						value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}"
+						disabled="#{conciliacionController.datosValidados}">
+						<tumih:selectItems var="sel"
+							cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}"
+							itemValue="#{sel.intIdDetalle}"
+							itemLabel="#{sel.strDescripcion}"/>
+					</h:selectOneMenu>
+				</rich:column>
+				-->
+				
+				<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
+						<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
+							<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
+							 itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
+				</h:selectOneMenu>	
+				
+				<rich:column width=	"120">
+					<h:outputText value="Cuenta Bancaria : "/>
+				</rich:column>
+				
+				<rich:column width="200">
+					<h:inputText
+						rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+						size="70"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
+					<h:inputText
+						rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+						value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
+						size="70"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
+				</rich:column>
+				<rich:column width="150">
+					<a4j:commandButton styleClass="btnEstilos"
+						value="Buscar Cuenta"
+		                disabled="#{conciliacionController.datosValidados}"
+		                reRender="pBuscarBancoCuenta"
+		                oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
+		                action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
+		                style="width:150px"/>
+				</rich:column>
+				
+				<!-- 
+				<rich:column width=	"140">
+					<h:outputText value="Estado de Registro : "/>
+				</rich:column>
+				<rich:column width="160">
+					<h:selectOneMenu
+						disabled="#{conciliacionController.datosValidados}"
+						style="width: 150px;"
+						value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
+						<f:selectItem itemValue="1" itemLabel="Todos"/>
+						<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
+						<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+					</h:selectOneMenu>
+				</rich:column>
+				-->
+			</h:panelGrid>
+			
+			<rich:spacer height="10px"/>
+			
+			<h:panelGrid columns="8">
+				<!--
+				<rich:column width=	"120">
+					<h:outputText value="Cuenta Bancaria : "/>
+				</rich:column>
+				
+				<rich:column width="450">
+					<h:inputText
+						rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+						size="70"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
+					<h:inputText
+						rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+						value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
+						size="70"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
+				</rich:column>
+				-->
+				<rich:column width=	"140">
+					<h:outputText value="Estado de Registro : "/>
+				</rich:column>
+				<rich:column width="160">
+					<h:selectOneMenu
+						disabled="#{conciliacionController.datosValidados}"
+						style="width: 150px;"
+						value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
+						<f:selectItem itemValue="1" itemLabel="Todos"/>
+						<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
+						<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+					</h:selectOneMenu>
+				</rich:column>
+				<rich:column>
+					<rich:fileUpload id="upload"
+		            	 addControlLabel="Adjuntar Archivo"
+			             clearControlLabel="Limpiar"
+			             cancelEntryControlLabel="Cancelar"
+			             uploadControlLabel="Subir Archivo"
+			             listHeight="65"
+			             listWidth="320"
+			             fileUploadListener="#{conciliacionController.adjuntarDocTelecredito}"
+						 maxFilesQuantity="1"
+						 doneLabel="Archivo cargado correctamente"
+						 immediateUpload="false"
+						 autoclear="false"
+						 acceptedTypes="xls,xlsx">
+						 <f:facet name="label">
+						 	<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
+						 </f:facet>
+					</rich:fileUpload>
+				</rich:column>
+				
+			</h:panelGrid>
+			
+			<rich:spacer height="5px"/>
+			
+			<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
+				<rich:column width="150">
+					<a4j:commandButton styleClass="btnEstilos"
+			        	disabled="flase"
+			        	value="Buscar"
+			            reRender="contPanelInferior,panelBotones"
+			            action="#{conciliacionController.buscarEgresoIngreso}"
+			            style="width:150px"/>
+				</rich:column>
+			</h:panelGrid>
+				
+			<rich:spacer height="5px"/>
+			
+			<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
+				<rich:column width="940">
+					<a4j:commandButton styleClass="btnEstilos"
+			        	disabled="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+			        	value="Validar Datos"
+			            reRender="contPanelInferior,panelBotones"
+			            action="#{conciliacionController.validarDatos}"
+			            style="width:940px"/>
+				</rich:column>
+			</h:panelGrid>
 		
-		</h:panelGrid>
-	</rich:panel>
+			</h:panelGroup>
+			
+			
+			<h:panelGrid id="panelDatosValidados" rendered="#{conciliacionController.datosValidados}">
+			
+			<rich:column width=	"910">
+				<rich:dataTable
+					sortMode="single"
+					var="item"
+					value="#{conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
+					rowKeyVar="rowKey"
+					width="955px"
+					rows="#{fn:length(conciliacionController.conciliacionNuevo.listaConciliacionDetalle)}">
+					
+					<rich:column width="30" style="text-align: center">
+						<f:facet name="header">
+			           		<h:outputText value="Tipo"/>
+			         	</f:facet>
+			         	<h:outputText rendered="#{not empty item.egreso}" value="E"/>
+			         	<h:outputText rendered="#{not empty item.ingreso}" value="I"/>
+					</rich:column>
+					<rich:column width="150" style="text-align: right">
+			        	<f:facet name="header">
+			           		<h:outputText value="Documento"/>
+			         	</f:facet>
+			         	<h:panelGroup rendered="#{not empty item.egreso}">
+			         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
+							itemValue="intIdDetalle"
+							itemLabel="strDescripcion" 
+							property="#{item.egreso.intParaDocumentoGeneral}"/>
+			         	</h:panelGroup>
+			         	<h:panelGroup rendered="#{not empty item.ingreso}">
+			         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
+							itemValue="intIdDetalle"
+							itemLabel="strDescripcion" 
+							property="#{item.ingreso.intParaDocumentoGeneral}"/>
+			         	</h:panelGroup>
+			   		</rich:column>
+			  	</rich:dataTable>
+			</rich:column>
+			
+			</h:panelGrid>
+		</rich:panel>
 	</h:panelGroup>	
 
 </h:panelGroup>
