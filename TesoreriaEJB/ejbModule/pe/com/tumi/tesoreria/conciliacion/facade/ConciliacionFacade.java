@@ -27,6 +27,7 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.ExpedienteCredito
 import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
+import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 
@@ -39,6 +40,7 @@ import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 public class ConciliacionFacade extends TumiFacade implements ConciliacionFacadeRemote, ConciliacionFacadeLocal {
     
 	ConciliacionBO conciliacionBO = (ConciliacionBO)TumiFactory.get(ConciliacionBO.class);
+	ConciliacionService conciliacionService = (ConciliacionService)TumiFactory.get(ConciliacionService.class);
     /**
      * @see TumiFacade#TumiFacade()
      */
@@ -81,5 +83,26 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		
 	}
 	
+	/**
+	 * 
+	 * @param conciliacion
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<ConciliacionDetalle> buscarRegistrosConciliacion(Conciliacion conciliacion)throws BusinessException{
+		List<ConciliacionDetalle> lstConcilDet = null;
+		try {
+			
+			
+			lstConcilDet= conciliacionService.buscarRegistrosConciliacion(conciliacion);
+
+			
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return lstConcilDet;
+	}
 
 }

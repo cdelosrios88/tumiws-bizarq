@@ -15,10 +15,13 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
+import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
+import pe.com.tumi.tesoreria.banco.domain.BancocuentaId;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.bo.EgresoBO;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
+import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalleId;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.ingreso.bo.IngresoBO;
@@ -61,19 +64,46 @@ public class ConciliacionService {
 	
 	/**
 	 * 
+	 * @param conciliacion
+	 * @return
+	 * @throws BusinessException
 	 */
 	public List<ConciliacionDetalle> buscarRegistrosConciliacion(Conciliacion conciliacion)throws BusinessException{
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 		try{
 			Ingreso ingresoFiltro = new Ingreso();
+			// solo para pruebas
+			conciliacion.setBancoCuenta(new Bancocuenta());
+			conciliacion.getBancoCuenta().setId(new BancocuentaId());
+			conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
+			conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("302"));// transfer a tercerso
+			conciliacion.getBancoCuenta().getId().setIntItembancocuenta(6);
+			conciliacion.getBancoCuenta().getId().setIntItembancofondo(2);
+
+
 			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
 			ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
 			ingresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
 			ingresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
 			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
-			for(Ingreso ingreso : listaIngreso){
-				
+			
+			if(listaIngreso != null && listaIngreso.size() >0){
+				for(Ingreso ingreso : listaIngreso){
+					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
+					//conciliacionDet.setId(new ConciliacionDetalleId());
+					conciliacionDet.setIngreso(ingreso);
+					listaConciliacionDetalle.add(conciliacionDet);
+				}
 			}
+			
+		   // solo para pruebas
+			conciliacion.setBancoCuenta(new Bancocuenta());
+			conciliacion.getBancoCuenta().setId(new BancocuentaId());
+			conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
+			conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("301"));// transfer a tercerso
+			conciliacion.getBancoCuenta().getId().setIntItembancocuenta(16);
+			conciliacion.getBancoCuenta().getId().setIntItembancofondo(16); 
+		      
 			
 			Egreso egresoFiltro = new Egreso();
 			egresoFiltro.getId().setIntPersEmpresaEgreso(conciliacion.getBancoCuenta().getId().getIntEmpresaPk());
@@ -81,6 +111,15 @@ public class ConciliacionService {
 			egresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
 			egresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
 			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, null, null);
+			
+			if(listaEgreso != null && listaEgreso.size() >0){
+				for(Egreso egreso : listaEgreso){
+					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
+					//conciliacionDet.setId(new ConciliacionDetalleId());
+					conciliacionDet.setEgreso(egreso);
+					listaConciliacionDetalle.add(conciliacionDet);
+				}
+			}
 			
 		}catch (Exception e) {
 			throw new BusinessException(e);
