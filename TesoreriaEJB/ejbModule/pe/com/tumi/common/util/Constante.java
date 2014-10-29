@@ -3,6 +3,7 @@
 * Motivo                      Fecha            Nombre                      Descripción
 * -----------------------------------------------------------------------------------------------------------
 * REQ14-005       			  20/10/2014       Christian De los Ríos       Se agregaron constantes.        
+* REQ14-006       			  28/10/2014       Christian De los Ríos       Se agregaron constantes.
 */
 package pe.com.tumi.common.util;
 
@@ -1065,4 +1066,8 @@ public class Constante {
 	public static final int INT_NINE = 9;
 	public static final int INT_TEN = 10;
 	//Fin: REQ14-005 - bizarq - 20/10/2014
+	
+	//Inicio: REQ14-006 - bizarq - 28/10/2014
+	public static final String STR_COMMA = ",";
+	//Fin: REQ14-005 - bizarq - 28/10/2014
 }
