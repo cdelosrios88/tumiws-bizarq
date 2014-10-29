@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			28/10/2014     Christian De los Ríos        Se agregó el método processExcelFile para leer un archivo xls         
+*/
 package pe.com.tumi.tesoreria.fileupload;
 
 import java.awt.image.BufferedImage;
@@ -9,7 +15,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -19,6 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.richfaces.event.UploadEvent;
 import org.richfaces.model.UploadItem;
 
@@ -257,6 +270,59 @@ public class FileUploadController {
 		}
 		return archivo;
 	}
+	
+	//Inicio: REQ14-006 - bizarq - 28/10/2014
+	public static Map<String, Object> processExcelFiles(UploadEvent event) throws Exception{
+		UploadItem uploadItem = event.getUploadItem();
+		java.io.File fileItem = uploadItem.getFile();
+		
+		Map<String, Object> mapExcelFile = null;
+		try {
+			if(fileItem.exists()){
+				mapExcelFile = new  LinkedHashMap<String, Object>();
+				FileInputStream file = new FileInputStream(fileItem);
+				
+				//Create Workbook instance holding reference to .xlsx file
+				XSSFWorkbook workbook = new XSSFWorkbook(file);
+				//Get first/desired sheet from the workbook
+				XSSFSheet sheet = workbook.getSheetAt(0);
+				//Iterate through each rows one by one
+				Iterator<Row> rowIterator = sheet.iterator();
+				int cnt = 0;
+				while (rowIterator.hasNext()) 
+				{
+					Row row = rowIterator.next();
+					//For each row, iterate through all the columns
+					Iterator<Cell> cellIterator = row.cellIterator();
+					
+					while (cellIterator.hasNext()) 
+					{
+						Cell cell = cellIterator.next();
+						//Check the cell type and format accordingly
+						switch (cell.getCellType()) 
+						{
+							case Cell.CELL_TYPE_NUMERIC:
+								mapExcelFile.put(row.getRowNum()+Constante.STR_COMMA+cell.getColumnIndex(), cell.getNumericCellValue());
+								log.info(cell.getNumericCellValue());
+								break;
+							case Cell.CELL_TYPE_STRING:
+								mapExcelFile.put(row.getRowNum()+Constante.STR_COMMA+cell.getColumnIndex(), cell.getStringCellValue());
+								log.info(cell.getStringCellValue());
+								break;
+						}
+					}
+					cnt++;
+				}
+				mapExcelFile.put("size", cnt);
+				file.close();
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		
+		return mapExcelFile;
+	}
+	//Fin: REQ14-006 - bizarq - 28/10/2014
 	
 	/**
 	 * Verifica si existe el directorio, si no existe lo crea.
