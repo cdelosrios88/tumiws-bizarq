@@ -16,7 +16,11 @@ import org.richfaces.event.UploadEvent;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
+import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
+import pe.com.tumi.framework.negocio.exception.BusinessException;
+import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
@@ -28,7 +32,9 @@ import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.conciliacion.facade.ConciliacionFacadeLocal;
+import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
+import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
@@ -52,6 +58,7 @@ public class ConciliacionController{
 	BancoFacadeLocal		bancoFacade;
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	ConciliacionFacadeLocal conciliacionFacade;
+	private ConciliacionService conciliacionService;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private	Conciliacion	conciliacionNuevo;
 	private Conciliacion	conciliacionFiltro;
@@ -63,6 +70,7 @@ public class ConciliacionController{
 	private ConciliacionComp conciliacionCompBusq;
 	private List<Bancofondo>	listaBanco;
 	private List<Tabla> listaTablaTipoDoc;
+	private List<Sucursal> listSucursal;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	
@@ -110,6 +118,8 @@ public class ConciliacionController{
 			//listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			//cargarListaBanco();
 			cargarListaTipoDocumento();
+			conciliacionService 	= (ConciliacionService)TumiFactory.get(ConciliacionService.class);
+
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -138,7 +148,7 @@ public class ConciliacionController{
 	 * Carga Combo de Cuentas Banacarias
 	 * @throws Exception
 	 */
-	private void cargarListaCuentas()throws Exception{
+	public void cargarListaCuentas()throws Exception{
 		
 		try {
 			String strIdCuenta = null;
@@ -156,7 +166,7 @@ public class ConciliacionController{
 	/**
 	 * carga Combo de Tipo de Documento
 	 */
-	private void cargarListaTipoDocumento()throws Exception{
+	public void cargarListaTipoDocumento()throws Exception{
 		
 		try {
 			listaTablaTipoDoc = tablaFacade.getListaTablaPorAgrupamientoA(new Integer(Constante.PARAM_T_DOCUMENTOGENERAL), "B");
@@ -170,12 +180,20 @@ public class ConciliacionController{
 	/**
 	 * Recupera Ingresos y egresos para conciliacion
 	 */
-	private void buscarEgresoIngreso()throws Exception{
-		
+	public void buscarRegistrosConciliacion(){
+		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
 			
+			
+			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
+			if(lstConcilDet != null && lstConcilDet.size() > 0){
+				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
+				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDet);
+				
+			}
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.error(e.getMessage(),e);
 		}
 
 		
@@ -348,6 +366,10 @@ public class ConciliacionController{
 	public void validarDatos(){
 		try{
 			datosValidados = Boolean.TRUE;
+			
+			
+			
+			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -553,5 +575,26 @@ public class ConciliacionController{
 		this.listaTablaTipoDoc = listaTablaTipoDoc;
 	}
 
+	public List<Sucursal> getListSucursal() {
+		try {
+			if (listSucursal == null) {
+				EmpresaFacadeRemote facade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
+				this.listSucursal = facade.getListaSucursalPorPkEmpresa(Constante.PARAM_EMPRESASESION);
+			}
+		} catch (EJBFactoryException e) {
+			e.printStackTrace();
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+		return listSucursal;
+	}
+
+
+	public void setListSucursal(List<Sucursal> listSucursal) {
+		this.listSucursal = listSucursal;
+	}
+
+	
+	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
