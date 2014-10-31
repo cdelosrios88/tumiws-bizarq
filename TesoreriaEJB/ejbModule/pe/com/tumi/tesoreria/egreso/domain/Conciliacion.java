@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
+import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 
 public class Conciliacion extends TumiDomain{
@@ -45,6 +46,7 @@ public class Conciliacion extends TumiDomain{
 	private BigDecimal bdSaldoConciliacion;	
 	private Integer intNroMovimientos;	
 	private BigDecimal bdPorConciliar;
+	private Usuario usuario;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public Conciliacion(){
@@ -267,8 +269,19 @@ public class Conciliacion extends TumiDomain{
 	public void setBdPorConciliar(BigDecimal bdPorConciliar) {
 		this.bdPorConciliar = bdPorConciliar;
 	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
+
+
 
 
 	@Override

@@ -41,4 +41,16 @@ public class ConciliacionDetalleDaoIbatis extends TumiDaoIbatis implements Conci
 		}
 		return lista;
 	}
+	/*
+	public List<ConciliacionDetalle> getListConcilDet(Object o) throws DAOException{
+		List<ConciliacionDetalle> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListConcilDet", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	*/
+	
 }
