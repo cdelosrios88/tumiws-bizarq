@@ -120,6 +120,16 @@
 	 <parameter property="intBusqItemBancoFondo"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intBusqItemBancoCuenta"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>  
   </parameterMap>
+  
+  
+  <parameterMap id="parPorConcilLast" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
+	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
+	 <parameter property="tsFechaConciliacion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>										
+  </parameterMap>
 
 	<!--
   <procedure id="grabar" parameterMap="parConciliacion">
@@ -148,10 +158,16 @@
 	{ call PKG_CONCILIACIONRE.getListaPorPk(?,?,?) }
   </procedure>
   
-    <procedure id="getListFilter" parameterMap="parPorFilter" resultMap="resConciliacionBusq">
+  <procedure id="getListFilter" parameterMap="parPorFilter" resultMap="resConciliacionBusq">
 	{ call PKG_CONCILIACIONRE.getListFilter(?,?,?,?,?,?) }
   </procedure>
-    
+   <!-- 
+  <procedure id="getUltimaConciliacion" parameterMap="parPorConcilLast" resultMap="resConciliacion">
+	{ call PKG_CONCILIACIONRE.getUltimaConciliacion(?,?,?,?,?,?)}
+  </procedure>
+	-->
+	
+	
    <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
 
 </sqlMap>

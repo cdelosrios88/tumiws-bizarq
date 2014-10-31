@@ -59,6 +59,17 @@ public class ConciliacionComp extends TumiDomain {
 	private Integer intNroMovimientos;
 	
 	private BigDecimal bdPorConciliar;
+	
+	
+	private BigDecimal bdResumenSaldoAnterior;
+	private BigDecimal bdResumenDebe;
+	private BigDecimal bdResumenHaber;
+	private BigDecimal bdResumenSaldoCaja;
+	private BigDecimal bdResumenSaldoConciliacion;
+	private Integer intResumenNroMov;
+	private BigDecimal bdResumenPorConciliar;
+	
+	
 
 	public Date getDtBusqFechaDesde() {
 		return dtBusqFechaDesde;
@@ -210,6 +221,62 @@ public class ConciliacionComp extends TumiDomain {
 
 	public void setBdPorConciliar(BigDecimal bdPorConciliar) {
 		this.bdPorConciliar = bdPorConciliar;
+	}
+
+	public BigDecimal getBdResumenSaldoAnterior() {
+		return bdResumenSaldoAnterior;
+	}
+
+	public void setBdResumenSaldoAnterior(BigDecimal bdResumenSaldoAnterior) {
+		this.bdResumenSaldoAnterior = bdResumenSaldoAnterior;
+	}
+
+	public BigDecimal getBdResumenDebe() {
+		return bdResumenDebe;
+	}
+
+	public void setBdResumenDebe(BigDecimal bdResumenDebe) {
+		this.bdResumenDebe = bdResumenDebe;
+	}
+
+	public BigDecimal getBdResumenHaber() {
+		return bdResumenHaber;
+	}
+
+	public void setBdResumenHaber(BigDecimal bdResumenHaber) {
+		this.bdResumenHaber = bdResumenHaber;
+	}
+
+	public BigDecimal getBdResumenSaldoCaja() {
+		return bdResumenSaldoCaja;
+	}
+
+	public void setBdResumenSaldoCaja(BigDecimal bdResumenSaldoCaja) {
+		this.bdResumenSaldoCaja = bdResumenSaldoCaja;
+	}
+
+	public BigDecimal getBdResumenSaldoConciliacion() {
+		return bdResumenSaldoConciliacion;
+	}
+
+	public void setBdResumenSaldoConciliacion(BigDecimal bdResumenSaldoConciliacion) {
+		this.bdResumenSaldoConciliacion = bdResumenSaldoConciliacion;
+	}
+
+	public Integer getIntResumenNroMov() {
+		return intResumenNroMov;
+	}
+
+	public void setIntResumenNroMov(Integer intResumenNroMov) {
+		this.intResumenNroMov = intResumenNroMov;
+	}
+
+	public BigDecimal getBdResumenPorConciliar() {
+		return bdResumenPorConciliar;
+	}
+
+	public void setBdResumenPorConciliar(BigDecimal bdResumenPorConciliar) {
+		this.bdResumenPorConciliar = bdResumenPorConciliar;
 	}
 
 

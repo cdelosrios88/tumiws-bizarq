@@ -67,4 +67,39 @@ public class ConciliacionDetalleBO{
 		}
 		return domain;
 	}
+	
+	
+	/*
+	public List<ConciliacionDetalle> getListConcilDet(ConciliacionDetalle pConcilDet) throws BusinessException{
+		List<ConciliacionDetalle> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", 					pConcilDet.getId().getIntPersEmpresa());
+			mapa.put("intItemConciliacion", 			pConcilDet.getId().getIntItemConciliacion());
+			mapa.put("intItemConciliacionDetalle", 		pConcilDet.getId().getIntItemConciliacionDetalle());
+			mapa.put("intPersEmpresaEgreso", 			pConcilDet.getIntPersEmpresaEgreso());
+			mapa.put("intItemEgresoGeneral", 			pConcilDet.getIntItemEgresoGeneral());
+			mapa.put("intPersEmpresaIngreso", 			pConcilDet.getIntPersEmpresaIngreso());
+			mapa.put("intItemIngresoGeneral", 			pConcilDet.getIntItemIngresoGeneral());
+			mapa.put("intIndicadorCheck", 				pConcilDet.getIntIndicadorCheck());
+			mapa.put("intIndicadorConci", 				pConcilDet.getIntIndicadorConci());
+			mapa.put("bdSaldoInicial", 					pConcilDet.getBdSaldoInicial());
+			mapa.put("bdMontoDebe", 					pConcilDet.getBdMontoDebe());
+			mapa.put("bdMontoHaber", 					pConcilDet.getBdMontoHaber());
+			mapa.put("intPersEmpresaCheckConciliacion", pConcilDet.getIntPersEmpresaCheckConciliacion());
+			mapa.put("intPersPersonaCheckConciliacion", pConcilDet.getIntPersPersonaCheckConciliacion());
+			mapa.put("tsFechaCheck", 					pConcilDet.getTsFechaCheck());
+			mapa.put("intNumeroOperacion", 				pConcilDet.getIntNumeroOperacion());
+			
+			lista = dao.getListConcilDet(mapa);
+
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	*/
+	
 }

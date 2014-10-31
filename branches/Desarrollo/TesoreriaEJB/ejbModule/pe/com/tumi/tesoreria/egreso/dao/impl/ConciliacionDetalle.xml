@@ -71,6 +71,28 @@
 	 <parameter property="intItemConciliacion"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intItemConciliacionDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
+  
+  
+    <parameterMap id="parPorAll" class="java.util.Map">
+	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemConciliacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+	 <parameter property="intItemConciliacionDetalle"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaEgreso"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemEgresoGeneral"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIndicadorCheck"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intIndicadorConci"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="bdSaldoInicial"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="bdMontoDebe"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="bdMontoHaber"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersEmpresaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intPersPersonaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="tsFechaCheck"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="IN"/>
+	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>   
+  </parameterMap>
+  
 
 <!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
    <!--
@@ -97,5 +119,11 @@
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacionDetalle">
 	{ call PKG_CONCILIACIONDET.getListaPorPk(?,?,?,?) }
   </procedure>
+  
+  <!-- 
+   <procedure id="getListConcilDet" parameterMap="parPorAll" resultMap="resConciliacionDetalle">
+	{ call PKG_CONCILIACIONDET.getListConcilDet(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+  </procedure> 
+  -->
 <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
 </sqlMap>

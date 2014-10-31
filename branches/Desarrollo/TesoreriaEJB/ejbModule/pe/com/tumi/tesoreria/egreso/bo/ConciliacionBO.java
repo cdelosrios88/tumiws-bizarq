@@ -79,8 +79,8 @@ public class ConciliacionBO{
 			mapa.put("dtBusqFechaDesde", 		conciliacionCompBusq.getDtBusqFechaDesde());
 			mapa.put("dtBusqFechaHasta", 		conciliacionCompBusq.getDtBusqFechaHasta());
 			mapa.put("intBusqPersEmpresa", 		conciliacionCompBusq.getIntBusqPersEmpresa());
-			mapa.put("intBusqItemBancoFondo", 		conciliacionCompBusq.getIntBusqItemBancoFondo());
-			mapa.put("intBusqItemBancoCuenta", 		conciliacionCompBusq.getIntBusqItemBancoCuenta());
+			mapa.put("intBusqItemBancoFondo", 	conciliacionCompBusq.getIntBusqItemBancoFondo());
+			mapa.put("intBusqItemBancoCuenta", 	conciliacionCompBusq.getIntBusqItemBancoCuenta());
 
 			lista = dao.getListFilter(mapa);
 		}catch(DAOException e){
@@ -90,6 +90,37 @@ public class ConciliacionBO{
 		}
 		return lista;
 	}
+	
+	/*
+	public Conciliacion getUltimaConciliacion(Conciliacion pConciliacion) throws DAOException{
+	List<Conciliacion> lista = null;
+	Conciliacion domain = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", 		pConciliacion.getIntPersEmpresa());
+			mapa.put("intItemBancoFondo", 	pConciliacion.getIntItemBancoFondo());
+			mapa.put("intItemBancoCuenta", 	pConciliacion.getIntItemBancoCuenta());
+			mapa.put("tsFechaConciliacion", pConciliacion.getTsFechaConciliacion());
+			mapa.put("intParaEstado", 		pConciliacion.getIntParaEstado());
+
+			lista = dao.getUltimaConciliacion(mapa);
+			if(lista!=null){
+				if(lista.size()==1){
+				   domain = lista.get(0);
+				}else if(lista.size()==0){
+				   domain = null;
+				}else{
+				   throw new BusinessException("Obtención de mas de un registro coincidente");
+				}
+			}
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return domain;
+	}
+	*/
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	

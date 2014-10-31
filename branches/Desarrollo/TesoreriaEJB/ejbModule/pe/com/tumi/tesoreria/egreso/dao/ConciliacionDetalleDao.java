@@ -10,4 +10,5 @@ public interface ConciliacionDetalleDao extends TumiDao{
 	public ConciliacionDetalle grabar(ConciliacionDetalle pDto) throws DAOException;
 	public ConciliacionDetalle modificar(ConciliacionDetalle o) throws DAOException;
 	public List<ConciliacionDetalle> getListaPorPk(Object o) throws DAOException;
+	//public List<ConciliacionDetalle> getListConcilDet(Object o) throws DAOException;
 }
