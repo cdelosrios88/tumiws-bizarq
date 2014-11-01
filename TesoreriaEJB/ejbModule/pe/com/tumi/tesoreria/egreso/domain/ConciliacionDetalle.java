@@ -30,6 +30,13 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Boolean blIndicadorConci;
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
+	// RSIS14-006
+	private Integer intSucuIdSucursalGira;
+	private Integer intSubSucuIdSucursalGira;
+	private Integer intSucuIdSucursalPaga;
+	private Integer intSubSucuIdSucursalPaga;
+	//
+	
 	public ConciliacionDetalleId getId() {
 		return id;
 	}
@@ -138,6 +145,36 @@ public class ConciliacionDetalle extends TumiDomain{
 	public void setBlIndicadorConci(Boolean blIndicadorConci) {
 		this.blIndicadorConci = blIndicadorConci;
 	}
+	
+	// BIZARQ
+	
+	public Integer getIntSucuIdSucursalGira() {
+		return intSucuIdSucursalGira;
+	}
+	public void setIntSucuIdSucursalGira(Integer intSucuIdSucursalGira) {
+		this.intSucuIdSucursalGira = intSucuIdSucursalGira;
+	}
+	public Integer getIntSubSucuIdSucursalGira() {
+		return intSubSucuIdSucursalGira;
+	}
+	public void setIntSubSucuIdSucursalGira(Integer intSubSucuIdSucursalGira) {
+		this.intSubSucuIdSucursalGira = intSubSucuIdSucursalGira;
+	}
+	public Integer getIntSucuIdSucursalPaga() {
+		return intSucuIdSucursalPaga;
+	}
+	public void setIntSucuIdSucursalPaga(Integer intSucuIdSucursalPaga) {
+		this.intSucuIdSucursalPaga = intSucuIdSucursalPaga;
+	}
+	public Integer getIntSubSucuIdSucursalPaga() {
+		return intSubSucuIdSucursalPaga;
+	}
+	
+	public void setIntSubSucuIdSucursalPaga(Integer intSubSucuIdSucursalPaga) {
+		this.intSubSucuIdSucursalPaga = intSubSucuIdSucursalPaga;
+	}
+	
+	// BIZARQ
 	
 	@Override
 	public String toString() {

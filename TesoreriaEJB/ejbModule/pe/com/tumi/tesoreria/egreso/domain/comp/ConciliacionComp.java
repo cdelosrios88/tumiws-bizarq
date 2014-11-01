@@ -17,7 +17,7 @@ import pe.com.tumi.framework.negocio.domain.TumiDomain;
 public class ConciliacionComp extends TumiDomain {
 	
 
-	//Filtro de la grilla de busqueda de concniliacion.
+	//Filtros de la grilla de busqueda de concniliacion y reutilizados para anulacion
 	private Date dtBusqFechaDesde;
 	
 	private Date dtBusqFechaHasta;
@@ -27,7 +27,7 @@ public class ConciliacionComp extends TumiDomain {
 	private Integer intBusqItemBancoFondo;
 	
 	private Integer intBusqItemBancoCuenta;
-	
+
 	
 	
 	// Campos de Resultado de busqueda
@@ -60,7 +60,7 @@ public class ConciliacionComp extends TumiDomain {
 	
 	private BigDecimal bdPorConciliar;
 	
-	
+	// Tabla Resumen
 	private BigDecimal bdResumenSaldoAnterior;
 	private BigDecimal bdResumenDebe;
 	private BigDecimal bdResumenHaber;
@@ -68,7 +68,7 @@ public class ConciliacionComp extends TumiDomain {
 	private BigDecimal bdResumenSaldoConciliacion;
 	private Integer intResumenNroMov;
 	private BigDecimal bdResumenPorConciliar;
-	
+
 	
 
 	public Date getDtBusqFechaDesde() {
@@ -278,6 +278,7 @@ public class ConciliacionComp extends TumiDomain {
 	public void setBdResumenPorConciliar(BigDecimal bdResumenPorConciliar) {
 		this.bdResumenPorConciliar = bdResumenPorConciliar;
 	}
-
+	
+	
 
 }

@@ -143,6 +143,24 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		}
 		return pConciliacion;
 	}	
+		
+		
+		
+	public Boolean anularConciliacion(ConciliacionComp pConciliacionCompAnul) throws BusinessException{
+		Boolean blnExit = false;
+		try{
+			blnExit = conciliacionService.anularConciliacion(pConciliacionCompAnul);
+
+		}catch(BusinessException e){
+			throw e;
+			blnExit = false;
+		}catch(Exception e){
+			throw new BusinessException(e);
+			blnExit = false;
+		}
+		return blnExit;
+	}
+	
 	*/
 
 }

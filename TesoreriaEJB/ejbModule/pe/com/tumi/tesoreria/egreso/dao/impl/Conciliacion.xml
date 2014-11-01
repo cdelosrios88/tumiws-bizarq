@@ -48,8 +48,8 @@
     <result property="tsFechaAnula"      			column="pfechaanula" />
     <result property="strObservaciónAnula"     		column="pobservacionanula" />
     <result property="intParaEstado"     			column="pestado" />
+	<result property="tsFechaConcilia"     			column="ptsFechaConcilia" />	
   </resultMap>
-  
   
   <resultMap id="resConciliacionBusq" class="Conciliacion">
 	<result property="id.intPersEmpresa"  			column="pempresaconciliacion" />
@@ -70,15 +70,15 @@
     <result property="tsFechaAnula"      			column="pfechaanula" />
     <result property="strObservaciónAnula"     		column="pobservacionanula" />
     <result property="intParaEstado"     			column="pestado" />
-    
-    <result property="strBanco"     			column="pDescripcionbanco" />
-    <result property="strTipoCuenta" 			column="pDescripciontipocuenta" />
-    <result property="strMoneda"   				column="pDescripcionmoneda" /> 
-    <result property="strNumeroCuenta"    		column="pNrocuenta" />
-    <result property="bdSaldoCaja"    			column="pSaldocaja" />
-    <result property="intNroMovimientos"      	column="pNromovimientos" />
-    <result property="bdSaldoConciliacion"      column="pSaldoConciliacion" />
-    <result property="bdPorConciliar"      		column="pPorconciliar"/>
+	<result property="tsFechaConcilia"     			column="ptsFechaConcilia" />
+    <result property="strBanco"     				column="pDescripcionbanco" />
+    <result property="strTipoCuenta" 				column="pDescripciontipocuenta" />
+    <result property="strMoneda"   					column="pDescripcionmoneda" /> 
+    <result property="strNumeroCuenta"    			column="pNrocuenta" />
+    <result property="bdSaldoCaja"    				column="pSaldocaja" />
+    <result property="intNroMovimientos"      		column="pNromovimientos" />
+    <result property="bdSaldoConciliacion"      	column="pSaldoConciliacion" />
+    <result property="bdPorConciliar"      			column="pPorconciliar"/>
 
   </resultMap>
   <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
@@ -101,7 +101,10 @@
 	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaAnula"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
 	 <parameter property="strObservaciónAnula"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
-	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
+	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+<!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
+	<parameter property="tsFechaConcilia"     			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+<!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->	
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -111,7 +114,6 @@
   </parameterMap>
 
   <!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
-  
   <parameterMap id="parPorFilter" class="java.util.Map">
    	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
    	 <parameter property="dtBusqFechaDesde"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
@@ -147,11 +149,11 @@
 	-->
 	
   <procedure id="grabar" parameterMap="parConciliacion">
-	{ call PKG_CONCILIACIONRE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONRE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parConciliacion" >
-	{ call PKG_CONCILIACIONRE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONRE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacion">

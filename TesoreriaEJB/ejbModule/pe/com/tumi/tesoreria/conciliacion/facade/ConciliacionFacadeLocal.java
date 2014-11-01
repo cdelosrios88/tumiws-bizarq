@@ -24,6 +24,7 @@ public interface ConciliacionFacadeLocal {
 	//public Conciliacion getUltimaConciliacion(ConciliacionComp conciliacionCompBusq)throws BusinessException;
 	//public List<ConciliacionDetalle> getListConcilDet(ConciliacionDetalle pConcilDet) throws BusinessException;
 	//public Conciliacion getConciliacionConDetalleValidado(Conciliacion pConciliacion) throws BusinessException;
-
-
+	//public Boolean anularConciliacion(ConciliacionComp pConciliacionCompAnul) throws BusinessException;
+	
+	
 }

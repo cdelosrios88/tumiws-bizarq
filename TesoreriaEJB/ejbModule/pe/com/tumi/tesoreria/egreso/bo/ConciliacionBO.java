@@ -17,6 +17,12 @@ public class ConciliacionBO{
 
 	private ConciliacionDao dao = (ConciliacionDao)TumiFactory.get(ConciliacionDaoIbatis.class);
 
+	/**
+	 * 
+	 * @param o
+	 * @return
+	 * @throws BusinessException
+	 */
 	public Conciliacion grabar(Conciliacion o) throws BusinessException{
 		Conciliacion dto = null;
 		try{
@@ -29,6 +35,12 @@ public class ConciliacionBO{
 	    return dto;
 	}
 
+	/**
+	 * 
+	 * @param o
+	 * @return
+	 * @throws BusinessException
+	 */
   	public Conciliacion modificar(Conciliacion o) throws BusinessException{
   		Conciliacion dto = null;
      	try{
@@ -41,6 +53,12 @@ public class ConciliacionBO{
 	    return dto;
     }
   
+  	/**
+  	 * 
+  	 * @param conciliacionId
+  	 * @return
+  	 * @throws BusinessException
+  	 */
 	public Conciliacion getPorPk(ConciliacionId conciliacionId) throws BusinessException{
 		Conciliacion domain = null;
 		List<Conciliacion> lista = null;
@@ -71,6 +89,9 @@ public class ConciliacionBO{
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	/**
 	 * 
+	 * @param conciliacionCompBusq
+	 * @return
+	 * @throws BusinessException
 	 */
 	public List<Conciliacion> getListFilter(ConciliacionComp conciliacionCompBusq) throws BusinessException{
 		List<Conciliacion> lista = null;

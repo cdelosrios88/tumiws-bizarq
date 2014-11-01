@@ -78,6 +78,10 @@ public class Ingreso extends TumiDomain{
 	private Integer intParaModalidadPago;
 	private Integer intPeriodoSocio;
 //	private String strMontoDepositar;
+
+	//  rsis14-006
+	private IngresoDetalle ingresoDetConciliacion;
+	// rsis14-006
 	
 	public Ingreso(){
 		id = new IngresoId();
@@ -485,4 +489,17 @@ public class Ingreso extends TumiDomain{
 //	public void setStrMontoDepositar(String strMontoDepositar) {
 //		this.strMontoDepositar = strMontoDepositar;
 //	}
+
+
+	
+//  rsis14-006
+	public IngresoDetalle getIngresoDetConciliacion() {
+		return ingresoDetConciliacion;
+	}
+
+	public void setIngresoDetConciliacion(IngresoDetalle ingresoDetConciliacion) {
+		this.ingresoDetConciliacion = ingresoDetConciliacion;
+	}
+	
+//  rsis14-006
 }
