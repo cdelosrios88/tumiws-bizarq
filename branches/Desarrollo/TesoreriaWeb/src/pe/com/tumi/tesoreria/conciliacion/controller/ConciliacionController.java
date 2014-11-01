@@ -38,10 +38,8 @@ import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
-//import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
-//import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.fileupload.FileUploadController;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
@@ -72,11 +70,13 @@ public class ConciliacionController{
 	//private List<Conciliacion>	listaConciliacion;
 	private List<Conciliacion>	listaConciliacionBusq;
 	private ConciliacionComp conciliacionCompBusq;
+	private ConciliacionComp conciliacionCompAnul;
 	private List<Bancofondo>	listaBanco;
 	private List<Tabla> listaTablaTipoDoc;
 	private List<Sucursal> listSucursal;
 	private List<ConciliacionComp> lstResumen;
 	private ConciliacionComp concilResumen;
+	private boolean mostrarBotonGrabarConcil;
 	private TelecreditoFileComp telecreditoFileComp;
 	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
@@ -127,6 +127,7 @@ public class ConciliacionController{
 			conciliacionService = (ConciliacionService)TumiFactory.get(ConciliacionService.class);
 			
 			conciliacionCompBusq = new ConciliacionComp();
+			conciliacionCompAnul = new ConciliacionComp();
 			//listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			//cargarListaBanco();
 			cargarListaTipoDocumento();
@@ -185,7 +186,6 @@ public class ConciliacionController{
 		try {
 			String strIdCuenta = null;
 			Integer intIdCuenta = null;
-			
 			strIdCuenta = getRequestParameter("pIntIdCuenta");
 			intIdCuenta = new Integer(strIdCuenta);
 			
@@ -199,7 +199,6 @@ public class ConciliacionController{
 	 * carga Combo de Tipo de Documento
 	 */
 	public void cargarListaTipoDocumento()throws Exception{
-		
 		try {
 			listaTablaTipoDoc = tablaFacade.getListaTablaPorAgrupamientoA(new Integer(Constante.PARAM_T_DOCUMENTOGENERAL), "B");
 		} catch (Exception e) {
@@ -212,6 +211,22 @@ public class ConciliacionController{
 	 * Recupera Ingresos y egresos para conciliacion, segun Filtros de Cuenta y Tipo de Documento
 	 */
 	public void buscarRegistrosConciliacion(){
+		List<ConciliacionDetalle> lstConcilDet = null;
+		try {
+			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
+			if(lstConcilDet != null && lstConcilDet.size() > 0){
+				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
+				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDet);
+			}
+			
+			calcularTablaResumen();
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+
+	public void anularConciliacion(){
 		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
 			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
@@ -246,7 +261,8 @@ public class ConciliacionController{
 			habilitarGrabar = Boolean.FALSE;
 			deshabilitarNuevo = Boolean.TRUE;
 			
-			if(conciliacionNuevo != null && conciliacionNuevo.getListaConciliacionDetalle()!=null ){
+			conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
+			/*if(conciliacionNuevo != null && conciliacionNuevo.getListaConciliacionDetalle()!=null ){
 				// ya se tiene
 				//conciliacionNuevo.getId().setIntPersEmpresa(EMPRESA_USUARIO);
 				//conciliacionNuevo.setTsFechaConciliacion(MyUtil.obtenerFechaActual());
@@ -274,28 +290,41 @@ public class ConciliacionController{
 				//CONCILIACIONFacade.modificarConciliacion(conciliacionNuevo);
 				
 				//mensaje = "Se modificó correctamente la planilla de movimientos.";				
-			}
+			}*/
 			
 		} catch (Exception e) {
-			mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro de la Conciliacion Bancaria.");
+			//mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro de la Conciliacion Bancaria.");
 			log.error(e.getMessage(),e);
 		}
 	}	
 	
+	
+	public void grabarConciliacionDiaria(){
+		try{
+				
+		} catch (Exception e) {
+			//mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de grabarConciliacionDiaria.");
+			log.error(e.getMessage(),e);
+		}
+	
+	
+	}
+	
+	
 	public void buscar(){
 		/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
-		conciliacionCompBusq = new ConciliacionComp();
 		listaConciliacionBusq = new ArrayList<Conciliacion>();	
 		List<ConciliacionDetalle> lstConcilDetTemp = new ArrayList<ConciliacionDetalle>();
 		//conciliacionNuevo.getListaConciliacionDetalle()
-
-		calcularTablaResumen();
+		//calcularTablaResumen();
 		/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 	
 		try{
 			
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
 			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
+			conciliacionCompBusq = new ConciliacionComp();
+
 			/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 			
 		}catch (Exception e) {
@@ -306,8 +335,13 @@ public class ConciliacionController{
 	public void seleccionarRegistro(ActionEvent event){
 		try{
 			cargarUsuario();
-			registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
+			//registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
 			log.info(registroSeleccionado);
+			
+			//if(registroSeleccionado != null){
+			//	verRegistro();
+			//}
+		
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -319,9 +353,8 @@ public class ConciliacionController{
 				deshabilitarNuevo = Boolean.FALSE;
 				habilitarGrabar = Boolean.TRUE;
 				
-				//conciliacion =  facade.getConciliacion(conciliacionId);
-				calcularTablaResumen();
-				
+				conciliacionNuevo = conciliacionService.getConciliacionEdit(registroSeleccionado.getId());
+								
 			}else{
 				deshabilitarNuevo = Boolean.TRUE;
 				habilitarGrabar = Boolean.FALSE;
@@ -354,9 +387,9 @@ public class ConciliacionController{
 			Conciliacion conciliacionEliminar = registroSeleccionado;			
 			
 			buscar();
-			mostrarMensaje(Boolean.TRUE, "Se eliminó correctamente la Solicitud Personal.");
+			//mostrarMensaje(Boolean.TRUE, "Se eliminó correctamente la Solicitud Personal.");
 		}catch (Exception e){
-			mostrarMensaje(Boolean.FALSE, "Hubo un error durante la eliminación de la Solicitud Personal.");
+			//mostrarMensaje(Boolean.FALSE, "Hubo un error durante la eliminación de la Solicitud Personal.");
 			log.error(e.getMessage(),e);
 		}
 	}
@@ -373,13 +406,18 @@ public class ConciliacionController{
 			conciliacionNuevo.getId().setIntPersEmpresa(EMPRESA_USUARIO);
 			conciliacionNuevo.setTsFechaConciliacion(MyUtil.obtenerFechaActual());
 			
+			//SOLO PRRUEBAS
+			conciliacionNuevo.setIntPersEmpresa(2);
+			conciliacionNuevo.setIntItemBancoCuenta(6);
+			conciliacionNuevo.setIntItemBancoFondo(2);
+			
 			habilitarGrabar = Boolean.TRUE;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
 	
-	public void mostrarMensaje(boolean exito, String mensaje){
+	/*public void mostrarMensaje(boolean exito, String mensaje){
 		if(exito){
 			mostrarMensajeExito = Boolean.TRUE;
 			mostrarMensajeError = Boolean.FALSE;
@@ -389,7 +427,7 @@ public class ConciliacionController{
 			mostrarMensajeError = Boolean.TRUE;
 			mensajeOperacion = mensaje;
 		}
-	}
+	}*/
 	
 	public void ocultarMensaje(){
 		mostrarMensajeExito = Boolean.FALSE;
@@ -509,18 +547,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
-	
-	/*
-	SELECT * 
-FROM TES_CONCILIACIONRE CONC WHERE 
-CONC.PERS_EMPRESACONCILIACION_N_PK = EMPRESA
-AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES_CONCILIACIONRE CONC1 
-									WHERE CONC1.PERS_EMPRESA_N_PK   		= EMPRESA    
-										AND CONC1.TESO_ITEMBANCOFONDO_N  	= ITEMBCOFONDO  
-										AND CONC1.TESO_ITEMBANCOCUENTA_N  	= ITEMBCOCTA
-										AND CONC1.CORE_FECHACONCILIACION_D 	= FECHA
-										AND CONC1.PARA_ESTADO_N_COD 		= ESTADO); --ESTADO_CONCILIADO
-				*/						
+						
 										
 										
 	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
@@ -619,7 +646,7 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 								}else if(concDetalle.getEgreso().getIntNumeroTransferencia()!=null) {
 									strNroOperacion = concDetalle.getEgreso().getIntNumeroTransferencia().toString();
 								} else {
-									mostrarMensaje(Boolean.FALSE,"Inconsistencia de datos. No se encontró número de operación para el egreso: " + concDetalle.getEgreso().getId().getIntItemEgresoGeneral());
+									//mostrarMensaje(Boolean.FALSE,"Inconsistencia de datos. No se encontró número de operación para el egreso: " + concDetalle.getEgreso().getId().getIntItemEgresoGeneral());
 									break lstDetailFile;
 								}
 								if(detailFile.getStrNroOperacion().trim().equals(strNroOperacion.trim())
@@ -634,7 +661,7 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 			}
 			
 		} else {
-			mostrarMensaje(Boolean.FALSE,"El archivo seleccionado no muestra coincidencia con el número de cuenta.");
+			//mostrarMensaje(Boolean.FALSE,"El archivo seleccionado no muestra coincidencia con el número de cuenta.");
 			return;
 		}
 	}
@@ -810,13 +837,31 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 	public void setConcilResumen(ConciliacionComp concilResumen) {
 		this.concilResumen = concilResumen;
 	}
-
+	
 	public TelecreditoFileComp getTelecreditoFileComp() {
 		return telecreditoFileComp;
 	}
 
 	public void setTelecreditoFileComp(TelecreditoFileComp telecreditoFileComp) {
 		this.telecreditoFileComp = telecreditoFileComp;
+	}
+	
+
+	public boolean isMostrarBotonGrabarConcil() {
+		return mostrarBotonGrabarConcil;
+	}
+
+	public void setMostrarBotonGrabarConcil(boolean mostrarBotonGrabarConcil) {
+		this.mostrarBotonGrabarConcil = mostrarBotonGrabarConcil;
+	}
+
+	public boolean isDeshabilitarGrabarConciliacionDiaria() {
+		return deshabilitarGrabarConciliacionDiaria;
+	}
+
+	public void setDeshabilitarGrabarConciliacionDiaria(
+			boolean deshabilitarGrabarConciliacionDiaria) {
+		this.deshabilitarGrabarConciliacionDiaria = deshabilitarGrabarConciliacionDiaria;
 	}
 	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */

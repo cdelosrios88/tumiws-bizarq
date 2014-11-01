@@ -166,8 +166,8 @@
 					
 					<a4j:support event="onRowClick"
 						actionListener="#{conciliacionController.seleccionarRegistro}"
-						oncomplete="Richfaces.showModalPanel('pAlertaRegistro')"
-						reRender="pAlertaRegistro">
+						oncomplete="Richfaces.showModalPanel('contPanelInferior')"
+						reRender="contPanelInferior">
 						
 						<f:attribute name="item" value="#{item}"/>
 					</a4j:support>
@@ -211,7 +211,13 @@
 						style="width:90px"
 						action="#{conciliacionController.grabar}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						disabled="#{!conciliacionController.habilitarGrabar}"/>
+						disabled="false"/>
+					<a4j:commandButton value="Grabar Conciliacion Diaria" 
+						styleClass="btnEstilos" 
+						style="width:90px"
+						action="#{conciliacionController.grabarConciliacionDiaria}" 
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
+						rendered="#{conciliacionController.mostrarBotonGrabarConcil}"/>
 					<a4j:commandButton value="Cancelar" 
 						styleClass="btnEstilos"
 						style="width:90px"
@@ -219,8 +225,6 @@
 						reRender="contPanelInferior,panelMensaje,panelBotones"/>      
 				</h:panelGrid>
 			</h:panelGroup>
-
-
 
 			<h:panelGroup id="contPanelInferior">
 				<rich:panel  rendered="#{conciliacionController.mostrarPanelInferior}"	style="border:1px solid #17356f;background-color:#DEEBF5;">
@@ -254,12 +258,13 @@
 								</h:selectOneMenu>
 							-->
 							</rich:column>
-							<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
-								<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
-								<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
-								itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
-							</h:selectOneMenu>	
-
+							<rich:column width=	"140">
+								<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
+									<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
+									<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
+									itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
+								</h:selectOneMenu>	
+							</rich:column>
 							<rich:column width=	"120">
 								<h:outputText value="Cuenta Bancaria : "/>
 							</rich:column>
@@ -391,8 +396,8 @@
 									style="width:940px"/>
 							</rich:column>
 						</h:panelGrid>
-
 					</h:panelGroup>
+					
 					<h:panelGrid id="panelDatosValidados" rendered="#{conciliacionController.datosValidados}">
 						<rich:column width=	"910">
 							<rich:dataTable
@@ -489,12 +494,12 @@
 									<h:panelGroup rendered="#{not empty item.egreso}">
 										<tumih:outputText value="#{conciliacionController.listSucursal}" 
 														  itemValue="id.intIdSucursal" itemLabel="juridica.strRazonSocial" 
-														  property="#{item.egreso.intSucuIdSucursal}"/>				
+														  property="#{item.egreso.egresoDetConciliacion.intSucuIdSucursalEgreso}"/>	
 									</h:panelGroup>
 									<h:panelGroup rendered="#{not empty item.ingreso}">
 										<tumih:outputText value="#{conciliacionController.listSucursal}" 
 														  itemValue="id.intIdSucursal" itemLabel="juridica.strRazonSocial" 
-														  property="#{item.ingreso.intSucuIdSucursal}"/>
+														  property="#{item.ingreso.ingresoDetConciliacion.intSucuIdSucursalIn}"/>
 									</h:panelGroup>                              
 								</rich:column>
 								<rich:column>

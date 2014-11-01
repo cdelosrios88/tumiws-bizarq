@@ -34,6 +34,8 @@ public class Conciliacion extends TumiDomain{
 	private Integer intEstadoCheckFiltro;
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	private Timestamp tsFechaConcilia;
+
 	// 
 	private String strBanco;	
 	private String strTipoCuenta;	
@@ -278,8 +280,18 @@ public class Conciliacion extends TumiDomain{
 		this.usuario = usuario;
 	}
 	
+
+	public Timestamp getTsFechaConcilia() {
+		return tsFechaConcilia;
+	}
+
+	public void setTsFechaConcilia(Timestamp tsFechaConcilia) {
+		this.tsFechaConcilia = tsFechaConcilia;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
+
 
 
 

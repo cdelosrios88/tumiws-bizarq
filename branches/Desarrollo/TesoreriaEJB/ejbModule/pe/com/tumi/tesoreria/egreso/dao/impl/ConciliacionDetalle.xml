@@ -34,13 +34,18 @@
     <result property="intItemIngresoGeneral"    		column="pitemingresogeneral" />
     <result property="intIndicadorCheck"    			column="pindicadorcheck" />
     <result property="intIndicadorConci"      			column="pindicadorconci" />
-    <result property="bdSaldoInicial"      				column="psaldoinicial" />
-    <result property="bdMontoDebe"    					column="pmontodebe" />
-    <result property="bdMontoHaber"      				column="pmontohaber" />
-    <result property="intPersEmpresaCheckConciliacion"  column="pempresacheckcon" />
-    <result property="intPersPersonaCheckConciliacion"  column="ppersonacheckcon" />
-    <result property="tsFechaCheck"      				column="pfechacheck" />
-    <result property="intNumeroOperacion"      			column="pnumerooperacion" />     
+    <result property="bdSaldoInicial"      				column="psaldoinicial"/>
+    <result property="bdMontoDebe"    					column="pmontodebe"/>
+    <result property="bdMontoHaber"      				column="pmontohaber"/>
+    <result property="intPersEmpresaCheckConciliacion"  column="pempresacheckcon"/>
+    <result property="intPersPersonaCheckConciliacion"  column="ppersonacheckcon"/>
+    <result property="tsFechaCheck"      				column="pfechacheck"/>
+    <result property="intNumeroOperacion"      			column="pnumerooperacion"/>  
+	<result property="intSucuIdSucursalGira" 			column="pintSucuIdSucursalGira"/>
+	<result property="intSubSucuIdSucursalGira" 		column="pintSubSucuIdSucursalGira"/>
+	<result property="intSucuIdSucursalPaga" 			column="pintSucuIdSucursalPaga"/>
+	<result property="intSubSucuIdSucursalPaga" 		column="pintSubSucuIdSucursalPaga"/>
+	
      <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
                 
                 
@@ -62,7 +67,11 @@
 	 <parameter property="intPersEmpresaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaCheck"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
-	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>   
+	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
+	 <parameter property="intSucuIdSucursalGira"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
+	 <parameter property="intSubSucuIdSucursalGira"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
+	 <parameter property="intSucuIdSucursalPaga"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
+	 <parameter property="intSubSucuIdSucursalPaga"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -90,7 +99,13 @@
 	 <parameter property="intPersEmpresaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intPersPersonaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="tsFechaCheck"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="IN"/>
-	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>   
+	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intSucuIdSucursalGira"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intSubSucuIdSucursalGira"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intSucuIdSucursalPaga"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+	 <parameter property="intSubSucuIdSucursalPaga"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/> 
+
+	 
   </parameterMap>
   
 
@@ -109,7 +124,7 @@
   </procedure>
   --> 
   <procedure id="grabar" parameterMap="parConciliacionDetalle">
-	{ call PKG_CONCILIACIONDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parConciliacionDetalle" >
@@ -122,7 +137,7 @@
   
   <!-- 
    <procedure id="getListConcilDet" parameterMap="parPorAll" resultMap="resConciliacionDetalle">
-	{ call PKG_CONCILIACIONDET.getListConcilDet(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+	{ call PKG_CONCILIACIONDET.getListConcilDet(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
   </procedure> 
   -->
 <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->

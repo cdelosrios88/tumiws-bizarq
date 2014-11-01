@@ -89,6 +89,10 @@ public class Egreso extends TumiDomain{
 	private ExpedienteCredito expedienteCredito;	
 	private String strNumeroLibro;
 	
+	//  rsis14-006
+	private EgresoDetalle egresoDetConciliacion;
+	// rsis14-006
+	
 	public Egreso(){
 		id = new EgresoId();
 		listaEgresoDetalle = new ArrayList<EgresoDetalle>();
@@ -526,4 +530,17 @@ public class Egreso extends TumiDomain{
 		this.intPersCuentaBancariaGirado = intPersCuentaBancariaGirado;
 	}	
 	//Fin jchavez - 19.09.2014
+
+
+	
+//  rsis14-006
+	public EgresoDetalle getEgresoDetConciliacion() {
+		return egresoDetConciliacion;
+	}
+
+	public void setEgresoDetConciliacion(EgresoDetalle egresoDetConciliacion) {
+		this.egresoDetConciliacion = egresoDetConciliacion;
+	}
+	
+//  rsis14-006
 }

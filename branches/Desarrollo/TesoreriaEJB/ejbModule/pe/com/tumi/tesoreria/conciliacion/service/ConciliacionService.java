@@ -37,10 +37,12 @@ import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalleId;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
+import pe.com.tumi.tesoreria.egreso.domain.EgresoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.EgresoId;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.ingreso.bo.IngresoBO;
 import pe.com.tumi.tesoreria.ingreso.domain.Ingreso;
+import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalle;
 import pe.com.tumi.tesoreria.ingreso.domain.IngresoId;
 
 
@@ -80,6 +82,7 @@ public class ConciliacionService {
 	 */
 	public List<ConciliacionDetalle> buscarRegistrosConciliacion(Conciliacion conciliacion)throws BusinessException{
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleFin = new ArrayList<ConciliacionDetalle>();
 		try{
 			Ingreso ingresoFiltro = new Ingreso();
 			// SOLO PRUEBAS RSIS14-006 
@@ -131,10 +134,15 @@ public class ConciliacionService {
 				}
 			}
 			
+			for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalle){
+				conciliacionDet = convertEgresoIngresoAConcilDet(conciliacionDet);
+				listaConciliacionDetalleFin.add(conciliacionDet);
+			}	
+			
 		}catch (Exception e) {
 			throw new BusinessException(e);
 		}
-		return listaConciliacionDetalle;
+		return listaConciliacionDetalleFin;
 	}
 	
 	/**
@@ -162,6 +170,11 @@ public class ConciliacionService {
 			
 			if(listaIngreso != null && listaIngreso.size() >0){
 				for(Ingreso ingreso : listaIngreso){
+					IngresoDetalle ingDet = null;
+					ingDet = recuperarIngresoDetConcil(ingreso);
+					if(ingDet != null){
+						ingreso.setIngresoDetConciliacion(ingDet);
+					}
 					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
 					//conciliacionDet.setId(new ConciliacionDetalleId());
 					conciliacionDet.setIngreso(ingreso);
@@ -187,6 +200,11 @@ public class ConciliacionService {
 			
 			if(listaEgreso != null && listaEgreso.size() >0){
 				for(Egreso egreso : listaEgreso){
+					EgresoDetalle egrDet = null;
+					egrDet = recuperarEgresoDetConcil(egreso);
+					if(egrDet != null){
+						egreso.setEgresoDetConciliacion(egrDet);
+					}
 					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
 					//conciliacionDet.setId(new ConciliacionDetalleId());
 					conciliacionDet.setEgreso(egreso);
@@ -292,6 +310,8 @@ public class ConciliacionService {
 			if(conciliacionDet.getEgreso() != null){
 				conciliacionDet.setIntPersEmpresaEgreso(conciliacionDet.getEgreso().getId().getIntPersEmpresaEgreso());
 				conciliacionDet.setIntItemEgresoGeneral(conciliacionDet.getEgreso().getId().getIntItemEgresoGeneral());
+				conciliacionDet.setIntIndicadorCheck(0);
+				conciliacionDet.setIntIndicadorConci(0);
 
 				conciliacionDet.setBdMontoDebe(null);
 				conciliacionDet.setBdMontoHaber(conciliacionDet.getEgreso().getBdMontoTotal());
@@ -301,6 +321,8 @@ public class ConciliacionService {
 			} else if (conciliacionDet.getIngreso() != null){	
 				conciliacionDet.setIntPersEmpresaIngreso(conciliacionDet.getIngreso().getId().getIntIdEmpresa());
 				conciliacionDet.setIntItemIngresoGeneral(conciliacionDet.getIngreso().getId().getIntIdIngresoGeneral());
+				conciliacionDet.setIntIndicadorCheck(0);
+				conciliacionDet.setIntIndicadorConci(0);
 				
 				conciliacionDet.setBdMontoDebe(conciliacionDet.getIngreso().getBdMontoTotal());
 				conciliacionDet.setBdMontoHaber(null); 
@@ -319,6 +341,175 @@ public class ConciliacionService {
 		}
 		return conciliacionDet;
 	}
+	
+	
+	
+	public EgresoDetalle recuperarEgresoDetConcil (Egreso egreso){
+	List<EgresoDetalle> lstEgresoDet = null;
+	EgresoDetalle egresoDet = null;	
+		try {
+			//lstEgresoDet = boEgreso.getPorEgreso(egreso);
+			if(lstEgresoDet != null && lstEgresoDet.size() >0){
+					egresoDet = new EgresoDetalle();
+					egresoDet = lstEgresoDet.get(0);
+			}
+		} catch (Exception e) {
+			log.error("Error en convertEgresoIngresoAConcilDet --> "+e);
+		}
+		return egresoDet;
+	}
+	
+	public IngresoDetalle recuperarIngresoDetConcil (Ingreso ingreso){
+	List<IngresoDetalle> lstIngresoDet = null;
+	IngresoDetalle ingresoDet = null;	
+		try {
+			//lstIngresoDet = boIngreso.getPorIngreso(ingreso);
+			if(lstIngresoDet != null && lstIngresoDet.size() >0){
+					ingresoDet = new IngresoDetalle();
+					ingresoDet = lstIngresoDet.get(0);
+			}
+		} catch (Exception e) {
+			log.error("Error en convertEgresoIngresoAConcilDet --> "+e);
+		}
+		return ingresoDet;
+	}
+	
+
+	public void anularConciliacion(ConciliacionComp pConciliacionCompAnul) throws BusinessException{
+		List<Conciliacion> lstConciliacion = null;
+		try{
+			  lstConciliacion = boConciliacion.getListFilter(pConciliacionCompAnul);
+			  
+			  if(lstConciliacion != null && lstConciliacion.size() > 0){
+				  for(Conciliacion concil : lstConciliacion){
+						List<ConciliacionDetalle> lstConcilDetalle = null;
+						Integer intNroConDet = 0;
+						
+						// 1. actualizar checks a 1 y concil a 0					
+						lstConcilDetalle =  boConciliacionDet.getPorConciliacion(concil.getId());
+						if(lstConcilDetalle != null && lstConcilDetalle.size() > 0){
+							List<ConciliacionDetalle> lstTemp = new ArrayList<ConciliacionDetalle>();
+							intNroConDet = lstConcilDetalle.size();
+							
+							for (ConciliacionDetalle concilDet :lstConcilDetalle){
+								concilDet.setIntIndicadorCheck(new Integer("1"));
+								concilDet.setIntIndicadorConci(new Integer("0"));	
+								lstTemp.add(concilDet);
+							}
+							concil.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
+							concil.getListaConciliacionDetalle().addAll(lstTemp);
+							
+						}
+						
+						// 2. Actualizar cabecera
+						
+						concil.setIntRegistrosConciliados(new Integer("0"));
+						concil.setIntRegistrosNoConciliados(intNroConDet);							
+						//concil.setIntPersEmpresaAnula(pConciliacionCompAnul.getUsuario().getId().getIntPersEmpresa());	
+						//concil.setIntPersPersonaAnula(pConciliacionCompAnul.getUsuario().getPersona().getId());								
+						concil.setTsFechaAnula(MyUtil.obtenerFechaActual());
+						//concil.setStrObservaciónAnula(pConciliacionCompAnul.getStrObservacionAnul());
+						concil.setIntParaEstado(new Integer ("3")); // estado anulado
+
+						// 3. Grabar concilicacion
+						grabarConciliacion(concil);
+				  }
+			  }
+		}catch(BusinessException e){
+			log.error("Error - BusinessException - en anularConciliacion ---> "+e);
+			throw e;
+		}catch(Exception e){
+			log.error("Error - Exception - en anularConciliacion ---> "+e);
+			throw new BusinessException(e);
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Conciliacion getConciliacionEdit(ConciliacionId id){
+		Conciliacion conciliacion = null;
+		try {
+			conciliacion = boConciliacion.getPorPk(id);
+			if(conciliacion != null){
+				List<ConciliacionDetalle> lstDetalle = null;
+				lstDetalle = boConciliacionDet.getPorConciliacion(id);
+				if(lstDetalle == null && lstDetalle.size()>0){
+					conciliacion.setListaConciliacionDetalle(lstDetalle);
+					//for (ConciliacionDetalle conciliacionDetalle : lstDetalle) {
+						
+						
+						
+						//convertEgresoIngresoAConcilDet(conciliacionDet)
+					//}
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return conciliacion;
+		
+		
+	}
+	
+	/*
+		public void calcularTablaResumen(){
+		BigDecimal bdTotalConciliacion;
+		BigDecimal bdResumenPorConciliar;
+		
+		try{
+			bdTotalConciliacion= BigDecimal.ZERO;
+			bdResumenPorConciliar= BigDecimal.ZERO;
+			
+			limpiarTablaResumen();
+			
+			concilResumen.setBdResumenSaldoAnterior(conciliacionNuevo.getBdMontoSaldoInicial() == null ? BigDecimal.ZERO :conciliacionNuevo.getBdMontoSaldoInicial());
+		
+			if(conciliacionNuevo.getListaConciliacionDetalle() != null || conciliacionNuevo.getListaConciliacionDetalle().size() == 0){
+				concilResumen.setIntResumenNroMov(conciliacionNuevo.getListaConciliacionDetalle().size());
+				
+				//bdTotalConciliacion
+				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+					bdTotalConciliacion = bdTotalConciliacion.add((detalle.getBdMontoDebe() == null ? ( detalle.getBdMontoHaber() == null ? BigDecimal.ZERO : detalle.getBdMontoHaber() ): detalle.getBdMontoDebe()));					
+				}
+
+				// bdResumenPorConciliar
+				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+					if(detalle.getIntIndicadorCheck() == null || detalle.getIntIndicadorCheck() == 0){
+						if(detalle.getIngreso() == null){
+							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
+						}else{
+							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
+						}
+					}
+				}
+				
+				// bdResumenSaldoConciliacion
+				concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar).setScale(2, RoundingMode.HALF_UP));
+				
+				// bdResumenDebe / bdResumenHaber
+				BigDecimal bdResumenDebe = BigDecimal.ZERO;
+				BigDecimal bdResumenHaber = BigDecimal.ZERO;
+				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+					bdResumenDebe  = bdResumenDebe.add(detalle.getBdMontoDebe()!= null ? detalle.getBdMontoDebe() : BigDecimal.ZERO);
+					bdResumenHaber = bdResumenHaber.add(detalle.getBdMontoHaber()!= null ? detalle.getBdMontoHaber() : BigDecimal.ZERO);
+				}
+
+				//bdResumenSaldoCaja
+				concilResumen.setBdResumenSaldoCaja(concilResumen.getBdResumenSaldoAnterior().add(bdResumenDebe).subtract(bdResumenHaber).setScale(2, RoundingMode.HALF_UP));
+				lstResumen.add(concilResumen);
+			
+			}		
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	
+	
+	*/
+	
 	
 	/*	
 	public List<ConciliacionDetalle> getConciliacionConDetalleValidado(Conciliacion conciliacion, List<ConciliacionDetalle> lstDetalleOriginal) throws BusinessException{
@@ -404,6 +595,7 @@ public class ConciliacionService {
 			if(listaConciliacionDetalleTemp!=null && !listaConciliacionDetalleTemp.isEmpty()){
 				listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 				for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalleTemp){
+					// Igualamos el check concil segun check
 					if(conciliacionDet.getIntIndicadorCheck() == null || conciliacionDet.getIntIndicadorCheck() == 0){
 						conciliacionDet.setIntIndicadorConci(0);
 					}else{

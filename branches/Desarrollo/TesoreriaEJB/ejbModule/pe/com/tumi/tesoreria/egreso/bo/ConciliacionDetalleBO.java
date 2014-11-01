@@ -10,6 +10,7 @@ import pe.com.tumi.tesoreria.egreso.dao.ConciliacionDetalleDao;
 import pe.com.tumi.tesoreria.egreso.dao.impl.ConciliacionDetalleDaoIbatis;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalleId;
+import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
 
 
 public class ConciliacionDetalleBO{
@@ -69,7 +70,24 @@ public class ConciliacionDetalleBO{
 	}
 	
 	
+	public List<ConciliacionDetalle> getPorConciliacion(ConciliacionId pId) throws BusinessException{
+		List<ConciliacionDetalle> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", pId.getIntPersEmpresa());
+			mapa.put("intItemConciliacion", pId.getIntItemConciliacion());
+			lista = dao.getListaPorPk(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	
 	/*
+
 	public List<ConciliacionDetalle> getListConcilDet(ConciliacionDetalle pConcilDet) throws BusinessException{
 		List<ConciliacionDetalle> lista = null;
 		try{
