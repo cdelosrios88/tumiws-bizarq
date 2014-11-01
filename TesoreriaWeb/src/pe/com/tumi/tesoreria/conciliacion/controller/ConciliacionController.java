@@ -77,7 +77,7 @@ public class ConciliacionController{
 	private List<Sucursal> listSucursal;
 	private List<ConciliacionComp> lstResumen;
 	private ConciliacionComp concilResumen;
-	
+	private TelecreditoFileComp telecreditoFileComp;
 	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
@@ -525,7 +525,6 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 										
 	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
 	public void adjuntarDocTelecredito(UploadEvent event){
-		TelecreditoFileComp telecreditoFileComp = null;
 		TelecreditoDetailFile telecreditoDetail = null;
 		List<TelecreditoDetailFile> lstDetailTelecreditoFile = new ArrayList<TelecreditoDetailFile>();
 		try {
@@ -555,7 +554,7 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 				lstDetailTelecreditoFile.add(telecreditoDetail);
 			}
 			telecreditoFileComp.setLstTelecreditoFileDetail(lstDetailTelecreditoFile);
-			
+			/*
 			List<Entry> entryList = new ArrayList<Entry>(mpTelecreditoFile.entrySet());
 			for (Entry temp : entryList) {
 				System.out.println(temp.getKey());
@@ -568,7 +567,7 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 				telecreditoDetail = new TelecreditoDetailFile();
 				
 				if(Integer.parseInt(rowIndex)>4){
-					telecreditoDetail.setStrFecRegistro(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
+					telecreditoDetail.setStrFecRegistro(mpTelecreditoFile.get(Constante.sdf.format(rowIndex+Constante.STR_COMMA+indexCol++)).toString());
 					telecreditoDetail.setStrFecValuta(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
 					telecreditoDetail.setStrDescOperacion(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
 					telecreditoDetail.setStrMonto(mpTelecreditoFile.get(rowIndex+Constante.STR_COMMA+indexCol++).toString());
@@ -582,10 +581,64 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 				}
 				telecreditoFileComp.getLstTelecreditoFileDetail().add(telecreditoDetail);
 			}
+			matchTelecreditoFileAgainstLstConcDet(telecreditoFileComp);
+			*/
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 	}
+	
+	/**
+	 * @author bizarq
+	 * Método encargado de realizar el match entre el archivo telecrédito y la lista de conciliaciones actual.
+	 * @param telecreditoFileComp
+	 * 
+	 * */
+	public void matchTelecreditoFileAgainstLstConcDet(){
+		//Verificando el Nº de cta. antes de iniciar las validaciones...
+		if(telecreditoFileComp.getStrNroCuenta().equals(conciliacionNuevo.getBancoCuenta().getStrNumerocuenta())){
+			if((telecreditoFileComp.getLstTelecreditoFileDetail()!=null && !telecreditoFileComp.getLstTelecreditoFileDetail().isEmpty())
+					&& (conciliacionNuevo.getListaConciliacionDetalle()!=null && !conciliacionNuevo.getListaConciliacionDetalle().isEmpty())){
+				lstDetailFile:
+				for(TelecreditoDetailFile detailFile : telecreditoFileComp.getLstTelecreditoFileDetail()){
+					//Verificando que la fecha de conciliación sea la misma 
+					for(ConciliacionDetalle concDetalle : conciliacionNuevo.getListaConciliacionDetalle()){
+						if(Constante.sdf.format(conciliacionNuevo.getTsFechaConciliacion()).equals(detailFile.getStrFecRegistro())){
+							if(concDetalle.getIngreso()!=null){
+								if(detailFile.getStrNroOperacion().trim().equals(concDetalle.getIngreso().getStrNumeroOperacion().trim())
+										&& new BigDecimal(detailFile.getStrMonto()).compareTo(concDetalle.getIngreso().getBdMontoTotal())==Constante.INT_ZERO){
+									concDetalle.setIntIndicadorCheck(Constante.INT_ONE);
+									concDetalle.setBlIndicadorCheck(Boolean.TRUE);
+								}
+							} else if(concDetalle.getEgreso()!=null){
+								String strNroOperacion = null;
+								if(concDetalle.getEgreso().getIntNumeroPlanilla()!=null){
+									strNroOperacion = concDetalle.getEgreso().getIntNumeroPlanilla().toString();
+								}else if(concDetalle.getEgreso().getIntNumeroCheque()!=null){
+									strNroOperacion = concDetalle.getEgreso().getIntNumeroCheque().toString();
+								}else if(concDetalle.getEgreso().getIntNumeroTransferencia()!=null) {
+									strNroOperacion = concDetalle.getEgreso().getIntNumeroTransferencia().toString();
+								} else {
+									mostrarMensaje(Boolean.FALSE,"Inconsistencia de datos. No se encontró número de operación para el egreso: " + concDetalle.getEgreso().getId().getIntItemEgresoGeneral());
+									break lstDetailFile;
+								}
+								if(detailFile.getStrNroOperacion().trim().equals(strNroOperacion.trim())
+										&& new BigDecimal(detailFile.getStrMonto()).compareTo(concDetalle.getEgreso().getBdMontoTotal())==Constante.INT_ZERO){
+									concDetalle.setIntIndicadorCheck(Constante.INT_ONE);
+									concDetalle.setBlIndicadorCheck(Boolean.TRUE);
+								}
+							} else break;
+						} else break;
+					}
+				}
+			}
+			
+		} else {
+			mostrarMensaje(Boolean.FALSE,"El archivo seleccionado no muestra coincidencia con el número de cuenta.");
+			return;
+		}
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	protected HttpServletRequest getRequest() {
@@ -757,8 +810,14 @@ AND TESO_ITEMCONCILIACIONRE_N = ( SELECT MAX(TESO_ITEMCONCILIACIONRE_N) FROM TES
 	public void setConcilResumen(ConciliacionComp concilResumen) {
 		this.concilResumen = concilResumen;
 	}
-	
-	
+
+	public TelecreditoFileComp getTelecreditoFileComp() {
+		return telecreditoFileComp;
+	}
+
+	public void setTelecreditoFileComp(TelecreditoFileComp telecreditoFileComp) {
+		this.telecreditoFileComp = telecreditoFileComp;
+	}
 	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }

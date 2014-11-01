@@ -279,7 +279,7 @@
 							<rich:column width="150">
 								<a4j:commandButton styleClass="btnEstilos"
 									value="Buscar Cuenta"
-									disabled="#{conciliacionController.datosValidados}"
+									
 									reRender="pBuscarBancoCuenta"
 									oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
 									action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
@@ -356,6 +356,13 @@
 										<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
 									</f:facet>
 								</rich:fileUpload>
+							</rich:column>
+							
+							<rich:column>
+								<a4j:commandButton value="Validar Checks" styleClass="btnEstilos"
+									action="#{conciliacionController.matchTelecreditoFileAgainstLstConcDet}"
+									style="width:150px"
+									reRender="panelDatosValidados"/>
 							</rich:column>
 						</h:panelGrid>
 
@@ -517,13 +524,13 @@
 									<f:facet name="header">
 										<h:outputText value="Check"/>
 									</f:facet>
-									<h:selectBooleanCheckbox value="#{item.intIndicadorCheck == 1}" disabled="false"/>
+									<h:selectBooleanCheckbox value="#{item.blIndicadorCheck}" disabled="false"/>
 								</rich:column>
 								<rich:column width="150" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Concil"/>
 									</f:facet>
-									<h:selectBooleanCheckbox value="#{item.intIndicadorConci == 1}" disabled="false"/>
+									<h:selectBooleanCheckbox value="#{item.blIndicadorConci}" disabled="false"/>
 								</rich:column>			
 							</rich:dataTable>
 								
