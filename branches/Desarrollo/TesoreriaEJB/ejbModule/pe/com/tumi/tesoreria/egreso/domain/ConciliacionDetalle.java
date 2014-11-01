@@ -23,8 +23,12 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Timestamp tsFechaCheck;
 	private Integer intNumeroOperacion;
 	
+	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
 	private Ingreso ingreso;
 	private Egreso	egreso;
+	private Boolean blIndicadorCheck;
+	private Boolean blIndicadorConci;
+	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	public ConciliacionDetalleId getId() {
 		return id;
@@ -121,6 +125,18 @@ public class ConciliacionDetalle extends TumiDomain{
 	}
 	public void setEgreso(Egreso egreso) {
 		this.egreso = egreso;
+	}
+	public Boolean getBlIndicadorCheck() {
+		return blIndicadorCheck;
+	}
+	public void setBlIndicadorCheck(Boolean blIndicadorCheck) {
+		this.blIndicadorCheck = blIndicadorCheck;
+	}
+	public Boolean getBlIndicadorConci() {
+		return blIndicadorConci;
+	}
+	public void setBlIndicadorConci(Boolean blIndicadorConci) {
+		this.blIndicadorConci = blIndicadorConci;
 	}
 	
 	@Override
