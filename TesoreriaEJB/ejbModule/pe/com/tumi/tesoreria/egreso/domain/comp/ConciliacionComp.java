@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
+import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 
 public class ConciliacionComp extends TumiDomain {
 	
@@ -68,9 +69,11 @@ public class ConciliacionComp extends TumiDomain {
 	private BigDecimal bdResumenSaldoConciliacion;
 	private Integer intResumenNroMov;
 	private BigDecimal bdResumenPorConciliar;
+	/* Inicio: REQ14-006 Bizarq - 01/11/2014 */
+	private Conciliacion conciliacion;
+	/* Fin: REQ14-006 Bizarq - 01/11/2014 */
 
 	
-
 	public Date getDtBusqFechaDesde() {
 		return dtBusqFechaDesde;
 	}
@@ -280,5 +283,13 @@ public class ConciliacionComp extends TumiDomain {
 	}
 	
 	
+	public Conciliacion getConciliacion() {
+		return conciliacion;
+	}
+
+	public void setConciliacion(Conciliacion conciliacion) {
+		this.conciliacion = conciliacion;
+	}
+
 
 }
