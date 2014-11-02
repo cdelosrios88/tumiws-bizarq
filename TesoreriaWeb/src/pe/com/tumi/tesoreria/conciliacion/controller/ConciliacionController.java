@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			01/11/2014     Christian De los Ríos        Se modificó los métodos principales de búsqueda y acciones de Conciliación         
+*/
 package pe.com.tumi.tesoreria.conciliacion.controller;
 
 import java.math.BigDecimal;
@@ -5,7 +11,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -43,6 +48,8 @@ import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.fileupload.FileUploadController;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
+//import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
+//import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
 
 
 public class ConciliacionController{
@@ -127,6 +134,8 @@ public class ConciliacionController{
 			conciliacionService = (ConciliacionService)TumiFactory.get(ConciliacionService.class);
 			
 			conciliacionCompBusq = new ConciliacionComp();
+			conciliacionCompBusq.setConciliacion(new Conciliacion());
+			conciliacionCompBusq.getConciliacion().setBancoCuenta(new Bancocuenta());
 			conciliacionCompAnul = new ConciliacionComp();
 			//listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			//cargarListaBanco();
@@ -306,27 +315,16 @@ public class ConciliacionController{
 			//mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de grabarConciliacionDiaria.");
 			log.error(e.getMessage(),e);
 		}
-	
-	
 	}
 	
 	
 	public void buscar(){
-		/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
-		listaConciliacionBusq = new ArrayList<Conciliacion>();	
-		List<ConciliacionDetalle> lstConcilDetTemp = new ArrayList<ConciliacionDetalle>();
-		//conciliacionNuevo.getListaConciliacionDetalle()
-		//calcularTablaResumen();
-		/* Fin: REQ14-006 Bizarq - 18/10/2014 */
-	
 		try{
-			
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
 			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
 			conciliacionCompBusq = new ConciliacionComp();
 
 			/* Fin: REQ14-006 Bizarq - 18/10/2014 */
-			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -463,7 +461,17 @@ public class ConciliacionController{
 	public void seleccionarBancoCuenta(ActionEvent event){
 		try{
 			Bancocuenta bancoCuentaSeleccionado = (Bancocuenta)event.getComponent().getAttributes().get("item");
-			conciliacionNuevo.setBancoCuenta(bancoCuentaSeleccionado);
+			/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
+			if(conciliacionCompBusq!=null && conciliacionCompBusq.getConciliacion()!=null){
+				conciliacionCompBusq.getConciliacion().setBancoCuenta(bancoCuentaSeleccionado);
+				log.info("IntItembancocuenta(): "+ bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				log.info("IntItembancofondo: "+bancoCuentaSeleccionado.getId().getIntItembancofondo());
+				conciliacionCompBusq.setIntBusqItemBancoCuenta(bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				conciliacionCompBusq.setIntBusqItemBancoFondo(bancoCuentaSeleccionado.getId().getIntItembancofondo());
+			} else {
+				conciliacionNuevo.setBancoCuenta(bancoCuentaSeleccionado);
+			}
+			/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 			log.info(bancoCuentaSeleccionado);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
