@@ -86,12 +86,12 @@ public class ConciliacionService {
 		try{
 			Ingreso ingresoFiltro = new Ingreso();
 			// SOLO PRUEBAS RSIS14-006 
-			conciliacion.setBancoCuenta(new Bancocuenta());
-			conciliacion.getBancoCuenta().setId(new BancocuentaId());
-			conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
-			conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("302"));// transfer a tercerso
-			conciliacion.getBancoCuenta().getId().setIntItembancocuenta(6);
-			conciliacion.getBancoCuenta().getId().setIntItembancofondo(2);
+			//conciliacion.setBancoCuenta(new Bancocuenta());
+			//conciliacion.getBancoCuenta().setId(new BancocuentaId());
+			//conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
+			//conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("302"));// transfer a tercerso
+			//conciliacion.getBancoCuenta().getId().setIntItembancocuenta(6);
+			//conciliacion.getBancoCuenta().getId().setIntItembancofondo(2);
 			// ---->
 
 			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
@@ -110,12 +110,12 @@ public class ConciliacionService {
 			}
 			
 		   // solo para pruebas
-			conciliacion.setBancoCuenta(new Bancocuenta());
-			conciliacion.getBancoCuenta().setId(new BancocuentaId());
-			conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
-			conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("301"));// transfer a tercerso
-			conciliacion.getBancoCuenta().getId().setIntItembancocuenta(16);
-			conciliacion.getBancoCuenta().getId().setIntItembancofondo(16); 
+			//conciliacion.setBancoCuenta(new Bancocuenta());
+			//conciliacion.getBancoCuenta().setId(new BancocuentaId());
+			//conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
+			//conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("301"));// transfer a tercerso
+			//conciliacion.getBancoCuenta().getId().setIntItembancocuenta(16);
+			//conciliacion.getBancoCuenta().getId().setIntItembancofondo(16); 
 		      
 			
 			Egreso egresoFiltro = new Egreso();

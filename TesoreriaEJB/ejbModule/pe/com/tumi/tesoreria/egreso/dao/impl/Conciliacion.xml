@@ -48,7 +48,7 @@
     <result property="tsFechaAnula"      			column="pfechaanula" />
     <result property="strObservaciónAnula"     		column="pobservacionanula" />
     <result property="intParaEstado"     			column="pestado" />
-	<result property="tsFechaConcilia"     			column="ptsFechaConcilia" />	
+	<result property="tsFechaConcilia"     			column="ptsFechaConcilia" />
   </resultMap>
   
   <resultMap id="resConciliacionBusq" class="Conciliacion">
