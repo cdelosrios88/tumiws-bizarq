@@ -8,6 +8,14 @@
 	<!-- Empresa   : Cooperativa Tumi         		-->
 	<!-- Autor     : Arturo Julca	    			-->
 
+<!-- 
+-----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			01/11/2014     Christian De los Ríos        Se agregó un atributo al reRender de retorno
+ -->
+
 <rich:modalPanel id="pBuscarBancoCuenta" width="730" height="290"
 	resizeable="false" style="background-color:#DEEBF5;">
     <f:facet name="header">
@@ -109,7 +117,7 @@
 						<a4j:commandLink
 							value="Seleccionar"
 							actionListener="#{conciliacionController.seleccionarBancoCuenta}" 
-							reRender="contPanelInferior" 
+							reRender="contPanelInferior,pgParamsBusq" 
 							oncomplete="Richfaces.hideModalPanel('pBuscarBancoCuenta')">
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
