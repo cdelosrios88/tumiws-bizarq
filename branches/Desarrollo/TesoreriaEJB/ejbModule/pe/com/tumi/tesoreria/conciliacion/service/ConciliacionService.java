@@ -240,7 +240,7 @@ public class ConciliacionService {
 			conciliacion = boConciliacion.grabar(pConciliacion);
 			
 			listaConciliacionDetalleTemp = pConciliacion.getListaConciliacionDetalle();
-			
+			/*
 			if(listaConciliacionDetalleTemp!=null && !listaConciliacionDetalleTemp.isEmpty()){
 				listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 				for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalleTemp){
@@ -251,7 +251,7 @@ public class ConciliacionService {
 			if(listaConciliacionDetalle!=null && !listaConciliacionDetalle.isEmpty()){
 				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalle, conciliacion.getId());
 			}
-			
+			*/
 		}catch(BusinessException e){
 			log.error("Error - BusinessException - en grabarConciliacion ---> "+e);
 			throw e;
