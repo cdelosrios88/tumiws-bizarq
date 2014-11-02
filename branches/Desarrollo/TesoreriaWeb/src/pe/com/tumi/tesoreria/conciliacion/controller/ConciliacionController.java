@@ -200,7 +200,7 @@ public class ConciliacionController{
 	 */
 	public void cargarListaTipoDocumento()throws Exception{
 		try {
-			listaTablaTipoDoc = tablaFacade.getListaTablaPorAgrupamientoA(new Integer(Constante.PARAM_T_DOCUMENTOGENERAL), "B");
+			listaTablaTipoDoc = tablaFacade.getListaTablaPorAgrupamientoA(new Integer(Constante.PARAM_T_DOCUMENTOGENERAL), "T");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}	
@@ -408,8 +408,8 @@ public class ConciliacionController{
 			
 			//SOLO PRRUEBAS
 			conciliacionNuevo.setIntPersEmpresa(2);
-			conciliacionNuevo.setIntItemBancoCuenta(6);
-			conciliacionNuevo.setIntItemBancoFondo(2);
+			//conciliacionNuevo.setIntItemBancoCuenta(6);
+			//conciliacionNuevo.setIntItemBancoFondo(2);
 			
 			habilitarGrabar = Boolean.TRUE;
 		}catch (Exception e) {
