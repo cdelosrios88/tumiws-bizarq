@@ -7,7 +7,15 @@
 	<%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 
 	<!-- Empresa   : Cooperativa Tumi         -->
-	<!-- Autor     : Arturo Julca    		  -->		
+	<!-- Autor     : Arturo Julca    		  -->
+	
+	<!-- 
+	-----------------------------------------------------------------------------------------------------------
+	* Modificaciones
+	* Motivo                      Fecha            Nombre                      Descripción
+	* -----------------------------------------------------------------------------------------------------------
+	* REQ14-006       			01/11/2014     Christian De los Ríos        Se modificó la pantalla inicial de Conciliación
+	 -->
 
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuenta.jsp"/>
 	<!--<a4j:include viewId="/pages/conciliacion/popup/anularConciliacion.jsp"/>-->
@@ -23,10 +31,10 @@
 				</rich:columnGroup>
 			</h:panelGrid>
 
-			<h:panelGrid columns="11">
+			<h:panelGrid id="pgParamsBusq" columns="11">
 				<!-- Inicio: REQ14-06 Bizarq - 18/10/2014 -->
-				<rich:column width="120px">
-					<h:outputText value="Fecha" styleClass="estiloLetra1"/>
+				<rich:column width="60px">
+					<h:outputText value="Fecha"/>
 				</rich:column>
 				<rich:column>
 					<h:outputText value=":" styleClass="estiloLetra1"/>
@@ -42,8 +50,8 @@
 						datePattern="dd/MM/yyyy" inputStyle="width:70px;" /> 
 				</rich:column>
 
-				<rich:column width="160">
-				<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
+				<%--<rich:column width="160">
+				 --SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
 					<h:selectOneMenu style="width: 160px;" 
 						value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
 							<tumih:selectItems var="sel" 
@@ -51,23 +59,37 @@
 							itemValue="#{sel.intIdDetalle}" 
 							itemLabel="#{sel.strDescripcion}"/>
 					</h:selectOneMenu>
-				-->
-				</rich:column>
+				
+				</rich:column>--%>
 
-				<rich:column width="160">
-				<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
-					<h:selectOneMenu style="width: 160px;" 
-						value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
-							<tumih:selectItems var="sel" 
-							cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
-							itemValue="#{sel.intIdDetalle}" 
-							itemLabel="#{sel.strDescripcion}"/>
-					</h:selectOneMenu> 
-				-->
+				<rich:column width=	"120">
+					<h:outputText value="Cuenta Bancaria : "/>
 				</rich:column>
-
+				<rich:column width="120">
+					<h:inputText
+						rendered="#{empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
+						size="40"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
+					<h:inputText
+						rendered="#{not empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
+						value="#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNumerocuenta}"
+						size="40"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
+				</rich:column>
+				<rich:column width="150">
+					<a4j:commandButton styleClass="btnEstilos"
+						value="Buscar Cuenta"
+						reRender="pBuscarBancoCuenta"
+						oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
+						action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
+						style="width:150px"/>
+				</rich:column>
 				<!-- Fin: REQ14-006 Bizarq - 18/10/2014 -->
-
+			</h:panelGrid>
+				
+			<h:panelGrid>
 				<rich:column width="130" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar" 
@@ -78,7 +100,6 @@
 			</h:panelGrid>
 
 			<rich:spacer height="12px"/>
-
 			<h:panelGrid id="panelTablaResultados">
 				<rich:extendedDataTable id="tblResultado" 
 					enableContextMenu="false" 
@@ -367,7 +388,7 @@
 								<a4j:commandButton value="Validar Checks" styleClass="btnEstilos"
 									action="#{conciliacionController.matchTelecreditoFileAgainstLstConcDet}"
 									style="width:150px"
-									reRender="panelDatosValidados"/>
+									reRender="panelDatosValidados,panelMensaje"/>
 							</rich:column>
 						</h:panelGrid>
 
