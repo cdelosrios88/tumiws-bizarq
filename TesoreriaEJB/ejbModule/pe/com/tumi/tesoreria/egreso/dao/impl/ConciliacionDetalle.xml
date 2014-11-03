@@ -128,7 +128,7 @@
   </procedure>
   
   <procedure id="modificar" parameterMap="parConciliacionDetalle" >
-	{ call PKG_CONCILIACIONDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacionDetalle">

@@ -104,6 +104,28 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		}
 		return lstConcilDet;
 	}
+	
+	/**
+	 * 
+	 * @param pId
+	 * @return
+	 * @throws BusinessException
+	 */
+	public Conciliacion getConciliacionEdit(ConciliacionId pId) throws BusinessException{
+		Conciliacion conciliacion = null;
+		try {
+
+			conciliacion= conciliacionService.getConciliacionEdit(pId);
+		
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return conciliacion;	
+		
+		
+	}
 
 	/*
 	public Conciliacion getUltimaConciliacion(Conciliacion conciliacion)throws BusinessException{

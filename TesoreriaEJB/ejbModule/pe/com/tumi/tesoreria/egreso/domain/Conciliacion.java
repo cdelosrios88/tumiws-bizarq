@@ -1,3 +1,4 @@
+
 package pe.com.tumi.tesoreria.egreso.domain;
 
 import java.math.BigDecimal;

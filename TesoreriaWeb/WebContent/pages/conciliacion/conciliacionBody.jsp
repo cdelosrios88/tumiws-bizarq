@@ -18,8 +18,9 @@
 	 -->
 
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuenta.jsp"/>
-	<!--<a4j:include viewId="/pages/conciliacion/popup/anularConciliacion.jsp"/>-->
-	<!--<a4j:include viewId="/pages/conciliacion/popup/.jsp"/>-->
+	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaParaConciliacion.jsp"/>
+	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaAnula.jsp"/>
+	<a4j:include viewId="/pages/conciliacion/conciliacionContent.jsp"/>
 
 	<h:form>
 		<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
@@ -81,7 +82,7 @@
 				<rich:column width="150">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar Cuenta"
-						reRender="pBuscarBancoCuenta"
+						reRender="pgParamsBusq"
 						oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
 						action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
 						style="width:150px"/>
@@ -187,8 +188,7 @@
 					
 					<a4j:support event="onRowClick"
 						actionListener="#{conciliacionController.seleccionarRegistro}"
-						oncomplete="Richfaces.showModalPanel('contPanelInferior')"
-						reRender="contPanelInferior">
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados">
 						
 						<f:attribute name="item" value="#{item}"/>
 					</a4j:support>
@@ -198,12 +198,15 @@
 				</rich:extendedDataTable>
 				
 			</h:panelGrid>
-
+			
 			<h:panelGrid columns="2" style="margin-left: auto; margin-right: auto">
-				<a4j:commandLink action="#">
-					<h:graphicImage value="/images/icons/mensaje1.jpg" style="border:0px"/>
-				</a4j:commandLink>
-				<h:outputText value="Para anular o ver una Conciliacion Bancaria hacer click en el registro" style="color:#8ca0bd"/>
+				<h:outputLink value="#" id="linkConciliacion">
+					<h:graphicImage value="/images/icons/mensaje1.jpg" style="border:0px" />
+					<rich:componentControl for="panelUpdateViewConciliacion"
+						attachTo="linkConciliacion" operation="show" event="onclick" />
+			</h:outputLink>
+			<h:outputText value="Para anular o ver una Conciliacion Bancaria hacer click en el registro" style="color:#8ca0bd"/>
+				
 			</h:panelGrid>
 
 
@@ -221,7 +224,7 @@
 
 			<h:panelGroup style="border: 0px solid #17356f;background-color:#DEEBF5;" styleClass="rich-tabcell-noborder"
 				id="panelBotones">
-				<h:panelGrid columns="4">
+				<h:panelGrid columns="5">
 					<a4j:commandButton value="Nuevo" 
 						styleClass="btnEstilos" 
 						style="width:90px" 
@@ -235,15 +238,21 @@
 						disabled="false"/>
 					<a4j:commandButton value="Grabar Conciliacion Diaria" 
 						styleClass="btnEstilos" 
-						style="width:90px"
+						style="width:170px"
 						action="#{conciliacionController.grabarConciliacionDiaria}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="#{conciliacionController.mostrarBotonGrabarConcil}"/>
+						rendered="false"/>						
+					<a4j:commandButton value="Anular Conciliacion" 
+						styleClass="btnEstilos" 
+						style="width:140px"
+						action="#{conciliacionController.habilitarPanelAnulacion}" 
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular"
+						rendered="true"/>
 					<a4j:commandButton value="Cancelar" 
 						styleClass="btnEstilos"
 						style="width:90px"
 						action="#{conciliacionController.deshabilitarPanelInferior}" 
-						reRender="contPanelInferior,panelMensaje,panelBotones"/>      
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular"/>      
 				</h:panelGrid>
 			</h:panelGroup>
 
@@ -305,10 +314,9 @@
 							<rich:column width="150">
 								<a4j:commandButton styleClass="btnEstilos"
 									value="Buscar Cuenta"
-									
-									reRender="pBuscarBancoCuenta"
-									oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
-									action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
+									reRender="pBuscarBancoCuentaConciliacion"
+									oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaConciliacion')"
+									action="#{conciliacionController.abrirPopUpBuscarBancoCuentaConciliacion}"
 									style="width:150px"/>
 							</rich:column>
 
@@ -359,9 +367,9 @@
 									disabled="#{conciliacionController.datosValidados}"
 									style="width: 150px;"
 									value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
-									<f:selectItem itemValue="1" itemLabel="Todos"/>
+									<f:selectItem itemValue="0" itemLabel="Todos"/>
 									<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
-									<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+									<f:selectItem itemValue="2" itemLabel="Chekeado"/>
 								</h:selectOneMenu>
 							</rich:column>
 							<rich:column>
@@ -406,8 +414,8 @@
 						</h:panelGrid>
 
 						<rich:spacer height="5px"/>
-
-						<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
+						<%--rendered="#{!conciliacionController.datosValidados}" --%>
+						<h:panelGrid columns="1" rendered="true">
 							<rich:column width="940">
 								<a4j:commandButton styleClass="btnEstilos"
 									disabled="false"
@@ -556,7 +564,7 @@
 									<f:facet name="header">
 										<h:outputText value="Concil"/>
 									</f:facet>
-									<h:selectBooleanCheckbox value="#{item.blIndicadorConci}" disabled="false"/>
+									<h:selectBooleanCheckbox value="#{item.blIndicadorConci}" disabled="true"/>
 								</rich:column>			
 							</rich:dataTable>
 								
@@ -617,8 +625,75 @@
 								</rich:column>
 							</rich:dataTable>				
 						</rich:column>
-					</h:panelGrid>
+			 		</h:panelGrid>
 				</rich:panel>
 			</h:panelGroup>	
+			
+			<h:panelGroup id="panelDatosAnular">
+				<rich:panel rendered="#{conciliacionController.blnMostrarPanelAnulacion}">
+				<h:panelGrid style="margin:0 auto; margin-bottom:10px">
+					<rich:columnGroup>
+						<rich:column>
+							<h:outputText value="ANULAR CONCILIACION BANCARIA" style="font-weight:bold; font-size:14px"/>
+						</rich:column>
+					</rich:columnGroup>
+				</h:panelGrid>
+				<h:panelGrid columns="16">
+				
+					<rich:column width="60px">
+							<h:outputText value="Fecha :"/>
+					</rich:column>	
+					<rich:column>
+						<rich:calendar popup="true" enableManualInput="true" 
+						value="#{conciliacionController.conciliacionCompAnul.dtFechaAnulDesde}" 
+						datePattern="dd/MM/yyyy" inputStyle="width:70px;" /> 
+					</rich:column>
+					<rich:column width=	"120">
+						<h:outputText value="Cuenta Bancaria :"/>
+					</rich:column>
+					<rich:column width="120">
+						<h:inputText
+							rendered="#{empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
+							size="40"
+							readonly="true"
+							style="background-color: #BFBFBF;font-weight:bold;"/>
+						<h:inputText
+							rendered="#{not empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
+							value="#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNumerocuenta}"
+							size="40"
+							readonly="true"
+							style="background-color: #BFBFBF;font-weight:bold;"/>
+					</rich:column>
+					<rich:column width="150">
+						<a4j:commandButton styleClass="btnEstilos"
+							value="Buscar Cuenta"
+							reRender="pgParamsBusq"
+							oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaAnulacion')"
+							action="#{conciliacionController.abrirPopUpBuscarBancoCuentaAnul}"
+							style="width:150px"/>
+					</rich:column>		
+				</h:panelGrid>
+				<h:panelGrid columns="16">
+					<rich:column width="150">
+						<h:outputText value="Observacion : *"/>
+					</rich:column>
+					<rich:column width="150">	
+						<h:inputTextarea rows="10" cols="140"
+								value="#{conciliacionController.conciliacionCompAnul.strObservacionAnula}" />
+					</rich:column>
+				</h:panelGrid>
+				<h:panelGrid columns="16">
+					<rich:column width="150">
+					<a4j:commandButton styleClass="btnEstilos"
+						disabled="false"
+						value="Anular Conciliacion"
+						reRender="panelDatosAnular"
+						action="#{conciliacionController.anularConciliacion}"
+						style="width:150px"/>
+					</rich:column>
+				</h:panelGrid>
+				</rich:panel>
+			</h:panelGroup>
+			
 		</h:panelGroup>
 	</h:form>
