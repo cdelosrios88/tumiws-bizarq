@@ -5,18 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
-	<!-- Empresa   : Cooperativa Tumi         		-->
-	<!-- Autor     : Arturo Julca	    			-->
 
-<!-- 
------------------------------------------------------------------------------------------------------------
-* Modificaciones
-* Motivo                      Fecha            Nombre                      Descripción
-* -----------------------------------------------------------------------------------------------------------
-* REQ14-006       			01/11/2014     Christian De los Ríos        Se agregó un atributo al reRender de retorno
- -->
-
-<rich:modalPanel id="pBuscarBancoCuenta" width="730" height="290"
+<rich:modalPanel id="pBuscarBancoCuentaAnulacion" width="730" height="290"
 	resizeable="false" style="background-color:#DEEBF5;">
     <f:facet name="header">
         <h:panelGrid>
@@ -28,7 +18,7 @@
     <f:facet name="controls">
         <h:panelGroup>
            <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
-           		<rich:componentControl for="pBuscarBancoCuenta" operation="hide" event="onclick"/>
+           		<rich:componentControl for="pBuscarBancoCuentaAnulacion" operation="hide" event="onclick"/>
            </h:graphicImage>
        </h:panelGroup>
     </f:facet>	
@@ -37,7 +27,7 @@
 	    	<h:panelGrid columns="8">
 	    			<rich:column width="160">
 	    				<h:selectOneMenu style="width: 160px;" 
-	    					value="#{conciliacionController.bancoCuentaFiltro.bancofondo.intBancoCod}">
+	    					value="#{conciliacionController.bancoCuentaFiltroAnulacion.bancofondo.intBancoCod}">
 	    					<tumih:selectItems var="sel" 
 	    						cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
 								itemValue="#{sel.intIdDetalle}" 
@@ -48,7 +38,7 @@
            				<h:outputText value="Periodo : "/>
            			</rich:column>
            			<rich:column width="80">
-           				<h:inputText value="#{conciliacionController.bancoCuentaFiltro.intPeriodocuenta}"
+           				<h:inputText value="#{conciliacionController.bancoCuentaFiltroAnulacion.intPeriodocuenta}"
            					style="background-color: #BFBFBF;font-weight:bold;"
            					size="10"
            					readonly="true"/>           				
@@ -58,21 +48,21 @@
            			</rich:column>
 	    			<rich:column width="170">
 	    				<h:inputText
-	    					value="#{conciliacionController.bancoCuentaFiltro.strNumerocuenta}"
+	    					value="#{conciliacionController.bancoCuentaFiltroAnulacion.strNumerocuenta}"
 	    					size="25"/>
 	    			</rich:column>
 	    			<rich:column>
-	    				<a4j:commandButton action="#{conciliacionController.buscarBancoCuenta}" 
+	    				<a4j:commandButton action="#{conciliacionController.buscarBancoCuentaAnulacion}" 
 	    					value="Buscar" 
-	    					reRender="tablaBuscarBancoCuenta" 
+	    					reRender="tablaBuscarBancoCuentaAnulacion" 
 	    					styleClass="btnEstilos"
 	    					style="width:100px">
 	    				</a4j:commandButton>
 	    			</rich:column>	    		
 	    	</h:panelGrid>
 		    	
-	    	<h:panelGroup id="tablaBuscarBancoCuenta">
-	    		<rich:dataTable id="tblSeleccionCuenta" 
+	    	<h:panelGroup id="tablaBuscarBancoCuentaAnulacion">
+	    		<rich:dataTable id="tblSeleccionCuentaAnulacion" 
 	    			var="item" 
 	                value="#{conciliacionController.listaBancoCuenta}" 
 			  		rowKeyVar="rowKey" 
@@ -116,16 +106,16 @@
 						</f:facet>
 						<a4j:commandLink
 							value="Seleccionar"
-							actionListener="#{conciliacionController.seleccionarBancoCuenta}" 
-							reRender="pgParamsBusq" 
-							oncomplete="Richfaces.hideModalPanel('pBuscarBancoCuenta')">
+							actionListener="#{conciliacionController.seleccionarBancoCuentaAnulacion}" 
+							reRender="contPanelInferior" 
+							oncomplete="Richfaces.hideModalPanel('pBuscarBancoCuentaAnulacion')">
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
 			     	</rich:column>			                    
 					
 					<f:facet name="footer">
 						<h:panelGroup layout="block">
-							<rich:datascroller for="tblSeleccionCuenta" maxPages="10"/>
+							<rich:datascroller for="tblSeleccionCuentaAnulacion" maxPages="10"/>
 					   	</h:panelGroup>
 					</f:facet>
 	            </rich:dataTable>

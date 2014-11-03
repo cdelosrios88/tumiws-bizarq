@@ -71,6 +71,8 @@ public class ConciliacionComp extends TumiDomain {
 	private BigDecimal bdResumenPorConciliar;
 	/* Inicio: REQ14-006 Bizarq - 01/11/2014 */
 	private Conciliacion conciliacion;
+	private Date dtFechaAnulDesde;
+	private String strObservacionAnula;
 	/* Fin: REQ14-006 Bizarq - 01/11/2014 */
 
 	
@@ -289,6 +291,22 @@ public class ConciliacionComp extends TumiDomain {
 
 	public void setConciliacion(Conciliacion conciliacion) {
 		this.conciliacion = conciliacion;
+	}
+
+	public Date getDtFechaAnulDesde() {
+		return dtFechaAnulDesde;
+	}
+
+	public void setDtFechaAnulDesde(Date dtFechaAnulDesde) {
+		this.dtFechaAnulDesde = dtFechaAnulDesde;
+	}
+
+	public String getStrObservacionAnula() {
+		return strObservacionAnula;
+	}
+
+	public void setStrObservacionAnula(String strObservacionAnula) {
+		this.strObservacionAnula = strObservacionAnula;
 	}
 
 
