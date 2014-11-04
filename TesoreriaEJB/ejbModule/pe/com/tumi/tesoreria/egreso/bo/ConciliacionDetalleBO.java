@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			28/10/2014     Christian De los Ríos        Se agregó el método processExcelFile para leer un archivo xls         
+*/
 package pe.com.tumi.tesoreria.egreso.bo;
 
 import java.util.HashMap;
@@ -69,7 +75,7 @@ public class ConciliacionDetalleBO{
 		return domain;
 	}
 	
-	
+	//Inicio: REQ14-006 - bizarq - 28/10/2014
 	public List<ConciliacionDetalle> getPorConciliacion(ConciliacionId pId) throws BusinessException{
 		List<ConciliacionDetalle> lista = null;
 		try{
@@ -119,5 +125,5 @@ public class ConciliacionDetalleBO{
 		return lista;
 	}
 	*/
-	
+	//Fin: REQ14-006 - bizarq - 28/10/2014
 }

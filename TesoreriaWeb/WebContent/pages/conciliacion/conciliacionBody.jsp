@@ -20,7 +20,7 @@
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuenta.jsp"/>
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaParaConciliacion.jsp"/>
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaAnula.jsp"/>
-	<a4j:include viewId="/pages/conciliacion/conciliacionContent.jsp"/>
+	<%-- <a4j:include viewId="/pages/conciliacion/conciliacionContent.jsp"/> --%>
 
 	<h:form>
 		<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
@@ -208,7 +208,6 @@
 			<h:outputText value="Para anular o ver una Conciliacion Bancaria hacer click en el registro" style="color:#8ca0bd"/>
 				
 			</h:panelGrid>
-
 
 			<h:panelGroup id="panelMensaje" style="border: 0px solid #17356f;background-color:#DEEBF5;text-align: center"
 				styleClass="rich-tabcell-noborder">

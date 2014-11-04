@@ -5,7 +5,13 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
-
+<!-- 
+-----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			01/11/2014     Christian De los Ríos        Se agregó un atributo al reRender de retorno
+ -->
 <rich:modalPanel id="pBuscarBancoCuentaAnulacion" width="730" height="290"
 	resizeable="false" style="background-color:#DEEBF5;">
     <f:facet name="header">

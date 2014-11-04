@@ -2,7 +2,6 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
 	"http://www.ibatis.com/dtd/sql-map-2.dtd">
 <sqlMap namespace="ConciliacionDetalleDaoIbatis">
-
   <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle" alias="ConciliacionDetalle"/> 
 	
   <resultMap id="resConciliacionDetalle" class="ConciliacionDetalle" >

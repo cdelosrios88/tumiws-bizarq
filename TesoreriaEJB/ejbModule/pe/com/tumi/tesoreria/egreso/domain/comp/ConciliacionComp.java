@@ -69,11 +69,9 @@ public class ConciliacionComp extends TumiDomain {
 	private BigDecimal bdResumenSaldoConciliacion;
 	private Integer intResumenNroMov;
 	private BigDecimal bdResumenPorConciliar;
-	/* Inicio: REQ14-006 Bizarq - 01/11/2014 */
 	private Conciliacion conciliacion;
 	private Date dtFechaAnulDesde;
 	private String strObservacionAnula;
-	/* Fin: REQ14-006 Bizarq - 01/11/2014 */
 
 	
 	public Date getDtBusqFechaDesde() {

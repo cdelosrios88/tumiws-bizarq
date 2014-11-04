@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			28/10/2014     		Bisarq        Nuevos Atributos        
+*/
 package pe.com.tumi.tesoreria.egreso.domain;
 
 import java.math.BigDecimal;
@@ -28,14 +34,11 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Egreso	egreso;
 	private Boolean blIndicadorCheck;
 	private Boolean blIndicadorConci;
-	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
-	
-	// RSIS14-006
 	private Integer intSucuIdSucursalGira;
 	private Integer intSubSucuIdSucursalGira;
 	private Integer intSucuIdSucursalPaga;
 	private Integer intSubSucuIdSucursalPaga;
-	//
+	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	public ConciliacionDetalleId getId() {
 		return id;
@@ -146,7 +149,7 @@ public class ConciliacionDetalle extends TumiDomain{
 		this.blIndicadorConci = blIndicadorConci;
 	}
 	
-	// BIZARQ
+	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
 	
 	public Integer getIntSucuIdSucursalGira() {
 		return intSucuIdSucursalGira;
@@ -174,7 +177,7 @@ public class ConciliacionDetalle extends TumiDomain{
 		this.intSubSucuIdSucursalPaga = intSubSucuIdSucursalPaga;
 	}
 	
-	// BIZARQ
+	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	@Override
 	public String toString() {

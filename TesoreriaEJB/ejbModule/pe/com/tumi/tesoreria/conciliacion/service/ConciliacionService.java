@@ -87,14 +87,6 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalleFin = new ArrayList<ConciliacionDetalle>();
 		try{
 			Ingreso ingresoFiltro = new Ingreso();
-			// SOLO PRUEBAS RSIS14-006 
-			//conciliacion.setBancoCuenta(new Bancocuenta());
-			//conciliacion.getBancoCuenta().setId(new BancocuentaId());
-			//conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
-			//conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("302"));// transfer a tercerso
-			//conciliacion.getBancoCuenta().getId().setIntItembancocuenta(6);
-			//conciliacion.getBancoCuenta().getId().setIntItembancofondo(2);
-			// ---->
 
 			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
 			ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
@@ -110,15 +102,6 @@ public class ConciliacionService {
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
 			}
-			
-		   // solo para pruebas
-			//conciliacion.setBancoCuenta(new Bancocuenta());
-			//conciliacion.getBancoCuenta().setId(new BancocuentaId());
-			//conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
-			//conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("301"));// transfer a tercerso
-			//conciliacion.getBancoCuenta().getId().setIntItembancocuenta(16);
-			//conciliacion.getBancoCuenta().getId().setIntItembancofondo(16); 
-		      
 			
 			Egreso egresoFiltro = new Egreso();
 			egresoFiltro.getId().setIntPersEmpresaEgreso(conciliacion.getBancoCuenta().getId().getIntEmpresaPk());
@@ -155,14 +138,6 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 		try{
 			Ingreso ingresoFiltro = new Ingreso();
-			// SOLO PRUEBAS RSIS14-006 
-			/*conciliacion.setBancoCuenta(new Bancocuenta());
-			conciliacion.getBancoCuenta().setId(new BancocuentaId());
-			conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
-			conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("302"));// transfer a tercerso
-			conciliacion.getBancoCuenta().getId().setIntItembancocuenta(6);
-			conciliacion.getBancoCuenta().getId().setIntItembancofondo(2);*/
-			// ---->
 
 			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
 			ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
@@ -182,16 +157,7 @@ public class ConciliacionService {
 					conciliacionDet.setIngreso(ingreso);
 					listaConciliacionDetalleTemp.add(conciliacionDet);
 				}				
-			}
-			
-		   // solo para pruebas
-			/*conciliacion.setBancoCuenta(new Bancocuenta());
-			conciliacion.getBancoCuenta().setId(new BancocuentaId());
-			conciliacion.getBancoCuenta().getId().setIntEmpresaPk(2); // tumi
-			conciliacion.setIntParaDocumentoGeneralFiltro(new Integer("301"));// transfer a tercerso
-			conciliacion.getBancoCuenta().getId().setIntItembancocuenta(16);
-			conciliacion.getBancoCuenta().getId().setIntItembancofondo(16); */
-		      
+			}		      
 			
 			Egreso egresoFiltro = new Egreso();
 			egresoFiltro.getId().setIntPersEmpresaEgreso(conciliacion.getBancoCuenta().getId().getIntEmpresaPk());
