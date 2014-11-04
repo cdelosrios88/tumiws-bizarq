@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			01/11/2014     		Bisarq        Nuevos Metodos        
+*/
 package pe.com.tumi.tesoreria.egreso.bo;
 
 import java.util.HashMap;

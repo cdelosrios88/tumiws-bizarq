@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			26/10/2014     		Bisarq        Nuevos Atributos        
+*/
 package pe.com.tumi.tesoreria.ingreso.domain;
 
 import java.math.BigDecimal;
@@ -79,9 +85,9 @@ public class Ingreso extends TumiDomain{
 	private Integer intPeriodoSocio;
 //	private String strMontoDepositar;
 
-	//  rsis14-006
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	private IngresoDetalle ingresoDetConciliacion;
-	// rsis14-006
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public Ingreso(){
 		id = new IngresoId();
@@ -492,7 +498,7 @@ public class Ingreso extends TumiDomain{
 
 
 	
-//  rsis14-006
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public IngresoDetalle getIngresoDetConciliacion() {
 		return ingresoDetConciliacion;
 	}
@@ -501,5 +507,5 @@ public class Ingreso extends TumiDomain{
 		this.ingresoDetConciliacion = ingresoDetConciliacion;
 	}
 	
-//  rsis14-006
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 }

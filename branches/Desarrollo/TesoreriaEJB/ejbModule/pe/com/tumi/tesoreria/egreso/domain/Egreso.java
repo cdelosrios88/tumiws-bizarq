@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			01/11/2014     		Bisarq        Nuevos atributos        
+*/
 package pe.com.tumi.tesoreria.egreso.domain;
 
 import java.math.BigDecimal;
@@ -89,9 +95,9 @@ public class Egreso extends TumiDomain{
 	private ExpedienteCredito expedienteCredito;	
 	private String strNumeroLibro;
 	
-	//  rsis14-006
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	private EgresoDetalle egresoDetConciliacion;
-	// rsis14-006
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public Egreso(){
 		id = new EgresoId();
@@ -533,7 +539,7 @@ public class Egreso extends TumiDomain{
 
 
 	
-//  rsis14-006
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public EgresoDetalle getEgresoDetConciliacion() {
 		return egresoDetConciliacion;
 	}
@@ -542,5 +548,5 @@ public class Egreso extends TumiDomain{
 		this.egresoDetConciliacion = egresoDetConciliacion;
 	}
 	
-//  rsis14-006
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 }

@@ -1,4 +1,9 @@
-
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			26/10/2014     		Bisarq        Nuevos Atributos        
+*/
 package pe.com.tumi.tesoreria.egreso.domain;
 
 import java.math.BigDecimal;
@@ -36,8 +41,6 @@ public class Conciliacion extends TumiDomain{
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	private Timestamp tsFechaConcilia;
-
-	// 
 	private String strBanco;	
 	private String strTipoCuenta;	
 	private String strMoneda;	
@@ -292,10 +295,6 @@ public class Conciliacion extends TumiDomain{
 	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
-
-
-
-
 
 	@Override
 	public String toString() {

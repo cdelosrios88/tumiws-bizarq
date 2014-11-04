@@ -6,7 +6,6 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.controller;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,6 @@ public class ConciliacionController{
 	private Bancocuenta		bancoCuentaFiltroAnulacion;
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-	//private List<Conciliacion>	listaConciliacion;
 	private List<Conciliacion>	listaConciliacionBusq;
 	private ConciliacionComp conciliacionCompBusq;
 	private ConciliacionComp conciliacionCompAnul;
@@ -91,16 +89,13 @@ public class ConciliacionController{
 	private boolean mostrarBotonAnular;
 	private TelecreditoFileComp telecreditoFileComp;
 	private boolean blnMostrarPanelAnulacion;
-	
+	private boolean deshabilitarGrabarConciliacionDiaria;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
-	
 	private Usuario 	usuario;
 	private String 		mensajeOperacion;
-	
 	private	Integer		EMPRESA_USUARIO;
 	private	Integer		PERSONA_USUARIO;
-	
 	private boolean mostrarBtnEliminar;
 	private boolean mostrarMensajeExito;
 	private boolean mostrarMensajeError;
@@ -109,8 +104,6 @@ public class ConciliacionController{
 	private boolean registrarNuevo;
 	private boolean habilitarGrabar;
 	private boolean datosValidados;
-	
-	private boolean deshabilitarGrabarConciliacionDiaria;
 	
 	public ConciliacionController(){
 		cargarUsuario();
@@ -263,7 +256,9 @@ public class ConciliacionController{
 		mostrarMensajeError = Boolean.FALSE;
 		mostrarMensajeExito = Boolean.FALSE;
 		habilitarGrabar = Boolean.FALSE;
+		/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 		blnMostrarPanelAnulacion = Boolean.FALSE;
+		/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	}
 
 	/**
@@ -277,17 +272,17 @@ public class ConciliacionController{
 			habilitarGrabar = Boolean.FALSE;
 			deshabilitarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.FALSE;
-			
+			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			calcularTablaResumen();
 			conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
-
+			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		} catch (Exception e) {
 			//mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro de la Conciliacion Bancaria.");
 			log.error(e.getMessage(),e);
 		}
 	}	
 	
-	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void grabarConciliacionDiaria(){
 		try{
 			conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
@@ -298,7 +293,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
-	
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void buscar(){
 		try{
@@ -312,20 +307,19 @@ public class ConciliacionController{
 		}
 	}
 	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void seleccionarRegistro(ActionEvent event){
 		try{
 			cargarUsuario();
 			registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
 			log.info(registroSeleccionado);
 			irModificarConciliacion();
-			//if(registroSeleccionado != null){
-			//	verRegistro();
-			//}
 		
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void verRegistro(){
 		try{
@@ -363,6 +357,7 @@ public class ConciliacionController{
 		}
 	}
 	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	/*
 	public void eliminarRegistro(){
 		try{
@@ -376,6 +371,7 @@ public class ConciliacionController{
 		}
 	}
 	*/
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void habilitarPanelInferior(){
 		try{
@@ -388,16 +384,12 @@ public class ConciliacionController{
 			conciliacionNuevo = new Conciliacion();
 			conciliacionNuevo.getId().setIntPersEmpresa(EMPRESA_USUARIO);
 			conciliacionNuevo.setTsFechaConciliacion(MyUtil.obtenerFechaActual());
-			
+			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			conciliacionCompAnul = new ConciliacionComp();
 			conciliacionCompAnul.setConciliacion(new Conciliacion());
 			conciliacionCompAnul.getConciliacion().getId().setIntPersEmpresa(EMPRESA_USUARIO);
 			conciliacionCompAnul.setDtFechaAnulDesde(null);
-			
-			//SOLO PRRUEBAS
-			//conciliacionNuevo.setIntPersEmpresa(2);
-			//conciliacionNuevo.setIntItemBancoCuenta(6);
-			//conciliacionNuevo.setIntItemBancoFondo(2);
+			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
 			habilitarGrabar = Boolean.TRUE;
 		}catch (Exception e) {
@@ -405,6 +397,7 @@ public class ConciliacionController{
 		}
 	}
 	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void habilitarPanelAnulacion(){
 		try{
 			cargarUsuario();
@@ -446,6 +439,7 @@ public class ConciliacionController{
 			mensajeOperacion = mensaje;
 		}
 	}*/
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void ocultarMensaje(){
 		mostrarMensajeExito = Boolean.FALSE;
@@ -466,7 +460,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
-	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void abrirPopUpBuscarBancoCuentaConciliacion(){
 		try{
 			bancoCuentaFiltroConciliacion = new Bancocuenta();
@@ -496,6 +490,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void buscarBancoCuenta(){
 		try{
@@ -508,6 +503,7 @@ public class ConciliacionController{
 		}
 	}
 	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void buscarBancoCuentaConciliacion(){
 		try{
 			if(bancoCuentaFiltroConciliacion.getStrNumerocuenta()!=null && bancoCuentaFiltroConciliacion.getStrNumerocuenta().isEmpty())
@@ -529,6 +525,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void seleccionarBancoCuenta(ActionEvent event){
 		try{
@@ -550,11 +547,10 @@ public class ConciliacionController{
 		}
 	}
 	
-	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void seleccionarBancoCuentaConciliacion(ActionEvent event){
 		try{
 			Bancocuenta bancoCuentaSeleccionado = (Bancocuenta)event.getComponent().getAttributes().get("item");
-			/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
 			if(conciliacionNuevo!=null){
 				conciliacionNuevo.setBancoCuenta(bancoCuentaSeleccionado);
 				log.info("IntItembancocuenta(): "+ bancoCuentaSeleccionado.getId().getIntItembancocuenta());
@@ -565,7 +561,6 @@ public class ConciliacionController{
 			} else {
 				conciliacionNuevo.setBancoCuenta(bancoCuentaSeleccionado);
 			}
-			/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 			log.info(bancoCuentaSeleccionado);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -576,7 +571,6 @@ public class ConciliacionController{
 	public void seleccionarBancoCuentaAnulacion(ActionEvent event){
 		try{
 			Bancocuenta bancoCuentaSeleccionado = (Bancocuenta)event.getComponent().getAttributes().get("item");
-			/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
 			if(conciliacionAnulacion!=null){
 				conciliacionAnulacion.setBancoCuenta(bancoCuentaSeleccionado);
 				log.info("IntItembancocuenta(): "+ bancoCuentaSeleccionado.getId().getIntItembancocuenta());
@@ -587,26 +581,26 @@ public class ConciliacionController{
 			} else {
 				conciliacionAnulacion.setBancoCuenta(bancoCuentaSeleccionado);
 			}
-			/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 			log.info(bancoCuentaSeleccionado);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void validarDatos(){
 		try{
 			datosValidados = Boolean.TRUE;
+			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			buscarRegistrosConciliacion();
-			
-			
-			
+			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
+
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
 	
-	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void limpiarTablaResumen(){
 		concilResumen = new ConciliacionComp();
 		concilResumen.setBdResumenSaldoAnterior(BigDecimal.ZERO);
@@ -618,6 +612,7 @@ public class ConciliacionController{
 		concilResumen.setBdResumenPorConciliar(BigDecimal.ZERO);
 		lstResumen = new ArrayList<ConciliacionComp>();
 	}
+	
 	/**
 	*/
 	public void calcularTablaResumen(){
@@ -676,7 +671,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
-						
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */					
 										
 										
 	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */

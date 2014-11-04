@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-006       			20/10/2014     		Bisarq        Nuevos Metodos        
+*/
 package pe.com.tumi.tesoreria.banco.service;
 
 import java.util.ArrayList;
