@@ -117,7 +117,9 @@
 						<f:facet name="header">
 							<h:outputText value="Fecha Conciliación"/>
 						</f:facet>
-						<h:outputText value="#{item.tsFechaConciliacion}"/>
+						<h:outputText value="#{item.tsFechaConciliacion}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
 					</rich:column>
 					<rich:column width="60" style="text-align: center">
 						<f:facet name="header">
@@ -147,31 +149,39 @@
 						<f:facet name="header">
 							<h:outputText value="Saldo Anterior"/>
 						</f:facet>
-						<h:outputText value="#{item.bdMontoSaldoInicial}"/>
+						<h:outputText value="#{item.bdMontoSaldoInicial}" style="align: right"/>
 					</rich:column>
 					<rich:column width="80" style="text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Debe"/>
 						</f:facet>
-						<h:outputText value="#{item.bdMontoDebe}"/>
+						<h:outputText value="#{item.bdMontoDebe}" style="align: right">
+							<f:converter converterId="ConvertidorMontos" />
+						</h:outputText>
 					</rich:column>
 					<rich:column width="80" style="text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Haber"/>
 						</f:facet>
-						<h:outputText value="#{item.bdMontoHaber}"/>
+						<h:outputText value="#{item.bdMontoHaber}" style="align: right">
+						<f:converter converterId="ConvertidorMontos" />
+						</h:outputText>
 					</rich:column>
 					<rich:column width="100" style="text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Saldo Caja"/>
 						</f:facet>
-						<h:outputText value="#{item.bdSaldoCaja}"/>
+						<h:outputText value="#{item.bdSaldoCaja}" style="align: right">
+						<f:converter converterId="ConvertidorMontos" />
+						</h:outputText>
 					</rich:column>
 					<rich:column width="100" style="text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Saldo Conciliación"/>
 						</f:facet>
-						<h:outputText value="#{item.bdSaldoConciliacion}"/>
+						<h:outputText value="#{item.bdSaldoConciliacion}" style="align: right">
+						<f:converter converterId="ConvertidorMontos" />
+						</h:outputText>
 					</rich:column>
 					<rich:column width="100" style="text-align: center">
 						<f:facet name="header">
@@ -183,7 +193,7 @@
 						<f:facet name="header">
 							<h:outputText value="Por Conciliar"/>
 						</f:facet>
-						<h:outputText value="#{item.intNroMovimientos}"/>
+						<h:outputText value="#{item.bdPorConciliar}"/>
 					</rich:column>
 					
 					<a4j:support event="onRowClick"
@@ -472,8 +482,12 @@
 									<f:facet name="header">
 										<h:outputText value="Fecha"/>
 									</f:facet>
-									<h:outputText rendered="#{not empty item.egreso}" value="#{item.egreso.tsFechaProceso}"/>  	
-									<h:outputText rendered="#{not empty item.ingreso}" value="#{item.ingreso.tsFechaProceso}"/>
+									<h:outputText rendered="#{not empty item.egreso}" value="#{item.egreso.tsFechaProceso}">
+									<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:outputText>  	
+									<h:outputText rendered="#{not empty item.ingreso}" value="#{item.ingreso.tsFechaProceso}">
+									<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:outputText>
 								</rich:column>
 								<rich:column width="150" style="text-align: right">
 									<f:facet name="header">
@@ -535,10 +549,12 @@
 										<h:outputText value="Debe"/>
 									</f:facet>
 									<h:panelGroup rendered="#{not empty item.egreso}">
-										<h:outputText value="---"/>				
+										<h:outputText value="---"  style="align: center"/>				
 									</h:panelGroup>
 									<h:panelGroup rendered="#{not empty item.ingreso}">
-										<h:outputText value="#{item.ingreso.bdMontoTotal}"/>
+										<h:outputText value="#{item.ingreso.bdMontoTotal}" style="align: right">
+										<f:converter converterId="ConvertidorMontos" />
+										</h:outputText>
 
 									</h:panelGroup>                              
 								</rich:column>
@@ -547,9 +563,11 @@
 										<h:outputText value="Haber"/>
 									</f:facet>
 									<h:panelGroup rendered="#{not empty item.egreso}">
-										<h:outputText value="#{item.egreso.bdMontoTotal}"/>				
+										<h:outputText value="#{item.egreso.bdMontoTotal}" style="align: right">
+										<f:converter converterId="ConvertidorMontos" />
+										</h:outputText>				
 									</h:panelGroup>
-									<h:panelGroup rendered="#{not empty item.ingreso}">
+									<h:panelGroup rendered="#{not empty item.ingreso}" style="align: center">
 										<h:outputText value="---"/>
 									</h:panelGroup>                              
 								</rich:column>
@@ -578,37 +596,49 @@
 									<f:facet name="header">
 										<h:outputText value="Fecha Conciliacion"/>
 									</f:facet>
-									<h:outputText value="#{conciliacionController.conciliacionNuevo.tsFechaConciliacion}"/>
+									<h:outputText value="#{conciliacionController.conciliacionNuevo.tsFechaConciliacion}">
+									<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:outputText>
 								</rich:column>
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Saldo Anterior"/>
 									</f:facet>
-									<h:outputText value="#{itemRes.bdResumenSaldoAnterior}"/>
+									<h:outputText value="#{itemRes.bdResumenSaldoAnterior}" style="align: right">
+									<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>	
 								</rich:column>
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Debe"/>
 									</f:facet>
-									<h:outputText value="#{itemRes.bdResumenDebe}"/>
+									<h:outputText value="#{itemRes.bdResumenDebe}" style="align: right">
+									<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>	
 								</rich:column>
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Haber"/>
 									</f:facet>
-									<h:outputText value="#{itemRes.bdResumenHaber}"/>
+									<h:outputText value="#{itemRes.bdResumenHaber}" style="align: right">
+									<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>	
 								</rich:column>
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Saldo Caja"/>
 									</f:facet>
-									<h:outputText value="#{itemRes.bdResumenSaldoCaja}"/>
+									<h:outputText value="#{itemRes.bdResumenSaldoCaja}" style="align: right">
+									<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>	
 								</rich:column>
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Saldo conciliacion"/>
 									</f:facet>
-									<h:outputText value="#{itemRes.bdResumenSaldoConciliacion}"/>
+									<h:outputText value="#{itemRes.bdResumenSaldoConciliacion}" style="align: right">
+									<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>	
 								</rich:column>
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
@@ -620,7 +650,9 @@
 									<f:facet name="header">
 										<h:outputText value="Por Conciliar"/>
 									</f:facet>
-									<h:outputText value="#{itemRes.bdResumenPorConciliar}"/>
+									<h:outputText value="#{itemRes.bdResumenPorConciliar}" style="align: right">
+									<f:converter converterId="ConvertidorMontos" />
+									</h:outputText>	
 								</rich:column>
 							</rich:dataTable>				
 						</rich:column>
