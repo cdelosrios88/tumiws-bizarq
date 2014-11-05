@@ -11,6 +11,7 @@ package pe.com.tumi.tesoreria.conciliacion.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -92,6 +93,11 @@ public class ConciliacionService {
 			ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
 			ingresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
 			ingresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
+			//ingresoFiltro.setIntParaDocumentoGeneral(302);
+			//ingresoFiltro.setIntItemBancoFondo(2);
+			//ingresoFiltro.setIntItemBancoCuenta(6);			
+			//ingresoFiltro.setDtDechaDesde(new Date(conciliacion.getTsFechaConciliacion().getTime()));
+			ingresoFiltro.setDtDechaHasta(new Date(conciliacion.getTsFechaConciliacion().getTime()));
 			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
 			
 			if(listaIngreso != null && listaIngreso.size() >0){
@@ -108,8 +114,12 @@ public class ConciliacionService {
 			egresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
 			egresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
 			egresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
-			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, null, null);
-			
+			//egresoFiltro.setIntParaDocumentoGeneral(301);
+			//egresoFiltro.setIntItemBancoFondo(2);
+			//egresoFiltro.setIntItemBancoCuenta(4);
+			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, null, (new Date(conciliacion.getTsFechaConciliacion().getTime())));
+			//List<Egreso> listaEgreso = null;
+
 			if(listaEgreso != null && listaEgreso.size() >0){
 				for(Egreso egreso : listaEgreso){
 					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
@@ -165,6 +175,7 @@ public class ConciliacionService {
 			egresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
 			egresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
 			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, null, null);
+			//List<Egreso> listaEgreso = null;
 			
 			if(listaEgreso != null && listaEgreso.size() >0){
 				for(Egreso egreso : listaEgreso){
@@ -205,7 +216,12 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalle = null;
 		
 		try{
-			conciliacion = boConciliacion.grabar(pConciliacion);
+			if(pConciliacion.getId()== null || pConciliacion.getId().getIntItemConciliacion()==null){
+				conciliacion = boConciliacion.grabar(pConciliacion);
+			}else{
+				conciliacion = boConciliacion.modificar(pConciliacion);
+			}
+			
 			
 			listaConciliacionDetalleTemp = pConciliacion.getListaConciliacionDetalle();
 			
