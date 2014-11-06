@@ -549,8 +549,8 @@ public class ConciliacionService {
 		try{
 
 			pConciliacion.setTsFechaConcilia(MyUtil.obtenerFechaActual());
-			pConciliacion.setIntPersEmpresaAnula(pConciliacion.getUsuario().getPerfil().getId().getIntPersEmpresaPk());	
-			pConciliacion.setIntPersPersonaAnula(pConciliacion.getUsuario().getIntPersPersonaPk());	
+			pConciliacion.setIntPersEmpresaConcilia(pConciliacion.getUsuario().getPerfil().getId().getIntPersEmpresaPk());	
+			pConciliacion.setIntPersPersonaConcilia(pConciliacion.getUsuario().getIntPersPersonaPk());	
 			pConciliacion.setIntParaEstado(Constante.INT_EST_CONCILIACION_CONCILIADO);
 				  
 			  if(pConciliacion.getListaConciliacionDetalle() != null 
