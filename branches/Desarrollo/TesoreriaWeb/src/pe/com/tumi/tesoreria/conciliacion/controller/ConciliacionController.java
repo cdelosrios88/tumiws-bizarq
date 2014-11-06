@@ -240,13 +240,26 @@ public class ConciliacionController{
 	public void anularConciliacion(){
 		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
-			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
-			if(lstConcilDet != null && lstConcilDet.size() > 0){
-				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
-				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDet);
-			}
-			
+
+			conciliacionAnulacion.setUsuario(usuario);
+			conciliacionCompAnul.setConciliacion(conciliacionAnulacion);
+			conciliacionFacade.anularConciliacion(conciliacionCompAnul);
+			//calcularTablaResumen();
+			deshabilitarPanelInferior();
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void grabarConciliacionDiaria(){
+		try {
+			conciliacionNuevo.setUsuario(usuario);
 			calcularTablaResumen();
+			conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
+			deshabilitarPanelInferior();
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -286,18 +299,6 @@ public class ConciliacionController{
 	}	
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-	public void grabarConciliacionDiaria(){
-		try{
-			
-			conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
-			
-			mostrarPanelInferior = Boolean.FALSE;	
-		} catch (Exception e) {
-			//mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de grabarConciliacionDiaria.");
-			log.error(e.getMessage(),e);
-		}
-	}
-	
 	private boolean isValidConciliacion(){
 		boolean isValid = Boolean.FALSE;
 		Date dtPreviousUtilDay = null;
@@ -496,6 +497,9 @@ public class ConciliacionController{
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void abrirPopUpBuscarBancoCuentaAnul(){
 		try{
 			bancoCuentaFiltroAnulacion = new Bancocuenta();
@@ -535,6 +539,9 @@ public class ConciliacionController{
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void buscarBancoCuentaAnulacion(){
 		try{
 			if(bancoCuentaFiltroAnulacion.getStrNumerocuenta()!=null && bancoCuentaFiltroAnulacion.getStrNumerocuenta().isEmpty())
