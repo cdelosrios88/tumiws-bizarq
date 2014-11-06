@@ -127,6 +127,39 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		
 	}
 
+	/**
+	 * 
+	 * @param pConciliacionCompAnul
+	 * @return
+	 * @throws BusinessException
+	 */
+	public void anularConciliacion(ConciliacionComp pConciliacionCompAnul) throws BusinessException{
+		try{
+			conciliacionService.anularConciliacion(pConciliacionCompAnul);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param conciliacion
+	 * @throws BusinessException
+	 */
+	public void grabarConciliacionDiaria(Conciliacion conciliacion) throws BusinessException{
+		try{
+			conciliacionService.grabarConciliacionDiaria(conciliacion);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+	}
+	
+	
+	
 	/*
 	public Conciliacion getUltimaConciliacion(Conciliacion conciliacion)throws BusinessException{
 		Conciliacion ultimaConciliacion = null;
@@ -166,22 +199,6 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		return pConciliacion;
 	}	
 		
-		
-		
-	public Boolean anularConciliacion(ConciliacionComp pConciliacionCompAnul) throws BusinessException{
-		Boolean blnExit = false;
-		try{
-			blnExit = conciliacionService.anularConciliacion(pConciliacionCompAnul);
-
-		}catch(BusinessException e){
-			throw e;
-			blnExit = false;
-		}catch(Exception e){
-			throw new BusinessException(e);
-			blnExit = false;
-		}
-		return blnExit;
-	}
 	
 	*/
 
