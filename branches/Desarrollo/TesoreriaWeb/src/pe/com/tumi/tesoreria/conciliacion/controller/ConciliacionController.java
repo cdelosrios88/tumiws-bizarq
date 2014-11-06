@@ -9,6 +9,7 @@ package pe.com.tumi.tesoreria.conciliacion.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.richfaces.event.UploadEvent;
 
+import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
@@ -286,6 +288,7 @@ public class ConciliacionController{
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public void grabarConciliacionDiaria(){
 		try{
+			
 			conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 			
 			mostrarPanelInferior = Boolean.FALSE;	
@@ -294,6 +297,22 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	private boolean isValidConciliacion(){
+		boolean isValid = Boolean.FALSE;
+		Date dtPreviousUtilDay = null;
+		try {
+			//1. Se validará que el día anterior haya sido conciliado.
+			dtPreviousUtilDay = CommonUtils.getPreviousUtilDay(new Date(conciliacionNuevo.getTsFechaConciliacion().getTime()), Constante.INT_ONE);
+			
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		
+		return false;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void buscar(){

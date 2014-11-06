@@ -6,6 +6,7 @@
 */
 package pe.com.tumi.tesoreria.egreso.bo;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -148,6 +149,38 @@ public class ConciliacionBO{
 		return domain;
 	}
 	*/
+	
+	/**
+	 * 
+	 * @param conciliacionCompBusq
+	 * @return
+	 * @throws BusinessException
+	 */
+	public Conciliacion getLastConciliacionByIdEstadoYFecha(Integer intParaEstado, Date dtLastUtilDay) throws BusinessException, DAOException{
+		Conciliacion domain = null;
+		List<Conciliacion> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			/*mapa.put("dtBusqFechaDesde", 		conciliacionCompBusq.getDtBusqFechaDesde());
+			mapa.put("dtBusqFechaHasta", 		conciliacionCompBusq.getDtBusqFechaHasta());
+			mapa.put("intBusqPersEmpresa", 		conciliacionCompBusq.getIntBusqPersEmpresa());
+			*/
+			lista = dao.getListaPorPk(mapa);
+			if(lista!=null){
+				if(lista.size()==1){
+				   domain = lista.get(0);
+				}else if(lista.size()==0){
+				   domain = null;
+				}else{
+				   throw new BusinessException("Obtención de mas de un registro coincidente");
+				}
+			}
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return domain;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	
