@@ -1069,5 +1069,8 @@ public class Constante {
 	
 	//Inicio: REQ14-006 - bizarq - 28/10/2014
 	public static final String STR_COMMA = ",";
+	public static final Integer INT_EST_CONCILIACION_REGISTRADO = 1;
+	public static final Integer INT_EST_CONCILIACION_CONCILIADO = 2;
+	public static final Integer INT_EST_CONCILIACION_ANULADO = 3;
 	//Fin: REQ14-005 - bizarq - 28/10/2014
 }
