@@ -250,7 +250,7 @@
 						style="width:170px"
 						action="#{conciliacionController.grabarConciliacionDiaria}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="false"/>						
+						rendered="true"/>						
 					<a4j:commandButton value="Anular Conciliacion" 
 						styleClass="btnEstilos" 
 						style="width:140px"
@@ -412,13 +412,13 @@
 						<rich:spacer height="5px"/>
 
 						<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
-							<rich:column width="150">
+							<rich:column width="300">
 								<a4j:commandButton styleClass="btnEstilos"
-									disabled="flase"
+									disabled="false"
 									value="Buscar"
 									reRender="contPanelInferior,panelBotones"
 									action="#{conciliacionController.buscarEgresoIngreso}"
-									style="width:150px"/>
+									style="width:300px"/>
 							</rich:column>
 						</h:panelGrid>
 
@@ -698,13 +698,13 @@
 					<rich:column width="150">
 						<a4j:commandButton styleClass="btnEstilos"
 							value="Buscar Cuenta"
-							reRender="pgParamsBusq"
+							reRender="panelDatosAnular"
 							oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaAnulacion')"
 							action="#{conciliacionController.abrirPopUpBuscarBancoCuentaAnul}"
 							style="width:150px"/>
 					</rich:column>		
 				</h:panelGrid>
-				<h:panelGrid columns="16">
+				<h:panelGrid columns="5">
 					<rich:column width="150">
 						<h:outputText value="Observacion : *"/>
 					</rich:column>
@@ -713,14 +713,14 @@
 								value="#{conciliacionController.conciliacionCompAnul.strObservacionAnula}" />
 					</rich:column>
 				</h:panelGrid>
-				<h:panelGrid columns="16">
-					<rich:column width="150">
+				<h:panelGrid columns="1">
+					<rich:column width="300">
 					<a4j:commandButton styleClass="btnEstilos"
 						disabled="false"
 						value="Anular Conciliacion"
-						reRender="panelDatosAnular"
+						reRender="panelDatosAnular,contPanelInferior,panelMensaje,panelBotones"
 						action="#{conciliacionController.anularConciliacion}"
-						style="width:150px"/>
+						style="width:300px"/>
 					</rich:column>
 				</h:panelGrid>
 				</rich:panel>
