@@ -64,18 +64,15 @@ public class ConciliacionDaoIbatis extends TumiDaoIbatis implements Conciliacion
 		}
 		return lista;
 	}
-	/*
-	public List<Conciliacion> getUltimaConciliacion(Object o) throws DAOException{
+	
+	public List<Conciliacion> getLastConciliacionByCuenta(Object o) throws DAOException{
 		List<Conciliacion> lista = null;
 		try{
-			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getUltimaConciliacion", o);
-
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getLastConciliacionByCuenta", o);
 		}catch(Exception e) {
 			throw new DAOException (e);
 		}
 		return lista;
 	}
-	*/
-	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 }

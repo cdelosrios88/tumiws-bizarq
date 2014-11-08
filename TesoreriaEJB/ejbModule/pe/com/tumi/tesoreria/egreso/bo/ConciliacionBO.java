@@ -181,7 +181,39 @@ public class ConciliacionBO{
 		return domain;
 	}
 	
+	/**
+  	 * 
+  	 * @param conciliacion
+  	 * @return
+  	 * @throws BusinessException
+  	 */
+	public Conciliacion getLastConciliacionByCuenta(Conciliacion conciliacion) throws BusinessException{
+		Conciliacion domain = null;
+		List<Conciliacion> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", conciliacion.getId().getIntPersEmpresa());
+			mapa.put("intParaEstado", conciliacion.getIntParaEstado());
+			mapa.put("intItemBancoFondo", conciliacion.getIntItemBancoFondo());
+			mapa.put("intItemBancoCuenta", conciliacion.getIntItemBancoCuenta());
+			lista = dao.getLastConciliacionByCuenta(mapa);
+			if(lista!=null){
+				if(lista.size()==1){
+				   domain = lista.get(0);
+				}else if(lista.size()==0){
+				   domain = null;
+				}else{
+				   throw new BusinessException("Obtención de mas de un registro coincidente");
+				}
+			}
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return domain;
+	}
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
-	
-	
 }
