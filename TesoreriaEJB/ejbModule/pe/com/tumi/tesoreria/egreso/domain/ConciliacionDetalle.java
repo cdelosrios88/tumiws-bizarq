@@ -38,6 +38,7 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Integer intSubSucuIdSucursalGira;
 	private Integer intSucuIdSucursalPaga;
 	private Integer intSubSucuIdSucursalPaga;
+	private Boolean blValid;
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	public ConciliacionDetalleId getId() {
@@ -177,8 +178,16 @@ public class ConciliacionDetalle extends TumiDomain{
 		this.intSubSucuIdSucursalPaga = intSubSucuIdSucursalPaga;
 	}
 	
+	public Boolean getBlValid() {
+		return blValid;
+	}
+	public void setBlValid(Boolean blValid) {
+		this.blValid = blValid;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
+
 	@Override
 	public String toString() {
 		return "ConciliacionDetalle [id=" + id + ", intPersEmpresaEgreso="
