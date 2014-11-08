@@ -323,7 +323,7 @@ public class ConciliacionController{
 			dtoSaldo = conciliacionFacade.obtenerSaldoUltimaFechaSaldo(EMPRESA_USUARIO);
 			if((dtoSaldo!=null && dtoSaldo.getId().getDtFechaSaldo()!=null && dtLastPreviousUtilDay!=null)
 					&& (dtoSaldo.getId().getDtFechaSaldo().compareTo(dtLastPreviousUtilDay))!=0){
-				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
+				mostrarMensaje(Boolean.FALSE, "No se ha realizado la generación de saldos correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
 				isValid = Boolean.TRUE;
 			}
 			
