@@ -44,6 +44,7 @@ import pe.com.tumi.tesoreria.conciliacion.facade.ConciliacionFacadeLocal;
 import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
+import pe.com.tumi.tesoreria.egreso.domain.Saldo;
 import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
@@ -256,10 +257,14 @@ public class ConciliacionController{
 	 */
 	public void grabarConciliacionDiaria(){
 		try {
-			conciliacionNuevo.setUsuario(usuario);
-			calcularTablaResumen();
-			conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
-			deshabilitarPanelInferior();
+			if(!isValidConciliacion(conciliacionNuevo)){
+				conciliacionNuevo.setUsuario(usuario);
+				calcularTablaResumen();
+				conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
+				deshabilitarPanelInferior();
+				mostrarMensaje(Boolean.TRUE, "Se generó éxitosamente la conciliación diaria.");
+			}
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -299,19 +304,46 @@ public class ConciliacionController{
 	}	
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-	private boolean isValidConciliacion(){
+	private boolean isValidConciliacion(Conciliacion conciliacion){
 		boolean isValid = Boolean.FALSE;
-		Date dtPreviousUtilDay = null;
+		Date dtLastArqueo = null;
+		Saldo dtoSaldo = null;
+		Date dtLastPreviousUtilDay = null;
 		try {
-			//1. Se validará que el día anterior haya sido conciliado.
-			dtPreviousUtilDay = CommonUtils.getPreviousUtilDay(new Date(conciliacionNuevo.getTsFechaConciliacion().getTime()), Constante.INT_ONE);
+			//1. Verificar el arqueo del día anterior
+			dtLastArqueo = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+			dtLastPreviousUtilDay = CommonUtils.getPreviousUtilDay(dtLastArqueo, Constante.INT_ONE);//Día anterior
+			if((dtLastArqueo!=null && dtLastPreviousUtilDay!=null)
+					&& (dtLastArqueo.compareTo(dtLastPreviousUtilDay))!=0){
+				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
+				isValid = Boolean.TRUE;
+			}
 			
+			//2. Verificar los saldos del día anterior
+			dtoSaldo = conciliacionFacade.obtenerSaldoUltimaFechaSaldo(EMPRESA_USUARIO);
+			if((dtoSaldo!=null && dtoSaldo.getId().getDtFechaSaldo()!=null && dtLastPreviousUtilDay!=null)
+					&& (dtoSaldo.getId().getDtFechaSaldo().compareTo(dtLastPreviousUtilDay))!=0){
+				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
+				isValid = Boolean.TRUE;
+			}
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 		
-		return false;
+		return isValid;
+	}
+	
+	public void mostrarMensaje(boolean exito, String mensaje){
+		if(exito){
+			mostrarMensajeExito = Boolean.TRUE;
+			mostrarMensajeError = Boolean.FALSE;
+			mensajeOperacion = mensaje;
+		}else{
+			mostrarMensajeExito = Boolean.FALSE;
+			mostrarMensajeError = Boolean.TRUE;
+			mensajeOperacion = mensaje;
+		}
 	}
 	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */

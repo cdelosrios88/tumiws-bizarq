@@ -17,19 +17,17 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCreditoId;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.ExpedienteCreditoComp;
 import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionDetalleBO;
+import pe.com.tumi.tesoreria.egreso.bo.SaldoBO;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
+import pe.com.tumi.tesoreria.egreso.domain.Saldo;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 
 /**
@@ -43,6 +41,7 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 	ConciliacionBO conciliacionBO = (ConciliacionBO)TumiFactory.get(ConciliacionBO.class);
 	ConciliacionDetalleBO conciliacionDetBO = (ConciliacionDetalleBO)TumiFactory.get(ConciliacionDetalleBO.class);
 	ConciliacionService conciliacionService = (ConciliacionService)TumiFactory.get(ConciliacionService.class);
+	SaldoBO boSaldo = (SaldoBO)TumiFactory.get(SaldoBO.class);
     /**
      * @see TumiFacade#TumiFacade()
      */
@@ -176,46 +175,21 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 	return concTemp;	
 	}
 	
-	/*
-	public Conciliacion getUltimaConciliacion(Conciliacion conciliacion)throws BusinessException{
-		Conciliacion ultimaConciliacion = null;
-		try {
-			// conciliacionCompBusq.setEstado conciliado
-			ultimaConciliacion = conciliacionBO.getUltimaConciliacion(conciliacion);
-		}catch(Exception e){
-			throw new BusinessException(e);
-		}
-		return ultimaConciliacion;
+	/**
+	 * 
+	 * @param intIdEmpresa
+	 * @throws BusinessException
+	 * @return Saldo
+	 */
+	public Saldo obtenerSaldoUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException{
+    	Saldo dto = null;
+		try{
+			dto = boSaldo.getSaldoUltimaFechaSaldo(intIdEmpresa);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return dto;
 	}
-	
-	public List<ConciliacionDetalle> getListConcilDet(ConciliacionDetalle pConcilDet) throws BusinessException{
-		List<ConciliacionDetalle> lstConciliacionDetalle = null;
-		try{
-			lstConciliacionDetalle = conciliacionDetBO.getListConcilDet(pConcilDet);
-
-		}catch(BusinessException e){
-			throw e;
-		}catch(Exception e){
-			throw new BusinessException(e);
-		}
-		return lstConciliacionDetalle;
-	}	
-	
-
-	
-	public Conciliacion getConciliacionConDetalleValidado(Conciliacion pConciliacion) throws BusinessException{
-		try{
-			//pConciliacion = conciliacionService.getConciliacionConDetalleValidado(pConciliacion, pConciliacion.getListaConciliacionDetalle());
-
-		}catch(BusinessException e){
-			throw e;
-		}catch(Exception e){
-			throw new BusinessException(e);
-		}
-		return pConciliacion;
-	}	
-		
-	
-	*/
-
 }
