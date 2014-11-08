@@ -223,6 +223,8 @@ public class ConciliacionController{
 	public void buscarRegistrosConciliacion(){
 		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
+			
+			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().equals("0"))conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
 			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
 			if(lstConcilDet != null && lstConcilDet.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
