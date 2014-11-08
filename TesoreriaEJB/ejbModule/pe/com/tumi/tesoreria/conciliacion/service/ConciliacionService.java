@@ -90,12 +90,12 @@ public class ConciliacionService {
 			Ingreso ingresoFiltro = new Ingreso();
 
 			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
-			ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
-			ingresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
-			ingresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
-			//ingresoFiltro.setIntParaDocumentoGeneral(302);
-			//ingresoFiltro.setIntItemBancoFondo(2);
-			//ingresoFiltro.setIntItemBancoCuenta(6);			
+			//ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
+			//ingresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
+			//ingresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
+			ingresoFiltro.setIntParaDocumentoGeneral(302);
+			ingresoFiltro.setIntItemBancoFondo(2);
+			ingresoFiltro.setIntItemBancoCuenta(6);			
 			//ingresoFiltro.setDtDechaDesde(new Date(conciliacion.getTsFechaConciliacion().getTime()));
 			ingresoFiltro.setDtDechaHasta(new Date(conciliacion.getTsFechaConciliacion().getTime()));
 			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
@@ -108,7 +108,7 @@ public class ConciliacionService {
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
 			}
-			
+			/*
 			Egreso egresoFiltro = new Egreso();
 			egresoFiltro.getId().setIntPersEmpresaEgreso(conciliacion.getBancoCuenta().getId().getIntEmpresaPk());
 			egresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
@@ -128,7 +128,7 @@ public class ConciliacionService {
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
 			}
-			
+			*/
 			for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalle){
 				conciliacionDet = convertEgresoIngresoAConcilDet(conciliacionDet);
 				listaConciliacionDetalleFin.add(conciliacionDet);
