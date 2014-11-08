@@ -11,7 +11,9 @@ package pe.com.tumi.tesoreria.conciliacion.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -78,26 +80,140 @@ public class ConciliacionService {
 	}
 	
 	/**
-	 * Asociado al boton MOSTRAR DATOS
+	 * Recupera las Conciliaciones Detalle. Asociado al boton MOSTRAR DATOS
 	 * @param conciliacion
 	 * @return
 	 * @throws BusinessException
 	 */
 	public List<ConciliacionDetalle> buscarRegistrosConciliacion(Conciliacion conciliacion)throws BusinessException{
+		List<ConciliacionDetalle> listaConciliacionDetallePlus = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
+		
+		List<ConciliacionDetalle> listaConciliacionDetalle_1 = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalle_2 = new ArrayList<ConciliacionDetalle>();
+		
+		List<ConciliacionDetalle> listaConciliacionDetalleTemp = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleResult = new ArrayList<ConciliacionDetalle>();
+		
+		Conciliacion concilLast = null;
+		Date dtSince = null;
+		Date dtSincePlusOne = null;
+		try{
+			
+			// verificamos la ultima conciliacion
+			concilLast = boConciliacion.getLastConciliacionByCuenta(conciliacion);
+			if(concilLast != null){
+				dtSince = new Date(concilLast.getTsFechaConciliacion().getTime());
+				dtSincePlusOne = sumarFechasDias(dtSince, 1);
+
+				// Recuperamos las concilaiciones desde el dia de hoy hast un dia posterior a la ultima cocnilaicion
+				listaConciliacionDetallePlus = getConciliacionDetallePorFechas(
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
+						dtSincePlusOne, 
+						new Date( conciliacion.getTsFechaConciliacion().getTime()));
+				
+				
+				//recuperampos el detalle de la ultima concilaicion
+				listaConciliacionDetalle_1 = getConciliacionDetallePorFechas(
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
+						dtSince, 
+						dtSince);
+				
+				// detalle de la ultima concilaicion
+				listaConciliacionDetalle_2 = boConciliacionDet.getPorConciliacion(concilLast.getId());
+				
+				if(listaConciliacionDetalle_2 != null && listaConciliacionDetalle_2.size() > 0){
+					
+				//Recoremos las listas a fin de solo tomar las que aun estan en estado No concilaido
+					for (ConciliacionDetalle concilDet1 : listaConciliacionDetalle_1) {
+						for (ConciliacionDetalle concilDet2 : listaConciliacionDetalle_2) {
+							concilDet1.setBlValid(Boolean.TRUE);
+							if(concilDet1.getIngreso() == null){
+								if(concilDet1.getEgreso().getId().getIntItemEgresoGeneral().compareTo(concilDet2.getIntItemEgresoGeneral())==0
+								   && concilDet1.getEgreso().getId().getIntPersEmpresaEgreso().compareTo(concilDet2.getIntPersEmpresaEgreso())==0
+								   && concilDet2.getIntIndicadorConci().compareTo(Constante.INT_ONE)==0){
+									concilDet1.setBlValid( Boolean.FALSE);
+								}									
+							}else{
+								if(concilDet1.getIngreso().getId().getIntIdIngresoGeneral().compareTo(concilDet2.getIntItemIngresoGeneral())==0
+									&& concilDet1.getIngreso().getId().getIntIdEmpresa().compareTo(concilDet2.getIntPersEmpresaIngreso())==0
+									&& concilDet2.getIntIndicadorConci().compareTo(Constante.INT_ONE)==0){
+									concilDet1.setBlValid( Boolean.FALSE);
+								}
+							}
+						}
+						listaConciliacionDetalleTemp.add(concilDet1);
+					}
+					
+					
+					for (ConciliacionDetalle concilaicionDet : listaConciliacionDetalleTemp) {
+						if(concilaicionDet.getBlValid()){
+							listaConciliacionDetalle.add(concilaicionDet);
+						}
+					}
+					listaConciliacionDetalleResult.addAll(listaConciliacionDetallePlus);
+					listaConciliacionDetalleResult.addAll(listaConciliacionDetalle);	
+				}
+				
+			}else{
+				// Recuperamos las concilaiciones desde el inicio del tiempo hast el dia de hoy
+				listaConciliacionDetalleResult = getConciliacionDetallePorFechas(
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
+						null, 
+						new Date( conciliacion.getTsFechaConciliacion().getTime()));		
+			}
+			
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		return listaConciliacionDetalleResult;
+	}
+	
+		
+	/**
+	 * Recupera Conciliacion Detalle, desde Egreso e Ingreso en base a fechas de Inicio ,Fin y Cuenta Bancaria
+	 * @param intBcoCtaEmpresaPk
+	 * @param intParaDocumentoGeneral
+	 * @param intItemBancoFondo
+	 * @param intItemBancoCuenta
+	 * @param conciliacion
+	 * @param dtInicio
+	 * @param dtFin
+	 * @return List<ConciliacionDetalle>
+	 * @throws BusinessException
+	 */
+	public List<ConciliacionDetalle> getConciliacionDetallePorFechas(Integer intBcoCtaEmpresaPk, Integer intParaDocumentoGeneral,
+			Integer intItemBancoFondo, Integer intItemBancoCuenta, Date dtInicio, Date dtFin)throws BusinessException{
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleFin = new ArrayList<ConciliacionDetalle>();
+		//Conciliacion concilLast = null;
+		//Date dtSince = null;
+		//Date dtSincePlusOne = null;
+		//Boolean blnExisteConcil = Boolean.FALSE;
 		try{
+		
 			Ingreso ingresoFiltro = new Ingreso();
 
-			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
-			//ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
-			//ingresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
-			//ingresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
-			ingresoFiltro.setIntParaDocumentoGeneral(302);
+			//ingresoFiltro.getId().setIntIdEmpresa(intBcoCtaEmpresaPk);
+			ingresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
+			//ingresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
+			//ingresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
+			
+			//ingresoFiltro.setIntParaDocumentoGeneral(302);
 			ingresoFiltro.setIntItemBancoFondo(2);
-			ingresoFiltro.setIntItemBancoCuenta(6);			
-			//ingresoFiltro.setDtDechaDesde(new Date(conciliacion.getTsFechaConciliacion().getTime()));
-			ingresoFiltro.setDtDechaHasta(new Date(conciliacion.getTsFechaConciliacion().getTime()));
+			ingresoFiltro.setIntItemBancoCuenta(6);
+			
+			ingresoFiltro.setDtDechaDesde(dtInicio);
+			ingresoFiltro.setDtDechaHasta(dtFin);
 			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
 			
 			if(listaIngreso != null && listaIngreso.size() >0){
@@ -108,16 +224,17 @@ public class ConciliacionService {
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
 			}
-			/*
+			
 			Egreso egresoFiltro = new Egreso();
-			egresoFiltro.getId().setIntPersEmpresaEgreso(conciliacion.getBancoCuenta().getId().getIntEmpresaPk());
-			egresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
-			egresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
-			egresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
+			egresoFiltro.getId().setIntPersEmpresaEgreso(intBcoCtaEmpresaPk);
+			egresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
+			egresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
+			egresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
 			//egresoFiltro.setIntParaDocumentoGeneral(301);
 			//egresoFiltro.setIntItemBancoFondo(2);
 			//egresoFiltro.setIntItemBancoCuenta(4);
-			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, null, (new Date(conciliacion.getTsFechaConciliacion().getTime())));
+			
+			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, dtInicio, dtFin);
 			//List<Egreso> listaEgreso = null;
 
 			if(listaEgreso != null && listaEgreso.size() >0){
@@ -128,7 +245,7 @@ public class ConciliacionService {
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
 			}
-			*/
+			
 			for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalle){
 				conciliacionDet = convertEgresoIngresoAConcilDet(conciliacionDet);
 				listaConciliacionDetalleFin.add(conciliacionDet);
@@ -140,61 +257,17 @@ public class ConciliacionService {
 		return listaConciliacionDetalleFin;
 	}
 	
+	
+	
 	/**
 	Busca registros segun Tipo Doc, Fecha
 	*/
 	public List<ConciliacionDetalle> buscar(Conciliacion conciliacion)throws BusinessException{
-		List<ConciliacionDetalle> listaConciliacionDetalleTemp = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 		try{
-			Ingreso ingresoFiltro = new Ingreso();
 
-			ingresoFiltro.getId().setIntIdEmpresa((conciliacion.getBancoCuenta().getId().getIntEmpresaPk()));
-			ingresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
-			ingresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
-			ingresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
-			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
 			
-			if(listaIngreso != null && listaIngreso.size() >0){
-				for(Ingreso ingreso : listaIngreso){
-					IngresoDetalle ingDet = null;
-					ingDet = recuperarIngresoDetConcil(ingreso);
-					if(ingDet != null){
-						ingreso.setIngresoDetConciliacion(ingDet);
-					}
-					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
-					//conciliacionDet.setId(new ConciliacionDetalleId());
-					conciliacionDet.setIngreso(ingreso);
-					listaConciliacionDetalleTemp.add(conciliacionDet);
-				}				
-			}		      
 			
-			Egreso egresoFiltro = new Egreso();
-			egresoFiltro.getId().setIntPersEmpresaEgreso(conciliacion.getBancoCuenta().getId().getIntEmpresaPk());
-			egresoFiltro.setIntParaDocumentoGeneral(conciliacion.getIntParaDocumentoGeneralFiltro());
-			egresoFiltro.setIntItemBancoFondo((conciliacion.getBancoCuenta().getId().getIntItembancofondo()));
-			egresoFiltro.setIntItemBancoCuenta(conciliacion.getBancoCuenta().getId().getIntItembancocuenta());
-			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, null, null);
-			//List<Egreso> listaEgreso = null;
-			
-			if(listaEgreso != null && listaEgreso.size() >0){
-				for(Egreso egreso : listaEgreso){
-					EgresoDetalle egrDet = null;
-					egrDet = recuperarEgresoDetConcil(egreso);
-					if(egrDet != null){
-						egreso.setEgresoDetConciliacion(egrDet);
-					}
-					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
-					//conciliacionDet.setId(new ConciliacionDetalleId());
-					conciliacionDet.setEgreso(egreso);
-					listaConciliacionDetalleTemp.add(conciliacionDet);
-				}
-			}
-
-			for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalleTemp){
-				conciliacionDet = convertEgresoIngresoAConcilDet(conciliacionDet);
-				listaConciliacionDetalle.add(conciliacionDet);
-			}	
 			
 			
 		}catch (Exception e) {
@@ -644,88 +717,19 @@ public class ConciliacionService {
 		}
 		return conciliacion;		
 	}
-		
 	
-	
-	/*
-
-	
-	
-	*/
-	
-	
-	/*	
-	public List<ConciliacionDetalle> getConciliacionConDetalleValidado(Conciliacion conciliacion, List<ConciliacionDetalle> lstDetalleOriginal) throws BusinessException{
-		List<ConciliacionDetalle> lstConcilDetEgreTemp = null;
-		List<ConciliacionDetalle> lstConcilDetIngreTemp = null;
-		List<ConciliacionDetalle> listaConciliacionDetalle = null;
-		Ingreso ingresoFiltro = null;
-		Egreso egresoFiltro = null;
-
-		try{	
-			listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
-			listaConciliacionDetalle.addAll(lstDetalleOriginal);
-			
-			// Metodos que recupera
-			ingresoFiltro = new Ingreso();
-			ingresoFiltro.setId(new IngresoId());
-			egresoFiltro = new Egreso();
-			egresoFiltro.setId(new EgresoId());
-			// por terminar
-			ingresoFiltro.set(conciliacion);
-			egresoFiltro.set(conciliacion)
-			
-			List<Ingreso> listaIngreso = boIngreso.getListaBuscarAnteriores(ingresoFiltro);
-			List<Egreso> listaEgreso = boEgreso.getListaBuscarAnteriores(egresoFiltro);
-
-			if(listaIngreso != null && listaIngreso.size() >0){
-			lstConcilDetIngreTemp = new ArrayList<ConciliacionDetalle>;
-				for(ConciliacionDetalle concilDet :lstDetalleOriginal){
-					for(Ingreso ingreso : listaIngreso){
-						
-						if(!(concilDet.getIntPersEmpresaIngreso().equals(ingreso.getId().getIntIdEmpresa()) 
-							&& concilDet.getIntItemIngresoGeneral()equals(ingreso.getId().getIntIdIngresoGeneral()))){
-							
-								ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
-								conciliacionDet.setIngreso(ingreso);
-								lstConcilDetIngreTemp.add(conciliacionDet);
-						}
-					}
-				}
-				listaConciliacionDetalle.addAll(lstConcilDetIngreTemp);
-			}
-			
-			if(listaEgreso != null && listaEgreso.size() >0){
-			lstConcilDetEgreTemp = new ArrayList<ConciliacionDetalle>;
-				for(ConciliacionDetalle concilDet :lstDetalleOriginal){
-					for(Egreso egreso : listaEgreso){
-						if(!(concilDet.getIntPersEmpresaEgreso().equals(egreso.getId().getIntPersEmpresaEgreso()) 
-							&& concilDet.getIntItemEgresoGeneral().equals(egreso.getId().getIntItemEgresoGeneral()))){
-								ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
-								conciliacionDet.setEgreso(egreso);
-								lstConcilDetEgreTemp.add(conciliacionDet);
-						}
-					}
-				}
-				listaConciliacionDetalle.addAll(lstConcilDetEgreTemp);
-			}
-			
-			
-		}catch(BusinessException e){
-			log.error("Error - BusinessException - en getConciliacionConDetalleValidado ---> "+e);
-			throw e;
-		}catch(Exception e){
-			log.error("Error - Exception - en getConciliacionConDetalleValidado ---> "+e);
-			throw new BusinessException(e);
-		}
-		return listaConciliacionDetalle;
-	}
-	
-
-	*/
-	
-	
-
-
+/**
+ * 	
+ * @param dtFecha
+ * @param dias
+ * @return
+ */
+   public static Date sumarFechasDias(Date dtFecha, int dias) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(dtFecha.getTime());
+        cal.add(Calendar.DATE, dias);
+        return new Date(cal.getTimeInMillis());
+    }
+	   
 	
 }
