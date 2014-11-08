@@ -146,32 +146,14 @@ public class CommonUtils {
 			int i = 0;
 			while (i < lnNoDays) {
 				objCavCal.add(Calendar.DATE, -1);
-				if (objCavCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+				if (objCavCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 					continue;
-				} else if (objCavCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-					objCavCal.add(Calendar.DATE, -1);
 				} else {
-					/*int toAddDay = 0;
-					int toAddMonth = 0;
-					if (objCavCal.getActualMinimum(Calendar.DAY_OF_MONTH)==0) {
-						toAddDay=1;
-					}
-					if (objCavCal.getActualMinimum(Calendar.MONTH)==0) {
-						toAddMonth=1;
-					}
-					Holidays objHday = objIHolidaysDAO.getHoliday(objCavCal
-							.get(Calendar.DAY_OF_MONTH) + toAddDay, objCavCal
-							.get(Calendar.MONTH) + toAddMonth, objCavCal
-							.get(Calendar.YEAR), Long
-							.valueOf(IGenericConstants.GL_PERU));
-					if (objHday != null) {
-						continue;
-					}*/
 					i++;
 				}
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		return objCavCal.getTime();
 	}

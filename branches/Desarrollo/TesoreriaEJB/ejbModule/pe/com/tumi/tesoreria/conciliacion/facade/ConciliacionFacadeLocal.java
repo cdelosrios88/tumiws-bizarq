@@ -14,6 +14,7 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
+import pe.com.tumi.tesoreria.egreso.domain.Saldo;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 
 public interface ConciliacionFacadeLocal {
@@ -27,7 +28,14 @@ public interface ConciliacionFacadeLocal {
 	//public Conciliacion getConciliacionConDetalleValidado(Conciliacion pConciliacion) throws BusinessException;
 	public void anularConciliacion(ConciliacionComp pConciliacionCompAnul) throws BusinessException;
 	public void grabarConciliacionDiaria(Conciliacion conciliacion) throws BusinessException;
-	public Conciliacion getLastConciliacionByCuenta(Conciliacion conciliacion) throws BusinessException;
 	
+	public Conciliacion getLastConciliacionByCuenta(Conciliacion conciliacion) throws BusinessException;
+	/**
+	 * 
+	 * @param intIdEmpresa
+	 * @throws BusinessException
+	 * @return Saldo
+	 */
+	public Saldo obtenerSaldoUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException;
 	
 }
