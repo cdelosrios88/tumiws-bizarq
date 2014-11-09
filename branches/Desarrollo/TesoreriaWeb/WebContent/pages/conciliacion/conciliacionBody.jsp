@@ -326,7 +326,8 @@
 									reRender="pBuscarBancoCuentaConciliacion"
 									oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaConciliacion')"
 									action="#{conciliacionController.abrirPopUpBuscarBancoCuentaConciliacion}"
-									style="width:150px"/>
+									style="width:150px"
+									disabled="#{conciliacionController.blDeshabilitarBuscarCuenta}"/>
 							</rich:column>
 
 							<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
@@ -411,7 +412,7 @@
 
 						<rich:spacer height="5px"/>
 
-						<h:panelGrid columns="1" rendered="#{!conciliacionController.datosValidados}">
+						<h:panelGrid columns="1" rendered="#{conciliacionController.blDeshabilitarBuscar}">
 							<rich:column width="300">
 								<a4j:commandButton styleClass="btnEstilos"
 									disabled="false"
@@ -423,10 +424,10 @@
 						</h:panelGrid>
 
 						<rich:spacer height="5px"/>
-						<%--rendered="#{!conciliacionController.datosValidados}" --%>
 						<h:panelGrid columns="1" rendered="true">
 							<rich:column width="940">
 								<a4j:commandButton styleClass="btnEstilos"
+									rendered="#{conciliacionController.blDeshabilitaValidarDatos}" 
 									disabled="false"
 									value="Validar Datos"
 									reRender="contPanelInferior,panelBotones"
