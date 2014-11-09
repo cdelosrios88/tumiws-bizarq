@@ -8,8 +8,6 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,18 +20,6 @@ import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.CancelacionCredito;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.CronogramaCredito;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.EstadoCredito;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.EstadoCreditoId;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteActividad;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCreditoId;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.GarantiaCredito;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.CapacidadCreditoComp;
-import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp;
-import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
-import pe.com.tumi.tesoreria.banco.domain.BancocuentaId;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionDetalleBO;
 import pe.com.tumi.tesoreria.egreso.bo.EgresoBO;
@@ -178,7 +164,145 @@ public class ConciliacionService {
 		return listaConciliacionDetalleResult;
 	}
 	
+	
+	/**
+	 * Recupera las Conciliaciones Detalle. Asociado al boton MOSTRAR DATOS
+	 * @param conciliacion
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<ConciliacionDetalle> buscarRegistrosConciliacionEdicion(Conciliacion conciliacion)throws BusinessException{
+		List<ConciliacionDetalle> listaConciliacionDetallePlus = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalle2 = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalle_1 = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalle_2 = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleTemp = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleVista = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleRec = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleTemp2 = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleResult = new ArrayList<ConciliacionDetalle>();
 		
+		Conciliacion concilLast = null;
+		Date dtSince = null;
+		Date dtSincePlusOne = null;
+		try{
+			
+			// verificamos la ultima conciliacion
+			concilLast = boConciliacion.getLastConciliacionByCuenta(conciliacion);
+			if(concilLast != null){
+				dtSince = new Date(concilLast.getTsFechaConciliacion().getTime());
+				dtSincePlusOne = sumarFechasDias(dtSince, 1);
+
+				// Recuperamos las concilaiciones desde el dia de hoy hast un dia posterior a la ultima cocnilaicion
+				listaConciliacionDetallePlus = getConciliacionDetallePorFechas(
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
+						dtSincePlusOne, 
+						new Date( conciliacion.getTsFechaConciliacion().getTime()));
+				
+				
+				//recuperampos el detalle de la ultima concilaicion
+				listaConciliacionDetalle_1 = getConciliacionDetallePorFechas(
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
+						dtSince, 
+						dtSince);
+				
+				// detalle de la ultima concilaicion
+				listaConciliacionDetalle_2 = boConciliacionDet.getPorConciliacion(concilLast.getId());
+				
+				if(listaConciliacionDetalle_2 != null && listaConciliacionDetalle_2.size() > 0){
+					
+				//Recoremos las listas a fin de solo tomar las que aun estan en estado No concilaido
+					for (ConciliacionDetalle concilDet1 : listaConciliacionDetalle_1) {
+						for (ConciliacionDetalle concilDet2 : listaConciliacionDetalle_2) {
+							concilDet1.setBlValid(Boolean.TRUE);
+							if(concilDet1.getIngreso() == null){
+								if(concilDet1.getEgreso().getId().getIntItemEgresoGeneral().compareTo(concilDet2.getIntItemEgresoGeneral())==0
+								   && concilDet1.getEgreso().getId().getIntPersEmpresaEgreso().compareTo(concilDet2.getIntPersEmpresaEgreso())==0
+								   && concilDet2.getIntIndicadorConci().compareTo(Constante.INT_ONE)==0){
+									concilDet1.setBlValid( Boolean.FALSE);
+								}									
+							}else{
+								if(concilDet1.getIngreso().getId().getIntIdIngresoGeneral().compareTo(concilDet2.getIntItemIngresoGeneral())==0
+									&& concilDet1.getIngreso().getId().getIntIdEmpresa().compareTo(concilDet2.getIntPersEmpresaIngreso())==0
+									&& concilDet2.getIntIndicadorConci().compareTo(Constante.INT_ONE)==0){
+									concilDet1.setBlValid( Boolean.FALSE);
+								}
+							}
+						}
+						listaConciliacionDetalleTemp.add(concilDet1);
+					}
+
+					for (ConciliacionDetalle concilaicionDet : listaConciliacionDetalleTemp) {
+						if(concilaicionDet.getBlValid()){
+							listaConciliacionDetalle.add(concilaicionDet);
+						}
+					}
+					listaConciliacionDetalleRec.addAll(listaConciliacionDetallePlus);
+					listaConciliacionDetalleRec.addAll(listaConciliacionDetalle);	
+				}
+				
+			}else{
+				// Recuperamos las concilaiciones desde el inicio del tiempo hast el dia de hoy
+				listaConciliacionDetalleRec = getConciliacionDetallePorFechas(
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
+						null, 
+						new Date( conciliacion.getTsFechaConciliacion().getTime()));		
+			}
+			
+			
+			// Se valida la lista recuperada VS. la lista actual de la concilaicion visulaizada
+			listaConciliacionDetalleVista = conciliacion.getListaConciliacionDetalle();
+
+			if(listaConciliacionDetalleVista != null && listaConciliacionDetalleVista.size() > 0){
+				//Recoremos las listas a fin de solo tomar las que aun estan en estado No concilaido
+				for (ConciliacionDetalle concilDet1 : listaConciliacionDetalleRec) {
+					for (ConciliacionDetalle concilDet2 : listaConciliacionDetalleVista) {
+						concilDet1.setBlValid(Boolean.TRUE);
+						if(concilDet1.getIngreso() == null){
+							if(concilDet1.getEgreso().getId().getIntItemEgresoGeneral().compareTo(concilDet2.getIntItemEgresoGeneral())==0
+							   && concilDet1.getEgreso().getId().getIntPersEmpresaEgreso().compareTo(concilDet2.getIntPersEmpresaEgreso())==0
+							   && concilDet2.getIntIndicadorConci().compareTo(Constante.INT_ONE)==0){
+								concilDet1.setBlValid( Boolean.FALSE);
+							}									
+						}else{
+							if(concilDet1.getIngreso().getId().getIntIdIngresoGeneral().compareTo(concilDet2.getIntItemIngresoGeneral())==0
+								&& concilDet1.getIngreso().getId().getIntIdEmpresa().compareTo(concilDet2.getIntPersEmpresaIngreso())==0
+								&& concilDet2.getIntIndicadorConci().compareTo(Constante.INT_ONE)==0){
+								concilDet1.setBlValid( Boolean.FALSE);
+							}
+						}
+					}
+					listaConciliacionDetalleTemp2.add(concilDet1);
+				}
+				
+				
+				for (ConciliacionDetalle concilaicionDet : listaConciliacionDetalleTemp2) {
+					if(concilaicionDet.getBlValid()){
+						listaConciliacionDetalle2.add(concilaicionDet);
+					}
+				}
+				listaConciliacionDetalleResult.addAll(listaConciliacionDetalle2);
+			}else{
+				listaConciliacionDetalleResult.addAll(listaConciliacionDetalleRec);
+			}
+
+			
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		return listaConciliacionDetalleResult;
+	}
+	
 	/**
 	 * Recupera Conciliacion Detalle, desde Egreso e Ingreso en base a fechas de Inicio ,Fin y Cuenta Bancaria
 	 * @param intBcoCtaEmpresaPk

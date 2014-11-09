@@ -22,6 +22,7 @@ public interface ConciliacionFacadeLocal {
 	public Conciliacion getPorPk(ConciliacionId conciliacionId) throws BusinessException;
 	public List<Conciliacion> getListFilter(ConciliacionComp conciliacionCompBusq)throws BusinessException;
 	public List<ConciliacionDetalle> buscarRegistrosConciliacion(Conciliacion conciliacion)throws BusinessException;
+	public List<ConciliacionDetalle> buscarRegistrosConciliacionEdicion(Conciliacion conciliacion)throws BusinessException;
 	public Conciliacion getConciliacionEdit(ConciliacionId pId) throws BusinessException;
 	//public Conciliacion getUltimaConciliacion(ConciliacionComp conciliacionCompBusq)throws BusinessException;
 	//public List<ConciliacionDetalle> getListConcilDet(ConciliacionDetalle pConcilDet) throws BusinessException;

@@ -86,9 +86,6 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 	
 	/**
 	 * 
-	 * @param conciliacion
-	 * @return
-	 * @throws BusinessException
 	 */
 	public List<ConciliacionDetalle> buscarRegistrosConciliacion(Conciliacion conciliacion)throws BusinessException{
 		List<ConciliacionDetalle> lstConcilDet = null;
@@ -103,6 +100,29 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		}
 		return lstConcilDet;
 	}
+	
+	/**
+	 * 
+	 * @param conciliacion
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<ConciliacionDetalle> buscarRegistrosConciliacionEdicion(Conciliacion conciliacion)throws BusinessException{
+		List<ConciliacionDetalle> lstConcilDet = null;
+		try {
+
+			lstConcilDet= conciliacionService.buscarRegistrosConciliacionEdicion(conciliacion);
+		
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return lstConcilDet;
+	}
+	
+	
+	
 	
 	/**
 	 * 
