@@ -327,15 +327,15 @@ public class ConciliacionService {
 		
 			Ingreso ingresoFiltro = new Ingreso();
 
-			//ingresoFiltro.getId().setIntIdEmpresa(intBcoCtaEmpresaPk);
+			ingresoFiltro.getId().setIntIdEmpresa(intBcoCtaEmpresaPk);
 			ingresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
-			//ingresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
-			//ingresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
-			
+			ingresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
+			ingresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
+			//PRUEBAS
 			//ingresoFiltro.setIntParaDocumentoGeneral(302);
-			ingresoFiltro.setIntItemBancoFondo(2);
-			ingresoFiltro.setIntItemBancoCuenta(6);
-			
+			//ingresoFiltro.setIntItemBancoFondo(2);
+			//ingresoFiltro.setIntItemBancoCuenta(6);
+			//
 			ingresoFiltro.setDtDechaDesde(dtInicio);
 			ingresoFiltro.setDtDechaHasta(dtFin);
 			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
@@ -354,12 +354,12 @@ public class ConciliacionService {
 			egresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
 			egresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
 			egresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
+			//PRUEBAS
 			//egresoFiltro.setIntParaDocumentoGeneral(301);
 			//egresoFiltro.setIntItemBancoFondo(2);
 			//egresoFiltro.setIntItemBancoCuenta(4);
-			
+			//
 			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, dtInicio, dtFin);
-			//List<Egreso> listaEgreso = null;
 
 			if(listaEgreso != null && listaEgreso.size() >0){
 				for(Egreso egreso : listaEgreso){
@@ -382,10 +382,7 @@ public class ConciliacionService {
 	}
 	
 	
-	
-	/**
-	Busca registros segun Tipo Doc, Fecha
-	*/
+	/*
 	public List<ConciliacionDetalle> buscar(Conciliacion conciliacion)throws BusinessException{
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 		try{
@@ -399,7 +396,7 @@ public class ConciliacionService {
 		}
 		return listaConciliacionDetalle;
 	}
-	
+	*/
 	
 	/**
 	 * 
@@ -460,9 +457,9 @@ public class ConciliacionService {
 		
 		try{
 			// SETERAR ESTADOD E COCNILIADO
-			pConciliacion.setIntParaEstado(2);
-			pConciliacion.setIntPersPersonaConcilia(2);
-			pConciliacion.setIntPersEmpresaConcilia(2);
+			pConciliacion.setIntParaEstado(Constante.INT_EST_CONCILIACION_CONCILIADO);			
+			pConciliacion.setIntPersPersonaConcilia(pConciliacion.getUsuario().getIntPersPersonaPk());
+			pConciliacion.setIntPersEmpresaConcilia(pConciliacion.getUsuario().getPerfil().getId().getIntPersEmpresaPk());
 			
 			
 			conciliacion = boConciliacion.grabar(pConciliacion);
@@ -687,10 +684,6 @@ public class ConciliacionService {
 		List<Conciliacion> lstConciliacion = null;
 		try{
 
-			//pConciliacionCompAnul.getConciliacion().getBancoCuenta().getId().setIntEmpresaPk(2);
-			//pConciliacionCompAnul.getConciliacion().getBancoCuenta().getId().setIntItembancocuenta(6);
-			//pConciliacionCompAnul.getConciliacion().getBancoCuenta().getId().setIntItembancofondo(2);
-			
 			  lstConciliacion = boConciliacion.getListFilter(pConciliacionCompAnul);
 			  
 			  if(lstConciliacion != null && lstConciliacion.size() > 0){
