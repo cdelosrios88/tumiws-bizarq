@@ -705,7 +705,7 @@
 					<rich:column width="150">
 						<a4j:commandButton styleClass="btnEstilos"
 							value="Buscar Cuenta"
-							reRender="panelDatosAnular"
+							reRender="panelDatosAnular,pBuscarBancoCuentaAnulacion,tablaBuscarBancoCuentaAnulacion"
 							oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaAnulacion')"
 							action="#{conciliacionController.abrirPopUpBuscarBancoCuentaAnul}"
 							style="width:150px"/>

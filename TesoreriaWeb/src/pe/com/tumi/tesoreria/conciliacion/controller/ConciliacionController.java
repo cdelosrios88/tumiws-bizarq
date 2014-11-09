@@ -387,7 +387,10 @@ public class ConciliacionController{
 	 */
 	public void grabar(){
 		log.info("--grabar");
+		boolean isCrear = false;
 		try {
+			Conciliacionvalidate validate = new Conciliacionvalidate();
+			ocultarMensaje();
 			cargarUsuario();
 			
 			habilitarGrabar = Boolean.FALSE;
@@ -395,9 +398,20 @@ public class ConciliacionController{
 			mostrarPanelInferior = Boolean.FALSE;
 			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			calcularTablaResumen();
-			conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
-			mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
-			
+			if(conciliacionNuevo.getId().getIntItemConciliacion() == null){
+				isCrear = validate.isValidCrearConciliacion(conciliacionNuevo);
+				if(isCrear){
+					conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
+					mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
+				}else{
+					mostrarMensaje(Boolean.TRUE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas.");
+				}
+
+			}else{
+				conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
+				mostrarMensaje(Boolean.TRUE, "Se actualizó éxitosamente la Conciliación Bancaria.");
+			}
+
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		} catch (Exception e) {
 			mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro de la Conciliacion Bancaria.");
@@ -485,9 +499,16 @@ public class ConciliacionController{
 	public void seleccionarRegistro(ActionEvent event){
 		try{
 			cargarUsuario();
+			ocultarMensaje();
 			registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
 			log.info(registroSeleccionado);
-			irModificarConciliacion();
+			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
+					|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0 ){
+				irModificarConciliacion();
+			}else{
+				mostrarMensaje(Boolean.TRUE, "Solo se poueden Modificar las Conciliaciones en estado Registrado y/o Anulado.");
+			}
+			
 		
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -554,6 +575,7 @@ public class ConciliacionController{
 	public void habilitarPanelInferior(){
 		try{
 			//cargarUsuario();
+			ocultarMensaje();
 			registrarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.TRUE;
 			deshabilitarNuevo = Boolean.FALSE;
@@ -583,6 +605,7 @@ public class ConciliacionController{
 	public void habilitarPanelAnulacion(){
 		try{
 			cargarUsuario();
+			ocultarMensaje();
 			//registrarNuevo = Boolean.TRUE;
 			blnMostrarPanelAnulacion = Boolean.TRUE;
 			blDeshabilitarBuscar = Boolean.FALSE;
