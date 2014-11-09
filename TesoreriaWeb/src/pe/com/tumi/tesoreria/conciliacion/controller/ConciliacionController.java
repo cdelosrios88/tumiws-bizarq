@@ -349,7 +349,7 @@ public class ConciliacionController{
 		try {
 			//1. Verificar el arqueo del día anterior
 			dtLastArqueo = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
-			dtLastPreviousUtilDay = CommonUtils.getPreviousUtilDay(MyUtil.obtenerFechaActual(), Constante.INT_ONE);//Día anterior
+			dtLastPreviousUtilDay = CommonUtils.getPreviousUtilDay(conciliacion.getTsFechaConciliacion(), Constante.INT_ONE);//Día anterior
 			if((dtLastArqueo!=null && dtLastPreviousUtilDay!=null)
 					&& (dtLastArqueo.compareTo(dtLastPreviousUtilDay))!=0){
 				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
