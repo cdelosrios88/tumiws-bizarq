@@ -32,7 +32,7 @@
 				</rich:columnGroup>
 			</h:panelGrid>
 
-			<h:panelGrid id="pgParamsBusq" columns="11">
+			<h:panelGrid id="pgParamsBusq" columns="7">
 				<!-- Inicio: REQ14-06 Bizarq - 18/10/2014 -->
 				<rich:column width="60px">
 					<h:outputText value="Fecha"/>
@@ -90,13 +90,28 @@
 				<!-- Fin: REQ14-006 Bizarq - 18/10/2014 -->
 			</h:panelGrid>
 				
-			<h:panelGrid>
-				<rich:column width="130" style="text-align: right;">
+			<h:panelGrid columns="7">
+			<rich:column width="50" style="text-align: right;">
+			<h:outputText value=""/>
+			</rich:column>
+			<rich:column width="50" style="text-align: right;">
+			<h:outputText value=""/>
+			</rich:column>
+				<rich:column width="80" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar" 
 						reRender="panelTablaResultados,panelMensaje"
 						action="#{conciliacionController.buscar}"
-						style="width:130px"/>
+						style="width:80px"/>
+				</rich:column>
+			</h:panelGrid>
+			<h:panelGrid>
+				<rich:column width="80" style="text-align: right;">
+					<a4j:commandButton styleClass="btnEstilos"
+						value="Limpiar" 
+						reRender="panelTablaResultados,panelMensaje,pgParamsBusq"
+						action="#{conciliacionController.limpiar}"
+						style="width:80px"/>
 				</rich:column>
 			</h:panelGrid>
 
@@ -250,13 +265,13 @@
 						style="width:170px"
 						action="#{conciliacionController.grabarConciliacionDiaria}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="true"/>						
+						rendered="#{conciliacionController.mostrarBotonGrabarConcil}"/>						
 					<a4j:commandButton value="Anular Conciliacion" 
 						styleClass="btnEstilos" 
 						style="width:140px"
 						action="#{conciliacionController.habilitarPanelAnulacion}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular"
-						rendered="true"/>
+						rendered="#{conciliacionController.mostrarBotonAnular}"/>
 					<a4j:commandButton value="Cancelar" 
 						styleClass="btnEstilos"
 						style="width:90px"
@@ -418,7 +433,7 @@
 									disabled="false"
 									value="Buscar"
 									reRender="contPanelInferior,panelBotones"
-									action="#{conciliacionController.buscarEgresoIngreso}"
+									action="#{conciliacionController.buscarRegistrosConciliacionEdicion}"
 									style="width:300px"/>
 							</rich:column>
 						</h:panelGrid>
@@ -714,12 +729,20 @@
 								value="#{conciliacionController.conciliacionCompAnul.strObservacionAnula}" />
 					</rich:column>
 				</h:panelGrid>
+				
+				<h:panelGrid id="pgMsgErrorValidarAnulacion">
+					<h:outputText value="#{conciliacionController.strMsgErrorAnulaFecha}" 		styleClass="msgError"/>
+					<h:outputText value="#{conciliacionController.strMsgErrorAnulaCuenta}" 		styleClass="msgError"/>
+					<h:outputText value="#{conciliacionController.strMsgErrorAnulaObservacion}" styleClass="msgError"/>
+					<h:outputText value="#{conciliacionController.strMsgErrorAnulaPerfil}" 		styleClass="msgError"/>
+				</h:panelGrid>
+		
 				<h:panelGrid columns="1">
 					<rich:column width="300">
 					<a4j:commandButton styleClass="btnEstilos"
 						disabled="false"
 						value="Anular Conciliacion"
-						reRender="panelDatosAnular,contPanelInferior,panelMensaje,panelBotones"
+						reRender="panelDatosAnular,contPanelInferior,panelMensaje,panelBotones,pgMsgErrorValidarAnulacion"
 						action="#{conciliacionController.anularConciliacion}"
 						style="width:300px"/>
 					</rich:column>

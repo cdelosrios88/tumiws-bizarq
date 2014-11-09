@@ -51,8 +51,6 @@ import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.fileupload.FileUploadController;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
-//import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
-//import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
 
 
 public class ConciliacionController{
@@ -97,7 +95,10 @@ public class ConciliacionController{
 	private boolean blDeshabilitarBuscar;
 	private boolean blDeshabilitaValidarDatos;
 	private boolean blDeshabilitarBuscarCuenta;
-	
+	private String strMsgErrorAnulaFecha;
+	private String strMsgErrorAnulaCuenta;
+	private String strMsgErrorAnulaObservacion;
+	private String strMsgErrorAnulaPerfil;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	private Usuario 	usuario;
@@ -146,8 +147,10 @@ public class ConciliacionController{
 			conciliacionCompAnul = new ConciliacionComp();
 			//listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			//cargarListaBanco();
+			cargarUsuario();
 			cargarListaTipoDocumento();
 			cargarValoresResumen();
+			renderBotones();
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -155,6 +158,17 @@ public class ConciliacionController{
 	}	
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	
+	
+	public void renderBotones(){
+		
+		Conciliacionvalidate validate = new Conciliacionvalidate();
+		mostrarBotonGrabarConcil = validate.isValidGrabarConcil(usuario);
+		mostrarBotonAnular = validate.isValidAnulConcil(usuario);
+		
+	}
+
+	
 	/**
 	 * 
 	 */
@@ -272,18 +286,67 @@ public class ConciliacionController{
 	 * 
 	 */
 	public void anularConciliacion(){
-		List<ConciliacionDetalle> lstConcilDet = null;
+		boolean isProcedeAnulacion=false;
 		try {
 			conciliacionAnulacion.setUsuario(usuario);
 			conciliacionCompAnul.setConciliacion(conciliacionAnulacion);
-			conciliacionFacade.anularConciliacion(conciliacionCompAnul);
-			mostrarMensaje(Boolean.TRUE, "Se realizo éxitosamente el Proceso de Anulación.");
-			//calcularTablaResumen();
-			deshabilitarPanelInferior();
+			isProcedeAnulacion = validarAnulacion();
+			
+			if(isProcedeAnulacion){
+				conciliacionFacade.anularConciliacion(conciliacionCompAnul);
+				mostrarMensaje(Boolean.TRUE, "Se realizo éxitosamente el Proceso de Anulación.");
+				deshabilitarPanelInferior();
+			}
+			
 		} catch (Exception e) {
 			mostrarMensaje(Boolean.FALSE, "Hubo un error en el proceso de Anulación.");
 			log.error(e.getMessage(),e);
 		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean validarAnulacion(){
+		boolean isError = true;
+		limpiarMensajesAnulacion();
+		ocultarMensaje();
+		
+		Conciliacionvalidate validate = new Conciliacionvalidate();
+		
+		if(conciliacionCompAnul.getDtFechaAnulDesde() == null){
+			isError = false;
+			strMsgErrorAnulaFecha="Ingresar Fecha de Anulación.";
+		}
+		
+		if(conciliacionCompAnul.getStrObservacionAnula() == null
+			|| conciliacionCompAnul.getStrObservacionAnula().isEmpty()){
+			isError = false;
+			strMsgErrorAnulaObservacion = "Ingresar Observación de Anulación.";
+		}
+		
+		if(conciliacionCompAnul.getConciliacion().getBancoCuenta() == null){
+			isError = false;
+			strMsgErrorAnulaCuenta="Ingresar Cuenta Bancaria de Anulación.";
+		}
+		
+		if(!validate.isValidAnulConcil(usuario)){
+			isError = false;
+			strMsgErrorAnulaPerfil="Solo el Perfil de Jefe de Contabilidad puede Anular Conciliación.";
+		}
+		
+		return isError;
+	}
+	
+	/**
+	 * 
+	 */
+	public void limpiarMensajesAnulacion(){
+		setStrMsgErrorAnulaFecha("");
+		setStrMsgErrorAnulaObservacion("");
+		setStrMsgErrorAnulaCuenta("");
+		setStrMsgErrorAnulaPerfil("");
 	}
 	
 	/**
@@ -314,6 +377,8 @@ public class ConciliacionController{
 		habilitarGrabar = Boolean.FALSE;
 		/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 		blnMostrarPanelAnulacion = Boolean.FALSE;
+		ocultarMensaje();
+		limpiarMensajesAnulacion();
 		/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	}
 
@@ -390,7 +455,7 @@ public class ConciliacionController{
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
 			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
 			conciliacionCompBusq = new ConciliacionComp();
-
+			ocultarMensaje();
 			/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -398,6 +463,23 @@ public class ConciliacionController{
 	}
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	
+	/**
+	 * 
+	 */
+	public void limpiar(){
+		try{
+			conciliacionCompBusq = new ConciliacionComp();
+			conciliacionCompBusq.setConciliacion(new Conciliacion());
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
 	public void seleccionarRegistro(ActionEvent event){
 		try{
 			cargarUsuario();
@@ -589,7 +671,7 @@ public class ConciliacionController{
 			bancoCuentaFiltroAnulacion.setIntPeriodocuenta(MyUtil.obtenerAñoActual()-1);
 			bancoCuentaFiltroAnulacion.getBancofondo().setIntBancoCod(Constante.PARAM_T_BANCOS_BANCOCREDITO);
 			
-			buscarBancoCuentaConciliacion();
+			buscarBancoCuentaAnulacion();
 		}catch (Exception e){
 			log.error(e.getMessage(),e);
 		}
@@ -1222,6 +1304,62 @@ public class ConciliacionController{
 		this.blDeshabilitarBuscarCuenta = blDeshabilitarBuscarCuenta;
 	}
 
+	/**
+	 * @return the strMsgErrorAnulaFecha
+	 */
+	public String getStrMsgErrorAnulaFecha() {
+		return strMsgErrorAnulaFecha;
+	}
+
+	/**
+	 * @param strMsgErrorAnulaFecha the strMsgErrorAnulaFecha to set
+	 */
+	public void setStrMsgErrorAnulaFecha(String strMsgErrorAnulaFecha) {
+		this.strMsgErrorAnulaFecha = strMsgErrorAnulaFecha;
+	}
+
+	/**
+	 * @return the strMsgErrorAnulaCuenta
+	 */
+	public String getStrMsgErrorAnulaCuenta() {
+		return strMsgErrorAnulaCuenta;
+	}
+
+	/**
+	 * @param strMsgErrorAnulaCuenta the strMsgErrorAnulaCuenta to set
+	 */
+	public void setStrMsgErrorAnulaCuenta(String strMsgErrorAnulaCuenta) {
+		this.strMsgErrorAnulaCuenta = strMsgErrorAnulaCuenta;
+	}
+
+	/**
+	 * @return the strMsgErrorAnulaObservacion
+	 */
+	public String getStrMsgErrorAnulaObservacion() {
+		return strMsgErrorAnulaObservacion;
+	}
+
+	/**
+	 * @param strMsgErrorAnulaObservacion the strMsgErrorAnulaObservacion to set
+	 */
+	public void setStrMsgErrorAnulaObservacion(String strMsgErrorAnulaObservacion) {
+		this.strMsgErrorAnulaObservacion = strMsgErrorAnulaObservacion;
+	}
+
+	/**
+	 * @return the strMsgErrorAnulaPerfil
+	 */
+	public String getStrMsgErrorAnulaPerfil() {
+		return strMsgErrorAnulaPerfil;
+	}
+
+	/**
+	 * @param strMsgErrorAnulaPerfil the strMsgErrorAnulaPerfil to set
+	 */
+	public void setStrMsgErrorAnulaPerfil(String strMsgErrorAnulaPerfil) {
+		this.strMsgErrorAnulaPerfil = strMsgErrorAnulaPerfil;
+	}
+	
 	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
