@@ -87,16 +87,7 @@
 						action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
 						style="width:150px"/>
 				</rich:column>
-				<!-- Fin: REQ14-006 Bizarq - 18/10/2014 -->
-			</h:panelGrid>
 				
-			<h:panelGrid columns="7">
-			<rich:column width="50" style="text-align: right;">
-			<h:outputText value=""/>
-			</rich:column>
-			<rich:column width="50" style="text-align: right;">
-			<h:outputText value=""/>
-			</rich:column>
 				<rich:column width="80" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar" 
@@ -104,8 +95,6 @@
 						action="#{conciliacionController.buscar}"
 						style="width:80px"/>
 				</rich:column>
-			</h:panelGrid>
-			<h:panelGrid>
 				<rich:column width="80" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Limpiar" 
@@ -113,6 +102,8 @@
 						action="#{conciliacionController.limpiar}"
 						style="width:80px"/>
 				</rich:column>
+				
+				<!-- Fin: REQ14-006 Bizarq - 18/10/2014 -->
 			</h:panelGrid>
 
 			<rich:spacer height="12px"/>

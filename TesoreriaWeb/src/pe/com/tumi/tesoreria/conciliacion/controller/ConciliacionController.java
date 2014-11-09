@@ -449,7 +449,9 @@ public class ConciliacionController{
 	}
 	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
-	
+	/**
+	 * 
+	 */
 	public void buscar(){
 		try{
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */

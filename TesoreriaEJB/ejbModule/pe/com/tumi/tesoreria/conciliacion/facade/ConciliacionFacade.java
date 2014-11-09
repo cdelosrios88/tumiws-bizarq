@@ -9,6 +9,8 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.facade;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -16,6 +18,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+
+import com.ibm.ObjectQuery.crud.util.Array;
 
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
@@ -72,17 +76,69 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 	 */
 	public List<Conciliacion> getListFilter(ConciliacionComp conciliacionCompBusq)throws BusinessException{
 		List<Conciliacion> lstConciliacion = null;
+		List<Conciliacion> lstConciliacionResult = null;
 		try {
 			lstConciliacion = conciliacionBO.getListFilter(conciliacionCompBusq);
-			
+			if(lstConciliacion != null && lstConciliacion.size()>0){
+				lstConciliacionResult = getDatosComplementariosFilter(lstConciliacion);
+			}
+
 		}catch(BusinessException e){
 			throw e;
 		}catch(Exception e){
 			throw new BusinessException(e);
 		}
-		return lstConciliacion;
+		return lstConciliacionResult;
 		
 	}
+	
+	
+	/**
+	 * 
+	 * @param lstConciliacion
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<Conciliacion> getDatosComplementariosFilter(List<Conciliacion> lstConciliacion)throws BusinessException{
+		List<Conciliacion> lstresult = null;
+		try {
+			if(lstConciliacion != null && lstConciliacion.size() >0){
+				lstresult = new ArrayList<Conciliacion>();
+				
+				for (Conciliacion conciliacion : lstConciliacion) {
+					Conciliacion conciliacionResult = new Conciliacion();
+					conciliacionResult = conciliacion;
+					BigDecimal bdSaldoConcil = BigDecimal.ZERO;
+					BigDecimal bdPorConcil = BigDecimal.ZERO;
+					BigDecimal bdPMontoConcil = BigDecimal.ZERO;
+					
+					bdPMontoConcil = conciliacion.getBdMontoDebe().add(conciliacion.getBdMontoHaber());
+					
+					List<ConciliacionDetalle> lstDetalle = null;
+					lstDetalle = conciliacionDetBO.getPorConciliacion(conciliacion.getId());
+					if(lstDetalle != null && lstDetalle.size() >0){
+						for (ConciliacionDetalle conciliacionDetalle : lstDetalle) {
+							if(conciliacionDetalle.getIntIndicadorCheck().compareTo(new Integer(1))==0){
+								bdSaldoConcil = bdSaldoConcil.add(conciliacionDetalle.getIntItemIngresoGeneral() != null ?  conciliacionDetalle.getBdMontoDebe(): conciliacionDetalle.getBdMontoHaber());
+							}
+						}
+						bdPorConcil = bdPMontoConcil.subtract(bdSaldoConcil);
+					}
+					conciliacionResult.setBdPorConciliar(bdPorConcil);
+					conciliacionResult.setBdSaldoConciliacion(bdSaldoConcil);
+					lstresult.add(conciliacionResult);
+				}
+				
+			}
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return lstresult;
+		
+	}
+	
 	
 	/**
 	 * 
