@@ -677,6 +677,9 @@ public class BancoFondoService {
 			List<Bancocuenta> listaTemp = new ArrayList<Bancocuenta>();
 			for(Bancocuenta bancoCuenta : listaBancoCuenta){
 				bancoCuenta.setBancofondo(boBancoFondo.getPorBancoCuenta(bancoCuenta));
+				//Inicio: REQ14-006 - bizarq - 20/10/2014
+				bancoCuenta.setCuentaBancaria(obtenerCuentaBancaria(bancoCuenta));
+				//Fin: REQ14-006 - bizarq - 20/10/2014
 				if(bancoCuenta.getBancofondo().getIntEstadoCod().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)
 				&& bancoCuenta.getBancofondo().getIntBancoCod().equals(bancoCuentaFiltro.getBancofondo().getIntBancoCod())){
 					listaTemp.add(bancoCuenta);
