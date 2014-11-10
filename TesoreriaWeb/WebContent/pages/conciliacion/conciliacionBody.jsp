@@ -21,6 +21,7 @@
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaParaConciliacion.jsp"/>
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaAnula.jsp"/>
 	<%-- <a4j:include viewId="/pages/conciliacion/conciliacionContent.jsp"/> --%>
+	<a4j:include viewId="/pages/conciliacion/popup/panelVerModificar.jsp"/>
 
 	<h:form>
 		<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
@@ -192,10 +193,11 @@
 					
 					<a4j:support event="onRowClick"
 						actionListener="#{conciliacionController.seleccionarRegistro}"
-						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados">
-						
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
+						oncomplete="if(#{conciliacionController.mostrarBtnView}){Richfaces.showModalPanel('panelUpdateViewConciliacion')}">
 						<f:attribute name="item" value="#{item}"/>
 					</a4j:support>
+					
 					<f:facet name="footer">
 					<rich:datascroller for="tblResultado" maxPages="10"/>   
 					</f:facet>
@@ -203,14 +205,20 @@
 				
 			</h:panelGrid>
 			
+			<%--
 			<h:panelGrid columns="2" style="margin-left: auto; margin-right: auto">
 				<h:outputLink value="#" id="linkConciliacion">
 					<h:graphicImage value="/images/icons/mensaje1.jpg" style="border:0px" />
 					<rich:componentControl for="panelUpdateViewConciliacion"
 						attachTo="linkConciliacion" operation="show" event="onclick" />
-			</h:outputLink>
-			<h:outputText value="Para anular o ver una Conciliacion Bancaria hacer click en el registro" style="color:#8ca0bd"/>
-				
+				</h:outputLink>
+				<h:outputText value="Para anular o ver una Conciliacion Bancaria hacer click en el registro" style="color:#8ca0bd"/>
+			</h:panelGrid>--%>
+			<h:panelGrid columns="2" style="margin-left: auto; margin-right: auto">
+				<a4j:commandLink action="#">
+					<h:graphicImage value="/images/icons/mensaje1.jpg" style="border:0px"/>
+				</a4j:commandLink>
+				<h:outputText value="Para Modificar hacer click en el registro" style="color:#8ca0bd"/>
 			</h:panelGrid>
 
 			<h:panelGroup id="panelMensaje" style="border: 0px solid #17356f;background-color:#DEEBF5;text-align: center"

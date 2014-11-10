@@ -24,6 +24,7 @@ import org.richfaces.event.UploadEvent;
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
+import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
@@ -113,6 +114,7 @@ public class ConciliacionController{
 	private boolean registrarNuevo;
 	private boolean habilitarGrabar;
 	private boolean datosValidados;
+	private boolean mostrarBtnView;
 	
 	public ConciliacionController(){
 		cargarUsuario();
@@ -374,8 +376,9 @@ public class ConciliacionController{
 		mostrarPanelInferior = Boolean.FALSE;
 		mostrarMensajeError = Boolean.FALSE;
 		mostrarMensajeExito = Boolean.FALSE;
-		habilitarGrabar = Boolean.FALSE;
 		/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+		//habilitarGrabar = Boolean.FALSE;
+		mostrarBotonGrabarConcil = Boolean.FALSE;
 		blnMostrarPanelAnulacion = Boolean.FALSE;
 		ocultarMensaje();
 		limpiarMensajesAnulacion();
@@ -496,7 +499,7 @@ public class ConciliacionController{
 	 * 
 	 * @param event
 	 */
-	public void seleccionarRegistro(ActionEvent event){
+	/*public void seleccionarRegistro(ActionEvent event){
 		try{
 			cargarUsuario();
 			ocultarMensaje();
@@ -510,6 +513,17 @@ public class ConciliacionController{
 			}
 			
 		
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}*/
+	
+	public void seleccionarRegistro(ActionEvent event){
+		try{
+			registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
+			log.info("reg selec:"+registroSeleccionado);
+			mostrarBtnView = Boolean.TRUE;
+			habilitarGrabar = Boolean.TRUE;			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -529,7 +543,7 @@ public class ConciliacionController{
 				habilitarGrabar = Boolean.FALSE;
 			}
 			mostrarPanelInferior = Boolean.TRUE;
-			
+			mostrarBotonGrabarConcil = Boolean.FALSE;
 			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -538,19 +552,23 @@ public class ConciliacionController{
 	
 	public void irModificarConciliacion(){
 		try{
-			log.info("--modificarRegistro");			
-			habilitarGrabar = Boolean.TRUE;
-			registrarNuevo = Boolean.FALSE;
-			deshabilitarNuevo = Boolean.FALSE;
-			mostrarPanelInferior = Boolean.TRUE;			
-			datosValidados = Boolean.TRUE;
-			blDeshabilitarBuscar = Boolean.TRUE;
-			blDeshabilitaValidarDatos = Boolean.FALSE;
-			blnMostrarPanelAnulacion = Boolean.FALSE;
-			
-			conciliacionNuevo = conciliacionFacade.getConciliacionEdit(registroSeleccionado.getId());
-			calcularTablaResumen();
-			//ocultarMensaje();
+			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
+					|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0 ){
+				//habilitarGrabar = Boolean.TRUE;
+				mostrarBotonGrabarConcil = Boolean.TRUE;
+				registrarNuevo = Boolean.FALSE;
+				deshabilitarNuevo = Boolean.FALSE;
+				mostrarPanelInferior = Boolean.TRUE;			
+				datosValidados = Boolean.TRUE;
+				blDeshabilitarBuscar = Boolean.TRUE;
+				blDeshabilitaValidarDatos = Boolean.FALSE;
+				blnMostrarPanelAnulacion = Boolean.FALSE;
+				
+				conciliacionNuevo = conciliacionFacade.getConciliacionEdit(registroSeleccionado.getId());
+				calcularTablaResumen();
+			} else {
+				mostrarMensaje(Boolean.TRUE, "Solo se poueden Modificar las Conciliaciones en estado Registrado y/o Anulado.");
+			}
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
@@ -595,7 +613,7 @@ public class ConciliacionController{
 			blnMostrarPanelAnulacion = Boolean.FALSE;
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
-			habilitarGrabar = Boolean.TRUE;
+			mostrarBotonGrabarConcil = Boolean.TRUE;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -1383,6 +1401,14 @@ public class ConciliacionController{
 	 */
 	public void setStrMsgErrorAnulaPerfil(String strMsgErrorAnulaPerfil) {
 		this.strMsgErrorAnulaPerfil = strMsgErrorAnulaPerfil;
+	}
+
+	public boolean isMostrarBtnView() {
+		return mostrarBtnView;
+	}
+
+	public void setMostrarBtnView(boolean mostrarBtnView) {
+		this.mostrarBtnView = mostrarBtnView;
 	}
 	
 	
