@@ -421,7 +421,7 @@ public class ConciliacionController{
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	private boolean isValidConciliacion(Conciliacion conciliacion){
-		boolean isValid = Boolean.FALSE;
+		boolean isValid = false;
 		Date dtLastArqueo = null;
 		Saldo dtoSaldo = null;
 		Date dtLastPreviousUtilDay = null;
@@ -431,8 +431,8 @@ public class ConciliacionController{
 			dtLastPreviousUtilDay = CommonUtils.getPreviousUtilDay(conciliacion.getTsFechaConciliacion(), Constante.INT_ONE);//Día anterior
 			if((dtLastArqueo!=null && dtLastPreviousUtilDay!=null)
 					&& (dtLastArqueo.compareTo(dtLastPreviousUtilDay))!=0){
-				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
-				isValid = Boolean.TRUE;
+				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente al " + Constante.sdf.format(dtLastPreviousUtilDay));
+				return true;
 			}
 			
 			//2. Verificar los saldos del día anterior
@@ -440,7 +440,7 @@ public class ConciliacionController{
 			if((dtoSaldo!=null && dtoSaldo.getId().getDtFechaSaldo()!=null && dtLastPreviousUtilDay!=null)
 					&& (dtoSaldo.getId().getDtFechaSaldo().compareTo(dtLastPreviousUtilDay))!=0){
 				mostrarMensaje(Boolean.FALSE, "No se ha realizado la generación de saldos correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
-				isValid = Boolean.TRUE;
+				return true;
 			}
 			
 		} catch (Exception e) {

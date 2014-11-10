@@ -51,18 +51,6 @@
 						datePattern="dd/MM/yyyy" inputStyle="width:70px;" /> 
 				</rich:column>
 
-				<%--<rich:column width="160">
-				 --SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
-					<h:selectOneMenu style="width: 160px;" 
-						value="#{conciliacionController.conciliacionCompBusq.intBusqItemBancoFondo}">
-							<tumih:selectItems var="sel" 
-							cache="#{applicationScope.Constante.PARAM_T_BANCOS}" 
-							itemValue="#{sel.intIdDetalle}" 
-							itemLabel="#{sel.strDescripcion}"/>
-					</h:selectOneMenu>
-				
-				</rich:column>--%>
-
 				<rich:column width=	"120">
 					<h:outputText value="Cuenta Bancaria : "/>
 				</rich:column>
@@ -119,9 +107,9 @@
 					height="160px" 
 					align="center">
 
-					<rich:column width="50" style="text-align: center">
+					<rich:column width="90" style="text-align: center">
 						<f:facet name="header">
-							<h:outputText value="Fecha Conciliación"/>
+							<h:outputText value="Fecha Conc."/>
 						</f:facet>
 						<h:outputText value="#{item.tsFechaConciliacion}">
 						<f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -133,9 +121,9 @@
 						</f:facet>
 						<h:outputText value="#{item.strBanco}"/>
 					</rich:column>
-					<rich:column width="75" style="text-align: center">
+					<rich:column width="90" style="text-align: center">
 						<f:facet name="header">
-							<h:outputText value="Tipo de Cuenta"/>
+							<h:outputText value="Tipo Cuenta"/>
 						</f:facet>
 						<h:outputText value="#{item.strTipoCuenta}"/>	
 					</rich:column>
@@ -145,9 +133,9 @@
 						</f:facet>
 						<h:outputText value="#{item.strMoneda}"/>
 					</rich:column>
-					<rich:column width="80" style="text-align: center">
+					<rich:column width="90" style="text-align: center">
 						<f:facet name="header">
-							<h:outputText value="Número Cuenta"/>
+							<h:outputText value="Nro. Cta."/>
 						</f:facet>
 						<h:outputText value="#{item.strNumeroCuenta}"/>
 					</rich:column>
@@ -173,7 +161,7 @@
 						<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
 					</rich:column>
-					<rich:column width="100" style="text-align: center">
+					<rich:column width="90" style="text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Saldo Caja"/>
 						</f:facet>
@@ -181,15 +169,15 @@
 						<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
 					</rich:column>
-					<rich:column width="100" style="text-align: center">
+					<rich:column width="90" style="text-align: center">
 						<f:facet name="header">
-							<h:outputText value="Saldo Conciliación"/>
+							<h:outputText value="Saldo Conc."/>
 						</f:facet>
 						<h:outputText value="#{item.bdSaldoConciliacion}" style="align: right">
 						<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
 					</rich:column>
-					<rich:column width="100" style="text-align: center">
+					<rich:column width="90" style="text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Nro. Mov."/>
 						</f:facet>
