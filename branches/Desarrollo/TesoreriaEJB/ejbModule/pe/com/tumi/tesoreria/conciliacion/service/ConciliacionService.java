@@ -18,17 +18,20 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
+import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
+import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.tesoreria.banco.bo.BancocuentaBO;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.service.BancoFondoService;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionDetalleBO;
 import pe.com.tumi.tesoreria.egreso.bo.EgresoBO;
+import pe.com.tumi.tesoreria.egreso.bo.EgresoDetalleBO;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalleId;
@@ -38,6 +41,7 @@ import pe.com.tumi.tesoreria.egreso.domain.EgresoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.EgresoId;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.ingreso.bo.IngresoBO;
+import pe.com.tumi.tesoreria.ingreso.bo.IngresoDetalleBO;
 import pe.com.tumi.tesoreria.ingreso.domain.Ingreso;
 import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalle;
 import pe.com.tumi.tesoreria.ingreso.domain.IngresoId;
@@ -50,6 +54,8 @@ public class ConciliacionService {
 	private ConciliacionBO boConciliacion = (ConciliacionBO)TumiFactory.get(ConciliacionBO.class);
 	private IngresoBO boIngreso = (IngresoBO)TumiFactory.get(IngresoBO.class);
 	private EgresoBO boEgreso = (EgresoBO)TumiFactory.get(EgresoBO.class);
+	private IngresoDetalleBO boIngresoDet = (IngresoDetalleBO)TumiFactory.get(IngresoDetalleBO.class);
+	private EgresoDetalleBO boEgresoDet = (EgresoDetalleBO)TumiFactory.get(EgresoDetalleBO.class);
 	private ConciliacionDetalleBO boConciliacionDet = (ConciliacionDetalleBO)TumiFactory.get(ConciliacionDetalleBO.class);
 	private BancocuentaBO boBancoCuenta = (BancocuentaBO)TumiFactory.get(BancocuentaBO.class);
 	private BancoFondoService bancoFondoService = (BancoFondoService)TumiFactory.get(BancoFondoService.class);
@@ -88,6 +94,7 @@ public class ConciliacionService {
 		
 		List<ConciliacionDetalle> listaConciliacionDetalleTemp = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleResult = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleFinal = new ArrayList<ConciliacionDetalle>();
 		
 		Conciliacion concilLast = null;
 		Date dtSince = null;
@@ -166,10 +173,19 @@ public class ConciliacionService {
 						new Date( conciliacion.getTsFechaConciliacion().getTime()));		
 			}
 			
+			
+			if(listaConciliacionDetalleResult != null && listaConciliacionDetalleResult.size()>0){
+				listaConciliacionDetalleFinal = new ArrayList<ConciliacionDetalle>();
+				for (ConciliacionDetalle conciliacionDetalle : listaConciliacionDetalleResult) {
+					conciliacionDetalle.setStrDescripcionSucursalPaga(getSucursalPaga(conciliacionDetalle));
+					listaConciliacionDetalleFinal.add(conciliacionDetalle);
+				}
+			}
+			
 		}catch (Exception e) {
 			throw new BusinessException(e);
 		}
-		return listaConciliacionDetalleResult;
+		return listaConciliacionDetalleFinal;
 	}
 	
 	
@@ -190,6 +206,7 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalleRec = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleTemp2 = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleResult = new ArrayList<ConciliacionDetalle>();
+		List<ConciliacionDetalle> listaConciliacionDetalleFinal = new ArrayList<ConciliacionDetalle>();
 		
 		Conciliacion concilLast = null;
 		Date dtSince = null;
@@ -304,12 +321,70 @@ public class ConciliacionService {
 				listaConciliacionDetalleResult.addAll(listaConciliacionDetalleRec);
 			}
 
-			
+			if(listaConciliacionDetalleResult != null && listaConciliacionDetalleResult.size()>0){
+				listaConciliacionDetalleFinal = new ArrayList<ConciliacionDetalle>();
+				for (ConciliacionDetalle conciliacionDetalle : listaConciliacionDetalleResult) {
+					conciliacionDetalle.setStrDescripcionSucursalPaga(getSucursalPaga(conciliacionDetalle));
+					listaConciliacionDetalleFinal.add(conciliacionDetalle);
+				}
+			}
+
 		}catch (Exception e) {
 			throw new BusinessException(e);
 		}
-		return listaConciliacionDetalleResult;
+		return listaConciliacionDetalleFinal;
 	}
+	
+	
+	/**
+	 * 
+	 * @param detalle
+	 * @return
+	 * @throws BusinessException
+	 */
+	public String getSucursalPaga(ConciliacionDetalle detalle) throws BusinessException{
+		String strSucursalPagaConcat = "";
+		EmpresaFacadeRemote empresaFacade = null;
+		List<Sucursal> listaSucursal;
+
+		try {
+			empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
+			listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(Constante.PARAM_EMPRESASESION);
+			
+			if(listaSucursal != null && listaSucursal.size()>0 ){
+				if(detalle.getIngreso() == null && detalle.getEgreso() != null){
+					List<EgresoDetalle> lstEgresoDet=null;
+					lstEgresoDet = boEgresoDet.getPorEgreso(detalle.getEgreso());
+					if(lstEgresoDet != null && lstEgresoDet.size()>0){
+						for (EgresoDetalle egresoDetalle : lstEgresoDet) {
+							for (Sucursal sucursal : listaSucursal) {
+								if(sucursal.getId().getIntIdSucursal().compareTo(egresoDetalle.getIntSucuIdSucursalEgreso())==0){
+									strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial();
+								}
+							}	
+						}
+					}
+					
+				}else if(detalle.getEgreso() == null && detalle.getIngreso() != null){
+					List<IngresoDetalle> lstIngresoDet=null;
+					lstIngresoDet = boIngresoDet.getPorIngreso(detalle.getIngreso());
+					if(lstIngresoDet != null && lstIngresoDet.size()>0){
+						for (IngresoDetalle ingresoDetalle : lstIngresoDet) {
+							for (Sucursal sucursal : listaSucursal) {
+								if(sucursal.getId().getIntIdSucursal().compareTo(ingresoDetalle.getIntSucuIdSucursalIn())==0){
+									strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial();
+								}
+							}	
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		return strSucursalPagaConcat;
+	}
+	
 	
 	/**
 	 * Recupera Conciliacion Detalle, desde Egreso e Ingreso en base a fechas de Inicio ,Fin y Cuenta Bancaria
@@ -483,8 +558,8 @@ public class ConciliacionService {
 					}else{
 						conciliacionDet.setIntIndicadorConci(1);
 					}
-					conciliacionDet.setIntPersEmpresaCheckConciliacion(2);
-					conciliacionDet.setIntPersPersonaCheckConciliacion(2);
+					conciliacionDet.setIntPersEmpresaCheckConciliacion(pConciliacion.getUsuario().getPerfil().getId().getIntPersEmpresaPk());
+					conciliacionDet.setIntPersPersonaCheckConciliacion(pConciliacion.getUsuario().getIntPersPersonaPk());	
 					conciliacionDet.setTsFechaCheck(MyUtil.obtenerFechaActual());
 					conciliacionDet = convertEgresoIngresoAConcilDet(conciliacionDet);
 					listaConciliacionDetalle.add(conciliacionDet);
