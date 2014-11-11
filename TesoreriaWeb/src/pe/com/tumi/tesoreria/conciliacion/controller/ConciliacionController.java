@@ -249,7 +249,7 @@ public class ConciliacionController{
 		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
 			
-			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().equals("0"))conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
+			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().compareTo(new Integer(0))== 0)conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
 			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
 			if(lstConcilDet != null && lstConcilDet.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
@@ -271,7 +271,7 @@ public class ConciliacionController{
 		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
 			
-			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().equals("0"))conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
+			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().compareTo(new Integer(0))== 0)conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
 			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacionEdicion(conciliacionNuevo);
 			if(lstConcilDet != null && lstConcilDet.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
@@ -300,6 +300,8 @@ public class ConciliacionController{
 				conciliacionFacade.anularConciliacion(conciliacionCompAnul);
 				mostrarMensaje(Boolean.TRUE, "Se realizo éxitosamente el Proceso de Anulación.");
 				deshabilitarPanelInferior();
+			}else{
+				mostrarMensaje(Boolean.FALSE, "No se pudo realizar el Proceso de Anulación.");
 			}
 			
 		} catch (Exception e) {
@@ -363,7 +365,7 @@ public class ConciliacionController{
 				calcularTablaResumen();
 				conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
 				deshabilitarPanelInferior();
-				mostrarMensaje(Boolean.TRUE, "Se generó éxitosamente la conciliación diaria.");
+				mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la conciliación diaria.");
 			}
 			
 		} catch (Exception e) {
@@ -380,7 +382,6 @@ public class ConciliacionController{
 		mostrarMensajeExito = Boolean.FALSE;
 		/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 		//habilitarGrabar = Boolean.FALSE;
-		mostrarBotonGrabarConcil = Boolean.FALSE;
 		blnMostrarPanelAnulacion = Boolean.FALSE;
 		ocultarMensaje();
 		limpiarMensajesAnulacion();
@@ -409,7 +410,7 @@ public class ConciliacionController{
 					conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 					mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
 				}else{
-					mostrarMensaje(Boolean.TRUE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas.");
+					mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
 				}
 
 			}else{
@@ -474,6 +475,7 @@ public class ConciliacionController{
 	public void buscar(){
 		try{
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
+			listaConciliacionBusq = new ArrayList<Conciliacion>();
 			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
 			conciliacionCompBusq = new ConciliacionComp();
 			ocultarMensaje();
@@ -492,6 +494,7 @@ public class ConciliacionController{
 		try{
 			conciliacionCompBusq = new ConciliacionComp();
 			conciliacionCompBusq.setConciliacion(new Conciliacion());
+			conciliacionCompBusq.getConciliacion().setBancoCuenta(new Bancocuenta());
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -551,7 +554,10 @@ public class ConciliacionController{
 	
 	public void verRegistro(){
 		try{
-			if(registroSeleccionado.getIntParaEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)){
+			
+			blDeshabilitarBuscarCuenta = true;
+			
+			if(registroSeleccionado.getIntParaEstado().equals(Constante.INT_EST_CONCILIACION_REGISTRADO)){
 				deshabilitarNuevo = Boolean.FALSE;
 				habilitarGrabar = Boolean.TRUE;
 				conciliacionNuevo = conciliacionService.getConciliacionEdit(registroSeleccionado.getId());
@@ -561,7 +567,7 @@ public class ConciliacionController{
 				habilitarGrabar = Boolean.FALSE;
 			}
 			mostrarPanelInferior = Boolean.TRUE;
-			mostrarBotonGrabarConcil = Boolean.FALSE;
+			//mostrarBotonGrabarConcil = Boolean.FALSE;
 			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -570,10 +576,12 @@ public class ConciliacionController{
 	
 	public void irModificarConciliacion(){
 		try{
+			blDeshabilitarBuscarCuenta = true;
+			
 			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
 					|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0 ){
 				//habilitarGrabar = Boolean.TRUE;
-				mostrarBotonGrabarConcil = Boolean.TRUE;
+				//mostrarBotonGrabarConcil = Boolean.TRUE;
 				registrarNuevo = Boolean.FALSE;
 				deshabilitarNuevo = Boolean.FALSE;
 				mostrarPanelInferior = Boolean.TRUE;			
@@ -629,9 +637,10 @@ public class ConciliacionController{
 			blDeshabilitarBuscar = Boolean.FALSE;
 			blDeshabilitaValidarDatos = Boolean.TRUE;
 			blnMostrarPanelAnulacion = Boolean.FALSE;
+			blDeshabilitarBuscarCuenta = false;
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
-			mostrarBotonGrabarConcil = Boolean.TRUE;
+			//mostrarBotonGrabarConcil = Boolean.TRUE;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -649,7 +658,6 @@ public class ConciliacionController{
 			mostrarPanelInferior = Boolean.FALSE;
 			deshabilitarNuevo = Boolean.TRUE;
 			datosValidados = Boolean.FALSE;
-			//private boolean mostrarBotonAnular;
 			blnMostrarPanelAnulacion = Boolean.TRUE;
 			
 			conciliacionAnulacion = new Conciliacion();
