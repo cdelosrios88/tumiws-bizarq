@@ -535,7 +535,6 @@ public class ConciliacionController{
 			if(registroSeleccionado.getIntParaEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)){
 				deshabilitarNuevo = Boolean.FALSE;
 				habilitarGrabar = Boolean.TRUE;
-				
 				conciliacionNuevo = conciliacionService.getConciliacionEdit(registroSeleccionado.getId());
 								
 			}else{
@@ -1007,6 +1006,15 @@ public class ConciliacionController{
 	 * */
 	public void matchTelecreditoFileAgainstLstConcDet(){
 		//Verificando el Nº de cta. antes de iniciar las validaciones...
+		if((telecreditoFileComp==null || (telecreditoFileComp.getLstTelecreditoFileDetail()==null || telecreditoFileComp.getLstTelecreditoFileDetail().isEmpty()) )){
+			mostrarMensaje(Boolean.FALSE, "No se ha cargado ningún archivo Telecrédito");
+			return;
+		}
+		if((conciliacionNuevo.getListaConciliacionDetalle()==null || conciliacionNuevo.getListaConciliacionDetalle().isEmpty())){
+			mostrarMensaje(Boolean.FALSE, "No existen conciliaciones para comparar.");
+			return;
+		}
+		
 		if(telecreditoFileComp.getStrNroCuenta().equals(conciliacionNuevo.getBancoCuenta().getStrNumerocuenta())){
 			if((telecreditoFileComp.getLstTelecreditoFileDetail()!=null && !telecreditoFileComp.getLstTelecreditoFileDetail().isEmpty())
 					&& (conciliacionNuevo.getListaConciliacionDetalle()!=null && !conciliacionNuevo.getListaConciliacionDetalle().isEmpty())){
