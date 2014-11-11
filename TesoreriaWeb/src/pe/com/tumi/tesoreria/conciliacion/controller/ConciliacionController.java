@@ -116,6 +116,7 @@ public class ConciliacionController{
 	private boolean habilitarGrabar;
 	private boolean datosValidados;
 	private boolean mostrarBtnView;
+	private boolean mostrarBtnActualizar;
 	private boolean poseePermiso;
 	
 	public ConciliacionController(){
@@ -550,6 +551,11 @@ public class ConciliacionController{
 		try{
 			registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
 			log.info("reg selec:"+registroSeleccionado);
+			mostrarBtnActualizar = true;
+			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)== 0
+				|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)== 0){
+				mostrarBtnActualizar = false;
+			}
 			mostrarBtnView = Boolean.TRUE;
 			habilitarGrabar = Boolean.TRUE;			
 		}catch (Exception e) {
@@ -1451,5 +1457,20 @@ public class ConciliacionController{
 	public void setMostrarBtnView(boolean mostrarBtnView) {
 		this.mostrarBtnView = mostrarBtnView;
 	}
+
+	/**
+	 * @return the mostrarBtnActualizar
+	 */
+	public boolean isMostrarBtnActualizar() {
+		return mostrarBtnActualizar;
+	}
+
+	/**
+	 * @param mostrarBtnActualizar the mostrarBtnActualizar to set
+	 */
+	public void setMostrarBtnActualizar(boolean mostrarBtnActualizar) {
+		this.mostrarBtnActualizar = mostrarBtnActualizar;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
