@@ -22,7 +22,9 @@
 	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaAnula.jsp"/>
 	<%-- <a4j:include viewId="/pages/conciliacion/conciliacionContent.jsp"/> --%>
 	<a4j:include viewId="/pages/conciliacion/popup/panelVerModificar.jsp"/>
-
+	
+	<h:outputText value="#{conciliacionController.limpiarConciliacion}"/>
+	
 	<h:form>
 		<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
 			<h:panelGrid style="margin:0 auto; margin-bottom:10px">
@@ -250,7 +252,7 @@
 						styleClass="btnEstilos" 
 						style="width:90px" 
 						action="#{conciliacionController.habilitarPanelInferior}" 
-						reRender="contPanelInferior,panelMensaje,panelBotones" />                     
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular" />                     
 					<a4j:commandButton value="Grabar" 
 						styleClass="btnEstilos" 
 						style="width:90px"
@@ -311,7 +313,7 @@
 							</rich:column>
 							<rich:column width=	"140">
 								<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
-									<f:selectItem itemValue="0" itemLabel="Seleccionar"/>
+									<f:selectItem itemValue="0" itemLabel="Todos"/>
 									<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
 									itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
 								</h:selectOneMenu>	
