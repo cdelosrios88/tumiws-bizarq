@@ -299,7 +299,12 @@ public class ConciliacionController{
 			if(isProcedeAnulacion){
 				conciliacionFacade.anularConciliacion(conciliacionCompAnul);
 				mostrarMensaje(Boolean.TRUE, "Se realizo éxitosamente el Proceso de Anulación.");
-				deshabilitarPanelInferior();
+				registrarNuevo = Boolean.FALSE; 
+				mostrarPanelInferior = Boolean.FALSE;
+				mostrarMensajeError = Boolean.TRUE;
+				mostrarMensajeExito = Boolean.FALSE;
+				blnMostrarPanelAnulacion = Boolean.FALSE;
+				limpiarMensajesAnulacion();
 			}else{
 				mostrarMensaje(Boolean.FALSE, "No se pudo realizar el Proceso de Anulación.");
 			}
@@ -477,7 +482,7 @@ public class ConciliacionController{
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
 			listaConciliacionBusq = new ArrayList<Conciliacion>();
 			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
-			conciliacionCompBusq = new ConciliacionComp();
+			//conciliacionCompBusq = new ConciliacionComp();
 			ocultarMensaje();
 			/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 		}catch (Exception e) {
@@ -510,6 +515,7 @@ public class ConciliacionController{
 			deshabilitarPanelInferior();
 			listaConciliacionBusq = new ArrayList<Conciliacion>();
 			blnMostrarPanelAnulacion = Boolean.FALSE;
+			renderBotones();
 			
 		}else{
 			log.error("--Usuario obtenido es NULL o no posee permiso.");

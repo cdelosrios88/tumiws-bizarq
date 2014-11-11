@@ -113,7 +113,7 @@
 						<a4j:commandLink
 							value="Seleccionar"
 							actionListener="#{conciliacionController.seleccionarBancoCuentaAnulacion}" 
-							reRender="contPanelInferior,panelDatosAnular" 
+							reRender="panelDatosAnular,pgAnula,contPanelInferior,panelMensaje,panelBotones,pgMsgErrorValidarAnulacion" 
 							oncomplete="Richfaces.hideModalPanel('pBuscarBancoCuentaAnulacion')">
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
