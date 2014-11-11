@@ -18,8 +18,14 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
+import pe.com.tumi.parametro.tabla.domain.Tabla;
+import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
+import pe.com.tumi.tesoreria.banco.bo.BancocuentaBO;
+import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
+import pe.com.tumi.tesoreria.banco.service.BancoFondoService;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionDetalleBO;
 import pe.com.tumi.tesoreria.egreso.bo.EgresoBO;
@@ -45,6 +51,8 @@ public class ConciliacionService {
 	private IngresoBO boIngreso = (IngresoBO)TumiFactory.get(IngresoBO.class);
 	private EgresoBO boEgreso = (EgresoBO)TumiFactory.get(EgresoBO.class);
 	private ConciliacionDetalleBO boConciliacionDet = (ConciliacionDetalleBO)TumiFactory.get(ConciliacionDetalleBO.class);
+	private BancocuentaBO boBancoCuenta = (BancocuentaBO)TumiFactory.get(BancocuentaBO.class);
+	private BancoFondoService bancoFondoService = (BancoFondoService)TumiFactory.get(BancoFondoService.class);
 	
 
 	/**
@@ -783,7 +791,6 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> lstConcildet = null;
 		List<ConciliacionDetalle> lstConcildetTemp = null;
 		try {
-			
 			conciliacion = boConciliacion.getPorPk(pId);
 			if(conciliacion != null){
 				lstConcildet = boConciliacionDet.getPorConciliacion(pId);
@@ -826,6 +833,7 @@ public class ConciliacionService {
 					conciliacion.getListaConciliacionDetalle().addAll(lstConcildetTemp) ;					
 					
 				}
+				conciliacion.setBancoCuenta(bancoFondoService.getBancoCuentaByConciliacion(conciliacion));
 			}
 		}catch(BusinessException e){
 			throw e;

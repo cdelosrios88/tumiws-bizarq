@@ -28,6 +28,8 @@ import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.parametro.general.domain.ArchivoId;
 import pe.com.tumi.parametro.general.domain.TipoArchivo;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
+import pe.com.tumi.parametro.tabla.domain.Tabla;
+import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.core.domain.CuentaBancaria;
 import pe.com.tumi.persona.core.domain.CuentaBancariaPK;
 import pe.com.tumi.persona.core.domain.Persona;
@@ -45,6 +47,7 @@ import pe.com.tumi.tesoreria.banco.domain.Bancocuentacheque;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.domain.BancofondoId;
 import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
+import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
 
 
@@ -283,7 +286,7 @@ public class BancoFondoService {
 		return listaBancoCuenta;
 	}
 	
-	private CuentaBancaria obtenerCuentaBancaria(Bancocuenta bancoCuenta)throws Exception{
+	public CuentaBancaria obtenerCuentaBancaria(Bancocuenta bancoCuenta)throws Exception{
 		PersonaFacadeRemote personaFacade =  (PersonaFacadeRemote) EJBFactory.getRemote(PersonaFacadeRemote.class);
 		
 		CuentaBancariaPK cuentaBancariaPK = new CuentaBancariaPK();
@@ -679,6 +682,7 @@ public class BancoFondoService {
 				bancoCuenta.setBancofondo(boBancoFondo.getPorBancoCuenta(bancoCuenta));
 				//Inicio: REQ14-006 - bizarq - 20/10/2014
 				bancoCuenta.setCuentaBancaria(obtenerCuentaBancaria(bancoCuenta));
+				bancoCuenta = getBancoByBancoCuenta(bancoCuenta);
 				//Fin: REQ14-006 - bizarq - 20/10/2014
 				if(bancoCuenta.getBancofondo().getIntEstadoCod().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)
 				&& bancoCuenta.getBancofondo().getIntBancoCod().equals(bancoCuentaFiltro.getBancofondo().getIntBancoCod())){
@@ -693,5 +697,57 @@ public class BancoFondoService {
 			throw new BusinessException(e);
 		}
 		return listaBancoCuenta;
-	}	
+	}
+	
+	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	public Bancocuenta getBancoCuentaByConciliacion(Conciliacion conciliacion) throws BusinessException{
+		Bancocuenta bancoCuenta = null;
+		Tabla tabla = null;
+		try {
+			bancoCuenta = new Bancocuenta();
+			bancoCuenta.getId().setIntEmpresaPk(conciliacion.getId().getIntPersEmpresa());
+			bancoCuenta.getId().setIntItembancocuenta(conciliacion.getIntItemBancoCuenta());
+			bancoCuenta.getId().setIntItembancofondo(conciliacion.getIntItemBancoFondo());
+			bancoCuenta = boBancoCuenta.getPorPk(bancoCuenta.getId());
+			if(bancoCuenta!=null){
+				if(obtenerCuentaBancaria(bancoCuenta)!=null){
+					bancoCuenta.setCuentaBancaria(obtenerCuentaBancaria(bancoCuenta));
+					getBancoByBancoCuenta(bancoCuenta);
+				}
+			}
+		} catch(BusinessException e){
+			throw e;
+		} catch (Exception e){
+			log.error(e.getMessage(), e);
+		}
+		return bancoCuenta;
+	}
+	
+	public Bancocuenta getBancoByBancoCuenta(Bancocuenta bancoCuenta){
+		Tabla tabla = null;
+		try {
+			TablaFacadeRemote tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
+			tabla = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_BANCOS), 
+					bancoCuenta.getCuentaBancaria().getIntBancoCod());
+			if(tabla!=null){
+				bancoCuenta.setStrEtiqueta(tabla.getStrDescripcion());
+			}
+			
+			tabla = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOMONEDA), 
+					bancoCuenta.getCuentaBancaria().getIntMonedaCod());
+			if(tabla!=null){
+				bancoCuenta.setStrMoneda(tabla.getStrDescripcion());
+			}
+			tabla = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOCUENTASOCIO), 
+					bancoCuenta.getCuentaBancaria().getIntTipoCuentaCod());
+			if(tabla!=null){
+				bancoCuenta.setStrTipoCuenta(tabla.getStrDescripcion());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return bancoCuenta;
+	}
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
+	
 }
