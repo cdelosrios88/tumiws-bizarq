@@ -39,6 +39,7 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Integer intSucuIdSucursalPaga;
 	private Integer intSubSucuIdSucursalPaga;
 	private Boolean blValid;
+	private String strDescripcionSucursalPaga;
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
 	public ConciliacionDetalleId getId() {
@@ -185,8 +186,22 @@ public class ConciliacionDetalle extends TumiDomain{
 		this.blValid = blValid;
 	}
 	
+	/**
+	 * @return the strDescripcionSucursalPaga
+	 */
+	public String getStrDescripcionSucursalPaga() {
+		return strDescripcionSucursalPaga;
+	}
+	/**
+	 * @param strDescripcionSucursalPaga the strDescripcionSucursalPaga to set
+	 */
+	public void setStrDescripcionSucursalPaga(String strDescripcionSucursalPaga) {
+		this.strDescripcionSucursalPaga = strDescripcionSucursalPaga;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
+
 
 	@Override
 	public String toString() {
