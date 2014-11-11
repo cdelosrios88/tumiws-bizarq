@@ -117,7 +117,7 @@
 							oncomplete="Richfaces.hideModalPanel('pBuscarBancoCuentaAnulacion')">
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
-			     	</rich:column>			                    
+			     	</rich:column>
 					
 					<f:facet name="footer">
 						<h:panelGroup layout="block">
