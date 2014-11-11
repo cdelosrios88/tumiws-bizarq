@@ -83,7 +83,7 @@
 				<rich:column width="150">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar Cuenta"
-						reRender="pgParamsBusq"
+						reRender="pBuscarBancoCuenta"
 						oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
 						action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
 						style="width:150px"/>
