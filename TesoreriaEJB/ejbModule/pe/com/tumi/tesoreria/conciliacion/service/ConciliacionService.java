@@ -771,36 +771,39 @@ public class ConciliacionService {
 			  
 			  if(lstConciliacion != null && lstConciliacion.size() > 0){
 				  for(Conciliacion concil : lstConciliacion){
-						List<ConciliacionDetalle> lstConcilDetalle = null;
-						Integer intNroConDet = 0;
-						
-						// 1. actualizar checks a 1 y concil a 0					
-						lstConcilDetalle =  boConciliacionDet.getPorConciliacion(concil.getId());
-						if(lstConcilDetalle != null && lstConcilDetalle.size() > 0){
-							List<ConciliacionDetalle> lstTemp = new ArrayList<ConciliacionDetalle>();
-							intNroConDet = lstConcilDetalle.size();
+					  if(concil.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0){
+						  List<ConciliacionDetalle> lstConcilDetalle = null;
+							Integer intNroConDet = 0;
 							
-							for (ConciliacionDetalle concilDet :lstConcilDetalle){
-								concilDet.setIntIndicadorCheck(new Integer("1"));
-								concilDet.setIntIndicadorConci(new Integer("0"));	
-								lstTemp.add(concilDet);
+							// 1. actualizar checks a 1 y concil a 0					
+							lstConcilDetalle =  boConciliacionDet.getPorConciliacion(concil.getId());
+							if(lstConcilDetalle != null && lstConcilDetalle.size() > 0){
+								List<ConciliacionDetalle> lstTemp = new ArrayList<ConciliacionDetalle>();
+								intNroConDet = lstConcilDetalle.size();
+								
+								for (ConciliacionDetalle concilDet :lstConcilDetalle){
+									concilDet.setIntIndicadorCheck(new Integer("1"));
+									concilDet.setIntIndicadorConci(new Integer("0"));	
+									lstTemp.add(concilDet);
+								}
+								concil.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
+								concil.getListaConciliacionDetalle().addAll(lstTemp);
+								
 							}
-							concil.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
-							concil.getListaConciliacionDetalle().addAll(lstTemp);
 							
-						}
+							// 2. Actualizar cabecera
+							concil.setIntRegistrosConciliados(new Integer("0"));
+							concil.setIntRegistrosNoConciliados(intNroConDet);							
+							concil.setIntPersEmpresaAnula(pConciliacionCompAnul.getConciliacion().getUsuario().getPerfil().getId().getIntPersEmpresaPk());	
+							concil.setIntPersPersonaAnula(pConciliacionCompAnul.getConciliacion().getUsuario().getIntPersPersonaPk());								
+							concil.setTsFechaAnula(MyUtil.obtenerFechaActual());
+							concil.setStrObservaciónAnula(pConciliacionCompAnul.getStrObservacionAnula());
+							concil.setIntParaEstado(Constante.INT_EST_CONCILIACION_ANULADO);
+							
+							// 3. Grabar concilicacion
+							grabarConciliacion(concil);
+					  }
 						
-						// 2. Actualizar cabecera
-						concil.setIntRegistrosConciliados(new Integer("0"));
-						concil.setIntRegistrosNoConciliados(intNroConDet);							
-						concil.setIntPersEmpresaAnula(pConciliacionCompAnul.getConciliacion().getUsuario().getPerfil().getId().getIntPersEmpresaPk());	
-						concil.setIntPersPersonaAnula(pConciliacionCompAnul.getConciliacion().getUsuario().getIntPersPersonaPk());								
-						concil.setTsFechaAnula(MyUtil.obtenerFechaActual());
-						concil.setStrObservaciónAnula(pConciliacionCompAnul.getStrObservacionAnula());
-						concil.setIntParaEstado(Constante.INT_EST_CONCILIACION_ANULADO);
-						
-						// 3. Grabar concilicacion
-						grabarConciliacion(concil);
 				  }
 			  }
 		}catch(BusinessException e){
@@ -901,7 +904,7 @@ public class ConciliacionService {
 							}
 						}
 						detalle = checkDetalleConciliacion(detalle);
-						
+						detalle.setStrDescripcionSucursalPaga(getSucursalPaga(detalle));
 						lstConcildetTemp.add(detalle);
 					}
 					

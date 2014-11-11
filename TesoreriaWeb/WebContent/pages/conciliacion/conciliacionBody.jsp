@@ -92,14 +92,14 @@
 				<rich:column width="80" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar" 
-						reRender="panelTablaResultados,panelMensaje"
+						reRender="panelTablaResultados,panelMensaje,tblResultado"
 						action="#{conciliacionController.buscar}"
 						style="width:80px"/>
 				</rich:column>
 				<rich:column width="80" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Limpiar" 
-						reRender="panelTablaResultados,panelMensaje,pgParamsBusq"
+						reRender="panelTablaResultados,panelMensaje,pgParamsBusq,tblResultado"
 						action="#{conciliacionController.limpiar}"
 						style="width:80px"/>
 				</rich:column>
@@ -693,7 +693,7 @@
 						</rich:column>
 					</rich:columnGroup>
 				</h:panelGrid>
-				<h:panelGrid columns="16">
+				<h:panelGrid columns="16" id="pgAnula">
 				
 					<rich:column width="60px">
 							<h:outputText value="Fecha :"/>
