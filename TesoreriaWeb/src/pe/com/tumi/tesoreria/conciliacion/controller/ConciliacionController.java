@@ -24,6 +24,7 @@ import org.richfaces.event.UploadEvent;
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
+import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Sucursal;
@@ -115,6 +116,7 @@ public class ConciliacionController{
 	private boolean habilitarGrabar;
 	private boolean datosValidados;
 	private boolean mostrarBtnView;
+	private boolean poseePermiso;
 	
 	public ConciliacionController(){
 		cargarUsuario();
@@ -493,6 +495,23 @@ public class ConciliacionController{
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
+	}
+	
+	public String getLimpiarConciliacion(){
+		cargarUsuario();
+		poseePermiso = PermisoUtil.poseePermiso(Constante.PARAM_TRANSACCION_CONCILIACION_BANCARIA);
+		log.info("POSEE PERMISO: " + poseePermiso);
+		//poseePermiso = Boolean.TRUE;
+		if(usuario!=null && poseePermiso){
+			limpiar();
+			deshabilitarPanelInferior();
+			listaConciliacionBusq = new ArrayList<Conciliacion>();
+			blnMostrarPanelAnulacion = Boolean.FALSE;
+			
+		}else{
+			log.error("--Usuario obtenido es NULL o no posee permiso.");
+		}
+		return "";
 	}
 	
 	/**
@@ -1418,7 +1437,5 @@ public class ConciliacionController{
 	public void setMostrarBtnView(boolean mostrarBtnView) {
 		this.mostrarBtnView = mostrarBtnView;
 	}
-	
-	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }

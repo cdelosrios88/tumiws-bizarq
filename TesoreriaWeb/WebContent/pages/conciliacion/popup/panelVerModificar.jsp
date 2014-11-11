@@ -43,12 +43,12 @@
 				style="margin:0 auto; width: 100%">
 				<a4j:commandButton value="Modificar"
 					action="#{conciliacionController.irModificarConciliacion}"
-					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje"
+					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje,panelDatosAnular"
 					oncomplete="Richfaces.hideModalPanel('panelUpdateViewConciliacion')" />
 
 				<a4j:commandButton value="Ver"
 					action="#{conciliacionController.verRegistro}"
-					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje"
+					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje,panelDatosAnular"
 					oncomplete="Richfaces.hideModalPanel('panelUpdateViewConciliacion')" />
 			</h:panelGrid>
 		</rich:panel>
