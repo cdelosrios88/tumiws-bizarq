@@ -61,9 +61,19 @@
 						size="40"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"/>
+					<%--
 					<h:inputText
 						rendered="#{not empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
 						value="#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNumerocuenta}"
+						size="40"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>--%>
+					<h:inputText
+						rendered="#{not empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
+						value="#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strEtiqueta} - 
+								#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strTipoCuenta} -
+								#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strMoneda} -
+								#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNombrecuenta}"
 						size="40"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"/>
@@ -218,7 +228,7 @@
 				<a4j:commandLink action="#">
 					<h:graphicImage value="/images/icons/mensaje1.jpg" style="border:0px"/>
 				</a4j:commandLink>
-				<h:outputText value="Para Modificar hacer click en el registro" style="color:#8ca0bd"/>
+				<h:outputText value="Para Modificar / Ver hacer click en el registro" style="color:#8ca0bd"/>
 			</h:panelGrid>
 
 			<h:panelGroup id="panelMensaje" style="border: 0px solid #17356f;background-color:#DEEBF5;text-align: center"
@@ -315,9 +325,19 @@
 									size="40"
 									readonly="true"
 									style="background-color: #BFBFBF;font-weight:bold;"/>
+								<%--
 								<h:inputText
 									rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
 									value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
+									size="40"
+									readonly="true"
+									style="background-color: #BFBFBF;font-weight:bold;"/> --%>
+								<h:inputText
+									rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+									value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strEtiqueta} - 
+											#{conciliacionController.conciliacionNuevo.bancoCuenta.strTipoCuenta} -
+											#{conciliacionController.conciliacionNuevo.bancoCuenta.strMoneda} -
+											#{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
 									size="40"
 									readonly="true"
 									style="background-color: #BFBFBF;font-weight:bold;"/>
@@ -408,6 +428,7 @@
 								<a4j:commandButton value="Validar Checks" styleClass="btnEstilos"
 									action="#{conciliacionController.matchTelecreditoFileAgainstLstConcDet}"
 									style="width:150px"
+									rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
 									reRender="panelDatosValidados,panelMensaje"/>
 							</rich:column>
 						</h:panelGrid>
@@ -691,12 +712,23 @@
 							size="40"
 							readonly="true"
 							style="background-color: #BFBFBF;font-weight:bold;"/>
+						<%--
 						<h:inputText
 							rendered="#{not empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
 							value="#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNumerocuenta}"
 							size="40"
 							readonly="true"
 							style="background-color: #BFBFBF;font-weight:bold;"/>
+							--%>
+						<h:inputText
+						rendered="#{not empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
+						value="#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strEtiqueta} - 
+								#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strTipoCuenta} -
+								#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strMoneda} -
+								#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNombrecuenta}"
+						size="40"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"/>
 					</rich:column>
 					<rich:column width="150">
 						<a4j:commandButton styleClass="btnEstilos"
