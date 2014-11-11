@@ -1076,5 +1076,7 @@ public class Constante {
 	public static final Integer INT_PERFIL_ANALISTA_TESORERIA = 22;
 	public static final Integer INT_PERFIL_JEFE_TESORERIA = 4;
 	public static final Integer INT_PERFIL_JEFE_CONTABILIDAD = 22;
-	//Fin: REQ14-005 - bizarq - 28/10/2014
+	
+	public static final Integer PARAM_TRANSACCION_CONCILIACION_BANCARIA = 189;
+	//Fin: REQ14-006 - bizarq - 28/10/2014
 }
