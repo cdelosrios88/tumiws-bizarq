@@ -101,6 +101,7 @@ public class ConciliacionController{
 	private String strMsgErrorAnulaCuenta;
 	private String strMsgErrorAnulaObservacion;
 	private String strMsgErrorAnulaPerfil;
+	private boolean blDeshabilitarVerConc;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	private Usuario 	usuario;
@@ -567,7 +568,8 @@ public class ConciliacionController{
 	public void verRegistro(){
 		try{
 			
-			blDeshabilitarBuscarCuenta = true;
+			blDeshabilitarBuscarCuenta = Boolean.TRUE;
+			blDeshabilitarVerConc = Boolean.TRUE;
 			
 			if(registroSeleccionado.getIntParaEstado().equals(Constante.INT_EST_CONCILIACION_REGISTRADO)){
 				deshabilitarNuevo = Boolean.FALSE;
@@ -589,6 +591,7 @@ public class ConciliacionController{
 	public void irModificarConciliacion(){
 		try{
 			blDeshabilitarBuscarCuenta = true;
+			blDeshabilitarVerConc = Boolean.FALSE;
 			
 			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
 					|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0 ){
@@ -650,6 +653,7 @@ public class ConciliacionController{
 			blDeshabilitaValidarDatos = Boolean.TRUE;
 			blnMostrarPanelAnulacion = Boolean.FALSE;
 			blDeshabilitarBuscarCuenta = false;
+			blDeshabilitarVerConc = Boolean.FALSE;
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
 			//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -1458,6 +1462,14 @@ public class ConciliacionController{
 		this.mostrarBtnView = mostrarBtnView;
 	}
 
+	public boolean isBlDeshabilitarVerConc() {
+		return blDeshabilitarVerConc;
+	}
+
+	public void setBlDeshabilitarVerConc(boolean blDeshabilitarVerConc) {
+		this.blDeshabilitarVerConc = blDeshabilitarVerConc;
+	}
+
 	/**
 	 * @return the mostrarBtnActualizar
 	 */
@@ -1471,6 +1483,5 @@ public class ConciliacionController{
 	public void setMostrarBtnActualizar(boolean mostrarBtnActualizar) {
 		this.mostrarBtnActualizar = mostrarBtnActualizar;
 	}
-	
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
