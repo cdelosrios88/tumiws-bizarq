@@ -284,22 +284,22 @@
 				<rich:spacer height="12px"/>
 					<h:panelGroup id="panelDatosSinValidar">
 						<h:panelGrid columns="16" id="panelMonto">
-							<rich:column width=	"120">
+							<rich:column width=	"130">
 								<h:outputText value="Fecha Conciliación : "/>
 							</rich:column>
-							<rich:column width="160">
-								<h:inputText size="20"
+							<rich:column width="120">
+								<h:inputText size="12"
 									readonly="true"
 									value="#{conciliacionController.conciliacionNuevo.tsFechaConciliacion}"
 									style="background-color: #BFBFBF;font-weight:bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy"/>
 								</h:inputText>
 							</rich:column>
-							<rich:column width=	"140">
+							<rich:column width=	"150">
 								<h:outputText value="Tipo de Documento : "/>
 							</rich:column>
-							<rich:column width="160">
-							<!-- 
+							<!--<rich:column width="160">
+							 
 								<h:selectOneMenu
 									style="width: 150px;"
 									value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}"
@@ -309,8 +309,8 @@
 										itemValue="#{sel.intIdDetalle}"
 										itemLabel="#{sel.strDescripcion}"/>
 								</h:selectOneMenu>
-							-->
-							</rich:column>
+							
+							</rich:column>-->
 							<rich:column width=	"140">
 								<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
 									<f:selectItem itemValue="0" itemLabel="Todos"/>
@@ -398,7 +398,7 @@
 							</rich:column>
 							<rich:column width="160">
 								<h:selectOneMenu
-									disabled="#{conciliacionController.datosValidados}"
+									disabled="false"
 									style="width: 150px;"
 									value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
 									<f:selectItem itemValue="0" itemLabel="Todos"/>
@@ -435,26 +435,27 @@
 							</rich:column>
 						</h:panelGrid>
 
-						<rich:spacer height="5px"/>
+						<rich:spacer height="15px"/>
 
 						<h:panelGrid columns="1" rendered="#{conciliacionController.blDeshabilitarBuscar}">
-							<rich:column width="300">
+							<rich:column width="940">
 								<a4j:commandButton styleClass="btnEstilos"
 									disabled="false"
 									value="Buscar"
 									reRender="contPanelInferior,panelBotones"
 									action="#{conciliacionController.buscarRegistrosConciliacionEdicion}"
-									style="width:300px"/>
+									style="width:940px"/>
 							</rich:column>
 						</h:panelGrid>
 
 						<rich:spacer height="5px"/>
+						
 						<h:panelGrid columns="1" rendered="true">
 							<rich:column width="940">
 								<a4j:commandButton styleClass="btnEstilos"
 									rendered="#{conciliacionController.blDeshabilitaValidarDatos}" 
-									disabled="false"
-									value="Validar Datos"
+									disabled="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
+									value="Mostrar Datos"
 									reRender="contPanelInferior,panelBotones"
 									action="#{conciliacionController.validarDatos}"
 									style="width:940px"/>
@@ -462,7 +463,8 @@
 						</h:panelGrid>
 					</h:panelGroup>
 					
-					<h:panelGrid id="panelDatosValidados" rendered="#{conciliacionController.datosValidados}">
+					<h:panelGrid id="panelDatosValidados" 
+						rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}">
 						<rich:column width=	"910">
 							<rich:dataTable
 							sortMode="single"
@@ -559,16 +561,9 @@
 									<f:facet name="header">
 										<h:outputText value="Sucursal a quien Paga"/>
 									</f:facet>
-									<h:panelGroup rendered="#{not empty item.egreso}">
-										<tumih:outputText value="#{conciliacionController.listSucursal}" 
-														  itemValue="id.intIdSucursal" itemLabel="juridica.strRazonSocial" 
-														  property="#{item.egreso.egresoDetConciliacion.intSucuIdSucursalEgreso}"/>	
-									</h:panelGroup>
-									<h:panelGroup rendered="#{not empty item.ingreso}">
-										<tumih:outputText value="#{conciliacionController.listSucursal}" 
-														  itemValue="id.intIdSucursal" itemLabel="juridica.strRazonSocial" 
-														  property="#{item.ingreso.ingresoDetConciliacion.intSucuIdSucursalIn}"/>
-									</h:panelGroup>                              
+									<h:panelGroup>
+									<h:outputText value="#{item.strDescripcionSucursalPaga}"/>  
+									</h:panelGroup>                             
 								</rich:column>
 								<rich:column>
 									<f:facet name="header">
@@ -610,10 +605,13 @@
 									<h:selectBooleanCheckbox value="#{item.blIndicadorConci}" disabled="true"/>
 								</rich:column>			
 							</rich:dataTable>
+							
+							<rich:spacer height="5px"/>
 								
 							<rich:dataTable
 								sortMode="single"
 								var="itemRes"
+								rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
 								value="#{conciliacionController.lstResumen}"
 								rowKeyVar="rowKey"
 								width="955px">
