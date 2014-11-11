@@ -157,6 +157,8 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		return lstConcilDet;
 	}
 	
+	
+	
 	/**
 	 * 
 	 * @param conciliacion
@@ -176,9 +178,7 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 		}
 		return lstConcilDet;
 	}
-	
-	
-	
+
 	
 	/**
 	 * 
