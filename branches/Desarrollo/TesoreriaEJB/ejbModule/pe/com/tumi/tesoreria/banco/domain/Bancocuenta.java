@@ -27,6 +27,11 @@ public class Bancocuenta extends TumiDomain{
      	private	Integer	intItemInterfaz;
      	private	String	strEtiqueta;
      	
+     	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+     	private String strTipoCuenta;
+     	private String strMoneda;
+     	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
+     	
      	public Bancocuenta(){
      		id = new BancocuentaId();
      		listaBancocuentacheque = new ArrayList<Bancocuentacheque>();
@@ -136,4 +141,22 @@ public class Bancocuenta extends TumiDomain{
 					+ ", strNumerocuenta=" + strNumerocuenta
 					+ ", bdMontosobregiro=" + bdMontosobregiro + "]";
 		}
+
+		/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+		public String getStrTipoCuenta() {
+			return strTipoCuenta;
+		}
+
+		public void setStrTipoCuenta(String strTipoCuenta) {
+			this.strTipoCuenta = strTipoCuenta;
+		}
+
+		public String getStrMoneda() {
+			return strMoneda;
+		}
+
+		public void setStrMoneda(String strMoneda) {
+			this.strMoneda = strMoneda;
+		}
+		/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 }
