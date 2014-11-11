@@ -312,7 +312,8 @@
 							
 							</rich:column>-->
 							<rich:column width=	"140">
-								<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" style="width:150px;">
+								<h:selectOneMenu value="#{conciliacionController.conciliacionNuevo.intParaDocumentoGeneralFiltro}" 
+									style="width:150px;" disabled="#{conciliacionController.blDeshabilitarBuscarCuenta}">
 									<f:selectItem itemValue="0" itemLabel="Todos"/>
 									<tumih:selectItems var="sel" value="#{conciliacionController.listaTablaTipoDoc}"
 									itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
@@ -398,7 +399,7 @@
 							</rich:column>
 							<rich:column width="160">
 								<h:selectOneMenu
-									disabled="false"
+									disabled="#{conciliacionController.blDeshabilitarBuscarCuenta}"
 									style="width: 150px;"
 									value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
 									<f:selectItem itemValue="0" itemLabel="Todos"/>
@@ -419,6 +420,7 @@
 									doneLabel="Archivo cargado correctamente"
 									immediateUpload="false"
 									autoclear="false"
+									disabled="#{conciliacionController.blDeshabilitarBuscarCuenta}"
 									acceptedTypes="xls,xlsx">
 									<f:facet name="label">
 										<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
@@ -596,7 +598,7 @@
 									<f:facet name="header">
 										<h:outputText value="Check"/>
 									</f:facet>
-									<h:selectBooleanCheckbox value="#{item.blIndicadorCheck}" disabled="false"/>
+									<h:selectBooleanCheckbox value="#{item.blIndicadorCheck}" disabled="#{conciliacionController.blDeshabilitarBuscarCuenta}"/>
 								</rich:column>
 								<rich:column width="150" style="text-align: right">
 									<f:facet name="header">
