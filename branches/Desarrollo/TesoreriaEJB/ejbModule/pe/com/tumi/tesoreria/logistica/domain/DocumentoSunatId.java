@@ -4,8 +4,8 @@ import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
 public class DocumentoSunatId extends TumiDomain{
 
-	private Integer intPersEmpresa;
-	private Integer intItemDocumentoSunat;
+	private Integer intPersEmpresa;			//PERS_EMPRESADOCSUNAT_N_PK
+	private Integer intItemDocumentoSunat;	//TESO_ITEMDOCSUN_N
 	
 	public Integer getIntPersEmpresa() {
 		return intPersEmpresa;

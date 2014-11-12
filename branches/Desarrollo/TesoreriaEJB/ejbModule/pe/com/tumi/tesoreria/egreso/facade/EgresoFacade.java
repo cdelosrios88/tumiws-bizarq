@@ -974,10 +974,10 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
 		return dto;
 	}
     
-    public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
+    public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroTransferencia, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
     	Egreso dto = null;
 		try{
-			dto = egresoService.grabarGiroOrdenCompraDocumentoPorTesoreria(listaEgresoDetalleInterfaz, bancoCuenta, usuario, intParaTipoDocumento, intTipoDocumentoValidar);			
+			dto = egresoService.grabarGiroOrdenCompraDocumentoPorTesoreria(listaEgresoDetalleInterfaz, bancoCuenta, usuario, intNroTransferencia, intParaTipoDocumento, intTipoDocumentoValidar);			
    		}catch(BusinessException e){
    			context.setRollbackOnly();
    			throw e;

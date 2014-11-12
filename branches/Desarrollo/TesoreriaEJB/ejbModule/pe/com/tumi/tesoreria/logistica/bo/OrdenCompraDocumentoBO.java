@@ -6,6 +6,7 @@ import java.util.List;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
+import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.logistica.dao.OrdenCompraDocumentoDao;
 import pe.com.tumi.tesoreria.logistica.dao.impl.OrdenCompraDocumentoDaoIbatis;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
@@ -76,6 +77,22 @@ public class OrdenCompraDocumentoBO{
 			mapa.put("intPersEmpresa", ordenCompra.getId().getIntPersEmpresa());
 			mapa.put("intItemOrdenCompra", ordenCompra.getId().getIntItemOrdenCompra());
 			lista = dao.getListaPorOrdenCompra(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 22.10.2014
+	public List<OrdenCompraDocumento> getListaPorEgreso(Egreso egreso) throws BusinessException{
+		List<OrdenCompraDocumento> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresaEgreso", egreso.getId().getIntPersEmpresaEgreso());
+			mapa.put("intItemEgresoGeneral", egreso.getId().getIntItemEgresoGeneral());
+			lista = dao.getListaPorEgreso(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);
 		}catch(Exception e) {

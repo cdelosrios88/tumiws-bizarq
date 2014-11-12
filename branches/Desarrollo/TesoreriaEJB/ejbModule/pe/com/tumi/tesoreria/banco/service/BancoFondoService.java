@@ -286,7 +286,7 @@ public class BancoFondoService {
 		return listaBancoCuenta;
 	}
 	
-	public CuentaBancaria obtenerCuentaBancaria(Bancocuenta bancoCuenta)throws Exception{
+	private CuentaBancaria obtenerCuentaBancaria(Bancocuenta bancoCuenta)throws Exception{
 		PersonaFacadeRemote personaFacade =  (PersonaFacadeRemote) EJBFactory.getRemote(PersonaFacadeRemote.class);
 		
 		CuentaBancariaPK cuentaBancariaPK = new CuentaBancariaPK();
@@ -697,7 +697,7 @@ public class BancoFondoService {
 			throw new BusinessException(e);
 		}
 		return listaBancoCuenta;
-	}
+	}	
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public Bancocuenta getBancoCuentaByConciliacion(Conciliacion conciliacion) throws BusinessException{
@@ -749,5 +749,4 @@ public class BancoFondoService {
 		return bancoCuenta;
 	}
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
-	
 }

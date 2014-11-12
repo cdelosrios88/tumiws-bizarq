@@ -82,6 +82,13 @@
 	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 22.10.2014 -->
+  <parameterMap id="parPorEgresoPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaEgreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemEgresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  <!-- Fin jchavez - 22.10.2014 -->
   
   <procedure id="grabar" parameterMap="parOrdenCompraDocumento">
 	{ call PKG_ORDENCOMPRADOCUMENTO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
@@ -99,4 +106,9 @@
 	{ call PKG_ORDENCOMPRADOCUMENTO.getListaPorOrdenCompra(?,?,?) }
   </procedure>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 22.10.2014 -->
+  <procedure id="getListaPorEgreso" parameterMap="parPorEgresoPk" resultMap="resOrdenCompraDocumento">
+	{ call PKG_ORDENCOMPRADOCUMENTO.getListaPorEgreso(?,?,?) }
+  </procedure>
+  <!-- Fin jchavez - 22.10.2014 -->
 </sqlMap>

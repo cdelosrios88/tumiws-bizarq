@@ -3,9 +3,9 @@ package pe.com.tumi.tesoreria.logistica.domain;
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
 public class DocumentoSunatDetalleId extends TumiDomain{
-	private Integer intPersEmpresa;
-	private Integer intItemDocumentoSunat;
-	private Integer intItemDocumentoSunatDetalle;
+	private Integer intPersEmpresa;					//PERS_EMPRESADOCSUNAT_N_PK
+	private Integer intItemDocumentoSunat;			//TESO_ITEMDOCSUN_N
+	private Integer intItemDocumentoSunatDetalle;	//TESO_ITEMDOCSUNDET_N
 	
 	public Integer getIntPersEmpresa() {
 		return intPersEmpresa;

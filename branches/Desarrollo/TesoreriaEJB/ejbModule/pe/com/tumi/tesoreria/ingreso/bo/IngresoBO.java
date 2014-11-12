@@ -1,6 +1,5 @@
 package pe.com.tumi.tesoreria.ingreso.bo;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -144,39 +143,4 @@ public class IngresoBO{
 		
 	return lista;
 	}
-	
-	/* inicio */
-	/**
-	 * 
-	 * @param ingreso
-	 * @param dtDesdeFiltro
-	 * @param dtHastaFiltro
-	 * @return
-	 * @throws BusinessException
-	 */
-	public List<Ingreso> getListaParaBuscar(Ingreso ingreso, Date dtDesdeFiltro, Date dtHastaFiltro) throws BusinessException{
-		List<Ingreso> lista = null;
-		try{
-			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intIdEmpresa", ingreso.getId().getIntIdEmpresa());
-			mapa.put("intParaDocumentoGeneral", ingreso.getIntParaDocumentoGeneral());
-			mapa.put("intItemIngreso", ingreso.getIntItemIngreso());
-			mapa.put("dtFechaDesde", dtDesdeFiltro);
-			mapa.put("dtFechaHasta", dtHastaFiltro);
-			mapa.put("bdMontoTotal", ingreso.getBdMontoTotal());
-			mapa.put("intParaEstado", ingreso.getIntParaEstado());
-			mapa.put("strNumeroOperacion", ingreso.getStrNumeroOperacion());
-			mapa.put("intItemBancoFondo", ingreso.getIntItemBancoFondo());
-			mapa.put("intItemBancoCuenta", ingreso.getIntItemBancoCuenta());
-			lista = dao.getListaParaBuscar(mapa);
-			
-		}catch(DAOException e){
-			throw new BusinessException(e);
-		}catch(Exception e) {
-			throw new BusinessException(e);
-		}
-		return lista;
-	}
-	
-	/* Final */
 }

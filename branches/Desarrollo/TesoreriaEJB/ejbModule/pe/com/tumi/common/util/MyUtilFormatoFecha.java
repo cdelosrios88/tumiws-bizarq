@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class MyUtilFormatoFecha {
 	protected static Logger log = Logger.getLogger(MyUtil.class);
+	static SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
 	
 	//Para su uso en cualquier clase ---> MyUtilFormatoFecha.nombre_metodo(valores de ingreso);
 	/**
@@ -117,7 +118,9 @@ public class MyUtilFormatoFecha {
 	 * @throws Exception
 	 */
 	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
 	} 
 	
 	/**

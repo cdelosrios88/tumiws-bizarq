@@ -123,9 +123,9 @@ public interface EgresoFacadeRemote {
 	//Fin jchavez - 06.10.2014
 	//Autor: jchavez / Tarea: Creacion / Fecha: 07.10.2014
 	public Egreso grabarGiroOrdenCompraDocumento(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, ControlFondosFijos controlFondosFijos, Usuario usuario, Integer intParaTipoDocumento)throws BusinessException;
-	//Fin jchavez - 13.10.2014
+	//Fin jchavez - 07.10.2014
 	//Autor: jchavez / Tarea: Creacion / Fecha: 07.10.2014
-	public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException;
+	public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario,  Integer intNroTransferencia, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException;
 	//Fin jchavez - 13.10.2014
 	//Autor: jchavez / Tarea: Creacion / Fecha: 15.10.2014
 	public Egreso grabarGiroOrdenCompraDocumentoPorCheque(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroCheque, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException;

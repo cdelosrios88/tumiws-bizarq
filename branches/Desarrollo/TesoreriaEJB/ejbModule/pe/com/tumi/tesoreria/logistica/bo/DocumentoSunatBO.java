@@ -88,7 +88,7 @@ public class DocumentoSunatBO{
 			//Agregado por cdelosrios, 10/10/2013
 			mapa.put("intParaTipoComprobante", documentoSunat.getIntParaTipoComprobante());
 			mapa.put("intItemDocumentoSunat", documentoSunat.getId().getIntItemDocumentoSunat());
-			mapa.put("intNroDocumento", documentoSunat.getStrNumeroDocumento());
+			mapa.put("strNroDocumento", documentoSunat.getStrNumeroDocumento());
 			//Fin agregado por cdelosrios, 10/10/2013
 			
 			lista = dao.getListaPorBuscar(mapa);
@@ -153,4 +153,18 @@ public class DocumentoSunatBO{
 		return lista;
 	}
 	//Fin agregado por cdelosrios, 18/11/2013
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 24.10.2014
+	public Integer getValidarCierreDocumento(Integer intPeriodoCierre) throws BusinessException{
+		Integer vResult = null;
+		HashMap<String,Object> mapa = new HashMap<String,Object>();
+		mapa.put("intPeriodoCierre", intPeriodoCierre);
+		try{
+		  vResult = dao.getValidarCierreDocumento(mapa);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return vResult;
+	}
+	//Fin jchavez - 24.10.2014
 }

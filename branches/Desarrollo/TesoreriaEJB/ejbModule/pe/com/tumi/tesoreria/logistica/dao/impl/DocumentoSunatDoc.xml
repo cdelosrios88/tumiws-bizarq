@@ -6,32 +6,78 @@
   <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDoc" alias="DocumentoSunatDoc"/> 
 	
   <resultMap id="resDocumentoSunatDoc" class="DocumentoSunatDoc" >
-	<result property="id.intPersEmpresa"  				column="pPersEmpresaDocSunat" />
-	<result property="id.intItemDocumentoSunat"   		column="pItemDocSun" />
-	<result property="id.intItemDocumentoSunatDoc"		column="pItemDocSunDoc" />
-	<result property="intParaTipoDocumentoGeneral"   	column="pParaTipoDocumentoGral" />
-	<result property="bdMontoDocumento"   				column="pMontoDocumento" />
-	<result property="intParaEstadoPago"   				column="pParaEstadoPago" />
-	<result property="intPersEmpresaPago"  				column="pPersEmpresaEgreso" />
-	<result property="intItemEgresoGeneral"   			column="pItemEgresoGral" />
+	<result property="id.intPersEmpresa"  				column="ppersempresadocsunat" />
+	<result property="id.intItemDocumentoSunat"   		column="pitemdocsun" />
+	<result property="id.intItemDocumentoSunatDoc"		column="pitemdocsundoc" />
+	<result property="intParaTipoDocumentoGeneral"   	column="pparatipodocumentogral" />
+	<result property="bdMontoDocumento"   				column="pmontodocumento" />
+	<result property="tsFechaRegistro"   				column="pfecharegistro" />
+	<result property="dtFechaVencimiento"   			column="pfechavencimiento" />
+	<result property="intParaEstado"   					column="pestado" />
+	<result property="intParaEstadoPagoDocSunat"   		column="pestadopagosunat" />
+	<result property="intPersEmpresaEgresoDocSunat"   	column="pempresaegresodocsun" />
+	<result property="intItemEgresoGeneralDocSuant"   	column="pitemegresodocsun" />
+	<result property="intParaTipo"   					column="ptipo" />
+	<result property="intItemArchivo"   				column="pitemarchivo" />
+	<result property="intItemHistorico"   				column="pitemhistorico" />
+	<result property="intParaEstadoPago"   				column="pestadopago" />
+	<result property="intPersEmpresaEgreso"   			column="pempresaegreso" />
+	<result property="intItemEgresoGeneral"   			column="pitemegreso" />
+	<result property="intPersEmpresaUsuario"   			column="pempresausuario" />
+	<result property="intPersPersonaUsuario"   			column="ppresonausuario" />
+	<result property="intPersEmpresaAnula"   			column="pempresaanula" />
+	<result property="intPersPersonaAnula"   			column="ppersonaanula" />
+	<result property="tsFechaAnula"   					column="pfechaanula" />
+	<result property="intPersEmpresaCanjea"   			column="pempresacanjea" />
+	<result property="intPersPersonaCanjea"   			column="ppersonacanjea" />
+	<result property="strObservacionCanjea"   			column="pobservacioncanjea" />
+	<result property="tsFechaCanjea"   					column="pfechacanjea" />
+	<result property="intParaTipoCanjea"   				column="ptipocanjea" />
+	<result property="intItemArchivoCanjea"   			column="pitemarchivocanjea" />
+	<result property="intItemHistoricoCanjea"   		column="pitemhistoricocanjea" />
+	<result property="intPersEmpresaIngreso"   			column="pempresaingreso" />
+	<result property="intItemIngresoGeneral"   			column="pitemingresoGral" />
   </resultMap>
   
-  <parameterMap id="parDocumentoSunatDoc" class="DocumentoSunatDetalle">
-	 <parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="id.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="id.intItemDocumentoSunatDoc"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intParaTipoDocumentoGeneral"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="bdMontoDocumento"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intParaEstadoPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intPersEmpresaPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intItemEgresoGeneral"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  <parameterMap id="parDocumentoSunatDoc" class="DocumentoSunatDoc">
+	<parameter property="id.intPersEmpresa"  				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="id.intItemDocumentoSunat"   		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="id.intItemDocumentoSunatDoc"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intParaTipoDocumentoGeneral"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="bdMontoDocumento"   				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="tsFechaRegistro"   				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	<parameter property="dtFechaVencimiento"   				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+	<parameter property="intParaEstado"   					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intParaEstadoPagoDocSunat"   		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersEmpresaEgresoDocSunat"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemEgresoGeneralDocSuant"   	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intParaTipo"   					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemArchivo"   					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemHistorico"   				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intParaEstadoPago"   				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersEmpresaEgreso"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemEgresoGeneral"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersEmpresaUsuario"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersPersonaUsuario"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersEmpresaAnula"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersPersonaAnula"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="tsFechaAnula"   					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	<parameter property="intPersEmpresaCanjea"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersPersonaCanjea"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="strObservacionCanjea"   			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	<parameter property="tsFechaCanjea"   					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	<parameter property="intParaTipoCanjea"   				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemArchivoCanjea"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemHistoricoCanjea"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intPersEmpresaIngreso"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemIngresoGeneral"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
-   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
-   	 <parameter property="intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intItemDocumentoSunatDoc"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	<parameter property="intPersEmpresa"  					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemDocumentoSunat"   			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="intItemDocumentoSunatDoc"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parPorDocSunat" class="java.util.Map">
@@ -48,11 +94,11 @@
   </parameterMap>
  
   <procedure id="grabar" parameterMap="parDocumentoSunatDoc">
-	{ call PKG_DOCUMENTOSUNATDOC.grabar(?,?,?,?,?,?,?,?) }  
+	{ call PKG_DOCUMENTOSUNATDOC.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parDocumentoSunatDoc" >
-	{ call PKG_DOCUMENTOSUNATDOC.modificar(?,?,?,?,?,?,?,?) }  
+	{ call PKG_DOCUMENTOSUNATDOC.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDocumentoSunatDoc">
@@ -62,8 +108,9 @@
   <procedure id="getListaPorDocumentoSunat" parameterMap="parPorDocSunat" resultMap="resDocumentoSunatDoc">
 	{ call PKG_DOCUMENTOSUNATDOC.getListaPorDocSunat(?,?,?) }
   </procedure>
-  
+  <!-- Autor: jchavez / Tarea: Creacion / Fecha: 27.10.2014 -->
   <procedure id="getListaPorDocumentoSunatYTipoDoc" parameterMap="parPorDocSunatYTipoDoc" resultMap="resDocumentoSunatDoc">
 	{ call PKG_DOCUMENTOSUNATDOC.getListaPorDocSunatYTipoDoc(?,?,?,?) }
   </procedure>
+  <!-- Fin jchavez - 27.10.2014 -->
 </sqlMap>

@@ -14,6 +14,7 @@ import pe.com.tumi.contabilidad.core.domain.AccesoPlanCuentaDetalle;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.persona.core.domain.Persona;
+import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.logistica.bo.OrdenCompraBO;
 import pe.com.tumi.tesoreria.logistica.bo.OrdenCompraDetalleBO;
 import pe.com.tumi.tesoreria.logistica.bo.OrdenCompraDocumentoBO;
@@ -21,6 +22,7 @@ import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalleId;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDocumento;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraId;
 
 
 public class OrdenCompraService {
@@ -304,6 +306,36 @@ public class OrdenCompraService {
 			log.info("Error en buscarDocumentoAdelantoParaGiroDesdeTesoreria() ---> "+e.getMessage());
 		}
 		return lista;
+	}
+	
+	/**
+	 * Autor: jchavez / Tarea: Creacion / Fecha: 22.10.2014
+	 * Funcionalidad: Recupera la lista de orden de compra, sus detalle y sus documentos por egreso
+	 * @author jchavez
+	 * @param egreso
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<OrdenCompra> obtenerOrdenCompraPorEgresoPk(Egreso egreso) throws BusinessException{
+		List<OrdenCompra> lstOrdenCompra = new ArrayList<OrdenCompra>();
+		try {
+			OrdenCompra ordComp = new OrdenCompra();
+			List<OrdenCompraDocumento> lstOrdComDoc = boOrdenCompraDocumento.getListaPorEgreso(egreso);
+			
+			if (lstOrdComDoc!=null && !lstOrdComDoc.isEmpty()) {
+				ordComp.setId(new OrdenCompraId());
+				ordComp.getId().setIntPersEmpresa(lstOrdComDoc.get(0).getId().getIntPersEmpresa());
+				ordComp.getId().setIntItemOrdenCompra(lstOrdComDoc.get(0).getId().getIntItemOrdenCompra());
+				ordComp = boOrdenCompra.getPorPk(ordComp.getId());
+				ordComp.setListaOrdenCompraDetalle(boOrdenCompraDetalle.getPorOrdenCompra(ordComp));
+				ordComp.setListaOrdenCompraDocumento(new ArrayList<OrdenCompraDocumento>());
+				ordComp.getListaOrdenCompraDocumento().addAll(lstOrdComDoc);
+			}
+			lstOrdenCompra.add(ordComp);
+		} catch (Exception e) {
+			log.info("Error en obtenerOrdenCompraPorEgresoPk() ---> "+e.getMessage());
+		}
+		return lstOrdenCompra;
 	}
 	
 }

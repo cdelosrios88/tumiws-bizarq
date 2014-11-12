@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 
 import pe.com.tumi.common.util.Constante;
-import pe.com.tumi.common.util.DocumentoRequisicion;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.seguridad.login.domain.Usuario;
@@ -23,6 +22,7 @@ import pe.com.tumi.tesoreria.logistica.bo.RequisicionBO;
 import pe.com.tumi.tesoreria.logistica.bo.RequisicionDetalleBO;
 import pe.com.tumi.tesoreria.logistica.domain.Contrato;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativo;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoRequisicion;
 import pe.com.tumi.tesoreria.logistica.domain.InformeGerencia;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.Requisicion;

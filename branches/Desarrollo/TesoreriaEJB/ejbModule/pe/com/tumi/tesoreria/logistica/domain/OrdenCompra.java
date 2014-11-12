@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import pe.com.tumi.common.util.DocumentoRequisicion;
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 import pe.com.tumi.parametro.general.domain.Detraccion;
 import pe.com.tumi.persona.core.domain.CuentaBancaria;

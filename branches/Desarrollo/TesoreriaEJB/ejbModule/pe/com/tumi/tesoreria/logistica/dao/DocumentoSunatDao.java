@@ -16,4 +16,7 @@ public interface DocumentoSunatDao extends TumiDao{
 	//Agregado por cdelosrios, 18/11/2013
 	public List<DocumentoSunat> getListaPorOrdenCompraYTipoDocumento(Object o) throws DAOException;
 	//Fin agregado por cdelosrios, 18/11/2013
+	//Autor: jchavez / Tarea: Creación / Fecha: 24.10.2014
+	public Integer getValidarCierreDocumento(Object o) throws DAOException;
+	//Fin jchavez - 24.10.2014
 }

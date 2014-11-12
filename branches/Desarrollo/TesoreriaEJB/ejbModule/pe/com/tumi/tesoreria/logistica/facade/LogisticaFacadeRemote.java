@@ -5,22 +5,24 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import pe.com.tumi.common.util.DocumentoRequisicion;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.general.domain.Tarifa;
 import pe.com.tumi.parametro.general.domain.TipoCambio;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.seguridad.login.domain.Usuario;
-import pe.com.tumi.tesoreria.logistica.domain.AdelantoSunat;
+import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.logistica.domain.Contrato;
 import pe.com.tumi.tesoreria.logistica.domain.ContratoId;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativo;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativoProveedor;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoRequisicion;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatOrdenComDoc;
 import pe.com.tumi.tesoreria.logistica.domain.InformeGerencia;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalleId;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDocumento;
 import pe.com.tumi.tesoreria.logistica.domain.Proveedor;
 import pe.com.tumi.tesoreria.logistica.domain.ProveedorId;
@@ -79,7 +81,6 @@ public interface LogisticaFacadeRemote {
 	public DocumentoSunat agregarDocumentoSunatLetra(DocumentoSunat documentoSunat) throws BusinessException;
 	public List<DocumentoSunatDetalle> getListaDocumentoSunatDetallePorOrdenCompraDetalle(OrdenCompraDetalle ordenCompraDetalle)
 		throws BusinessException;
-	public List<AdelantoSunat> getListaAdelantoSunatPorOrdenCompraDocumento(OrdenCompraDocumento ordenCompraDocumento)throws BusinessException;
 	public OrdenCompra modificarOrdenCompra(OrdenCompra ordenCompra) throws BusinessException;
 	public Persona obtenerPersonaProveedorDeContrato(Contrato contrato) throws BusinessException;
 	public Persona obtenerPersonaProveedorDeInformeGerencia(InformeGerencia informeGerencia) throws BusinessException;
@@ -95,4 +96,19 @@ public interface LogisticaFacadeRemote {
     //Autor: jchavez / Tarea: Creación / Fecha: 06.10.2014
     public List<OrdenCompra> buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(Integer intIdPersona, Integer intIdEmpresa, Integer intParaTipoDocumento) throws BusinessException;
     //Fin jchavez - 06.10.2014
+    //Autor: jchavez / Tarea: Creación / Fecha: 22.10.2014
+    public List<OrdenCompra> obtenerOrdenCompraPorEgresoPk(Egreso egreso) throws BusinessException;
+    //Fin jchavez - 22.10.2014
+    //Autor: jchavez / Tarea: Creación / Fecha: 24.10.2014
+    public Integer getValidarCierreDocumento(Integer intPeriodoCierre) throws BusinessException;
+    //Fin jchavez - 24.10.2014
+    //Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+    public List<DocumentoSunatOrdenComDoc> getListaPorOrdenCompraDoc(OrdenCompraDocumento ordenComDoc) throws BusinessException;
+    //Fin jchavez - 26.10.2014
+    //Autor: jchavez / Tarea: Creacion / Fecha: 07.11.2014
+    public OrdenCompraDetalle getOrdenCompraDetallePorPk(OrdenCompraDetalleId pId) throws BusinessException;
+    //Fin jchavez - 07.11.2014
+    //Autor: jchavez / Tarea: Creacion / Fecha: 09.11.2014
+    public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat) throws BusinessException;
+    //Fin jchavez - 09.11.2014
 }

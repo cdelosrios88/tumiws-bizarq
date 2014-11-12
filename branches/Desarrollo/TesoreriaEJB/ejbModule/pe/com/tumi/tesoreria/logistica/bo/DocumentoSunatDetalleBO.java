@@ -103,30 +103,31 @@ public class DocumentoSunatDetalleBO{
 		return lista;
 	}
 	//Agregado por cdelosrios, 01/11/2013
-	public DocumentoSunatDetalle getPorDocumentoSunatYTipoDocSunat(DocumentoSunat documentoSunat, Integer intParaTipoDocumentoSunat) throws BusinessException{
-		DocumentoSunatDetalle domain = null;
+	public List<DocumentoSunatDetalle> getPorDocumentoSunatYTipoDocSunat(DocumentoSunat documentoSunat, Integer intParaTipoDocumentoSunat) throws BusinessException{
+//		DocumentoSunatDetalle domain = null;
 		List<DocumentoSunatDetalle> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
 			mapa.put("intPersEmpresa", 				documentoSunat.getId().getIntPersEmpresa());
 			mapa.put("intItemDocumentoSunat", 		documentoSunat.getId().getIntItemDocumentoSunat());
-			mapa.put("intParaTipoDocumentoSunat", 	intParaTipoDocumentoSunat);
+			mapa.put("intParaTipoCptoDocumentoSunat", 	intParaTipoDocumentoSunat);
 			lista = dao.getListaPorDocumentoSunatYTipoDocSunat(mapa);
-			if(lista!=null){
-				if(lista.size()==1){
-				   domain = lista.get(0);
-				}else if(lista.size()==0){
-				   domain = null;
-				}else{
-				   throw new BusinessException("Obtención de mas de un registro coincidente");
-				}
-			}
+//			if(lista!=null){
+//				if(lista.size()==1){
+//				   domain = lista.get(0);
+//				}else if(lista.size()==0){
+//				   domain = null;
+//				}else{
+//				   throw new BusinessException("Obtención de mas de un registro coincidente");
+//				}
+//			}
 		}catch(DAOException e){
 			throw new BusinessException(e);
 		}catch(Exception e) {
 			throw new BusinessException(e);
 		}
-		return domain;
+//		return domain;
+		return lista;
 	}
 	//Fin agregado por cdelosrios, 01/11/2013
 }

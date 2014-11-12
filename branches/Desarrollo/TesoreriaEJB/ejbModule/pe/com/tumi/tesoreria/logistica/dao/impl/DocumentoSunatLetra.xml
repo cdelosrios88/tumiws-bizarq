@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoSunatLetraDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatLetra" alias="DocumentoSunatLetra"/> 
+	
+  <resultMap id="resDocumentoSunatLetra" class="DocumentoSunatLetra" >
+	<result property="id.intPersEmpresaDocSunat"  		column="pempresadocsunat" />
+	<result property="id.intItemDocumentoSunat"   		column="pitemdocsunat" />
+	<result property="id.intItemDocumentoSunatLetra"   	column="pitemdocsunatletra" />
+	<result property="intPersEmpresaDocSunatLetra"   	column="pempresadocsunatletra" />
+	<result property="intItemDocSunatLetraEnlazada"		column="pitemdocsunatletraen" />
+	<result property="bdMontoCancelado"   				column="pmontocancelado" />
+	<result property="intItemDocumentoSunatDoc"   		column="pitemdocsunatdoc" />
+  </resultMap>
+  
+  <parameterMap id="parDocumentoSunatLetra" class="DocumentoSunatLetra">
+	 <parameter property="id.intPersEmpresaDocSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemDocumentoSunatLetra"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaDocSunatLetra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemDocSunatLetraEnlazada"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMontoCancelado"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemDocumentoSunatDoc"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaDocSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunatLetra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <!-- Autor: jchavez / Tarea: Creacion / Fecha: 09.11.2014 -->
+  <parameterMap id="parPorDocumentoSunat" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaDocSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+
+  <procedure id="grabar" parameterMap="parDocumentoSunatLetra">
+	{ call PKG_DOCUMENTOSUNATLETRA.grabar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDocumentoSunatLetra">
+	{ call PKG_DOCUMENTOSUNATLETRA.modificar(?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDocumentoSunatLetra">
+	{ call PKG_DOCUMENTOSUNATLETRA.getListaPorPk(?,?,?,?) }
+  </procedure>
+  
+  <procedure id="getListaPorDocumentoSunat" parameterMap="parPorDocumentoSunat" resultMap="resDocumentoSunatLetra">
+	{ call PKG_DOCUMENTOSUNATLETRA.getListaPorDocumentoSunat(?,?,?) }
+  </procedure>  
+
+</sqlMap>

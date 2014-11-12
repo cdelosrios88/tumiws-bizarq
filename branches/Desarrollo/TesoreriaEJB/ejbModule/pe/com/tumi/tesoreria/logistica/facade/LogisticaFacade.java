@@ -10,7 +10,6 @@ import javax.ejb.TransactionAttributeType;
 
 import org.apache.log4j.Logger;
 
-import pe.com.tumi.common.util.DocumentoRequisicion;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
@@ -18,28 +17,32 @@ import pe.com.tumi.parametro.general.domain.Tarifa;
 import pe.com.tumi.parametro.general.domain.TipoCambio;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.seguridad.login.domain.Usuario;
-import pe.com.tumi.tesoreria.logistica.bo.AdelantoSunatBO;
+import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.logistica.bo.ContratoBO;
 import pe.com.tumi.tesoreria.logistica.bo.CuadroComparativoBO;
 import pe.com.tumi.tesoreria.logistica.bo.CuadroComparativoProveedorBO;
 import pe.com.tumi.tesoreria.logistica.bo.DocumentoSunatBO;
 import pe.com.tumi.tesoreria.logistica.bo.DocumentoSunatDetalleBO;
+import pe.com.tumi.tesoreria.logistica.bo.DocumentoSunatOrdenComDocBO;
 import pe.com.tumi.tesoreria.logistica.bo.InformeGerenciaBO;
 import pe.com.tumi.tesoreria.logistica.bo.OrdenCompraBO;
+import pe.com.tumi.tesoreria.logistica.bo.OrdenCompraDetalleBO;
 import pe.com.tumi.tesoreria.logistica.bo.ProveedorBO;
 import pe.com.tumi.tesoreria.logistica.bo.ProveedorDetalleBO;
 import pe.com.tumi.tesoreria.logistica.bo.RequisicionBO;
 import pe.com.tumi.tesoreria.logistica.bo.RequisicionDetalleBO;
-import pe.com.tumi.tesoreria.logistica.domain.AdelantoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.Contrato;
 import pe.com.tumi.tesoreria.logistica.domain.ContratoId;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativo;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativoProveedor;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoRequisicion;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatOrdenComDoc;
 import pe.com.tumi.tesoreria.logistica.domain.InformeGerencia;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalleId;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDocumento;
 import pe.com.tumi.tesoreria.logistica.domain.Proveedor;
 import pe.com.tumi.tesoreria.logistica.domain.ProveedorId;
@@ -77,7 +80,8 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
 	DocumentoSunatBO boDocumentoSunat = (DocumentoSunatBO)TumiFactory.get(DocumentoSunatBO.class);
 	DocumentoSunatService documentoSunatService = (DocumentoSunatService)TumiFactory.get(DocumentoSunatService.class);
 	DocumentoSunatDetalleBO boDocumentoSunatDetalle = (DocumentoSunatDetalleBO)TumiFactory.get(DocumentoSunatDetalleBO.class);
-	AdelantoSunatBO boAdelantoSunat = (AdelantoSunatBO)TumiFactory.get(AdelantoSunatBO.class);
+	DocumentoSunatOrdenComDocBO boDocumentoSunatOrdenComDoc = (DocumentoSunatOrdenComDocBO)TumiFactory.get(DocumentoSunatOrdenComDocBO.class);
+	OrdenCompraDetalleBO boOrdenCompraDetalle = (OrdenCompraDetalleBO)TumiFactory.get(OrdenCompraDetalleBO.class);
 	
 	
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -629,19 +633,6 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
 		return lista;
 	}
     
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<AdelantoSunat> getListaAdelantoSunatPorOrdenCompraDocumento(OrdenCompraDocumento ordenCompraDocumento)throws BusinessException{
-    	List<AdelantoSunat> lista = null;
-		try{
-			lista = boAdelantoSunat.getPorOrdenCompraDocumento(ordenCompraDocumento);
-   		}catch(BusinessException e){
-   			throw e;
-   		}catch(Exception e){
-   			throw new BusinessException(e);
-   		}
-		return lista;
-	}
-    
     public OrdenCompra modificarOrdenCompra(OrdenCompra ordenCompra) throws BusinessException{
     	OrdenCompra dto = null;
 		try{
@@ -762,4 +753,84 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
 		return lista;
 	}
     //Fin jchavez - 06.10.2014
+    
+    //Autor: jchavez / Tarea: Creación / Fecha: 22.10.2014
+    public List<OrdenCompra> obtenerOrdenCompraPorEgresoPk(Egreso egreso) throws BusinessException{
+    	List<OrdenCompra> lista = null;
+		try{
+			lista = ordenCompraService.obtenerOrdenCompraPorEgresoPk(egreso);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return lista;
+	}
+    //Fin jchavez - 24.10.2014
+    
+    /**
+     * Autor: jchavez / Tarea: Creacion / Fecha: 24.10.2014
+     * Funcionalidad: Método que valida si existe un cierre logistico y un cierre contable abierto para el documento en gestion.
+	 * @author jchavez
+	 * @param ordenCompra
+	 * @return vResult - 0: NO EXISTE 1:EXISTE
+	 * @throws BusinessException
+     */
+    public Integer getValidarCierreDocumento(Integer intPeriodoCierre) throws BusinessException{
+    	Integer vResult  = null;
+		try{
+			vResult = boDocumentoSunat.getValidarCierreDocumento(intPeriodoCierre);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return vResult;
+	}
+    
+    /**
+     * Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+     * Funcionalidad: Método que recupera la lista de documentos sunat relacionados a una orden de compra documento.
+	 * @author jchavez
+     * @param ordenComDoc
+     * @return lista - lista DocumentoSunatOrdenComDoc
+     * @throws BusinessException
+     */
+    public List<DocumentoSunatOrdenComDoc> getListaPorOrdenCompraDoc(OrdenCompraDocumento ordenComDoc) throws BusinessException{
+    	List<DocumentoSunatOrdenComDoc> lista = null;
+		try{
+			lista = boDocumentoSunatOrdenComDoc.getListaPorOrdenCompraDoc(ordenComDoc);
+		}catch(BusinessException e){
+			context.setRollbackOnly();
+			throw e;
+		}catch(Exception e){
+			context.setRollbackOnly();
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+    
+    public OrdenCompraDetalle getOrdenCompraDetallePorPk(OrdenCompraDetalleId pId) throws BusinessException{
+    	OrdenCompraDetalle dto = null;
+		try{
+			dto = boOrdenCompraDetalle.getPorPk(pId);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return dto;
+    }
+    
+    public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat) throws BusinessException{
+    	DocumentoSunat dto = null;
+		try{
+			dto = documentoSunatService.agregarDocumentoSunatNota(documentoSunat);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return dto;
+	}
 }
