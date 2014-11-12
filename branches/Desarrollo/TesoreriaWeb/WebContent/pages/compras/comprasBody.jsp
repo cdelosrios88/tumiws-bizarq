@@ -7,50 +7,69 @@
 	
 	<!-- Empresa   : Cooperativa Tumi         -->
 	<!-- Autor     : Arturo Julca    		  -->	
+
+<a4j:outputPanel>
+	<a4j:include viewId="/pages/compras/popup/agregarRequisicionDetalle.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/alertaRequisicion.jsp"/>
 	
+	<a4j:include viewId="/pages/compras/popup/buscarRequisicionInforme.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarPersonaInforme.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoInforme.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/alertaInforme.jsp"/>
+	
+	<a4j:include viewId="/pages/compras/popup/buscarRequisicionContrato.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarPersonaContrato.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarDomicilioContrato.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarDomicilioContrato.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoContrato.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarAnteriorContrato.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/alertaContrato.jsp"/>
+	
+	<a4j:include viewId="/pages/compras/popup/buscarRequisicionCuadro.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarProveedorCuadro.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarPersonaCuadro.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoCuadro.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarProveedorDetalleCuadro.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/alertaCuadro.jsp"/>
+	
+	<a4j:include viewId="/pages/compras/popup/buscarRequisicionOrden.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarDetalleOrden.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarPersonaOrden.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarPlanCuentaOrden.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarDocumentoOrden.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/buscarCuentaBancariaOrden.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/alertaOrden.jsp"/>
+	
+	<a4j:include viewId="/pages/compras/popup/buscarOrdenCompraSunat.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarDetalleSunat.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarLetraSunat.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/alertaDocumentoSunat.jsp"/>
+	<!-- Agregado por cdelosrios, 01/11/2013 -->
+	<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoSunat.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/verDocumentoSunat.jsp"/>
+	<!-- Fin agregado por cdelosrios, 01/11/2013 -->
+	<!-- Agregado por cdelosrios, 15/11/2013 -->
+	
+	<!-- Fin agregado por cdelosrios, 15/11/2013 -->
+	<!-- Agregado por jchavez, 05/11/2014 -->
+	<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoSunatLetra.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/agregarNotaSunat.jsp"/>
+	<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoSunatNota.jsp"/>	
+</a4j:outputPanel>
 
-<a4j:include viewId="/pages/compras/popup/agregarRequisicionDetalle.jsp"/>
-<a4j:include viewId="/pages/compras/popup/alertaRequisicion.jsp"/>
+<a4j:region>
+	<a4j:jsFunction name="getTipoComprobanteDS" reRender="pgDocSunatLetrasYNotas"
+		actionListener="#{sunatController.seleccionarModalidad}">
+		<f:param name="pCboTipoComprobanteDS"></f:param>
+	</a4j:jsFunction>
+	
+	<a4j:jsFunction name="selecRegistroDocumento" reRender="dtDocSunatValidosNotas, dtDetalleDocSunatRelacionado, rbOpcDoc"
+		actionListener="#{sunatController.verDetalleDocSunatRelacionado}">
+		<f:param name="pRdoRegistroDocumento"></f:param>
+	</a4j:jsFunction>
+</a4j:region>
 
-<a4j:include viewId="/pages/compras/popup/buscarRequisicionInforme.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarPersonaInforme.jsp"/>
-<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoInforme.jsp"/>
-<a4j:include viewId="/pages/compras/popup/alertaInforme.jsp"/>
-
-<a4j:include viewId="/pages/compras/popup/buscarRequisicionContrato.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarPersonaContrato.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarDomicilioContrato.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarDomicilioContrato.jsp"/>
-<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoContrato.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarAnteriorContrato.jsp"/>
-<a4j:include viewId="/pages/compras/popup/alertaContrato.jsp"/>
-
-<a4j:include viewId="/pages/compras/popup/buscarRequisicionCuadro.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarProveedorCuadro.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarPersonaCuadro.jsp"/>
-<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoCuadro.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarProveedorDetalleCuadro.jsp"/>
-<a4j:include viewId="/pages/compras/popup/alertaCuadro.jsp"/>
-
-<a4j:include viewId="/pages/compras/popup/buscarRequisicionOrden.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarDetalleOrden.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarPersonaOrden.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarPlanCuentaOrden.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarDocumentoOrden.jsp"/>
-<a4j:include viewId="/pages/compras/popup/buscarCuentaBancariaOrden.jsp"/>
-<a4j:include viewId="/pages/compras/popup/alertaOrden.jsp"/>
-
-<a4j:include viewId="/pages/compras/popup/buscarOrdenCompraSunat.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarDetalleSunat.jsp"/>
-<a4j:include viewId="/pages/compras/popup/agregarLetraSunat.jsp"/>
-<a4j:include viewId="/pages/compras/popup/alertaDocumentoSunat.jsp"/>
-<!-- Agregado por cdelosrios, 01/11/2013 -->
-<a4j:include viewId="/pages/compras/popup/adjuntarDocumentoSunat.jsp"/>
-<a4j:include viewId="/pages/compras/popup/verDocumentoSunat.jsp"/>
-<!-- Fin agregado por cdelosrios, 01/11/2013 -->
-<!-- Agregado por cdelosrios, 15/11/2013 -->
-<a4j:include viewId="/pages/compras/popup/verDocumentoAdelanto.jsp"/>
-<!-- Fin agregado por cdelosrios, 15/11/2013 -->
+<!-- Fin agregado por cdelosrios, 05/11/2014 -->
 <h:outputText value="#{requisicionController.limpiarRequisicion}" />
 <h:outputText value="#{contratoController.limpiarContrato}" />
 <h:outputText value="#{informeController.limpiarInforme}" />

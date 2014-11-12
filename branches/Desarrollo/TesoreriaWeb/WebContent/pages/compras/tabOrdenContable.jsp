@@ -304,7 +304,8 @@
 			<%--disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO" --%>
 				<rich:calendar datePattern="dd/MM/yyyy"  
 					disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
-					|| !ordenController.habilitarGrabar}"
+					|| !ordenController.habilitarGrabar
+					|| ordenController.ordenCompraNuevo.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
 					value="#{ordenController.ordenCompraNuevo.tsFechaAtencionReal}"  
 					converter="calendarTimestampConverter"
 					jointPoint="top-right" 
@@ -389,7 +390,7 @@
 	                rendered="#{ordenController.ordenCompraNuevo.documentoRequisicion.intParaTipoAprobacion==applicationScope.Constante.PARAM_T_APROBACION_ORDENCOMPRA
 	                || ordenController.ordenCompraNuevo.documentoRequisicion.intParaTipoAprobacion==applicationScope.Constante.PARAM_T_APROBACION_CAJACHICA}"
 	                reRender="pBuscarPersonaOrden"
-	                disabled="#{!ordenController.habilitarGrabar}"
+	                disabled="#{ordenController.deshabilitarNuevo || ordenController.habilitarCuentaFormaPago || !ordenController.habilitarGrabar}"
 	                oncomplete="Richfaces.showModalPanel('pBuscarPersonaOrden')"
 	                action="#{ordenController.abrirPopUpBuscarPersona}" 
 	                style="width:150px"/>
@@ -406,7 +407,8 @@
 				<!-- Modificado por cdelosrios, 15/10/2013 -->
 				<rich:calendar datePattern="dd/MM/yyyy"  
 					disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
-					|| !ordenController.habilitarGrabar}"	
+					|| !ordenController.habilitarGrabar
+					|| ordenController.deshabilitarNuevo}"	
 					converter="calendarTimestampConverter"
 					value="#{ordenController.ordenCompraNuevo.tsPlazoEntrega}"  
 					jointPoint="top-right" 
@@ -491,6 +493,7 @@
 				<h:selectOneMenu
 					disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
 					|| !ordenController.habilitarGrabar
+					|| ordenController.deshabilitarNuevo 
 					|| ordenController.blnHabilitarAdmin}"
 					value="#{ordenController.ordenCompraNuevo.intParaFormaPago}"
 					style="width: 230px;">
@@ -537,7 +540,7 @@
 			</rich:column>
 			<rich:column width="240">
 				<h:selectOneMenu
-					disabled="#{ordenController.deshabilitarNuevo}"
+					disabled="#{ordenController.deshabilitarNuevo || !ordenController.habilitarGrabar}"
 					style="width: 230px;">
 					<tumih:selectItems var="sel"
 						cache="#{applicationScope.Constante.PARAM_T_IMPUESTOORDEN}"
@@ -583,7 +586,7 @@
 			<rich:column width="497">
 				<h:inputTextarea cols="121"					
 					rows="2"
-					disabled="#{ordenController.deshabilitarNuevo}"
+					disabled="#{ordenController.ordenCompraNuevo.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
 					value="#{ordenController.ordenCompraNuevo.strObservacion}"/>
 			</rich:column>
 		</h:panelGrid>
@@ -601,7 +604,8 @@
 				<a4j:commandButton styleClass="btnEstilos"
                 	disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
                 	|| empty ordenController.ordenCompraNuevo.personaProveedor
-                	|| !ordenController.habilitarGrabar}"
+                	|| !ordenController.habilitarGrabar
+                	|| ordenController.ordenCompraNuevo.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
                 	value="Agregar" 
                 	reRender="pAgregarDetalleOrden"
 	                oncomplete="Richfaces.showModalPanel('pAgregarDetalleOrden')"
@@ -707,7 +711,8 @@
 		         	</f:facet>
 					<a4j:commandLink value="Eliminar"
 						disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
-						|| !ordenController.habilitarGrabar}"
+						|| !ordenController.habilitarGrabar
+						|| ordenController.ordenCompraNuevo.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
 						reRender="panelDetalleO,panelMensajeO"
 						actionListener="#{ordenController.quitarOrdenCompraDetalle}">
 						<f:attribute name="item" value="#{item}"/>
@@ -749,7 +754,8 @@
                 	disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
                 	|| empty ordenController.ordenCompraNuevo.personaProveedor
                 	|| !ordenController.habilitarGrabar
-                	|| ordenController.blnHabilitarAdmin}"
+                	|| ordenController.blnHabilitarAdmin
+                	|| ordenController.ordenCompraNuevo.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
                 	value="Agregar" 
                 	reRender="pAgregarDocumentoOrden"
 	                oncomplete="Richfaces.showModalPanel('pAgregarDocumentoOrden')"
@@ -867,7 +873,8 @@
 		         	</f:facet>
 					<a4j:commandLink value="Eliminar"
 						disabled="#{ordenController.ordenCompraNuevo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO
-						|| !ordenController.habilitarGrabar}"
+						|| !ordenController.habilitarGrabar
+						|| ordenController.ordenCompraNuevo.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
 						reRender="panelDocumentoO,panelMensajeO"
 						actionListener="#{ordenController.quitarOrdenCompraDocumento}">
 						<f:attribute name="item" value="#{item}"/>

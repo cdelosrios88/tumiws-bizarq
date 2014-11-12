@@ -552,11 +552,11 @@ public class ConciliacionController{
 		try{
 			registroSeleccionado = (Conciliacion)event.getComponent().getAttributes().get("item");
 			log.info("reg selec:"+registroSeleccionado);
-			mostrarBtnActualizar = true;
+			/*mostrarBtnActualizar = true;
 			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)== 0
 				|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)== 0){
 				mostrarBtnActualizar = false;
-			}
+			}*/
 			mostrarBtnView = Boolean.TRUE;
 			habilitarGrabar = Boolean.TRUE;			
 		}catch (Exception e) {

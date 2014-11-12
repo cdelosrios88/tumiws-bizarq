@@ -45,25 +45,6 @@
              			onclick="Richfaces.hideModalPanel('pAlertaRegistroD')"
              			reRender="contPanelInferiorD,panelBotonesD"/>
              	</rich:column>
-             	<!-- Fin modificado por cdelosrios, 28/10/2013 -->
-             	<!-- Modificado por cdelosrios, 25/10/2013 -->
-             	<%--<rich:column style="border:none" width="110">
-	    			<a4j:commandButton value="Letras" 
-	    				styleClass="btnEstilos"
-	    				style="width:90px"	
-            			action="#{sunatController.agregarLetras}"
-             			onclick="Richfaces.hideModalPanel('pAlertaRegistroD')"
-             			reRender="contPanelInferiorD,panelBotonesD"/>
-             	</rich:column>
-             	<rich:column style="border:none" width="100">
-        			<a4j:commandButton value="Eliminar"
-        				rendered="#{sunatController.registroSeleccionado.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO}"
-        				styleClass="btnEstilos"
-        				style="width:90px"
-            			action="#{sunatController.eliminarRegistro}"
-             			onclick="Richfaces.hideModalPanel('pAlertaRegistroD')"
-             			reRender="panelBotonesD,panelMensajeD,panelTablaResultadosD"/>	        		
-	        	</rich:column> --%>
 	        	<rich:column style="border:none" width="110">
 	    			<a4j:commandButton value="Ver" 
 	    				styleClass="btnEstilos"

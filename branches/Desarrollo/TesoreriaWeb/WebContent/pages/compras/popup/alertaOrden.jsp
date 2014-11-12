@@ -44,7 +44,10 @@
              	</rich:column>             	
              	<rich:column style="border:none" width="110">
         			<a4j:commandButton value="Eliminar"
-        				rendered="#{ordenController.registroSeleccionado.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO}"
+        				rendered="#{(ordenController.registroSeleccionado.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO
+        				&& ordenController.ordenCompraNuevo.intParaEstadoOrden!=applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO)
+        				&& !ordenController.blnExisteCancelado
+        				&& !ordenController.blnExisteDocSunatRel}"
         				styleClass="btnEstilos"
         				style="width:100px"
             			action="#{ordenController.eliminarRegistro}"

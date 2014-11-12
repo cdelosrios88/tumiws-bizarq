@@ -7,7 +7,7 @@
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 
 	
-<rich:modalPanel id="pVerDocumentoSunat" width="910" height="350"
+<rich:modalPanel id="pVerDocumentoSunat" width="1020" height="350"
 	resizeable="false" style="background-color:#DEEBF5;">
     <f:facet name="header">
         <h:panelGrid>
@@ -114,7 +114,7 @@
 				<h:outputText value="Inafecto"/>
 			</rich:column>
 			<rich:column width=	"120">
-				<h:selectBooleanCheckbox value="#{sunatController.itemDocumentoSunat.seleccionaIGV}"
+				<h:selectBooleanCheckbox value="#{sunatController.itemDocumentoSunat.seleccionaIGVContable}"
 					disabled="#{not empty sunatController.itemDocumentoSunat.id.intItemDocumentoSunat}">
 				</h:selectBooleanCheckbox>
 				<h:outputText value="IGV"/>
@@ -173,7 +173,7 @@
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="80" style="text-align: right">
+			    <rich:column width="100" style="text-align: right">
 					<h:outputText style="padding-right:10px;" value="Subtotal :"/>
 				</rich:column>
 				<rich:column width="140" style="text-align: left">
@@ -184,21 +184,21 @@
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="90" style="text-align: right">
+			    <rich:column width="100" style="text-align: right" rendered="#{sunatController.itemDocumentoSunat.detalleDescuento.bdMontoTotal!=null}">
 					<h:outputText style="padding-right:10px;" value="Descuento :"/>
 				</rich:column>
-				<rich:column width="140" style="text-align: left">
+				<rich:column width="140" style="text-align: left" rendered="#{sunatController.itemDocumentoSunat.detalleDescuento.bdMontoTotal!=null}">
 					<h:inputText size="15"
 						rendered="#{!sunatController.poseePermisoDescuento || (not empty sunatController.itemDocumentoSunat.id.intItemDocumentoSunat)}"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"/>
-					<h:inputText size="19"
+					<h:inputText size="15"
 						rendered="#{sunatController.poseePermisoDescuento && (empty sunatController.itemDocumentoSunat.id.intItemDocumentoSunat)}"
 						value="#{sunatController.itemDocumentoSunat.detalleDescuento.bdMontoTotal}"
 						onkeypress="return soloNumerosDecimalesPositivos(this)">
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="90" style="text-align: right">
+			    <rich:column width="100" style="text-align: right">
 					<h:outputText style="padding-right:10px;" value="Valor Venta :"/>
 				</rich:column>
 				<rich:column width="140" style="text-align: left">
@@ -223,11 +223,11 @@
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="80" style="text-align: right">
+			    <rich:column width="100" style="text-align: right" rendered="#{sunatController.itemDocumentoSunat.detalleOtros.bdMontoTotal!=null}">
 					<h:outputText style="padding-right:10px;" value="Otros :"/>
 				</rich:column>
-				<rich:column width="140" style="text-align: left">
-					<h:inputText size="19"
+				<rich:column width="140" style="text-align: left" rendered="#{sunatController.itemDocumentoSunat.detalleOtros.bdMontoTotal!=null}">
+					<h:inputText size="15"
 						rendered="#{empty sunatController.itemDocumentoSunat.id.intItemDocumentoSunat}"
 						value="#{sunatController.itemDocumentoSunat.detalleOtros.bdMontoTotal}"
 						onkeypress="return soloNumerosDecimales(this)">
@@ -240,7 +240,7 @@
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="90" style="text-align: right">
+			    <rich:column width="100" style="text-align: right">
 					<h:outputText style="padding-right:10px;" value="Total :"/>
 				</rich:column>
 				<rich:column width="140" style="text-align: left">
@@ -251,35 +251,35 @@
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="90" style="text-align: right">
+			    <rich:column width="100" style="text-align: right" rendered="#{sunatController.itemDocumentoSunat.docPercepcion.bdMontoDocumento!=null}">
 					<h:outputText value="Percepción 2% :"/>
 				</rich:column>
-				<rich:column width="140" style="text-align: left">
+				<rich:column width="140" style="text-align: left" rendered="#{sunatController.itemDocumentoSunat.docPercepcion.bdMontoDocumento!=null}">
 					<h:inputText size="15"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"					
-						value="#{sunatController.itemDocumentoSunat.detallePercepcion.bdMontoTotal}">
+						value="#{sunatController.itemDocumentoSunat.docPercepcion.bdMontoDocumento}">
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
 			</h:panelGrid>
 			
 			<h:panelGrid columns="10">
-				<rich:column width="100" style="text-align: right">
+				<rich:column width="100" style="text-align: right" rendered="#{sunatController.itemDocumentoSunat.docDetraccion.bdMontoDocumento!=null}">
 					<h:outputText style="padding-right:10px;" value="Detracción #{sunatController.ordenCompra.detraccion.bdPorcentaje}% :"/>
 				</rich:column>
-				<rich:column width="140" style="text-align: left">
+				<rich:column width="140" style="text-align: left" rendered="#{sunatController.itemDocumentoSunat.docDetraccion.bdMontoDocumento!=null}">
 					<h:inputText size="15"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"					
-						value="#{sunatController.itemDocumentoSunat.detalleDetraccion.bdMontoTotal}">
+						value="#{sunatController.itemDocumentoSunat.docDetraccion.bdMontoDocumento}">
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="80" style="text-align: right">
+			    <rich:column width="100" style="text-align: right" rendered="#{sunatController.itemDocumentoSunat.detalleRetencion.bdMontoTotal!=null}">
 					<h:outputText style="padding-right:10px;" value="Retención :"/>
 				</rich:column>
-				<rich:column width="140" style="text-align: left">
+				<rich:column width="140" style="text-align: left" rendered="#{sunatController.itemDocumentoSunat.detalleRetencion.bdMontoTotal!=null}">
 					<h:inputText size="15"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"					
@@ -287,7 +287,7 @@
 						<f:converter converterId="ConvertidorMontos"/>
 					</h:inputText>
 			    </rich:column>
-			    <rich:column width="90" style="text-align: right">
+			    <rich:column width="100" style="text-align: right">
 					<h:outputText style="padding-right:10px;" value="Total General:"/>
 				</rich:column>
 				<rich:column width="140" style="text-align: left">
@@ -301,10 +301,8 @@
 			</h:panelGrid>
 		</h:panelGroup>
 		
-		<h:panelGrid columns="2" style="text-align:center">
-			<rich:column width="350">
-			</rich:column>
-			<rich:column width="120">
+		<h:panelGrid columns="1" style="text-align:center">
+			<rich:column width="960" style="text-align:center">
                 <a4j:commandButton styleClass="btnEstilos"
                 	value="Cancelar"
                 	onclick="Richfaces.hideModalPanel('pVerDocumentoSunat')"

@@ -2727,14 +2727,6 @@ public class CajaController {
 		return bdMontoInteresAtrasado;
 	}
 	
-//	private static Date convertirTimestampToDate(Timestamp timestamp) {
-//        return new Date(timestamp.getTime());
-//    }
-	
-//	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-//	}   
-	
 	private String obtenerEtiquetaTipoDocumentoGeneral(Integer intTipoDocumento){
 		for(Tabla tabla : listaTablaDocumentoGeneral){
 			if(tabla.getIntIdDetalle().equals(intTipoDocumento)){

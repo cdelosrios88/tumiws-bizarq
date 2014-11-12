@@ -7,7 +7,7 @@
 <%@ taglib uri="http://www.tumi.com.pe/tumi-h" prefix="tumih"%>
 
 
-<rich:modalPanel id="pAgregarDetalleSunat" width="960" height="470"
+<rich:modalPanel id="pAgregarDetalleSunat" width="980" height="500"
 	resizeable="false" style="background-color:#DEEBF5;">
     <f:facet name="header">
         <h:panelGrid>
@@ -25,24 +25,28 @@
     </f:facet>
    	
    	<h:form id="fAgregarDetalleSunat">
-   	
-	<h:panelGrid columns="6">
-		<rich:column width="120" style="text-align: left;">
-			 <a4j:commandButton styleClass="btnEstilos"
-                value="Aceptar"
-                oncomplete="if(#{sunatController.mostrarMensajeDetalle}){rendPopUp4();}else{Richfaces.hideModalPanel('pAgregarDetalleSunat');rendTabla4();}"
-                action="#{sunatController.agregarDetalleSunat2}" 
-                style="width:120px"/>
-	     	</rich:column>
-		<rich:column width="120" style="text-align: left;">
-	    	<a4j:commandButton styleClass="btnEstilos"
-	        	value="Cancelar"
-	            onclick="Richfaces.hideModalPanel('pAgregarDetalleSunat')"
-	            style="width:120px"/>
-		</rich:column>
-    </h:panelGrid>
+   	<a4j:outputPanel>
+   		<h:panelGrid columns="6">
+			<rich:column width="120" style="text-align: left;">
+				 <a4j:commandButton styleClass="btnEstilos"
+				 	id="btnAceptarAgregarDetalle"
+	                value="Aceptar"
+	                oncomplete="if(#{sunatController.mostrarMensajeDetalle}){rendPopUp4();}else{Richfaces.hideModalPanel('pAgregarDetalleSunat');rendTabla4();}"
+	                action="#{sunatController.agregarDetalleSunat2}" 
+	                disabled="#{not empty sunatController.strMsgErrorMontoOrdenCompraDetalle}"
+	                style="width:120px"/>
+		     	</rich:column>
+			<rich:column width="120" style="text-align: left;">
+		    	<a4j:commandButton styleClass="btnEstilos"
+		        	value="Cancelar"
+		            onclick="Richfaces.hideModalPanel('pAgregarDetalleSunat')"
+		            style="width:120px"/>
+			</rich:column>
+	    </h:panelGrid>
+   	</a4j:outputPanel>
+	
     
-    <a4j:jsFunction name="rendTabla4" reRender="panelDocumentoD" ajaxSingle="true"/>
+    <a4j:jsFunction name="rendTabla4" reRender="panelDocumentoD, panelModificadores, panelFechasDocumento, pnDatosSunat" ajaxSingle="true"/>
 	<a4j:jsFunction name="rendPopUp4" reRender="fAgregarDetalleSunat" ajaxSingle="true"/>		
 	
     <rich:spacer height="5px"/>
@@ -53,11 +57,7 @@
 	<rich:spacer height="10px"
 		rendered="#{empty sunatController.strMensajeDetalle}"/>
     
-    
-    
-    
-    
-    
+
     <h:panelGrid columns="3">
     	<rich:column width="100" style="text-align: left;font-weight:bold">
     		<h:outputText value="Tipo de Cambio : "/>
@@ -177,76 +177,145 @@
     	<rich:column width="120" style="text-align: left;"><h:outputText value="Detalle : "/></rich:column>
     </h:panelGrid>
     
+    <a4j:outputPanel>
+	    <h:panelGrid id="msgErrorMontoDetalle">
+	    	<rich:column width="120" style="text-align: left;">
+	    		<h:outputText value="#{sunatController.strMsgErrorMontoOrdenCompraDetalle}"
+	    			styleClass="msgError"
+					style="font-weight:bold; text-align: left"/>
+	    	</rich:column>
+	    </h:panelGrid>
+    </a4j:outputPanel>
+    
 			<h:panelGroup>
-	    		<rich:dataTable
-	    			id="tablaOrdenCompraDetalle"
-	    			var="item"
-	                value="#{sunatController.ordenCompra.listaOrdenCompraDetalle}"
-			  		rowKeyVar="rowKey"
-			  		rows="5"
-			  		sortMode="single" 
-			  		width="930px">
-			        
-					<rich:column width="100" style="text-align: center;">
-						<f:facet name="header">
-	                    	<h:outputText value="Item"/>
-	                 	</f:facet>
-			        	<h:outputText value="#{item.id.intItemOrdenCompraDetalle}"/>
-			      	</rich:column>
-			      	<rich:column width="50" style="text-align: right;">
-						<f:facet name="header">
-	                    	<h:outputText value="Cant"/>
-	                 	</f:facet>
-			        	<h:outputText value="#{item.bdCantidad}">
-			        		<f:converter converterId="ConvertidorMontos"/>
-			        	</h:outputText>
-			      	</rich:column>
-					<rich:column width="100" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="U.M."/>
-                      	</f:facet>
-                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_UNIDADMEDIDA}" 
-							itemValue="intIdDetalle"
-							itemLabel="strDescripcion"
-							property="#{item.intParaUnidadMedida}"/>
-                    </rich:column>
-					<rich:column width="150" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Descripción"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.strDescripcion}" title="#{item.strDescripcion}"/>
-                    </rich:column>
-                    <rich:column width="150" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Centro Costo"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.sucursal.juridica.strRazonSocial}-#{item.area.strDescripcion}"/>
-                    </rich:column>
-	                <rich:column width="80" style="text-align: right">
-                    	<f:facet name="header">
-                        	<h:outputText value="P.U."/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.bdPrecioUnitario}">
-	                    	<f:converter converterId="ConvertidorMontos"/>
-	                 	</h:outputText>
-                    </rich:column>
-                    <rich:column width="70" style="text-align: center">
-                    	<f:facet name="header">
-                      		<h:outputText value="Moneda"/>                      		
-                      	</f:facet>
-                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}" 
-							itemValue="intIdDetalle" 
-							itemLabel="strDescripcion" 
-							property="#{item.intParaTipoMoneda}"/>
-                  	</rich:column>
-	                <rich:column width="80" style="text-align: right">
-                    	<f:facet name="header">
-                        	<h:outputText value="P.T."/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.bdPrecioTotal}">
-	                    	<f:converter converterId="ConvertidorMontos"/>
-	                 	</h:outputText>
-                    </rich:column>
+				<a4j:outputPanel>
+		    		<rich:dataTable
+		    			id="tablaOrdenCompraDetalle"
+		    			var="item"
+		                value="#{sunatController.ordenCompra.listaOrdenCompraDetalle}"
+				  		rowKeyVar="rowKey"
+				  		rows="5"
+				  		sortMode="single" 
+				  		width="930px">
+				        
+						<rich:column width="100" style="text-align: center;">
+							<f:facet name="header">
+		                    	<h:outputText value="Item"/>
+		                 	</f:facet>
+				        	<h:outputText value="#{item.id.intItemOrdenCompraDetalle}"/>
+				      	</rich:column>
+				      	<rich:column width="50" style="text-align: right;">
+							<f:facet name="header">
+		                    	<h:outputText value="Cant"/>
+		                 	</f:facet>
+				        	<h:outputText value="#{item.bdCantidad}">
+				        		<f:converter converterId="ConvertidorMontos"/>
+				        	</h:outputText>
+				      	</rich:column>
+						<rich:column width="100" style="text-align: center">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="U.M."/>
+	                      	</f:facet>
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_UNIDADMEDIDA}" 
+								itemValue="intIdDetalle"
+								itemLabel="strDescripcion"
+								property="#{item.intParaUnidadMedida}"/>
+	                    </rich:column>
+						<rich:column width="150" style="text-align: center">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="Descripción"/>
+	                      	</f:facet>
+	                      	<h:outputText value="#{item.strDescripcion}" title="#{item.strDescripcion}"/>
+	                    </rich:column>
+	                    <rich:column width="150" style="text-align: center">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="Centro Costo"/>
+	                      	</f:facet>
+	                      	<h:outputText value="#{item.sucursal.juridica.strRazonSocial}-#{item.area.strDescripcion}"/>
+	                    </rich:column>
+	                    <rich:column width="50" style="text-align: center">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="A/I"/>
+	                      	</f:facet>
+	                      	<h:outputText value="A" rendered="#{item.intAfectoIGV==1}"/>
+	                      	<h:outputText value="I" rendered="#{item.intAfectoIGV==2}"/>
+	                    </rich:column>
+		                <rich:column width="80" style="text-align: right">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="P.U."/>
+	                      	</f:facet>
+	                      	<h:outputText value="#{item.bdPrecioUnitario}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+	                    <rich:column width="70" style="text-align: center">
+	                    	<f:facet name="header">
+	                      		<h:outputText value="Moneda"/>                      		
+	                      	</f:facet>
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}" 
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion" 
+								property="#{item.intParaTipoMoneda}"/>
+	                  	</rich:column>
+	                  	<rich:column width="50" style="text-align: right">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="T.C."/>
+	                      	</f:facet>
+	                      	<h:outputText value="#{sunatController.tipoCambio.bdPromedio}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+		                <rich:column width="80" style="text-align: right">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="Precio Total"/>
+	                      	</f:facet>
+	                      	<h:outputText value="#{item.bdPrecioTotal}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+	                    <rich:column width="80" style="text-align: right">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="Saldo"/>
+	                      	</f:facet>
+	                      	<h:outputText value="#{item.bdMontoSaldoTemp}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+	                    <rich:column width="120" style="text-align: right">
+	                    	<f:facet name="header">
+	                        	<h:outputText value="Aplicado"/>
+	                      	</f:facet>
+	                      	<h:inputText 
+								onblur="extractNumber(this,2,false);" 
+		   						onkeyup="extractNumber(this,2,false);" 			   						
+		   						onkeypress="return soloNumerosDecimales(this)"
+		   						size="12"	
+		   						style="text-align: right;"							
+								id="txtMontoAportado"
+								disabled="#{item.bdMontoSaldoTemp==0}"
+		                    	value="#{item.bdMontoUsar}">
+		                    	<a4j:support event="onchange"
+									actionListener="#{sunatController.getBaseCalculo}"
+									reRender="txtMontoIngresadoTotalDetalle, msgErrorMontoDetalle, btnAceptarAgregarDetalle" />
+		                    </h:inputText>
+	                    </rich:column>
+				      	<f:facet name="footer">
+							<rich:columnGroup>
+								<rich:column colspan="11" style="text-align: center">
+									<b><h:outputText value="TOTAL ORDEN COMPRA DETALLE" /></b>
+								</rich:column>
+								<rich:column width="120" style="text-align: right; color:red; font-weight: bold;">
+									<h:outputText id="txtMontoIngresadoTotalDetalle" value="#{sunatController.bdMontoIngresadoTotal}">
+										<f:converter converterId="ConvertidorMontos"/>
+									</h:outputText>
+								</rich:column>
+							</rich:columnGroup>   
+						</f:facet>
+		            </rich:dataTable>
+		        </a4j:outputPanel>
+	    	</h:panelGroup>
+	    	
+	    	                    <!--  Autor: jchavez / Tarea: Se quita de la grilla de detalle / Fecha: 26.10.2014
                     <rich:column width="80" style="text-align: right">
                     	<f:facet name="header">
                         	<h:outputText value="Saldo"/>
@@ -255,19 +324,19 @@
 	                    	<f:converter converterId="ConvertidorMontos"/>
 	                 	</h:outputText>
                     </rich:column>
-                    <rich:column width="120" style="text-align: right">
-                    	<f:facet name="header">
-                        	<h:outputText value="Aplicado"/>
-                      	</f:facet>
-                      	<h:inputText size="12"
-                      		disabled="#{item.bdMontoSaldoTemp==0}"
-                      		onkeypress="return soloNumerosDecimalesPositivos(this)"
-                      		value="#{item.bdMontoUsar}"/>
-                    </rich:column>
-			      	
-	            </rich:dataTable>
-	    	</h:panelGroup>
-	    	
+                    	                      	<h:inputText size="12"
+	                      		disabled="#{item.bdMontoSaldoTemp==0}"
+	                      		onkeypress="return soloNumerosDecimalesPositivos(this)"
+	                      		value="#{item.bdMontoUsar}"/>
+	                      		
+	                      		                    	<h:selectOneMenu
+								style="width: 50px;"
+								value="#{item.intAfectoIGV}"
+								disabled = "true">
+								<f:selectItem itemValue="1" itemLabel="A"/>
+								<f:selectItem itemValue="2" itemLabel="I"/>
+							</h:selectOneMenu>
+	                      		-->
 	   	
 	</h:form>
 </rich:modalPanel>	

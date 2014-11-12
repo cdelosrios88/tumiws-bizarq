@@ -70,6 +70,8 @@
 					onkeypress="return soloNumerosDecimalesPositivos(this)"
 					value="#{ordenController.ordenCompraDetalle.bdPrecioUnitario}"/>
 				<h:inputText size="32" 
+					readonly="true"
+					style="background-color: #BFBFBF;"
 					rendered="#{not empty ordenController.ordenCompraDetalle.id.intItemOrdenCompraDetalle}"
 					value="#{ordenController.ordenCompraDetalle.bdPrecioUnitario}">
 					<f:converter converterId="ConvertidorMontos"/>

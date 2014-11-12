@@ -26,7 +26,6 @@
    	<h:form>
    	
 	   	<h:panelGroup>
-	   			<!-- Agregado por cdelosrios, 15/10/2013 -->
 	   			<h:panelGrid columns="3">
 	   				<rich:column>
 	   					<h:outputText value="Nº Orden"/>
@@ -42,7 +41,6 @@
 	                    	style="width:130px"/>
 	   				</rich:column>
 	   			</h:panelGrid>
-	   			<!-- Fin agregado por cdelosrios, 15/10/2013 -->
 	   		   	<rich:dataTable id="dtOrdenCompra"
 	    			var="item"
 	                value="#{sunatController.listaOrdenCompra}"
@@ -115,15 +113,13 @@
 			    			value="Seleccionar"
 							actionListener="#{sunatController.seleccionarOrdenCompra}"
 							oncomplete="Richfaces.hideModalPanel('pBuscarOrdenCompra')"
-							reRender="contPanelInferiorD">
+							reRender="contPanelInferiorD, panelBotonesD">
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
 			      	</rich:column>
-			      	<!-- Agregado por cdelosrios, 15/10/2013 -->
 			      	<f:facet name="footer">   
 	                    <rich:datascroller for="dtOrdenCompra" maxPages="10"/>   
 	                </f:facet> 
-	                <!-- Fin agregado por cdelosrios, 15/10/2013 -->
 	            </rich:dataTable>
 	   	
 	   	</h:panelGroup>

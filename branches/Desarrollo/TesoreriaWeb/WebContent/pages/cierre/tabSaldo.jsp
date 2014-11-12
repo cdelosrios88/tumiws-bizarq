@@ -244,7 +244,7 @@
 	               	<rich:calendar datePattern="dd/MM/yyyy"  
 						value="#{saldoController.dtFechaInicioSaldo}"  
 						disabled="#{saldoController.deshabilitarNuevo}"
-						jointPoint="top-right" 
+						jointPoint="top-right"
 						direction="right"
 						inputSize="16"
 						showApplyButton="true"/>

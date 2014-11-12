@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
-import pe.com.tumi.common.util.DocumentoRequisicion;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.common.util.UtilManagerReport;
 import pe.com.tumi.empresa.domain.Area;
@@ -31,6 +30,7 @@ import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoRequisicion;
 import pe.com.tumi.tesoreria.logistica.domain.Requisicion;
 import pe.com.tumi.tesoreria.logistica.domain.RequisicionDetalle;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;

@@ -69,6 +69,7 @@
 	   		<h:panelGrid id="pgDocumentoRequisicion">
 	   			<rich:column width="680">
 	    		<rich:dataTable
+	    			id="tblResultadoDocReq" 
 	    			var="item"
 	                value="#{ordenController.listaDocumentoRequisicion}"
 			  		rowKeyVar="rowKey"
@@ -177,7 +178,10 @@
 							<f:attribute name="item" value="#{item}"/>
 						</a4j:commandLink>
 			      	</rich:column>
-			      	
+			      	<f:facet name="footer">
+						<rich:datascroller for="tblResultadoDocReq" maxPages="10"/>   
+					</f:facet>
+					
 	            </rich:dataTable>
 	            </rich:column>
 	    	</h:panelGrid>

@@ -513,7 +513,8 @@
 							<tumih:selectItems var="sel"
 								value="#{fondosFijosController.listaTablaTipoDocumento}"
 								itemValue="#{sel.intIdDetalle}"
-								itemLabel="#{sel.strDescripcion}"/>
+								itemLabel="#{sel.strDescripcion}"
+								propertySort="strDescripcion"/>
 						</h:selectOneMenu>
 			        </rich:column>
 			        <rich:column width="503">

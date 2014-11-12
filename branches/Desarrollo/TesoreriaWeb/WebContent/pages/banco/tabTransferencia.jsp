@@ -1057,6 +1057,7 @@
 				                   		<h:outputText value="Persona"/>
 				                   	</f:facet>
 				                   	<h:outputText value="#{item.persona.natural.strNombreCompleto}"/>
+				                   	<h:outputText value="#{item.persona.juridica.strRazonSocial}"/>
 				                </rich:column>
 				                <rich:column width="160" style="text-align: left">
 				                    <f:facet name="header">
@@ -1090,8 +1091,8 @@
 				                    <f:facet name="header">
 				                      	<h:outputText value="Asiento"/>                      		
 				                    </f:facet>
-				                    <h:outputText rendered="#{not empty item.libroDiario}" 
-				                    	value="#{item.libroDiario.strNumeroAsiento}"/>
+				                    <h:outputText
+				                    	value="#{transferenciaController.libroDiario.strNumeroAsiento}"/>
 				               	</rich:column>
 				               	<rich:column width="100">
 				               		<f:facet name="header">
