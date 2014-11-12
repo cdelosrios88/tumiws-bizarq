@@ -117,7 +117,8 @@
 	                     	</f:facet>
 	                     	<a4j:commandLink id="lnkDelete" styleClass="no-decor" reRender="tblContabilidad,panelValidMsgError"
 			            		actionListener="#{mayorizacionController.deleteMayorizado}" 
-			            		rendered="#{item.intEstadoCod==applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO}"
+			            		rendered="#{item.intEstadoCod==applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO || 
+			            		item.intEstadoCod==applicationScope.Constante.PARAM_T_TIPOESTADOMAYORIZACION_FALLIDO}"
 			            		onclick="if(!confirm('Está Ud. Seguro de Eliminar este Registro?'))return false;">
 			                    <h:graphicImage value="/images/icons/delete.png" alt="delete"/>
 			                    <f:attribute name="item" value="#{item}"/>
@@ -159,16 +160,18 @@
 		<h:panelGrid id="panelValidMsgSuccess">
 			<h:outputText value="#{mayorizacionController.strMsgSuccess}" styleClass="msgInfo"/>
 			<h:outputText value="#{mayorizacionController.strMsgFailed}" styleClass="msgError"/>
+			<h:outputText value="#{mayorizacionController.strMsgError}" styleClass="msgError"/>
 		</h:panelGrid>
 		
 		<rich:panel id="contPanelInferiorProcMay" style="border:0px;">
 			<rich:spacer height="3px"/>
 				<rich:panel id="panelInferior" style="border:1px solid #17356f;" rendered="#{mayorizacionController.mostrarPanelInferior}">
 					<rich:spacer height="3px"/>
-					<rich:column width="70" style="text-align: center;">
+					<rich:columnGroup>
+					<rich:column width="70" style="text-align: left;">
 		         		<h:outputText value="Periodo : "/>
 		         	</rich:column>
-		         	<rich:column width="150">
+		         	<rich:column width="160">
 		               	<h:selectOneMenu
 							style="width: 150px;"
 							value="#{mayorizacionController.libroMayorNuevo.id.intContMesMayor}">
@@ -192,9 +195,19 @@
 		               	<a4j:commandButton styleClass="btnEstilos"
 		               		value="Procesar"
 		                   	action="#{mayorizacionController.procesarMayorizado}" style="width:70px"
-		                   	reRender="panelValidMsgError,panelValidMsgSuccess,tblContabilidad"/>
+		                   	reRender="panelValidMsgError,panelValidMsgSuccess,tblContabilidad,txtPassMayor"/>
 		            </rich:column>
-		            <rich:spacer height="3px"/>
+		            </rich:columnGroup>
+		            <rich:columnGroup>
+		            <rich:spacer height="10px"/>
+		           
+		            <rich:column width="70px" style="text-align: left;">
+						<h:outputText value ="Password : " />
+					</rich:column>
+					<rich:column width="150px">
+						<h:inputSecret id="txtPassMayor" value="#{mayorizacionController.strPassword}" style="width: 145px;" />
+					</rich:column>
+					</rich:columnGroup>
 				</rich:panel>
 		</rich:panel>
 		<h:panelGrid id="panelValidMsgError">

@@ -128,6 +128,5 @@
 		<url-pattern>/portal/*</url-pattern>
 		<url-pattern>/pages/*</url-pattern>
 	</filter-mapping>
-	<!-- Fin: REQ14-003 Bizarq - 08/08/2014 -->
-	
+	<!-- Fin: REQ14-003 Bizarq - 08/08/2014 -->	
 </web-app>

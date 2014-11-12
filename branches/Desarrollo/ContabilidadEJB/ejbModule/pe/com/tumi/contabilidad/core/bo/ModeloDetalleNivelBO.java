@@ -278,7 +278,8 @@ public class ModeloDetalleNivelBO{
 															Integer paraTipoRiesgo,
 															Integer itemConcepto,
 															Integer categoria,
-															Integer conceptoGeneral) throws BusinessException{
+															Integer conceptoGeneral,
+									   						Integer intTipoModeloContable) throws BusinessException{
 		List<ModeloDetalleNivel> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
@@ -288,6 +289,7 @@ public class ModeloDetalleNivelBO{
 			mapa.put("intItemConcepto", itemConcepto);
 			mapa.put("intCategoria", categoria);
 			mapa.put("intConceptoGeneral", conceptoGeneral);
+			mapa.put("intTipoModeloContable",intTipoModeloContable);
 			lista = dao.getNumeroCuentaPrestamo(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);
@@ -301,7 +303,8 @@ public class ModeloDetalleNivelBO{
 															Integer periodo,
 															Integer paraTipoRiesgo,
 															Integer itemConcepto,															
-															Integer conceptoGeneral) throws BusinessException{
+															Integer conceptoGeneral,
+									   						Integer intTipoModeloContable) throws BusinessException{
 		List<ModeloDetalleNivel> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
@@ -310,6 +313,7 @@ public class ModeloDetalleNivelBO{
 			mapa.put("intParaTipoRiesgo", paraTipoRiesgo);
 			mapa.put("intItemConcepto", itemConcepto);			
 			mapa.put("intConceptoGeneral", conceptoGeneral);
+			mapa.put("intTipoModeloContable",intTipoModeloContable);
 			lista = dao.getNroCtaPrestamoSinCategoria(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);
@@ -364,4 +368,24 @@ public class ModeloDetalleNivelBO{
 		return lista;
 	}
 
+	//Autor: fyalico / Tarea: Creación / Fecha: 11.09.2014 
+	public String getCuentaPorCobrar(Integer intEmpresa,								   
+									Integer intPeriodo)throws BusinessException
+	{
+		String strEscalar = null;
+		try
+		{	
+			HashMap<String,Object> mapa = new HashMap<String, Object>();			
+			mapa.put("intEmpresa", intEmpresa);
+			mapa.put("intPeriodo", intPeriodo);			
+			strEscalar = dao.getCuentaPorCobrar(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return strEscalar;
+	}
+ 
+	 
 }

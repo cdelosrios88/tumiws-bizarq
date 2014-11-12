@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ReclamosDevolucionesDaoIbatis">
+
+		<!--Autor: Rodolfo Villarreal / Tarea: Creación / Fecha: 08.08.2014 /-->
+	
+	<typeAlias type="pe.com.tumi.contabilidad.reclamosDevoluciones.domain.ReclamosDevoluciones" alias="ReclamosDevoluciones"/>
+ 	<typeAlias type="pe.com.tumi.contabilidad.reclamosDevoluciones.domain.ReclamosDevolucionesId" alias="ReclamosDevolucionesId"/>
+ 	
+ 	<resultMap id="resListParametro" class="ReclamosDevoluciones" >
+	     <result property="intIdMaestro"      		column="pTABL_IDMAESTRO_N" />
+	     <result property="intIdDetalle" 			column="pTABL_IDDETALLE_N" />
+	     <result property="strDescripcion"      	column="pTABL_DESCRIPCION_V" />
+	     <result property="intEstado"      			column="pTABL_IDESTADO" />
+  	</resultMap>
+  	
+  	<resultMap id="resListaBusqueda" class="ReclamosDevoluciones" >
+	     <result property="id.intPersEmpresa"      				column="pPERS_EMPRESA_N_PK" />
+	     <result property="id.intContItemReclamoDevolucion" 	column="pCONT_ITEMRECLAMODEVOLUCION_N" />
+	     <result property="strDocumentoGeneral"      			column="pPARA_DOCUMENTOGENERAL_N_COD" />
+	     <result property="strReclamoDevolucion"      			column="pPARA_RECLAMODEVOLUCION_N_COD" />
+	     <result property="intPersPersonaAfecto"      			column="pPERS_PERSONAAFECTADO_N_PK" />
+	     <result property="intTipoMoneda" 						column="pPARA_TIPOMONEDA_N_COD" />
+	     <result property="bdRedeMonto"      					column="pREDE_MONTO_N" />
+	     <result property="intRedePlanillaAfectada"      		column="pREDE_PLANILLAAFECTADA_N" />
+	     <result property="tsRedeFechaRegistro"      			column="pREDE_FECHAREGISTRO_D" />
+	     <result property="intPersPersonaUsuario" 				column="pPERS_PERSONAUSUARIO_N_PK" />
+	     <result property="strEstado"      						column="pPARA_ESTADO_DESCRIPCION" />
+	     <result property="intParaEstadoCobroCod"      			column="pPARA_ESTADOCOBRO_N_COD" />
+	     <result property="intParaEstadoPago"      				column="pPARA_ESTADOPAGO_N_COD" />
+	     <result property="strNombreCompleto"      				column="pNOMBRECOMPLETO" />
+	     <result property="strDescripcionEstado"      			column="pESTADOS" />
+	     <result property="strRedeGlosa"      					column="pREDE_GLOSA_V" />
+	     <result property="intReclamoDevolucion" 				column="pPARA_RECLAMODEV" />
+	     <result property="intParaDocumentoGeneral"      		column="pPARA_DOCUMENTO" />
+	     <result property="intRedePlanillaAfectada"      		column="pREDE_PLANILLAAFECTADA_N" />
+	     <result property="intParaTipoCod"      				column="pPARA_TIPO_N_COD" />
+	     <result property="intMaeItemArchivo"      				column="pMAE_ITEMARCHIVO_N" />
+	     <result property="intMaeItemHistorico"      			column="pMAE_ITEMHISTORICO_N" />
+	     <result property="intParaEstadoCod"      				column="pPARA_ESTADO_N_COD" />
+  	</resultMap>
+ 	
+ 	<parameterMap id="parReclamacionesDev" class="ReclamosDevoluciones">
+ 		<parameter property="id.intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContItemReclamoDevolucion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaDocumentoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intReclamoDevolucion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaAfecto"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaAfecto"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intTipoMoneda"						javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="bdRedeMonto"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intRedePlanillaAfectada"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoCod"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intMaeItemArchivo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intMaeItemHistorico"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="strRedeGlosa"						javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+		<parameter property="tsRedeFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaUsuario"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaUsuario"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoCod"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoCobroCod"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoPago"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsRedeFechaEliminacion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaEliminar"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaEliminar"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibroAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibroAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibroAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+ 	</parameterMap>
+ 	
+ 	<parameterMap id="parListParametro" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntEstado" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parListaBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntDocumentoGeneral"			javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="pIntReclamoDev" 				javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	     mode="IN"/>
+   	 <parameter property="ptsFechaRegistro" 			javaType="java.sql.Timestamp"   jdbcType="TIMESTAMP" 	 mode="IN"/>
+   	 <parameter property="pIntEstadoCod" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	     mode="IN"/>
+   	 <parameter property="pIntEstadoCobro"				javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	     mode="IN"/>
+   	 <parameter property="pIntEstadoPAgo"				javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	     mode="IN"/>
+   	</parameterMap>
+ 	
+ 	<procedure id="grabar" parameterMap="parReclamacionesDev">
+		{ call PKG_RECLAMODEVOLUCION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="modificar" parameterMap="parReclamacionesDev" >
+		{ call PKG_RECLAMODEVOLUCION.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaParametro" parameterMap="parListParametro" resultMap="resListParametro">
+		{ call PKG_RECLAMODEVOLUCION.getListParametro(?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaBusqueda" parameterMap="parListaBusqueda" resultMap="resListaBusqueda">
+		{ call PKG_RECLAMODEVOLUCION.getBusqueda(?,?,?,?,?,?,?) }  
+  	</procedure>
+</sqlMap> 

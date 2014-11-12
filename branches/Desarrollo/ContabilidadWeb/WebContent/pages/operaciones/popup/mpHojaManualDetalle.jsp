@@ -10,7 +10,7 @@
 	<!-- Prototipo : PROTOTIPO SELECCIONAR CUENTA MODELO     -->
 	<!-- Fecha     : 17/05/2012               		-->
 
-<rich:modalPanel id="mpHojaManualDetalle" width="780" height="305"
+<rich:modalPanel id="mpHojaManualDetalle" width="780" height="350"
 	resizeable="false" style="background-color:#DEEBF5">
 	<f:facet name="header">
 		<h:panelGrid>
@@ -33,11 +33,92 @@
 	   		<h:panelGrid styleClass="tableCellBorder4">
 	   			<rich:columnGroup>
 	   				<rich:column style="padding-left:-5px">
-	   					<a4j:commandButton value="Grabar" actionListener="#{hojaManualController.addHojaManualDetalle}" 
-	   									reRender="divTblHojaManualDetalle" styleClass="btnEstilos1"
-	   									oncomplete="Richfaces.hideModalPanel('mpHojaManualDetalle')"></a4j:commandButton>
+	   					<a4j:commandButton value="Grabar" actionListener="#{hojaManualController.grabarManualDetalle}" 
+	   									reRender="divTblHojaManualDetalle,msgErrorTipoDocumento,msgErrorTipoNumero,msgErrorTipoNombre,msgErrorTipoSucursal,msgErrorTipoSubSucursal,msgErrorTipoSerieDocumento,msgErrorTipoNumeroDocumento,msgErrorTipoMonedaDocumento,msgErrorTipoOpcionDebeHaber,msgErrorTipoMontoSoles" styleClass="btnEstilos1"
+	   									oncomplete="if(#{hojaManualController.strPlop == '' && hojaManualController.strNumero=='' && hojaManualController.strNombre=='' && hojaManualController.strSucursal=='' && hojaManualController.strSubSucursal=='' && hojaManualController.strSerieDocumento=='' && hojaManualController.strNumeroDocumento=='' && hojaManualController.strMonedaDocumento=='' && hojaManualController.strOpcionDebeHaber=='' && hojaManualController.strMontoSoles==''}){Richfaces.hideModalPanel('mpHojaManualDetalle')}"
+	   									></a4j:commandButton>
 	   					<a4j:commandButton value="Cancelar" styleClass="btnEstilos1"
 	   									oncomplete="Richfaces.hideModalPanel('mpHojaManualDetalle')"></a4j:commandButton>
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoDocumento" value="#{hojaManualController.strPlop}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strPlop}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoNumero" value="#{hojaManualController.strNumero}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strNumero}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoNombre" value="#{hojaManualController.strNombre}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strNombre}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoSucursal" value="#{hojaManualController.strSucursal}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strSucursal}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoSubSucursal" value="#{hojaManualController.strSubSucursal}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strSubSucursal}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoSerieDocumento" value="#{hojaManualController.strSerieDocumento}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strSerieDocumento}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoNumeroDocumento" value="#{hojaManualController.strNumeroDocumento}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strNumeroDocumento}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoMonedaDocumento" value="#{hojaManualController.strMonedaDocumento}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strMonedaDocumento}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoOpcionDebeHaber" value="#{hojaManualController.strOpcionDebeHaber}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strOpcionDebeHaber}"/>	
+	   				</rich:column>
+	   			</rich:columnGroup>
+	   			<rich:columnGroup>
+	   				<rich:column style="text-align: left">
+		   				<h:outputText id="msgErrorTipoMontoSoles" value="#{hojaManualController.strMontoSoles}" 
+							styleClass="msgError"
+							style="font-weight:bold; text-align: left"
+							rendered="#{!hojaManualController.strMontoSoles}"/>	
 	   				</rich:column>
 	   			</rich:columnGroup>
 	   		</h:panelGrid>
@@ -53,8 +134,12 @@
                 			<h:inputText id="txtNumeroCuenta" value="#{hojaManualController.hojaManualDetalle.planCuenta.id.strNumeroCuenta}" disabled="true" size="90"></h:inputText>
                 		</rich:column>
                 		<rich:column>
-                			<a4j:commandButton value="Agregar Cuenta" styleClass="btnEstilos1" reRender="mpSeleccionCuenta"
-                							onclick="searchCuentaContable()" oncomplete="Richfaces.showModalPanel('mpSeleccionCuenta')"></a4j:commandButton>
+                			<a4j:commandButton 	value="Agregar Cuenta"
+                								action="#{hojaManualController.limpiarCuenta}" 
+                								styleClass="btnEstilos1" 
+                								reRender="mpSeleccionCuenta"
+                								onclick="searchCuentaContable()" 
+                								oncomplete="Richfaces.showModalPanel('mpSeleccionCuenta')"></a4j:commandButton>
                 		</rich:column>
                 	</rich:columnGroup>
                 	<rich:columnGroup>
@@ -62,13 +147,15 @@
                 			<h:outputText value="Persona"></h:outputText>
                 		</rich:column>
                 		<rich:column colspan="4">
-                			<h:inputText id="txtFullNamePersona" value="#{hojaManualController.hojaManualDetalle.persona.natural.strNombres} 
-                								#{hojaManualController.hojaManualDetalle.persona.natural.strApellidoPaterno} 
-                								#{hojaManualController.hojaManualDetalle.persona.natural.strApellidoMaterno}" disabled="true" size="90"></h:inputText>
+                			<h:inputText id="txtFullNamePersona" value="#{hojaManualController.hojaManualDetalle.persona.strEtiqueta}" disabled="true" size="90"></h:inputText>
                 		</rich:column>
                 		<rich:column>
-                			<a4j:commandButton value="Agregar Persona" styleClass="btnEstilos1" reRender="mpSeleccionPersona"
-                							onclick="searchPersona()" oncomplete="Richfaces.showModalPanel('mpSeleccionPersona')"></a4j:commandButton>
+                			<a4j:commandButton value="Agregar Persona"
+                							   action="#{hojaManualController.limpiarPersona}" 
+                							   styleClass="btnEstilos1" 
+                							   reRender="mpSeleccionPersona"
+                							   onclick="searchPersona()" 
+                							   oncomplete="Richfaces.showModalPanel('mpSeleccionPersona')"></a4j:commandButton>
                 		</rich:column>
                 	</rich:columnGroup>
                 	<rich:columnGroup>

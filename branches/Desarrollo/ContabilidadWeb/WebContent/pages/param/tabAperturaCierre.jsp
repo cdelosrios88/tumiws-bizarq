@@ -160,7 +160,7 @@
 					</f:facet>
 					<a4j:support event="onRowClick"  
 						actionListener="#{aperturaCierreController.seleccionarRegistro}"
-						reRender="frmAlertaRegistro,contpanelInferiorAperturaApertura,panelBotonesApertura"
+						reRender="frmAlertaRegistro,opPanelInferiorApertura,panelBotonesApertura"
 						oncomplete="if(#{aperturaCierreController.mostrarBtnEliminar}){Richfaces.showModalPanel('pAlertaRegistroApertura')}">
                         	<f:attribute name="item" value="#{item}"/>
                    	</a4j:support>
@@ -193,19 +193,19 @@
 			<h:panelGrid columns="3">
 				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
 					actionListener="#{aperturaCierreController.habilitarPanelInferior}" 
-					reRender="contpanelInferiorAperturaApertura,panelMensajeApertura,panelBotonesApertura" />                     
+					reRender="opPanelInferiorApertura,panelMensajeApertura,panelBotonesApertura" />                     
 			    <a4j:commandButton value="Grabar" styleClass="btnEstilos" style="width:90px"
 			    	action="#{aperturaCierreController.grabar}" 
-			    	reRender="contpanelInferiorAperturaApertura,panelMensajeApertura,panelBotonesApertura,panelTablaCierre"
+			    	reRender="opPanelInferiorApertura,panelMensajeApertura,panelBotonesApertura,panelTablaCierre"
 			    	disabled="#{!aperturaCierreController.habilitarGrabar}"/>       												                 
 			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
 			    	actionListener="#{aperturaCierreController.deshabilitarPanelInferior}" 
-			    	reRender="contpanelInferiorAperturaApertura,panelMensajeApertura,panelBotonesApertura"/>      
+			    	reRender="opPanelInferiorApertura,panelMensajeApertura,panelBotonesApertura"/>      
 			</h:panelGrid>
 		</h:panelGroup>	        	
 		
 		          	
-		<rich:panel id="contpanelInferiorAperturaApertura" style="border:0px;">
+		<a4j:outputPanel id="opPanelInferiorApertura">
 			<rich:panel id="panelInferiorApertura" style="border:1px solid #17356f;" rendered="#{aperturaCierreController.mostrarPanelInferior}">		          	 	
 		    
 		    	<h:panelGrid columns="5">
@@ -287,7 +287,7 @@
 		        	</rich:column>
 		        	<rich:column width="510">
 						<h:inputText size="102" readonly="true" style="background-color: #BFBFBF;" 
-							value="#{aperturaCierreController.cuentaCierreNuevo.strContNumeroCuenta}"
+							value="#{aperturaCierreController.descripcionAgregarCuenta}"
 							disabled="#{aperturaCierreController.deshabilitarNuevo}"/>
 		        	</rich:column>
 		        	<rich:column width="50" style="text-align: right;">
@@ -310,12 +310,9 @@
 			    	<rich:column width="130">
 						<h:outputText value="Detalle de Operación : "/>
 		        	</rich:column>
-		        	<rich:column width="510">
-						<h:inputText size="102" readonly="true"/>
-		        	</rich:column>
 		        	<rich:column width="50" style="text-align: right;">
 	                	<a4j:commandButton styleClass="btnEstilos"
-	                		actionListener="#{aperturaCierreController.abrirPopUpPlanCuenta}"
+	                		actionListener="#{aperturaCierreController.abrirPopUpPlanCuentaDetalleOperacion}"
 	                		disabled="#{aperturaCierreController.deshabilitarNuevo}"
 	                		value="Buscar" 
 	                		reRender="pBuscarCuenta"
@@ -378,6 +375,6 @@
 				<rich:spacer height="4px"/>
 				
 			</rich:panel>
-		</rich:panel>
+		</a4j:outputPanel>
 </h:panelGroup>				
 </h:form>

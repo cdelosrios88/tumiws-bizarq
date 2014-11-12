@@ -2,6 +2,7 @@ package pe.com.tumi.contabilidad.legalizacion.domain;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
+@SuppressWarnings("serial")
 public class PagoLegalizacionId extends TumiDomain{
 
 	private	Integer intPersEmpresa;

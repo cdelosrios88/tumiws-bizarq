@@ -188,4 +188,24 @@ public class ModeloDetalleNivelDaoIbatis extends TumiDaoIbatis implements Modelo
 		}
 		return lista;
 	}
+	
+	//Autor: fyalico / Tarea: Creación / Fecha: 11.09.2014
+	@Override
+	public String getCuentaPorCobrar(Object o)
+			throws DAOException {
+		String escalar = null;
+		try
+		{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".getCuentaPorCobrar", o);
+			m = (HashMap<String, Object>)o;
+			escalar = (String)m.get("strEscalar");
+		}catch(Exception e)
+		{
+			throw new DAOException(e);
+		}
+		return escalar;
+	}
+ 
+
 }	

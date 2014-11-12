@@ -1,9 +1,3 @@
-/* -----------------------------------------------------------------------------------------------------------
-* Modificaciones
-* Motivo                      Fecha            Nombre                      Descripción
-* -----------------------------------------------------------------------------------------------------------
-* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevas variables constantes a la mayorización         
-*/
 package pe.com.tumi.common.util;
 
 import java.text.SimpleDateFormat;
@@ -169,19 +163,74 @@ public class Constante {
 	public static final String PARAM_T_OPCIONDEBEHABER = "181";
 	public static final String PARAM_T_TIPOREGISTROMODELO = "182";
 	public static final String PARAM_T_TIPOESTADOCIERRE = "186";
-	//Inicio: REQ14-004 - bizarq - 17/09/2014
-	public static final String PARAM_T_TIPOESTADOMAYORIZACION = "188";
-	//Fin: REQ14-004 - bizarq - 17/09/2014
 	public static final String PARAM_T_DOCUMENTOGENERAL = "189";
 	public static final String PARAM_T_TIPOOPERACIONANUAL = "190";
 	public static final String PARAM_T_TIPOOPLANTILLAANEXODET = "191";
 	public static final String PARAM_T_TIPOOPLANTILLAGRUPOSUG = "192";
 	public static final String PARAM_T_TIPOOPLANTILLALINEASUG = "193";
 	public static final String PARAM_T_TIPOOPERACIONCONTABLE = "194";
+	//Inicio: REQ14-004 - bizarq - 17/09/2014
+	public static final String PARAM_T_TIPOESTADOMAYORIZACION = "188";
+	//Fin: REQ14-004 - bizarq - 17/09/2014
 	public static final String PARAM_T_OPCIONPERSONABUSQUEDA = "195";
 	public static final String PARAM_T_GRUPORATIOANEXO = "198";
 	public static final String PARAM_T_TIPORATIO = "199";
 	public static final String PARAM_T_UNIDADMEDIDAINDICADOR = "200";
+	
+	// Autor: jbermudez / Tarea: Legalización Libros Contables / 20.08.2014
+	public static final String PARAM_T_TIPOLIBROCONTABLE = "223";
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_CERTIFICADO_LEGALIZACION = 56;
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_DECLARACION_PDT = 58;
+	// Autor: jbermudez / Tarea: Legalización Libros Contables / 02.09.2014
+	public static final Integer PARAM_T_LIBROSELECTRONICOS = 3;
+	
+	// Autor: jchavez / Tarea: Modificación / Fecha: 11.08.2014 /
+	public static final String PARAM_T_ESTADOPAGO = "267";
+
+	//----------------------------------------------------------------------------------------
+	//CONSTANTES PARA LA AUDITORIA
+	//----------------------------------------------------------------------------------------
+		// Tipo de Operación
+		public static final Integer PARAM_T_AUDITORIA_TIPO_UPDATE = 1;
+		public static final Integer PARAM_T_AUDITORIA_TIPO_DELETE = 2;
+		public static final Integer PARAM_T_AUDITORIA_TIPO_INSERT = 3;
+		
+		//Tablas que pasaran a auditoria
+	
+		/*TABLAS Y CAMPOS QUE PASARAN POR AUDITORIA*/
+		// Tabla CON_LIBROLEGALIZACION
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION 								= "CON_LIBROLEGALIZACION";
+		// Campos CON_LIBROLEGALIZACION
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_PERS_EMPRESA_N_PK 			= "PERS_EMPRESA_N_PK";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_PARA_LIBROCONTABLE_N_COD 	= "PARA_LIBROCONTABLE_N_COD";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_CONT_ITEMLIBROLEGALIZACION 	= "CONT_ITEMLIBROLEGALIZACION";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_PERS_EMPRESALEGAL_N_PK 		= "PERS_EMPRESALEGAL_N_PK";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_PERS_PERSONA_N_PK 			= "PERS_PERSONA_N_PK";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_LILE_FECHALEGALIZACION_D 	= "LILE_FECHALEGALIZACION_D";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_LILE_NROCERTIFICADO_N 		= "LILE_NROCERTIFICADO_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_LILE_FOLIOINICIO_N 			= "LILE_FOLIOINICIO_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_LILE_FOLIOFIN_N 				= "LILE_FOLIOFIN_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_PARA_TIPO_N_COD 				= "PARA_TIPO_N_COD";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_MAE_ITEMARCHIVO_N 			= "MAE_ITEMARCHIVO_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROLEGALIZACION_MAE_ITEMHISTORICO_N 			= "MAE_ITEMHISTORICO_N";
+	
+		// Tabla CON_LIBROCONTABLEDETALLE
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE								= "CON_LIBROCONTABLEDETALLE";
+		//Campos CON_LIBROCONTABLEDETALLE
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_PERS_EMPRESA_N_PK 			= "PERS_EMPRESA_N_PK";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_PARA_LIBROCONTABLE_N_COD 		= "PARA_LIBROCONTABLE_N_COD";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_CONT_ITEMLIBROCONTABLEDET_N 	= "CONT_ITEMLIBROCONTABLEDET_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_LICD_PERIODO_N 				= "LICD_PERIODO_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_LICD_FOLIOINICIO_N 			= "LICD_FOLIOINICIO_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_LICD_FOLIOFIN_N 				= "LICD_FOLIOFIN_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_CONT_ITEMLIBROLEGALIZACION 	= "CONT_ITEMLIBROLEGALIZACION";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_PARA_TIPO_N_COD 				= "PARA_TIPO_N_COD";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_MAE_ITEMARCHIVO_N 			= "MAE_ITEMARCHIVO_N";
+		public static final String PARAM_T_AUDITORIA_CON_LIBROCONTABLEDETALLE_MAE_ITEMHISTORICO_N 			= "MAE_ITEMHISTORICO_N";
+	//----------------------------------------------------------------------------------------
+	//FIN CONSTANTES PARA LA AUDITORIA
+	//----------------------------------------------------------------------------------------
+	
 	//----------------------------------------------------------------------------------------
 	//OPCIONES DE PARAMETROS
 	//----------------------------------------------------------------------------------------
@@ -581,6 +630,11 @@ public class Constante {
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_FONDOCAMBIO = 319;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_PLANILLATELECREDITO = 320;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_PAGOLEGALIZACIONLIBROS = 401;
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_NOTACONTABLE = 402;
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_TRIBUTACION = 403;
+	
+	//Descripción Nota Contable
+	public static final String PARAM_T_DOCUMENTOGENERAL_NOTACONTABLEDESCRIPCION = "Nota contable";
 	
 	//PARAM_T_FRECUENCPAGOINT
 	public static final Integer PARAM_T_FRECUENCPAGOINT_DIAS = 1;
@@ -589,6 +643,31 @@ public class Constante {
 	public static final Integer PARAM_T_FRECUENCPAGOINT_BIMESTRAL = 4;
 	public static final Integer PARAM_T_FRECUENCPAGOINT_SEMESTRAL = 5;
 	public static final Integer PARAM_T_FRECUENCPAGOINT_ANUAL = 6;
+	
+	//PARAM_T_TIPOOPERACIONANUAL
+	public static final Integer PARAM_T_TIPOOPERACIONANUAL_CIERRE = 1;
+	public static final Integer PARAM_T_TIPOOPERACIONANUAL_APERTURA = 2;
+	public static final String  PARAM_T_TIPOPERSONA_NATURAL_ROL = "1";
+	//Estado del Pago autor Rodolfo Villarreal Acuña
+	public static final Integer PARAM_T_TIPO_PAGO = 210;
+	public static final Integer PARAM_T_OPCIONPERSONABUSQUEDA_NOMBRE_DNI = 195;
+	// Autor: jchavez / Tarea: Modificación / Fecha: 11.08.2014 /
+	public static final Integer PARAM_T_ESTADOPAGO_PENDIENTE = 1;
+	public static final Integer PARAM_T_ESTADOPAGO_CANCELADO = 2;
+	//Rodolfo Villarreal para adjuntar archivo 11/08/2014
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_RECLAMOS_DEVOLUCIONES = 57;
+	//Estado Pago Autor Rodolfo Villarreal 12/08/2014
+	public static final Integer PARAM_T_TIPO_PAGO_RECLAMO_DEVOLUCION = 267;
+	//Estado Pago Autor Rodolfo Villarreal 15/08/2014
+	public static final Integer PARAM_T_TIPO_SOLICITUD_DE_SINIESTRO = 400;
+	public static final Integer PARAM_T_TIPO_ASEGURADORA_PERSONAL_AFECTADO = 306;
+	public static final Integer PARAM_T_ASEGURADORA = 1;
+	public static final Integer PARAM_T_PERSONAL_AFECTADO = 2;
+	
+	public static final Integer PARAM_T_ASEGURADORA_RAZON_SOCIAL = 4;
+	public static final Integer PARAM_T_ASEGURADORA_RUC = 3;
+	public static final Integer PARAM_T_PERSONAL_AFECTADO_NOMBRE = 1;
+	public static final Integer PARAM_T_PERSONAL_AFECTADO_DNI = 2;
 	
 	//Inicio: REQ14-004 - bizarq - 14/09/2014
 	public static final Integer INT_IDTRANSACCION_MAYORIZACION = 143;

@@ -7,10 +7,13 @@ import javax.servlet.http.HttpSession;
 
 public class FacesContextUtil {
 	//Mensajes
-	public static final String MESSAGE_SUCCESS_ONSAVE = "El registro se se guardó de manera exitosa.";
+	public static final String MESSAGE_SUCCESS_ONSAVE = "El registro se guardó de manera exitosa.";
 	public static final String MESSAGE_ERROR_ONSAVE = "Error no controlado al momento de guardar el registro. Comuníquese con el área de soporte técnico.";
 	public static final String MESSAGE_ERROR_ONSEARCH = "Error no controlado al momento de obtener los registros de búsqueda. Comuníquese con el área de soporte técnico.";
-	
+	public static final String MESSAGE_SUCCESS_MODIFICAR= "El registro se Modifico de manera exitosa";
+	public static final String MESSAGE_SUCCESS_ELIMINAR= "El registro se Elimino de manera exitosa";
+	public static final String MESSAGE_ERROR_CIERRE = "El periodo se encuentra en estado Cerrado no se puede Realizar el Registro de la Nota Contable";
+
 	//Metodos Utilitarios
 	public static final String getRequestParameter(String name) {
 		return (String) FacesContext.getCurrentInstance().getExternalContext()

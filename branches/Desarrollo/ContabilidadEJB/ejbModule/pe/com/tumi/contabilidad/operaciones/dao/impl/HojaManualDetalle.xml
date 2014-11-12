@@ -57,7 +57,7 @@
 	 <parameter property="pIntPersEmpresaHojaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="pIntContPeriodoHoja"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="pIntContCodigoHoja"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="pIntContCodigoHoja"			javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="pIntContItemHoja"				javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parBusqueda" class="java.util.Map">

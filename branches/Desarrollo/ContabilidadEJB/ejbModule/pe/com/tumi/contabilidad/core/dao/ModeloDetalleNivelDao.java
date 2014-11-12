@@ -33,4 +33,7 @@ public interface ModeloDetalleNivelDao extends TumiDao{
 	//jchavez 27.05.2014
 	public List<ModeloDetalleNivelComp> getModeloProvisionRetiro(Object o) throws DAOException;
 	public List<ModeloDetalleNivelComp> getModeloProvRetiroInteres(Object o) throws DAOException;
+	//Autor: fyalico / Tarea: Creación / Fecha: 11.09.2014 
+	public String getCuentaPorCobrar(Object o) throws DAOException;
+	 
 }	

@@ -232,8 +232,8 @@ public class MayorizacionController {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}
 	
-	public String autenticar(){
-		String outcome = null;
+	public boolean autenticar(){
+		boolean outcome = false;
 		Password password = null;
 		strMsgError = null;
 		try {
@@ -245,8 +245,8 @@ public class MayorizacionController {
 			password = permisoFacade.getPasswordPorPkYPass(password);
 			log.info("password: " + password);
 			if(password!=null){
-				cargarValoresIniciales();
-				outcome = "mayorizacion.formulario";
+				//cargarValoresIniciales();
+				outcome = true;
 			}else {
 				strMsgError = "Clave incorrecta. Favor verificar";
 			}
@@ -262,26 +262,30 @@ public class MayorizacionController {
 		String strPeriodo = null;
 		strMsgSuccess = null;
 		strMsgFailed = null;
+		
 		try {
-			isValidProcess = isValidateMayorizadoProcess();
-			if(!isValidProcess){
-				strPeriodo = String.valueOf(CommonUtils.concatPeriodo(libroMayorNuevo.getId().getIntContPeriodoMayor(), libroMayorNuevo.getId().getIntContMesMayor()));
-				libroMayorNuevo.setIntPersEmpresaUsuario(INT_ID_EMPRESA);
-				libroMayorNuevo.setIntPersPersonaUsuario(INT_ID_USER);
-				intReturnResp = mayorizacionFacade.processMayorizacion(libroMayorNuevo, strPeriodo);
-				if(intReturnResp!=null && intReturnResp.equals(Constante.ON_SUCCESS)){
-					libroMayorNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));
-					libroMayorNuevo.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO);
-					mayorizacionFacade.modificarLibroMayor(libroMayorNuevo);
-					strMsgSuccess = "El proceso de mayorización para el periodo " + strPeriodo + " ha sido generado éxitosamente.";
-				}else{
-					libroMayorNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));
-					libroMayorNuevo.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_FALLIDO);
-					mayorizacionFacade.modificarLibroMayor(libroMayorNuevo);
-					strMsgFailed = "El proceso de mayorización para el periodo " + strPeriodo + " falló en ejecución.";
+			if(autenticar()){
+				isValidProcess = isValidateMayorizadoProcess();
+				if(!isValidProcess){
+					strPeriodo = String.valueOf(CommonUtils.concatPeriodo(libroMayorNuevo.getId().getIntContPeriodoMayor(), libroMayorNuevo.getId().getIntContMesMayor()));
+					libroMayorNuevo.setIntPersEmpresaUsuario(INT_ID_EMPRESA);
+					libroMayorNuevo.setIntPersPersonaUsuario(INT_ID_USER);
+					intReturnResp = mayorizacionFacade.processMayorizacion(libroMayorNuevo, strPeriodo);
+					if(intReturnResp!=null && intReturnResp.equals(Constante.ON_SUCCESS)){
+						libroMayorNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));
+						libroMayorNuevo.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO);
+						mayorizacionFacade.modificarLibroMayor(libroMayorNuevo);
+						strMsgSuccess = "El proceso de mayorización para el periodo " + strPeriodo + " ha sido generado éxitosamente.";
+					}else{
+						libroMayorNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));
+						libroMayorNuevo.setIntEstadoCod(Constante.PARAM_T_TIPOESTADOMAYORIZACION_FALLIDO);
+						mayorizacionFacade.modificarLibroMayor(libroMayorNuevo);
+						strMsgFailed = "El proceso de mayorización para el periodo " + strPeriodo + " falló en ejecución.";
+					}
+					buscarMayorizado();
 				}
-				buscarMayorizado();
 			}
+			
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		} 
@@ -297,7 +301,8 @@ public class MayorizacionController {
 			libroMayor = cierreFacade.getLibroMayorPorPk(libroMayorNuevo.getId());
 			if(libroMayor!=null && 
 			(libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_REGISTRADO) || 
-			 libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO) )){
+			 libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO) || 
+			 libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_FALLIDO) )){
 				strErrorValidateMsg = "El proceso a ejecutar existe con el mismo periodo, favor verificar!";
 				return true;
 			}
@@ -319,6 +324,11 @@ public class MayorizacionController {
 			if(libroMayor==null){
 				strErrorValidateMsg = "El Periodo ingresado no puede ser procesado debido a que no se ha procesado el mes anterior";
 				return true;
+			}else {
+				if(!libroMayor.getIntEstadoCod().equals(Constante.PARAM_T_TIPOESTADOMAYORIZACION_PROCESADO)){
+					strErrorValidateMsg = "El Periodo ingresado no puede ser procesado debido a que no se ha procesado el mes anterior";
+					return true;
+				}
 			}
 			//Validar cuentas padre
 			isReturn = (validateBookAccounts(libroMayorNuevo.getId().getIntContPeriodoMayor()));

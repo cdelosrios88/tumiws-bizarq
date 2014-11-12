@@ -163,15 +163,17 @@
 	 <parameter property="intItemConcepto"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
 	 <parameter property="intCategoria"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
 	 <parameter property="intConceptoGeneral"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	  <parameter property = "intTipoModeloContable"  javaType="java.lang.Integer" 	jdbcType="NUMERIC"       mode="IN"/>
   </parameterMap>
   
-      <parameterMap id="parPrestamoInteresSC" class="java.util.Map">
+   <parameterMap id="parPrestamoInteresSC" class="java.util.Map">
    	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
 	 <parameter property="intEmpresa"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
 	 <parameter property="intPeriodo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
 	 <parameter property="intParaTipoRiesgo"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
 	 <parameter property="intItemConcepto"			javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>	 
 	 <parameter property="intConceptoGeneral"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property = "intTipoModeloContable"  javaType="java.lang.Integer" 	jdbcType="NUMERIC"       mode="IN"/>
   </parameterMap>
   
   <!-- Agregado 27.05.2014 jchavez -->
@@ -190,6 +192,8 @@
 	 <parameter property="intPeriodoCuenta"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>       
   <!-- Fin agregado 27.05.2014 -->
+   
+    
    
   <procedure id="grabar" parameterMap="parModeloDetalleNivel">
 	{ call PKG_MODELODETALLENIVEL.grabar(?,?,?,?,?,?,?,?,?,?,?) }  
@@ -236,11 +240,11 @@
   </procedure>
    
   <procedure id="getNumeroCuentaPrestamo" parameterMap="parPrestamoInteres" resultMap="resModeloDetalleCobranza">
-	{ call PKG_MODELODETALLENIVEL.getNumeroCuentaPrestamo(?,?,?,?,?,?,?) }
+	{ call PKG_MODELODETALLENIVEL.getNumeroCuentaPrestamo(?,?,?,?,?,?,?,?) }
   </procedure>  
   
-    <procedure id="getNroCtaPrestamoSinCategoria" parameterMap="parPrestamoInteresSC" resultMap="resModeloDetalleCobranza">
-	{ call PKG_MODELODETALLENIVEL.getNroCtaPrestamoSinCategoria(?,?,?,?,?,?) }
+  <procedure id="getNroCtaPrestamoSinCategoria" parameterMap="parPrestamoInteresSC" resultMap="resModeloDetalleCobranza">
+	{ call PKG_MODELODETALLENIVEL.getNroCtaPrestamoSinCategoria(?,?,?,?,?,?,?) }
   </procedure>  
   <!-- Agregado 27.05.2014 jchavez -->
   <procedure id="getModeloProvisionRetiro" parameterMap="parPorPeriodo" resultMap="resModeloDetalleNivelCampoAUsar">
@@ -251,4 +255,9 @@
 	{ call PKG_MODELODETALLENIVEL.getModeloProvRetiroInteres(?,?,?,?,?) }
   </procedure>
   <!-- Fin 27.05.2014 -->
+<!--   Autor: fyalico / Tarea: Creación / Fecha: 11.09.2014 -->
+  <procedure id="getCuentaPorCobrar" parameterMap="parCuentaPorPagar">
+  	{call PKG_MODELODETALLENIVEL.getCuentaPorCobrar(?,?,?)}
+  </procedure>
+ 
 </sqlMap>  

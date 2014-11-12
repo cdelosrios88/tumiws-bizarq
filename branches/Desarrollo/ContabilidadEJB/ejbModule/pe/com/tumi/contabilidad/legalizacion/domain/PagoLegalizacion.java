@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
+@SuppressWarnings("serial")
 public class PagoLegalizacion extends TumiDomain{
 
 	private PagoLegalizacionId id;

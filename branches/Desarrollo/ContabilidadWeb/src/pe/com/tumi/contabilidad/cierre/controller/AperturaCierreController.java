@@ -49,7 +49,7 @@ public class AperturaCierreController {
 	private String 	mensajeOperacion;
 	private String strCuentaContableFiltro;
 	private Integer intFiltroPlanCuenta;
-	private final int cantidadAñosLista = 4;
+	private final int cantidadAñosLista = 6;
 	
 	//popup plan de cuenta
 	private Integer intTipoBusquedaPlanCuenta;
@@ -66,6 +66,7 @@ public class AperturaCierreController {
 	private boolean habilitarAperturarOperaciones;
 	private boolean habilitarTextoPlanCuenta;
 	
+	private String 	descripcionAgregarCuenta;
 	
 	
 	public AperturaCierreController(){
@@ -88,7 +89,7 @@ public class AperturaCierreController {
 			listaPlanCuenta = new ArrayList<PlanCuenta>();
 			listaCuentaCierreDetalle = new ArrayList<CuentaCierreDetalle>();
 			strCuentaContableFiltro = "";
-			
+			descripcionAgregarCuenta = "";
 			planCuentaFacade = (PlanCuentaFacadeLocal) EJBFactory.getLocal(PlanCuentaFacadeLocal.class);
 			cierreFacade = (CierreFacadeLocal) EJBFactory.getLocal(CierreFacadeLocal.class);
 			loginFacade = (LoginFacadeRemote) EJBFactory.getRemote(LoginFacadeRemote.class);
@@ -103,6 +104,7 @@ public class AperturaCierreController {
 	private void cargarListaAnios(){
 		listaAnios = new ArrayList<Tabla>();
 		Calendar cal=Calendar.getInstance();
+		cal.add(Calendar.YEAR, -1);
 		Tabla tabla = null;
 		for(int i=0;i<cantidadAñosLista;i++){
 			tabla = new Tabla();
@@ -127,6 +129,7 @@ public class AperturaCierreController {
 			deshabilitarNuevo = Boolean.FALSE;			
 			mostrarMensajeError = Boolean.FALSE;
 			mostrarMensajeExito = Boolean.FALSE;
+			descripcionAgregarCuenta = "";
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -139,6 +142,7 @@ public class AperturaCierreController {
 		mostrarMensajeError = Boolean.FALSE;
 		mostrarMensajeExito = Boolean.FALSE;
 		habilitarGrabar = Boolean.FALSE;
+		descripcionAgregarCuenta = "";
 	}
 	
 	
@@ -211,6 +215,7 @@ public class AperturaCierreController {
 		}
 		cuentaCierreNuevo.setListaCuentaCierreDetalle(lista);
 		listaCuentaCierreDetalle = lista;
+		descripcionAgregarCuenta = cuentaCierreNuevo.getIntContPeriodoCuenta()+" - "+cuentaCierreNuevo.getStrContNumeroCuenta()+" - "+planCuenta.getStrDescripcion();
 	}
 	
 	public void buscarPlanCuenta(){
@@ -303,9 +308,33 @@ public class AperturaCierreController {
 			intTipoBusquedaPlanCuenta = 0;
 			planCuentaFiltro = new PlanCuenta();
 			planCuentaFiltro.setId(new PlanCuentaId());
+			planCuentaFiltro.getId().setIntPeriodoCuenta(cuentaCierreNuevo.getId().getIntContPeriodoCierre());
 			listaPlanCuenta = planCuentaFacade.getListaPlanCuentaBusqueda(planCuentaFiltro);
 			habilitarTextoPlanCuenta = Boolean.FALSE;
-			planCuentaFiltro.getId().setIntPeriodoCuenta(-1);
+			
+			
+			intTipoAgregarPlanCuenta = (Integer)event.getComponent().getAttributes().get(Constante.TIPOAGREGARPLANCUENTA);
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	public void abrirPopUpPlanCuentaDetalleOperacion(ActionEvent event){
+		try{
+			intTipoBusquedaPlanCuenta = 0;
+			planCuentaFiltro = new PlanCuenta();
+			planCuentaFiltro.setId(new PlanCuentaId());
+			//jchavez 03.07.2014
+			if (cuentaCierreNuevo.getId().getIntParaTipoCierre().equals(Constante.PARAM_T_TIPOOPERACIONANUAL_CIERRE)) {
+				planCuentaFiltro.getId().setIntPeriodoCuenta(cuentaCierreNuevo.getId().getIntContPeriodoCierre());
+			}
+			if (cuentaCierreNuevo.getId().getIntParaTipoCierre().equals(Constante.PARAM_T_TIPOOPERACIONANUAL_APERTURA)) {
+				planCuentaFiltro.getId().setIntPeriodoCuenta(cuentaCierreNuevo.getId().getIntContPeriodoCierre()-1);
+			}
+			listaPlanCuenta = planCuentaFacade.getListaPlanCuentaBusqueda(planCuentaFiltro);
+			habilitarTextoPlanCuenta = Boolean.FALSE;
+			
+			
 			intTipoAgregarPlanCuenta = (Integer)event.getComponent().getAttributes().get(Constante.TIPOAGREGARPLANCUENTA);
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
@@ -353,7 +382,7 @@ public class AperturaCierreController {
 					cuentaCierreNuevo.setIntPersEmpresaCuenta(planCuenta.getId().getIntEmpresaCuentaPk());
 					cuentaCierreNuevo.setIntContPeriodoCuenta(planCuenta.getId().getIntPeriodoCuenta());
 					cuentaCierreNuevo.setStrContNumeroCuenta(planCuenta.getId().getStrNumeroCuenta());	
-					
+					descripcionAgregarCuenta = cuentaCierreNuevo.getIntContPeriodoCuenta()+" - "+cuentaCierreNuevo.getStrContNumeroCuenta()+" - "+planCuenta.getStrDescripcion();
 				}else if(intTipoAgregarPlanCuenta.equals(Constante.TIPOAGREGARPLANCUENTA_CIERRECUENTADETALLE)){
 					CuentaCierreDetalle cuentaCierreDetalle = new CuentaCierreDetalle();
 					cuentaCierreDetalle.setIntPersEmpresaCuenta(planCuenta.getId().getIntEmpresaCuentaPk());
@@ -549,5 +578,11 @@ public class AperturaCierreController {
 	}
 	public void setRegistroSeleccionado(CuentaCierre registroSeleccionado) {
 		this.registroSeleccionado = registroSeleccionado;
+	}
+	public String getDescripcionAgregarCuenta() {
+		return descripcionAgregarCuenta;
+	}
+	public void setDescripcionAgregarCuenta(String descripcionAgregarCuenta) {
+		this.descripcionAgregarCuenta = descripcionAgregarCuenta;
 	}
 }

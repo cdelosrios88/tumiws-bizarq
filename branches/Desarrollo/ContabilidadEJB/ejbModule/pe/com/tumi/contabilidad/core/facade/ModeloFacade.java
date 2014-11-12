@@ -328,10 +328,11 @@ public class ModeloFacade extends TumiFacade implements ModeloFacadeRemote, Mode
 										   									Integer paraTipoRiesgo,
 										   									Integer itemConcepto,
 										   									Integer categoria,
-										   									Integer conceptoGeneral) throws BusinessException{
+										   									Integer conceptoGeneral,
+										   									Integer intTipoModeloContable) throws BusinessException{
     	List<ModeloDetalleNivel> lista = null;
    		try{
-   			lista = boModeloDetalleNivel.getNumeroCuentaPrestamo(empresa,periodo,paraTipoRiesgo,itemConcepto,categoria,conceptoGeneral);
+   			lista = boModeloDetalleNivel.getNumeroCuentaPrestamo(empresa,periodo,paraTipoRiesgo,itemConcepto,categoria,conceptoGeneral,intTipoModeloContable);
    		}catch(BusinessException e){
    			throw e;
    		}catch(Exception e){
@@ -346,10 +347,11 @@ public class ModeloFacade extends TumiFacade implements ModeloFacadeRemote, Mode
 										   						Integer periodo,
 										   						Integer paraTipoRiesgo,
 										   						Integer itemConcepto,
-										   						Integer conceptoGeneral) throws BusinessException{
+										   						Integer conceptoGeneral,
+										   						Integer intTipoModeloContable) throws BusinessException{
     	List<ModeloDetalleNivel> lista = null;
    		try{
-   			lista = boModeloDetalleNivel.getNroCtaPrestamoSinCategoria(empresa,periodo,paraTipoRiesgo,itemConcepto,conceptoGeneral);
+   			lista = boModeloDetalleNivel.getNroCtaPrestamoSinCategoria(empresa,periodo,paraTipoRiesgo,itemConcepto,conceptoGeneral,intTipoModeloContable);
    		}catch(BusinessException e){
    			throw e;
    		}catch(Exception e){
@@ -395,6 +397,21 @@ public class ModeloFacade extends TumiFacade implements ModeloFacadeRemote, Mode
    		return lista;
 	}
 
+	//Autor: fyalico / Tarea: Creación / Fecha: 11.09.2014 
+	public String getCuentaPorCobrar(Integer intEmpresa,								   
+									Integer intPeriodo)throws BusinessException
+			{
+				String str = null;
+		   		try{
+		   			str = boModeloDetalleNivel.getCuentaPorCobrar(intEmpresa,
+		   													intPeriodo);
+		   		}catch(BusinessException e){
+		   			throw e;
+		   		}catch(Exception e){
+		   			throw new BusinessException(e);
+		   		}
+		   		return str;
+			}	 
 }
 
 

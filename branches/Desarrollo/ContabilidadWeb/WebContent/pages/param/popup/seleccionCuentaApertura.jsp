@@ -31,7 +31,8 @@
            			</rich:column>
            			<rich:column width="80">
            				<h:selectOneMenu style="width: 80px;" 
-           					value="#{aperturaCierreController.planCuentaFiltro.id.intPeriodoCuenta}">
+           					value="#{aperturaCierreController.planCuentaFiltro.id.intPeriodoCuenta}"
+           					disabled="true">
            					<f:selectItem itemValue="-1" itemLabel="Todos"/>
            					<tumih:selectItems var="sel"
 								value="#{aperturaCierreController.listaAnios}" 
@@ -93,7 +94,7 @@
 								<f:selectItem itemValue="#{rowKey}"/>
 								<a4j:support event="onclick"
 									actionListener="#{aperturaCierreController.seleccionarPlanCuenta}" 
-									reRender="colTablaCuentaCierreDetalle,panelMensajeApertura" 
+									reRender="colTablaCuentaCierreDetalle,panelMensajeApertura,panelInferiorApertura" 
 									ajaxSingle="true" 
 									oncomplete="Richfaces.hideModalPanel('pBuscarCuenta')">
 									<f:attribute name="item" value="#{item}"/>
