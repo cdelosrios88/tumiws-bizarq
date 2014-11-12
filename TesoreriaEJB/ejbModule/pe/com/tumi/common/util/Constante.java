@@ -1,10 +1,3 @@
-/* -----------------------------------------------------------------------------------------------------------
-* Modificaciones
-* Motivo                      Fecha            Nombre                      Descripción
-* -----------------------------------------------------------------------------------------------------------
-* REQ14-005       			  20/10/2014       Christian De los Ríos       Se agregaron constantes.        
-* REQ14-006       			  28/10/2014       Christian De los Ríos       Se agregaron constantes.
-*/
 package pe.com.tumi.common.util;
 
 import java.math.BigDecimal;
@@ -427,7 +420,10 @@ public class Constante {
 	//jchavez 08.07.2014
 	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_CHEQUE = 55;
 	//Fin agregado por cdelosrios, 03/11/2013
-	
+	//JCHAVEZ 04.11.2014
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_LETRADECAMBIO = 60;
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_NOTADECREDITO = 61;
+	public static final Integer PARAM_T_TIPOARCHIVOADJUNTO_NOTADEDEBITO = 62;
 	//PARAM_T_TIPODOCUMENTO
 	public static final String PARAM_T_TIPODOCUMENTO_DNI = "1";
 	public static final String PARAM_T_TIPODOCUMENTO_PASAPORTE = "2";
@@ -558,7 +554,9 @@ public class Constante {
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_INGRESODECAJA = 324;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_PAGOLEGALIZACIONLIBROS = 401;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_REMUNERACION = 607;
-	
+	//JCHAVEZ 27.10.2014
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_PERCEPCION = 310;
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_DETRACCION = 311;
 	
 	//PARAM_T_OPCIONPERSONABUSQUEDA
 	public static final Integer PARAM_T_OPCIONPERSONABUSQ_NOMBRE = 1;
@@ -593,6 +591,7 @@ public class Constante {
 	//PARAM_T_ESTADOPAGO
 	public static final Integer PARAM_T_ESTADOPAGO_PENDIENTE = 1;
 	public static final Integer PARAM_T_ESTADOPAGO_CANCELADO = 2;
+	public static final Integer PARAM_T_ESTADOPAGO_CANJEADO = 3;
 	
 	//FILTRO MOVIMIENTO
 	public static final Integer FILTROMOVIMIENTO_USUARIO = 1;
@@ -709,7 +708,12 @@ public class Constante {
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_CANCELACIONADELANTOORDENCOMPRA = 504;
 	//JCHAVEZ 10.10.2014
 	public static final Integer PARAM_T_TIPOMODELOCONTABLE_CANCELACIONGARANTIAORDENCOMPRA = 512;
-		
+	//JCHAVEZ 27.10.2014
+	public static final Integer PARAM_T_MODELOCONTABLE_DOCUMENTOSUNAT = 514;
+	public static final Integer PARAM_T_MODELOCONTABLE_LETRADECAMBIO = 507;
+	public static final Integer PARAM_T_MODELOCONTABLE_NOTACREDITO = 509;
+	public static final Integer PARAM_T_MODELOCONTABLE_NOTADEBITO = 513;
+	
 	//PARAM_T_TIPOCAMBIO
 	public static final Integer PARAM_T_TIPOCAMBIO_BANCARIO = 1;
 	public static final Integer PARAM_T_TIPOCAMBIO_PARALELO = 2;
@@ -1046,6 +1050,18 @@ public class Constante {
 //	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_ORCD_MONTOINGRESADO_N = "ORCD_MONTOINGRESADO_N";
 //	public static final String PARAM_T_AUDITORIA_TES_ORDENCOMPRADOC_COLUMA_PARA_ESTADO_N_COD = "PARA_ESTADO_N_COD";
 	
+	//JCHAVEZ 03.10.2014
+	public static final Integer PARAM_T_INDICADORLETRAS_SINLETRAS = 0;
+	public static final Integer PARAM_T_INDICADORLETRAS_CONLETRAS = 1;
+	
+	public static final String PARAM_T_MODELOCONTABLE_DOCUMENTOSUNAT_INDICADORIGV = "DOSU_INDICADORIGV_N";
+	public static final String PARAM_T_MODELOCONTABLE_DOCUMENTOSUNAT_TIPOREQUISICION = "Para_TipoRequisicion_n_cod";
+	public static final String PARAM_T_MODELOCONTABLE_DOCUMENTOSUNAT_TIPOCPTODOCSUNAT = "Para_tipocptodocsunat_n_cod";
+	public static final String PARAM_T_MODELOCONTABLE_DOCUMENTOSUNAT_TIPOCOMPROBANTE = "Para_TipoComprobante_n_cod";
+	
+	public static final String PARAM_T_MODELOCONTABLE_LETRADECAMBIO_TIPOREQUISICION = "Para_TipoRequisicion_n_cod";
+	public static final String PARAM_T_MODELOCONTABLE_LETRADECAMBIO_TIPOCOMPROBANTE = "Para_TipoComprobante_n_cod";
+	
 	//Inicio: REQ14-005 - bizarq - 20/10/2014
 	public static final String STR_EMPTY = "";
 	public static final Integer INT_IDTRANSACCION_CIERRE_SALDOCAJA = 211;
@@ -1066,7 +1082,6 @@ public class Constante {
 	public static final int INT_NINE = 9;
 	public static final int INT_TEN = 10;
 	//Fin: REQ14-005 - bizarq - 20/10/2014
-	
 	//Inicio: REQ14-006 - bizarq - 28/10/2014
 	public static final String STR_COMMA = ",";
 	public static final Integer INT_EST_CONCILIACION_REGISTRADO = 1;
@@ -1079,4 +1094,10 @@ public class Constante {
 	
 	public static final Integer PARAM_TRANSACCION_CONCILIACION_BANCARIA = 189;
 	//Fin: REQ14-006 - bizarq - 28/10/2014
+	
+	//JCHAVEZ 11.11.2014
+	public static final Integer INT_AFECTOIGV = 1;
+	public static final Integer INT_INAFECTOIGV = 2;
+	public static final Integer PARAM_T_INDICADORIGV_GENERA = 1;
+	public static final Integer PARAM_T_INDICADORIGV_NOGENERA = 0;
 }

@@ -886,15 +886,17 @@ public class EgresoService {
 					EgresoDetalleInterfaz eDI = new EgresoDetalleInterfaz();
 					eDI.setIntParaDocumentoGeneral(intTipoDocumento);//Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
 					eDI.setStrNroDocumento(""+ordCmpDoc.getId().getIntItemOrdenCompraDocumento());
-					BigDecimal bdAcumulado = BigDecimal.ZERO;
+//					BigDecimal bdAcumulado = BigDecimal.ZERO;
 					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
 						if (ordCmpDet.getId().getIntPersEmpresa().equals(ordCmpDoc.getId().getIntPersEmpresa())
 							&& ordCmpDet.getId().getIntItemOrdenCompra().equals(ordCmpDoc.getId().getIntItemOrdenCompra())) {
-							bdAcumulado = bdAcumulado.add(ordCmpDet.getBdPrecioTotal());
+//							bdAcumulado = bdAcumulado.add(ordCmpDet.getBdPrecioTotal());
 							eDI.setIntTipoMoneda(ordCmpDet.getIntParaTipoMoneda());
+							break;
 						}
 					}
-					eDI.setBdMonto(bdAcumulado);
+//					eDI.setBdMonto(bdAcumulado);
+					eDI.setBdMonto(ordCmpDoc.getBdMontoDocumento());
 					eDI.setBdSubTotal(ordCmpDoc.getBdMontoDocumento());
 					eDI.setSucursal(empresaFacade.getSucursalPorId(ordCmpDoc.getIntSucuIdSucursal()));
 					for(Subsucursal subsucursal : eDI.getSucursal().getListaSubSucursal()){
@@ -937,6 +939,20 @@ public class EgresoService {
 				log.info(libroDiarioDetalle);
 			}
 
+//			egreso = egresoFacade.grabarEgresoParaGiroPrestamo(egreso);
+//
+//			if (listaEgresoDetalleInterfaz!=null && !listaEgresoDetalleInterfaz.isEmpty()) {
+//				for(EgresoDetalleInterfaz eDI : listaEgresoDetalleInterfaz){
+//					if(!eDI.isEsDiferencial()){
+//						OrdenCompra ordCmp = eDI.getOrdenCompra();
+//						for (OrdenCompraDocumento o : ordCmp.getListaOrdenCompraDocumento()) {
+//							o.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
+//							o.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
+//							boOrdenCompraDocumento.modificar(o);
+//						}						
+//					}
+//				}
+//			}
 			egreso = egresoFacade.grabarEgresoParaGiroPrestamo(egreso);
 
 			if (listaEgresoDetalleInterfaz!=null && !listaEgresoDetalleInterfaz.isEmpty()) {
@@ -944,6 +960,11 @@ public class EgresoService {
 					if(!eDI.isEsDiferencial()){
 						OrdenCompra ordCmp = eDI.getOrdenCompra();
 						for (OrdenCompraDocumento o : ordCmp.getListaOrdenCompraDocumento()) {
+							//Autor: jchavez / Tarea: nuevos campos a modificar tras egreso / Fecha: 22.10.2014
+							o.setBdMontoPagado(egreso.getBdMontoTotal());
+							o.setIntParaEstadoPago(Constante.PARAM_T_ESTADOPAGO_CANCELADO);
+							o.setBdMontoSaldo(o.getBdMontoPagado().subtract(o.getBdMontoIngresado()));
+							//Fin jchavez - 22.10.2014
 							o.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
 							o.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
 							boOrdenCompraDocumento.modificar(o);
@@ -1282,10 +1303,10 @@ public class EgresoService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
+	public Egreso grabarGiroOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroTransferencia, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
 		try{
 			EgresoFacadeLocal egresoFacade = (EgresoFacadeLocal) EJBFactory.getLocal(EgresoFacadeLocal.class);
-			Egreso egreso = generarEgresoOrdenCompraDocumentoPorTesoreria(listaEgresoDetalleInterfaz, bancoCuenta, usuario, intParaTipoDocumento, intTipoDocumentoValidar);
+			Egreso egreso = generarEgresoOrdenCompraDocumentoPorTesoreria(listaEgresoDetalleInterfaz, bancoCuenta, usuario, intNroTransferencia, intParaTipoDocumento, intTipoDocumentoValidar);
 			
 			log.info(egreso);
 			for(EgresoDetalle egresoDetalle : egreso.getListaEgresoDetalle()){
@@ -1297,12 +1318,17 @@ public class EgresoService {
 			}
 
 			egreso = egresoFacade.grabarEgresoParaGiroPrestamo(egreso);
-
+			
 			if (listaEgresoDetalleInterfaz!=null && !listaEgresoDetalleInterfaz.isEmpty()) {
 				for(EgresoDetalleInterfaz eDI : listaEgresoDetalleInterfaz){
 					if(!eDI.isEsDiferencial()){
 						OrdenCompra ordCmp = eDI.getOrdenCompra();
 						for (OrdenCompraDocumento o : ordCmp.getListaOrdenCompraDocumento()) {
+							//Autor: jchavez / Tarea: nuevos campos a modificar tras egreso / Fecha: 22.10.2014
+							o.setBdMontoPagado(egreso.getBdMontoTotal());
+							o.setIntParaEstadoPago(Constante.PARAM_T_ESTADOPAGO_CANCELADO);
+							o.setBdMontoSaldo(o.getBdMontoPagado().subtract(o.getBdMontoIngresado()));
+							//Fin jchavez - 22.10.2014
 							o.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
 							o.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
 							boOrdenCompraDocumento.modificar(o);
@@ -1310,6 +1336,19 @@ public class EgresoService {
 					}
 				}
 			}
+//			
+//			if (listaEgresoDetalleInterfaz!=null && !listaEgresoDetalleInterfaz.isEmpty()) {
+//				for(EgresoDetalleInterfaz eDI : listaEgresoDetalleInterfaz){
+//					if(!eDI.isEsDiferencial()){
+//						OrdenCompra ordCmp = eDI.getOrdenCompra();
+//						for (OrdenCompraDocumento o : ordCmp.getListaOrdenCompraDocumento()) {
+//							o.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
+//							o.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
+//							boOrdenCompraDocumento.modificar(o);
+//						}						
+//					}
+//				}
+//			}
 			return egreso;
 		}catch(Exception e){
 			throw new BusinessException(e);
@@ -1327,7 +1366,7 @@ public class EgresoService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public Egreso generarEgresoOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
+	public Egreso generarEgresoOrdenCompraDocumentoPorTesoreria(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroTransferencia, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException{
 		Egreso egreso = new Egreso();
 		try{
 			PlanCuentaFacadeRemote planCuentaFacade = (PlanCuentaFacadeRemote)EJBFactory.getRemote(PlanCuentaFacadeRemote.class);
@@ -1347,7 +1386,7 @@ public class EgresoService {
 			egreso.getId().setIntPersEmpresaEgreso(intIdEmpresa);
 			egreso.setIntParaTipoOperacion(Constante.PARAM_T_TIPODEOPERACION_EGRESO);
 			
-			egreso.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION);
+			egreso.setIntParaDocumentoGeneral(intTipoDocumentoValidar);
 			egreso.setIntItemPeriodoEgreso(obtenerPeriodoActual());
 			egreso.setIntItemEgreso(null);
 			egreso.setIntSucuIdSucursal(usuario.getSucursal().getId().getIntIdSucursal());
@@ -1376,7 +1415,7 @@ public class EgresoService {
 			egreso.setIntItemBancoCuentaCheque(null);
 			egreso.setIntNumeroPlanilla(null);
 			egreso.setIntNumeroCheque(null);
-			egreso.setIntNumeroTransferencia(null);
+			egreso.setIntNumeroTransferencia(intNroTransferencia);
 			egreso.setTsFechaPagoDiferido(null);
 			egreso.setIntPersEmpresaGirado(intIdEmpresa);
 			egreso.setIntPersPersonaGirado(proveedor.getIntIdPersona());
@@ -1586,6 +1625,11 @@ public class EgresoService {
 					if(!eDI.isEsDiferencial()){
 						OrdenCompra ordCmp = eDI.getOrdenCompra();
 						for (OrdenCompraDocumento o : ordCmp.getListaOrdenCompraDocumento()) {
+							//Autor: jchavez / Tarea: nuevos campos a modificar tras egreso / Fecha: 22.10.2014
+							o.setBdMontoPagado(egreso.getBdMontoTotal());
+							o.setIntParaEstadoPago(Constante.PARAM_T_ESTADOPAGO_CANCELADO);
+							o.setBdMontoSaldo(o.getBdMontoPagado().subtract(o.getBdMontoIngresado()));
+							//Fin jchavez - 22.10.2014
 							o.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
 							o.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
 							boOrdenCompraDocumento.modificar(o);
@@ -1619,7 +1663,7 @@ public class EgresoService {
 			egreso.getId().setIntPersEmpresaEgreso(intIdEmpresa);
 			egreso.setIntParaTipoOperacion(Constante.PARAM_T_TIPODEOPERACION_EGRESO);
 			
-			egreso.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION);
+			egreso.setIntParaDocumentoGeneral(intTipoDocumentoValidar);
 			egreso.setIntItemPeriodoEgreso(obtenerPeriodoActual());
 			egreso.setIntItemEgreso(null);
 			egreso.setIntSucuIdSucursal(usuario.getSucursal().getId().getIntIdSucursal());

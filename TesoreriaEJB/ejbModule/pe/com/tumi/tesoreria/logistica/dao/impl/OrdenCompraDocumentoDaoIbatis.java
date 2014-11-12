@@ -51,4 +51,15 @@ public class OrdenCompraDocumentoDaoIbatis extends TumiDaoIbatis implements Orde
 		}
 		return lista;
 	}	
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 22.10.2014
+	public List<OrdenCompraDocumento> getListaPorEgreso(Object o) throws DAOException{
+		List<OrdenCompraDocumento> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaPorEgreso", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="DocumentoSunatOrdenComDocDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatOrdenComDoc" alias="DocumentoSunatOrdenComDoc"/> 
+	
+  <resultMap id="resDocumentoSunatOrdenComDoc" class="DocumentoSunatOrdenComDoc" >
+	<result property="id.intPersEmpresaDocSunatOrden"  	column="pempresadocsunord" />
+	<result property="id.intItemEmpresaDocSunatOrden"   column="pitemempresadocsunord" />
+	<result property="intPersEmpresaOrden"   			column="pempresaorden" />
+	<result property="intItemOrdenCompra"   			column="pitemordencompra" />
+	<result property="intItemOrdenCompraDoc"   			column="pitemordencompradoc" />
+	<result property="intPersEmpresaDocSunat"   		column="pempresadocsunat" />
+	<result property="intItemDocumentoSunat"  			column="pitemdocsun" />
+	<result property="bdMonto"   						column="pmonto" />
+	<result property="intParaEstado"   					column="pestado" />
+	<result property="intItemOrdenCompraDetalle"   		column="pItemOrdenCompraDet" />
+  </resultMap>
+  
+  <parameterMap id="parDocumentoSunatOrdenComDoc" class="DocumentoSunatOrdenComDoc">
+	 <parameter property="id.intPersEmpresaDocSunatOrden"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemEmpresaDocSunatOrden"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaOrden"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemOrdenCompra"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemOrdenCompraDoc"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaDocSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdMonto"							javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaEstado"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemOrdenCompraDetalle"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+  
+  <parameterMap id="parPorPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaDocSunatOrden"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemEmpresaDocSunatOrden"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 26.10.2014 -->
+  <parameterMap id="parPorOrdenCompraDoc" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresaOrden"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompra"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemOrdenCompraDoc"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+  <!-- Fin jchavez - 26.10.2014 -->
+  
+  <procedure id="grabar" parameterMap="parDocumentoSunatOrdenComDoc">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.grabar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="modificar" parameterMap="parDocumentoSunatOrdenComDoc">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.modificar(?,?,?,?,?,?,?,?,?,?) }  
+  </procedure>
+  
+  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDocumentoSunatOrdenComDoc">
+	{ call PKG_DOCUMENTOSUNAT.getListaPorPk(?,?,?) }
+  </procedure>
+  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 26.10.2014 -->
+  <procedure id="getListaPorOrdenCompraDoc" parameterMap="parPorOrdenCompraDoc" resultMap="resDocumentoSunatOrdenComDoc">
+	{ call PKG_DOCUMENTOSUNATORDENCOMDOC.getListaPorOrdenCompraDoc(?,?,?,?) }
+  </procedure>  
+  <!-- Fin jchavez - 26.10.2014 -->
+
+</sqlMap>

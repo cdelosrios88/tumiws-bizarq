@@ -30,6 +30,9 @@
 	<result property="intPersEmpresaCuenta"   		column="pempresacuenta" />
 	<result property="intContPeriodoCuenta"   		column="pperiodocuenta" />
 	<result property="strContNumeroCuenta"   		column="pnumerocuenta" />
+	<!-- Autor: jchavez / Tarea: Creación / Fecha: 20.10.2014-->
+	<result property="intIdPerfil"   				column="pidperfil" />
+	<!-- Fin jchavez - 20.10.2014 -->
   </resultMap>
   
   <!-- Autor: jchavez / Tarea: Creación / Fecha: 02.10.2014-->
@@ -62,7 +65,10 @@
 	 <parameter property="intPersPersonaAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersEmpresaCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intContPeriodoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>	 
+	 <parameter property="strContNumeroCuenta"			javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <!-- Autor: jchavez / Tarea: Creación / Fecha: 20.10.2014-->
+	 <parameter property="intIdPerfil"   				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <!-- Fin jchavez - 20.10.2014 -->	 
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -91,11 +97,11 @@
   <!-- Fin jchavez - 02.10.2014 -->
   
   <procedure id="grabar" parameterMap="parOrdenCompraDetalle">
-	{ call PKG_ORDENCOMPRADETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_ORDENCOMPRADETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parOrdenCompraDetalle" >
-	{ call PKG_ORDENCOMPRADETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_ORDENCOMPRADETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resOrdenCompraDetalle">

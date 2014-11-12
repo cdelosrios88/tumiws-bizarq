@@ -31,6 +31,7 @@
     <result property="intIdsucursal"      		column="pSUCU_IDSUCURSAL_N" />
     <result property="intIdsubsucursal"      	column="pSUDE_IDSUBSUCURSAL_N" />
     <result property="intDocumentogeneralCod"   column="pPARA_DOCUMENTOGENERAL_N_COD" />
+    <result property="intTipocomprobanteCod"   	column="pPARA_TIPOCOMPROBANTE_N_COD" />
   </resultMap>  
   <!-- Fin jchavez - 16.10.2014 -->
   

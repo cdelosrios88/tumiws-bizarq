@@ -8,6 +8,7 @@ import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.tesoreria.logistica.dao.DocumentoSunatDocDao;
 import pe.com.tumi.tesoreria.logistica.dao.impl.DocumentoSunatDocDaoIbatis;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDoc;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDocId;
 
@@ -82,15 +83,15 @@ public class DocumentoSunatDocBO{
 		return lista;
 	}
 	
-	public DocumentoSunatDoc getPorDocumentoSunatYTipoDoc(DocumentoSunatDoc o) throws BusinessException{
+	public DocumentoSunatDoc getPorDocumentoSunatYTipoDoc(DocumentoSunat documentoSunat, Integer intParaTipoDocumentoSunat) throws BusinessException{
 		DocumentoSunatDoc domain = null;
 		List<DocumentoSunatDoc> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intPersEmpresa", 				o.getId().getIntPersEmpresa());
-			mapa.put("intItemDocumentoSunat", 		o.getId().getIntItemDocumentoSunat());
-			mapa.put("intParaTipoDocumentoGeneral",	o.getIntParaTipoDocumentoGeneral());
-			lista = dao.getListaPorPk(mapa);
+			mapa.put("intPersEmpresa", 				documentoSunat.getId().getIntPersEmpresa());
+			mapa.put("intItemDocumentoSunat", 		documentoSunat.getId().getIntItemDocumentoSunat());
+			mapa.put("intParaTipoDocumentoGeneral",	intParaTipoDocumentoSunat);
+			lista = dao.getListaPorDocSunatYTipoDoc(mapa);
 			if(lista!=null){
 				if(lista.size()==1){
 				   domain = lista.get(0);
@@ -99,7 +100,7 @@ public class DocumentoSunatDocBO{
 				}else{
 				   throw new BusinessException("Obtención de mas de un registro coincidente");
 				}
-			}	
+			}
 		}catch(DAOException e){
 			throw new BusinessException(e);
 		}catch(BusinessException e){

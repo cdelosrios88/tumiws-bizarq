@@ -1,69 +1,64 @@
 package pe.com.tumi.tesoreria.logistica.domain;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 import pe.com.tumi.parametro.general.domain.Archivo;
+import pe.com.tumi.parametro.general.domain.TipoCambio;
 import pe.com.tumi.persona.core.domain.Persona;
 
 public class DocumentoSunat extends TumiDomain{
-
+	//BD
 	private DocumentoSunatId id;
-	private Integer intPersEmpresaOrden;
-	private Integer intItemOrdenCompra;
-	private Integer intPersEmpresaRequisicion;
-	private Integer intItemRequisicion;
-	private Timestamp	tsFechaProvision;
-	private Integer intParaDocumentoGeneral;
-	private Integer intParaTipoComprobante;
-	private String 	strSerieDocumento;
-	private String 	strNumeroDocumento;
-	private Date 	dtFechaEmision;
-	private Date 	dtFechaVencimiento;
-	private Date 	dtFechaPago;
-	private Integer intIndicadorInafecto;
-	private Integer intIndicadorIGV;
-	private Integer intIndicadorPercepcion;
-	private Integer intIndicadorLetras;
-	private String	strGlosa;
-	private Integer intParaEstado;
-	private Integer intParaEstadoPago;
-	private Integer intPersEmpresaDocSunatEnlazado;
-	private Integer intItemDocumentoSunatEnlazado;
-	private Integer intPersEmpresaUsuario;
-	private Integer intPersPersonaUsuario;
-	private Timestamp tsFechaAnula;
-	private Integer intPersEmpresaAnula;
-	private Integer intPersPersonaAnula;
-	private Integer intPersEmpresaEgreso;
-	private Integer intItemEgresoGeneral;
-	private Integer intEmpresaLibro;
-	private Integer intPeriodoLibro;
-	private Integer intCodigoLibro;
+	private Integer 	intPersEmpresaOrden;			//PERS_EMPRESAORDEN_N_PK
+	private Integer 	intItemOrdenCompra;				//TESO_ITEMORDENCOMPRA_N
+	private Integer 	intPersEmpresaRequisicion;		//PERS_EMPRESAREQUISICION_N_PK
+	private Integer 	intItemRequisicion;				//TESO_ITEMREQUISICION_N
+	private Timestamp	tsFechaProvision;				//DOSU_FECHAPROVISION_D
+	private Integer 	intParaDocumentoGeneral;		//PARA_DOCUMENTOGENERAL_N_COD
+	private Integer 	intParaTipoComprobante;			//PARA_TIPOCOMPROBANTE_N_COD
+	private String 		strSerieDocumento;				//DOSU_SERIEDOCUMENTO_V
+	private String 		strNumeroDocumento;				//DOSU_NUMERODOC_V
+	private Timestamp 	tsFechaRegistro;				//DOSU_FECHAREGISTRO_D
+	private Date 		dtFechaEmision;					//DOSU_FECHAEMISION_D
+	private Date 		dtFechaVencimiento;				//DOSU_FECHAVENCIMIENTO_D
+	private Date 		dtFechaPago;					//DOSU_FECHAPAGO_D
+	private Integer 	intIndicadorInafecto;			//DOSU_INDICADORINAFECTO_N			
+	private Integer 	intIndicadorIGV;				//DOSU_INDICADORIGV_N			
+	private Integer 	intIndicadorPercepcion;			//DOSU_INDICADORPERCEPCION_N			
+	private Integer 	intIndicadorLetras;				//DOSU_INDICADORLETRAS_N			
+	private String		strGlosa;						//DOSU_GLOSA_V			
+	private Integer 	intParaEstado;					//PARA_ESTADO_N_COD			
+	private Integer 	intParaEstadoPago;				//PARA_ESTADOPAGO_N_COD			
+	private Integer 	intPersEmpresaUsuario;			//PERS_EMPRESAUSUARIO_N_PK
+	private Integer 	intPersPersonaUsuario;			//PERS_PERSONAUSUARIO_N_PK			
+	private Integer 	intSucuIdSucursal;				//SUCU_IDSUCURSAL_N			
+	private Integer 	intSubIdSubsucursal;			//SUDE_IDSUBSUCURSAL_N			
+	private Integer 	intPersEmpresaDocSunatAnula;	//PERS_EMPRESADOCSUNATAN_N_PK	
+	private Integer 	intItemDocumentoSunatAnula;		//TESO_ITEMDOCSUNAN_N
+	private Timestamp 	tsFechaAnula;					//DOSU_FECHAANULA_D
+	private Integer 	intPersEmpresaAnula;			//PERS_EMPRESAANULA_N_PK	
+	private Integer 	intPersPersonaAnula;			//PERS_PERSONAANULA_N_PK
+	private Integer 	intPersEmpresaEgreso;			//PERS_EMPRESAEGRESO_N_PK
+	private Integer 	intItemEgresoGeneral;			//TESO_ITEMEGRESOGENERAL_N	
+	private Integer 	intEmpresaLibro;				//PERS_EMPRESALIBRO_N_PK
+	private Integer 	intPeriodoLibro;				//CONT_PERIODOLIBRO_N
+	private Integer 	intCodigoLibro;					//CONT_CODIGOLIBRO_N
+	private Integer 	intParaTipo;					//PARA_TIPO_N_COD
+	private Integer 	intItemArchivo;					//MAE_ITEMARCHIVO_N
+	private Integer 	intItemHistorico;				//MAE_ITEMHISTORICO_N
+	private Integer 	intPersEmpresaDocSunatEnlazado;	//PERS_EMPRESADOCSUNATREL_N_PK
+	private Integer 	intItemDocumentoSunatEnlazado;	//TESO_ITEMDOCSUNREL_N	
+	private Integer 	intPersEmpresaIngreso;			//PERS_EMPRESAINGRESO_N_PK
+	private Integer 	intItemIngresoGeneral;			//TESO_ITEMINGRESOGENERAL_N
 	
-	//Agregado por cdelosrios, 01/11/2013
-	private Integer 	intParaTipo;
-	private Integer 	intItemArchivo;
-	private Integer 	intItemHistorico;
-	private Archivo		archivoDocumento;
-	//Fin agregado por cdelosrios, 01/11/2013
-	
-	//Agregado por cdelosrios, 12/11/2013
-	private Integer intSucuIdSucursal;
-	private Integer intSubIdSubsucursal;
-	//Fin agregado por cdelosrios, 12/11/2013
-	
-	//Agregado por cdelosrios, 04/01/2013
-	private Timestamp tsFechaRegistro;
-	//Fin agregado por cdelosrios, 04/01/2013
-	
+	//ADICIONALES (cdelosrios - DIC2013 / MAR2014)
+	private Archivo						archivoDocumento;
 	private List<DocumentoSunatDetalle>	listaDocumentoSunatDetalle;
-	private List<DocumentoSunatEgreso>	listaDocumentoSunatEgreso;
-	private List<AdelantoSunat>			listaAdelantoSunat;
 	private List<DocumentoSunat>		listaDocumentoSunatLetra;
 	
 	private DocumentoRequisicion	documentoRequisicion;
@@ -78,16 +73,14 @@ public class DocumentoSunat extends TumiDomain{
 	private DocumentoSunatDetalle	detalleIGV;
 	private DocumentoSunatDetalle	detalleOtros;
 	private DocumentoSunatDetalle	detalleTotal;
-	private DocumentoSunatDetalle	detallePercepcion;
-	private DocumentoSunatDetalle	detalleDetraccion;
 	private DocumentoSunatDetalle	detalleRetencion;
 	private DocumentoSunatDetalle	detalleTotalGeneral;
 	private DocumentoSunatDetalle	detalleLetra;
 	
 	private boolean	seleccionaInafecto;
-	private boolean	seleccionaIGV;
+	private boolean	seleccionaIGVContable;
 	private boolean	seleccionaPercepcion;
-	private boolean	seleccionaLetras;
+//	private boolean	seleccionaLetras;
 	
 	private Date	dtFiltroEmisionDesde;
 	private Date	dtFiltroEmisionHasta;
@@ -98,36 +91,34 @@ public class DocumentoSunat extends TumiDomain{
 	private Integer	intTipoFiltroFecha;
 	private Date	dtFechaDeGiro;
 	
+	private DocumentoSunatDoc	docPercepcion;
+	private DocumentoSunatDoc	docDetraccion;
+	
+	private List<DocumentoSunatOrdenComDoc> listaDocumentoSunatOrdenComDoc;
+	private BigDecimal bdMontoAplicar;
+	
+	private DocumentoSunatDetalle	detalleNotaCredito;
+	private DocumentoSunatDetalle	detalleNotaDebito;
+	
+	private BigDecimal 	bdMontoTotalSinDetraccion;
+	private List<DocumentoSunat> listaDocSunatRelacionadosConLetraDeCambio;
+	private List<DocumentoSunat> listaDocSunatDocRelacionadosConLetraDeCambio;
+	private List<DocumentoSunat> listaDocSunatRelacionadosConNotaCreditoYDebito;
+	private Boolean blnGeneraDetraccion;
+	private Integer rbDocSunatSelected;
+	
+	private List<DocumentoSunat>	listaDocumentoSunatNota;
+	private Boolean blnGeneraDetraccionNota;
+	private BigDecimal bdMontoSaldoTemp;
+	private TipoCambio tipoCambio;
+	
+	//BD
 	public DocumentoSunat(){
 		id = new DocumentoSunatId();
-		listaDocumentoSunatDetalle = new ArrayList<DocumentoSunatDetalle>();
-		listaDocumentoSunatEgreso = new ArrayList<DocumentoSunatEgreso>();
-		listaAdelantoSunat = new ArrayList<AdelantoSunat>();
+		listaDocumentoSunatOrdenComDoc = new ArrayList<DocumentoSunatOrdenComDoc>();
+		listaDocSunatRelacionadosConLetraDeCambio = new ArrayList<DocumentoSunat>();
+		listaDocSunatRelacionadosConNotaCreditoYDebito = new ArrayList<DocumentoSunat>();
 	}
-	
-	public DocumentoSunat(DocumentoSunat otroDocumentoSunat){
-		this.id = otroDocumentoSunat.getId();
-		this.dtFechaEmision = otroDocumentoSunat.getDtFechaEmision();
-		this.strGlosa = otroDocumentoSunat.getStrGlosa();
-		this.intParaTipoComprobante = otroDocumentoSunat.getIntParaTipoComprobante();
-		this.listaDocumentoSunatDetalle = otroDocumentoSunat.getListaDocumentoSunatDetalle();
-		this.detalleSubTotal = otroDocumentoSunat.getDetalleSubTotal();
-		this.detalleDescuento = otroDocumentoSunat.getDetalleDescuento();
-		this.detalleValorVenta = otroDocumentoSunat.getDetalleValorVenta();
-		this.detalleIGV = otroDocumentoSunat.getDetalleIGV();
-		this.detalleOtros = otroDocumentoSunat.getDetalleOtros();
-		this.detalleTotal = otroDocumentoSunat.getDetalleTotal();
-		this.detallePercepcion = otroDocumentoSunat.getDetallePercepcion();
-		this.detalleDetraccion = otroDocumentoSunat.getDetalleDetraccion();
-		this.detalleRetencion = otroDocumentoSunat.getDetalleRetencion();
-		this.detalleTotalGeneral = otroDocumentoSunat.getDetalleTotalGeneral();
-		this.detalleLetra = otroDocumentoSunat.getDetalleLetra();
-		
-		this.seleccionaInafecto = otroDocumentoSunat.isSeleccionaInafecto();
-		this.seleccionaPercepcion = otroDocumentoSunat.isSeleccionaPercepcion();
-		this.ordenCompra = otroDocumentoSunat.getOrdenCompra();
-	}
-	
 	public DocumentoSunatId getId() {
 		return id;
 	}
@@ -187,6 +178,12 @@ public class DocumentoSunat extends TumiDomain{
 	}
 	public void setStrNumeroDocumento(String strNumeroDocumento) {
 		this.strNumeroDocumento = strNumeroDocumento;
+	}
+	public Timestamp getTsFechaRegistro() {
+		return tsFechaRegistro;
+	}
+	public void setTsFechaRegistro(Timestamp tsFechaRegistro) {
+		this.tsFechaRegistro = tsFechaRegistro;
 	}
 	public Date getDtFechaEmision() {
 		return dtFechaEmision;
@@ -248,23 +245,41 @@ public class DocumentoSunat extends TumiDomain{
 	public void setIntParaEstadoPago(Integer intParaEstadoPago) {
 		this.intParaEstadoPago = intParaEstadoPago;
 	}
-	public Integer getIntPersEmpresaDocSunatEnlazado() {
-		return intPersEmpresaDocSunatEnlazado;
-	}
-	public void setIntPersEmpresaDocSunatEnlazado(Integer intPersEmpresaDocSunatEnlazado) {
-		this.intPersEmpresaDocSunatEnlazado = intPersEmpresaDocSunatEnlazado;
-	}
-	public Integer getIntItemDocumentoSunatEnlazado() {
-		return intItemDocumentoSunatEnlazado;
-	}
-	public void setIntItemDocumentoSunatEnlazado(Integer intItemDocumentoSunatEnlazado) {
-		this.intItemDocumentoSunatEnlazado = intItemDocumentoSunatEnlazado;
-	}
 	public Integer getIntPersEmpresaUsuario() {
 		return intPersEmpresaUsuario;
 	}
 	public void setIntPersEmpresaUsuario(Integer intPersEmpresaUsuario) {
 		this.intPersEmpresaUsuario = intPersEmpresaUsuario;
+	}
+	public Integer getIntPersPersonaUsuario() {
+		return intPersPersonaUsuario;
+	}
+	public void setIntPersPersonaUsuario(Integer intPersPersonaUsuario) {
+		this.intPersPersonaUsuario = intPersPersonaUsuario;
+	}
+	public Integer getIntSucuIdSucursal() {
+		return intSucuIdSucursal;
+	}
+	public void setIntSucuIdSucursal(Integer intSucuIdSucursal) {
+		this.intSucuIdSucursal = intSucuIdSucursal;
+	}
+	public Integer getIntSubIdSubsucursal() {
+		return intSubIdSubsucursal;
+	}
+	public void setIntSubIdSubsucursal(Integer intSubIdSubsucursal) {
+		this.intSubIdSubsucursal = intSubIdSubsucursal;
+	}
+	public Integer getIntPersEmpresaDocSunatAnula() {
+		return intPersEmpresaDocSunatAnula;
+	}
+	public void setIntPersEmpresaDocSunatAnula(Integer intPersEmpresaDocSunatAnula) {
+		this.intPersEmpresaDocSunatAnula = intPersEmpresaDocSunatAnula;
+	}
+	public Integer getIntItemDocumentoSunatAnula() {
+		return intItemDocumentoSunatAnula;
+	}
+	public void setIntItemDocumentoSunatAnula(Integer intItemDocumentoSunatAnula) {
+		this.intItemDocumentoSunatAnula = intItemDocumentoSunatAnula;
 	}
 	public Timestamp getTsFechaAnula() {
 		return tsFechaAnula;
@@ -314,7 +329,6 @@ public class DocumentoSunat extends TumiDomain{
 	public void setIntCodigoLibro(Integer intCodigoLibro) {
 		this.intCodigoLibro = intCodigoLibro;
 	}
-	//Agregado por cdelosrios, 01/11/2013
 	public Integer getIntParaTipo() {
 		return intParaTipo;
 	}
@@ -333,62 +347,52 @@ public class DocumentoSunat extends TumiDomain{
 	public void setIntItemHistorico(Integer intItemHistorico) {
 		this.intItemHistorico = intItemHistorico;
 	}
+	public Integer getIntPersEmpresaDocSunatEnlazado() {
+		return intPersEmpresaDocSunatEnlazado;
+	}
+	public void setIntPersEmpresaDocSunatEnlazado(
+			Integer intPersEmpresaDocSunatEnlazado) {
+		this.intPersEmpresaDocSunatEnlazado = intPersEmpresaDocSunatEnlazado;
+	}
+	public Integer getIntItemDocumentoSunatEnlazado() {
+		return intItemDocumentoSunatEnlazado;
+	}
+	public void setIntItemDocumentoSunatEnlazado(
+			Integer intItemDocumentoSunatEnlazado) {
+		this.intItemDocumentoSunatEnlazado = intItemDocumentoSunatEnlazado;
+	}
+	public Integer getIntPersEmpresaIngreso() {
+		return intPersEmpresaIngreso;
+	}
+	public void setIntPersEmpresaIngreso(Integer intPersEmpresaIngreso) {
+		this.intPersEmpresaIngreso = intPersEmpresaIngreso;
+	}
+	public Integer getIntItemIngresoGeneral() {
+		return intItemIngresoGeneral;
+	}
+	public void setIntItemIngresoGeneral(Integer intItemIngresoGeneral) {
+		this.intItemIngresoGeneral = intItemIngresoGeneral;
+	}	
+	//ADICIONALES
 	public Archivo getArchivoDocumento() {
 		return archivoDocumento;
 	}
 	public void setArchivoDocumento(Archivo archivoDocumento) {
 		this.archivoDocumento = archivoDocumento;
 	}
-	//Fin agregado por cdelosrios, 01/11/2013
-	//Agregado por cdelosrios, 12/11/2013
-	public Integer getIntSucuIdSucursal() {
-		return intSucuIdSucursal;
+	public List<DocumentoSunatDetalle> getListaDocumentoSunatDetalle() {
+		return listaDocumentoSunatDetalle;
 	}
-	public void setIntSucuIdSucursal(Integer intSucuIdSucursal) {
-		this.intSucuIdSucursal = intSucuIdSucursal;
+	public void setListaDocumentoSunatDetalle(
+			List<DocumentoSunatDetalle> listaDocumentoSunatDetalle) {
+		this.listaDocumentoSunatDetalle = listaDocumentoSunatDetalle;
 	}
-	public Integer getIntSubIdSubsucursal() {
-		return intSubIdSubsucursal;
+	public List<DocumentoSunat> getListaDocumentoSunatLetra() {
+		return listaDocumentoSunatLetra;
 	}
-	public void setIntSubIdSubsucursal(Integer intSubIdSubsucursal) {
-		this.intSubIdSubsucursal = intSubIdSubsucursal;
-	}
-	//Fin agregado por cdelosrios, 12/11/2013
-	public List<DocumentoSunatEgreso> getListaDocumentoSunatEgreso() {
-		return listaDocumentoSunatEgreso;
-	}
-	public void setListaDocumentoSunatEgreso(List<DocumentoSunatEgreso> listaDocumentoSunatEgreso) {
-		this.listaDocumentoSunatEgreso = listaDocumentoSunatEgreso;
-	}
-	public Integer getIntPersPersonaUsuario() {
-		return intPersPersonaUsuario;
-	}
-	public void setIntPersPersonaUsuario(Integer intPersPersonaUsuario) {
-		this.intPersPersonaUsuario = intPersPersonaUsuario;
-	}
-	public boolean isSeleccionaInafecto() {
-		return seleccionaInafecto;
-	}
-	public void setSeleccionaInafecto(boolean seleccionaInafecto) {
-		this.seleccionaInafecto = seleccionaInafecto;
-	}
-	public boolean isSeleccionaIGV() {
-		return seleccionaIGV;
-	}
-	public void setSeleccionaIGV(boolean seleccionaIGV) {
-		this.seleccionaIGV = seleccionaIGV;
-	}
-	public boolean isSeleccionaPercepcion() {
-		return seleccionaPercepcion;
-	}
-	public void setSeleccionaPercepcion(boolean seleccionaPercepcion) {
-		this.seleccionaPercepcion = seleccionaPercepcion;
-	}
-	public boolean isSeleccionaLetras() {
-		return seleccionaLetras;
-	}
-	public void setSeleccionaLetras(boolean seleccionaLetras) {
-		this.seleccionaLetras = seleccionaLetras;
+	public void setListaDocumentoSunatLetra(
+			List<DocumentoSunat> listaDocumentoSunatLetra) {
+		this.listaDocumentoSunatLetra = listaDocumentoSunatLetra;
 	}
 	public DocumentoRequisicion getDocumentoRequisicion() {
 		return documentoRequisicion;
@@ -408,11 +412,23 @@ public class DocumentoSunat extends TumiDomain{
 	public void setOrdenCompra(OrdenCompra ordenCompra) {
 		this.ordenCompra = ordenCompra;
 	}
-	public List<DocumentoSunatDetalle> getListaDocumentoSunatDetalle() {
-		return listaDocumentoSunatDetalle;
+	public Integer getIntParaMoneda() {
+		return intParaMoneda;
 	}
-	public void setListaDocumentoSunatDetalle(List<DocumentoSunatDetalle> listaDocumentoSunatDetalle) {
-		this.listaDocumentoSunatDetalle = listaDocumentoSunatDetalle;
+	public void setIntParaMoneda(Integer intParaMoneda) {
+		this.intParaMoneda = intParaMoneda;
+	}
+	public Persona getPersonaGirar() {
+		return personaGirar;
+	}
+	public void setPersonaGirar(Persona personaGirar) {
+		this.personaGirar = personaGirar;
+	}
+	public DocumentoSunatDetalle getDetalleSubTotal() {
+		return detalleSubTotal;
+	}
+	public void setDetalleSubTotal(DocumentoSunatDetalle detalleSubTotal) {
+		this.detalleSubTotal = detalleSubTotal;
 	}
 	public DocumentoSunatDetalle getDetalleDescuento() {
 		return detalleDescuento;
@@ -444,18 +460,18 @@ public class DocumentoSunat extends TumiDomain{
 	public void setDetalleTotal(DocumentoSunatDetalle detalleTotal) {
 		this.detalleTotal = detalleTotal;
 	}
-	public DocumentoSunatDetalle getDetallePercepcion() {
-		return detallePercepcion;
-	}
-	public void setDetallePercepcion(DocumentoSunatDetalle detallePercepcion) {
-		this.detallePercepcion = detallePercepcion;
-	}
-	public DocumentoSunatDetalle getDetalleDetraccion() {
-		return detalleDetraccion;
-	}
-	public void setDetalleDetraccion(DocumentoSunatDetalle detalleDetraccion) {
-		this.detalleDetraccion = detalleDetraccion;
-	}
+//	public DocumentoSunatDetalle getDetallePercepcion() {
+//		return detallePercepcion;
+//	}
+//	public void setDetallePercepcion(DocumentoSunatDetalle detallePercepcion) {
+//		this.detallePercepcion = detallePercepcion;
+//	}
+//	public DocumentoSunatDetalle getDetalleDetraccion() {
+//		return detalleDetraccion;
+//	}
+//	public void setDetalleDetraccion(DocumentoSunatDetalle detalleDetraccion) {
+//		this.detalleDetraccion = detalleDetraccion;
+//	}
 	public DocumentoSunatDetalle getDetalleRetencion() {
 		return detalleRetencion;
 	}
@@ -468,17 +484,29 @@ public class DocumentoSunat extends TumiDomain{
 	public void setDetalleTotalGeneral(DocumentoSunatDetalle detalleTotalGeneral) {
 		this.detalleTotalGeneral = detalleTotalGeneral;
 	}
-	public Integer getIntParaMoneda() {
-		return intParaMoneda;
+	public DocumentoSunatDetalle getDetalleLetra() {
+		return detalleLetra;
 	}
-	public void setIntParaMoneda(Integer intParaMoneda) {
-		this.intParaMoneda = intParaMoneda;
+	public void setDetalleLetra(DocumentoSunatDetalle detalleLetra) {
+		this.detalleLetra = detalleLetra;
 	}
-	public DocumentoSunatDetalle getDetalleSubTotal() {
-		return detalleSubTotal;
+	public boolean isSeleccionaInafecto() {
+		return seleccionaInafecto;
 	}
-	public void setDetalleSubTotal(DocumentoSunatDetalle detalleSubTotal) {
-		this.detalleSubTotal = detalleSubTotal;
+	public void setSeleccionaInafecto(boolean seleccionaInafecto) {
+		this.seleccionaInafecto = seleccionaInafecto;
+	}
+	public boolean isSeleccionaIGVContable() {
+		return seleccionaIGVContable;
+	}
+	public void setSeleccionaIGVContable(boolean seleccionaIGVContable) {
+		this.seleccionaIGVContable = seleccionaIGVContable;
+	}
+	public boolean isSeleccionaPercepcion() {
+		return seleccionaPercepcion;
+	}
+	public void setSeleccionaPercepcion(boolean seleccionaPercepcion) {
+		this.seleccionaPercepcion = seleccionaPercepcion;
 	}
 	public Date getDtFiltroEmisionDesde() {
 		return dtFiltroEmisionDesde;
@@ -515,36 +543,12 @@ public class DocumentoSunat extends TumiDomain{
 	}
 	public void setDtFiltroProgramacionHasta(Date dtFiltroProgramacionHasta) {
 		this.dtFiltroProgramacionHasta = dtFiltroProgramacionHasta;
-	}	
+	}
 	public Integer getIntTipoFiltroFecha() {
 		return intTipoFiltroFecha;
 	}
 	public void setIntTipoFiltroFecha(Integer intTipoFiltroFecha) {
 		this.intTipoFiltroFecha = intTipoFiltroFecha;
-	}
-	public Persona getPersonaGirar() {
-		return personaGirar;
-	}
-	public void setPersonaGirar(Persona personaGirar) {
-		this.personaGirar = personaGirar;
-	}
-	public List<AdelantoSunat> getListaAdelantoSunat() {
-		return listaAdelantoSunat;
-	}
-	public void setListaAdelantoSunat(List<AdelantoSunat> listaAdelantoSunat) {
-		this.listaAdelantoSunat = listaAdelantoSunat;
-	}
-	public List<DocumentoSunat> getListaDocumentoSunatLetra() {
-		return listaDocumentoSunatLetra;
-	}
-	public void setListaDocumentoSunatLetra(List<DocumentoSunat> listaDocumentoSunatLetra) {
-		this.listaDocumentoSunatLetra = listaDocumentoSunatLetra;
-	}
-	public DocumentoSunatDetalle getDetalleLetra() {
-		return detalleLetra;
-	}
-	public void setDetalleLetra(DocumentoSunatDetalle detalleLetra) {
-		this.detalleLetra = detalleLetra;
 	}
 	public Date getDtFechaDeGiro() {
 		return dtFechaDeGiro;
@@ -552,45 +556,105 @@ public class DocumentoSunat extends TumiDomain{
 	public void setDtFechaDeGiro(Date dtFechaDeGiro) {
 		this.dtFechaDeGiro = dtFechaDeGiro;
 	}
-	//Agregado por cdelosrios, 04/01/2013
-	public Timestamp getTsFechaRegistro() {
-		return tsFechaRegistro;
+	public DocumentoSunatDoc getDocPercepcion() {
+		return docPercepcion;
 	}
-	public void setTsFechaRegistro(Timestamp tsFechaRegistro) {
-		this.tsFechaRegistro = tsFechaRegistro;
+	public void setDocPercepcion(DocumentoSunatDoc docPercepcion) {
+		this.docPercepcion = docPercepcion;
 	}
-	//Fin agregado por cdelosrios, 04/01/2013
-
-	@Override
-	public String toString() {
-		return "DocumentoSunat [id=" + id + ", intPersEmpresaOrden="
-				+ intPersEmpresaOrden + ", intItemOrdenCompra="
-				+ intItemOrdenCompra + ", intPersEmpresaRequisicion="
-				+ intPersEmpresaRequisicion + ", intItemRequisicion="
-				+ intItemRequisicion + ", tsFechaProvision=" + tsFechaProvision
-				+ ", intParaDocumentoGeneral=" + intParaDocumentoGeneral
-				+ ", intParaTipoComprobante=" + intParaTipoComprobante
-				+ ", strSerieDocumento=" + strSerieDocumento
-				+ ", strNumeroDocumento=" + strNumeroDocumento
-				+ ", dtFechaEmision=" + dtFechaEmision
-				+ ", dtFechaVencimiento=" + dtFechaVencimiento
-				+ ", dtFechaPago=" + dtFechaPago + ", intIndicadorInafecto="
-				+ intIndicadorInafecto + ", intIndicadorIGV=" + intIndicadorIGV
-				+ ", intIndicadorPercepcion=" + intIndicadorPercepcion
-				+ ", intIndicadorLetras=" + intIndicadorLetras + ", strGlosa="
-				+ strGlosa + ", intParaEstado=" + intParaEstado
-				+ ", intParaEstadoPago=" + intParaEstadoPago
-				+ ", intPersEmpresaDocSunatEnlazado="
-				+ intPersEmpresaDocSunatEnlazado
-				+ ", intItemDocumentoSunatEnlazado="
-				+ intItemDocumentoSunatEnlazado + ", intPersEmpresaUsuario="
-				+ intPersEmpresaUsuario + ", intPersPersonaUsuario="
-				+ intPersPersonaUsuario + ", tsFechaAnula=" + tsFechaAnula
-				+ ", intPersEmpresaAnula=" + intPersEmpresaAnula
-				+ ", intPersPersonaAnula=" + intPersPersonaAnula
-				+ ", intPersEmpresaEgreso=" + intPersEmpresaEgreso
-				+ ", intItemEgresoGeneral=" + intItemEgresoGeneral
-				+ ", intEmpresaLibro=" + intEmpresaLibro + ", intPeriodoLibro="
-				+ intPeriodoLibro + ", intCodigoLibro=" + intCodigoLibro + "]";
+	public DocumentoSunatDoc getDocDetraccion() {
+		return docDetraccion;
 	}
+	public void setDocDetraccion(DocumentoSunatDoc docDetraccion) {
+		this.docDetraccion = docDetraccion;
+	}
+	public List<DocumentoSunatOrdenComDoc> getListaDocumentoSunatOrdenComDoc() {
+		return listaDocumentoSunatOrdenComDoc;
+	}
+	public void setListaDocumentoSunatOrdenComDoc(
+			List<DocumentoSunatOrdenComDoc> listaDocumentoSunatOrdenComDoc) {
+		this.listaDocumentoSunatOrdenComDoc = listaDocumentoSunatOrdenComDoc;
+	}
+	public BigDecimal getBdMontoAplicar() {
+		return bdMontoAplicar;
+	}
+	public void setBdMontoAplicar(BigDecimal bdMontoAplicar) {
+		this.bdMontoAplicar = bdMontoAplicar;
+	}
+	public DocumentoSunatDetalle getDetalleNotaCredito() {
+		return detalleNotaCredito;
+	}
+	public void setDetalleNotaCredito(DocumentoSunatDetalle detalleNotaCredito) {
+		this.detalleNotaCredito = detalleNotaCredito;
+	}
+	public DocumentoSunatDetalle getDetalleNotaDebito() {
+		return detalleNotaDebito;
+	}
+	public void setDetalleNotaDebito(DocumentoSunatDetalle detalleNotaDebito) {
+		this.detalleNotaDebito = detalleNotaDebito;
+	}
+	public BigDecimal getBdMontoTotalSinDetraccion() {
+		return bdMontoTotalSinDetraccion;
+	}
+	public void setBdMontoTotalSinDetraccion(BigDecimal bdMontoTotalSinDetraccion) {
+		this.bdMontoTotalSinDetraccion = bdMontoTotalSinDetraccion;
+	}
+	public List<DocumentoSunat> getListaDocSunatRelacionadosConLetraDeCambio() {
+		return listaDocSunatRelacionadosConLetraDeCambio;
+	}
+	public void setListaDocSunatRelacionadosConLetraDeCambio(
+			List<DocumentoSunat> listaDocSunatRelacionadosConLetraDeCambio) {
+		this.listaDocSunatRelacionadosConLetraDeCambio = listaDocSunatRelacionadosConLetraDeCambio;
+	}
+	public List<DocumentoSunat> getListaDocSunatRelacionadosConNotaCreditoYDebito() {
+		return listaDocSunatRelacionadosConNotaCreditoYDebito;
+	}
+	public void setListaDocSunatRelacionadosConNotaCreditoYDebito(
+			List<DocumentoSunat> listaDocSunatRelacionadosConNotaCreditoYDebito) {
+		this.listaDocSunatRelacionadosConNotaCreditoYDebito = listaDocSunatRelacionadosConNotaCreditoYDebito;
+	}
+	public List<DocumentoSunat> getListaDocSunatDocRelacionadosConLetraDeCambio() {
+		return listaDocSunatDocRelacionadosConLetraDeCambio;
+	}
+	public void setListaDocSunatDocRelacionadosConLetraDeCambio(
+			List<DocumentoSunat> listaDocSunatDocRelacionadosConLetraDeCambio) {
+		this.listaDocSunatDocRelacionadosConLetraDeCambio = listaDocSunatDocRelacionadosConLetraDeCambio;
+	}
+	public Boolean getBlnGeneraDetraccion() {
+		return blnGeneraDetraccion;
+	}
+	public void setBlnGeneraDetraccion(Boolean blnGeneraDetraccion) {
+		this.blnGeneraDetraccion = blnGeneraDetraccion;
+	}
+	public Integer getRbDocSunatSelected() {
+		return rbDocSunatSelected;
+	}
+	public void setRbDocSunatSelected(Integer rbDocSunatSelected) {
+		this.rbDocSunatSelected = rbDocSunatSelected;
+	}
+	public List<DocumentoSunat> getListaDocumentoSunatNota() {
+		return listaDocumentoSunatNota;
+	}
+	public void setListaDocumentoSunatNota(
+			List<DocumentoSunat> listaDocumentoSunatNota) {
+		this.listaDocumentoSunatNota = listaDocumentoSunatNota;
+	}
+	public Boolean getBlnGeneraDetraccionNota() {
+		return blnGeneraDetraccionNota;
+	}
+	public void setBlnGeneraDetraccionNota(Boolean blnGeneraDetraccionNota) {
+		this.blnGeneraDetraccionNota = blnGeneraDetraccionNota;
+	}
+	public BigDecimal getBdMontoSaldoTemp() {
+		return bdMontoSaldoTemp;
+	}
+	public void setBdMontoSaldoTemp(BigDecimal bdMontoSaldoTemp) {
+		this.bdMontoSaldoTemp = bdMontoSaldoTemp;
+	}
+	public TipoCambio getTipoCambio() {
+		return tipoCambio;
+	}
+	public void setTipoCambio(TipoCambio tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}	
 }

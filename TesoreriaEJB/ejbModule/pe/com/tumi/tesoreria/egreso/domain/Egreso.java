@@ -1,9 +1,3 @@
-/* -----------------------------------------------------------------------------------------------------------
-* Modificaciones
-* Motivo                      Fecha            Nombre                      Descripción
-* -----------------------------------------------------------------------------------------------------------
-* REQ14-006       			01/11/2014     		Bisarq        Nuevos atributos        
-*/
 package pe.com.tumi.tesoreria.egreso.domain;
 
 import java.math.BigDecimal;
@@ -536,8 +530,6 @@ public class Egreso extends TumiDomain{
 		this.intPersCuentaBancariaGirado = intPersCuentaBancariaGirado;
 	}	
 	//Fin jchavez - 19.09.2014
-
-
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	public EgresoDetalle getEgresoDetConciliacion() {

@@ -1,5 +1,6 @@
 package pe.com.tumi.tesoreria.logistica.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import pe.com.tumi.framework.negocio.exception.DAOException;
@@ -83,4 +84,19 @@ public class DocumentoSunatDaoIbatis extends TumiDaoIbatis implements DocumentoS
 		return lista;
 	}
 	//Fin agregado por cdelosrios, 18/11/2013
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 24.10.2014
+	public Integer getValidarCierreDocumento(Object o) throws DAOException{
+		Integer  vExisteCierre = null;
+		try{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".getValidarCierreDocumento", o);
+			m = (HashMap<String, Object>)o;
+			vExisteCierre = (Integer)m.get("vExisteCierre");
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}		
+		return vExisteCierre;
+	}	
+	//Fin jchavez - 24.10.2014
 }

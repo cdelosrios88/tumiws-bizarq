@@ -11,4 +11,6 @@ public interface OrdenCompraDocumentoDao extends TumiDao{
 	public OrdenCompraDocumento modificar(OrdenCompraDocumento o) throws DAOException;
 	public List<OrdenCompraDocumento> getListaPorPk(Object o) throws DAOException;
 	public List<OrdenCompraDocumento> getListaPorOrdenCompra(Object o) throws DAOException;
+	//Autor: jchavez / Tarea: Creacion / Fecha: 22.10.2014
+	public List<OrdenCompraDocumento> getListaPorEgreso(Object o) throws DAOException;
 }

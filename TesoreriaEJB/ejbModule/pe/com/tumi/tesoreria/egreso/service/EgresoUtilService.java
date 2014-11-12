@@ -264,7 +264,11 @@ public class EgresoUtilService {
 				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
 				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)
 				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)
-				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS)){
+				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS)
+				//Autor: jchavez / Tarea: nuevos filtros / Fecha: 26.10.2014
+				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
+				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				//Fin jchavez - 26.10.2014	
 					procesarItems(egreso);
 					listaEgresoTemp.add(egreso);
 				}
@@ -326,7 +330,9 @@ public class EgresoUtilService {
 				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_AES)
 				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
 				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)
-				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)){
+				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)
+				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
+				|| egresoDetalle.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
 					procesarItems(egreso);
 				}
 			}

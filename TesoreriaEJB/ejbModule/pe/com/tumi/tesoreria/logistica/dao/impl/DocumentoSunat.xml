@@ -17,6 +17,7 @@
 	<result property="intParaTipoComprobante"   		column="ptipocomprobante" />
 	<result property="strSerieDocumento"   				column="pseriedocumento" />
 	<result property="strNumeroDocumento"   			column="pnumerodoc" />
+	<result property="tsFechaRegistro"   				column="pfecharegistro" />
 	<result property="dtFechaEmision"   				column="pfechaemision" />
 	<result property="dtFechaVencimiento"   			column="pfechavencimiento" />
 	<result property="dtFechaPago"   					column="pfechapago" />
@@ -27,10 +28,12 @@
 	<result property="strGlosa"   						column="pglosa" />
 	<result property="intParaEstado"   					column="pestado" />
 	<result property="intParaEstadoPago"   				column="pestadopago" />
-	<result property="intPersEmpresaDocSunatEnlazado" 	column="pempresadocsunaten" />
-	<result property="intItemDocumentoSunatEnlazado"  	column="pitemdocsunen" />
 	<result property="intPersEmpresaUsuario"   			column="pempresausuario" />
 	<result property="intPersPersonaUsuario"   			column="ppersonausuario" />
+	<result property="intSucuIdSucursal"   				column="psucuidsucursal" />
+	<result property="intSubIdSubsucursal"   			column="psudeidsubsucursal" />
+	<result property="intPersEmpresaDocSunatAnula" 		column="pempresadocsunatan" />
+	<result property="intItemDocumentoSunatAnula"  		column="pitemdocsunan" />
 	<result property="tsFechaAnula"   					column="pfechaanula" />
 	<result property="intPersEmpresaAnula"   			column="pempresaanula" />
 	<result property="intPersPersonaAnula"   			column="ppersonaanula" />
@@ -39,18 +42,13 @@
 	<result property="intEmpresaLibro"   				column="pempresalibro" />
 	<result property="intPeriodoLibro"   				column="pperiodolibro" />
 	<result property="intCodigoLibro"   				column="pcodigolibro" />
-	<!-- Agregado por cdelosrios, 03/11/2013 -->
-	<result property="intParaTipo"   					column="pParaTipoCod" />
-	<result property="intItemArchivo"   				column="pItemArchivo" />
-	<result property="intItemHistorico"   				column="pItemHistorico" />
-	<!-- Fin agregado por cdelosrios, 03/11/2013 -->
-	<!-- Agregado por cdelosrios, 12/11/2013 -->
-	<result property="intSucuIdSucursal"   				column="pSucuIdSucursal" />
-	<result property="intSubIdSubsucursal"   			column="pSudeIdSubsucursal" />	
-	<!-- Agregado por cdelosrios, 12/11/2013 -->
-	<!-- Agregado por cdelosrios, 04/01/2014 -->
-	<result property="tsFechaRegistro"   				column="pFechaRegistro" />
-	<!-- Fin agregado por cdelosrios, 04/01/2014 -->
+	<result property="intParaTipo"   					column="pparatipopod" />
+	<result property="intItemArchivo"   				column="pitemarchivo" />
+	<result property="intItemHistorico"   				column="pitemhistorico" />
+	<result property="intPersEmpresaDocSunatEnlazado" 	column="pempresadocsunatrel" />
+	<result property="intItemDocumentoSunatEnlazado"  	column="pitemdocsunrel" />
+	<result property="intPersEmpresaIngreso"   			column="pempresaingreso" />
+	<result property="intItemIngresoGeneral"   			column="pitemingresogeneral" />
   </resultMap>
   
   <parameterMap id="parDocumentoSunat" class="DocumentoSunat">
@@ -65,6 +63,7 @@
 	 <parameter property="intParaTipoComprobante"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="strSerieDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
 	 <parameter property="strNumeroDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+	 <parameter property="tsFechaRegistro"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
 	 <parameter property="dtFechaEmision"					javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
 	 <parameter property="dtFechaVencimiento"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
 	 <parameter property="dtFechaPago"						javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
@@ -75,11 +74,13 @@
 	 <parameter property="strGlosa"							javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
 	 <parameter property="intParaEstado"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intParaEstadoPago"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intPersEmpresaDocSunatEnlazado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intItemDocumentoSunatEnlazado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersEmpresaUsuario"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaUsuario"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="tsFechaAnula"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	 <parameter property="intSucuIdSucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <parameter property="intSubIdSubsucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <parameter property="intPersEmpresaDocSunatAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemDocumentoSunatAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+  	 <parameter property="tsFechaAnula"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
 	 <parameter property="intPersEmpresaAnula"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersPersonaAnula"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersEmpresaEgreso"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
@@ -87,18 +88,13 @@
 	 <parameter property="intEmpresaLibro"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPeriodoLibro"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intCodigoLibro"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-  	 <!-- Agregado por cdelosrios, 03/11/2013 -->
-  	 <parameter property="intParaTipo"						javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipo"						javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   	 <parameter property="intItemArchivo"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   	 <parameter property="intItemHistorico"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-  	 <!-- Fin agregado por cdelosrios, 03/11/2013 -->
-  	 <!-- Agregado por cdelosrios, 12/11/2013 -->
-  	 <parameter property="intSucuIdSucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-  	 <parameter property="intSubIdSubsucursal"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-  	 <!-- Fin agregado por cdelosrios, 04/01/2014 -->
-  	 <!-- Agregado por cdelosrios, 12/11/2013 -->
-  	 <parameter property="tsFechaRegistro"					javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
-  	 <!-- Fin agregado por cdelosrios, 04/01/2014 -->
+  	 <parameter property="intPersEmpresaDocSunatEnlazado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemDocumentoSunatEnlazado"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPersEmpresaIngreso"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intItemIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -125,7 +121,7 @@
 	 <!-- Agregado por cdelosrios, 10/10/2013 -->
 	 <parameter property="intParaTipoComprobante"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
 	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intNroDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
+	 <parameter property="strNroDocumento"				javaType="java.lang.String"			jdbcType="VARCHAR"		mode="IN"/>
 	 <!-- Fin agregado por cdelosrios, 10/10/2013 -->
   </parameterMap>
   
@@ -154,12 +150,19 @@
   </parameterMap>
   <!-- Fin agregado por cdelosrios, 18/11/2013 -->
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 24.10.2014 -->
+  <parameterMap id="parValidarCierreDocumento" class="java.util.Map">
+   	 <parameter property="vExisteCierre" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"      mode="OUT"/>
+   	 <parameter property="intPeriodoCierre"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+  <!-- Fin jchavez - 24.10.2014 -->
+  
   <procedure id="grabar" parameterMap="parDocumentoSunat">
-	{ call PKG_DOCUMENTOSUNAT.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_DOCUMENTOSUNAT.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parDocumentoSunat">
-	{ call PKG_DOCUMENTOSUNAT.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_DOCUMENTOSUNAT.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resDocumentoSunat">
@@ -184,4 +187,9 @@
   </procedure>
   <!-- Fin agregado por cdelosrios, 18/11/2013 -->
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 24.10.2014 -->
+  <procedure id="getValidarCierreDocumento" parameterMap="parValidarCierreDocumento">
+	{ call PKG_DOCUMENTOSUNAT.getValidarCierreDocumento(?,?) }	
+  </procedure>  
+  <!-- Fin jchavez - 24.10.2014 -->
 </sqlMap>

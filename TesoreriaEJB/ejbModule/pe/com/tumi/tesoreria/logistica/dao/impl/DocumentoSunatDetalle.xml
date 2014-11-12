@@ -9,7 +9,7 @@
 	<result property="id.intPersEmpresa"  				column="pempresadocsunat" />
 	<result property="id.intItemDocumentoSunat"   		column="pitemdocsun" />
 	<result property="id.intItemDocumentoSunatDetalle"	column="pitemdocsundet" />
-	<result property="intParaTipoDocumentoSunat"   		column="ptipocptodocsunat" />
+	<result property="intParaTipoCptoDocumentoSunat"   	column="ptipocptodocsunat" />
 	<result property="intPersEmpresaOrdenCompra"   		column="pempresaorden" />
 	<result property="intItemOrdenCompra"   			column="pitemordencompra" />
 	<result property="intItemOrdenCompraDetalle"  		column="pitemordencompradet" />
@@ -31,7 +31,7 @@
 	 <parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intItemDocumentoSunatDetalle"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="intParaTipoDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intParaTipoCptoDocumentoSunat"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersEmpresaOrdenCompra"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intItemOrdenCompra"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intItemOrdenCompraDetalle"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
@@ -71,10 +71,10 @@
   
   <!-- Agregado por cdelosrios, 01/11/2013 -->
   <parameterMap id="parPorDocumentoSunatYTipoDocSunat" class="java.util.Map">
-   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
-   	 <parameter property="intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intItemDocumentoSunat"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intParaTipoDocumentoSunat"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="cursorLista" 						javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>	 
+   	 <parameter property="intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intParaTipoCptoDocumentoSunat"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
   <!-- Fin agregado por cdelosrios, 01/11/2013 -->
   
