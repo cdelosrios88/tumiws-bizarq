@@ -33,9 +33,9 @@
 		<f:param name="rowHojaManualDetalle"></f:param>
 	</a4j:jsFunction>
 	
-	<a4j:jsFunction name="eliminarHojaManualDetalle" reRender="divTblHojaManualDetalle"
+	<a4j:jsFunction name="acceptMessage" reRender="divTblHojaManualDetalle"
 		actionListener="#{hojaManualController.deleteHojaManualDetalle}">
-	</a4j:jsFunction>
+	</a4j:jsFunction>	
 	
 	<a4j:jsFunction name="selecSucursal" reRender="cboSubsucursalHMDe"
 		actionListener="#{hojaManualController.loadListSubsucursal}">
@@ -124,7 +124,7 @@
     				<h:inputText value="#{hojaManualController.hojaManualDetBusq.strContNumeroCuenta}"></h:inputText>
     			</rich:column>
     			<rich:column>
-    				<a4j:commandButton actionListener="#{hojaManualController.searchHojaManual}" value="Buscar" 
+    				<a4j:commandButton action="#{hojaManualController.searchHojaManual}" value="Buscar" 
     								reRender="divTblHojaManual" styleClass="btnEstilos"></a4j:commandButton>
     			</rich:column>
     		</rich:columnGroup>
@@ -249,8 +249,8 @@
            				</rich:column>
            				<rich:column>
            					<a4j:commandButton value="Agregar" styleClass="btnEstilos1" actionListener="#{hojaManualController.newHojaManualDetalle}"
-           									oncomplete="if(#{hojaManualController.hojaManual.tsHomaFechaRegistro==null || hojaManualController.hojaManual.strHomaGlosa==null}){
-                										Richfaces.showModalPanel('mpMessage')}else{Richfaces.showModalPanel('mpHojaManualDetalle')}" reRender="divHojaManualDetalle,mpMessage"></a4j:commandButton>
+           									oncomplete="if(#{hojaManualController.hojaManual.tsHomaFechaRegistro==null || hojaManualController.hojaManual.strHomaGlosa==null || hojaManualController.cierre.id.intEstadoCierreCod==2}){
+           									Richfaces.showModalPanel('mpMessage')}else{Richfaces.showModalPanel('mpHojaManualDetalle')}" reRender="divHojaManualDetalle,mpMessage"></a4j:commandButton>
            				</rich:column>
            			</rich:columnGroup>
            		</h:panelGrid>
@@ -290,24 +290,18 @@
 		                            <h:outputText value="Persona" style="font-weight:bold"></h:outputText>
 		                        </f:facet>
 		                        <h:outputText value="#{item.persona.intIdPersona} - "></h:outputText>
-								<h:outputText value="#{item.persona.natural.strNombres} "></h:outputText>
-								<h:outputText value="#{item.persona.natural.strApellidoPaterno} "></h:outputText>
-								<h:outputText value="#{item.persona.natural.strApellidoMaterno} - "></h:outputText>
-								<h:outputText value="#{item.persona.documento.strNumeroIdentidad}"></h:outputText>
+								<h:outputText value="#{item.persona.strEtiqueta} - "></h:outputText>
+								<h:outputText value="#{item.persona.strRuc}"></h:outputText>
 								<rich:toolTip for="colNombresPersona" 
 											value="#{item.persona.intIdPersona} - 
-													#{item.persona.natural.strNombres} 
-													#{item.persona.natural.strApellidoPaterno} 
-													#{item.persona.natural.strApellidoMaterno} - 
-													#{item.persona.documento.strNumeroIdentidad}"></rich:toolTip>
+													#{item.persona.strEtiqueta} - #{item.persona.strRuc}"></rich:toolTip>
 				            </rich:column>
 				            <rich:column id="colDocumento">
 		                        <f:facet name="header">
 		                            <h:outputText value="Documento" style="font-weight:bold"></h:outputText>
 		                        </f:facet>
-								<h:outputText value="#{item.strHmdeSerieDocumento} - "></h:outputText>
-								<h:outputText value="#{item.strHmdeNumeroDocumento}"></h:outputText>
-								<rich:toolTip for="colDocumento" value="#{item.strHmdeSerieDocumento} - #{item.strHmdeNumeroDocumento}"></rich:toolTip>
+								<h:outputText value="#{item.persona.strRuc}"></h:outputText>
+								<rich:toolTip for="colDocumento" value="#{item.persona.strRuc}"></rich:toolTip>
 				            </rich:column>
 				            <rich:column width="60">
 		                        <f:facet name="header">
@@ -336,13 +330,13 @@
 						   		 <h:panelGroup layout="block" style="margin:0 auto; width:420px">
 						   		 	<h:outputText value="Para " style="color:#38749C"></h:outputText>
 						   		 	<a4j:commandLink action="#" oncomplete="Richfaces.showModalPanel('mpHojaManualDetalle')"
-						   		 					actionListener="#{hojaManualController.getHojaManualDetalle}" reRender="mpHojaManualDetalle">
+						   		 					actionListener="#{hojaManualController.getHojaManualDetalle}" reRender="mpHojaManualDetalle,frmHojaManualDetalle">
 										<h:graphicImage value="/images/icons/icon_edit.png" style="border:0px"/>
 										<h:outputText value="Modificar"></h:outputText>
 									</a4j:commandLink>
 									<h:outputText value=" o " style="color:#38749C"></h:outputText>
 									<a4j:commandLink action="#" oncomplete="Richfaces.showModalPanel('mpConfirmMessage')"
-													actionListener="#{hojaManualController.confirmDeleteHojaManualDet}" reRender="mpConfirmMessage">
+													actionListener="#{hojaManualController.onConfirmDeleteModeloDet}" reRender="mpConfirmMessage">
 										<h:graphicImage value="/images/icons/icon_trash.gif" style="border:0px"/>
 										<h:outputText value="Eliminar"></h:outputText>
 									</a4j:commandLink>

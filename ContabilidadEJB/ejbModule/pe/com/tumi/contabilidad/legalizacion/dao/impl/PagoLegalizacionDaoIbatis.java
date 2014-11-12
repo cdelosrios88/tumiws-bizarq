@@ -31,6 +31,7 @@ public class PagoLegalizacionDaoIbatis extends TumiDaoIbatis implements PagoLega
 		return dto;
 	}  
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<PagoLegalizacion> getListaPorPk(Object o) throws DAOException{
 		List<PagoLegalizacion> lista = null;
 		try{
@@ -41,6 +42,7 @@ public class PagoLegalizacionDaoIbatis extends TumiDaoIbatis implements PagoLega
 		return lista;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<PagoLegalizacion> getListaPorLibroLegalizacion(Object o) throws DAOException{
 		List<PagoLegalizacion> lista = null;
 		try{

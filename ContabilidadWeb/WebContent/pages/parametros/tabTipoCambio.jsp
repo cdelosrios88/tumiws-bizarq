@@ -92,16 +92,18 @@
     				</h:selectOneMenu>
     			</rich:column>
     			<rich:column>
-    				<a4j:commandButton actionListener="#{tipoCambioController.buscarTipoCambio}" value="Buscar" 
+    				<a4j:commandButton value="Buscar" actionListener="#{tipoCambioController.buscarTipoCambio}"  
     								reRender="divTblTipoCambio" styleClass="btnEstilos"></a4j:commandButton>
     			</rich:column>
     		</rich:columnGroup>
     	</h:panelGrid>
     	
     	<h:panelGroup id="divTblTipoCambio" layout="block" style="padding:15px">
-    		<rich:extendedDataTable id="tblTipoCambio" enableContextMenu="false" style="margin:0 auto"
-                        var="item" value="#{tipoCambioController.listTipoCambio}" onRowClick="selecTipoCambio('#{rowKey}')"
-		  		 		rowKeyVar="rowKey" rows="5" sortMode="single" width="800px" height="165px">
+    		<rich:extendedDataTable id="tblTipoCambio" sortMode="single"
+    				enableContextMenu="false" var="item"
+    				value="#{tipoCambioController.listTipoCambio}"
+    				rowKeyVar="rowKey" rows="5" width="800px" height="165px"
+    				style="margin:0 auto" onRowClick="selecTipoCambio('#{rowKey}')">
 		                           
 				 	<rich:column width="31px">
 				 		<f:facet name="header">

@@ -2,7 +2,7 @@
 * Modificaciones
 * Motivo                      Fecha            Nombre                      Descripción
 * -----------------------------------------------------------------------------------------------------------
-* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevos métodos para regularizar la mayorización
+* REQ14-004       			27/09/2014     Christian De los Ríos        Se agregan nuevos métodos para regularizar la mayorización         
 */
 package pe.com.tumi.contabilidad.cierre.dao.impl;
 

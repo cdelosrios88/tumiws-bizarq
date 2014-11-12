@@ -158,19 +158,21 @@ public class ModeloService {
 				for(Modelo modelo : lista){
 					log.info(modelo);
 					if(o.getIntPeriodo().equals(new Integer(0)) || modelo.getIntPeriodo().equals(o.getIntPeriodo())){
-						for(ModeloDetalle modeloDetalle : modelo.getListModeloDetalle()){
-							//obtener la lista ModeloDetalleNivel
-							listaModeloDetalleNivel = boModeloDetalleNivel.getListaPorModeloDetalleId(modeloDetalle.getId());
-							if(listaModeloDetalleNivel!=null && listaModeloDetalleNivel.size()>0){
+						if (modelo.getListModeloDetalle()!=null && !modelo.getListModeloDetalle().isEmpty()) {
+							for(ModeloDetalle modeloDetalle : modelo.getListModeloDetalle()){
+								//obtener la lista ModeloDetalleNivel
+								listaModeloDetalleNivel = boModeloDetalleNivel.getListaPorModeloDetalleId(modeloDetalle.getId());
+								if(listaModeloDetalleNivel!=null && listaModeloDetalleNivel.size()>0){
 								modeloDetalle.setListModeloDetalleNivel(listaModeloDetalleNivel);
+								}
+								//obtener el PlanContable, por cada ModeloDetalle
+								PlanCuentaId planCuentaPK = new PlanCuentaId(modeloDetalle.getId().getIntPersEmpresaCuenta(),
+																modeloDetalle.getId().getIntContPeriodoCuenta(),
+																modeloDetalle.getId().getStrContNumeroCuenta());
+								modeloDetalle.setPlanCuenta(boPlanCuenta.getPlanCuentaPorPk(planCuentaPK));							
 							}
-							//obtener el PlanContable, por cada ModeloDetalle
-							PlanCuentaId planCuentaPK = new PlanCuentaId(modeloDetalle.getId().getIntPersEmpresaCuenta(),
-															modeloDetalle.getId().getIntContPeriodoCuenta(),
-															modeloDetalle.getId().getStrContNumeroCuenta());
-							modeloDetalle.setPlanCuenta(boPlanCuenta.getPlanCuentaPorPk(planCuentaPK));							
-						}
-						listaAux.add(modelo);
+							listaAux.add(modelo);
+						}						
 					}
 				}
 				lista = listaAux;

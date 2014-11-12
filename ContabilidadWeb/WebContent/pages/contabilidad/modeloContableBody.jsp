@@ -356,6 +356,7 @@ R		            <rich:column>
 					   		 </h:panelGroup>  
 				       </f:facet>
 		            </rich:extendedDataTable>
+		            
            		</h:panelGroup>
            </h:panelGroup>
         </h:panelGroup>

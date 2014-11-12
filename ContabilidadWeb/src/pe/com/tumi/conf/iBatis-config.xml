@@ -24,10 +24,14 @@
 	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/Ratio.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/cierre/dao/impl/RatioDetalle.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/legalizacion/dao/impl/LibroLegalizacion.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/legalizacion/dao/impl/LibroContableDetalle.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/legalizacion/dao/impl/PagoLegalizacion.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/AccesoPlanCuenta.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/core/dao/impl/AccesoPlanCuentaDetalle.xml"/>
 	<!-- Agregado por rvillareal on 28/07/2014 -->
+	<sqlMap resource="pe/com/tumi/contabilidad/impuesto/dao/impl/Impuesto.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/reclamosDevoluciones/dao/impl/ReclamosDevoluciones.xml"/>
+	<sqlMap resource="pe/com/tumi/contabilidad/perdidasSiniestro/dao/impl/PerdidasSiniestro.xml"/>
 	<sqlMap resource="pe/com/tumi/contabilidad/cierreContabilidad/dao/impl/CierreContabilidad.xml"/>
 	<!-- Fin agregado por rvillareal on 28/07/2014 -->
 </sqlMapConfig>

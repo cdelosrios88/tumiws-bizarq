@@ -75,17 +75,15 @@
 			            </rich:column>
 			            <rich:column width="350">
 	                        <f:facet name="header">
-	                            <h:outputText value="Nombre Completo"></h:outputText>
+	                            <h:outputText value="Apellidos y Nombres"></h:outputText>
 	                        </f:facet>
-							<h:outputText value="#{item.natural.strNombres}" rendered="#{item.intTipoPersonaCod==Constante.PARAM_T_TIPOPERSONA_NATURAL}"></h:outputText>
-							<h:outputText value="#{item.juridica.strRazonSocial}" rendered="#{item.intTipoPersonaCod==Constante.PARAM_T_TIPOPERSONA_JURIDICA}"></h:outputText>
+							<h:outputText value="#{item.strEtiqueta}"></h:outputText>
 			            </rich:column> 
 			            <rich:column>
 	                        <f:facet name="header">
 	                            <h:outputText value="Documento"></h:outputText>
 	                        </f:facet>
-							<h:outputText value="#{item.documento.strNumeroIdentidad}" rendered="#{item.intTipoPersonaCod==Constante.PARAM_T_TIPOPERSONA_NATURAL}"></h:outputText>
-							<h:outputText value="#{item.strRuc}" rendered="#{item.intTipoPersonaCod==Constante.PARAM_T_TIPOPERSONA_JURIDICA}"></h:outputText>
+							<h:outputText value="#{item.strRuc}"></h:outputText>
 			            </rich:column>
 			                    
 				   <f:facet name="footer">

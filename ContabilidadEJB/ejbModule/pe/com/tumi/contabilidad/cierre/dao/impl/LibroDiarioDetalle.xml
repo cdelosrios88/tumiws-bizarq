@@ -27,6 +27,9 @@
     <result property="bdDebeExtranjero"    		column="pLdde_debeextranjero"/>
     <result property="bdHaberExtranjero"    	column="pLdde_haberextranjero"/>
     <result property="strComentario"    		column="pLdde_comentario"/>
+    <!-- Autor: jchavez / Tarea: Se agrega nuevo atributo / Fecha: 03.11.2014 -->
+    <result property="intParaTipoComprobante"   column="pPara_tipocomprobante"/>
+    <!-- Fin jchavez - 03.11.2014 -->
   </resultMap>
   
   <parameterMap id="parLibroDiarioDetalle" class="LibroDiarioDetalle">
@@ -51,6 +54,9 @@
 	    <parameter property="bdDebeExtranjero"    		javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
 	    <parameter property="bdHaberExtranjero"    		javaType="java.math.BigDecimal" 	jdbcType="NUMERIC"		mode="INOUT"/>
 	    <parameter property="strComentario"    			javaType="java.lang.String" 		jdbcType="VARCHAR"		mode="INOUT"/>
+	    <!-- Autor: jchavez / Tarea: Se agrega nuevo atributo / Fecha: 03.11.2014 -->
+	    <parameter property="intParaTipoComprobante"    javaType="java.lang.Integer" 		jdbcType="NUMERIC"		mode="INOUT"/>
+	    <!-- Fin jchavez - 03.11.2014 -->
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -102,11 +108,11 @@
   <!-- Fin - GTorresBroussetP - 05.abr.2014 -->
   
   <procedure id="grabar" parameterMap="parLibroDiarioDetalle">
-	{ call PKG_LIBRODIARIODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_LIBRODIARIODETALLE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parLibroDiarioDetalle" >
-	{ call PKG_LIBRODIARIODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_LIBRODIARIODETALLE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroDiarioDetalle">

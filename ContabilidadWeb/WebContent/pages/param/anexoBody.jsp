@@ -227,12 +227,12 @@
 	    			<a4j:commandButton value="Modificar" styleClass="btnEstilos"
             			action="#{aperturaCierreController.modificarRegistro}"
              			onclick="Richfaces.hideModalPanel('pAlertaRegistroApertura')"
-             			reRender="contPanelInferiorApertura,panelMensajeApertura"
+             			reRender="opPanelInferiorApertura,panelMensajeApertura"
         			/>
         			<a4j:commandButton value="Eliminar" styleClass="btnEstilos"
             			action="#{aperturaCierreController.eliminarRegistro}"
              			onclick="Richfaces.hideModalPanel('pAlertaRegistroApertura')"
-             			reRender="panelTablaCierre,panelMensajeApertura,contPanelInferiorApertura"
+             			reRender="panelTablaCierre,panelMensajeApertura,opPanelInferiorApertura"
              			rendered="#{aperturaCierreController.mostrarBtnEliminar}"
         			/>	        		
 	        	</rich:column>

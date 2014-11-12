@@ -16,7 +16,7 @@ import javax.ejb.Stateless;
 
 import pe.com.tumi.contabilidad.cierre.bo.LibroMayorBO;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
-import pe.com.tumi.contabilidad.cierre.service.LibroMayorService;
+//import pe.com.tumi.contabilidad.cierre.service.LibroMayorService;
 import pe.com.tumi.contabilidad.core.service.MayorizacionService;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
@@ -33,7 +33,7 @@ public class MayorizacionFacade extends TumiFacade implements MayorizacionFacade
 	//LibroDiarioBO boLibroDiario = (LibroDiarioBO)TumiFactory.get(LibroDiarioBO.class);
 	//LibroDiarioService libroDiarioService = (LibroDiarioService)TumiFactory.get(LibroDiarioService.class);
 	LibroMayorBO boLibroMayor = (LibroMayorBO)TumiFactory.get(LibroMayorBO.class);
-	LibroMayorService libroMayorService = (LibroMayorService)TumiFactory.get(LibroMayorService.class);
+//	LibroMayorService libroMayorService = (LibroMayorService)TumiFactory.get(LibroMayorService.class);
 	MayorizacionService mayorizacionService = (MayorizacionService)TumiFactory.get(MayorizacionService.class);
 	
     /**

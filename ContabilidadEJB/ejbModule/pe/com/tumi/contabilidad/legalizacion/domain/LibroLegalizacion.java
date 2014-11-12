@@ -1,11 +1,10 @@
 package pe.com.tumi.contabilidad.legalizacion.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
+@SuppressWarnings("serial")
 public class LibroLegalizacion extends TumiDomain{
 
 	private LibroLegalizacionId	id;
@@ -18,20 +17,19 @@ public class LibroLegalizacion extends TumiDomain{
 	private Integer intParaTipo;
 	private Integer intItemArchivo;
 	private Integer intItemHistorico;
-	
-	private List<PagoLegalizacion> listaPagoLegalizacion;
-	
+
 	public LibroLegalizacion(){
 		id = new LibroLegalizacionId();
-		listaPagoLegalizacion = new ArrayList<PagoLegalizacion>();
 	}
-	
+
 	public LibroLegalizacionId getId() {
 		return id;
 	}
+
 	public void setId(LibroLegalizacionId id) {
 		this.id = id;
 	}
+
 	public Integer getIntPersEmpresaLegal() {
 		return intPersEmpresaLegal;
 	}
@@ -86,12 +84,6 @@ public class LibroLegalizacion extends TumiDomain{
 	public void setIntItemHistorico(Integer intItemHistorico) {
 		this.intItemHistorico = intItemHistorico;
 	}
-	public List<PagoLegalizacion> getListaPagoLegalizacion() {
-		return listaPagoLegalizacion;
-	}
-	public void setListaPagoLegalizacion(List<PagoLegalizacion> listaPagoLegalizacion) {
-		this.listaPagoLegalizacion = listaPagoLegalizacion;
-	}
 
 	@Override
 	public String toString() {
@@ -104,5 +96,4 @@ public class LibroLegalizacion extends TumiDomain{
 				+ ", intItemArchivo=" + intItemArchivo + ", intItemHistorico="
 				+ intItemHistorico + "]";
 	}
-	
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PerdidasSiniestroDaoIbatis">
+
+		<!--Autor: Rodolfo Villarreal / Tarea: Creación / Fecha: 15.08.2014 /-->
+	
+	<typeAlias type="pe.com.tumi.contabilidad.perdidasSiniestro.domain.PerdidasSiniestro" alias="PerdidasSiniestro"/>
+ 	<typeAlias type="pe.com.tumi.contabilidad.perdidasSiniestro.domain.PerdidasSiniestroId" alias="PerdidasSiniestroId"/>
+ 	
+ 	<resultMap id="resJuricaRuc" class="PerdidasSiniestro" >
+     <result property="intIdPersJuridica"   column="pPERS_PERSONA_N" />
+     <result property="strNombreJuridica" 	column="pJURI_RAZONSOCIAL_V" />
+     <result property="strNumeroRuc"      	column="pPERS_RUC_V" />
+  	</resultMap>
+  	
+  	<resultMap id="resBuscar" class="PerdidasSiniestro" >
+     <result property="id.intPersEmpresa"   			column="pPERS_EMPRESA_N_PK" />
+     <result property="id.intContItemSiniestro" 		column="pCONT_ITEMSINIESTRO_N" />
+     <result property="intParaDocumentoGeneral"      	column="pPARA_DOCUMENTOGENERAL_N_COD" />
+     <result property="intParaDocumentoGeneral"   		column="pPERS_PERSONAASEGURA_N_PK" />
+     <result property="intParaTipoSiniestro" 			column="pPARA_TIPOSINIESTRO_N_COD" />
+     <result property="dtSiniFechaSiniestro"      		column="pSINI_FECHASINIESTRO_D" />
+     <result property="intPersonaAfectadoPk"   			column="pPERS_PERSONAAFECTADO_N_PK" />
+     <result property="intParaTipoMonedaCod" 			column="pPARA_TIPOMONEDA_N_COD" />
+     <result property="bdSiniMontoDado"      			column="pSINI_MONTODANO_N" />
+     <result property="intParaTipoMonedaAsegCod"   		column="pPARA_TIPOMONEDAASEG_N_COD" />
+     <result property="bdSiniMontoAsegurado" 			column="pSINI_MONTOASEGURADO_N" />
+     <result property="strSiniGlosa"      				column="pSINI_GLOSA_V" />
+     <result property="tsSiniFechaRegistro"   			column="pSINI_FECHAREGISTRO_D" />
+     <result property="intPersPersonaUsuarioPk" 		column="pPERS_PERSONAUSUARIO_N_PK" />
+     <result property="intParaEstadoCod"      			column="pPARA_ESTADO_N_COD" />
+     <result property="intParaEstadoCobroCod" 			column="pPARA_ESTADOCOBRO_N_COD" />
+     <result property="intIdPersJuridica"      			column="pPERS_PERSONA_N" />
+     <result property="strNombreJuridica"   			column="pJURI_RAZONSOCIAL_V" />
+     <result property="strNumeroRuc" 					column="pPERS_RUC_V" />
+     <result property="intIdPersPersona"      			column="pIDNATURAL" />
+     <result property="strNombreCompletoPerdido" 		column="pNOMBRECOMPLETO" />
+     <result property="strDocumentoIdentidad"      		column="pDOCU_NUMEROIDENTIDAD_V" />
+     <result property="strDescripcionTipo"      		column="pDESCRIPCIONTIPO" />
+     <result property="strDescripcionEstado" 			column="pDESCRIPCIONESTADO" />
+     <result property="strDescripcionPago"      		column="pDESCRIPCIONPAGO" />
+  	</resultMap>
+ 	
+ 	
+ 	<parameterMap id="parPerdidasSiniestro" class="PerdidasSiniestro">
+ 		<parameter property="id.intPersEmpresa"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intContItemSiniestro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaDocumentoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaAseguraPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaAseguraPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoSiniestro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="dtSiniFechaSiniestro"				javaType="java.util.Date"			jdbcType="DATE"			mode="INOUT"/>
+		<parameter property="intPersEmpresaAfectadoPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersonaAfectadoPk"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoMonedaCod"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="bdSiniMontoDado"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoMonedaAsegCod"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="bdSiniMontoAsegurado"				javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="strSiniGlosa"						javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+		<parameter property="tsSiniFechaRegistro"				javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaUsuarioPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaUsuarioPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibroPk"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibro"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoCod"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoCobroCod"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsSiniFechaEliminacion"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaEliminarPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaEliminarPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibroAnulaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibroAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibroAnula"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+ 	</parameterMap>
+ 	
+ 	<parameterMap id="parJuricaRuc" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntBusqTipo" 		javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pstrFiltroBusq" 		javaType="java.lang.String"   	jdbcType="VARCHAR" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parBuscar" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntBusqTipo" 			javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   	 mode="IN"/>
+   	 <parameter property="pstrFiltroBusq" 			javaType="java.lang.String"   	jdbcType="VARCHAR" 	     mode="IN"/>
+   	 <parameter property="piniFechaSiniestro"		javaType="java.util.Date"		jdbcType="DATE"		     mode="IN"/>
+   	 <parameter property="pintParaEstadoCod"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		 mode="IN"/>
+	 <parameter property="pintParaEstadoCobroCod"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		 mode="IN"/>
+  	</parameterMap>
+ 	
+	<procedure id="grabarSiniestro" parameterMap="parPerdidasSiniestro">
+		{ call PKG_SINIESTRO.grabarSiniestro(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="modificar" parameterMap="parPerdidasSiniestro">
+		{ call PKG_SINIESTRO.modificarSinies(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	
+  	<procedure id="getListaJuricaRuc" parameterMap="parJuricaRuc" resultMap="resJuricaRuc">
+		{ call PKG_SINIESTRO.getListaJuridicaRol5(?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaBuscar" parameterMap="parBuscar" resultMap="resBuscar">
+		{ call PKG_SINIESTRO.getBuscarJuridico(?,?,?,?,?,?) }  
+  	</procedure>
+</sqlMap> 

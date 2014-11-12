@@ -6,8 +6,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +17,9 @@ import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.FacesContextUtil;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioId;
+import pe.com.tumi.contabilidad.cierreContabilidad.domain.CierreContabilidad;
+import pe.com.tumi.contabilidad.cierreContabilidad.domain.CierreContabilidadId;
+import pe.com.tumi.contabilidad.cierreContabilidad.facade.CierreContabilidadFacadeLocal;
 import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.contabilidad.core.domain.PlanCuentaId;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeLocal;
@@ -45,6 +50,7 @@ public class HojaManualController {
 	private HojaManual hojaManual;
 	private List<HojaManual> listHojaManual;
 	private HojaManual selectedHojaManual;
+	private HojaManualDetalle SelectedHojaManualDet;
 	
 	//variables del popup
 	private HojaManualDetalle hojaManualDetalle;
@@ -60,6 +66,8 @@ public class HojaManualController {
 	//propiedades que capturan atributos de sesión
 	private Integer IDUSUARIO_SESION;
 	private Integer IDEMPRESA_SESION;
+	
+	private int action;
 	
 	//propiedad que hace referencia al id del Menú (tabla SEGURIDAD_101.SEG_M_TRANSACCIONES)
 	private Integer IDMENU_NOTASCONTABLES; 
@@ -77,14 +85,35 @@ public class HojaManualController {
 	private Integer intCboTipoPersonaBusq;
 	private Integer intCboFiltroPersonaBusq;
 	private String strTxtPersonaBusq;
+	private String strApePaterno;
+	private String strApeMaterno;
 	private List<Persona> listPersona;
 	private List<SelectItem> cboFiltroPersona = null;
 	private Boolean isDisabledTxtPersonaBusq;
+	
+	//Agregado por Rodolfo Villarreal
+	private Integer intPeriodoCuenta;
+	private String strPlop;
+	private String strNumero;
+	private String strNombre;
+	private String strSucursal;
+	private String strSubSucursal;
+	private String strSerieDocumento;
+	private String strNumeroDocumento;
+	private String strMonedaDocumento;
+	private String strOpcionDebeHaber;
+	private String strMontoSoles;
+	private Boolean blnShowDivFormHojaManualDet;
+	private Integer intRowHojaManual;
+	private CierreContabilidad cierre;
+	List<CierreContabilidad> listaCierre;
 	
 	public HojaManualController() throws BusinessException, EJBFactoryException{
 		hojaManualDetBusq = new HojaManualDetalle();
 		hojaManualDetBusq.setHojaManual(new HojaManual());
 		hojaManualDetBusq.getHojaManual().setId(new HojaManualId());
+		cierre = new CierreContabilidad();
+		cierre.setId(new CierreContabilidadId());
 		cleanBeanHojaManual();
 		isValidHojaManual = true;
 		blnUpdating = false;
@@ -108,7 +137,7 @@ public class HojaManualController {
 		setBlnUpdating(false);
 	}
 	
-	public void searchHojaManual(ActionEvent event) throws EJBFactoryException, BusinessException{
+	public void searchHojaManual() throws EJBFactoryException, BusinessException{
 		log.info("-------------------------------------Debugging HojaManualController.buscarHojaManual-------------------------------------");
 		busquedaHojaManual();
 	}
@@ -138,7 +167,7 @@ public class HojaManualController {
 		}
 	}
 	
-	public void saveHojaManual(ActionEvent event) throws EJBFactoryException {
+	public void saveHojaManual(ActionEvent event) throws EJBFactoryException, BusinessException {
 		log.info("-------------------------------------Debugging TipoCambioController.grabarHojaManual-------------------------------------");
 		HojaManual beanHojaManual = null;
 		
@@ -165,11 +194,18 @@ public class HojaManualController {
 				getHojaManual().getId().setIntContPeriodoHoja(Integer.valueOf(strPeriodo));
 				//Propiedades de Sesion para LibroDiario
 				getHojaManual().setLibroDiario(new LibroDiario());
-				getHojaManual().getLibroDiario().getId().setIntPersEmpresaLibro(Constante.PARAM_EMPRESASESION);
-				getHojaManual().getLibroDiario().setIntPersEmpresaUsuario(Constante.PARAM_EMPRESASESION);
-				getHojaManual().getLibroDiario().setIntPersPersonaUsuario(Constante.PARAM_USUARIOSESION);
+				/*Agregado por Rodolfo Villarreal 15/07/2014*/
+				getHojaManual().getLibroDiario().setId(new LibroDiarioId());
+				getHojaManual().getLibroDiario().getId().setIntPersEmpresaLibro(IDEMPRESA_SESION);
+				getHojaManual().getLibroDiario().setIntPersEmpresaUsuario(IDEMPRESA_SESION);
+				getHojaManual().getLibroDiario().setIntPersPersonaUsuario(IDUSUARIO_SESION);
 				try {
+					//Graba los valores	
 					beanHojaManual = hojaManualFacade.grabarHojaManual(getHojaManual());
+						
+					if(hojaManual!=null){
+						FacesContextUtil.setMessageSuccess(FacesContextUtil.MESSAGE_SUCCESS_ONSAVE);
+					}
 				} catch (BusinessException e) {
 					FacesContextUtil.setMessageError(FacesContextUtil.MESSAGE_ERROR_ONSAVE);
 					log.error(e);
@@ -179,17 +215,16 @@ public class HojaManualController {
 				//Actualizar Hoja Manual
 				try {
 					beanHojaManual = hojaManualFacade.modificarHojaManual(getHojaManual());
+					if(hojaManual!=null){
+						FacesContextUtil.setMessageSuccess(FacesContextUtil.MESSAGE_SUCCESS_MODIFICAR);
+					}
 				} catch (BusinessException e) {
 					FacesContextUtil.setMessageError(FacesContextUtil.MESSAGE_ERROR_ONSAVE);
 					log.error(e);
 				}
 			}
 		}
-		
-		if(hojaManual!=null){
-			FacesContextUtil.setMessageSuccess(FacesContextUtil.MESSAGE_SUCCESS_ONSAVE);
-		}
-		
+	
 		busquedaHojaManual();
 		setBlnShowDivFormHojaManual(false);
 	}
@@ -266,27 +301,210 @@ public class HojaManualController {
 	//Metodos del popup
 	
 	public void newHojaManualDetalle(ActionEvent event) throws BusinessException, EJBFactoryException{
+		this.action = 1; // Nuevo
 		log.info("-------------------------------------Debugging HojaManualController.openHojaManualDetalle-------------------------------------");
-		if(getHojaManual().getTsHomaFechaRegistro()==null || getHojaManual().getStrHomaGlosa()==null){
-			MessageController message = (MessageController)FacesContextUtil.getSessionBean("messageController");
-			message.setWarningMessage("Primero debe ingresar la Fecha de Registro y la Glosa.");
-			return;
+		CierreContabilidadFacadeLocal cierreFacade = (CierreContabilidadFacadeLocal)EJBFactory.getLocal(CierreContabilidadFacadeLocal.class);
+		
+		//Obteniendo el Periodo
+		GregorianCalendar gcal1 = new GregorianCalendar();
+	if(getHojaManual().getTsHomaFechaRegistro()==null || getHojaManual().getStrHomaGlosa()==null){
+		MessageController message = (MessageController)FacesContextUtil.getSessionBean("messageController");
+		message.setWarningMessage("Primero debe ingresar la Fecha de Registro y la Glosa.");
+		return;
+	}else{
+		gcal1.setTime(getHojaManual().getTsHomaFechaRegistro());
+		String strPeriodo1 = gcal1.get(Calendar.YEAR)+""+(gcal1.get(Calendar.MONTH)+1);
+		if(strPeriodo1.length()<6){//Debe tener 6 caracteres
+			strPeriodo1 = gcal1.get(Calendar.YEAR)+"0"+(gcal1.get(Calendar.MONTH)+1);
 		}
-		cleanHojaManualDetalle();
+		Integer periodoCierre = Integer.valueOf(strPeriodo1);
+		cierre.setId(new CierreContabilidadId());
+		cierre.getId().setIntPersEmpresaCieCob(IDEMPRESA_SESION);
+		cierre.getId().setIntCcobPeriodoCierre(periodoCierre);
+		
+		listaCierre = cierreFacade.getListaCierre(cierre);
+		if(!listaCierre.isEmpty()){
+				if(listaCierre.get(0).getId().getIntCcobPeriodoCierre().equals(periodoCierre) && listaCierre.get(0).getId().getIntEstadoCierreCod()==2){
+					cierre.getId().setIntEstadoCierreCod(listaCierre.get(0).getId().getIntEstadoCierreCod());
+					MessageController message = (MessageController)FacesContextUtil.getSessionBean("messageController");
+					message.setWarningMessage("El periodo se encuentra en estado Cerrado no se puede Realizar el Registro de la Nota Contable");
+					hojaManual.setTsFechaRegistroDesde(null);
+					hojaManual.setStrHomaGlosa("");
+					return;
+			}
+		}
 	}
-	
+	cleanHojaManualDetalle();
+}
 	public void cleanHojaManualDetalle() throws BusinessException, EJBFactoryException{
 		log.info("-------------------------------------Debugging HojaManualController.openHojaManualDetalle-------------------------------------");
 		hojaManualDetalle = new HojaManualDetalle();
 		hojaManualDetalle.setPersona(new Persona());
+		
+		getHojaManualDetalle().setId(new HojaManualDetalleId());
+		getHojaManualDetalle().getId().setIntPersEmpresaHojaPk(IDEMPRESA_SESION);
+		
+		GregorianCalendar gcal = new GregorianCalendar();
+		gcal.setTime(hojaManual.getTsHomaFechaRegistro());
+		String strPeriodo = gcal.get(Calendar.YEAR)+""+(gcal.get(Calendar.MONTH)+1);
+		if(strPeriodo.length()<6){//Debe tener 6 caracteres
+			strPeriodo = gcal.get(Calendar.YEAR)+"0"+(gcal.get(Calendar.MONTH)+1);
+		}
+		getHojaManualDetalle().getId().setIntContPeriodoHoja(Integer.valueOf(strPeriodo));
+		
 		hojaManualDetalle.getPersona().setNatural(new Natural());
 		hojaManualDetalle.getPersona().setJuridica(new Juridica());
-		
 		loadListSucursal();
+		strPlop = "";
+		strNumero= "";
+		strNombre= "";
+		strSucursal = "";
+		strSubSucursal = "";
+		strSerieDocumento = "";
+		strNumeroDocumento = "";
+		strMonedaDocumento = "";
+		strOpcionDebeHaber = "";
+		strMontoSoles = "";
+	}
+	
+	public void grabarManualDetalle(ActionEvent event) {
+		strPlop = "";
+		strNumero= "";
+		strNombre= "";
+		strSucursal = "";
+		strSubSucursal = "";
+		strSerieDocumento = "";
+		strNumeroDocumento = "";
+		strMonedaDocumento = "";
+		strOpcionDebeHaber = "";
+		strMontoSoles = "";
+		
+		if(hojaManualDetalle.getPlanCuenta()==null){
+			strNumero = "Ingresar Cuenta Contable";
+			return;
+		}
+		
+		if(hojaManualDetalle.getPersona().getStrEtiqueta()==null){
+			strNombre= "Ingresar Persona";
+			return;
+		}
+		
+		if (hojaManualDetalle.getIntParaDocumentoGeneralCod().equals(0)) {
+			strPlop = "Ingresar Tipo Documento";
+			return;
+		}
+		if(hojaManualDetalle.getIntSucuIdSucursalPk().equals(0)){
+			strSucursal = "Ingresar Sucursal";
+			return;
+		}
+		if(hojaManualDetalle.getIntSudeIdSubsucursalPk().equals(0)){
+			strSubSucursal = "Ingresar Subsucursal";
+			return;
+		}
+		if(hojaManualDetalle.getStrHmdeSerieDocumento().isEmpty()){
+			strSerieDocumento = "Ingresar Serie";
+			return;
+		}
+		if(hojaManualDetalle.getStrHmdeNumeroDocumento().isEmpty()){
+			strNumeroDocumento = "Ingresar Número";
+			return;
+		}
+		if(hojaManualDetalle.getIntParaMonedaDocumento().equals(0)){
+			strMonedaDocumento = "Ingresar Tipo de Moneda";
+			return;
+		}
+		if(hojaManualDetalle.getBdMontoSoles()==null){
+			strMontoSoles = "Ingresar Monto Soles";
+		}
+		if(hojaManualDetalle.getIntOpcionDebeHaber().equals(0)){
+			strOpcionDebeHaber = "Ingresar Tipo";
+			return;
+		}
+		
+		//Seteando el monto si es Debe o Haber en Soles o en Dólares
+		if(hojaManualDetalle.getIntOpcionDebeHaber()!=null && !hojaManualDetalle.getIntOpcionDebeHaber().equals(0)){
+			if(hojaManualDetalle.getIntOpcionDebeHaber().equals(Constante.PARAM_T_OPCIONDEBEHABER_DEBE)){
+				hojaManualDetalle.setBdHmdeDebeSoles(hojaManualDetalle.getBdMontoSoles());
+			}else if(hojaManualDetalle.getIntOpcionDebeHaber().equals(Constante.PARAM_T_OPCIONDEBEHABER_HABER)){
+				hojaManualDetalle.setBdHmdeHaberSoles(hojaManualDetalle.getBdMontoSoles());
+			}
+		}
+		
+		switch (action) {
+			case 1:
+				// registrar un nuevo detalle
+//				List<HojaManualDetalle> listaHojaManualDetalle = getHojaManual().getListHojaManualDetalle();
+				
+				if( getHojaManual().getListHojaManualDetalle() == null){
+					getHojaManual().setListHojaManualDetalle(new ArrayList<HojaManualDetalle>());
+				}
+				
+				getHojaManual().getListHojaManualDetalle().add(hojaManualDetalle);
+				
+				break;
+				
+			default:
+				//
+		}
+		
+		System.out.println("Tamaño" +getHojaManual().getListHojaManualDetalle().size());
 	}
 	
 	public void addHojaManualDetalle(ActionEvent event){
+		strPlop = "";
+		strNumero = "";
+		strNombre= "";
+		strSucursal = "";
+		strSubSucursal = "";
+		strSerieDocumento = "";
+		strNumeroDocumento = "";
+		strMonedaDocumento = "";
+		strOpcionDebeHaber = "";
+		strMontoSoles = "";
+			
+//		blnok=true;
 		log.info("-------------------------------------Debugging HojaManualController.addHojaManualDetalle-------------------------------------");
+		if(hojaManualDetalle.getPlanCuenta()==null){
+			strNumero = "Ingresar Cuenta Contable";
+			return;
+		}
+		if(hojaManualDetalle.getPersona().getNatural().getStrNombres()==null && hojaManualDetalle.getPersona().getNatural().getStrApellidoPaterno()==null && hojaManualDetalle.getPersona().getNatural().getStrApellidoMaterno()==null){
+			strNombre= "Ingresar Persona";
+			return;
+		}
+		
+		if (hojaManualDetalle.getIntParaDocumentoGeneralCod().equals(0)) {
+			strPlop = "Ingresar Tipo Documento";
+			return;
+		}
+		if(hojaManualDetalle.getIntSucuIdSucursalPk().equals(0)){
+			strSucursal = "Ingresar Sucursal";
+			return;
+		}
+		if(hojaManualDetalle.getIntSudeIdSubsucursalPk().equals(0)){
+			strSubSucursal = "Ingresar Subsucursal";
+			return;
+		}
+		if(hojaManualDetalle.getStrHmdeSerieDocumento().isEmpty()){
+			strSerieDocumento = "Ingresar Serie";
+			return;
+		}
+		if(hojaManualDetalle.getStrHmdeNumeroDocumento().isEmpty()){
+			strNumeroDocumento = "Ingresar Número";
+			return;
+		}
+		if(hojaManualDetalle.getIntParaMonedaDocumento().equals(0)){
+			strMonedaDocumento = "Ingresar Tipo de Moneda";
+			return;
+		}
+		if(hojaManualDetalle.getBdMontoSoles()==null){
+			strMontoSoles = "Ingresar Monto Soles";
+		}
+		if(hojaManualDetalle.getIntOpcionDebeHaber().equals(0)){
+			strOpcionDebeHaber = "Ingresar Tipo";
+			return;
+		}
+		
 		if(getHojaManual().getListHojaManualDetalle()==null){
 			getHojaManual().setListHojaManualDetalle(new ArrayList<HojaManualDetalle>());
 		}
@@ -312,7 +530,9 @@ public class HojaManualController {
 				}
 			}
 		}
-		getHojaManual().getListHojaManualDetalle().add(getHojaManualDetalle());
+		
+		if (getHojaManualDetalle().getId() == null)
+			getHojaManual().getListHojaManualDetalle().add(getHojaManualDetalle());
 	}
 	
 	public void loadListSucursal() throws EJBFactoryException, BusinessException{
@@ -335,7 +555,6 @@ public class HojaManualController {
 		log.info("-----------------------Debugging HojaManualController.seleccionarCuenta()-----------------------------");
 		String strCuenta = (String) FacesContextUtil.getRequestParameter("pRowCuentaContable");
 		log.info("strCuenta: "+strCuenta);
-		
 		hojaManualDetalle.setPlanCuenta(listCuentaOperacional.get(Integer.valueOf(strCuenta)));
 	}
 	
@@ -377,6 +596,8 @@ public class HojaManualController {
 	public List<PlanCuenta> buscarCuentaContable() throws EJBFactoryException, BusinessException{
 		log.info("-------------------------------------Debugging HojaManualController.buscarCuentaOrigenDestino-------------------------------------");
 		PlanCuenta beanCuentaBusq = new PlanCuenta();
+		List<PlanCuenta> listPlanCuenta = new ArrayList<PlanCuenta>();
+		
 		beanCuentaBusq.setId(new PlanCuentaId());
 		//Filtro combo para Descripcion, Numero de Cuenta
 		if(getIntCboTipoCuentaBusq()!=null && getIntCboTipoCuentaBusq().equals(Constante.PARAM_T_FILTROSELECTPLANCUENTAS_DESCRIPCION)){//Por Descripción
@@ -386,9 +607,9 @@ public class HojaManualController {
 		}
 		
 		//Filtrar por el Período
-		GregorianCalendar gcal = new GregorianCalendar();
-		gcal.setTime(getHojaManual().getTsHomaFechaRegistro());
-		if(getIntCboPeriodoBusq()!=null && !getIntCboPeriodoBusq().equals(0))beanCuentaBusq.getId().setIntPeriodoCuenta(gcal.get(Calendar.YEAR));
+//		GregorianCalendar gcal = new GregorianCalendar();
+//		gcal.setTime(getHojaManual().getTsHomaFechaRegistro());
+		if(getIntCboPeriodoBusq()!=null && !getIntCboPeriodoBusq().equals(0))beanCuentaBusq.getId().setIntPeriodoCuenta(getIntCboPeriodoBusq());
 		
 		//Obtener sólo los planes de cuenta operacionales
 		beanCuentaBusq.setIntMovimiento(Constante.TABLA_PLANCUENTA_MOVIMIENTO_OPERACIONAL);
@@ -396,8 +617,32 @@ public class HojaManualController {
 		List<PlanCuenta> lista = null;
 		PlanCuentaFacadeLocal planCuentaFacade = (PlanCuentaFacadeLocal) EJBFactory.getLocal(PlanCuentaFacadeLocal.class);
 		lista = planCuentaFacade.getListaPlanCuentaBusqueda(beanCuentaBusq);
-		System.out.println("listCuentaOrigenDestino.size: "+lista.size());
-		return lista;
+		//Agregado Por Rodolfo Villarreal Acuña fecha 22/07/2014
+		GregorianCalendar gcal = new GregorianCalendar();
+		gcal.setTime(getHojaManual().getTsHomaFechaRegistro());
+		int strPeriodo = gcal.get(Calendar.YEAR);
+		
+		for (PlanCuenta planCuenta : lista) {
+			if(planCuenta.getId().getIntPeriodoCuenta().equals(strPeriodo)){
+				listPlanCuenta.add(planCuenta);
+			}
+		}
+		System.out.println("listCuentaOrigenDestino.size: "+listPlanCuenta.size());
+		return listPlanCuenta;
+	}
+	
+	public void limpiarCuenta(){
+		listCuentaOperacional = new ArrayList<PlanCuenta>();
+		intCboTipoCuentaBusq = 0;
+		intCboPeriodoBusq = 0;
+		strCuentaBusq ="";
+	}
+	
+	public void limpiarPersona(){
+		listPersona = new ArrayList<Persona>();
+		intCboTipoPersonaBusq = 0;
+		cboFiltroPersona = new ArrayList<SelectItem>();
+		setStrTxtPersonaBusq("");
 	}
 	
 	public void fillCboPeriodos() throws EJBFactoryException, BusinessException{
@@ -456,26 +701,34 @@ public class HojaManualController {
 				beanPersonaBusq.setNatural(new Natural());
 				if(getIntCboFiltroPersonaBusq()!=null && !getIntCboFiltroPersonaBusq().equals(0)){
 					if(getIntCboFiltroPersonaBusq().equals(Constante.PARAM_T_OPCIONPERSONABUSQ_NOMBRE)){
-						beanPersonaBusq.getNatural().setStrNombres(getStrTxtPersonaBusq());
+						beanPersonaBusq.setStrRoles(getStrTxtPersonaBusq());
+						beanPersonaBusq.setIntEstadoCod(getIntCboFiltroPersonaBusq());
 					}else if(getIntCboFiltroPersonaBusq().equals(Constante.PARAM_T_OPCIONPERSONABUSQ_DNI)){
 						beanPersonaBusq.setDocumento(new Documento());
 						beanPersonaBusq.getDocumento().setIntTipoIdentidadCod(Integer.valueOf(Constante.PARAM_T_TIPODOCUMENTO_DNI));
-						beanPersonaBusq.getDocumento().setStrNumeroIdentidad(getStrTxtPersonaBusq());
+						beanPersonaBusq.setStrRoles(getStrTxtPersonaBusq());
+						beanPersonaBusq.setIntEstadoCod(getIntCboFiltroPersonaBusq());
 					}
 				}
 				PersonaFacadeRemote personaFacade = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
-				listPersona = personaFacade.getListPerNaturalBusqueda(beanPersonaBusq);
+//				listPersona = personaFacade.getListPerNaturalBusqueda(beanPersonaBusq);
+				
+				listPersona = personaFacade.getBuscarNombrYdni(beanPersonaBusq);
+				
 			}else if(getIntCboTipoPersonaBusq().equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA)){
 				beanPersonaBusq.setJuridica(new Juridica());
 				if(getIntCboFiltroPersonaBusq()!=null && !getIntCboFiltroPersonaBusq().equals(0)){
 					if(getIntCboFiltroPersonaBusq().equals(Constante.PARAM_T_OPCIONPERSONABUSQ_NOMBRE)){
-						beanPersonaBusq.getJuridica().setStrRazonSocial(getStrTxtPersonaBusq());
+						beanPersonaBusq.setStrRoles(getStrTxtPersonaBusq());
+						beanPersonaBusq.setIntEstadoCod(3);
 					}else if(getIntCboFiltroPersonaBusq().equals(Constante.PARAM_T_OPCIONPERSONABUSQ_RUC)){
-						beanPersonaBusq.setStrRuc(getStrTxtPersonaBusq());
+						beanPersonaBusq.setStrRoles(getStrTxtPersonaBusq());
+						beanPersonaBusq.setIntEstadoCod(getIntCboFiltroPersonaBusq());
 					}
 				}
 				PersonaFacadeRemote personaFacade = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
-				listPersona = personaFacade.getBusquedaPerJuridicaSinSucursales(beanPersonaBusq);
+//				listPersona = personaFacade.getBusquedaPerJuridicaSinSucursales(beanPersonaBusq);
+				listPersona = personaFacade.getBuscarNombrYdni(beanPersonaBusq);
 			}
 		}
 		
@@ -522,6 +775,82 @@ public class HojaManualController {
 		log.info("strIdPersona: "+strIdPersona);
 		
 		hojaManualDetalle.setPersona(listPersona.get(Integer.valueOf(strIdPersona)));
+	}
+
+	//Autor Rodolfo Villarreal Acuña fecha 17/07/2014   intRowHojaManual
+	public void setSelectedHojaManualDet(ActionEvent event){
+		String selectedRow = FacesContextUtil.getRequestParameter("rowHojaManualDetalle");
+			if(hojaManual.getListHojaManualDetalle().size()>Integer.valueOf(selectedRow)){
+				setSelectedHojaManualDet(hojaManual.getListHojaManualDetalle().get(Integer.valueOf(selectedRow)));
+			}
+			setIntRowHojaManual(Integer.valueOf(selectedRow.trim()));
+	}
+	
+	public void getHojaManualDetalle(ActionEvent event) throws BusinessException{
+		EmpresaFacadeRemote empresaFacade;
+		try {
+			
+			this.action = 2; //Modificar;
+			
+			empresaFacade = (EmpresaFacadeRemote)EJBFactory.getRemote(EmpresaFacadeRemote.class);
+			
+			List<Sucursal> listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(IDEMPRESA_SESION);
+			setListSucursal(listaSucursal);
+			
+			List<Subsucursal> listaSubsucursal = empresaFacade.getListaSubSucursalPorIdSucursalYestado(getSelectedHojaManualDet().getIntSucuIdSucursalPk(), Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+			setListSubsucursal(listaSubsucursal);
+		} catch (EJBFactoryException e) {
+			e.printStackTrace();
+		}
+		
+		if(getSelectedHojaManualDet()!=null){
+			if(getSelectedHojaManualDet().getBdHmdeDebeSoles()!=null){
+				getSelectedHojaManualDet().setBdMontoSoles(getSelectedHojaManualDet().getBdHmdeDebeSoles());
+				getSelectedHojaManualDet().setIntOpcionDebeHaber(Constante.PARAM_T_OPCIONDEBEHABER_DEBE);
+			}
+			if(getSelectedHojaManualDet().getBdHmdeHaberSoles()!=null){
+				getSelectedHojaManualDet().setBdMontoSoles(getSelectedHojaManualDet().getBdHmdeHaberSoles());
+				getSelectedHojaManualDet().setIntOpcionDebeHaber(Constante.PARAM_T_OPCIONDEBEHABER_HABER);
+			}
+			setBlnShowDivFormHojaManualDet(true);
+			setHojaManualDetalle(getSelectedHojaManualDet());
+			setBlnUpdating(true);
+			strPlop = "";
+			strNumero= "";
+			strNombre= "";
+			strSucursal = "";
+			strSubSucursal = "";
+			strSerieDocumento = "";
+			strNumeroDocumento = "";
+			strMonedaDocumento = "";
+			strOpcionDebeHaber = "";
+			strMontoSoles = "";
+		}
+	}
+	
+	
+	public void onConfirmDeleteModeloDet(ActionEvent event){
+		log.info("-------------------------------------Debugging ModeloController.onConfirmDeleteModeloDet-------------------------------------");
+		MessageController message = (MessageController)getSessionBean("messageController");
+		message.setWarningMessage("¿Esta seguro de eliminar el registro?");
+		message.setStrFunctionAccept("acceptMessage()");
+	}
+	//UTILITARIOS
+	public Object getSessionBean(String beanName) {
+		HttpSession sesion = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		return sesion.getAttribute(beanName);
+	}
+	//beanModelo.getListModeloDetalle().get(intRowModeloDetalle).setIsDeleted(true);
+	public void deleteHojaManualDetalle(ActionEvent event){
+		if(hojaManual!=null && hojaManual.getListHojaManualDetalle()!=null && hojaManual.getListHojaManualDetalle().size()>0){
+			hojaManual.getListHojaManualDetalle().get(intRowHojaManual).setIsDeleted(true);
+			setHojaManualDetalle(null);
+			setIntRowHojaManual(null);
+			
+			for (HojaManualDetalle hojaManual1: hojaManual.getListHojaManualDetalle()) {
+				log.info(hojaManual1.getIsDeleted()+ " "+hojaManual1);
+			}
+		}
 	}
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------
@@ -688,5 +1017,149 @@ public class HojaManualController {
 	}
 	public void setIsMonedaExtranjera(Boolean isMonedaExtranjera) {
 		this.isMonedaExtranjera = isMonedaExtranjera;
+	}
+//Agregado por Rodolfo Villarreal
+	public Integer getIntPeriodoCuenta() {
+		return intPeriodoCuenta;
+	}
+
+	public void setIntPeriodoCuenta(Integer intPeriodoCuenta) {
+		this.intPeriodoCuenta = intPeriodoCuenta;
+	}
+
+	public String getStrApePaterno() {
+		return strApePaterno;
+	}
+
+	public void setStrApePaterno(String strApePaterno) {
+		this.strApePaterno = strApePaterno;
+	}
+
+	public String getStrApeMaterno() {
+		return strApeMaterno;
+	}
+
+	public void setStrApeMaterno(String strApeMaterno) {
+		this.strApeMaterno = strApeMaterno;
+	}
+
+	public String getStrPlop() {
+		return strPlop;
+	}
+
+	public void setStrPlop(String strPlop) {
+		this.strPlop = strPlop;
+	}
+
+	public String getStrNumero() {
+		return strNumero;
+	}
+
+	public void setStrNumero(String strNumero) {
+		this.strNumero = strNumero;
+	}
+
+	public String getStrNombre() {
+		return strNombre;
+	}
+
+	public void setStrNombre(String strNombre) {
+		this.strNombre = strNombre;
+	}
+
+	public String getStrSucursal() {
+		return strSucursal;
+	}
+
+	public void setStrSucursal(String strSucursal) {
+		this.strSucursal = strSucursal;
+	}
+
+	public String getStrSubSucursal() {
+		return strSubSucursal;
+	}
+
+	public void setStrSubSucursal(String strSubSucursal) {
+		this.strSubSucursal = strSubSucursal;
+	}
+
+	public String getStrSerieDocumento() {
+		return strSerieDocumento;
+	}
+
+	public void setStrSerieDocumento(String strSerieDocumento) {
+		this.strSerieDocumento = strSerieDocumento;
+	}
+
+	public String getStrNumeroDocumento() {
+		return strNumeroDocumento;
+	}
+
+	public void setStrNumeroDocumento(String strNumeroDocumento) {
+		this.strNumeroDocumento = strNumeroDocumento;
+	}
+
+	public String getStrMonedaDocumento() {
+		return strMonedaDocumento;
+	}
+
+	public void setStrMonedaDocumento(String strMonedaDocumento) {
+		this.strMonedaDocumento = strMonedaDocumento;
+	}
+
+	public String getStrOpcionDebeHaber() {
+		return strOpcionDebeHaber;
+	}
+
+	public void setStrOpcionDebeHaber(String strOpcionDebeHaber) {
+		this.strOpcionDebeHaber = strOpcionDebeHaber;
+	}
+
+	public String getStrMontoSoles() {
+		return strMontoSoles;
+	}
+
+	public void setStrMontoSoles(String strMontoSoles) {
+		this.strMontoSoles = strMontoSoles;
+	}
+
+	public HojaManualDetalle getSelectedHojaManualDet() {
+		return SelectedHojaManualDet;
+	}
+
+	public void setSelectedHojaManualDet(HojaManualDetalle selectedHojaManualDet) {
+		SelectedHojaManualDet = selectedHojaManualDet;
+	}
+
+	public Boolean getBlnShowDivFormHojaManualDet() {
+		return blnShowDivFormHojaManualDet;
+	}
+
+	public void setBlnShowDivFormHojaManualDet(Boolean blnShowDivFormHojaManualDet) {
+		this.blnShowDivFormHojaManualDet = blnShowDivFormHojaManualDet;
+	}
+
+	public Integer getIntRowHojaManual() {
+		return intRowHojaManual;
+	}
+
+	public void setIntRowHojaManual(Integer intRowHojaManual) {
+		this.intRowHojaManual = intRowHojaManual;
+	}
+
+	public CierreContabilidad getCierre() {
+		return cierre;
+	}
+
+	public void setCierre(CierreContabilidad cierre) {
+		this.cierre = cierre;
+	}
+
+	public List<CierreContabilidad> getListaCierre() {
+		return listaCierre;
+	}
+
+	public void setListaCierre(List<CierreContabilidad> listaCierre) {
+		this.listaCierre = listaCierre;
 	}
 }

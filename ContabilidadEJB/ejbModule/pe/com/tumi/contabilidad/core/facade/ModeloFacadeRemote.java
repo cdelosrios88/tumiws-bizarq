@@ -57,14 +57,19 @@ public interface ModeloFacadeRemote {
 															Integer paraTipoRiesgo,
 															Integer itemConcepto,
 															Integer categoria,
-															Integer conceptoGeneral) throws BusinessException;
+															Integer conceptoGeneral,
+						   									Integer intTipoModeloContable) throws BusinessException;
    	
    	public List<ModeloDetalleNivel> getNroCtaPrestamoSinCategoria(Integer empresa,
 																	Integer periodo,
 																	Integer paraTipoRiesgo,
 																	Integer itemConcepto,
-																	Integer conceptoGeneral) throws BusinessException;
+																	Integer conceptoGeneral,
+											   						Integer intTipoModeloContable) throws BusinessException;
 	//jchavez 27.05.2014
    	public List<ModeloDetalleNivelComp> getModeloProvisionRetiro(ModeloDetalleNivel o) throws BusinessException;
 	public List<ModeloDetalleNivelComp> getModeloProvRetiroInteres(ModeloDetalleNivel o) throws BusinessException;
+	//Autor: fyalico / Tarea: Creación / Fecha: 11.09.2014 
+	public String getCuentaPorCobrar(Integer intEmpresa,								   
+									 Integer intPeriodo)throws BusinessException;
 }

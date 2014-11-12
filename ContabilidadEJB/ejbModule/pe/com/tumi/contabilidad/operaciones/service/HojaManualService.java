@@ -6,17 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.contabilidad.cierre.bo.LibroDiarioBO;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalle;
+import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalleId;
 import pe.com.tumi.contabilidad.cierre.service.LibroDiarioService;
-import pe.com.tumi.contabilidad.core.domain.Modelo;
-import pe.com.tumi.contabilidad.core.domain.ModeloDetalle;
-import pe.com.tumi.contabilidad.core.domain.ModeloDetalleId;
-import pe.com.tumi.contabilidad.core.domain.ModeloDetalleNivel;
-import pe.com.tumi.contabilidad.core.domain.ModeloDetalleNivelId;
-import pe.com.tumi.contabilidad.core.domain.ModeloId;
 import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.contabilidad.core.domain.PlanCuentaId;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
@@ -24,14 +20,11 @@ import pe.com.tumi.contabilidad.operaciones.bo.HojaManualBO;
 import pe.com.tumi.contabilidad.operaciones.bo.HojaManualDetalleBO;
 import pe.com.tumi.contabilidad.operaciones.domain.HojaManual;
 import pe.com.tumi.contabilidad.operaciones.domain.HojaManualDetalle;
-import pe.com.tumi.contabilidad.operaciones.domain.HojaManualDetalleId;
 import pe.com.tumi.contabilidad.operaciones.domain.HojaManualId;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
-import pe.com.tumi.parametro.general.domain.Archivo;
-import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 
@@ -41,19 +34,57 @@ public class HojaManualService {
 	HojaManualDetalleBO boHojaManualDetalle = (HojaManualDetalleBO)TumiFactory.get(HojaManualDetalleBO.class);
 	LibroDiarioService libroDiarioService = (LibroDiarioService)TumiFactory.get(LibroDiarioService.class);
 	
+	
+	
 	public HojaManual grabarHojaManual(HojaManual o) throws Exception{
 		
 		//Para grabar HojaManual primero debe guardarse en paralelo en LibroDiario
 		LibroDiario diario = o.getLibroDiario();
+		diario.setListaLibroDiarioDetalle(new ArrayList<LibroDiarioDetalle>());
 		System.out.println("diario.id.intPersEmpresaLibro: "+diario.getId().getIntPersEmpresaLibro());//diario.id.intPersEmpresaLibro desde el Controller
 		diario.getId().setIntContPeriodoLibro(o.getId().getIntContPeriodoHoja());
 		//diario.id.intContCodigoHoja autogenerado;
-		diario.setStrGlosa(o.getStrHomaGlosa());
+		
 		diario.setTsFechaRegistro(new Timestamp((new Date()).getTime())); //la fecha actual
 		diario.setTsFechaDocumento(o.getTsHomaFechaRegistro());
-		System.out.println("diario.intPersEmpresaUsuario: "+diario.getIntPersEmpresaUsuario());//diario.intPersEmpresaUsuario desde el Controller
-		System.out.println("diario.intPersPersonaUsuario: "+diario.getIntPersPersonaUsuario());//diario.intPersPersonaUsuario desde el Controller
 		diario.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+		diario.setStrGlosa(o.getStrHomaGlosa());
+		/*Agregado por Rodolfo Villarreal 15/07/2014*/
+		diario.getId().setIntPersEmpresaLibro(o.getId().getIntPersEmpresaHojaPk());
+		diario.getId().setIntContPeriodoLibro(o.getId().getIntContPeriodoHoja());
+		diario.getId().setIntContCodigoLibro(o.getId().getIntContCodigoHoja());
+		diario.setTsFechaDocumento(o.getTsHomaFechaRegistro());
+		diario.setIntPersEmpresaUsuario(o.getId().getIntPersEmpresaHojaPk());
+		diario.setIntPersPersonaUsuario(o.getListHojaManualDetalle().get(0).getPersona().getIntIdPersona());
+		diario.setIntParaTipoDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_NOTACONTABLE);
+		diario.setTsfFechaEliminacion(null);
+		/*Construyendo libro*/
+		for (HojaManualDetalle x : o.getListHojaManualDetalle()) {
+			LibroDiarioDetalle haber = new LibroDiarioDetalle();
+			haber.setId(new LibroDiarioDetalleId());
+			haber.getId().setIntPersEmpresaLibro(o.getId().getIntPersEmpresaHojaPk());
+			haber.getId().setIntContPeriodoLibro(o.getId().getIntContPeriodoHoja());
+			haber.getId().setIntContCodigoLibro(o.getId().getIntContCodigoHoja());
+			haber.setIntPersEmpresaCuenta(o.getId().getIntPersEmpresaHojaPk());
+			haber.setIntContPeriodo(x.getPlanCuenta().getId().getIntPeriodoCuenta());
+			haber.setStrContNumeroCuenta(x.getPlanCuenta().getId().getStrNumeroCuenta());
+			haber.setIntPersPersona(x.getPersona().getIntIdPersona());
+			haber.setIntParaDocumentoGeneral(x.getIntParaDocumentoGeneralCod());
+			haber.setStrSerieDocumento(x.getStrHmdeSerieDocumento());
+			haber.setStrNumeroDocumento(x.getStrHmdeNumeroDocumento());
+			haber.setIntSucuIdSucursal(x.getIntSucuIdSucursalPk());
+			haber.setIntSudeIdSubSucursal(x.getIntSudeIdSubsucursalPk());
+			haber.setIntParaMonedaDocumento(x.getIntParaMonedaDocumento());
+			haber.setBdDebeSoles(x.getBdHmdeDebeSoles());
+			haber.setBdDebeExtranjero(x.getBdHmdeDebeExtranjero());
+			haber.setBdHaberExtranjero(x.getBdHmdeHaberExtranjero());
+			haber.setBdHaberSoles(x.getBdHmdeHaberSoles());
+			haber.setStrComentario(Constante.PARAM_T_DOCUMENTOGENERAL_NOTACONTABLEDESCRIPCION);
+			haber.setIntPersEmpresaSucursal(diario.getId().getIntPersEmpresaLibro());
+			diario.getListaLibroDiarioDetalle().add(haber);
+		}
+		/*fin Libro*/
+		
 		//Se graba en la base de datos
 		diario = libroDiarioService.grabarLibroDiario(diario);
 		
@@ -90,10 +121,12 @@ public class HojaManualService {
 		//o.id.intContCodigoHoja es autogenerado
 		//o.intParaDocumentoGeneralCod ¿PARAMETROS?
 		//o.strHomaGlosa viene del Controller
-		//o.tsHomaFechaRegistro viene del Controller
+		java.util.Date date= new java.util.Date();
+		o.setTsHomaFechaRegistro(new Timestamp(date.getTime()));
 		o.setIntPersEmpresaLibroPk(diario.getId().getIntPersEmpresaLibro());
 		o.setIntContPeriodoLibro(diario.getId().getIntContPeriodoLibro());
 		o.setIntContCodigoLibro(diario.getId().getIntContCodigoLibro());
+		o.setIntParaDocumentoGeneralCod(Constante.PARAM_T_DOCUMENTOGENERAL_NOTACONTABLE);
 		//Grabar en la base de datos
 		domain = boHojaManual.grabarHojaManual(o);
 		

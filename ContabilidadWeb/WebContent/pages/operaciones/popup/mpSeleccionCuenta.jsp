@@ -41,6 +41,14 @@
 	    				</h:selectOneMenu>
 	    			</rich:column>
 	    			<rich:column>
+           				<h:outputText value="Período"></h:outputText>
+           			</rich:column>
+           			<rich:column>
+           				<h:selectOneMenu value="#{hojaManualController.intCboPeriodoBusq}">
+           					<f:selectItems value="#{hojaManualController.cboPeriodos}"></f:selectItems>
+           				</h:selectOneMenu>
+           			</rich:column>
+	    			<rich:column>
 	    				<h:inputText id="txtCuentaBusq" value="#{hojaManualController.strCuentaBusq}" 
 	    							disabled="#{hojaManualController.isDisabledTxtCuentaBusq}" size="35"></h:inputText>
 	    			</rich:column>

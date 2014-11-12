@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ImpuestoDaoIbatis">
+
+ 	<typeAlias type="pe.com.tumi.contabilidad.impuesto.domain.Impuesto" alias="Impuesto"/>
+ 	<typeAlias type="pe.com.tumi.contabilidad.impuesto.domain.ImpuestoId" alias="ImpuestoId"/>
+ 	<!--Autor Rodolf Villarreal A. / Tarea: Creación / Fecha: 07.08.2014 -->
+
+	<!-- Autor: jchavez / Tarea: creación / Fecha: 18.08.2014 /  -->
+	<resultMap id="resImpuesto" class="Impuesto">
+		<result property="id.intPersEmpresa" 				column="pPers_empresa_n_pk"/>
+		<result property="id.intItemImpuesto" 				column="pCont_itemimpuesto_n"/>
+		<result property="intParaDocumentoGeneralCod" 		column="pPara_documentogeneral_n_cod"/>
+		<result property="intTipoImpuestoCod" 				column="pPara_tipoimpuesto_n_cod"/>
+		<result property="intTipoRectificatoriaCod" 		column="pPara_tiporectificatoria_n_cod"/>
+		<result property="intPersEmpresaEntidadPk" 			column="pPers_empresaentidad_n_pk"/>
+		<result property="intPersPersonaEntidadPk" 			column="pPers_personaentidad_n_pk"/>
+		<result property="intPersEmpresaPersonaPk" 			column="pPers_empresapersona_n_pk"/>
+		<result property="intPersPersonaEncargadaPk" 		column="pPers_personaencargada_n_pk"/>
+		<result property="tsImpuFechaPresentacionD" 		column="pImpu_fechapresentacion_d"/>
+		<result property="intImpuPeriodo" 					column="pImpu_periodo_n"/>
+		<result property="intParaTipoMonedaCod" 			column="pPara_tipomoneda_n_cod"/>
+		<result property="bdImpuMonto" 						column="pImpu_monto_n"/>
+		<result property="strImpuGlosa" 					column="pImpu_glosa_v"/>
+		<result property="intParaEstadoCod" 				column="pPara_estado_n_cod"/>
+		<result property="intParaEstadoPagoCod" 			column="pPara_estadopago_n_cod"/>
+		<result property="tsImpuFechaRegistro" 				column="pImpu_fecharegistro"/>
+		<result property="intPersEmpresaUsuarioPk" 			column="pPers_empresausuario_n_pk"/>
+		<result property="intPersPersonaUsuarioPk" 			column="pPers_personausuario_n_pk"/>
+		<result property="intPersEmpresaLibroPK" 			column="pPers_empresalibro_n_pk"/>
+		<result property="intContPeriodoLibro" 				column="pCont_periodolibro_n"/>
+		<result property="intContCodigoLibro" 				column="pCont_codigolibro_n"/>
+		<result property="tsImpuFechaEliminacionD" 			column="pImpu_fechaeliminacion_d"/>
+		<result property="intPersEmpresaEliminaPk" 			column="pPers_empresaelimina_n_pk"/>
+		<result property="intPersPersonaElimina" 			column="pPers_personaelimina_n_pk"/>
+		<result property="intPersEmpresaLibroAnulaPk" 		column="pPers_empresalibroanula_n_pk"/>
+		<result property="intContPeriodoLibroAnula" 		column="pCont_periodolibroanula_n"/>
+		<result property="intContCodigoLibroAnula" 			column="pCont_codigolibroanula_n"/>
+		<result property="intPersEmpresaRectPk" 			column="pPers_empresarect_n_pk"/>
+		<result property="intContItemImpuestoRectPk" 		column="pCont_itemimpuestorect_n_pk"/>
+	</resultMap>
+
+	<resultMap id="resListaPersonaJuri" class="Impuesto">
+		<result property="intPersPersona" 			column="pPERS_PERSONA_N"/>
+		<result property="strJuriRazonsocial" 		column="pJURI_RAZONSOCIAL_V"/>
+		<result property="strPersRuc" 				column="pPERS_RUC_V"/>
+	</resultMap>
+	
+	<resultMap id="resNombreDniRol" class="Impuesto" >
+     <result property="intPersPerson"      			column="pIDPERSONA" />
+     <result property="strNombreCompleto" 			column="pDESCRIPCION" />
+     <result property="strNumeroDocumento"      	column="pNUMEROIDENTIDAD" />
+  	</resultMap>
+  	
+  	<resultMap id="resImpuestoBusq" class="Impuesto" >
+	     <result property="id.intPersEmpresa"      			column="pPERS_EMPRESA_N_PK" />
+	     <result property="id.intItemImpuesto" 				column="pCONT_ITEMIMPUESTO_N" />
+	     <result property="intParaDocumentoGeneralCod"      column="pPARA_DOCUMENTOGENERAL_N_COD" />
+	     <result property="intTipoImpuestoCod"      		column="pPARA_TIPOIMPUESTO_N_COD" />
+	     <result property="intTipoRectificatoriaCod" 		column="pPARA_TIPORECTIFICATORIA_N_COD" />
+	     <result property="strDescTipoRegistro"      		column="pDESC_TIPOREGISTRO" />
+	     <result property="strDescTipoImpuesto"      		column="pDESC_PARA_TIPOIMP_TIPORECT" />
+	     <result property="intPersEmpresaEntidadPk" 		column="pPERS_EMPRESAENTIDAD_N_PK" />
+	     <result property="intPersPersonaEntidadPk"      	column="pPERS_PERSONAENTIDAD_N_PK" />
+	     <result property="strJuriRazonsocial"      		column="pJURI_RAZONSOCIAL_V" />
+	     <result property="intPersEmpresaPersonaPk"      	column="pPERS_EMPRESAPERSONA_N_PK" />
+	     <result property="intPersPersonaEncargadaPk"      	column="pPERS_PERSONAENCARGADA_N_PK" />
+	     <result property="strNombreCompleto" 				column="pNOMBRECOMPLETO" />
+	     <result property="tsImpuFechaPresentacionD"      	column="pIMPU_FECHAPRESENTACION_D" />
+	     <result property="intImpuPeriodo"      			column="pIMPU_PERIODO_N" />
+	     <result property="intParaTipoMonedaCod" 			column="pPARA_TIPOMONEDA_N_COD" />
+	     <result property="strDescTipoMoneda"      			column="pDESC_PARA_TIPOMONEDA" />
+	     <result property="bdImpuMonto"      				column="pIMPU_MONTO_N" />
+	     <result property="strImpuGlosa" 					column="pIMPU_GLOSA_V" />
+	     <result property="intParaEstadoCod"      			column="pPARA_ESTADO_N_COD" />
+	     <result property="strDescEstado"      				column="pPARA_ESTADO_DESC" />
+	     <result property="intParaEstadoPagoCod"      		column="pPARA_ESTADOPAGO_N_COD" />
+	     <result property="strDescEstadoPago"      			column="pPARA_ESTADOPAGO_DESC" />
+	     <result property="intPersEmpresaRectPk"      		column="pPERS_EMPRESARECT" />
+	     <result property="intContItemImpuestoRectPk"      	column="pCONT_ITEMIMPUESTORECT" />
+  	</resultMap>
+  	
+  	<resultMap id="resListImpuesto" class="Impuesto" >
+     <result property="id.intItemImpuesto"      		column="pCONT_ITEMIMPUESTO_N" />
+     <result property="tsImpuFechaRegistro" 			column="pIMPU_FECHAREGISTRO_D" />
+     <result property="strDescTipoImpuesto"      		column="pPARA_TIPOIMPUESTO_N_COD" />
+     <result property="intPersPersonaEntidadPk"      	column="pPERS_PERSONAENTIDAD_N_PK" />
+     <result property="intImpuPeriodo" 					column="pIMPU_PERIODO_N" />
+     <result property="intPersPersonaEncargadaPk"      	column="pPERS_PERSONAENCARGADA_N_PK" />
+     <result property="intParaEstadoPagoCod"      		column="pPARA_ESTADOPAGO_N_COD" />
+     <result property="intPersEmpresaPersonaPk" 		column="pPERS_EMPRESA_N_PK" />
+     <result property="intParaDocumentoGeneralCod"      column="pPARA_DOCUMENTOGENERAL_N_COD" />
+     <result property="intParaTipoMonedaCod"      		column="pPARA_TIPOMONEDA_N_COD" />
+     <result property="bdImpuMonto"      				column="pIMPU_MONTO_N" />
+     <result property="intParaEstadoPagoCod"      		column="PPARA_ESTADOPAGO_N_COD" />
+     <result property="tsImpuFechaPresentacionD"      	column="pIMPU_FECHAPRESENTACION_D" />
+     <result property="strImpuGlosa"      				column="pIMPU_GLOSA_V" />
+     <result property="strJuriRazonsocial"      		column="pJURI_RAZONSOCIAL_V" />
+  	</resultMap>
+
+<parameterMap id="parImpuesto" class="Impuesto">
+		<parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="id.intItemImpuesto"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaDocumentoGeneralCod"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intTipoImpuestoCod"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intTipoRectificatoriaCod"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaEntidadPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaEntidadPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaPersonaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaEncargadaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsImpuFechaPresentacionD"		javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intImpuPeriodo"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaTipoMonedaCod"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="bdImpuMonto"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="strImpuGlosa"					javaType="java.lang.String"			jdbcType="VARCHAR"		mode="INOUT"/>
+		<parameter property="intParaEstadoCod"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intParaEstadoPagoCod"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsImpuFechaRegistro"			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaUsuarioPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaUsuarioPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibroPK"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibro"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="tsImpuFechaEliminacionD"		javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+		<parameter property="intPersEmpresaEliminaPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersPersonaElimina"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaLibroAnulaPk"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContPeriodoLibroAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContCodigoLibroAnula"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intPersEmpresaRectPk"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+		<parameter property="intContItemImpuestoRectPk"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	</parameterMap>
+	
+	<parameterMap id="parListaPersonaJuri" class="java.util.Map">
+		<parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  	mode="OUT"/>
+		<parameter property="pIntPersPersona"		javaType="java.lang.Integer"	jdbcType="NUMERIC"			mode="IN"/>
+		<parameter property="pStrPersRuc"			javaType="java.lang.String"		jdbcType="VARCHAR"			mode="IN"/>
+	</parameterMap>
+	
+	<parameterMap id="parNombreDniRol" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntBusqTipo" 				javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pstrFiltroBusq" 				javaType="java.lang.String"   	jdbcType="VARCHAR" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parBusqueda" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntTipoImpuesto"				javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntImpuPeriodo" 				javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntParaEstadoPagoCod" 		javaType="java.lang.Integer"   	jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="pIntEstadoCod" 				javaType="java.lang.Integer" 	jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+  	<parameterMap id="parListImpuesto" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="pIntTipoImpuesto" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+	
+	<!-- Autor: jchavez / Tarea: creación / Fecha: 18.08.2014 /  -->
+	<parameterMap id="parImpuestoPk" class="java.util.Map">
+   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intItemImpuesto" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  	</parameterMap>
+  	
+	<procedure id="grabar" parameterMap="parImpuesto">
+		{ call PKG_IMPUESTO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="modificar" parameterMap="parImpuesto" >
+		{ call PKG_IMPUESTO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaPersonaJurid" parameterMap="parListaPersonaJuri" resultMap="resListaPersonaJuri">
+		{ call PKG_IMPUESTO.getListaPersonaJuridica(?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListaNombreDniRol" parameterMap="parNombreDniRol" resultMap="resNombreDniRol">
+		{ call PKG_IMPUESTO.getListaNombreDniRol3(?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getBusqueda" parameterMap="parBusqueda" resultMap="resImpuestoBusq">
+		{ call PKG_IMPUESTO.getBusqueda(?,?,?,?,?) }  
+  	</procedure>
+  	
+  	<procedure id="getListImpuesto" parameterMap="parListImpuesto" resultMap="resListImpuesto">
+		{ call PKG_IMPUESTO.getListImpuesto(?,?) }  
+  	</procedure>
+  	
+  	<!-- Autor: jchavez / Tarea: creación / Fecha: 18.08.2014 /  -->
+  	<procedure id="getListaPorPk" parameterMap="parImpuestoPk" resultMap="resImpuesto">
+		{ call PKG_IMPUESTO.getListaPorPk(?,?,?) }  
+  	</procedure>
+</sqlMap> 
+  
+	

@@ -6,15 +6,16 @@ import java.util.List;
 import pe.com.tumi.contabilidad.legalizacion.dao.LibroLegalizacionDao;
 import pe.com.tumi.contabilidad.legalizacion.dao.impl.LibroLegalizacionDaoIbatis;
 import pe.com.tumi.contabilidad.legalizacion.domain.LibroLegalizacion;
-import pe.com.tumi.contabilidad.legalizacion.domain.LibroLegalizacionId;
+import pe.com.tumi.contabilidad.legalizacion.domain.LibroLegalizacionComp;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 
 public class LibroLegalizacionBO {
-	
+
 	private LibroLegalizacionDao dao = (LibroLegalizacionDao)TumiFactory.get(LibroLegalizacionDaoIbatis.class);
 
+	//Autor : jbermudez	/ Tarea : Creación	/ Fecha : 03.09.2014
 	public LibroLegalizacion grabar(LibroLegalizacion o) throws BusinessException{
 		LibroLegalizacion dto = null;
 		try{
@@ -26,7 +27,8 @@ public class LibroLegalizacionBO {
 	    }
 	    return dto;
 	}
-	
+
+	//Autor : jbermudez	/ Tarea : Creación	/ Fecha : 03.09.2014
   	public LibroLegalizacion modificar(LibroLegalizacion o) throws BusinessException{
   		LibroLegalizacion dto = null;
      	try{
@@ -38,42 +40,79 @@ public class LibroLegalizacionBO {
 	    }
 	    return dto;
     }
-  
-	public LibroLegalizacion getPorPk(LibroLegalizacionId pId) throws BusinessException{
-		LibroLegalizacion domain = null;
-		List<LibroLegalizacion> lista = null;
+  	
+  //Autor : jbermudez	/ Tarea : Creación	/ Fecha : 08.09.2014
+	public void eliminar(LibroLegalizacionComp o) throws BusinessException{
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
-			mapa.put("intPersEmpresa",pId.getIntPersEmpresa());
-			mapa.put("intParaLibroContable",pId.getIntParaLibroContable());
-			mapa.put("intItemLibroLegalizacion",pId.getIntItemLibroLegalizacion());
-			lista = dao.getListaPorPk(mapa);
-			if(lista!=null){
-				if(lista.size()==1){
-				   domain = lista.get(0);
-				}else if(lista.size()==0){
-				   domain = null;
-				}else{
-				   throw new BusinessException("Obtención de mas de un registro coincidente");
-				}
-			}
+			mapa.put("intPersEmpresa", o.getLibroLegalizacion().getId().getIntPersEmpresa());
+			mapa.put("intParaLibroContable", o.getLibroLegalizacion().getId().getIntParaLibroContable());
+			mapa.put("intItemLibroLegalizacion", o.getLibroLegalizacion().getId().getIntItemLibroLegalizacion());
+			dao.eliminar(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);
-		}catch(BusinessException e){
-			throw e;
 		}catch(Exception e) {
 			throw new BusinessException(e);
 		}
-		return domain;
+	}
+  	
+	//Autor : jbermudez	/ Tarea : Creación	/ Fecha : 03.09.2014
+	public List<LibroLegalizacionComp> getListaPersonaJuridica(String strRazonSocial, String strRuc, Integer intIdEmpresa) throws BusinessException{
+		List<LibroLegalizacionComp> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("strPersRuc",strRuc.trim());
+			mapa.put("strJuriRazon",strRazonSocial);
+			mapa.put("intPersEmpresa",intIdEmpresa);
+			lista = dao.getListaPersonaJuridica(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
 	}
 	
-	public List<LibroLegalizacion> getPorIdPersona(Integer intIdPersona, Integer intIdEmpresa) throws BusinessException{
-		List<LibroLegalizacion> lista = null;
+	//Autor : jbermudez	/ Tarea : Creación	/ Fecha : 03.09.2014
+	public List<LibroLegalizacionComp> getListaLegalizaciones(Integer intIdEmpresa, Integer intParaLibroContable) throws BusinessException{
+		List<LibroLegalizacionComp> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
 			mapa.put("intPersEmpresa",intIdEmpresa);
-			mapa.put("intPersPersona",intIdPersona);
-			lista = dao.getListaPorIdPersona(mapa);
+			mapa.put("intParaLibroContable",intParaLibroContable);
+			lista = dao.getListaLegalizaciones(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+
+	//Autor : jbermudez	/ Tarea : Creación	/ Fecha : 03.09.2014
+	public Integer getUltimoFolio(Integer intIdEmpresa, Integer intParaLibroContable) throws BusinessException{
+		Integer ultimoFolio = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa",intIdEmpresa);
+			mapa.put("intParaLibroContable",intParaLibroContable);
+			ultimoFolio = dao.getUltimoFolio(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return ultimoFolio;
+	}
+
+	//Autor : jbermudez	/ Tarea : Creación	/ Fecha : 03.09.2014
+	public List<LibroLegalizacionComp> getListaLibrosLegalizaciones(Integer intIdEmpresa, Integer intParaLibroContable) throws BusinessException{
+		List<LibroLegalizacionComp> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa",intIdEmpresa);
+			mapa.put("intParaLibroContable",intParaLibroContable);
+			lista = dao.getListaLibrosLegalizaciones(mapa);
 		}catch(DAOException e){
 			throw new BusinessException(e);
 		}catch(Exception e) {

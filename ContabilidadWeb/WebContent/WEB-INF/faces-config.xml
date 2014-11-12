@@ -172,5 +172,26 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<!-- Agregado por cdelosrios, 15/09/2013 -->
-	
+
+<!-- Agregado por Javier Bermudez Control de Libros Contables 09/07/2014 -->
+	<navigation-rule>
+		<from-view-id>/pages/legalizacion/*</from-view-id>
+		<navigation-case>
+			<from-outcome>legalizacion.controlLibroContable</from-outcome>
+			<to-view-id>/pages/legalizacion/controlLibroContable.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>controlLibroContableController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.legalizacion.controller.ControlLibroContableController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin Agregado por Javier Bermudez Control de Libros Contables 09/07/2014 -->
+	<!-- Agregado por Rodolfo Villarreal Acuña 11/08/2014 -->
+	<managed-bean>
+		<managed-bean-name>fileUploadControllerContabilidad</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.contabilidad.fileUpload.FileUploadControllerContabilidad</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin Agregado -->
 </faces-config>

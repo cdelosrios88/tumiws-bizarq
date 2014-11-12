@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#pages#parametros#paramContabilidad.jsf"
+  PATH="/pages/parametros/paramContabilidad.jsf" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#parametros#paramContabilidad.jsf:0"
+   NAME="item" PATH="/pages/parametros/paramContabilidad.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="parametros.paramContabilidad::#pages#parametros#paramContabilidad.jsp"
+    NAME="output" PATH="/pages/parametros/paramContabilidad.jsp"
+    TARGET="rules:#pages#parametros#paramContabilidad.jsp"
+    TITLE="parametros.paramContabilidad" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#contabilidad#*"
+  PATH="/pages/contabilidad/*" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#contabilidad#*:0" NAME="item"
+   PATH="/pages/contabilidad/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="contabilidad.planCuentas::#pages#contabilidad#planCuentas.jsp"
+    NAME="output" PATH="/pages/contabilidad/planCuentas.jsp"
+    TARGET="rules:#pages#contabilidad#planCuentas.jsp"
+    TITLE="contabilidad.planCuentas" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#contabilidad#*:1"
+  PATH="/pages/contabilidad/*" SHAPE="32,241,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#contabilidad#*:1" NAME="item"
+   PATH="/pages/contabilidad/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="contabilidad.modeloContable::#pages#contabilidad#modeloContable.jsp"
+    NAME="output" PATH="/pages/contabilidad/modeloContable.jsp"
+    TARGET="rules:#pages#contabilidad#modeloContable.jsp"
+    TITLE="contabilidad.modeloContable" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#operaciones#*"
+  PATH="/pages/operaciones/*" SHAPE="32,353,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#operaciones#*:0" NAME="item"
+   PATH="/pages/operaciones/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="operaciones.hojaManual::#pages#operaciones#hojaManual.jsp"
+    NAME="output" PATH="/pages/operaciones/hojaManual.jsp"
+    TARGET="rules:#pages#operaciones#hojaManual.jsp"
+    TITLE="operaciones.hojaManual" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#mensual#*" PATH="/pages/mensual/*"
+  SHAPE="32,465,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#mensual#*:0" NAME="item"
+   PATH="/pages/mensual/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="cierre.cierre::#pages#mensual#contabilidad.jsp" NAME="output"
+    PATH="/pages/mensual/contabilidad.jsp"
+    TARGET="rules:#pages#mensual#contabilidad.jsp" TITLE="cierre.cierre" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#mayorizacion#*"
+  PATH="/pages/mayorizacion/*" SHAPE="32,608,53,58" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#mayorizacion#*:0" NAME="item"
+   PATH="/pages/mayorizacion/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="mayorizacion.mayorizacion::#pages#mayorizacion#mayorizacion.jsp"
+    NAME="output" PATH="/pages/mayorizacion/mayorizacion.jsp"
+    TARGET="rules:#pages#mayorizacion#mayorizacion.jsp"
+    TITLE="mayorizacion.mayorizacion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="mayorizacion.formulario::#pages#mayorizacion#mayorizacionForm.jsp"
+    NAME="output1" PATH="/pages/mayorizacion/mayorizacionForm.jsp"
+    TARGET="rules:#pages#mayorizacion#mayorizacionForm.jsp"
+    TITLE="mayorizacion.formulario" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#param#anexo.jsf"
+  PATH="/pages/param/anexo.jsf" SHAPE="32,776,50,41" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#param#anexo.jsf:0" NAME="item"
+   PATH="/pages/param/anexo.jsf" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="anexo.anexo::#pages#param#anexo.jsp"
+    NAME="output" PATH="/pages/param/anexo.jsp"
+    TARGET="rules:#pages#param#anexo.jsp" TITLE="anexo.anexo" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#parametros#paramContabilidad.jsp"
+  PATH="/pages/parametros/paramContabilidad.jsp" SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#param#anexo.jsp"
+  PATH="/pages/param/anexo.jsp" SHAPE="248,800,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#operaciones#hojaManual.jsp"
+  PATH="/pages/operaciones/hojaManual.jsp" SHAPE="240,369,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#contabilidad#modeloContable.jsp"
+  PATH="/pages/contabilidad/modeloContable.jsp" SHAPE="240,257,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#contabilidad#planCuentas.jsp"
+  PATH="/pages/contabilidad/planCuentas.jsp" SHAPE="240,145,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#mensual#contabilidad.jsp"
+  PATH="/pages/mensual/contabilidad.jsp" SHAPE="240,481,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#mayorizacion#mayorizacion.jsp"
+  PATH="/pages/mayorizacion/mayorizacion.jsp" SHAPE="240,568,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#mayorizacion#mayorizacionForm.jsp"
+  PATH="/pages/mayorizacion/mayorizacionForm.jsp" SHAPE="240,704,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#legalizacion#*"
+  PATH="/pages/legalizacion/*" SHAPE="32,945,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#legalizacion#*:0" NAME="item"
+   PATH="/pages/legalizacion/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="legalizacion.controlLibroContable::#pages#legalizacion#controlLibroContable.jsp"
+    NAME="output" PATH="/pages/legalizacion/controlLibroContable.jsp"
+    TARGET="rules:#pages#legalizacion#controlLibroContable.jsp"
+    TITLE="legalizacion.controlLibroContable" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#legalizacion#controlLibroContable.jsp"
+  PATH="/pages/legalizacion/controlLibroContable.jsp"
+  SHAPE="240,961,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

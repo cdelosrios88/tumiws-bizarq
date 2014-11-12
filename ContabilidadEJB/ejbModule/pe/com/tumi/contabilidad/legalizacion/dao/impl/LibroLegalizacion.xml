@@ -4,22 +4,43 @@
 <sqlMap namespace="LibroLegalizacionDaoIbatis">
 
   <typeAlias type="pe.com.tumi.contabilidad.legalizacion.domain.LibroLegalizacion" alias="LibroLegalizacion"/> 
-	
-  <resultMap id="resLibroLegalizacion" class="LibroLegalizacion">
-	<result property="id.intPersEmpresa" 			column="pPers_empresa"/>
-	<result property="id.intParaLibroContable"   	column="pPara_librocontable"/>
-	<result property="id.intItemLibroLegalizacion"  column="pCont_itemlibrolegalizacion"/>
-	<result property="intPersEmpresaLegal"   		column="pPers_empresalegal"/>
-    <result property="intPersPersona"      			column="pPers_persona"/>
-    <result property="dtFechaLegalizacion"    		column="pLile_fechalegalizacion"/>
-    <result property="intNroCertificado"    		column="pLile_nrocertificado"/>
-    <result property="intFolioInicio"    			column="pLile_folioinicio"/>
-    <result property="intFolioFin"    				column="pLile_foliofin"/>
-    <result property="intParaTipo"    				column="pPara_tipo"/>
-    <result property="intItemArchivo"    			column="pMae_itemarchivo"/>
-    <result property="intItemHistorico"    			column="pMae_itemhistorico"/>
+  <typeAlias type="pe.com.tumi.contabilidad.legalizacion.domain.LibroLegalizacionComp" alias="LibroLegalizacionComp"/> 
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <resultMap id="resLegalizaciones" class="LibroLegalizacionComp">
+    <result property="libroLegalizacion.id.intPersEmpresa" 				column="pPERS_EMPRESA"/>
+    <result property="libroLegalizacion.id.intParaLibroContable"   		column="pPARA_LIBROCONTABLE"/>
+    <result property="libroLegalizacion.id.intItemLibroLegalizacion"  	column="pCONT_ITEMLIBROLEGALIZACION"/>
+    <result property="libroLegalizacion.intPersEmpresaLegal"    		column="pPERS_EMPRESALEGAL"/>
+    <result property="libroLegalizacion.intPersPersona"    				column="pPERS_PERSONA"/>
+    <result property="strJuriRazonSocial"   							column="pJURI_RAZONSOCIAL"/>
+    <result property="strPersRuc"   									column="pPERS_RUC"/>
+    <result property="libroLegalizacion.dtFechaLegalizacion"    		column="pLILE_FECHALEGALIZACION"/>
+    <result property="libroLegalizacion.intNroCertificado"    			column="pLILE_NROCERTIFICADO"/>
+    <result property="libroLegalizacion.intFolioInicio"    				column="pLILE_FOLIOINICIO"/>
+    <result property="libroLegalizacion.intFolioFin"    				column="pLILE_FOLIOFIN"/>
+    <result property="intSaldolegalizacion"    							column="pSALDO_LEGALIZACION"/>
+    <result property="libroLegalizacion.intParaTipo"    				column="pPARA_TIPO"/>
+    <result property="libroLegalizacion.intItemArchivo"    				column="pMAE_ITEMARCHIVO"/>
+    <result property="libroLegalizacion.intItemHistorico"    			column="pMAE_ITEMHISTORICO"/>
+    <result property="intParaTipoLibro"    								column="pPARA_TIPOLIBRO"/>
   </resultMap>
-  
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <resultMap id="resPersonaJuridica" class="LibroLegalizacionComp">
+	<result property="libroLegalizacion.intPersEmpresaLegal" 			column="pPers_empresalegal"/>
+	<result property="libroLegalizacion.intPersPersona"					column="pPers_persona"/>
+	<result property="strJuriRazonSocial"  								column="pJuri_razonsocial"/>
+	<result property="strPersRuc"  										column="pPers_ruc"/>
+  </resultMap>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <resultMap id="resListaLibrosLegalizaciones" class="LibroLegalizacionComp">
+    <result property="libroLegalizacion.id.intPersEmpresa" 				column="pPERS_EMPRESA"/>
+    <result property="libroLegalizacion.id.intParaLibroContable"   		column="pPARA_LIBROCONTABLE"/>
+	<result property="strNombreLibro"  									column="pTABL_DESCRIPCION"/>
+	<result property="intSaldolegalizacion"  							column="pSALDO_LEGALIZACION"/>
+	<result property="intSaldoPendiente"  								column="pSALDO_PENDIENTE"/>
+	<result property="strPeriodoNombre"  								column="pLICD_PERIODO_NOMBRE"/>
+  </resultMap>
+
   <parameterMap id="parLibroLegalizacion" class="LibroLegalizacion">
 	 <parameter property="id.intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
@@ -32,36 +53,60 @@
      <parameter property="intFolioFin"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intParaTipo"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
      <parameter property="intItemArchivo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
-     <parameter property="intItemArchivo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
-  </parameterMap>
-  
-  <parameterMap id="parPorPk" class="java.util.Map">
-   	 <parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
-   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
-	 <parameter property="intItemLibroLegalizacion"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="IN"/>	      
+     <parameter property="intItemHistorico"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
 
-  <parameterMap id="parPorPersona" class="java.util.Map">
+  <parameterMap id="parPersonaJuridica" class="java.util.Map">
    	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
-	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>   
-   	<parameter property="intPersPersona"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+	<parameter property="strPersRuc"				javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>   
+   	<parameter property="strJuriRazon"				javaType="java.lang.String"		jdbcType="VARCHAR"		mode="IN"/>
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
   </parameterMap>
-  
-     
-  <procedure id="grabar" parameterMap="parLibroLegalizacion">
-	{ call PKG_LIBROLEGALIZACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?) }  
-  </procedure>
-  
-  <procedure id="modificar" parameterMap="parLibroLegalizacion" >
-	{ call PKG_LIBROLEGALIZACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?) }  
-  </procedure>
-  
-  <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resLibroLegalizacion">
-	{ call PKG_LIBROLEGALIZACION.getListaPorPk(?,?,?,?) }
-  </procedure>
 
-  <procedure id="getListaPorPersona" parameterMap="parPorPersona" resultMap="resLibroLegalizacion">
-	{ call PKG_LIBROLEGALIZACION.getListaPorPersona(?,?,?) }
+  <parameterMap id="parLegalizaciones" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parUltimoFolio" class="java.util.Map">
+   	<parameter property="intUltimoFolioLegal"		javaType="java.lang.Integer" 	jdbcType="NUMERIC" 		mode="OUT"/>
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intItemLibroLegalizacion"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="grabar" parameterMap="parLibroLegalizacion">
+	{ call PKG_LIBROLEGALIZACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?) } 
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="modificar" parameterMap="parLibroLegalizacion" >
+	{ call PKG_LIBROLEGALIZACION.modificar(?,?,?,?,?,?,?,?,?,?,?,?) } 
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 08.09.2014 -->
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_LIBROLEGALIZACION.eliminar(?,?,?) }
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="getListaPersonaJuridica" parameterMap="parPersonaJuridica" resultMap="resPersonaJuridica">
+	{ call PKG_LIBROLEGALIZACION.getListaPersonaJuridica(?,?,?,?) }
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="getListaLegalizaciones" parameterMap="parLegalizaciones" resultMap="resLegalizaciones">
+	{ call PKG_LIBROLEGALIZACION.getListaLegalizaciones(?,?,?) }
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="getUltimoFolio" parameterMap="parUltimoFolio">
+	{ call PKG_LIBROLEGALIZACION.getUltimoFolio(?,?,?) }
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="getListaLibrosLegalizaciones" parameterMap="parLegalizaciones" resultMap="resListaLibrosLegalizaciones">
+	{ call PKG_LIBROLEGALIZACION.getListaLibrosLegalizaciones(?,?,?) }
   </procedure>
 </sqlMap>

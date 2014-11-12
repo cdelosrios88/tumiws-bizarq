@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="LibroContableDetalleDaoIbatis">
+
+  <typeAlias type="pe.com.tumi.contabilidad.legalizacion.domain.LibroContableDetalleComp" alias="LibroContableDetalleComp"/>
+  <typeAlias type="pe.com.tumi.contabilidad.legalizacion.domain.LibroContableDetalle" alias="LibroContableDetalle"/> 
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <resultMap id="resLibroContableDetalle" class="LibroContableDetalleComp">
+    <result property="libroContableDetalle.id.intEmpresaPk" 				column="pPERS_EMPRESA"/>
+    <result property="libroContableDetalle.id.intLibroContable"   			column="pPARA_LIBROCONTABLE"/>
+    <result property="libroContableDetalle.id.intItemLibroContableDet"  	column="pCONT_ITEMLIBROCONTABLEDET"/>
+    <result property="libroContableDetalle.intPeriodo"    					column="pLICD_PERIODO"/>
+    <result property="libroContableDetalle.intFolioInicio"    				column="pLICD_FOLIOINICIO"/>
+    <result property="libroContableDetalle.intFolioFin"    					column="pLICD_FOLIOFIN"/>
+    <result property="libroContableDetalle.intItemLibroLegalizacion"    	column="pCONT_ITEMLIBROLEGALIZACION"/>
+    <result property="libroContableDetalle.intTipo"    						column="pPARA_TIPO"/>
+    <result property="libroContableDetalle.intItemArchivo"    				column="pMAE_ITEMARCHIVO"/>
+    <result property="libroContableDetalle.intItemHistorico"    			column="pMAE_ITEMHISTORICO"/>
+    <result property="strLicdPeriodoNombre"    								column="pLICD_PERIODO_NOMBRE"/>
+    <result property="strContLibroLegalizacion"    							column="pCONT_LIBROLEGALIZACION"/>
+  </resultMap>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 06.09.2014 -->
+  <resultMap id="resListaLibroContaDetaNulo" class="LibroContableDetalleComp">
+    <result property="libroContableDetalle.id.intEmpresaPk" 				column="pPERS_EMPRESA"/>
+    <result property="libroContableDetalle.id.intLibroContable"   			column="pPARA_LIBROCONTABLE"/>
+    <result property="libroContableDetalle.id.intItemLibroContableDet"  	column="pCONT_ITEMLIBROCONTABLEDET"/>
+    <result property="libroContableDetalle.intFolioInicio"    				column="pLICD_FOLIOINICIO"/>
+    <result property="libroContableDetalle.intFolioFin"    					column="pLICD_FOLIOFIN"/>
+    <result property="strLicdPeriodoNombre"    								column="pLICD_PERIODO_NOMBRE"/>
+  </resultMap>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <resultMap id="resListaUltimoFolioDetalle" class="LibroContableDetalleComp">
+    <result property="libroContableDetalle.intFolioInicio" 					column="pLICD_FOLIOINICIO"/>
+    <result property="libroContableDetalle.intFolioFin"   					column="pLICD_FOLIOFIN"/>
+  </resultMap>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <parameterMap id="parLibroContableDetalle" class="LibroContableDetalle">
+	 <parameter property="id.intEmpresaPk"				javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intLibroContable"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="id.intItemLibroContableDet"	javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intPeriodo"					javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intFolioInicio"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intFolioFin"					javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intItemLibroLegalizacion"		javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intTipo"						javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intItemArchivo"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+     <parameter property="intItemHistorico"				javaType="java.lang.Integer" 	jdbcType="NUMERIC"		mode="INOUT"/>
+  </parameterMap>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <parameterMap id="parListaLibroContableDetalle" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <parameterMap id="parListaUltimoFolioDetalle" class="java.util.Map">
+   	<parameter property="cursorLista"				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intItemLibroLegalizacion"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+  <parameterMap id="parPorEliminar" class="java.util.Map">
+   	<parameter property="intPersEmpresa"			javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intParaLibroContable"		javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+   	<parameter property="intItemLibroContableDet"	javaType="java.lang.Integer"	jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="grabar" parameterMap="parLibroContableDetalle">
+	{ call PKG_LIBROCONTABLEDETALLE.grabar(?,?,?,?,?,?,?,?,?,?) } 
+  </procedure>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 08.09.2014 -->
+  <procedure id="modificar" parameterMap="parLibroContableDetalle">
+	{ call PKG_LIBROCONTABLEDETALLE.modificar(?,?,?,?,?,?,?,?,?,?) } 
+  </procedure>
+
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 09.09.2014 -->
+  <procedure id="eliminar" parameterMap="parPorEliminar">
+	{ call PKG_LIBROCONTABLEDETALLE.eliminar(?,?,?) }
+  </procedure>
+
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 03.09.2014 -->
+  <procedure id="getListaLibroContableDetalle" parameterMap="parListaLibroContableDetalle" resultMap="resLibroContableDetalle">
+	{ call PKG_LIBROCONTABLEDETALLE.getListaLibroContableDetalle(?,?,?) }
+  </procedure>
+	<!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 04.09.2014 -->
+  <procedure id="getListaUltimoFolioDetalle" parameterMap="parListaUltimoFolioDetalle" resultMap="resListaUltimoFolioDetalle">
+	{ call PKG_LIBROCONTABLEDETALLE.getListaUltimoFolioDetalle(?,?,?,?) }
+  </procedure>
+  <!-- Autor : jbermudez 	/ Tarea : creación	/ Fecha : 06.09.2014 -->
+  <procedure id="getListaLibroContaDetaNulo" parameterMap="parListaLibroContableDetalle" resultMap="resListaLibroContaDetaNulo">
+	{ call PKG_LIBROCONTABLEDETALLE.getListaLibroContaDetaNulo(?,?,?) }
+  </procedure>
+</sqlMap>

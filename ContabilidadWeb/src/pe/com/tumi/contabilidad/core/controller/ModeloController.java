@@ -27,7 +27,6 @@ import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.contabilidad.core.domain.PlanCuentaId;
 import pe.com.tumi.contabilidad.core.facade.ModeloFacadeLocal;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeLocal;
-import pe.com.tumi.empresa.domain.AreaCodigo;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
@@ -390,9 +389,19 @@ public class ModeloController {
 		}
 		if(getIntCboPeriodoBusq()!=null && !getIntCboPeriodoBusq().equals(0))beanCuentaBusq.getId().setIntPeriodoCuenta(getIntCboPeriodoBusq());
 		
-		List<PlanCuenta> lista = null;
+		//Autor: jchavez / Tarea: Creación / Fecha: 12.09.2014 / Se agrega nueva validación: PLCU_MOVIMIENTO = 1 
+		List<PlanCuenta> listaTemp = null;
+		List<PlanCuenta> lista = new ArrayList<PlanCuenta>();
 		PlanCuentaFacadeLocal planCuentaFacade = (PlanCuentaFacadeLocal) EJBFactory.getLocal(PlanCuentaFacadeLocal.class);
-		lista = planCuentaFacade.getListaPlanCuentaBusqueda(beanCuentaBusq);
+		listaTemp = planCuentaFacade.getListaPlanCuentaBusqueda(beanCuentaBusq);
+		if (listaTemp!=null && !listaTemp.isEmpty()) {
+			for (PlanCuenta planCuenta : listaTemp) {
+				if (planCuenta.getIntMovimiento().equals(1)) {
+					lista.add(planCuenta);
+				}
+			}
+		}
+		//Fin jchavez 12.09.2014
 		System.out.println("listCuentaOrigenDestino.size: "+lista.size());
 		
 		setListPlanCuenta(lista);
@@ -593,6 +602,7 @@ public class ModeloController {
 		log.info("-------------------------------------Debugging ModeloController.onConfirmDeleteModeloDet-------------------------------------");
 		MessageController message = (MessageController)getSessionBean("messageController");
 		message.setWarningMessage("¿Desea eliminar esta cuenta del modelo?");
+		message.setStrFunctionAccept("acceptMessage()");
 	}
 	
 	public void deleteModeloDetalle(ActionEvent event){
