@@ -44,15 +44,21 @@
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/OrdenCompra.xml"/>
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/OrdenCompraDetalle.xml"/>
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/OrdenCompraDocumento.xml"/>
+	
+	<!-- Agregado por cdelosrios, 02/11/2013 -->
+	<sqlMap resource="pe/com/tumi/tesoreria/cierreLogisticaOper/dao/impl/CierreLogisticaOper.xml"/>
+	<!-- Fin agregado por cdelosrios, 02/11/2013 -->
+	
+	<!-- Autor: jchavez / Tarea: Creación / Fecha: 19.10.2014 -->
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatOrdenComDoc.xml"/>
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunat.xml"/>
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatDetalle.xml"/>
-	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/AdelantoSunat.xml"/>
-	<!-- Agregado por cdelosrios, 02/11/2013 -->
+	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatLetra.xml"/>
 	<sqlMap resource="pe/com/tumi/tesoreria/logistica/dao/impl/DocumentoSunatDoc.xml"/>
-	<!-- Fin agregado por cdelosrios, 02/11/2013 -->
+	<!-- Fin jchavez - 19.10.2014 -->
+	
 	<!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
 	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/Conciliacion.xml"/>
 	<sqlMap resource="pe/com/tumi/tesoreria/egreso/dao/impl/ConciliacionDetalle.xml"/>
 	<!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
-	
 </sqlMapConfig>

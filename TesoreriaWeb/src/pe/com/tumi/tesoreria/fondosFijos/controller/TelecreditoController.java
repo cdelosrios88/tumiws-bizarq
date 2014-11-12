@@ -84,7 +84,7 @@ import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.fileupload.FileUploadController;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
-import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDocumento;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
 
 public class TelecreditoController {
@@ -215,7 +215,7 @@ public class TelecreditoController {
 	//Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014 /
 	private Egreso egresoGeneradoTrasGrabacion;
 	private List<Tabla> listaTablaTipoDocumento;
-	
+	private List<Tabla> listaTablaTipoComprobante;
 		
 	public TelecreditoController(){
 		cargarUsuario();
@@ -313,6 +313,7 @@ public class TelecreditoController {
 			listaTablaTipoCuentaBancaria = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTABANCARIA));
 			listaTablaTipoMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
 			listaTablaTipoDocumento = new ArrayList<Tabla>();
+			listaTablaTipoComprobante = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCOMPROBANTE));
 			
 			listaMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
 			setListaSubTipoOperacion(tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPODESUBOPERACION), "A"));
@@ -1517,38 +1518,53 @@ public class TelecreditoController {
 					documentoGeneral.setDocumentoSunat(documentoSunat);
 					listaDocumentoPorAgregar.add(documentoGeneral);
 				}
-			}//Autor: jchavez / Tarea: Creación / Fecha: 11.10.2014
-			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
-				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
+			}//Autor: jchavez / Tarea: Creación / Fecha: 23.10.2014
+			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO) || intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, intTipoDocumentoAgregar);
 				for (OrdenCompra ordenCompra : listaOrdenCompra) {
-					log.info(ordenCompra);
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
-					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
-					BigDecimal bdMonto = BigDecimal.ZERO;
-					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
-						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
-					}
-					documentoGeneral.setBdMonto(bdMonto);
-					documentoGeneral.setOrdenCompra(ordenCompra);
-					listaDocumentoPorAgregar.add(documentoGeneral);
-				}
-			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
-				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
-				for (OrdenCompra ordenCompra : listaOrdenCompra) {
-					log.info(ordenCompra);
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
-					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
-					BigDecimal bdMonto = BigDecimal.ZERO;
-					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
-						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
-					}
-					documentoGeneral.setBdMonto(bdMonto);
-					documentoGeneral.setOrdenCompra(ordenCompra);
-					listaDocumentoPorAgregar.add(documentoGeneral);
+					for (OrdenCompraDocumento ordenCompraDoc : ordenCompra.getListaOrdenCompraDocumento()) {
+						DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+						documentoGeneral.setIntTipoDocumento(ordenCompraDoc.getIntParaDocumentoGeneral());
+						documentoGeneral.setStrNroDocumento(""+ordenCompraDoc.getId().getIntItemOrdenCompraDocumento());
+						BigDecimal bdMonto = ordenCompraDoc.getBdMontoDocumento();
+						documentoGeneral.setBdMonto(bdMonto);
+						documentoGeneral.setOrdenCompra(ordenCompra);
+						listaDocumentoPorAgregar.add(documentoGeneral);
+					}					
 				}
 			}
+			//Autor: jchavez / Tarea: Creación / Fecha: 11.10.2014
+//			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
+//				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
+//				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+//					log.info(ordenCompra);
+//					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+//					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+//					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+//					BigDecimal bdMonto = BigDecimal.ZERO;
+//					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+//						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+//					}
+//					documentoGeneral.setBdMonto(bdMonto);
+//					documentoGeneral.setOrdenCompra(ordenCompra);
+//					listaDocumentoPorAgregar.add(documentoGeneral);
+//				}
+//			}else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+//				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, SESION_IDEMPRESA, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
+//				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+//					log.info(ordenCompra);
+//					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+//					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+//					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+//					BigDecimal bdMonto = BigDecimal.ZERO;
+//					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+//						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+//					}
+//					documentoGeneral.setBdMonto(bdMonto);
+//					documentoGeneral.setOrdenCompra(ordenCompra);
+//					listaDocumentoPorAgregar.add(documentoGeneral);
+//				}
+//			}
 			//Fin jchavez - 11.10.2014
 			
 			listaDocumentoPorAgregar = egresoFacade.filtrarDuplicidadDocumentoGeneralParaEgreso(listaDocumentoPorAgregar, 
@@ -1886,6 +1902,8 @@ public class TelecreditoController {
 	public void agregarDocumento(){
 		deshabilitarNuevo = false;
 		try{
+			listaEgresoDetalleInterfazAgregado.clear();
+			
 			if(documentoGeneralSeleccionado.getBdMonto()==null){
 				return;
 			}
@@ -2136,14 +2154,19 @@ public class TelecreditoController {
 		listaTablaTipoDocumento.clear();
 		List<Fondodetalle> lstFdoDetalle = null;
 		try {
-			lstFdoDetalle = bancoFacade.getDocumentoPorFondoFijo(SESION_IDEMPRESA, intTipoFondoFijoValidar, (controlFondosFijos.getIntParaMoneda()!=null?controlFondosFijos.getIntParaMoneda():Constante.PARAM_T_TIPOMONEDA_SOLES));
+			lstFdoDetalle = bancoFacade.getDocumentoPorFondoFijo(SESION_IDEMPRESA, intTipoFondoFijoValidar, controlFondosFijos.getIntParaMoneda());
 			if (lstFdoDetalle!=null && !lstFdoDetalle.isEmpty()) {
 				for (Fondodetalle fondodetalle : lstFdoDetalle) {
-					if (fondodetalle.getIntTotalsucursalCod()!=null) {						
+					Tabla tipoDocumento = new Tabla();
+					if (fondodetalle.getIntTotalsucursalCod()!=null) {					
 						if (fondodetalle.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_SUCURSALES)) {
 							for (Tabla o : listaTablaDocumentoGeneral) {
 								if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-									listaTablaTipoDocumento.add(o);
+									tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+									tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+									tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+									tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());//Uso el orden como auxiliar para guardar el id comprobante
+//									listaTablaTipoDocumento.add(o);
 									break;
 								}
 							}
@@ -2151,7 +2174,11 @@ public class TelecreditoController {
 							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_AGENCIA)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
@@ -2160,7 +2187,11 @@ public class TelecreditoController {
 							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_FILIAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
@@ -2169,7 +2200,11 @@ public class TelecreditoController {
 							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_OFICINAPRINCIPAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
@@ -2178,26 +2213,44 @@ public class TelecreditoController {
 							if (usuarioSesion.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
-							}							
+							}
 						}
 					}else {
 						if (fondodetalle.getIntIdsucursal().equals(sucursalUsuario.getId().getIntIdSucursal())
 								&& fondodetalle.getIntIdsubsucursal().equals(subsucursalUsuario.getId().getIntIdSubSucursal())) {
 							for (Tabla o : listaTablaDocumentoGeneral) {
 								if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-									listaTablaTipoDocumento.add(o);
+									tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+									tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+									tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+									tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//									listaTablaTipoDocumento.add(o);
 									break;
 								}
 							}
 						}
 					}
+					//Se agrega comprobante
+					String strDescTipoDocumento = tipoDocumento.getStrDescripcion();
+					for (Tabla tipComp : listaTablaTipoComprobante) {
+						if (tipComp.getIntIdDetalle().equals(tipoDocumento.getIntOrden())) {
+							tipoDocumento.setStrDescripcion(strDescTipoDocumento+" - "+tipComp.getStrDescripcion());
+							break;
+						}
+					}
+					if (tipoDocumento.getIntIdMaestro()!=null) {
+						listaTablaTipoDocumento.add(tipoDocumento);
+					}					
 				}
-			}
-			
+			}			
 		} catch (Exception e) {
 			log.info("Error en listaDocumentosConf() ---> "+e.getMessage());
 		}

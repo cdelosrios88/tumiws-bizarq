@@ -1,9 +1,3 @@
-/* -----------------------------------------------------------------------------------------------------------
-* Modificaciones
-* Motivo                      Fecha            Nombre                      Descripción
-* -----------------------------------------------------------------------------------------------------------
-* REQ14-006       			28/10/2014     Christian De los Ríos        Se agregó el método processExcelFile para leer un archivo xls         
-*/
 package pe.com.tumi.tesoreria.fileupload;
 
 import java.awt.image.BufferedImage;
@@ -487,7 +481,50 @@ public class FileUploadController {
 			log.error(e.getMessage(),e);
 		}
 	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 04.11.2014
+	public void adjuntarArchivoDocumentoSunatLetra(UploadEvent event){
+		try{
+			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_LETRADECAMBIO;
+			
+			archivoDocumento = procesarArchivo(event, intTipoArchivo);
+			log.info("rutaAntigua:"+archivoDocumento.getRutaAntigua());
+			log.info("rutaNueva:"+archivoDocumento.getRutaActual());
+			renombrarArchivo(archivoDocumento.getRutaAntigua(), archivoDocumento.getRutaActual());
+			
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 04.11.2014
+	public void adjuntarArchivoDocumentoSunatNotaCredito(UploadEvent event){
+		try{
+			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_NOTADECREDITO;
+			
+			archivoDocumento = procesarArchivo(event, intTipoArchivo);
+			log.info("rutaAntigua:"+archivoDocumento.getRutaAntigua());
+			log.info("rutaNueva:"+archivoDocumento.getRutaActual());
+			renombrarArchivo(archivoDocumento.getRutaAntigua(), archivoDocumento.getRutaActual());
+			
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 04.11.2014
+	public void adjuntarArchivoDocumentoSunatNotaDebito(UploadEvent event){
+		try{
+			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_NOTADEDEBITO;
+			
+			archivoDocumento = procesarArchivo(event, intTipoArchivo);
+			log.info("rutaAntigua:"+archivoDocumento.getRutaAntigua());
+			log.info("rutaNueva:"+archivoDocumento.getRutaActual());
+			renombrarArchivo(archivoDocumento.getRutaAntigua(), archivoDocumento.getRutaActual());
+			
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
 	public void adjuntarArchivoDocumentoContrato(UploadEvent event){
 		try{
 			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_COMPRASCONTRATO;

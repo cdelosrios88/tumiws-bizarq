@@ -224,7 +224,9 @@ public class JuridicaController {
 				for(PersonaRol personaRol : persona.getPersonaEmpresa().getListaPersonaRol()) {
 					for (Tabla tabla : lstRoles) {
 						if (tabla.getIntIdDetalle().equals(personaRol.getId().getIntParaRolPk())) {
-							strRoles = (strRoles.trim().equalsIgnoreCase("")?(strRoles.trim()+" / "):"") + tabla.getStrDescripcion();
+//							strRoles = (strRoles.trim().equalsIgnoreCase("")?(strRoles.trim()+" / "):"") + tabla.getStrDescripcion();
+							//Autor: jchavez / Tarea: Modificación / Fecha: 18.10.2014
+							strRoles = (strRoles.trim().equalsIgnoreCase("")?(tabla.getStrDescripcion()+" / "):(strRoles+tabla.getStrDescripcion()+" / "));
 							log.info(personaRol);
 						}
 					}
@@ -606,6 +608,8 @@ public class JuridicaController {
 			}else{
 				tipoComprobanteController.setListComprobanteProveedor(new ArrayList<TipoComprobante>());
 			}
+			
+			logPersona(perJuridica);
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 			throw e;			

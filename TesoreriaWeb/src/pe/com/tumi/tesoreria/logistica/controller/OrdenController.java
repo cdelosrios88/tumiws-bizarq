@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
-import pe.com.tumi.common.util.DocumentoRequisicion;
 import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.common.util.UtilManagerReport;
@@ -30,7 +29,6 @@ import pe.com.tumi.empresa.domain.Area;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
-import pe.com.tumi.parametro.auditoria.facade.AuditoriaFacadeRemote;
 import pe.com.tumi.parametro.general.domain.Detraccion;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
@@ -45,12 +43,13 @@ import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.persona.empresa.domain.Juridica;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
-import pe.com.tumi.tesoreria.logistica.domain.AdelantoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.Contrato;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativo;
 import pe.com.tumi.tesoreria.logistica.domain.CuadroComparativoProveedor;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoRequisicion;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunatOrdenComDoc;
 import pe.com.tumi.tesoreria.logistica.domain.InformeGerencia;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
@@ -144,9 +143,10 @@ public class OrdenController {
 	private	List<Tabla> listaTablaTipoMoneda;
 	//Fin jchavez - 01.10.2014
 	
-	//Autor: jchavez / Tarea: Creacion / Fecha: 03.10.2014
-	private AuditoriaFacadeRemote auditoriaFacade;
-	//Fin jchavez - 03.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+	private Boolean blnExisteCancelado;
+	private Boolean blnExisteDocSunatRel;
+	//Fin jchavez - 26.10.2014
 	
 	public OrdenController() {
 		cargarUsuario();
@@ -221,7 +221,10 @@ public class OrdenController {
 			// Agregado por cdelosrios, 29/09/2013
 			blnHabilitarDetOrden = Boolean.FALSE;
 			// Fin agregado por cdelosrios, 29/09/2013
-
+			//Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+			blnExisteCancelado = false;
+			blnExisteDocSunatRel = false;
+			//Fin jchavez - 26.10.2014
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -237,6 +240,10 @@ public class OrdenController {
 		blnHabilitarAdmin = Boolean.FALSE;
 		blnHabilitarDetOrden = Boolean.FALSE;
 		//Fin agregado por cdelosrios, 29/09/2013
+		//Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+		blnExisteCancelado = false;
+		blnExisteDocSunatRel = false;
+		//Fin jchavez - 26.10.2014
 	}
 
 	public void grabar() {
@@ -448,10 +455,26 @@ public class OrdenController {
 	}
 
 	public void seleccionarRegistro(ActionEvent event) {
+		blnExisteCancelado = false;
+		blnExisteDocSunatRel = false;
+		List<DocumentoSunatOrdenComDoc> lista = null;
 		try {
 			cargarUsuario();
 			registroSeleccionado = (OrdenCompra) event.getComponent()
 					.getAttributes().get("item");
+			// Si tiene enlazados documentos sunat o los adelantos están cancelados, 
+			// se debe mostrar la opción Ver.
+			if (registroSeleccionado.getListaOrdenCompraDocumento()!=null && !registroSeleccionado.getListaOrdenCompraDocumento().isEmpty()) {
+				for (OrdenCompraDocumento o : registroSeleccionado.getListaOrdenCompraDocumento()) {
+					lista = logisticaFacade.getListaPorOrdenCompraDoc(o);
+					if (lista != null && !lista.isEmpty()) {
+						blnExisteDocSunatRel = true;
+					}
+					if (o.getIntParaEstadoPago().equals(Constante.PARAM_T_ESTADOPAGO_CANCELADO)) {
+						blnExisteCancelado = true;
+					}
+				}
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -723,7 +746,8 @@ public class OrdenController {
 		try {
 			log.info("--buscarPersona");
 			Persona persona = null;
-			boolean proveedorValido = Boolean.TRUE;
+			boolean esProveedor = false;
+			boolean proveedorValido = false;
 			if (intTipoPersona.equals(Constante.PARAM_T_TIPOPERSONA_NATURAL)) {
 				persona = personaFacade.getPersonaNaturalPorDocIdentidadYIdEmpresa(Constante.PARAM_T_INT_TIPODOCUMENTO_DNI,
 																				   strFiltroTextoPersona, EMPRESA_USUARIO);
@@ -737,35 +761,39 @@ public class OrdenController {
 				 * Estado Contribuyente: Activo
 				 * Condición Contribuyente: Habido
 				 */ 
-				proveedorValido = MyUtil.poseeRol(persona,Constante.PARAM_T_TIPOROL_PROVEEDOR)
-								&& (persona.getJuridica().getIntCondContribuyente() != null 
-										&& persona.getJuridica().getIntCondContribuyente().equals(Constante.PARAM_T_TIPOCONDCONTRIBUYENTE_HABIDO))
-								&& (persona.getJuridica().getIntEstadoContribuyenteCod() != null 
-										&& persona.getJuridica().getIntEstadoContribuyenteCod().equals(Constante.PARAM_T_TIPOESTADOCONTRIB_ACTIVO));
+				esProveedor = MyUtil.poseeRol(persona,Constante.PARAM_T_TIPOROL_PROVEEDOR);
 				
-				      
-				if (proveedorValido) {
-					strMsgErrorBusquedaProveedor = "";
-				}else{
-					//Descripcion Estado Contribuyente
-					for (Tabla tabla : lstTablaEstadoContribuyente) {
-						if (tabla.getIntIdDetalle().equals(persona.getJuridica().getIntEstadoContribuyenteCod())) {
-							strDescEstadoContribuyente = tabla.getStrDescripcion();
-							break;
+				if (esProveedor) {
+					proveedorValido = (persona.getJuridica().getIntCondContribuyente() != null 
+							&& persona.getJuridica().getIntCondContribuyente().equals(Constante.PARAM_T_TIPOCONDCONTRIBUYENTE_HABIDO))
+							&& (persona.getJuridica().getIntEstadoContribuyenteCod() != null 
+							&& persona.getJuridica().getIntEstadoContribuyenteCod().equals(Constante.PARAM_T_TIPOESTADOCONTRIB_ACTIVO));
+					
+					if (proveedorValido) {
+						strMsgErrorBusquedaProveedor = "";
+					}else{
+						//Descripcion Estado Contribuyente
+						for (Tabla tabla : lstTablaEstadoContribuyente) {
+							if (tabla.getIntIdDetalle().equals(persona.getJuridica().getIntEstadoContribuyenteCod())) {
+								strDescEstadoContribuyente = tabla.getStrDescripcion();
+								break;
+							}
 						}
+					      
+						//Descripcion Condicion Contribuyente
+						for (Tabla tabla : lstTablaCondicionContribuyente) {
+							if (tabla.getIntIdDetalle().equals(persona.getJuridica().getIntCondContribuyente())) {
+								strDescCondicionContribuyente = tabla.getStrDescripcion();
+								break;
+							}
+						}		
+						strMsgErrorBusquedaProveedor = "El proveedor se encuentra Estado: "+strDescEstadoContribuyente+
+						   " Condición: "+strDescCondicionContribuyente+", no puede seleccionarse ";
 					}
-				      
-					//Descripcion Condicion Contribuyente
-					for (Tabla tabla : lstTablaCondicionContribuyente) {
-						if (tabla.getIntIdDetalle().equals(persona.getJuridica().getIntCondContribuyente())) {
-							strDescCondicionContribuyente = tabla.getStrDescripcion();
-							break;
-						}
-					}		
-					strMsgErrorBusquedaProveedor = "El proveedor se encuentra Estado: "+strDescEstadoContribuyente+
-					   " Condición: "+strDescCondicionContribuyente+", no puede seleccionarse ";
+					//Fin jchavez - 01.10.2014
+				}else {
+					strMsgErrorBusquedaProveedor = "El RUC ingresado no es de tipo rol PROVEEDOR.";
 				}
-				//Fin jchavez - 01.10.2014
 			}
 
 			// proveedorValido = Boolean.TRUE;
@@ -1422,7 +1450,11 @@ public class OrdenController {
 //	}
 	
 	public void agregarOrdenCompraDetalle() {
+		List<OrdenCompraDetalle> lstOrdComDetTmp = new ArrayList<OrdenCompraDetalle>();
+		List<OrdenCompraDetalle> lstOrdComDetNew = new ArrayList<OrdenCompraDetalle>();
 		try {
+			lstOrdComDetTmp.addAll(ordenCompraNuevo.getListaOrdenCompraDetalle());
+			
 			mostrarMensajeDetalle = Boolean.TRUE;
 			if (ordenCompraDetalle.getBdCantidad() == null
 					|| ordenCompraDetalle.getBdCantidad().signum() <= 0) {
@@ -1492,25 +1524,37 @@ public class OrdenController {
 						.equals(ordenCompraDetalle.getIntIdArea()))
 					ordenCompraDetalle.setArea(area);
 
-			if (!ordenCompraNuevo.getListaOrdenCompraDetalle().contains(
-					ordenCompraDetalle))
-				ordenCompraNuevo.getListaOrdenCompraDetalle().add(
-						ordenCompraDetalle);
-
-			calcularMontoTotalDetalle();
+			if (!lstOrdComDetTmp.contains(ordenCompraDetalle)){
+				lstOrdComDetTmp.add(ordenCompraDetalle);
+				lstOrdComDetNew.add(ordenCompraDetalle);
+			}
+			
+			calcularMontoTotalDetalle(lstOrdComDetTmp);
+			if (ordenCompraNuevo.getBdMontoTotalDetalle().compareTo(ordenCompraNuevo.getDocumentoRequisicion().getRequisicion().getBdMontoLogistica())==1) {
+				strMensajeDetalle = "El monto ingresado no puede ser mayor al monto del Documento Requisito.";
+				return;
+			}else {
+				ordenCompraNuevo.getListaOrdenCompraDetalle().addAll(lstOrdComDetNew);
+			}				
 			mostrarMensajeDetalle = Boolean.FALSE;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 	}
 
-	private void calcularMontoTotalDetalle() throws Exception {
+	private void calcularMontoTotalDetalle(List<OrdenCompraDetalle> lstOrdComDetTmp) throws Exception {
+//		ordenCompraNuevo.setBdMontoTotalDetalle(new BigDecimal(0));
+//		for (OrdenCompraDetalle ordenCompraDetalle : ordenCompraNuevo
+//				.getListaOrdenCompraDetalle())
+//			ordenCompraNuevo.setBdMontoTotalDetalle(ordenCompraNuevo
+//					.getBdMontoTotalDetalle().add(
+//							ordenCompraDetalle.getBdPrecioTotal()));
 		ordenCompraNuevo.setBdMontoTotalDetalle(new BigDecimal(0));
-		for (OrdenCompraDetalle ordenCompraDetalle : ordenCompraNuevo
-				.getListaOrdenCompraDetalle())
-			ordenCompraNuevo.setBdMontoTotalDetalle(ordenCompraNuevo
-					.getBdMontoTotalDetalle().add(
-							ordenCompraDetalle.getBdPrecioTotal()));
+		for (OrdenCompraDetalle ordenCompraDetalle : lstOrdComDetTmp){
+			ordenCompraNuevo.setBdMontoTotalDetalle(ordenCompraNuevo.getBdMontoTotalDetalle()
+					.add(ordenCompraDetalle.getBdPrecioTotal()));
+		}
+			
 	}
 
 	private void calcularMontoTotalDocumento() throws Exception {
@@ -1575,7 +1619,10 @@ public class OrdenController {
 			//Autor: jchavez / Tarea: Se agregan nuevos campos / Fecha: 04.10.2014
 			ordenCompraDocumento.setTsFechaRegistro(new Timestamp(new Date().getTime()));
 			//Fin jchavez - 04.10.2014
-
+			//Autor: jchavez / Tarea: Modificacion (OBS 1) / Fecha: 20.10.2014
+			ordenCompraDocumento.setIntParaEstadoPago(Constante.PARAM_T_ESTADOPAGO_PENDIENTE);
+			ordenCompraDocumento.setBdMontoSaldo(BigDecimal.ZERO);
+			//Fin jchavez - Fecha: 20.10.2014
 			if (!ordenCompraNuevo.getListaOrdenCompraDocumento().contains(
 					ordenCompraDocumento))
 				ordenCompraNuevo.getListaOrdenCompraDocumento().add(
@@ -1733,15 +1780,16 @@ public class OrdenController {
 			OrdenCompraDocumento ordenCompraDocumentoQuitar = (OrdenCompraDocumento) event
 					.getComponent().getAttributes().get("item");
 
-			List<AdelantoSunat> listaAdelantoSunat = logisticaFacade
-					.getListaAdelantoSunatPorOrdenCompraDocumento(ordenCompraDocumentoQuitar);
-			if (listaAdelantoSunat != null && !listaAdelantoSunat.isEmpty()) {
-				mostrarMensaje(
-						Boolean.FALSE,
-						"No se puede quitar el documento, esta siendo referenciado por un Documento Sunat.");
-				log.info(listaAdelantoSunat.get(0));
-				return;
-			}
+			//Autor: jchavez / Tarea: Se comenta dado que la tabla AdelantoSunat SE ELIMINÓ / Fecha: 17.10.2014
+//			List<AdelantoSunat> listaAdelantoSunat = logisticaFacade
+//					.getListaAdelantoSunatPorOrdenCompraDocumento(ordenCompraDocumentoQuitar);
+//			if (listaAdelantoSunat != null && !listaAdelantoSunat.isEmpty()) {
+//				mostrarMensaje(
+//						Boolean.FALSE,
+//						"No se puede quitar el documento, esta siendo referenciado por un Documento Sunat.");
+//				log.info(listaAdelantoSunat.get(0));
+//				return;
+//			}
 
 			ordenCompraNuevo.getListaOrdenCompraDocumento().remove(
 					ordenCompraDocumentoQuitar);
@@ -2256,4 +2304,18 @@ public class OrdenController {
 		this.strMsgErrorBusquedaProveedor = strMsgErrorBusquedaProveedor;
 	}	
 	//Fin jchavez - 01.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+	public Boolean getBlnExisteCancelado() {
+		return blnExisteCancelado;
+	}
+	public void setBlnExisteCancelado(Boolean blnExisteCancelado) {
+		this.blnExisteCancelado = blnExisteCancelado;
+	}
+	public Boolean getBlnExisteDocSunatRel() {
+		return blnExisteDocSunatRel;
+	}
+	public void setBlnExisteDocSunatRel(Boolean blnExisteDocSunatRel) {
+		this.blnExisteDocSunatRel = blnExisteDocSunatRel;
+	}
+	//Fin jchavez - 26.10.2014
 }

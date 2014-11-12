@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.openjpa.lib.log.Log;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.ConvertirLetras;
@@ -47,7 +48,6 @@ import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.persona.vinculo.domain.Vinculo;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
-//import pe.com.tumi.servicio.configuracion.domain.ConfServDetalleId;
 import pe.com.tumi.servicio.configuracion.domain.ConfServDetalleId;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioPrevision;
@@ -69,8 +69,6 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.RequisitoCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.PrestamoFacadeRemote;
-//import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
-//import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
 import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
@@ -82,7 +80,7 @@ import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.fileupload.FileUploadController;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
 import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
-import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDetalle;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompraDocumento;
 import pe.com.tumi.tesoreria.logistica.facade.LogisticaFacadeLocal;
 
 public class FondosFijosController {
@@ -207,6 +205,7 @@ public class FondosFijosController {
 	//Autor: jchavez / Tarea: Creación / Fecha: 19.08.2014 /
 	private Boolean blnActivarNroApertura;
 	private List<Tabla> listaTablaTipoDocumento;
+	private List<Tabla> listaTablaTipoComprobante;
 	
 	public FondosFijosController(){
 		cargarUsuario();
@@ -240,7 +239,6 @@ public class FondosFijosController {
 	
 	private void cargarValoresIniciales(){
 		try{
-			
 			empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 			egresoFacade = (EgresoFacadeLocal) EJBFactory.getLocal(EgresoFacadeLocal.class);
@@ -255,6 +253,7 @@ public class FondosFijosController {
 			conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
 //			listaTablaTipoCredito = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPO_CREDITO));
 			listaTablaDocumentoGeneral = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL));
+			listaTablaTipoComprobante = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCOMPROBANTE));
 			
 			listaMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
 			listaSubTipoOperacion = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPODESUBOPERACION), "A");
@@ -824,6 +823,13 @@ public class FondosFijosController {
 	public void verRegistro(ActionEvent event){
 		Boolean exito = Boolean.FALSE;
 		String mensaje = null;
+		//Inicio jchavez - 23.10.2014
+		lstRequisitoCredito.clear();
+		lstRequisitoPrevision.clear();
+		lstRequisitoPrevisionComp.clear();
+		lstRequisitoLiquidacion.clear();
+		lstRequisitoLiquidacionComp.clear();
+		//Fin jchavez - 23.10.2014
 		try{
 			limpiarFormulario();
 			deshabilitarNuevo = Boolean.TRUE;
@@ -861,7 +867,9 @@ public class FondosFijosController {
 			}			
 //			filtrarListaTablaDocumentoGeneral();
 			/****/
-			
+			//Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
+			obtenerListaTipoDocumentoGeneral();
+			//Fin jchavez - 26.10.2014
 			
 			documentoGeneralSeleccionado = new DocumentoGeneral();
 			documentoGeneralSeleccionado.setIntTipoDocumento(intTipoDocumentoAgregar);
@@ -926,6 +934,19 @@ public class FondosFijosController {
 					documentoGeneralSeleccionado.setDocumentoSunat(documentoSunat);
 					documentoGeneralSeleccionado.setBdMonto(new BigDecimal(0));
 					agregarDocumento();
+				}
+			}
+			//Autor: jchavez / Tarea: Creacion / Fecha: 22.10.2014
+			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO) || intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.obtenerOrdenCompraPorEgresoPk(egreso);
+				if (listaOrdenCompra!=null && !listaOrdenCompra.isEmpty()) {
+					for (OrdenCompra ordenCompra : listaOrdenCompra) {
+						documentoGeneralSeleccionado = new DocumentoGeneral();
+						documentoGeneralSeleccionado.setIntTipoDocumento(intTipoDocumentoAgregar);
+						documentoGeneralSeleccionado.setOrdenCompra(ordenCompra);
+						documentoGeneralSeleccionado.setBdMonto(new BigDecimal(0));
+						agregarDocumento();
+					}
 				}
 			}
 			
@@ -1393,41 +1414,57 @@ public class FondosFijosController {
 					listaDocumentoPorAgregar.add(documentoGeneral);
 				}
 			}
+			//Autor: jchavez / Tarea: Creación / Fecha: 23.10.2014
+			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO) || intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, intTipoDocumentoAgregar);
+				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+					for (OrdenCompraDocumento ordenCompraDoc : ordenCompra.getListaOrdenCompraDocumento()) {
+						DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+						documentoGeneral.setIntTipoDocumento(ordenCompraDoc.getIntParaDocumentoGeneral());
+						documentoGeneral.setStrNroDocumento(""+ordenCompraDoc.getId().getIntItemOrdenCompraDocumento());
+						BigDecimal bdMonto = ordenCompraDoc.getBdMontoDocumento();
+						documentoGeneral.setBdMonto(bdMonto);
+						documentoGeneral.setOrdenCompra(ordenCompra);
+						listaDocumentoPorAgregar.add(documentoGeneral);
+					}					
+				}
+			}
+			//Fin jchavez - 23.10.2014
 			//Autor: jchavez / Tarea: Creación / Fecha: 04.10.2014
-			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
-				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
-				for (OrdenCompra ordenCompra : listaOrdenCompra) {
-					log.info(ordenCompra);
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
-					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
-					BigDecimal bdMonto = BigDecimal.ZERO;
-					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
-						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
-					}
-					documentoGeneral.setBdMonto(bdMonto);
-					documentoGeneral.setOrdenCompra(ordenCompra);
-					listaDocumentoPorAgregar.add(documentoGeneral);
-				}
-			}
-			//Fin jchavez - 04.10.2014
-			//Autor: jchavez / Tarea: Creación / Fecha: 10.10.2014
-			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
-				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
-				for (OrdenCompra ordenCompra : listaOrdenCompra) {
-					log.info(ordenCompra);
-					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
-					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
-					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
-					BigDecimal bdMonto = BigDecimal.ZERO;
-					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
-						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
-					}
-					documentoGeneral.setBdMonto(bdMonto);
-					documentoGeneral.setOrdenCompra(ordenCompra);
-					listaDocumentoPorAgregar.add(documentoGeneral);
-				}
-			}
+//			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)){
+//				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO);
+//				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+//					log.info(ordenCompra);
+//					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+//					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+//					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+//					BigDecimal bdMonto = BigDecimal.ZERO;
+//					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+//						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+//					}
+//					documentoGeneral.setBdMonto(bdMonto);
+//					documentoGeneral.setOrdenCompra(ordenCompra);
+//					listaDocumentoPorAgregar.add(documentoGeneral);
+//				}
+//			}
+//			//Fin jchavez - 04.10.2014
+//			//Autor: jchavez / Tarea: Creación / Fecha: 10.10.2014
+//			else if(intTipoDocumentoAgregar.equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA)){
+//				List<OrdenCompra> listaOrdenCompra = logisticaFacade.buscarDocumentoAdelantoGarantiaParaGiroPorTesoreria(intIdPersona, EMPRESA_USUARIO, Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA);
+//				for (OrdenCompra ordenCompra : listaOrdenCompra) {
+//					log.info(ordenCompra);
+//					DocumentoGeneral documentoGeneral = new DocumentoGeneral();
+//					documentoGeneral.setIntTipoDocumento(ordenCompra.getIntParaTipoDocumentoGeneral());
+//					documentoGeneral.setStrNroDocumento(""+ordenCompra.getId().getIntItemOrdenCompra());
+//					BigDecimal bdMonto = BigDecimal.ZERO;
+//					for (OrdenCompraDetalle ordCmpDet : ordenCompra.getListaOrdenCompraDetalle()) {
+//						bdMonto = bdMonto.add(ordCmpDet.getBdPrecioTotal());
+//					}
+//					documentoGeneral.setBdMonto(bdMonto);
+//					documentoGeneral.setOrdenCompra(ordenCompra);
+//					listaDocumentoPorAgregar.add(documentoGeneral);
+//				}
+//			}
 			//Fin jchavez - 10.10.2014
 			
 			//listaDocumentoPorAgregar = filtrarDuplicidadDocumentoGeneral(listaDocumentoPorAgregar, intTipoDocumentoAgregar);
@@ -1587,12 +1624,21 @@ public class FondosFijosController {
 				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(Constante.PARAM_T_TIPOMONEDA_SOLES)+" ";
 			}
 			
+			//Autor: jchavez / Tarea: Creacion / Fecha: 26.10.2014
 			if(documentoGeneralSeleccionado.getOrdenCompra()!=null && 
 					(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
 							|| documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))){
-				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaTipoMoneda())+" ";
-			}
-			strEtiqueta = strEtiqueta + formato.format(documentoGeneralSeleccionado.getBdMonto());
+				strEtiqueta = "Orden de Compra - "+documentoGeneralSeleccionado.getOrdenCompra().getId().getIntItemOrdenCompra()+" / " + strEtiqueta + " / " +formato.format(documentoGeneralSeleccionado.getBdMonto())+" "+obtenerEtiquetaTipoMoneda(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaTipoMoneda())+" ";
+			}else{
+				strEtiqueta = strEtiqueta + formato.format(documentoGeneralSeleccionado.getBdMonto());
+			}//Fin jchavez - 26.10.2014
+			
+//			if(documentoGeneralSeleccionado.getOrdenCompra()!=null && 
+//					(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_ADELANTO)
+//							|| documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_GARANTIA))){
+//				strEtiqueta = strEtiqueta + obtenerEtiquetaTipoMoneda(documentoGeneralSeleccionado.getOrdenCompra().getListaOrdenCompraDocumento().get(0).getIntParaTipoMoneda())+" ";
+//			}
+//			strEtiqueta = strEtiqueta + formato.format(documentoGeneralSeleccionado.getBdMonto());
 			
 			documentoGeneralSeleccionado.setStrEtiqueta(strEtiqueta);
 			//rqcuperamos el adjunto de giro para un prestamo
@@ -1776,6 +1822,7 @@ public class FondosFijosController {
 	}	
 	
 	private boolean validarMontosExpedienteCredito(ExpedienteCredito expedienteCredito) throws Exception{
+		log.info("BREAKPOINT 3");
 		boolean exito = Boolean.FALSE;
 		BigDecimal bdMontoCanceladoAcumulado = new BigDecimal(0);
 		for(CancelacionCredito cancelacionCredito : expedienteCredito.getListaCancelacionCredito()){
@@ -1804,7 +1851,11 @@ public class FondosFijosController {
 		}
 		log.info("total : "+expedienteCredito.getBdMontoTotal());
 		log.info("valid : "+bdMontoValidar);
-		if(!expedienteCredito.getBdMontoTotal().equals(bdMontoValidar)){
+//		if(!expedienteCredito.getBdMontoTotal().equals(bdMontoValidar)){
+//			return exito;//FALSE
+//		}
+		//Autor:jchavez / Tarea: modificación / Fecha: 06.11.2014
+		if(!(expedienteCredito.getBdMontoTotal().compareTo(bdMontoValidar)==0)){
 			return exito;//FALSE
 		}
 		exito = Boolean.TRUE;
@@ -1814,6 +1865,8 @@ public class FondosFijosController {
 	public void agregarDocumento(){
 		deshabilitarNuevo = false;
 		try{
+			listaEgresoDetalleInterfazAgregado.clear();
+			
 			if(documentoGeneralSeleccionado.getBdMonto()==null){
 				return;
 			}
@@ -1861,8 +1914,9 @@ public class FondosFijosController {
 				
 				expedienteCredito.setListaCancelacionCredito(prestamoFacade.getListaCancelacionCreditoPorExpedienteCredito(expedienteCredito));
 				List<EgresoDetalleInterfaz> listaEDI = prestamoFacade.cargarListaEgresoDetalleInterfaz(expedienteCredito);
-				expedienteCredito.setListaCancelacionCredito(
-						prestamoFacade.getListaCancelacionCreditoPorExpedienteCredito(expedienteCredito));
+				log.info("BREAKPOINT 1");
+				expedienteCredito.setListaCancelacionCredito(prestamoFacade.getListaCancelacionCreditoPorExpedienteCredito(expedienteCredito));
+				log.info("BREAKPOINT 2");
 				if(!validarMontosExpedienteCredito(documentoGeneralSeleccionado.getExpedienteCredito())){
 					mostrarMensaje(Boolean.FALSE, "Hay un error con los montos del expediente de crédito.");
 					return;
@@ -1952,7 +2006,6 @@ public class FondosFijosController {
 					eDI.setOrdenCompra(ordenCompra);
 					listaEgresoDetalleInterfazAgregado.add(eDI);
 				}
-//				documentoSunat.setPersonaGirar(personaSeleccionada);
 			}
 			//Fin jchavez - 06.10.2014
 			//Autor: jchavez / Tarea: Creacion / Fecha: 10.10.2014
@@ -1967,8 +2020,7 @@ public class FondosFijosController {
 					eDI.setOrdenCompra(ordenCompra);
 					listaEgresoDetalleInterfazAgregado.add(eDI);
 				}
-			}
-			//Fin jchavez - 10.10.2014
+			}//Fin jchavez - 10.10.2014
 			
 			for(EgresoDetalleInterfaz egresoDetalleInterfaz : listaEgresoDetalleInterfazAgregado){
 				if(egresoDetalleInterfaz.getIntOrden()==null){
@@ -2068,11 +2120,16 @@ public class FondosFijosController {
 			lstFdoDetalle = bancoFacade.getDocumentoPorFondoFijo(EMPRESA_USUARIO, intTipoFondoFijoValidar, controlFondosFijos.getIntParaMoneda());
 			if (lstFdoDetalle!=null && !lstFdoDetalle.isEmpty()) {
 				for (Fondodetalle fondodetalle : lstFdoDetalle) {
-					if (fondodetalle.getIntTotalsucursalCod()!=null) {						
+					Tabla tipoDocumento = new Tabla();
+					if (fondodetalle.getIntTotalsucursalCod()!=null) {					
 						if (fondodetalle.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_SUCURSALES)) {
 							for (Tabla o : listaTablaDocumentoGeneral) {
 								if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-									listaTablaTipoDocumento.add(o);
+									tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+									tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+									tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+									tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());//Uso el orden como auxiliar para guardar el id comprobante
+//									listaTablaTipoDocumento.add(o);
 									break;
 								}
 							}
@@ -2080,7 +2137,11 @@ public class FondosFijosController {
 							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_AGENCIA)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
@@ -2089,7 +2150,11 @@ public class FondosFijosController {
 							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_FILIAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
@@ -2098,7 +2163,11 @@ public class FondosFijosController {
 							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_OFICINAPRINCIPAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
@@ -2107,26 +2176,44 @@ public class FondosFijosController {
 							if (usuario.getSucursal().getIntIdTipoSucursal().equals(Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL)) {
 								for (Tabla o : listaTablaDocumentoGeneral) {
 									if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-										listaTablaTipoDocumento.add(o);
+										tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+										tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+										tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+										tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//										listaTablaTipoDocumento.add(o);
 										break;
 									}
 								}
-							}							
+							}
 						}
 					}else {
 						if (fondodetalle.getIntIdsucursal().equals(sucursalUsuario.getId().getIntIdSucursal())
 								&& fondodetalle.getIntIdsubsucursal().equals(subsucursalUsuario.getId().getIntIdSubSucursal())) {
 							for (Tabla o : listaTablaDocumentoGeneral) {
 								if (o.getIntIdDetalle().equals(fondodetalle.getIntDocumentogeneralCod())) {
-									listaTablaTipoDocumento.add(o);
+									tipoDocumento.setIntIdMaestro(o.getIntIdMaestro());
+									tipoDocumento.setIntIdDetalle(o.getIntIdDetalle());
+									tipoDocumento.setStrDescripcion(o.getStrDescripcion());
+									tipoDocumento.setIntOrden(fondodetalle.getIntTipocomprobanteCod());
+//									listaTablaTipoDocumento.add(o);
 									break;
 								}
 							}
 						}
 					}
+					//Se agrega comprobante
+					String strDescTipoDocumento = tipoDocumento.getStrDescripcion();
+					for (Tabla tipComp : listaTablaTipoComprobante) {
+						if (tipComp.getIntIdDetalle().equals(tipoDocumento.getIntOrden())) {
+							tipoDocumento.setStrDescripcion(strDescTipoDocumento+" - "+tipComp.getStrDescripcion());
+							break;
+						}
+					}
+					if (tipoDocumento.getIntIdMaestro()!=null) {
+						listaTablaTipoDocumento.add(tipoDocumento);
+					}					
 				}
-			}
-			
+			}			
 		} catch (Exception e) {
 			log.info("Error en listaDocumentosConf() ---> "+e.getMessage());
 		}

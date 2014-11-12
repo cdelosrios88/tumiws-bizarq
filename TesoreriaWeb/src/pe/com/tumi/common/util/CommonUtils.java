@@ -3,7 +3,7 @@
 * Objeto: CommonUtils
 * Descripción:  Clase utilitaria que albergará los métodos más comunes usados en la implementación
  * 				de métodos tales como fechas, periodos, sucursal, sub sucursal, etc.
-* Fecha de Creación: 05/11/2014.
+* Fecha de Creación: 31/10/2014.
 * Requerimiento de Creación: REQ14-006
 * Autor: Bizarq
 */
@@ -33,7 +33,6 @@ public class CommonUtils {
 		log = Logger.getLogger(this.getClass());
 		
 	}
-	
 	
 	/**
 	 * @author Christian De los Ríos
@@ -147,14 +146,32 @@ public class CommonUtils {
 			int i = 0;
 			while (i < lnNoDays) {
 				objCavCal.add(Calendar.DATE, -1);
-				if (objCavCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				if (objCavCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 					continue;
+				} else if (objCavCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+					objCavCal.add(Calendar.DATE, -1);
 				} else {
+					/*int toAddDay = 0;
+					int toAddMonth = 0;
+					if (objCavCal.getActualMinimum(Calendar.DAY_OF_MONTH)==0) {
+						toAddDay=1;
+					}
+					if (objCavCal.getActualMinimum(Calendar.MONTH)==0) {
+						toAddMonth=1;
+					}
+					Holidays objHday = objIHolidaysDAO.getHoliday(objCavCal
+							.get(Calendar.DAY_OF_MONTH) + toAddDay, objCavCal
+							.get(Calendar.MONTH) + toAddMonth, objCavCal
+							.get(Calendar.YEAR), Long
+							.valueOf(IGenericConstants.GL_PERU));
+					if (objHday != null) {
+						continue;
+					}*/
 					i++;
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return objCavCal.getTime();
 	}

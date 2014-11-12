@@ -220,7 +220,7 @@
 						<rich:datascroller for="tblResultadoC" maxPages="10"/>   
 					</f:facet>
 					
-                   	
+                   		
             	</rich:extendedDataTable>
             	
          	</h:panelGrid>
@@ -790,6 +790,7 @@
 			                   		<h:outputText value="Persona"/>
 			                   	</f:facet>
 			                   	<h:outputText value="#{item.persona.natural.strNombreCompleto}"/>
+			                   	<h:outputText value="#{item.persona.juridica.strRazonSocial}"/>
 			                </rich:column>
 			                <rich:column width="160" style="text-align: left">
 			                    <f:facet name="header">
@@ -824,7 +825,7 @@
 			                      	<h:outputText value="Asiento"/>                      		
 			                    </f:facet>
 			                    <h:outputText rendered="#{not empty item.libroDiario}" 
-			                    	value="#{item.libroDiario.strNumeroAsiento}"/>
+			                    	value="#{chequesController.egresoGeneradoTrasGrabacion.strNumeroLibro}"/>
 			               	</rich:column>
 			               	<rich:column width="100">
 			               		<f:facet name="header">

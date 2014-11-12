@@ -9,10 +9,6 @@
 	<!-- Autor     : Arturo Julca   	-->
 	<!-- Modulo    :                	-->
 	<!-- Fecha     :                	-->
-
-
-
-
 <h:form>
    	<rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;">
         	
@@ -64,19 +60,7 @@
             	</rich:column>
             	<rich:column width="80" style="text-align: left;">
 					<h:outputText value="Estado Pago: "/>
-				</rich:column>
-				
-				<%-- Modificado por cdelosrios, 08/10/2013
-				<rich:column width="100">
-					<h:selectOneMenu
-						value="#{sunatController.documentoSunatFiltro.intParaEstadoPago}"
-						style="width: 100px;">
-						<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO}" itemLabel="Activo"/>
-						<f:selectItem itemValue="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO}" itemLabel="Anulado"/>
-					</h:selectOneMenu>
-				</rich:column>
-					Modificado por cdelosrios, 08/10/2013--%>
-				<!-- Agregado por cdelosrios, 08/10/2013 -->
+				</rich:column>				
 				<rich:column width="100">
 					<h:selectOneMenu
 						value="#{sunatController.documentoSunatFiltro.intParaEstadoPago}"
@@ -89,7 +73,6 @@
 							tipoVista="#{applicationScope.Constante.CACHE_TOTAL}"/>
 					</h:selectOneMenu>
 				</rich:column>
-				<!-- Fin agregado por cdelosrios, 08/10/2013 -->
             </h:panelGrid>
             
             <h:panelGrid columns="11">       			
@@ -106,8 +89,7 @@
 							itemLabel="#{sel.strDescripcion}"/>
 					</h:selectOneMenu>
 				</rich:column>
-				
-				<!-- Agregado por cdelosrios, 08/10/2013 -->
+
 				<rich:column width="150" style="text-align: left;">
 					<h:outputText value="Tipo de Comprobante : "/>
 				</rich:column>
@@ -136,9 +118,7 @@
 				<rich:column>
 					<h:inputText value="#{sunatController.documentoSunatFiltro.strNumeroDocumento}" 
 						size="15" maxlength="20"/>
-				</rich:column>
-				<!-- Fin agregado por cdelosrios, 08/10/2013 -->
-				
+				</rich:column>		
 				<rich:column width="130" style="text-align: right;">
                 	<a4j:commandButton styleClass="btnEstilos"
                 		value="Buscar" 
@@ -249,7 +229,6 @@
                       		<f:convertDateTime pattern="dd/MM/yyyy"/>
                       	</h:outputText>
                   	</rich:column>
-                  	
                   	<a4j:support event="onRowClick"
                    		actionListener="#{sunatController.seleccionarRegistro}"
                    		oncomplete="Richfaces.showModalPanel('pAlertaRegistroD')"
@@ -259,9 +238,7 @@
                   	
                    	<f:facet name="footer">
 						<rich:datascroller for="tblResultadoD" maxPages="10"/>   
-					</f:facet>
-					
-                   	
+					</f:facet>		
             	</rich:extendedDataTable>
             	
          	</h:panelGrid>
@@ -270,10 +247,7 @@
 				<a4j:commandLink action="#">
 					<h:graphicImage value="/images/icons/mensaje1.jpg" style="border:0px"/>
 				</a4j:commandLink>
-				<!-- Modificado por cdelosrios, 25/10/2013 -->
-				<%-- <h:outputText value="Para Eliminar un Documento de SUNAT hacer click en el registro" style="color:#8ca0bd"/> --%>
 				<h:outputText value="Para Modificar o Ver un Documento de SUNAT hacer click en el registro" style="color:#8ca0bd"/>
-				<!-- Fin modificado por cdelosrios, 25/10/2013 -->
 			</h:panelGrid>
 				
 		<h:panelGroup id="panelMensajeD" style="border: 0px solid #17356f;background-color:#DEEBF5;text-align: center"
@@ -294,28 +268,24 @@
 				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
 					action="#{sunatController.habilitarPanelInferior}" 
 					reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,pnDatosSunat" />
-			    <!-- Modificado por cdelosrios, 01/11/2013 -->
 			    <h:panelGroup rendered="#{sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_GRABAR}">
-		         	<a4j:commandButton value="Grabar" styleClass="btnEstilos" style="width:90px"
+		         	<a4j:commandButton value="Grabar GR" styleClass="btnEstilos" style="width:90px"
 				    	action="#{sunatController.grabar}"
 				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,panelTablaResultadosD,pnDatosSunat"
 				    	disabled="#{!sunatController.habilitarGrabar}"/>
 		      	</h:panelGroup>
 		      	<h:panelGroup rendered="#{sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_MODIFICAR}">
-		         	<a4j:commandButton value="Grabar" styleClass="btnEstilos" style="width:90px"
+		         	<a4j:commandButton value="Grabar MD" styleClass="btnEstilos" style="width:90px"
 				    	action="#{sunatController.modificar}"
 				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,panelTablaResultadosD,pnDatosSunat"
 				    	disabled="#{!sunatController.habilitarGrabar}"/>
 		      	</h:panelGroup>
-		      	<!-- Fin modificado por cdelosrios, 01/11/2013 -->
 			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
 			    	action="#{sunatController.deshabilitarPanelInferior}"
 			    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,pnDatosSunat"/>
 			</h:panelGrid>
 		</h:panelGroup>
-		
-		
-		
+
 	<h:panelGroup id="contPanelInferiorD">
 	<rich:panel  rendered="#{sunatController.mostrarPanelInferior}"	style="border:1px solid #17356f;background-color:#DEEBF5;">
 		
@@ -345,34 +315,19 @@
 		
 		
 		<h:panelGroup rendered="#{not empty sunatController.ordenCompra}">		
-		
-		<!-- Agregado por cdelosrios, 27/10/2013 -->
-		<%--
-		<h:panelGrid columns="2" rendered="#{sunatController.documentoSunatNuevo.id.intItemDocumentoSunat!=null}">
-			<rich:column width=	"120">
-				<h:outputText value="Nro. Documento SUNAT :"/>
-			</rich:column>
-			<rich:column width="210">
-				<h:inputText size="36"
-					readonly="true"
-					style="background-color: #BFBFBF;"
-					value="#{sunatController.documentoSunatNuevo.id.intItemDocumentoSunat}"/>
-			</rich:column>
-		</h:panelGrid>--%>
-		<!-- Fin agregado por cdelosrios, 27/10/2013 -->
-		
+
 		<h:panelGrid columns="16">
-			<rich:column width=	"120">
+			<rich:column width=	"150">
 				<h:outputText value="Documento Requisito : "/>
 			</rich:column>
-			<rich:column width="210">
-				<h:inputText size="36"
+			<rich:column width="180">
+				<h:inputText size="30"
 					readonly="true"
 					style="background-color: #BFBFBF;"
 					value="Orden Contable"/>
 			</rich:column>
-			<rich:column width=	"500">
-				<h:inputText size="105"
+			<rich:column width=	"400">
+				<h:inputText size="90"
 					readonly="true"
 					value="#{sunatController.ordenCompra.strEtiqueta}"
 					style="background-color: #BFBFBF;"/>
@@ -382,7 +337,7 @@
 		<rich:spacer height="3px"/>
 		
 		<h:panelGrid columns="8">
-			<rich:column width=	"120">
+			<rich:column width=	"150">
 				<h:outputText value="Proveedor : "/>
 			</rich:column>
 			<rich:column width="497">
@@ -397,7 +352,7 @@
 		<!-- Agregado por cdelosrios, 17/10/2013 -->
 		<rich:spacer height="3px"/>
 		<h:panelGrid columns="2">
-			<rich:column width=	"120">
+			<rich:column width=	"150">
 				<h:outputText value="Adelantos entregados : "/>
 			</rich:column>
 			<rich:column width="497">
@@ -409,33 +364,42 @@
 				</h:inputText>
 			</rich:column>
 		</h:panelGrid>
-		<!-- Fin agregado por cdelosrios, 17/10/2013 -->
 		
 		<rich:spacer height="10px"/>
-		<rich:separator lineType="double" width="990"/>
-		<rich:spacer height="10px"/>
 		
-		<!-- Agregado por cdelosrios, 25/10/2013 -->
-		<h:panelGroup id="pnDatosSunat" rendered="#{sunatController.mostrarPanelDatosSunat}">
+		<rich:panel id="pnDatosSunat" rendered="#{sunatController.mostrarPanelDatosSunat}" style="border:1px solid #17356f;background-color:#DEEBF5;">
+	
+			<a4j:outputPanel id="opMsgErrorAgregarDetalleDocSunat">
+				<h:panelGrid columns="1">
+					<rich:column width=	"600">
+						<h:outputText value="#{sunatController.mensajeOperacionDocSunatDetalle}" 
+							styleClass="msgInfo"
+							style="font-weight:bold"
+							rendered="#{sunatController.mostrarMensajeExitoDocSunatDetalle}"/>
+						<h:outputText value="#{sunatController.mensajeOperacionDocSunatDetalle}" 
+							styleClass="msgError"
+							style="font-weight:bold"
+							rendered="#{sunatController.mostrarMensajeErrorDocSunatDetalle}"/>	
+					</rich:column>
+				</h:panelGrid>
+			</a4j:outputPanel>
+			
+			<rich:spacer height="3px" rendered="#{sunatController.intValidaCierrePorFechaEmision!=0}"/>
+			
 			<h:panelGrid columns="9" id="panelTipoComprobante">			
 				<rich:column width=	"120">
-					<h:outputText value="Documento : "/>
+					<h:outputText value="Documento: "/>
 				</rich:column>
 				<rich:column width="210">
 					<!-- Modificado por cdelosrios, 20/10/2013 -->
 					<h:selectOneMenu
-						disabled="#{(not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
+						disabled="#{(not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat) || sunatController.blnBloqueoDetalle}"
 						style="width: 210px;"
 						value="#{sunatController.documentoSunatNuevo.intParaTipoComprobante}">
 						<tumih:selectItems var="sel"
-							value="#{sunatController.listaTipoComprobante}"
+							value="#{sunatController.listaTipoComprobantePorProveedor}"
 							itemValue="#{sel.intIdDetalle}"
 							itemLabel="#{sel.strDescripcion}"/>
-						<%--
-						<%--value="#{sunatController.listaTablaTipoComprobante}" 
-						<a4j:support event="onchange"
-							action="#{sunatController.seleccionarTipoComprobante}" 
-							reRender="panelDocumentoD, panelTipoComprobante, panelModificadores"/> --%>
 						<a4j:support event="onchange"
 							action="#{sunatController.onChangeTipoDocumento}" 
 							reRender="panelDocumentoD, chkIGV, chkPercepcion"/>
@@ -445,22 +409,10 @@
 				<rich:column width=	"120">
 					<h:outputText value="Serie : "/>
 				</rich:column>
-				
-				<!-- Modificado por cdelosrios, 14/11/2013 -->
 				<rich:column width="170">
-				<%--
-					<h:inputText size="23" 
-						rendered="#{sunatController.documentoSunatNuevo.intParaTipoComprobante!=applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS}"
+					<h:inputText size="23"
 						disabled="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat && !sunatController.modificarRegistro}"
 						value="#{sunatController.documentoSunatNuevo.strSerieDocumento}"/>
-					<h:inputText size="23" 
-						rendered="#{sunatController.documentoSunatNuevo.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS}"
-						disabled="true"
-						value="#{sunatController.documentoSunatNuevo.strSerieDocumento}"/> --%>
-				<h:inputText size="23"
-						disabled="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat && !sunatController.modificarRegistro}"
-						value="#{sunatController.documentoSunatNuevo.strSerieDocumento}"/>
-				<!-- Modificado por cdelosrios, 14/11/2013 -->
 				</rich:column>
 				<rich:column width=	"120">
 					<h:outputText value="Número : "/>
@@ -475,21 +427,18 @@
 			
 			<rich:spacer height="3px"/>
 			
-			<h:panelGrid columns="8">
+			<h:panelGrid columns="8" id="panelFechasDocumento">
 				<rich:column width=	"120">
 					<h:outputText value="Fecha Emisión : "/>
 				</rich:column>
 				<rich:column width="210">
 					<rich:calendar datePattern="dd/MM/yyyy"  
-						disabled="#{(not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
+						disabled="#{(not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat) || sunatController.blnBloqueoDetalle}"
 						value="#{sunatController.documentoSunatNuevo.dtFechaEmision}"  
 						jointPoint="top-right" 
 						direction="right" 
-						inputSize="32" 
+						inputSize="20" 
 						showApplyButton="true">
-						<a4j:support event="ondateselected" 
-							action="#{sunatController.calcularMontos}" 
-							reRender="panelDocumentoD"/>
 					</rich:calendar>
 				</rich:column>
 				<rich:column width=	"120">
@@ -534,27 +483,27 @@
 				</rich:column>
 				<rich:column width=	"120">
 					<h:selectBooleanCheckbox id="chkInafecto" value="#{sunatController.documentoSunatNuevo.seleccionaInafecto}"
-						disabled="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat}">
-						<a4j:support event="onclick"
-							action="#{sunatController.calcularMontos}" 
-							reRender="panelDocumentoD"/>
+						disabled="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat 
+									|| sunatController.blnBloqueoDetalle
+									|| !sunatController.poseePermisoAfectoInafecto}">
 					</h:selectBooleanCheckbox>
 					<h:outputText value="Inafecto"/>
 				</rich:column>
 				<rich:column width=	"120">
-					<h:selectBooleanCheckbox id="chkIGV" value="#{sunatController.documentoSunatNuevo.seleccionaIGV}"
+					<h:selectBooleanCheckbox id="chkIGV" value="#{sunatController.documentoSunatNuevo.seleccionaIGVContable}"
 						disabled="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat
-									|| (sunatController.documentoSunatNuevo.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_BOLETA)}">
+									|| sunatController.documentoSunatNuevo.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_BOLETA
+									|| sunatController.blnBloqueoDetalle
+									|| !sunatController.poseePermisoIGVContable}">
 					</h:selectBooleanCheckbox>
 					<h:outputText value="IGV"/>
 				</rich:column>
 				<rich:column width=	"120">
 					<h:selectBooleanCheckbox id="chkPercepcion" value="#{sunatController.documentoSunatNuevo.seleccionaPercepcion}"
 						disabled="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat
-									|| (sunatController.documentoSunatNuevo.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA)}">
-						<a4j:support event="onclick"
-							action="#{sunatController.calcularMontos}" 
-							reRender="panelDocumentoD"/>
+									|| !(sunatController.documentoSunatNuevo.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA)
+									|| sunatController.blnBloqueoDetalle
+									|| !sunatController.poseePermisoPercepcion}">
 					</h:selectBooleanCheckbox>
 					<h:outputText value="Percepción"/>
 				</rich:column>
@@ -573,7 +522,6 @@
 				</rich:column>
 			</h:panelGrid>
 			
-			<!-- Agregado por cdelosrios, 01/11/2013 -->
 			<h:panelGrid columns="8" id="panelDocumentoSunat">
 				<rich:column width=	"120">
 					<h:outputText value="Documento : "/>
@@ -598,7 +546,6 @@
 		                style="width:150px"/>
 				</rich:column>
 			</h:panelGrid>
-			<!-- Fin agregado por cdelosrios, 01/11/2013 -->
 		
 			<rich:spacer height="15px"/>
 		
@@ -607,15 +554,12 @@
 					<h:outputText value="Detalle : "/>
 				</rich:column>
 				<rich:column width="210">
-					<!-- Modificado por cdelosrios, 29/10/2013 -->
-					<%--disabled="#{(not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}" --%>
 					<a4j:commandButton styleClass="btnEstilos"
 	                	value="Agregar" 
-	                	reRender="pAgregarDetalleSunat"
-		                oncomplete="Richfaces.showModalPanel('pAgregarDetalleSunat')"
+	                	reRender="opMsgErrorAgregarDetalleDocSunat, pAgregarDetalleSunat"
+		                oncomplete="if(#{sunatController.mostrarMensajeExitoDocSunatDetalle}){Richfaces.showModalPanel('pAgregarDetalleSunat')}"
 	                    action="#{sunatController.abrirPopUpAgregarDetalleSunat}" 
 	                    style="width:200px"/>
-	                <!-- Fin modificado por cdelosrios, 29/10/2013 -->
 				</rich:column>
 			</h:panelGrid>
 		
@@ -712,167 +656,179 @@
 				</h:panelGrid>
 			
 				<rich:spacer height="3px"/>
-			
-				<h:panelGrid columns="10">
-					<rich:column width="100" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="T.C :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							value="#{sunatController.tipoCambio.bdPromedio}"
-							style="background-color: #BFBFBF;font-weight:bold;">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="80" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Subtotal :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"
-							value="#{sunatController.documentoSunatNuevo.detalleSubTotal.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="90" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Descuento :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							rendered="#{!sunatController.poseePermisoDescuento || (not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"/>
-						<h:inputText size="19"
-							rendered="#{sunatController.poseePermisoDescuento && (empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
-							value="#{sunatController.documentoSunatNuevo.detalleDescuento.bdMontoTotal}"
-							onkeypress="return soloNumerosDecimalesPositivos(this)">
-							<a4j:support event="onkeyup" 
-								action="#{sunatController.calcularMontos}"
-								ignoreDupResponses="true"
-								requestDelay="500" 
-								reRender="panelDocumentoD" 
-								focus="input" />
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="90" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Valor Venta :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"
-							value="#{sunatController.documentoSunatNuevo.detalleValorVenta.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				</h:panelGrid>
-			
-				<h:panelGrid columns="10">
-					<rich:column width="100" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="IGV :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detalleIGV.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="80" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Otros :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="19"
-							rendered="#{empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat}"
-							value="#{sunatController.documentoSunatNuevo.detalleOtros.bdMontoTotal}"
-							onkeypress="return soloNumerosDecimales(this)">
-							<a4j:support event="onkeyup" 
-								action="#{sunatController.calcularMontos}"
-								ignoreDupResponses="true"
-								requestDelay="500" 
-								reRender="panelDocumentoD" 
-								focus="input" />
-						</h:inputText>
-						<h:inputText size="15"
-							rendered="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat}"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detalleOtros.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="90" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Total :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detalleTotal.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="90" style="text-align: right">
-						<h:outputText value="Percepción 2% :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detallePercepcion.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				</h:panelGrid>
-			
-				<h:panelGrid columns="10">
-					<rich:column width="100" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Detracción #{sunatController.ordenCompra.detraccion.bdPorcentaje}% :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detalleDetraccion.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="80" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Retención :"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detalleRetencion.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				    <rich:column width="90" style="text-align: right">
-						<h:outputText style="padding-right:10px;" value="Total General:"/>
-					</rich:column>
-					<rich:column width="140" style="text-align: left">
-						<h:inputText size="15"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"					
-							value="#{sunatController.documentoSunatNuevo.detalleTotalGeneral.bdMontoTotal}">
-							<f:converter converterId="ConvertidorMontos"/>
-						</h:inputText>
-				    </rich:column>
-				</h:panelGrid>
+				<a4j:outputPanel>
+					<h:panelGrid columns="1" id="pgMsgErrorDetalleOtros">
+						<rich:column width=	"300">
+							<h:outputText value="#{sunatController.strMsgErrorDetalleOtros}"
+								styleClass="msgError"
+								style="font-weight:bold"/>
+						</rich:column>
+					</h:panelGrid>
+				</a4j:outputPanel>
+				
+				<a4j:outputPanel id="opCalculoMontosDetalle">
+				
+					<h:panelGrid columns="10">
+						<rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="T.C :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								value="#{sunatController.tipoCambio.bdPromedio}"
+								style="background-color: #BFBFBF;font-weight:bold;">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Subtotal :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"
+								value="#{sunatController.documentoSunatNuevo.detalleSubTotal.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Descuento :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								rendered="#{!sunatController.poseePermisoDescuento || (not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"/>
+							<h:inputText size="15"
+								rendered="#{sunatController.poseePermisoDescuento && (empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
+								value="#{sunatController.documentoSunatNuevo.detalleDescuento.bdMontoTotal}"
+								onkeypress="return soloNumerosDecimalesPositivos(this)"
+								readonly="true">
+								<a4j:support event="onchange" 
+									action="#{sunatController.calcularMontos}"
+									ignoreDupResponses="true"
+									requestDelay="500" 
+									reRender="opCalculoMontosDetalle" 
+									focus="input" />
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Valor Venta :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"
+								value="#{sunatController.documentoSunatNuevo.detalleValorVenta.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+				    	</rich:column>
+					</h:panelGrid>
+				
+					<h:panelGrid columns="10">
+						<rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="IGV :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.detalleIGV.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Otros :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								rendered="#{empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat}"
+								value="#{sunatController.documentoSunatNuevo.detalleOtros.bdMontoTotal}"
+								onkeypress="return soloNumerosDecimales(this)"
+								disabled="#{sunatController.documentoSunatNuevo.intParaTipoComprobante != applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA}">
+								<a4j:support event="onkeyup" 
+									action="#{sunatController.calcularMontos}"
+									ignoreDupResponses="true"
+									requestDelay="500" 
+									reRender="opCalculoMontosDetalle, pgMsgErrorDetalleOtros" 
+									focus="input" />
+							</h:inputText>
+							<h:inputText size="15"
+								rendered="#{not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat}"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.detalleOtros.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Total :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								id="itTotal1"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.detalleTotal.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText value="Percepción 2% :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.docPercepcion.bdMontoDocumento}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					</h:panelGrid>
+				
+					<h:panelGrid columns="10">
+						<rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Detracción #{sunatController.ordenCompra.detraccion.bdPorcentaje}% :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.docDetraccion.bdMontoDocumento}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Retención 4ta :"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.detalleRetencion.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="120" style="text-align: right">
+							<h:outputText style="padding-right:10px;" value="Total General:"/>
+						</rich:column>
+						<rich:column width="140" style="text-align: left">
+							<h:inputText size="15"
+								readonly="true"
+								style="background-color: #BFBFBF;font-weight:bold;"					
+								value="#{sunatController.documentoSunatNuevo.detalleTotalGeneral.bdMontoTotal}">
+								<f:converter converterId="ConvertidorMontos"/>
+							</h:inputText>
+					    </rich:column>
+					    <rich:column width="250" style="text-align: right">
+					    </rich:column>
+					</h:panelGrid>
+				</a4j:outputPanel>
 			
 			</h:panelGroup>
-		</h:panelGroup>
-		<!-- Fin modificado por cdelosrios, 25/10/2013 -->
+		</rich:panel>
 		
-		<!-- Agregado por cdelosrios, 11/11/2013 -->
 		<rich:spacer height="10px"/>
-		<rich:separator lineType="double" width="990"/>
-		<rich:spacer height="10px"/>
-		<!-- Fin agregado por cdelosrios, 11/11/2013 -->
 		
 		<rich:spacer height="15px"/>
 		<h:outputText value="#{sunatController.strMensajeAgregar}" 
@@ -883,27 +839,25 @@
 		
 		<h:panelGrid columns="1">
 			<rich:column width="960">
-				<!-- Agregado por cdelosrios, 29/10/2013 -->
-				<%-- disabled="#{(not empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}"
-		 			rendered="#{(empty sunatController.documentoSunatNuevo.id.intItemDocumentoSunat)}" --%>
 				<a4j:commandButton styleClass="btnEstilos"
 		 			value="Agregar Documento Sunat"
-		            reRender="contPanelInferiorD"
+		            reRender="contPanelInferiorD, panelModificadores, panelFechasDocumento, pnDatosSunat"
 		            rendered="#{sunatController.mostrarPanelDatosSunat}"
 		            action="#{sunatController.agregarDocumentoSunat}" 
-		            style="width:955px"/>
+		            disabled="#{sunatController.documentoSunatNuevo.detalleTotalGeneral.bdMontoTotal==null}"
+		            style="width:1000px"/>
 		        <!-- Agregado por cdelosrios, 29/10/2013 -->
 			</rich:column>
 		</h:panelGrid>
 		
 		<rich:spacer height="20px"/>
 		
-		<h:panelGroup id="panelFinalDocumento" 
-			rendered="#{not empty sunatController.listaDocumentoSunatGrabar}">
+		<rich:panel id="panelFinalDocumento" 
+			rendered="#{not empty sunatController.listaDocumentoSunatGrabar}" style="border:1px solid #ED0000;background-color:#DEEBF5;">
 		
 		<h:panelGrid columns="1">
 			<rich:column width="940">
-				<h:outputText value="Documento SUNAT"/>
+				<h:outputText value="Documento SUNAT" style="font-weight:bold"/>
 			</rich:column>
 		</h:panelGrid>
 		<h:panelGrid id="pgDtDocumentoSunat" columns="2">
@@ -966,13 +920,13 @@
 		            	<rich:column width="30" style="text-align: center">
 							<h:outputText value="#{item.id.intItemDocumentoSunat}"/>
 						</rich:column>
-						<rich:column width="185" style="text-align: left">
+						<rich:column width="185" style="text-align: center">
 				        	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE}"
 								itemValue="intIdDetalle" 
 								itemLabel="strDescripcion"
 								property="#{item.intParaTipoComprobante}"/>
 				   		</rich:column>
-				        <rich:column width="100" style="text-align: center">
+				        <rich:column width="150" style="text-align: center">
 				        	<h:outputText value="#{item.strSerieDocumento}-#{item.strNumeroDocumento}"/>						
 				    	</rich:column>
 				    	<rich:column width="100" style="text-align: center">
@@ -1023,7 +977,6 @@
 				   		<rich:column>
 				   			<a4j:commandLink id="idLnkVerRegistroSunat" value="Ver"
 								reRender="pVerDocumentoSunat"
-								disabled="#{item.intParaEstadoPago==applicationScope.Constante.PARAM_T_ESTADOPAGO_CANCELADO}"
 								actionListener="#{sunatController.verDocumentoSunat}"
 								ajaxSingle="true" process="idLnkVerRegistroSunat"
 								oncomplete="Richfaces.showModalPanel('pVerDocumentoSunat')">
@@ -1032,6 +985,8 @@
 				   		</rich:column>
 				   		<rich:column>
 				   			<a4j:commandLink value="Eliminar"
+				   				rendered="#{item.intParaEstadoPago==applicationScope.Constante.PARAM_T_ESTADOPAGO_PENDIENTE
+				   							&& item.intIndicadorLetras!=applicationScope.Constante.PARAM_T_INDICADORLETRAS_CONLETRAS}"
 								disabled="#{sunatController.habilitarVerRegistro}"
 								action="#{sunatController.eliminarDocumentoSunat}"
 								reRender="dtDocumentoSunat,pAgregarDetalleSunat,fAgregarDetalleSunat" >
@@ -1040,7 +995,7 @@
 				   		</rich:column>
 				   		<rich:column>
 				   			<h:commandLink value="Imprimir"
-								rendered="#{not empty item.id.intItemDocumentoSunat}"
+				   				rendered="#{not empty item.id.intItemDocumentoSunat}"
 								action="#{sunatController.imprimirDocumentoSunat}">
 							</h:commandLink>
 				   		</rich:column>
@@ -1049,11 +1004,109 @@
 		  	</rich:column>
 		</h:panelGrid>
 		
-		<rich:spacer height="30px"/>
+		<rich:spacer height="15px"/>
+
+		<h:panelGrid columns="1">
+			<rich:column width="940">
+				<h:outputText value="Detracción y Percepción" style="font-weight:bold"/>
+			</rich:column>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			<rich:column width=	"910">
+				<rich:dataTable id="dtDocumentoSunatDoc"
+					sortMode="single"
+					var="item"
+					value="#{sunatController.listaDocSunatDetraccionPercepcion}"
+					rowKeyVar="rowKey"
+					width="955px"
+					rows="#{fn:length(sunatController.listaDocSunatDetraccionPercepcion)}">
+					<f:facet name="header">
+	                	<rich:columnGroup>
+	                		<rich:column>
+	                			<h:outputText value="Item"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Documento"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Fecha"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Moneda"/>   
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="T.C."/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Monto"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Doc.Sunat Rel."/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Estado Pago"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Doc.Egreso"/>
+	                		</rich:column>
+	                	</rich:columnGroup>
+		            </f:facet>
+		            <rich:columnGroup>
+						<rich:column width="60" style="text-align: center;">
+				        	<h:outputText value="#{item.id.intItemDocumentoSunatDoc}"/>
+				      	</rich:column>
+						<rich:column width="130" style="text-align: center">
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
+								itemValue="intIdDetalle"
+								itemLabel="strDescripcion"
+								property="#{item.intParaTipoDocumentoGeneral}"/>
+	                    </rich:column>
+						<rich:column width="100" style="text-align: center">
+	                      	<h:outputText value="#{item.tsFechaRegistro}">
+	                      		<f:convertDateTime pattern="dd/MM/yyyy" />
+	                      	</h:outputText>
+	                    </rich:column>
+						<rich:column width="85" style="text-align: center">
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}" 
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion" 
+								property="#{item.intTipoMoneda}"/>   
+	                  	</rich:column>
+						<rich:column width="60" style="text-align: center;">
+				        	<h:outputText value="#{item.bdTipoCambio}">
+				        		<f:converter converterId="ConvertidorMontos"/>
+				        	</h:outputText>
+				      	</rich:column>
+		                <rich:column width="90" style="text-align: center">
+	                      	<h:outputText value="#{item.bdMontoDocumento}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>                    
+		                <rich:column width="150" style="text-align: center">
+	                      	<h:outputText value="#{item.id.intItemDocumentoSunat}"/>
+	                    </rich:column>
+						
+	                    <rich:column width="90" style="text-align: center">
+							<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOPAGO}"
+								itemValue="intIdDetalle"
+								itemLabel="strDescripcion"
+								property="#{item.intParaEstadoPagoDocSunat}"/>
+	                    </rich:column>
+	                    <rich:column width="90" style="text-align: right">
+	                      	<h:outputText value="#{item.intItemEgresoGeneral}"/>
+	                    </rich:column>		            
+		            </rich:columnGroup>
+					
+				</rich:dataTable>
+			</rich:column>
+		</h:panelGrid>	
+		
+		<rich:spacer height="15px"/>
 		
 		<h:panelGrid columns="1">
 			<rich:column width="940">
-				<h:outputText value="Documento Adelantos"/>
+				<h:outputText value="Documento Adelantos" style="font-weight:bold"/>
 			</rich:column>
 		</h:panelGrid>
 		<h:panelGrid columns="2">
@@ -1065,115 +1118,156 @@
 					rowKeyVar="rowKey"
 					width="955px"
 					rows="#{fn:length(sunatController.ordenCompra.listaOrdenCompraDocumento)}">
-					
-					<rich:column width="60" style="text-align: center;">
-						<f:facet name="header">
-	                    	<h:outputText value="Item"/>
-	                 	</f:facet>
-			        	<h:outputText value="#{item.id.intItemOrdenCompraDocumento}"/>
-			      	</rich:column>
-					<rich:column width="130" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Documento"/>
-                      	</f:facet>
-                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
-							itemValue="intIdDetalle"
-							itemLabel="strDescripcion"
-							property="#{item.intParaDocumentoGeneral}"/>
-                    </rich:column>
-					<rich:column width="100" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Fecha"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.tsFechaDocumento}">
-                      		<f:convertDateTime pattern="dd/MM/yyyy" />
-                      	</h:outputText>
-                    </rich:column>
-	                <rich:column width="90" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Monto"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.bdMontoDocumento}">
-	                    	<f:converter converterId="ConvertidorMontos"/>
-	                 	</h:outputText>
-                    </rich:column>
-                    <rich:column width="85" style="text-align: center">
-                    	<f:facet name="header">
-                      		<h:outputText value="Moneda"/>                      		
-                      	</f:facet>
-                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}" 
-							itemValue="intIdDetalle" 
-							itemLabel="strDescripcion" 
-							property="#{item.intParaTipoMoneda}"/>   
-                  	</rich:column>
-	                <rich:column width="150" style="text-align: center">
-                    	<f:facet name="header">
-                        	<h:outputText value="Centro Costo"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.sucursal.juridica.strRazonSocial}-#{item.area.strDescripcion}"/>
-                    </rich:column>
-	                <rich:column width="90" style="text-align: right">
-                    	<f:facet name="header">
-                        	<h:outputText value="Pagado"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.bdMontoPagado}">
-	                    	<f:converter converterId="ConvertidorMontos"/>
-	                 	</h:outputText>
-                    </rich:column>
-                    <rich:column width="90" style="text-align: right">
-                    	<f:facet name="header">
-                        	<h:outputText value="Saldo"/>
-                      	</f:facet>
-                      	<h:outputText value="#{item.bdMontoPagado - item.bdMontoIngresado}">
-	                    	<f:converter converterId="ConvertidorMontos"/>
-	                 	</h:outputText>
-                    </rich:column>
-                    <rich:column width="90" style="text-align: right">
-                    	<f:facet name="header">
-                        	<h:outputText value="Aplicado"/>
-                      	</f:facet>
-                      	<h:inputText size="10"
-                      		disabled="#{!item.checked}"
-                      		onkeypress="return soloNumerosDecimales(this)" 
-                      		value="#{item.bdMontoUsarTotal}"/>
-                    </rich:column>
-                    <rich:column>
-			   			<a4j:commandLink id="idLnkVerDocAdelantos" value="Ver"
-							reRender="pVerDocumentoAdelanto"
-							
-							actionListener="#{sunatController.verDocumentoAdelanto}"
-							ajaxSingle="true" process="idLnkVerDocAdelantos"
-							oncomplete="Richfaces.showModalPanel('pVerDocumentoAdelanto')">
-							<f:attribute name="item" value="#{item}"/>
-						</a4j:commandLink>
-			   		</rich:column>
-			   		<rich:column>
-			   			<a4j:commandLink value="Eliminar"
-							disabled="#{sunatController.habilitarVerRegistro}"
-							action="#{sunatController.eliminarDocumentoAdelanto}"
-							reRender="dtDocumentoAdelanto" >
-							<f:param name="rowKeyDocSunat" value="#{rowKey}"/>
-						</a4j:commandLink>
-			   		</rich:column>
+					<f:facet name="header">
+	                	<rich:columnGroup>
+	                		<rich:column>
+	                			<h:outputText value="Item"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Documento"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Fecha"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Monto"/>
+	                		</rich:column>	                		
+	                		<rich:column>
+	                			<h:outputText value="Moneda"/>   
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Centro Costo"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Pagado"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Saldo"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Aplicado"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<rich:spacer />
+	                		</rich:column>
+	                		<rich:column>
+	                			<rich:spacer />
+	                		</rich:column>
+	                	</rich:columnGroup>
+		            </f:facet>
+		            <rich:columnGroup>
+						<rich:column width="60" style="text-align: center;">
+				        	<h:outputText value="#{item.id.intItemOrdenCompraDocumento}"/>
+				      	</rich:column>
+						<rich:column width="130" style="text-align: center">
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
+								itemValue="intIdDetalle"
+								itemLabel="strDescripcion"
+								property="#{item.intParaDocumentoGeneral}"/>
+	                    </rich:column>
+						<rich:column width="100" style="text-align: center">
+	                      	<h:outputText value="#{item.tsFechaDocumento}">
+	                      		<f:convertDateTime pattern="dd/MM/yyyy" />
+	                      	</h:outputText>
+	                    </rich:column>
+		                <rich:column width="90" style="text-align: center">
+	                      	<h:outputText value="#{item.bdMontoDocumento}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+	                    <rich:column width="85" style="text-align: center">
+	                      	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}" 
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion" 
+								property="#{item.intParaTipoMoneda}"/>   
+	                  	</rich:column>
+		                <rich:column width="150" style="text-align: center">
+	                      	<h:outputText value="#{item.sucursal.juridica.strRazonSocial}-#{item.area.strDescripcion}"/>
+	                    </rich:column>
+		                <rich:column width="90" style="text-align: right">
+	                      	<h:outputText value="#{item.bdMontoPagado}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+	                    <rich:column width="90" style="text-align: right">
+	                      	<h:outputText value="#{item.bdMontoPagado - item.bdMontoIngresado}">
+		                    	<f:converter converterId="ConvertidorMontos"/>
+		                 	</h:outputText>
+	                    </rich:column>
+	                    <rich:column width="90" style="text-align: right">
+	                      	<h:inputText size="10"
+	                      		disabled="#{!item.checked}"
+	                      		onkeypress="return soloNumerosDecimales(this)" 
+	                      		value="#{item.bdMontoUsarTotal}"/>
+	                    </rich:column>
+	                    <rich:column>
+				   			<a4j:commandLink id="idLnkVerDocAdelantos" value="Ver"
+								reRender="pVerDocumentoAdelanto"								
+								actionListener="#{sunatController.verDocumentoAdelanto}"
+								ajaxSingle="true" process="idLnkVerDocAdelantos"
+								oncomplete="Richfaces.showModalPanel('pVerDocumentoAdelanto')">
+								<f:attribute name="item" value="#{item}"/>
+							</a4j:commandLink>
+				   		</rich:column>
+				   		<rich:column>
+				   			<a4j:commandLink value="Eliminar"
+								disabled="#{sunatController.habilitarVerRegistro}"
+								action="#{sunatController.eliminarDocumentoAdelanto}"
+								reRender="dtDocumentoAdelanto" >
+								<f:param name="rowKeyDocSunat" value="#{rowKey}"/>
+							</a4j:commandLink>
+				   		</rich:column>		            
+		            </rich:columnGroup>
+
 				</rich:dataTable>
 			</rich:column>
 		</h:panelGrid>	
-		</h:panelGroup>
+		</rich:panel>
 		
 		<h:panelGroup id="panelLetrasDocumento"	rendered="#{sunatController.agregarLetras}">
 		
-		<h:panelGrid columns="8">
-			<rich:column width=	"120">
-				<h:outputText value="Letras : "/>
+		<h:panelGrid columns="8" id="pgDocSunatLetrasYNotas" rendered="#{sunatController.mostrarPanelDatosSunat}">
+			<rich:column width=	"250">
+				<h:outputText value="Agregar Letras y Notas : "/>
 			</rich:column>
 			<rich:column width="150">
-				<a4j:commandButton styleClass="btnEstilos"
-	               	disabled="#{sunatController.deshabilitarNuevo}"
+				<h:selectOneMenu
+					onchange="getTipoComprobanteDS(#{applicationScope.Constante.ONCHANGE_VALUE})"
+					style="width: 180px;"
+					value="#{sunatController.intTipoComprobante}">
+					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+					<tumih:selectItems var="sel"
+						value="#{sunatController.listaTablaTipoComprobanteLetrasYNotas}"
+						itemValue="#{sel.intIdDetalle}"
+						itemLabel="#{sel.strDescripcion}"/>
+				</h:selectOneMenu>
+			</rich:column>
+			<rich:column width="150" rendered="#{sunatController.intTipoComprobante == applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO}">
+				<a4j:commandButton 
+					styleClass="btnEstilos"
+	               	disabled="#{sunatController.deshabilitarNuevo || sunatController.ordenCompra.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
 	               	value="Agregar" 
 	               	reRender="pAgregarLetraSunat"
 		            oncomplete="Richfaces.showModalPanel('pAgregarLetraSunat')"
 	                action="#{sunatController.abrirPopUpAgregarLetra}" 
 	                style="width:120px"/>
+			</rich:column>
+			<rich:column width="150" rendered="#{sunatController.intTipoComprobante == applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO 
+											     || sunatController.intTipoComprobante == applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO}">
+				<a4j:commandButton 
+					styleClass="btnEstilos"
+	               	disabled="#{sunatController.deshabilitarNuevo || sunatController.ordenCompra.intParaEstadoOrden==applicationScope.Constante.PARAM_T_ESTADOORDEN_CERRADO}"
+	               	value="Agregar" 
+	               	reRender="pAgregarNotaDocSunat"
+		            oncomplete="Richfaces.showModalPanel('pAgregarNotaDocSunat')"
+	                action="#{sunatController.abrirPopUpAgregarNota}" 
+	                style="width:120px"/>
+			</rich:column>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<rich:column width=	"250">
+				<h:outputText value="Letras de Cambio" style="font-weight:bold"/>
 			</rich:column>
 		</h:panelGrid>
 		
@@ -1186,57 +1280,142 @@
 					rowKeyVar="rowKey"
 					width="955px"
 					rows="#{fn:length(sunatController.listaDocumentoSunatLetra)}">
-					
-					<rich:column width="30" style="text-align: center">
-						<f:facet name="header">
-			           		<h:outputText value="Nro"/>
-			         	</f:facet>
-			         	<h:outputText value="#{rowKey + 1}"/>
-					</rich:column>
-					<rich:column width="100" style="text-align: center">
-			        	<f:facet name="header">
-			           		<h:outputText value="Tipo"/>
-			         	</f:facet>
-			         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE}"
-							itemValue="intIdDetalle" 
-							itemLabel="strDescripcion"
-							property="#{item.intParaTipoComprobante}"/>
-			   		</rich:column>
-			        <rich:column width="110" style="text-align: center">
-			        	<f:facet name="header">
-			            	<h:outputText value="Fecha"/>
-			          	</f:facet>
-			          	<h:outputText value="#{item.dtFechaEmision}">
-			          		<f:convertDateTime pattern="dd/MM/yyyy"/>
-			          	</h:outputText>
-			    	</rich:column>
-			    	<rich:column width="100" style="text-align: right">
-			        	<f:facet name="header">
-			            	<h:outputText value="Monto"/>
-			          	</f:facet>
-			          	<h:outputText value="#{item.detalleLetra.bdMontoTotal}">
-			         		<f:converter converterId="ConvertidorMontos"/>
-			         	</h:outputText>
-			    	</rich:column>
-			    	<rich:column width="100" style="text-align: center">
-			        	<f:facet name="header">
-			            	<h:outputText value="Moneda"/>
-			          	</f:facet>
-			          	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}"
-							itemValue="intIdDetalle" 
-							itemLabel="strDescripcion"
-							property="#{item.intParaMoneda}"/>
-			    	</rich:column>
-			    	<rich:column width="150" style="text-align: center">
-			        	<f:facet name="header">
-			            	<h:outputText value="Centro Costo"/>
-			          	</f:facet>
-			          	<h:outputText 
-			          		value="#{item.detalleLetra.ordenCompraDetalle.sucursal.juridica.strRazonSocial}-#{item.detalleLetra.ordenCompraDetalle.area.strDescripcion}"/>
-		    		</rich:column>			    	
+					<f:facet name="header">
+	                	<rich:columnGroup>
+	                		<rich:column>
+	                			<h:outputText value="Nro"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Tipo"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Fecha"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Monto"/>
+	                		</rich:column>	                		
+	                		<rich:column>
+	                			<h:outputText value="Moneda"/>   
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Centro Costo"/>
+	                		</rich:column>
+	                	</rich:columnGroup>
+		            </f:facet>
+		            <rich:columnGroup>
+						<rich:column width="30" style="text-align: center">
+				         	<h:outputText value="#{rowKey + 1}"/>
+						</rich:column>
+						<rich:column width="100" style="text-align: center">
+				         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE}"
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion"
+								property="#{item.intParaTipoComprobante}"/>
+				   		</rich:column>
+				        <rich:column width="60" style="text-align: center">
+				          	<h:outputText value="#{item.dtFechaEmision}">
+				          		<f:convertDateTime pattern="dd/MM/yyyy"/>
+				          	</h:outputText>
+				    	</rich:column>
+				    	<rich:column width="60" style="text-align: right">
+				          	<h:outputText value="#{item.detalleLetra.bdMontoTotal}">
+				         		<f:converter converterId="ConvertidorMontos"/>
+				         	</h:outputText>
+				    	</rich:column>
+				    	<rich:column width="100" style="text-align: center">
+				          	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}"
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion"
+								property="#{item.intParaMoneda}"/>
+				    	</rich:column>
+				    	<rich:column width="150" style="text-align: center">
+				          	<h:outputText 
+				          		value="#{item.detalleLetra.ordenCompraDetalle.sucursal.juridica.strRazonSocial}-#{item.detalleLetra.ordenCompraDetalle.area.strDescripcion}"/>
+			    		</rich:column>		            
+		            </rich:columnGroup>
 			  	</rich:dataTable>
 		  	</rich:column>
 		</h:panelGrid>
+		
+		<rich:spacer height="15px"/>
+		
+		<h:panelGrid columns="1">
+			<rich:column width=	"250">
+				<h:outputText value="Notas de Crédito y Débito" style="font-weight:bold"/>
+			</rich:column>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			<rich:column width=	"910">
+				<rich:dataTable
+					sortMode="single"
+					var="item"
+					value="#{sunatController.listaDocumentoSunatNota}"
+					rowKeyVar="rowKey"
+					width="955px"
+					rows="#{fn:length(sunatController.listaDocumentoSunatNota)}">
+					
+					<f:facet name="header">
+	                	<rich:columnGroup>
+	                		<rich:column>
+	                			<h:outputText value="Nro"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Tipo"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Fecha"/>
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Monto"/>
+	                		</rich:column>	                		
+	                		<rich:column>
+	                			<h:outputText value="Moneda"/>   
+	                		</rich:column>
+	                		<rich:column>
+	                			<h:outputText value="Centro Costo"/>
+	                		</rich:column>
+	                	</rich:columnGroup>
+		            </f:facet>
+		            <rich:columnGroup>					
+						<rich:column width="30" style="text-align: center">
+				         	<h:outputText value="#{rowKey + 1}"/>
+						</rich:column>
+						<rich:column width="100" style="text-align: center">
+				         	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE}"
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion"
+								property="#{item.intParaTipoComprobante}"/>
+				   		</rich:column>
+				        <rich:column width="110" style="text-align: center">
+				          	<h:outputText value="#{item.dtFechaEmision}">
+				          		<f:convertDateTime pattern="dd/MM/yyyy"/>
+				          	</h:outputText>
+				    	</rich:column>
+				    	<rich:column width="100" style="text-align: right">
+				          	<h:outputText value="#{item.detalleNotaCredito.bdMontoTotal}" rendered="#{item.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO}">
+				         		<f:converter converterId="ConvertidorMontos"/>
+				         	</h:outputText>
+							<h:outputText value="#{item.detalleNotaDebito.bdMontoTotal}" rendered="#{item.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO}">
+				         		<f:converter converterId="ConvertidorMontos"/>
+				         	</h:outputText>
+				    	</rich:column>
+				    	<rich:column width="100" style="text-align: center">
+				          	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOMONEDA}"
+								itemValue="intIdDetalle" 
+								itemLabel="strDescripcion"
+								property="#{item.intParaMoneda}"/>
+				    	</rich:column>
+				    	<rich:column width="150" style="text-align: center">
+				          	<h:outputText rendered="#{item.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO}"
+				          		value="#{item.detalleNotaCredito.ordenCompraDetalle.sucursal.juridica.strRazonSocial}-#{item.detalleNotaCredito.ordenCompraDetalle.area.strDescripcion}"/>
+							<h:outputText rendered="#{item.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO}"
+				          		value="#{item.detalleNotaDebito.ordenCompraDetalle.sucursal.juridica.strRazonSocial}-#{item.detalleNotaDebito.ordenCompraDetalle.area.strDescripcion}"/>
+			    		</rich:column>
+			    	</rich:columnGroup>	    	
+			  	</rich:dataTable>
+		  	</rich:column>
+		</h:panelGrid>		
 					
 		</h:panelGroup>
 		
@@ -1246,6 +1425,5 @@
 	</rich:panel>
 	
 	</h:panelGroup>	
-
 </rich:panel>
 </h:form>
