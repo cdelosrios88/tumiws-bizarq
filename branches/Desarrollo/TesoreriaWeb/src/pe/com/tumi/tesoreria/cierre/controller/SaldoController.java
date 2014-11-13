@@ -36,6 +36,7 @@ import pe.com.tumi.seguridad.permiso.domain.PasswordId;
 import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeRemote;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
+import pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.Saldo;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalleInterfaz;
@@ -97,6 +98,34 @@ public class SaldoController {
 			log.error("--Usuario obtenido es NULL.");
 		}
 	}
+	
+	//Inicio: REQ14-005 - bizarq - 12/11/2014
+	public String getInicioPage() {
+		cargarUsuario();
+		poseePermiso = PermisoUtil.poseePermiso(Constante.TRANSACCION_CIERRE_CIERREFONDOS);
+		if(usuario!=null && poseePermiso){
+			limpiarFormulario();
+			listaSaldo.clear();
+			deshabilitarPanelInferior();
+			/*
+			intIdSucursal = SESION_IDSUCURSAL;
+			
+			if (SESION_IDSUCURSAL.equals(59)) {
+				blnDisabledSucursal = Boolean.FALSE;
+			}else blnDisabledSucursal = Boolean.TRUE;
+			
+			validarPerfilAnular();
+			log.debug("Perfil Seleccionado"+SESION_IDPERFIL);*/
+		}else log.error("--Usuario obtenido es NULL.");
+		return "";
+	}
+	
+	private void limpiarFormulario(){
+		
+		ocultarMensaje();
+		cargarUsuario();
+	}	
+	//Fin: REQ14-005 - bizarq - 12/11/2014
 	
 	private void cargarUsuario(){
 		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
@@ -309,9 +338,8 @@ public class SaldoController {
 		Integer intResult = null;
 		try {
 			if(!isValidDailyAmountProcess()){
-				//egresoFacade.procesarSaldo(dtFechaInicioSaldo, dtFechaFinSaldo, usuario, listaBanco, listaFondo);
+				intResult = egresoFacade.processDailyAmount(dtFechaInicioSaldo, dtFechaFinSaldo, usuario);
 				if(intResult!=null && intResult.equals(Constante.ON_SUCCESS)){
-					egresoFacade.processDailyAmount(dtFechaInicioSaldo, dtFechaFinSaldo, usuario);
 					mostrarMensaje(Boolean.TRUE, "Se registro correctamene el saldo para el rango de fechas indicadas.");
 				}else{
 					mostrarMensaje(Boolean.FALSE, "Ocurrió un error en el proceso de Saldos Diarios.");
