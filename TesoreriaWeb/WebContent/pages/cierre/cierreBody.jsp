@@ -159,6 +159,9 @@
 
 <h:outputText value="#{cierreFondosController.inicioPage}" />
 <h:outputText value="#{cierreDiarioController.inicioPage}" />
+<!-- Inicio: REQ14-005 - bizarq - 12/10/2014 -->
+<h:outputText value="#{saldoController.inicioPage}" />
+<!-- Inicio: REQ14-005 - bizarq - 12/10/2014 -->
 
 <rich:tabPanel activeTabClass="activo" inactiveTabClass="inactivo" disabledTabClass="disabled">
 
