@@ -397,6 +397,11 @@
 									<f:selectItem itemValue="2" itemLabel="Chekeado"/>
 								</h:selectOneMenu>
 							</rich:column>
+							
+							<rich:column>
+								<h:outputText value="Telecrédito: "/>
+							</rich:column>
+							
 							<rich:column>
 								<rich:fileUpload id="upload"
 									addControlLabel="Adjuntar Archivo"
@@ -687,7 +692,6 @@
 					</rich:columnGroup>
 				</h:panelGrid>
 				<h:panelGrid columns="16" id="pgAnula">
-				
 					<rich:column width="60px">
 							<h:outputText value="Fecha :"/>
 					</rich:column>	
@@ -697,40 +701,32 @@
 						datePattern="dd/MM/yyyy" inputStyle="width:70px;" /> 
 					</rich:column>
 					<rich:column width=	"120">
-						<h:outputText value="Cuenta Bancaria :"/>
+						<h:outputText value="Cuenta Bancaria : "/>
 					</rich:column>
 					<rich:column width="120">
-						<h:inputText
-							rendered="#{empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
-							size="40"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"/>
-						<%--
-						<h:inputText
-							rendered="#{not empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
-							value="#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNumerocuenta}"
-							size="40"
-							readonly="true"
-							style="background-color: #BFBFBF;font-weight:bold;"/>
-							--%>
-						<h:inputText
-						rendered="#{not empty conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta}"
-						value="#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strEtiqueta} - 
-								#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strTipoCuenta} -
-								#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strMoneda} -
-								#{conciliacionController.conciliacionCompAnul.conciliacion.bancoCuenta.strNombrecuenta}"
-						size="40"
-						readonly="true"
-						style="background-color: #BFBFBF;font-weight:bold;"/>
+						<h:selectOneMenu style="width: 170px;"
+							value="#{conciliacionController.intBancoAnuladoSeleccionado}">
+							<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+							<tumih:selectItems var="sel"
+								cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}" />
+							<a4j:support event="onchange"
+								action="#{conciliacionController.seleccionarAnularConcBancoFiltro}"
+								reRender="cboListaCuentasAnulaConc" />
+						</h:selectOneMenu>
 					</rich:column>
-					<rich:column width="150">
-						<a4j:commandButton styleClass="btnEstilos"
-							value="Buscar Cuenta"
-							reRender="panelDatosAnular,pBuscarBancoCuentaAnulacion,tablaBuscarBancoCuentaAnulacion"
-							oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaAnulacion')"
-							action="#{conciliacionController.abrirPopUpBuscarBancoCuentaAnul}"
-							style="width:150px"/>
-					</rich:column>		
+					<rich:column width="120">
+						<h:selectOneMenu
+							value="#{conciliacionController.intBancoCuentaAnuladoConcSeleccionado}"
+							style="width: 260px;" id="cboListaCuentasAnulaConc">
+							<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+							<tumih:selectItems var="sel"
+								value="#{conciliacionController.listaBancoCuentaFiltroAnulaConc}"
+								itemValue="#{sel.id.intItembancocuenta}"
+								itemLabel="#{sel.strEtiqueta}" />
+						</h:selectOneMenu>
+					</rich:column>
 				</h:panelGrid>
 				<h:panelGrid columns="5">
 					<rich:column width="150">

@@ -107,8 +107,11 @@ public class ConciliacionController{
 	private	List<Bancocuenta>	listaBancoCuentaFiltro;
 	private Integer intBancoCuentaSeleccionado;
 	private Integer intBancoNuevoSeleccionado;
+	private Integer intBancoAnuladoSeleccionado;
 	private List<Bancocuenta> listaBancoCuentaFiltroNuevaConc;
+	private List<Bancocuenta> listaBancoCuentaFiltroAnulaConc;
 	private Integer intBancoCuentaNuevaConcSeleccionado;
+	private Integer intBancoCuentaAnuladoConcSeleccionado;
 	private boolean deshabilitarBancoCuentaNuevoConc;
 	private boolean deshabilitarBancoNuevoConc;
 	
@@ -197,6 +200,14 @@ public class ConciliacionController{
 
 	public void setIntBancoNuevoSeleccionado(Integer intBancoNuevoSeleccionado) {
 		this.intBancoNuevoSeleccionado = intBancoNuevoSeleccionado;
+	}
+
+	public Integer getIntBancoAnuladoSeleccionado() {
+		return intBancoAnuladoSeleccionado;
+	}
+
+	public void setIntBancoAnuladoSeleccionado(Integer intBancoAnuladoSeleccionado) {
+		this.intBancoAnuladoSeleccionado = intBancoAnuladoSeleccionado;
 	}
 
 	public List<Bancocuenta> getListaBancoCuentaFiltroNuevaConc() {
@@ -510,6 +521,17 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	public void seleccionarAnularConcBancoFiltro(){
+		try{
+			log.info("--seleccionarBancoOrigen");
+			listaBancoCuentaFiltroAnulaConc = seleccionarBanco(intBancoAnuladoSeleccionado);
+			//listaBancoCuentaDestino solo puede tener BancoCuenta's con moneda del bancocuenta seleccionado
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	
 	public void seleccionarBancoCuentaFiltro(){
 		try{
 			Bancocuenta bancoCuentaSeleccionado = null;
@@ -551,6 +573,31 @@ public class ConciliacionController{
 				conciliacionNuevo.setIntPersEmpresa(bancoCuentaSeleccionado.getId().getIntEmpresaPk());
 				conciliacionNuevo.setIntItemBancoCuenta(bancoCuentaSeleccionado.getId().getIntItembancocuenta());
 				conciliacionNuevo.setIntItemBancoFondo(bancoCuentaSeleccionado.getId().getIntItembancofondo());
+			}
+			log.info(bancoCuentaSeleccionado);
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	public void seleccionarBancoCuentaAnulaConc(){
+		try{
+			Bancocuenta bancoCuentaSeleccionado = null;
+			if(listaBancoCuentaFiltroAnulaConc != null){
+				for(Bancocuenta bancocuenta : listaBancoCuentaFiltroAnulaConc){
+					if(intBancoCuentaAnuladoConcSeleccionado.equals(bancocuenta.getId().getIntItembancocuenta())){
+						bancoCuentaSeleccionado = bancocuenta;
+						break;
+					}
+				}
+			}
+			if(conciliacionCompAnul!=null && bancoCuentaSeleccionado!= null){
+				conciliacionCompAnul.getConciliacion().setBancoCuenta(bancoCuentaSeleccionado);
+				log.info("IntItembancocuenta(): "+ bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				log.info("IntItembancofondo: "+bancoCuentaSeleccionado.getId().getIntItembancofondo());
+				conciliacionCompAnul.getConciliacion().setIntPersEmpresa(bancoCuentaSeleccionado.getId().getIntEmpresaPk());
+				conciliacionCompAnul.getConciliacion().setIntItemBancoCuenta(bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				conciliacionCompAnul.getConciliacion().setIntItemBancoFondo(bancoCuentaSeleccionado.getId().getIntItembancofondo());
 			}
 			log.info(bancoCuentaSeleccionado);
 		}catch(Exception e){
@@ -834,6 +881,7 @@ public class ConciliacionController{
 			blDeshabilitarVerConc = Boolean.FALSE;
 			deshabilitarBancoNuevoConc = Boolean.FALSE;
 			intBancoNuevoSeleccionado = null;
+			intBancoAnuladoSeleccionado = null;
 			deshabilitarBancoCuentaNuevoConc = Boolean.FALSE;
 			intBancoCuentaNuevaConcSeleccionado = null;
 			listaBancoCuentaFiltroNuevaConc = null;
@@ -1668,6 +1716,24 @@ public class ConciliacionController{
 	 */
 	public void setMostrarBtnActualizar(boolean mostrarBtnActualizar) {
 		this.mostrarBtnActualizar = mostrarBtnActualizar;
+	}
+	
+	public List<Bancocuenta> getListaBancoCuentaFiltroAnulaConc() {
+		return listaBancoCuentaFiltroAnulaConc;
+	}
+
+	public void setListaBancoCuentaFiltroAnulaConc(
+			List<Bancocuenta> listaBancoCuentaFiltroAnulaConc) {
+		this.listaBancoCuentaFiltroAnulaConc = listaBancoCuentaFiltroAnulaConc;
+	}
+
+	public Integer getIntBancoCuentaAnuladoConcSeleccionado() {
+		return intBancoCuentaAnuladoConcSeleccionado;
+	}
+
+	public void setIntBancoCuentaAnuladoConcSeleccionado(
+			Integer intBancoCuentaAnuladoConcSeleccionado) {
+		this.intBancoCuentaAnuladoConcSeleccionado = intBancoCuentaAnuladoConcSeleccionado;
 	}
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
