@@ -40,7 +40,7 @@
 				<rich:column width="60px">
 					<h:outputText value="Fecha"/>
 				</rich:column>
-				<rich:column>
+				<rich:column width="10px">
 					<h:outputText value=":" styleClass="estiloLetra1"/>
 				</rich:column>
 				<rich:column>
@@ -57,39 +57,31 @@
 				<rich:column width=	"120">
 					<h:outputText value="Cuenta Bancaria : "/>
 				</rich:column>
-				<rich:column width="120">
-					<h:inputText
-						rendered="#{empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
-						size="40"
-						readonly="true"
-						style="background-color: #BFBFBF;font-weight:bold;"/>
-					<%--
-					<h:inputText
-						rendered="#{not empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
-						value="#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNumerocuenta}"
-						size="40"
-						readonly="true"
-						style="background-color: #BFBFBF;font-weight:bold;"/>--%>
-					<h:inputText
-						rendered="#{not empty conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta}"
-						value="#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strEtiqueta} - 
-								#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strTipoCuenta} -
-								#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strMoneda} -
-								#{conciliacionController.conciliacionCompBusq.conciliacion.bancoCuenta.strNombrecuenta}"
-						size="40"
-						readonly="true"
-						style="background-color: #BFBFBF;font-weight:bold;"/>
-				</rich:column>
-				<rich:column width="150">
-					<a4j:commandButton styleClass="btnEstilos"
-						value="Buscar Cuenta"
-						reRender="pBuscarBancoCuenta"
-						oncomplete="Richfaces.showModalPanel('pBuscarBancoCuenta')"
-						action="#{conciliacionController.abrirPopUpBuscarBancoCuenta}"
-						style="width:150px"/>
-				</rich:column>
-				
-				<rich:column width="80" style="text-align: right;">
+			<rich:column width="120">
+				<h:selectOneMenu style="width: 170px;"
+					value="#{conciliacionController.intBancoSeleccionado}">
+					<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+					<tumih:selectItems var="sel"
+						cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}" />
+					<a4j:support event="onchange"
+						action="#{conciliacionController.seleccionarBancoFiltro}"
+						reRender="cboListaCuentas" />
+				</h:selectOneMenu>
+			</rich:column>
+			<rich:column width="120">
+				<h:selectOneMenu
+					value="#{conciliacionController.intBancoCuentaSeleccionado}"
+					style="width: 260px;" id="cboListaCuentas">
+					<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+					<tumih:selectItems var="sel"
+						value="#{conciliacionController.listaBancoCuentaFiltro}"
+						itemValue="#{sel.id.intItembancocuenta}"
+						itemLabel="#{sel.strEtiqueta}" />
+				</h:selectOneMenu>
+			</rich:column>
+
+			<rich:column width="80" style="text-align: right;">
 					<a4j:commandButton styleClass="btnEstilos"
 						value="Buscar" 
 						reRender="panelTablaResultados,panelMensaje,tblResultado"
@@ -322,38 +314,36 @@
 							<rich:column width=	"120">
 								<h:outputText value="Cuenta Bancaria : "/>
 							</rich:column>
-							<rich:column width="120">
-								<h:inputText
-									rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-									size="40"
-									readonly="true"
-									style="background-color: #BFBFBF;font-weight:bold;"/>
-								<%--
-								<h:inputText
-									rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-									value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
-									size="40"
-									readonly="true"
-									style="background-color: #BFBFBF;font-weight:bold;"/> --%>
-								<h:inputText
-									rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-									value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strEtiqueta} - 
-											#{conciliacionController.conciliacionNuevo.bancoCuenta.strTipoCuenta} -
-											#{conciliacionController.conciliacionNuevo.bancoCuenta.strMoneda} -
-											#{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
-									size="40"
-									readonly="true"
-									style="background-color: #BFBFBF;font-weight:bold;"/>
-							</rich:column>
-							<rich:column width="150">
-								<a4j:commandButton styleClass="btnEstilos"
-									value="Buscar Cuenta"
-									reRender="pBuscarBancoCuentaConciliacion"
-									oncomplete="Richfaces.showModalPanel('pBuscarBancoCuentaConciliacion')"
-									action="#{conciliacionController.abrirPopUpBuscarBancoCuentaConciliacion}"
-									style="width:150px"
-									disabled="#{conciliacionController.blDeshabilitarBuscarCuenta}"/>
-							</rich:column>
+						<rich:column width="120">
+							<h:selectOneMenu style="width: 170px;"
+								disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
+								value="#{conciliacionController.intBancoNuevoSeleccionado}">
+								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+								<tumih:selectItems var="sel"
+									cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+									itemValue="#{sel.intIdDetalle}"
+									itemLabel="#{sel.strDescripcion}" />
+								<a4j:support event="onchange"
+									action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
+									reRender="cboListaCuentasNuevaConc" />
+							</h:selectOneMenu>
+						</rich:column>
+						<rich:column width="120">
+							<h:selectOneMenu
+								value="#{conciliacionController.intBancoCuentaNuevaConcSeleccionado}"
+								disabled="#{conciliacionController.deshabilitarBancoCuentaNuevoConc}"
+								style="width: 260px;" id="cboListaCuentasNuevaConc">
+								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+								<tumih:selectItems var="sel"
+									value="#{conciliacionController.listaBancoCuentaFiltroNuevaConc}"
+									itemValue="#{sel.id.intItembancocuenta}"
+									itemLabel="#{sel.strEtiqueta}" />
+									<a4j:support event="onchange"
+									action="#{conciliacionController.seleccionarBancoCuentaNuevoConc}"
+									reRender="contPanelInferior" />
+							</h:selectOneMenu>
+						</rich:column>
+						
 
 							<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
 							<rich:column width=	"140">
