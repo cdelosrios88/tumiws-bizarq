@@ -102,6 +102,16 @@ public class ConciliacionController{
 	private String strMsgErrorAnulaObservacion;
 	private String strMsgErrorAnulaPerfil;
 	private boolean blDeshabilitarVerConc;
+	private Integer intBancoSeleccionado;
+	private	List<Tabla>	 		listaMoneda;
+	private	List<Bancocuenta>	listaBancoCuentaFiltro;
+	private Integer intBancoCuentaSeleccionado;
+	private Integer intBancoNuevoSeleccionado;
+	private List<Bancocuenta> listaBancoCuentaFiltroNuevaConc;
+	private Integer intBancoCuentaNuevaConcSeleccionado;
+	private boolean deshabilitarBancoCuentaNuevoConc;
+	private boolean deshabilitarBancoNuevoConc;
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	private Usuario 	usuario;
@@ -119,7 +129,7 @@ public class ConciliacionController{
 	private boolean mostrarBtnView;
 	private boolean mostrarBtnActualizar;
 	private boolean poseePermiso;
-	
+
 	public ConciliacionController(){
 		cargarUsuario();
 		if(usuario!=null){
@@ -146,7 +156,7 @@ public class ConciliacionController{
 			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			conciliacionFacade = (ConciliacionFacadeLocal) EJBFactory.getLocal(ConciliacionFacadeLocal.class);
 			conciliacionService = (ConciliacionService)TumiFactory.get(ConciliacionService.class);
-			
+			listaMoneda = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOMONEDA));
 			conciliacionCompBusq = new ConciliacionComp();
 			conciliacionCompBusq.setConciliacion(new Conciliacion());
 			conciliacionCompBusq.getConciliacion().setBancoCuenta(new Bancocuenta());
@@ -164,8 +174,70 @@ public class ConciliacionController{
 	}	
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-	
-	
+	public boolean isDeshabilitarBancoCuentaNuevoConc() {
+		return deshabilitarBancoCuentaNuevoConc;
+	}
+
+	public void setDeshabilitarBancoCuentaNuevoConc(
+			boolean deshabilitarBancoCuentaNuevoConc) {
+		this.deshabilitarBancoCuentaNuevoConc = deshabilitarBancoCuentaNuevoConc;
+	}
+
+	public boolean isDeshabilitarBancoNuevoConc() {
+		return deshabilitarBancoNuevoConc;
+	}
+
+	public void setDeshabilitarBancoNuevoConc(boolean deshabilitarBancoNuevoConc) {
+		this.deshabilitarBancoNuevoConc = deshabilitarBancoNuevoConc;
+	}
+
+	public Integer getIntBancoNuevoSeleccionado() {
+		return intBancoNuevoSeleccionado;
+	}
+
+	public void setIntBancoNuevoSeleccionado(Integer intBancoNuevoSeleccionado) {
+		this.intBancoNuevoSeleccionado = intBancoNuevoSeleccionado;
+	}
+
+	public List<Bancocuenta> getListaBancoCuentaFiltroNuevaConc() {
+		return listaBancoCuentaFiltroNuevaConc;
+	}
+
+	public void setListaBancoCuentaFiltroNuevaConc(
+			List<Bancocuenta> listaBancoCuentaFiltroNuevaConc) {
+		this.listaBancoCuentaFiltroNuevaConc = listaBancoCuentaFiltroNuevaConc;
+	}
+
+	public Integer getIntBancoCuentaNuevaConcSeleccionado() {
+		return intBancoCuentaNuevaConcSeleccionado;
+	}
+
+	public void setIntBancoCuentaNuevaConcSeleccionado(
+			Integer intBancoCuentaNuevaConcSeleccionado) {
+		this.intBancoCuentaNuevaConcSeleccionado = intBancoCuentaNuevaConcSeleccionado;
+	}
+
+	public Integer getIntBancoCuentaSeleccionado() {
+		return intBancoCuentaSeleccionado;
+	}
+
+	public void setIntBancoCuentaSeleccionado(Integer intBancoCuentaSeleccionado) {
+		this.intBancoCuentaSeleccionado = intBancoCuentaSeleccionado;
+	}
+	public List<Bancocuenta> getListaBancoCuentaFiltro() {
+		return listaBancoCuentaFiltro;
+	}
+
+	public void setListaBancoCuentaFiltro(List<Bancocuenta> listaBancoCuentaFiltro) {
+		this.listaBancoCuentaFiltro = listaBancoCuentaFiltro;
+	}
+	public Integer getIntBancoSeleccionado() {
+		return intBancoSeleccionado;
+	}
+
+	public void setIntBancoSeleccionado(Integer intBancoSeleccionado) {
+		this.intBancoSeleccionado = intBancoSeleccionado;
+	}
 	public void renderBotones(){
 		
 		Conciliacionvalidate validate = new Conciliacionvalidate();
@@ -251,7 +323,8 @@ public class ConciliacionController{
 		List<ConciliacionDetalle> lstConcilDet = null;
 		try {
 			
-			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().compareTo(new Integer(0))== 0)conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
+			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().compareTo(new Integer(0))== 0)
+				conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
 			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
 			if(lstConcilDet != null && lstConcilDet.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
@@ -380,6 +453,110 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	public List<Bancocuenta> seleccionarBanco(Integer intBancoSeleccionado) throws Exception{
+		//log.info("--seleccionarBanco");
+		if (intBancoSeleccionado==null) intBancoSeleccionado=0;
+			
+		List<Bancocuenta> listaBancoCuenta = new ArrayList<Bancocuenta>();
+		if(intBancoSeleccionado.equals(new Integer(0))){
+			return listaBancoCuenta;
+		}
+		Bancofondo bancoFondoTemp = new Bancofondo();
+		bancoFondoTemp.setIntTipoBancoFondoFiltro(Constante.PARAM_T_BANCOFONDOFIJO_BANCO);
+		bancoFondoTemp.setIntEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+		
+		List<Bancofondo> listaBancoFondoTemp = bancoFacade.buscarBancoFondo(bancoFondoTemp);
+		String strEtiqueta = "";
+		//log.info("--intBancoSeleccionado:"+intBancoSeleccionado);
+		for(Bancofondo bancoFondo : listaBancoFondoTemp){
+			//log.info(bancoFondo);
+			if(bancoFondo.getIntBancoCod().equals(intBancoSeleccionado)){
+				for(Bancocuenta bancoCuenta : bancoFondo.getListaBancocuenta()){
+					//log.info(bancoCuenta);
+					strEtiqueta = bancoCuenta.getStrNombrecuenta()+" - "
+									+bancoCuenta.getCuentaBancaria().getStrNroCuentaBancaria()+" - "
+									+obtenerEtiquetaTipoMoneda(bancoCuenta.getCuentaBancaria().getIntMonedaCod());
+					bancoCuenta.setStrEtiqueta(strEtiqueta);
+					listaBancoCuenta.add(bancoCuenta);
+				}
+			}
+		}
+		return listaBancoCuenta;
+	}
+	private String obtenerEtiquetaTipoMoneda(Integer intTipoMoneda){
+		for(Tabla tabla : listaMoneda){
+			if(tabla.getIntIdDetalle().equals(intTipoMoneda)){
+				return tabla.getStrDescripcion();
+			}
+		}
+		return "";
+	}
+	public void seleccionarBancoFiltro(){
+		try{
+			log.info("--seleccionarBancoOrigen");
+			listaBancoCuentaFiltro = seleccionarBanco(intBancoSeleccionado);
+			//listaBancoCuentaDestino solo puede tener BancoCuenta's con moneda del bancocuenta seleccionado
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	public void seleccionarNuevoConcBancoFiltro(){
+		try{
+			log.info("--seleccionarBancoOrigen");
+			listaBancoCuentaFiltroNuevaConc = seleccionarBanco(intBancoNuevoSeleccionado);
+			//listaBancoCuentaDestino solo puede tener BancoCuenta's con moneda del bancocuenta seleccionado
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	public void seleccionarBancoCuentaFiltro(){
+		try{
+			Bancocuenta bancoCuentaSeleccionado = null;
+			if(listaBancoCuentaFiltro != null){
+				for(Bancocuenta bancocuenta : listaBancoCuentaFiltro){
+					if(intBancoCuentaSeleccionado.equals(bancocuenta.getId().getIntItembancocuenta())){
+						bancoCuentaSeleccionado = bancocuenta;
+						break;
+					}
+				}
+			}
+			if(conciliacionCompBusq!=null && conciliacionCompBusq.getConciliacion()!=null && bancoCuentaSeleccionado != null){
+				conciliacionCompBusq.getConciliacion().setBancoCuenta(bancoCuentaSeleccionado);
+				log.info("IntItembancocuenta(): "+ bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				log.info("IntItembancofondo: "+bancoCuentaSeleccionado.getId().getIntItembancofondo());
+				conciliacionCompBusq.setIntBusqItemBancoCuenta(bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				conciliacionCompBusq.setIntBusqItemBancoFondo(bancoCuentaSeleccionado.getId().getIntItembancofondo());
+			}
+			log.info(bancoCuentaSeleccionado);
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	public void seleccionarBancoCuentaNuevoConc(){
+		try{
+			Bancocuenta bancoCuentaSeleccionado = null;
+			if(listaBancoCuentaFiltroNuevaConc != null){
+				for(Bancocuenta bancocuenta : listaBancoCuentaFiltroNuevaConc){
+					if(intBancoCuentaNuevaConcSeleccionado.equals(bancocuenta.getId().getIntItembancocuenta())){
+						bancoCuentaSeleccionado = bancocuenta;
+						break;
+					}
+				}
+			}
+			if(conciliacionNuevo!=null && bancoCuentaSeleccionado!= null){
+				conciliacionNuevo.setBancoCuenta(bancoCuentaSeleccionado);
+				log.info("IntItembancocuenta(): "+ bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				log.info("IntItembancofondo: "+bancoCuentaSeleccionado.getId().getIntItembancofondo());
+				conciliacionNuevo.setIntPersEmpresa(bancoCuentaSeleccionado.getId().getIntEmpresaPk());
+				conciliacionNuevo.setIntItemBancoCuenta(bancoCuentaSeleccionado.getId().getIntItembancocuenta());
+				conciliacionNuevo.setIntItemBancoFondo(bancoCuentaSeleccionado.getId().getIntItembancofondo());
+			}
+			log.info(bancoCuentaSeleccionado);
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void deshabilitarPanelInferior(){
@@ -482,6 +659,7 @@ public class ConciliacionController{
 	public void buscar(){
 		try{
 			/* Inicio: REQ14-006 Bizarq - 18/10/2014 */
+			seleccionarBancoCuentaFiltro();
 			listaConciliacionBusq = new ArrayList<Conciliacion>();
 			listaConciliacionBusq = conciliacionFacade.getListFilter(conciliacionCompBusq);
 			//conciliacionCompBusq = new ConciliacionComp();
@@ -654,6 +832,11 @@ public class ConciliacionController{
 			blnMostrarPanelAnulacion = Boolean.FALSE;
 			blDeshabilitarBuscarCuenta = false;
 			blDeshabilitarVerConc = Boolean.FALSE;
+			deshabilitarBancoNuevoConc = Boolean.FALSE;
+			intBancoNuevoSeleccionado = null;
+			deshabilitarBancoCuentaNuevoConc = Boolean.FALSE;
+			intBancoCuentaNuevaConcSeleccionado = null;
+			listaBancoCuentaFiltroNuevaConc = null;
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
 			//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -799,6 +982,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void seleccionarBancoCuenta(ActionEvent event){
@@ -860,7 +1044,7 @@ public class ConciliacionController{
 			log.error(e.getMessage(),e);
 		}
 	}
-	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void validarDatos(){
 		try{
@@ -870,6 +1054,8 @@ public class ConciliacionController{
 			if(conciliacionNuevo.getListaConciliacionDetalle() != null && conciliacionNuevo.getListaConciliacionDetalle().size() >0){
 				blDeshabilitaValidarDatos = Boolean.FALSE;
 				blDeshabilitarBuscar = Boolean.TRUE;
+				deshabilitarBancoNuevoConc = Boolean.TRUE;
+				deshabilitarBancoCuentaNuevoConc = Boolean.TRUE;
 			}
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 
