@@ -166,17 +166,17 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 	 * @throws BusinessException
 	 */
 	public List<ConciliacionDetalle> buscarRegistrosConciliacionEdicion(Conciliacion conciliacion)throws BusinessException{
-		List<ConciliacionDetalle> lstConcilDet = null;
+		List<ConciliacionDetalle> lstConcilDetTotal = null;
 		try {
 
-			lstConcilDet= conciliacionService.buscarRegistrosConciliacionEdicion(conciliacion);
+			lstConcilDetTotal= conciliacionService.buscarRegistrosConciliacionEdicion(conciliacion);
 		
 		}catch(BusinessException e){
 			throw e;
 		}catch(Exception e){
 			throw new BusinessException(e);
 		}
-		return lstConcilDet;
+		return lstConcilDetTotal;
 	}
 
 	
