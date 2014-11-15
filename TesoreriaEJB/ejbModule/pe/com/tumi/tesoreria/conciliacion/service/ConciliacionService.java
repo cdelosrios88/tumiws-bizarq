@@ -446,31 +446,22 @@ public class ConciliacionService {
 			Integer intItemBancoFondo, Integer intItemBancoCuenta, Date dtInicio, Date dtFin)throws BusinessException{
 		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleFin = new ArrayList<ConciliacionDetalle>();
-		//Conciliacion concilLast = null;
-		//Date dtSince = null;
-		//Date dtSincePlusOne = null;
-		//Boolean blnExisteConcil = Boolean.FALSE;
+
 		try{
 		
 			Ingreso ingresoFiltro = new Ingreso();
-
 			ingresoFiltro.getId().setIntIdEmpresa(intBcoCtaEmpresaPk);
 			ingresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
 			ingresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
 			ingresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
-			//PRUEBAS
-			//ingresoFiltro.setIntParaDocumentoGeneral(302);
-			//ingresoFiltro.setIntItemBancoFondo(2);
-			//ingresoFiltro.setIntItemBancoCuenta(6);
-			//
 			ingresoFiltro.setDtDechaDesde(dtInicio);
 			ingresoFiltro.setDtDechaHasta(dtFin);
+			
 			List<Ingreso> listaIngreso = boIngreso.getListaParaBuscar(ingresoFiltro);
 			
 			if(listaIngreso != null && listaIngreso.size() >0){
 				for(Ingreso ingreso : listaIngreso){
 					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
-					//conciliacionDet.setId(new ConciliacionDetalleId());
 					conciliacionDet.setIngreso(ingreso);
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
@@ -481,17 +472,11 @@ public class ConciliacionService {
 			egresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
 			egresoFiltro.setIntItemBancoFondo(intItemBancoFondo);
 			egresoFiltro.setIntItemBancoCuenta(intItemBancoCuenta);
-			//PRUEBAS
-			//egresoFiltro.setIntParaDocumentoGeneral(301);
-			//egresoFiltro.setIntItemBancoFondo(2);
-			//egresoFiltro.setIntItemBancoCuenta(4);
-			//
 			List<Egreso> listaEgreso = boEgreso.getListaPorBuscar(egresoFiltro, dtInicio, dtFin);
 
 			if(listaEgreso != null && listaEgreso.size() >0){
 				for(Egreso egreso : listaEgreso){
 					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
-					//conciliacionDet.setId(new ConciliacionDetalleId());
 					conciliacionDet.setEgreso(egreso);
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
@@ -507,23 +492,6 @@ public class ConciliacionService {
 		}
 		return listaConciliacionDetalleFin;
 	}
-	
-	
-	/*
-	public List<ConciliacionDetalle> buscar(Conciliacion conciliacion)throws BusinessException{
-		List<ConciliacionDetalle> listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
-		try{
-
-			
-			
-			
-			
-		}catch (Exception e) {
-			throw new BusinessException(e);
-		}
-		return listaConciliacionDetalle;
-	}
-	*/
 	
 	/**
 	 * 
@@ -549,17 +517,7 @@ public class ConciliacionService {
 			if(listaConciliacionDetalleTemp!=null && !listaConciliacionDetalleTemp.isEmpty()){
 				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalleTemp, conciliacion.getId());
 			}
-			/*if(listaConciliacionDetalleTemp!=null && !listaConciliacionDetalleTemp.isEmpty()){
-				listaConciliacionDetalle = new ArrayList<ConciliacionDetalle>();
-				for( ConciliacionDetalle conciliacionDet : listaConciliacionDetalleTemp){
-					conciliacionDet = convertEgresoIngresoAConcilDet(conciliacionDet);
-					listaConciliacionDetalle.add(conciliacionDet);
-				}	
-			}
-			if(listaConciliacionDetalle!=null && !listaConciliacionDetalle.isEmpty()){
-				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalle, conciliacion.getId());
-			}
-			*/
+	
 		}catch(BusinessException e){
 			log.error("Error - BusinessException - en grabarConciliacion ---> "+e);
 			throw e;
@@ -583,11 +541,9 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalle = null;
 		
 		try{
-			// SETERAR ESTADOD E COCNILIADO
 			pConciliacion.setIntParaEstado(Constante.INT_EST_CONCILIACION_CONCILIADO);			
 			pConciliacion.setIntPersPersonaConcilia(pConciliacion.getUsuario().getIntPersPersonaPk());
 			pConciliacion.setIntPersEmpresaConcilia(pConciliacion.getUsuario().getPerfil().getId().getIntPersEmpresaPk());
-			
 			
 			conciliacion = boConciliacion.grabar(pConciliacion);
 			

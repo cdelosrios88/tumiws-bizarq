@@ -683,6 +683,7 @@ public class ConciliacionController{
 			if(conciliacionNuevo.getId().getIntItemConciliacion() == null){
 				isCrear = validate.isValidCrearConciliacion(conciliacionNuevo);
 				if(isCrear){
+					//logging();
 					conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 					mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
 				}else{
@@ -690,6 +691,7 @@ public class ConciliacionController{
 				}
 
 			}else{
+				//logging();
 				conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 				mostrarMensaje(Boolean.TRUE, "Se actualizó éxitosamente la Conciliación Bancaria.");
 			}
@@ -701,7 +703,50 @@ public class ConciliacionController{
 		}
 	}	
 	
+
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	
+	
+	public void logging(){
+		if(conciliacionNuevo.getListaConciliacionDetalleVisual()!= null && conciliacionNuevo.getListaConciliacionDetalleVisual().size()>0 ){
+			System.out.println("============================== xxx VISUAL xxx ======================================");
+			for (ConciliacionDetalle visual: conciliacionNuevo.getListaConciliacionDetalleVisual()) {
+				int cont = 0;
+				if(visual.getEgreso() != null){
+					System.out.println("Egreso "+ cont++ + ":");
+					System.out.println("visual.getIntPersEmpresaEgreso() -- "+visual.getIntPersEmpresaEgreso());
+					System.out.println("visual.getIntItemEgresoGeneral() -- "+visual.getIntItemEgresoGeneral());
+				}
+				if(visual.getIngreso() != null){
+					System.out.println("Ingreso "+ cont++ + ":");
+					System.out.println("visual.getIntPersEmpresaIngreso() -- "+visual.getIntPersEmpresaIngreso());
+					System.out.println("visual.getIntItemIngresoGeneral() -- "+visual.getIntItemIngresoGeneral());
+				}
+				System.out.println("=============================================================================");
+
+			}
+		}
+		
+		if(conciliacionNuevo.getListaConciliacionDetalle()!= null && conciliacionNuevo.getListaConciliacionDetalle().size()>0 ){
+			System.out.println("============================== xxx REAL xxx ======================================");
+			for (ConciliacionDetalle real: conciliacionNuevo.getListaConciliacionDetalle()) {
+				int cont = 0;
+				if(real.getEgreso() != null){
+					System.out.println("Egreso "+ cont++ + ":");
+					System.out.println("real.getIntPersEmpresaEgreso() -- "+real.getIntPersEmpresaEgreso());
+					System.out.println("real.getIntItemEgresoGeneral() -- "+real.getIntItemEgresoGeneral());
+				}
+				if(real.getIngreso() != null){
+					System.out.println("Ingreso "+ cont++ + ":");
+					System.out.println("real.getIntPersEmpresaIngreso() -- "+real.getIntPersEmpresaIngreso());
+					System.out.println("real.getIntItemIngresoGeneral() -- "+real.getIntItemIngresoGeneral());
+				}
+				System.out.println("=============================================================================");
+			}
+		}
+	}
+	
+	
 	private boolean isValidConciliacion(Conciliacion conciliacion){
 		boolean isValid = false;
 		Date dtLastArqueo = null;
