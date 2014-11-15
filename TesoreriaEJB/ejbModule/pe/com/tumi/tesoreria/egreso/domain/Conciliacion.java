@@ -53,6 +53,7 @@ public class Conciliacion extends TumiDomain{
 	private Integer intNroMovimientos;	
 	private BigDecimal bdPorConciliar;
 	private Usuario usuario;
+	private List<ConciliacionDetalle> listaConciliacionDetalleVisual;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public Conciliacion(){
@@ -293,8 +294,24 @@ public class Conciliacion extends TumiDomain{
 		this.tsFechaConcilia = tsFechaConcilia;
 	}
 	
+
+	/**
+	 * @return the listaConciliacionDetalleVisual
+	 */
+	public List<ConciliacionDetalle> getListaConciliacionDetalleVisual() {
+		return listaConciliacionDetalleVisual;
+	}
+
+	/**
+	 * @param listaConciliacionDetalleVisual the listaConciliacionDetalleVisual to set
+	 */
+	public void setListaConciliacionDetalleVisual(
+			List<ConciliacionDetalle> listaConciliacionDetalleVisual) {
+		this.listaConciliacionDetalleVisual = listaConciliacionDetalleVisual;
+	}
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
+
 
 	@Override
 	public String toString() {
