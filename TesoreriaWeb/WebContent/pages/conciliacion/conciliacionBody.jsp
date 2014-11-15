@@ -17,10 +17,6 @@
 	* REQ14-006       			01/11/2014     Christian De los Ríos        Se modificó la pantalla inicial de Conciliación
 	 -->
 
-	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuenta.jsp"/>
-	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaParaConciliacion.jsp"/>
-	<a4j:include viewId="/pages/conciliacion/popup/buscarBancoCuentaAnula.jsp"/>
-	<%-- <a4j:include viewId="/pages/conciliacion/conciliacionContent.jsp"/> --%>
 	<a4j:include viewId="/pages/conciliacion/popup/panelVerModificar.jsp"/>
 	
 	<h:outputText value="#{conciliacionController.limpiarConciliacion}"/>
@@ -243,20 +239,22 @@
 					<a4j:commandButton value="Nuevo" 
 						styleClass="btnEstilos" 
 						style="width:90px" 
-						action="#{conciliacionController.habilitarPanelInferior}" 
+						action="#{conciliacionController.habilitarPanelInferior}"
+						rendered="#{!conciliacionController.mostrarBotonAnular}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular" />                     
 					<a4j:commandButton value="Grabar" 
 						styleClass="btnEstilos" 
 						style="width:90px"
 						action="#{conciliacionController.grabar}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
+						rendered="#{!conciliacionController.mostrarBotonAnular}"
 						disabled="false"/>
 					<a4j:commandButton value="Grabar Conciliacion Diaria" 
 						styleClass="btnEstilos" 
 						style="width:170px"
 						action="#{conciliacionController.grabarConciliacionDiaria}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="#{conciliacionController.mostrarBotonGrabarConcil}"/>						
+						rendered="#{conciliacionController.mostrarBotonGrabarConcil && !conciliacionController.mostrarBotonAnular}"/>						
 					<a4j:commandButton value="Anular Conciliacion" 
 						styleClass="btnEstilos" 
 						style="width:140px"
