@@ -24,11 +24,12 @@
     <result property="tsFechaCheck"      				column="ppersonaconcianula" />
     <result property="intNumeroOperacion"      			column="pfechaanula" />
     -->
+    
     <result property="id.intPersEmpresa"  				column="pempresaconciliacion" />
 	<result property="id.intItemConciliacion"   		column="pitemconciliacion" />
 	<result property="id.intItemConciliacionDetalle" 	column="pitemconciliaciondet" />
     <result property="intPersEmpresaEgreso"     		column="pempresaegreso" />
-    <result property="intItemEgresoGeneral" 			column="pitemingresogeneral" />
+    <result property="intItemEgresoGeneral" 			column="pitemegresogeneral" />
     <result property="intPersEmpresaIngreso"   			column="pempresaingreso" />
     <result property="intItemIngresoGeneral"    		column="pitemingresogeneral" />
     <result property="intIndicadorCheck"    			column="pindicadorcheck" />
