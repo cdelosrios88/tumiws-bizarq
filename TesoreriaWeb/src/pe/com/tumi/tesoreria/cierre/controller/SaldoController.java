@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -367,8 +368,15 @@ public class SaldoController {
 				saldo = new Saldo();
 				saldo.setDtFechaDesde(dtFechaInicioSaldo);
 				saldo.setStrMotivoAnula(strAnulReason);
-				egresoFacade.anularSaldo(usuario, saldo);
-				mostrarMensaje(Boolean.TRUE, "Se anularon correctamene todos los saldos desde la fecha "+ Constante.sdf.format(dtFechaInicioSaldo)+".");
+				List<Map> lstResult = egresoFacade.verificarSaldoProcesado(usuario, dtFechaInicioSaldo);
+				if(new Integer(lstResult.get(0).get("cantReg").toString())  > 0){
+					egresoFacade.anularSaldo(usuario, saldo);
+					mostrarMensaje(Boolean.TRUE, "Se anularon correctamene todos los saldos desde la fecha "+ Constante.sdf.format(dtFechaInicioSaldo)+".");
+					mostrarPanelInferiorNuevo = Boolean.FALSE;
+					mostrarPanelInferiorAnular = Boolean.FALSE;
+				}else {
+					mostrarMensaje(Boolean.FALSE, "No existe ningún saldo procesado.");
+				}
 			}
 		} catch (BusinessException e) {
 			mostrarMensaje(Boolean.FALSE, "Ocurrio un error durante el proceso de anulación de saldos diarios.");
@@ -506,7 +514,9 @@ public class SaldoController {
 			dtFechaFinSaldo = null;
 			dtUltimaFechaCierreGeneral = null;
 			dtUltimaFechaGenerada = null;
-			
+			//Inicio: REQ14-005 - bizarq - 14/11/2014
+			strAnulReason = null;
+			//Fin: REQ14-005 - bizarq - 14/11/2014
 			obtenerFechasSaldo();
 				
 			registrarNuevo = Boolean.TRUE;
