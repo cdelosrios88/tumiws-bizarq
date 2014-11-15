@@ -101,7 +101,7 @@ AS
                 v_itemconciliaciondet,
              TES_CONCILIACIONDET.PERS_EMPRESAEGRESO_N_PK = v_empresaegreso,
              TES_CONCILIACIONDET.TESO_ITEMEGRESOGENERAL_N =
-                v_itemingresogeneral,
+                v_itemegresogeneral,
              TES_CONCILIACIONDET.PERS_EMPRESAINGRESO_N_PK = v_empresaingreso,
              TES_CONCILIACIONDET.TESO_ITEMINGRESOGENERAL_N =
                 v_itemingresogeneral,
