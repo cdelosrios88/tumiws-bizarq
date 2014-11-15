@@ -331,15 +331,17 @@ public class ConciliacionController{
 	 * Recupera Ingresos y egresos para conciliacion, segun Filtros de Cuenta y Tipo de Documento
 	 */
 	public void buscarRegistrosConciliacion(){
-		List<ConciliacionDetalle> lstConcilDet = null;
+		List<ConciliacionDetalle> lstConcilDetTotal = null;
 		try {
 			
 			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().compareTo(new Integer(0))== 0)
 				conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
-			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
-			if(lstConcilDet != null && lstConcilDet.size() > 0){
+			lstConcilDetTotal= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
+			if(lstConcilDetTotal != null && lstConcilDetTotal.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
-				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDet);
+				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDetTotal);
+				//
+				getListaVisualSegunFiltros(lstConcilDetTotal);
 				calcularTablaResumen();
 			}else{
 				mostrarMensaje(Boolean.FALSE, "No se encontraron registros.");
@@ -352,20 +354,63 @@ public class ConciliacionController{
 	}
 	
 	
-	
+	/**
+	 * 
+	 */
 	public void buscarRegistrosConciliacionEdicion(){
-		List<ConciliacionDetalle> lstConcilDet = null;
+		List<ConciliacionDetalle> lstConcilDetTotal = null;
 		try {
 			
 			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro().compareTo(new Integer(0))== 0)conciliacionNuevo.setIntParaDocumentoGeneralFiltro(null);
-			lstConcilDet= conciliacionFacade.buscarRegistrosConciliacionEdicion(conciliacionNuevo);
-			if(lstConcilDet != null && lstConcilDet.size() > 0){
+			lstConcilDetTotal= conciliacionFacade.buscarRegistrosConciliacionEdicion(conciliacionNuevo);
+			if(lstConcilDetTotal != null && lstConcilDetTotal.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
-				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDet);
+				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDetTotal);
+				//
+				getListaVisualSegunFiltros(lstConcilDetTotal);
 				calcularTablaResumen();
 			}else{
 				mostrarMensaje(Boolean.FALSE, "No se encontraron registros.");
 			}
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @param lstDetalleTotal
+	 * @return
+	 */
+	public void getListaVisualSegunFiltros(List<ConciliacionDetalle> lstDetalleTotal){
+		List<ConciliacionDetalle> lstVisual = null;
+		try {
+			lstVisual = new ArrayList<ConciliacionDetalle>();
+			
+			if(conciliacionNuevo.getIntParaDocumentoGeneralFiltro()== null 
+				|| conciliacionNuevo.getIntParaDocumentoGeneralFiltro().toString().equalsIgnoreCase("0")){
+				lstVisual.addAll(lstDetalleTotal);
+			}else{
+				for (ConciliacionDetalle detalleTotal : lstDetalleTotal) {
+					
+					if(detalleTotal.getIngreso() == null){
+						if(detalleTotal.getEgreso().getIntParaDocumentoGeneral().
+								compareTo(conciliacionNuevo.getIntParaDocumentoGeneralFiltro())==0){
+							lstVisual.add(detalleTotal);
+						}
+					}
+					if(detalleTotal.getEgreso() == null){
+						if(detalleTotal.getIngreso().getIntParaDocumentoGeneral().
+								compareTo(conciliacionNuevo.getIntParaDocumentoGeneralFiltro())==0){
+							lstVisual.add(detalleTotal);
+						}
+					}
+				}			
+			}
+			conciliacionNuevo.getListaConciliacionDetalleVisual().clear();
+			conciliacionNuevo.getListaConciliacionDetalleVisual().addAll(lstVisual);	
+
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -867,6 +912,8 @@ public class ConciliacionController{
 			
 			conciliacionNuevo = new Conciliacion();
 			conciliacionNuevo.getId().setIntPersEmpresa(EMPRESA_USUARIO);
+			conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
+			conciliacionNuevo.setListaConciliacionDetalleVisual(new ArrayList<ConciliacionDetalle>());
 			conciliacionNuevo.setTsFechaConciliacion(MyUtil.obtenerFechaActual());
 			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			conciliacionCompAnul = new ConciliacionComp();
@@ -1146,16 +1193,16 @@ public class ConciliacionController{
 			Integer intRegConciliados = 0;
 			Integer intRegNoConciliados = 0;
 
-			if(conciliacionNuevo.getListaConciliacionDetalle() != null || conciliacionNuevo.getListaConciliacionDetalle().size() == 0){
-				concilResumen.setIntResumenNroMov(conciliacionNuevo.getListaConciliacionDetalle().size());
-				conciliacionNuevo.setIntNroMovimientos(conciliacionNuevo.getListaConciliacionDetalle().size());
+			if(conciliacionNuevo.getListaConciliacionDetalleVisual() != null || conciliacionNuevo.getListaConciliacionDetalleVisual().size() == 0){
+				concilResumen.setIntResumenNroMov(conciliacionNuevo.getListaConciliacionDetalleVisual().size());
+				conciliacionNuevo.setIntNroMovimientos(conciliacionNuevo.getListaConciliacionDetalleVisual().size());
 				//bdTotalConciliacion
-				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalleVisual()){
 					bdTotalConciliacion = bdTotalConciliacion.add((detalle.getBdMontoDebe() == null ? ( detalle.getBdMontoHaber() == null ? BigDecimal.ZERO : detalle.getBdMontoHaber() ): detalle.getBdMontoDebe()));					
 				}
 
 				// bdResumenPorConciliar
-				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalleVisual()){
 					if(detalle.getIntIndicadorCheck() == null || detalle.getIntIndicadorCheck() == 0){
 						if(detalle.getEgreso() == null){
 							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
@@ -1171,7 +1218,7 @@ public class ConciliacionController{
 				conciliacionNuevo.setBdPorConciliar(bdResumenPorConciliar);
 				conciliacionNuevo.setBdSaldoConciliacion(concilResumen.getBdResumenSaldoConciliacion());
 
-				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalleVisual()){
 					bdResumenDebe  = bdResumenDebe.add(detalle.getIngreso()!= null ? detalle.getIngreso().getBdMontoTotal() : BigDecimal.ZERO);
 					bdResumenHaber = bdResumenHaber.add(detalle.getEgreso()!= null ? detalle.getEgreso().getBdMontoTotal() : BigDecimal.ZERO);
 					
