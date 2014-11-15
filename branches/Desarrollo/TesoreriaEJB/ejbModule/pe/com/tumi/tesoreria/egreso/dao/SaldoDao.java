@@ -24,5 +24,6 @@ public interface SaldoDao extends TumiDao{
 	public List<Map> getListaFechas(Object o) throws DAOException;
 	//Inicio: REQ14-005 - bizarq - 19/10/2014
 	public Integer processDailyAmount(Object o) throws DAOException;
+	public List<Map> verificarSaldoProcesado(Object o) throws DAOException;
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 }

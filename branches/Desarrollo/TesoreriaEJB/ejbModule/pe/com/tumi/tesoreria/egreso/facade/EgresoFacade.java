@@ -8,6 +8,7 @@ package pe.com.tumi.tesoreria.egreso.facade;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -699,6 +700,18 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
    			throw new BusinessException(e);
    		}
 	}
+    
+    public List<Map> verificarSaldoProcesado(Usuario usuario,Date dtFechaInicioSaldo) throws BusinessException {
+    	List<Map> lista = null;
+    	try {
+    		lista = saldoService.verificarSaldoProcesado(usuario, dtFechaInicioSaldo);
+		} catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+    	return lista;
+    }
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Egreso> buscarEgresoParaTelecredito(Egreso egreso)throws BusinessException{

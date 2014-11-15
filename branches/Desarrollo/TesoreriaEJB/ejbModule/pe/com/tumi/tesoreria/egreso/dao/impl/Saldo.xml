@@ -134,6 +134,19 @@
   </procedure>
   
   <!-- Inicio: REQ14-005 - bizarq - 19/10/2014 -->
+  <parameterMap id="parVerificacion" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
+  	 <parameter property="dtFechaSaldo"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+  </parameterMap>
+  <resultMap id="resVerif" class="java.util.HashMap">
+    <result property="cantReg" 		column="cant_reg" />
+  </resultMap>
+  <procedure id="verificarSaldoProcesado" parameterMap="parVerificacion" resultMap="resVerif"> 
+	{ call PKG_SALDOS.verificarSaldoProcesado(?,?,?,?,?) }  
+  </procedure>
   <procedure id="processDailyAmount" parameterMap="parPorProcessDailyAmountDB">
 	{ call PKG_SALDOS.processDailyAmount(?,?,?,?,?) }  
   </procedure>

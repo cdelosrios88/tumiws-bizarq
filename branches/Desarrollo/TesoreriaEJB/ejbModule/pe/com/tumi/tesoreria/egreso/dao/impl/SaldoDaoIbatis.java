@@ -121,5 +121,22 @@ public class SaldoDaoIbatis extends TumiDaoIbatis implements SaldoDao{
 		}
 		return escalar;
 	}
+	/**
+	 * Método encargado de validar si existe algun saldo procesado.
+	 * 
+     * @author Bizarq
+     * @param o: Objeto con la informacion a procesar en el cierre diario <code>Object</code>
+     * 
+     * @throws DAOException
+     * */
+	public List<Map> verificarSaldoProcesado(Object o) throws DAOException{
+		List<Map> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".verificarSaldoProcesado", o);
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return lista;
+	}
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 }

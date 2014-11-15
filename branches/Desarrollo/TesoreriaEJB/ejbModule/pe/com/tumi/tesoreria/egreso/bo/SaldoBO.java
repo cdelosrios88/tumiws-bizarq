@@ -9,6 +9,7 @@ package pe.com.tumi.tesoreria.egreso.bo;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.exception.DAOException;
@@ -180,7 +181,24 @@ public class SaldoBO{
 		}
 		return lista;
 	}
-	
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public List<Map> verificarSaldoProcesado(Usuario objUsuario, Date dtFechaInicioSaldo) throws BusinessException{
+		List<Map> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", objUsuario.getEmpresa().getIntIdEmpresa());
+			mapa.put("intSucuIdSucursal", objUsuario.getSucursal().getId().getIntIdSucursal());
+			mapa.put("intSudeIdSucursal", objUsuario.getSubSucursal().getId().getIntIdSubSucursal());
+			mapa.put("dtFechaSaldo", dtFechaInicioSaldo);
+			lista = dao.verificarSaldoProcesado(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 	//Inicio: REQ14-005 - bizarq - 19/10/2014
 	/**
 	 * Método encargado de procesar los montos diarios.
