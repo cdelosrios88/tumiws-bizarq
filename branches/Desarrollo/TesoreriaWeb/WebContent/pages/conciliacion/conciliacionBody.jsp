@@ -393,6 +393,9 @@
 									<f:selectItem itemValue="0" itemLabel="Todos"/>
 									<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
 									<f:selectItem itemValue="2" itemLabel="Chekeado"/>
+									
+									<a4j:support event="onclick" reRender="dtResumen" actionListener="#{conciliacionController.onclickCheck}" />
+									
 								</h:selectOneMenu>
 							</rich:column>
 							
@@ -605,6 +608,7 @@
 							<rich:spacer height="5px"/>
 								
 							<rich:dataTable
+								id="dtResumen"
 								sortMode="single"
 								var="itemRes"
 								rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
