@@ -234,10 +234,10 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="5">
-				<rich:column width="160">
+				<rich:column width="152">
 					<h:outputText value="Rango de Fechas a Generar"/>
 				</rich:column>
-				<rich:column width="35">
+				<rich:column width="40">
 					<h:outputText value="Inicio :"/>
 				</rich:column>
 				<rich:column width="150" style="text-align: left;">	               	
