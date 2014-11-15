@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -557,7 +558,12 @@ public class SaldoService {
 			throw new BusinessException(e);
 		}
 	}
-	
+	//Inicio: REQ14-005 - bizarq - 19/10/2014
+	public List<Map> verificarSaldoProcesado(Usuario objUsuario, Date dtFechaInicioSaldo) throws BusinessException{
+		List<Map> lista = boSaldo.verificarSaldoProcesado(objUsuario, dtFechaInicioSaldo);
+		return lista;
+	}
+	//Fin: REQ14-005 - bizarq - 19/10/2014
 	//Inicio: REQ14-005 - bizarq - 19/10/2014
 	/*public Date obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException{
 		Date dtUltimaFecha = null;

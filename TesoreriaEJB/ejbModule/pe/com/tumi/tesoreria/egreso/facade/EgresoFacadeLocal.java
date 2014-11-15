@@ -8,6 +8,7 @@ package pe.com.tumi.tesoreria.egreso.facade;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Local;
 
@@ -95,6 +96,7 @@ public interface EgresoFacadeLocal {
 	//public void anularSaldo(Integer intIdEmpresa, Date dtFechaInicio)throws BusinessException;
 	public void anularSaldo(Usuario usuario, Date dtFechaInicio)throws BusinessException;
 	public void anularSaldo(Usuario usuario, Saldo saldoFiltro)throws BusinessException;
+	public List<Map> verificarSaldoProcesado(Usuario usuario,Date dtFechaInicioSaldo) throws BusinessException;
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 	public List<Egreso> buscarEgresoParaTelecredito(Egreso egreso)throws BusinessException;
 	public Egreso grabarTransferenciaTelecredito(Egreso egreso, List<Egreso> listaEgresoTelecredito) throws BusinessException;
