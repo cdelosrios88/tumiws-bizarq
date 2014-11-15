@@ -250,13 +250,11 @@ public class ConciliacionController{
 		this.intBancoSeleccionado = intBancoSeleccionado;
 	}
 	public void renderBotones(){
-		
 		Conciliacionvalidate validate = new Conciliacionvalidate();
 		mostrarBotonGrabarConcil = validate.isValidGrabarConcil(usuario);
 		mostrarBotonAnular = validate.isValidAnulConcil(usuario);
 		
 	}
-
 	
 	/**
 	 * 
@@ -489,6 +487,8 @@ public class ConciliacionController{
 		setStrMsgErrorAnulaObservacion("");
 		setStrMsgErrorAnulaCuenta("");
 		setStrMsgErrorAnulaPerfil("");
+		intBancoAnuladoSeleccionado = null;
+		intBancoCuentaAnuladoConcSeleccionado = null;
 	}
 	
 	/**
@@ -1008,10 +1008,8 @@ public class ConciliacionController{
 			conciliacionCompAnul.getConciliacion().getId().setIntPersEmpresa(EMPRESA_USUARIO);
 			conciliacionCompAnul.setDtFechaAnulDesde(null);
 			
-			//SOLO PRRUEBAS
-			//conciliacionNuevo.setIntPersEmpresa(2);
-			//conciliacionNuevo.setIntItemBancoCuenta(6);
-			//conciliacionNuevo.setIntItemBancoFondo(2);
+			intBancoAnuladoSeleccionado = null;
+			intBancoCuentaAnuladoConcSeleccionado = null;
 			
 			habilitarGrabar = Boolean.TRUE;
 		}catch (Exception e) {
