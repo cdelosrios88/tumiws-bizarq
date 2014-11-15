@@ -427,7 +427,7 @@
 								<a4j:commandButton value="Validar Checks" styleClass="btnEstilos"
 									action="#{conciliacionController.matchTelecreditoFileAgainstLstConcDet}"
 									style="width:150px"
-									rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
+									rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}"
 									reRender="panelDatosValidados,panelMensaje"/>
 							</rich:column>
 						</h:panelGrid>
@@ -461,15 +461,15 @@
 					</h:panelGroup>
 					
 					<h:panelGrid id="panelDatosValidados" 
-						rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}">
+						rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}">
 						<rich:column width=	"910">
 							<rich:dataTable
 							sortMode="single"
 							var="item"
-							value="#{conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"
+							value="#{conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}"
 							rowKeyVar="rowKey"
 							width="955px"
-							rows="#{fn:length(conciliacionController.conciliacionNuevo.listaConciliacionDetalle)}">
+							rows="#{fn:length(conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual)}">
 								<rich:column width="30" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Tipo"/>
