@@ -25,7 +25,6 @@ import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.PermisoUtil;
-import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
@@ -89,11 +88,9 @@ public class ConciliacionController{
 	private List<Sucursal> listSucursal;
 	private List<ConciliacionComp> lstResumen;
 	private ConciliacionComp concilResumen;
-	private boolean mostrarBotonGrabarConcil;
-	private boolean mostrarBotonAnular;
+	
 	private TelecreditoFileComp telecreditoFileComp;
 	private boolean blnMostrarPanelAnulacion;
-	private boolean deshabilitarGrabarConciliacionDiaria;
 	private boolean blDeshabilitarBuscar;
 	private boolean blDeshabilitaValidarDatos;
 	private boolean blDeshabilitarBuscarCuenta;
@@ -115,19 +112,19 @@ public class ConciliacionController{
 	private boolean deshabilitarBancoCuentaNuevoConc;
 	private boolean deshabilitarBancoNuevoConc;
 	
+	private boolean showFileUpload;
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	private Usuario 	usuario;
 	private String 		mensajeOperacion;
 	private	Integer		EMPRESA_USUARIO;
 	private	Integer		PERSONA_USUARIO;
-	private boolean mostrarBtnEliminar;
 	private boolean mostrarMensajeExito;
 	private boolean mostrarMensajeError;
 	private boolean deshabilitarNuevo;
 	private boolean mostrarPanelInferior;
 	private boolean registrarNuevo;
-	private boolean habilitarGrabar;
 	private boolean datosValidados;
 	private boolean mostrarBtnView;
 	private boolean mostrarBtnActualizar;
@@ -169,7 +166,6 @@ public class ConciliacionController{
 			cargarUsuario();
 			cargarListaTipoDocumento();
 			cargarValoresResumen();
-			renderBotones();
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -248,12 +244,6 @@ public class ConciliacionController{
 
 	public void setIntBancoSeleccionado(Integer intBancoSeleccionado) {
 		this.intBancoSeleccionado = intBancoSeleccionado;
-	}
-	public void renderBotones(){
-		Conciliacionvalidate validate = new Conciliacionvalidate();
-		mostrarBotonGrabarConcil = validate.isValidGrabarConcil(usuario);
-		mostrarBotonAnular = validate.isValidAnulConcil(usuario);
-		
 	}
 	
 	/**
@@ -470,12 +460,6 @@ public class ConciliacionController{
 			isError = false;
 			strMsgErrorAnulaCuenta="Ingresar Cuenta Bancaria de Anulación.";
 		}
-		
-		if(!validate.isValidAnulConcil(usuario)){
-			isError = false;
-			strMsgErrorAnulaPerfil="Solo el Perfil de Jefe de Contabilidad puede Anular Conciliación.";
-		}
-		
 		return isError;
 	}
 	
@@ -561,7 +545,9 @@ public class ConciliacionController{
 		try{
 			log.info("--seleccionarBancoOrigen");
 			listaBancoCuentaFiltroNuevaConc = seleccionarBanco(intBancoNuevoSeleccionado);
-			//listaBancoCuentaDestino solo puede tener BancoCuenta's con moneda del bancocuenta seleccionado
+			
+			showFileUpload = (intBancoNuevoSeleccionado.equals(Constante.PARAM_T_BANCOS_BANCOCREDITO));
+			log.info("showFileUpload: " + showFileUpload);
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
@@ -659,6 +645,7 @@ public class ConciliacionController{
 		/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 		//habilitarGrabar = Boolean.FALSE;
 		blnMostrarPanelAnulacion = Boolean.FALSE;
+		showFileUpload = Boolean.FALSE;
 		ocultarMensaje();
 		limpiarMensajesAnulacion();
 		/* Fin: REQ14-006 Bizarq - 26/10/2014 */
@@ -675,7 +662,6 @@ public class ConciliacionController{
 			ocultarMensaje();
 			cargarUsuario();
 			
-			habilitarGrabar = Boolean.FALSE;
 			deshabilitarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.FALSE;
 			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
@@ -834,8 +820,6 @@ public class ConciliacionController{
 			deshabilitarPanelInferior();
 			listaConciliacionBusq = new ArrayList<Conciliacion>();
 			blnMostrarPanelAnulacion = Boolean.FALSE;
-			renderBotones();
-			
 		}else{
 			log.error("--Usuario obtenido es NULL o no posee permiso.");
 		}
@@ -875,7 +859,6 @@ public class ConciliacionController{
 				mostrarBtnActualizar = false;
 			}*/
 			mostrarBtnView = Boolean.TRUE;
-			habilitarGrabar = Boolean.TRUE;			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -950,14 +933,18 @@ public class ConciliacionController{
 			
 			if(registroSeleccionado.getIntParaEstado().equals(Constante.INT_EST_CONCILIACION_REGISTRADO)){
 				deshabilitarNuevo = Boolean.FALSE;
-				habilitarGrabar = Boolean.TRUE;
 				conciliacionNuevo = conciliacionService.getConciliacionEdit(registroSeleccionado.getId());
-								
+				
 			}else{
 				deshabilitarNuevo = Boolean.TRUE;
-				habilitarGrabar = Boolean.FALSE;
 			}
 			mostrarPanelInferior = Boolean.TRUE;
+			
+			showFileUpload = Boolean.FALSE;
+			deshabilitarBancoNuevoConc = Boolean.TRUE;
+			deshabilitarBancoCuentaNuevoConc = Boolean.TRUE;
+			conciliacionNuevo.setBancoCuenta(null);
+			
 			//mostrarBotonGrabarConcil = Boolean.FALSE;
 			
 		}catch (Exception e) {
@@ -1039,6 +1026,8 @@ public class ConciliacionController{
 			deshabilitarBancoCuentaNuevoConc = Boolean.FALSE;
 			intBancoCuentaNuevaConcSeleccionado = null;
 			listaBancoCuentaFiltroNuevaConc = null;
+			
+			showFileUpload = Boolean.FALSE;
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
 			//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -1073,7 +1062,6 @@ public class ConciliacionController{
 			intBancoAnuladoSeleccionado = null;
 			intBancoCuentaAnuladoConcSeleccionado = null;
 			
-			habilitarGrabar = Boolean.TRUE;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -1096,94 +1084,6 @@ public class ConciliacionController{
 		mostrarMensajeExito = Boolean.FALSE;
 		mostrarMensajeError = Boolean.FALSE;		
 	}
-	
-	public void abrirPopUpBuscarBancoCuenta(){
-		try{
-			bancoCuentaFiltro = new Bancocuenta();
-			bancoCuentaFiltro.getId().setIntEmpresaPk(EMPRESA_USUARIO);
-			bancoCuentaFiltro.setIntEmpresacuentaPk(EMPRESA_USUARIO);
-			bancoCuentaFiltro.setBancofondo(new Bancofondo());
-			bancoCuentaFiltro.setIntPeriodocuenta(MyUtil.obtenerAñoActual()-1);
-			bancoCuentaFiltro.getBancofondo().setIntBancoCod(Constante.PARAM_T_BANCOS_BANCOCREDITO);
-			
-			buscarBancoCuenta();
-		}catch (Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
-	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-	public void abrirPopUpBuscarBancoCuentaConciliacion(){
-		try{
-			bancoCuentaFiltroConciliacion = new Bancocuenta();
-			bancoCuentaFiltroConciliacion.getId().setIntEmpresaPk(EMPRESA_USUARIO);
-			bancoCuentaFiltroConciliacion.setIntEmpresacuentaPk(EMPRESA_USUARIO);
-			bancoCuentaFiltroConciliacion.setBancofondo(new Bancofondo());
-			bancoCuentaFiltroConciliacion.setIntPeriodocuenta(MyUtil.obtenerAñoActual()-1);
-			bancoCuentaFiltroConciliacion.getBancofondo().setIntBancoCod(Constante.PARAM_T_BANCOS_BANCOCREDITO);
-			
-			buscarBancoCuentaConciliacion();
-		}catch (Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 
-	 */
-	public void abrirPopUpBuscarBancoCuentaAnul(){
-		try{
-			bancoCuentaFiltroAnulacion = new Bancocuenta();
-			bancoCuentaFiltroAnulacion.getId().setIntEmpresaPk(EMPRESA_USUARIO);
-			bancoCuentaFiltroAnulacion.setIntEmpresacuentaPk(EMPRESA_USUARIO);
-			bancoCuentaFiltroAnulacion.setBancofondo(new Bancofondo());
-			bancoCuentaFiltroAnulacion.setIntPeriodocuenta(MyUtil.obtenerAñoActual()-1);
-			bancoCuentaFiltroAnulacion.getBancofondo().setIntBancoCod(Constante.PARAM_T_BANCOS_BANCOCREDITO);
-			
-			buscarBancoCuentaAnulacion();
-		}catch (Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
-	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
-	
-	public void buscarBancoCuenta(){
-		try{
-			if(bancoCuentaFiltro.getStrNumerocuenta()!=null && bancoCuentaFiltro.getStrNumerocuenta().isEmpty())
-				bancoCuentaFiltro.setStrNumerocuenta(null);
-			
-			listaBancoCuenta = bancoFacade.buscarListaBancoCuenta(bancoCuentaFiltro);
-		}catch (Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
-	
-	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-	public void buscarBancoCuentaConciliacion(){
-		try{
-			if(bancoCuentaFiltroConciliacion.getStrNumerocuenta()!=null && bancoCuentaFiltroConciliacion.getStrNumerocuenta().isEmpty())
-				bancoCuentaFiltroConciliacion.setStrNumerocuenta(null);
-			
-			listaBancoCuenta = bancoFacade.buscarListaBancoCuenta(bancoCuentaFiltroConciliacion);
-		}catch (Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 
-	 */
-	public void buscarBancoCuentaAnulacion(){
-		try{
-			if(bancoCuentaFiltroAnulacion.getStrNumerocuenta()!=null && bancoCuentaFiltroAnulacion.getStrNumerocuenta().isEmpty())
-				bancoCuentaFiltroAnulacion.setStrNumerocuenta(null);
-			
-			listaBancoCuenta = bancoFacade.buscarListaBancoCuenta(bancoCuentaFiltroAnulacion);
-		}catch (Exception e){
-			log.error(e.getMessage(),e);
-		}
-	}
-	
-	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
 	public void seleccionarBancoCuenta(ActionEvent event){
 		try{
@@ -1420,7 +1320,7 @@ public class ConciliacionController{
 			//telecreditoFileComp.setLstTelecreditoFileDetail(new ArrayList<TelecreditoDetailFile>());
 			Integer intCont = (Integer) mpTelecreditoFile.get("size");
 			
-			for(int i=5; i<intCont; i++){
+			for(int i=5; i<intCont; i++){//Arranca de la fila 6 del excel
 				int indexCol=0;
 				telecreditoDetail = new TelecreditoDetailFile();
 				telecreditoDetail.setStrFecRegistro(mpTelecreditoFile.get(i+Constante.STR_COMMA+indexCol++).toString());
@@ -1488,46 +1388,68 @@ public class ConciliacionController{
 			return;
 		}
 		
-		if(telecreditoFileComp.getStrNroCuenta().equals(conciliacionNuevo.getBancoCuenta().getStrNumerocuenta())){
-			if((telecreditoFileComp.getLstTelecreditoFileDetail()!=null && !telecreditoFileComp.getLstTelecreditoFileDetail().isEmpty())
-					&& (conciliacionNuevo.getListaConciliacionDetalle()!=null && !conciliacionNuevo.getListaConciliacionDetalle().isEmpty())){
-				lstDetailFile:
-				for(TelecreditoDetailFile detailFile : telecreditoFileComp.getLstTelecreditoFileDetail()){
-					//Verificando que la fecha de conciliación sea la misma 
-					for(ConciliacionDetalle concDetalle : conciliacionNuevo.getListaConciliacionDetalle()){
-						if(Constante.sdf.format(conciliacionNuevo.getTsFechaConciliacion()).equals(detailFile.getStrFecRegistro())){
-							if(concDetalle.getIngreso()!=null){
-								if(detailFile.getStrNroOperacion().trim().equals(concDetalle.getIngreso().getStrNumeroOperacion().trim())
-										&& new BigDecimal(detailFile.getStrMonto()).compareTo(concDetalle.getIngreso().getBdMontoTotal())==Constante.INT_ZERO){
-									concDetalle.setIntIndicadorCheck(Constante.INT_ONE);
-									concDetalle.setBlIndicadorCheck(Boolean.TRUE);
-								}
-							} else if(concDetalle.getEgreso()!=null){
-								String strNroOperacion = null;
-								if(concDetalle.getEgreso().getIntNumeroPlanilla()!=null){
-									strNroOperacion = concDetalle.getEgreso().getIntNumeroPlanilla().toString();
-								}else if(concDetalle.getEgreso().getIntNumeroCheque()!=null){
-									strNroOperacion = concDetalle.getEgreso().getIntNumeroCheque().toString();
-								}else if(concDetalle.getEgreso().getIntNumeroTransferencia()!=null) {
-									strNroOperacion = concDetalle.getEgreso().getIntNumeroTransferencia().toString();
-								} else {
-									//mostrarMensaje(Boolean.FALSE,"Inconsistencia de datos. No se encontró número de operación para el egreso: " + concDetalle.getEgreso().getId().getIntItemEgresoGeneral());
-									break lstDetailFile;
-								}
-								if(detailFile.getStrNroOperacion().trim().equals(strNroOperacion.trim())
-										&& new BigDecimal(detailFile.getStrMonto()).compareTo(concDetalle.getEgreso().getBdMontoTotal())==Constante.INT_ZERO){
-									concDetalle.setIntIndicadorCheck(Constante.INT_ONE);
-									concDetalle.setBlIndicadorCheck(Boolean.TRUE);
-								}
-							} else break;
-						} else break;
-					}
+		//Match contra la cuenta
+		Bancocuenta bancoCuentaSeleccionado = null;
+		if(listaBancoCuentaFiltroNuevaConc != null){
+			for(Bancocuenta bancocuenta : listaBancoCuentaFiltroNuevaConc){
+				if(intBancoCuentaNuevaConcSeleccionado.equals(bancocuenta.getId().getIntItembancocuenta())){
+					bancoCuentaSeleccionado = bancocuenta;
+					break;
 				}
 			}
 			
-		} else {
-			//mostrarMensaje(Boolean.FALSE,"El archivo seleccionado no muestra coincidencia con el número de cuenta.");
-			return;
+			if(telecreditoFileComp.getStrNroCuenta()!=null){
+				if(!bancoCuentaSeleccionado.getCuentaBancaria().getStrNroCuentaBancaria().replaceAll("[^\\.0123456789]","").equals(telecreditoFileComp.getStrNroCuenta())){
+					mostrarMensaje(Boolean.FALSE, "El número de cta. seleccionado no coincide con el archivo Telecrédito");
+					return;
+				}
+			}
+		}
+		
+		if((telecreditoFileComp.getLstTelecreditoFileDetail()!=null && !telecreditoFileComp.getLstTelecreditoFileDetail().isEmpty())
+				&& (conciliacionNuevo.getListaConciliacionDetalleVisual()!=null && !conciliacionNuevo.getListaConciliacionDetalleVisual().isEmpty())){
+			int cntMatch = Constante.INT_ZERO;
+			
+			lstDetailFile:
+			for(TelecreditoDetailFile detailFile : telecreditoFileComp.getLstTelecreditoFileDetail()){
+				//Verificando que la fecha de conciliación sea la misma 
+				for(ConciliacionDetalle concDetalle : conciliacionNuevo.getListaConciliacionDetalleVisual()){
+					if(Constante.sdf.format(conciliacionNuevo.getTsFechaConciliacion()).equals(detailFile.getStrFecRegistro())){
+						if(concDetalle.getIngreso()!=null){
+							if(detailFile.getStrNroOperacion().trim().equals(concDetalle.getIngreso().getStrNumeroOperacion().trim())
+									&& new BigDecimal(detailFile.getStrMonto()).compareTo(concDetalle.getIngreso().getBdMontoTotal())==Constante.INT_ZERO){
+								concDetalle.setIntIndicadorCheck(Constante.INT_ONE);
+								concDetalle.setBlIndicadorCheck(Boolean.TRUE);
+								cntMatch++;
+							}
+						} else if(concDetalle.getEgreso()!=null){
+							String strNroOperacion = null;
+							if(concDetalle.getEgreso().getIntNumeroPlanilla()!=null){
+								strNroOperacion = concDetalle.getEgreso().getIntNumeroPlanilla().toString();
+							}else if(concDetalle.getEgreso().getIntNumeroCheque()!=null){
+								strNroOperacion = concDetalle.getEgreso().getIntNumeroCheque().toString();
+							}else if(concDetalle.getEgreso().getIntNumeroTransferencia()!=null) {
+								strNroOperacion = concDetalle.getEgreso().getIntNumeroTransferencia().toString();
+							} else {
+								//mostrarMensaje(Boolean.FALSE,"Inconsistencia de datos. No se encontró número de operación para el egreso: " + concDetalle.getEgreso().getId().getIntItemEgresoGeneral());
+								break lstDetailFile;
+							}
+							if(detailFile.getStrNroOperacion().trim().equals(strNroOperacion.trim())
+									&& new BigDecimal(detailFile.getStrMonto()).compareTo(concDetalle.getEgreso().getBdMontoTotal())==Constante.INT_ZERO){
+								concDetalle.setIntIndicadorCheck(Constante.INT_ONE);
+								concDetalle.setBlIndicadorCheck(Boolean.TRUE);
+								cntMatch++;
+							}
+						} else break;
+					} else break;
+				}
+			}
+			
+			if(cntMatch<=Constante.INT_ZERO){
+				mostrarMensaje(Boolean.TRUE, "No se encontraron coincidencias.");
+			}else {
+				mostrarMensaje(Boolean.TRUE, "Se encontraron " + cntMatch + " coincidencias");
+			}
 		}
 	}
 	
@@ -1547,12 +1469,6 @@ public class ConciliacionController{
 	}
 	public void setMensajeOperacion(String mensajeOperacion) {
 		this.mensajeOperacion = mensajeOperacion;
-	}
-	public boolean isMostrarBtnEliminar() {
-		return mostrarBtnEliminar;
-	}
-	public void setMostrarBtnEliminar(boolean mostrarBtnEliminar) {
-		this.mostrarBtnEliminar = mostrarBtnEliminar;
 	}
 	public boolean isMostrarMensajeExito() {
 		return mostrarMensajeExito;
@@ -1583,12 +1499,6 @@ public class ConciliacionController{
 	}
 	public void setRegistrarNuevo(boolean registrarNuevo) {
 		this.registrarNuevo = registrarNuevo;
-	}
-	public boolean isHabilitarGrabar() {
-		return habilitarGrabar;
-	}
-	public void setHabilitarGrabar(boolean habilitarGrabar) {
-		this.habilitarGrabar = habilitarGrabar;
 	}
 	public Conciliacion getConciliacionNuevo() {
 		return conciliacionNuevo;
@@ -1710,24 +1620,6 @@ public class ConciliacionController{
 	public void setTelecreditoFileComp(TelecreditoFileComp telecreditoFileComp) {
 		this.telecreditoFileComp = telecreditoFileComp;
 	}
-	
-
-	public boolean isMostrarBotonGrabarConcil() {
-		return mostrarBotonGrabarConcil;
-	}
-
-	public void setMostrarBotonGrabarConcil(boolean mostrarBotonGrabarConcil) {
-		this.mostrarBotonGrabarConcil = mostrarBotonGrabarConcil;
-	}
-
-	public boolean isDeshabilitarGrabarConciliacionDiaria() {
-		return deshabilitarGrabarConciliacionDiaria;
-	}
-
-	public void setDeshabilitarGrabarConciliacionDiaria(
-			boolean deshabilitarGrabarConciliacionDiaria) {
-		this.deshabilitarGrabarConciliacionDiaria = deshabilitarGrabarConciliacionDiaria;
-	}
 
 	public Bancocuenta getBancoCuentaFiltroConciliacion() {
 		return bancoCuentaFiltroConciliacion;
@@ -1768,14 +1660,6 @@ public class ConciliacionController{
 
 	public void setListaBanco(List<Bancofondo> listaBanco) {
 		this.listaBanco = listaBanco;
-	}
-
-	public boolean isMostrarBotonAnular() {
-		return mostrarBotonAnular;
-	}
-
-	public void setMostrarBotonAnular(boolean mostrarBotonAnular) {
-		this.mostrarBotonAnular = mostrarBotonAnular;
 	}
 
 	public boolean isBlnMostrarPanelAnulacion() {
@@ -1930,6 +1814,20 @@ public class ConciliacionController{
 	public void setIntBancoCuentaAnuladoConcSeleccionado(
 			Integer intBancoCuentaAnuladoConcSeleccionado) {
 		this.intBancoCuentaAnuladoConcSeleccionado = intBancoCuentaAnuladoConcSeleccionado;
+	}
+	
+	public boolean isShowFileUpload() {
+		return showFileUpload;
+	}
+
+	public void setShowFileUpload(boolean showFileUpload) {
+		this.showFileUpload = showFileUpload;
+	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }
