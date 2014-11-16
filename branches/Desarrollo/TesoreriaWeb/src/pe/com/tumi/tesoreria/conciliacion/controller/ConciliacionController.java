@@ -9,6 +9,7 @@ package pe.com.tumi.tesoreria.conciliacion.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.richfaces.event.UploadEvent;
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
+import pe.com.tumi.common.util.MyUtilFormatoFecha;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Sucursal;
@@ -341,9 +343,11 @@ public class ConciliacionController{
 			lstConcilDetTotal= conciliacionFacade.buscarRegistrosConciliacion(conciliacionNuevo);
 			if(lstConcilDetTotal != null && lstConcilDetTotal.size() > 0){
 				conciliacionNuevo.setListaConciliacionDetalle(new ArrayList<ConciliacionDetalle>());
+				conciliacionNuevo.setListaConciliacionDetalleVisual(new ArrayList<ConciliacionDetalle>());
 				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDetTotal);
-				//
-				getListaVisualSegunFiltros(lstConcilDetTotal);
+				conciliacionNuevo.getListaConciliacionDetalleVisual().addAll(lstConcilDetTotal);
+				
+				//getListaVisualSegunFiltros(lstConcilDetTotal);
 				calcularResumen();
 			}else{
 				mostrarMensaje(Boolean.FALSE, "No se encontraron registros.");
@@ -494,12 +498,16 @@ public class ConciliacionController{
 	 */
 	public void grabarConciliacionDiaria(){
 		try {
-			if(!isValidConciliacion(conciliacionNuevo)){
-				conciliacionNuevo.setUsuario(usuario);
-				calcularCabecera();
-				conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
-				deshabilitarPanelInferior();
-				mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la conciliación diaria.");
+			Conciliacionvalidate validate = new Conciliacionvalidate();
+			
+			if(!validate.procedeAccion(conciliacionNuevo)){
+				if(!isValidConciliacion(conciliacionNuevo)){
+					conciliacionNuevo.setUsuario(usuario);
+					calcularCabecera();
+					conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
+					deshabilitarPanelInferior();
+					mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la conciliación diaria.");
+				}				
 			}
 			
 		} catch (Exception e) {
@@ -664,6 +672,8 @@ public class ConciliacionController{
 		ocultarMensaje();
 		limpiarMensajesAnulacion();
 		blModoEdicion = Boolean.FALSE;
+		conciliacionNuevo = null;	
+		
 		/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	}
 
@@ -674,32 +684,39 @@ public class ConciliacionController{
 		log.info("--grabar");
 		boolean isCrear = false;
 		try {
+			
+			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+
 			Conciliacionvalidate validate = new Conciliacionvalidate();
 			ocultarMensaje();
 			cargarUsuario();
 			
-			deshabilitarNuevo = Boolean.TRUE;
-			mostrarPanelInferior = Boolean.FALSE;
-			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
-			calcularCabecera();
-			if(conciliacionNuevo.getId().getIntItemConciliacion() == null){
-				isCrear = validate.isValidCrearConciliacion(conciliacionNuevo);
-				if(isCrear){
-					//logging();
-					
-					conciliacionNuevo.setIntParaEstado(Constante.INT_EST_CONCILIACION_REGISTRADO); // Estado Registrado					
-					conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
-					mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
+			if(!validate.procedeAccion(conciliacionNuevo)){
+				deshabilitarNuevo = Boolean.TRUE;
+				mostrarPanelInferior = Boolean.FALSE;
+				calcularCabecera();
+				if(conciliacionNuevo.getId().getIntItemConciliacion() == null){
+					isCrear = validate.isValidCrearConciliacion(conciliacionNuevo);
+					if(isCrear){
+						//logging();
+						
+						conciliacionNuevo.setIntParaEstado(Constante.INT_EST_CONCILIACION_REGISTRADO); // Estado Registrado					
+						conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
+						mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
+					}else{
+						mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
+					}
+
 				}else{
-					mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
+					//logging();
+					if(!isValidModificarConciliacion(conciliacionNuevo)){
+						conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
+						mostrarMensaje(Boolean.TRUE, "Se actualizó éxitosamente la Conciliación Bancaria.");
+
+					}
 				}
-
-			}else{
-				//logging();
-				conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
-				mostrarMensaje(Boolean.TRUE, "Se actualizó éxitosamente la Conciliación Bancaria.");
 			}
-
+			
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		} catch (Exception e) {
 			mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro de la Conciliacion Bancaria.");
@@ -757,6 +774,18 @@ public class ConciliacionController{
 		Saldo dtoSaldo = null;
 		Date dtLastPreviousUtilDay = null;
 		try {
+			
+			//3. Verificar la fecha de conciliacion con la fecha del dia actual
+			Date dtFechaConciliacion = new Date(conciliacion.getTsFechaConciliacion().getTime());
+			Date dtHoy = Calendar.getInstance().getTime();
+			Integer intDif = -1;
+			
+			intDif = MyUtilFormatoFecha.obtenerDiasEntreFechas(dtFechaConciliacion, dtHoy);
+			if(intDif.compareTo(new Integer(0))!=0){
+				mostrarMensaje(Boolean.FALSE, "Solo se puede 'Grabar Conciliacion Diaria'. La fecha de registro de la Conciliación ("+ Constante.sdf.format(dtFechaConciliacion) +")  no es igual a la fecha actual(" + Constante.sdf.format(dtHoy)+ ").");
+				return true;
+			}
+			
 			//1. Verificar el arqueo del día anterior
 			dtLastArqueo = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
 			dtLastPreviousUtilDay = CommonUtils.getPreviousUtilDay(conciliacion.getTsFechaConciliacion(), Constante.INT_ONE);//Día anterior
@@ -774,12 +803,39 @@ public class ConciliacionController{
 				return true;
 			}
 			
+
+			
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 		
 		return isValid;
 	}
+	
+
+	private boolean isValidModificarConciliacion(Conciliacion conciliacion){
+		boolean isValid = false;
+		try {
+			
+			//Verificar la fecha de conciliacion con la fecha del dia actual
+			Date dtFechaConciliacion = new Date(conciliacion.getTsFechaConciliacion().getTime());
+			Date dtHoy = Calendar.getInstance().getTime();
+			Integer intDif = -1;
+			
+			intDif = MyUtilFormatoFecha.obtenerDiasEntreFechas(dtFechaConciliacion, dtHoy);
+			if(intDif.compareTo(new Integer(0))!=0){
+				mostrarMensaje(Boolean.FALSE, "No se puede Modificar conciliación. La fecha de registro ("+ Constante.sdf.format(dtFechaConciliacion) +") no es igual a la fecha actual(" + Constante.sdf.format(dtHoy)+ ").");
+				return true;
+			}
+						
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return isValid;
+	}
+
+	
 	
 	public void mostrarMensaje(boolean exito, String mensaje){
 		if(exito){
@@ -984,7 +1040,8 @@ public class ConciliacionController{
 			blModoEdicion = Boolean.TRUE;
 			
 			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
-					|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0 ){
+				|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 
+					){
 				//habilitarGrabar = Boolean.TRUE;
 				//mostrarBotonGrabarConcil = Boolean.TRUE;
 				registrarNuevo = Boolean.FALSE;
@@ -1003,7 +1060,7 @@ public class ConciliacionController{
 
 				calcularResumen();
 			} else {
-				mostrarMensaje(Boolean.TRUE, "Solo se poueden Modificar las Conciliaciones en estado Registrado y/o Anulado.");
+				mostrarMensaje(Boolean.TRUE, "No se poueden Modificar las Conciliaciones en estado Anulado.");
 			}
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
