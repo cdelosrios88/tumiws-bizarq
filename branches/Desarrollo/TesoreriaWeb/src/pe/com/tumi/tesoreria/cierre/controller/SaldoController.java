@@ -521,11 +521,17 @@ public class SaldoController {
 	}
 	
 	private void obtenerFechasSaldo()throws Exception{
-		Saldo saldoUltimaFechaRegistro = egresoFacade.obtenerSaldoUltimaFechaRegistro(EMPRESA_USUARIO);		
-		log.info("saldoUltimaFechaRegistro:"+saldoUltimaFechaRegistro);		
 		//Inicio: REQ14-005 - bizarq - 19/10/2014
+		//Saldo saldoUltimaFechaRegistro = egresoFacade.obtenerSaldoUltimaFechaRegistro(EMPRESA_USUARIO);
+		Date saldoUltimaFechaRegistro = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+		
+		log.info("saldoUltimaFechaRegistro:"+saldoUltimaFechaRegistro);		
+		
 		//if(saldoUltimaFechaRegistro!=null)dtUltimaFechaCierreGeneral = saldoUltimaFechaRegistro.getTsFechaRegistro();
-		if(saldoUltimaFechaRegistro!=null)dtUltimaFechaGenerada = saldoUltimaFechaRegistro.getTsFechaRegistro();
+		if(saldoUltimaFechaRegistro!=null){
+			dtUltimaFechaGenerada = saldoUltimaFechaRegistro;
+		}
+				//saldoUltimaFechaRegistro.getTsFechaRegistro();
 		
 		//dtUltimaFechaGenerada = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
 		dtUltimaFechaCierreGeneral = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
