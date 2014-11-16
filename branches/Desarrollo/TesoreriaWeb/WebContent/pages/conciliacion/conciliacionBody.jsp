@@ -395,7 +395,7 @@
 										doneLabel="Archivo cargado correctamente"
 										immediateUpload="false"
 										autoclear="false"
-										disabled="#{conciliacionController.blDeshabilitarVerConc}"
+										disabled="#{conciliacionController.blDeshabilitarVerComp}"
 										acceptedTypes="xls,xlsx">
 										<f:facet name="label">
 											<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
