@@ -314,7 +314,7 @@
 							<rich:column width=	"120">
 								<h:outputText value="Cuenta Bancaria : "/>
 							</rich:column>
-							<rich:column width="120">
+							<rich:column width="120" rendered="#{!conciliacionController.blModoEdicion}">
 								<h:selectOneMenu style="width: 170px;"
 									disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
 									value="#{conciliacionController.intBancoNuevoSeleccionado}">
@@ -328,7 +328,14 @@
 										reRender="cboListaCuentasNuevaConc,pgUploadTelecreditoFile" />
 								</h:selectOneMenu>
 							</rich:column>
-							<rich:column width="120">
+							<rich:column width="120" rendered="#{conciliacionController.blModoEdicion}">
+								<tumih:inputText readonly="true"
+								cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+								itemValue="intIdDetalle" itemLabel="strDescripcion"
+								property="#{conciliacionController.intBancoNuevoSeleccionado}" />
+							</rich:column>							
+							
+							<rich:column width="120"rendered="#{!conciliacionController.blModoEdicion}">
 								<h:selectOneMenu
 									value="#{conciliacionController.intBancoCuentaNuevaConcSeleccionado}"
 									disabled="#{conciliacionController.deshabilitarBancoCuentaNuevoConc}"
@@ -343,7 +350,10 @@
 										reRender="contPanelInferior" />
 								</h:selectOneMenu>
 							</rich:column>
-						
+							<rich:column width="120" rendered="#{conciliacionController.blModoEdicion}">
+								<h:inputText style="width: 260px;" value="#{conciliacionController.strDescCuentaBancariaConciliacion}"
+									readonly="true" />
+							</rich:column>
 						</h:panelGrid>
 
 						<rich:spacer height="10px"/>
