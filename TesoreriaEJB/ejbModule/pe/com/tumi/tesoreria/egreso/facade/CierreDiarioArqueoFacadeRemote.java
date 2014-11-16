@@ -22,7 +22,7 @@ public interface CierreDiarioArqueoFacadeRemote {
 	public boolean existeCierreDiaAnterior(Integer intIdEmpresa, Integer intIdSucursal, Integer intIdSubsucursal)throws BusinessException;
 	public boolean existeCierreDiaActual(Integer intIdEmpresa, Integer intIdSucursal, Integer intIdSubsucursal)throws BusinessException;
 	//Inicio: REQ14-005 - bizarq - 11/11/2014
-	public boolean existeCierreDiaActualSaldo(Integer intIdEmpresa, Integer intIdSucursal, Integer intIdSubsucursal)throws BusinessException;
+	public boolean existeCierreDiaActualSaldo(Integer intIdEmpresa, Integer intIdSucursal, Integer intIdSubsucursal,Date dtFechaFin)throws BusinessException;
 	//Fin: REQ14-005 - bizarq - 11/11/2014
 	public Date obtenerFechaACerrar(CierreDiarioArqueo cierreDiarioArqueo)throws BusinessException;
 	public CierreDiarioArqueoDetalle calcularCierreDiarioArqueoDetalleIngresos(CierreDiarioArqueo cierreDiarioArqueo)throws BusinessException;

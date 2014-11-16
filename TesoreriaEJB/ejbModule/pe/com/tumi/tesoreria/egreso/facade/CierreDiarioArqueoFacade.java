@@ -126,10 +126,10 @@ public class CierreDiarioArqueoFacade extends TumiFacade implements CierreDiario
 		return poseePermiso;
 	}
    //Inicio: REQ14-005 - bizarq - 11/11/2014
-   public boolean existeCierreDiaActualSaldo(Integer intIdEmpresa, Integer intIdSucursal, Integer intIdSubsucursal)throws BusinessException{
+   public boolean existeCierreDiaActualSaldo(Integer intIdEmpresa, Integer intIdSucursal, Integer intIdSubsucursal,Date dtFechaFin)throws BusinessException{
   		boolean poseePermiso = Boolean.FALSE;
 		try{
-			poseePermiso = cierreDiarioArqueoService.existeCierreCajaSaldo(intIdEmpresa,  new Date(),intIdSucursal, intIdSubsucursal);
+			poseePermiso = cierreDiarioArqueoService.existeCierreCajaSaldo(intIdEmpresa,  dtFechaFin,intIdSucursal, intIdSubsucursal);
  		}catch(BusinessException e){
  			throw e;
  		}catch(Exception e){
