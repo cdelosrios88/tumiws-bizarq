@@ -606,10 +606,9 @@ public class SaldoService {
 	public Date obtenerUltimaFechaSaldo(Integer intIdEmpresa) throws BusinessException{
 		Date dtUltimaFecha = null;
 		try {
-			List<HashMap> listaFechas = boCierreDiarioArqueo.getListaFechas(intIdEmpresa);
-			for(HashMap<String,Object> mapa : listaFechas){
-				dtUltimaFecha = (Timestamp)mapa.get("fechaMaxima");
-				break;
+			Saldo saldo = boSaldo.getSaldoUltimaFechaSaldo(intIdEmpresa);
+			if (saldo != null){
+				dtUltimaFecha = saldo.getId().getDtFechaSaldo();
 			}
 		} catch (Exception e) {
 			throw new BusinessException(e);
