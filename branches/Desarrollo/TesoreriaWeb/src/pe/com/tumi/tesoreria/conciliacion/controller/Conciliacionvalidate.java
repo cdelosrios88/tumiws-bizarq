@@ -1,3 +1,11 @@
+/**
+* Resumen.
+* Objeto: Conciliacionvalidate
+* Descripción:  Clase validadora
+* Fecha de Creación: 30/10/2014.
+* Requerimiento de Creación: REQ14-006
+* Autor: Bizarq
+*/
 package pe.com.tumi.tesoreria.conciliacion.controller;
 
 import java.util.Date;
@@ -18,22 +26,25 @@ import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 
 
 public class Conciliacionvalidate {
+	protected static Logger log;
 
 	private ConciliacionFacadeLocal conciliacionFacade;
 	private ConciliacionService conciliacionService;
 	private ConciliacionBO conciliacionBO;
 	
 	
-	
-	protected static Logger log;
-	
+	/**
+	 * 
+	 */
 	public Conciliacionvalidate(){
 		log = Logger.getLogger(this.getClass());
 		cargarValoresIniciales();
 		
 	}
 	
-	
+	/**
+	 * 
+	 */
 	public void cargarValoresIniciales(){
 		try {
 			conciliacionFacade = (ConciliacionFacadeLocal) EJBFactory.getLocal(ConciliacionFacadeLocal.class);
@@ -79,4 +90,27 @@ public class Conciliacionvalidate {
 
 		return isValid;
 	}
+	
+	
+	/**
+	 * Valida que al momento de Grabar o Grabar COncilaicion diara, se haya seleccionado cuenta bancaria y que existan
+	 * registros de conciliaicon detalle.
+	 * @param conciliacion
+	 * @return
+	 */
+	public boolean procedeAccion(Conciliacion conciliacion){
+		boolean isProcede = false;
+		if(conciliacion == null 
+			|| conciliacion.getListaConciliacionDetalle() == null 
+			|| conciliacion.getListaConciliacionDetalle().size()==0
+			|| conciliacion.getBancoCuenta() == null){
+			return true;	
+		}
+		return isProcede;
+	}
+	
+	
+	
+	
+	
 }
