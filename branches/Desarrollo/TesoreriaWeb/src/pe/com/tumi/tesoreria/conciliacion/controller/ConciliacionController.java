@@ -117,9 +117,7 @@ public class ConciliacionController{
 	private String strDescBancoConciliacion;
 	private Boolean blModoEdicion;
 	private boolean showFileUpload;
-	
-	private boolean showFileUpload;
-	
+		
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Bancocuenta>	listaBancoCuenta;
 	private Usuario 	usuario;
