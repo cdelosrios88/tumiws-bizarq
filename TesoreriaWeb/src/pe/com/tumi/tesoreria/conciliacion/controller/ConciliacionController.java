@@ -80,7 +80,7 @@ public class ConciliacionController{
 	private Bancocuenta		bancoCuentaFiltro;
 	private Bancocuenta		bancoCuentaFiltroConciliacion;
 	private Bancocuenta		bancoCuentaFiltroAnulacion;
-	
+	private boolean blDeshabilitarVerComp;
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 	private List<Conciliacion>	listaConciliacionBusq;
 	private ConciliacionComp conciliacionCompBusq;
@@ -180,6 +180,13 @@ public class ConciliacionController{
 	}	
 	
 	/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
+	public boolean isBlDeshabilitarVerComp() {
+		return blDeshabilitarVerComp;
+	}
+
+	public void setBlDeshabilitarVerComp(boolean blDeshabilitarVerComp) {
+		this.blDeshabilitarVerComp = blDeshabilitarVerComp;
+	}
 	public boolean isDeshabilitarBancoCuentaNuevoConc() {
 		return deshabilitarBancoCuentaNuevoConc;
 	}
@@ -554,6 +561,7 @@ public class ConciliacionController{
 			listaBancoCuentaFiltroNuevaConc = seleccionarBanco(intBancoNuevoSeleccionado);
 			
 			showFileUpload = (intBancoNuevoSeleccionado.equals(Constante.PARAM_T_BANCOS_BANCOCREDITO));
+			blDeshabilitarVerComp = Boolean.TRUE;
 			log.info("showFileUpload: " + showFileUpload);
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
@@ -1263,6 +1271,7 @@ public class ConciliacionController{
 				blDeshabilitarBuscar = Boolean.TRUE;
 				deshabilitarBancoNuevoConc = Boolean.TRUE;
 				deshabilitarBancoCuentaNuevoConc = Boolean.TRUE;
+				blDeshabilitarVerComp = Boolean.FALSE;
 			}
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 
