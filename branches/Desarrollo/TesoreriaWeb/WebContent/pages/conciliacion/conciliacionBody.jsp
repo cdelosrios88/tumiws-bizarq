@@ -311,22 +311,55 @@
 									itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
 								</h:selectOneMenu>	
 							</rich:column>
-							<rich:column width=	"120">
+							<rich:column width=	"70">
 								<h:outputText value="Cuenta Bancaria : "/>
 							</rich:column>
-							<rich:column width="120">
-								<h:selectOneMenu style="width: 170px;"
-									disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
-									value="#{conciliacionController.intBancoNuevoSeleccionado}">
-									<f:selectItem itemValue="0" itemLabel="Seleccionar" />
-									<tumih:selectItems var="sel"
-										cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
-										itemValue="#{sel.intIdDetalle}"
-										itemLabel="#{sel.strDescripcion}" />
+						<rich:column width="120" rendered="#{!conciliacionController.blModoEdicion}">
+							<h:selectOneMenu style="width: 170px;"
+								disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
+								value="#{conciliacionController.intBancoNuevoSeleccionado}">
+								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+								<tumih:selectItems var="sel"
+									cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+									itemValue="#{sel.intIdDetalle}"
+									itemLabel="#{sel.strDescripcion}" />
+								<a4j:support event="onchange"
+									action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
+									reRender="cboListaCuentasNuevaConc" />
+							</h:selectOneMenu>
+						</rich:column>
+						<rich:column width="120" rendered="#{conciliacionController.blModoEdicion}">
+							<tumih:inputText readonly="true"
+							cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+							itemValue="intIdDetalle" itemLabel="strDescripcion"
+							property="#{conciliacionController.intBancoNuevoSeleccionado}" />
+						</rich:column>
+						<rich:column width="120" rendered="#{!conciliacionController.blModoEdicion}">
+							<h:selectOneMenu
+								value="#{conciliacionController.intBancoCuentaNuevaConcSeleccionado}"
+								disabled="#{conciliacionController.deshabilitarBancoCuentaNuevoConc}"
+								style="width: 260px;" id="cboListaCuentasNuevaConc">
+								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+								<tumih:selectItems var="sel"
+									value="#{conciliacionController.listaBancoCuentaFiltroNuevaConc}"
+									itemValue="#{sel.id.intItembancocuenta}"
+									itemLabel="#{sel.strEtiqueta}" />
 									<a4j:support event="onchange"
-										action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
-										reRender="cboListaCuentasNuevaConc,pgUploadTelecreditoFile" />
-								</h:selectOneMenu>
+									action="#{conciliacionController.seleccionarBancoCuentaNuevoConc}"
+									reRender="contPanelInferior" />
+							</h:selectOneMenu>
+						</rich:column>
+						<rich:column width="120" rendered="#{conciliacionController.blModoEdicion}">
+							<h:inputText style="width: 260px;" value="#{conciliacionController.strDescCuentaBancariaConciliacion}"
+							readonly="true" />
+						</rich:column>
+
+												
+						
+
+							<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
+							<rich:column width=	"140">
+								<h:outputText value="Estado de Registro : "/>
 							</rich:column>
 							<rich:column width="120">
 								<h:selectOneMenu
@@ -361,7 +394,7 @@
 									<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
 									<f:selectItem itemValue="2" itemLabel="Chekeado"/>
 									
-									<a4j:support event="onclick" reRender="dtResumen" actionListener="#{conciliacionController.onclickCheck}" />
+									<a4j:support event="onchange" reRender="dtResumen" actionListener="#{conciliacionController.onclickCheck}" />
 									
 								</h:selectOneMenu>
 							</rich:column>
@@ -434,7 +467,7 @@
 					<h:panelGrid id="panelDatosValidados" 
 						rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}">
 						<rich:column width=	"910">
-							<rich:dataTable
+						<rich:dataTable
 							sortMode="single"
 							var="item"
 							value="#{conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}"
@@ -465,7 +498,7 @@
 										property="#{item.ingreso.intParaDocumentoGeneral}"/>
 									</h:panelGroup>
 								</rich:column>
-								<rich:column width="150" style="text-align: right">
+								<rich:column width="80" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Número"/>
 									</f:facet>
@@ -474,7 +507,7 @@
 									<h:outputText rendered="#{not empty item.ingreso}" 
 									value="#{item.ingreso.intItemPeriodoIngreso}#{item.ingreso.intItemIngreso}"/>
 								</rich:column>
-								<rich:column width="150" style="text-align: right">
+								<rich:column width="90" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Fecha"/>
 									</f:facet>
@@ -485,14 +518,14 @@
 									<f:convertDateTime pattern="dd/MM/yyyy"/>
 									</h:outputText>
 								</rich:column>
-								<rich:column width="150" style="text-align: right">
+								<rich:column width="100" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Nro. Operación"/>
 									</f:facet>
 									<h:outputText rendered="#{not empty item.egreso}" value="#{item.egreso.intNumeroPlanilla}#{item.egreso.intNumeroCheque}#{item.egreso.intNumeroTransferencia}"/>  	
 									<h:outputText rendered="#{not empty item.ingreso}" value="#{item.ingreso.strNumeroOperacion}"/>
 								</rich:column>
-								<rich:column width="150" style="text-align: right">
+								<rich:column width="110" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Concepto"/>
 									</f:facet>
@@ -560,7 +593,7 @@
 										<h:outputText value="---"/>
 									</h:panelGroup>                              
 								</rich:column>
-								<rich:column width="150" style="text-align: right">
+								<rich:column width="50" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Check"/>
 									</f:facet>
@@ -586,7 +619,7 @@
 								rowKeyVar="rowKey"
 								width="955px">
 								
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="90" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Fecha Conciliacion"/>
 									</f:facet>
@@ -594,7 +627,7 @@
 									<f:convertDateTime pattern="dd/MM/yyyy"/>
 									</h:outputText>
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="90" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Saldo Anterior"/>
 									</f:facet>
@@ -602,7 +635,7 @@
 									<f:converter converterId="ConvertidorMontos" />
 									</h:outputText>	
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="80" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Debe"/>
 									</f:facet>
@@ -610,7 +643,7 @@
 									<f:converter converterId="ConvertidorMontos" />
 									</h:outputText>	
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="80" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Haber"/>
 									</f:facet>
@@ -618,7 +651,7 @@
 									<f:converter converterId="ConvertidorMontos" />
 									</h:outputText>	
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="90" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Saldo Caja"/>
 									</f:facet>
@@ -626,7 +659,7 @@
 									<f:converter converterId="ConvertidorMontos" />
 									</h:outputText>	
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="90" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Saldo conciliacion"/>
 									</f:facet>
@@ -634,13 +667,13 @@
 									<f:converter converterId="ConvertidorMontos" />
 									</h:outputText>	
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="50" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Nro. Mov."/>
 									</f:facet>
 									<h:outputText value="#{itemRes.intResumenNroMov}"/>
 								</rich:column>
-								<rich:column width="30" style="text-align: center">
+								<rich:column width="90" style="text-align: center">
 									<f:facet name="header">
 										<h:outputText value="Por Conciliar"/>
 									</f:facet>
