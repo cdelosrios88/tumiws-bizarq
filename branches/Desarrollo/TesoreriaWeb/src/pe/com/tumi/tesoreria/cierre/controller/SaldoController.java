@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
@@ -39,6 +40,7 @@ import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.Saldo;
+import pe.com.tumi.tesoreria.egreso.facade.CierreDiarioArqueoFacadeRemote;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
 import pe.com.tumi.tesoreria.ingreso.domain.IngresoDetalleInterfaz;
 
@@ -51,6 +53,7 @@ public class SaldoController {
 	private TablaFacadeRemote 	tablaFacade;
 	private EgresoFacadeLocal 	egresoFacade;
 	private BancoFacadeLocal 	bancoFacade;
+	private CierreDiarioArqueoFacadeRemote	cierreDiarioArqueoFacade;
 	
 	private List<Saldo>	listaSaldo;
 	private List<IngresoDetalleInterfaz>listaIngresoDetalleInterfaz;
@@ -150,6 +153,7 @@ public class SaldoController {
 			bancoFacade = (BancoFacadeLocal) EJBFactory.getLocal(BancoFacadeLocal.class);
 			//Inicio: REQ14-005 - bizarq - 19/10/2014
 			permisoFacade = (PermisoFacadeRemote) EJBFactory.getRemote(PermisoFacadeRemote.class);
+			cierreDiarioArqueoFacade = (CierreDiarioArqueoFacadeRemote) EJBFactory.getRemote(CierreDiarioArqueoFacadeRemote.class);
 			//Fin: REQ14-005 - bizarq - 19/10/2014
 			
 			listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
@@ -394,6 +398,11 @@ public class SaldoController {
 	private boolean isValidDailyAmountProcess(){
 		boolean isValid = Boolean.FALSE;
 		try {
+			if(!isValidCierreArqueoDiario()){
+				mostrarMensaje(Boolean.FALSE, "Es necesario ejecutar el cierre de caja para continuar con el proceso de generación de saldos.");
+				return Boolean.TRUE;
+			}
+			
 			if(dtFechaInicioSaldo==null){
 				mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de inicio a calcular el saldo.");
 				return Boolean.TRUE;
@@ -410,7 +419,10 @@ public class SaldoController {
 				mostrarMensaje(Boolean.FALSE, "La fecha de inicio debe ser mayor a la ultima fecha generada.");
 				return Boolean.TRUE;
 			}
-			
+			if(dtFechaInicioSaldo.compareTo(MyUtil.obtenerFechaActual())>0 || dtFechaFinSaldo.compareTo(MyUtil.obtenerFechaActual()) >0 ){
+				mostrarMensaje(Boolean.FALSE, "No se pueden procesar fechas posteriores a la actual.");
+				return Boolean.TRUE;
+			}
 			isValid = isValidPassword(this.strPassword);
 			
 		} catch (Exception e) {
@@ -433,6 +445,10 @@ public class SaldoController {
 			mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de inicio de anulación de saldos.");
 			return Boolean.TRUE;
 		}
+		if(dtFechaInicioSaldo.compareTo(MyUtil.obtenerFechaActual())>0){
+			mostrarMensaje(Boolean.FALSE, "No se puede anular saldos de fechas posteriores a la actual");
+			return Boolean.TRUE;
+		}
 		if(strAnulReason==null || strAnulReason.equals(Constante.STR_EMPTY)){
 			mostrarMensaje(Boolean.FALSE, "Debe ingresar el motivo de anulación de saldos.");
 			return Boolean.TRUE;
@@ -442,7 +458,16 @@ public class SaldoController {
 		
 		return isValid;
 	}
-	
+	private boolean isValidCierreArqueoDiario(){
+		boolean isValid = Boolean.FALSE;
+		try {
+			isValid=cierreDiarioArqueoFacade.existeCierreDiaActualSaldo(usuario.getEmpresa().getIntIdEmpresa(), null, null);
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isValid;
+	}
 	/**
 	 * @author bizarq
 	 * @param <String> strPassword </String>
@@ -462,7 +487,7 @@ public class SaldoController {
 			password.setStrContrasena(strPassword);
 			password = permisoFacade.getPasswordPorPkYPass(password);
 			if(password==null){
-				mostrarMensaje(Boolean.FALSE, "Clave incorrecta. Por favor intente nuevamente.");
+				mostrarMensaje(Boolean.FALSE, "La contraseña es inválida, no se realiza la anulación de saldos.");
 				return Boolean.TRUE;
 			}
 			
@@ -515,6 +540,7 @@ public class SaldoController {
 			dtUltimaFechaCierreGeneral = null;
 			dtUltimaFechaGenerada = null;
 			//Inicio: REQ14-005 - bizarq - 14/11/2014
+			dtFechaInicioSaldo = MyUtil.obtenerFechaActual();
 			strAnulReason = null;
 			//Fin: REQ14-005 - bizarq - 14/11/2014
 			obtenerFechasSaldo();
