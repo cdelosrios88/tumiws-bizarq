@@ -185,7 +185,31 @@ public class CierreDiarioArqueoService {
 		log.info(fechaValidar+" "+existeCierreCaja);
 		return existeCierreCaja;
 	}
-	
+	//Inicio: REQ14-005 - bizarq - 11/11/2014
+	public boolean existeCierreCajaSaldo(Integer intIdEmpresa, Date fechaValidar, Integer intIdSucursal, Integer intIdSubsucursal)throws Exception{
+		boolean existeCierreCaja = Boolean.FALSE;
+		
+		CierreDiarioArqueo cierreDiarioArqueoFiltro = new CierreDiarioArqueo();
+		cierreDiarioArqueoFiltro.getId().setIntPersEmpresa(intIdEmpresa);
+		cierreDiarioArqueoFiltro.getId().setIntParaTipoArqueo(Constante.PARAM_T_TIPOARQUEO_CIERRECAJA);
+		cierreDiarioArqueoFiltro.getId().setIntSucuIdSucursal(intIdSucursal);
+		cierreDiarioArqueoFiltro.getId().setIntSudeIdSubsucursal(intIdSubsucursal);
+		cierreDiarioArqueoFiltro.setTsFechaCierreArqueo(new Timestamp(fechaValidar.getTime()));
+		cierreDiarioArqueoFiltro.setIntParaEstadoCierre(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+		
+		List<CierreDiarioArqueo> listaCierreDiarioArqueo = boCierreDiarioArqueo.getListaBuscar(cierreDiarioArqueoFiltro);
+		
+		if(listaCierreDiarioArqueo!=null && !listaCierreDiarioArqueo.isEmpty()){
+			log.info("listaCierreDiarioArqueo size:"+listaCierreDiarioArqueo.size());
+			if(listaCierreDiarioArqueo.size()>0){
+				existeCierreCaja = Boolean.TRUE;
+			}
+		}
+		
+		log.info(fechaValidar+" "+existeCierreCaja);
+		return existeCierreCaja;
+	}
+	//Fin: REQ14-005 - bizarq - 11/11/2014
 	private Date obtenerDiaAnterior(Date diaActual)throws Exception{		
 		Calendar calendar = Calendar.getInstance();
 		
