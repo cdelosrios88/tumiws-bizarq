@@ -240,27 +240,29 @@
 						styleClass="btnEstilos" 
 						style="width:90px" 
 						action="#{conciliacionController.habilitarPanelInferior}"
-						rendered="#{!conciliacionController.mostrarBotonAnular}" 
+						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_ANALISTA_TESORERIA ||
+									conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular" />                     
 					<a4j:commandButton value="Grabar" 
 						styleClass="btnEstilos" 
 						style="width:90px"
 						action="#{conciliacionController.grabar}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="#{!conciliacionController.mostrarBotonAnular}"
+						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_ANALISTA_TESORERIA ||
+									conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"
 						disabled="false"/>
 					<a4j:commandButton value="Grabar Conciliacion Diaria" 
 						styleClass="btnEstilos" 
 						style="width:170px"
 						action="#{conciliacionController.grabarConciliacionDiaria}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="#{conciliacionController.mostrarBotonGrabarConcil && !conciliacionController.mostrarBotonAnular}"/>						
+						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"/>						
 					<a4j:commandButton value="Anular Conciliacion" 
 						styleClass="btnEstilos" 
 						style="width:140px"
 						action="#{conciliacionController.habilitarPanelAnulacion}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelDatosAnular"
-						rendered="#{conciliacionController.mostrarBotonAnular}"/>
+						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_CONTABILIDAD}"/>
 					<a4j:commandButton value="Cancelar" 
 						styleClass="btnEstilos"
 						style="width:90px"
@@ -312,76 +314,41 @@
 							<rich:column width=	"120">
 								<h:outputText value="Cuenta Bancaria : "/>
 							</rich:column>
-						<rich:column width="120">
-							<h:selectOneMenu style="width: 170px;"
-								disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
-								value="#{conciliacionController.intBancoNuevoSeleccionado}">
-								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
-								<tumih:selectItems var="sel"
-									cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
-									itemValue="#{sel.intIdDetalle}"
-									itemLabel="#{sel.strDescripcion}" />
-								<a4j:support event="onchange"
-									action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
-									reRender="cboListaCuentasNuevaConc" />
-							</h:selectOneMenu>
-						</rich:column>
-						<rich:column width="120">
-							<h:selectOneMenu
-								value="#{conciliacionController.intBancoCuentaNuevaConcSeleccionado}"
-								disabled="#{conciliacionController.deshabilitarBancoCuentaNuevoConc}"
-								style="width: 260px;" id="cboListaCuentasNuevaConc">
-								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
-								<tumih:selectItems var="sel"
-									value="#{conciliacionController.listaBancoCuentaFiltroNuevaConc}"
-									itemValue="#{sel.id.intItembancocuenta}"
-									itemLabel="#{sel.strEtiqueta}" />
+							<rich:column width="120">
+								<h:selectOneMenu style="width: 170px;"
+									disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
+									value="#{conciliacionController.intBancoNuevoSeleccionado}">
+									<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+									<tumih:selectItems var="sel"
+										cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+										itemValue="#{sel.intIdDetalle}"
+										itemLabel="#{sel.strDescripcion}" />
 									<a4j:support event="onchange"
-									action="#{conciliacionController.seleccionarBancoCuentaNuevoConc}"
-									reRender="contPanelInferior" />
-							</h:selectOneMenu>
-						</rich:column>
-						
-
-							<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
-							<rich:column width=	"140">
-								<h:outputText value="Estado de Registro : "/>
-							</rich:column>
-							<rich:column width="160">
-								<h:selectOneMenu
-									disabled="#{conciliacionController.datosValidados}"
-									style="width: 150px;"
-									value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
-									<f:selectItem itemValue="1" itemLabel="Todos"/>
-									<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
-									<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+										action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
+										reRender="cboListaCuentasNuevaConc,pgUploadTelecreditoFile" />
 								</h:selectOneMenu>
 							</rich:column>
-							-->
+							<rich:column width="120">
+								<h:selectOneMenu
+									value="#{conciliacionController.intBancoCuentaNuevaConcSeleccionado}"
+									disabled="#{conciliacionController.deshabilitarBancoCuentaNuevoConc}"
+									style="width: 260px;" id="cboListaCuentasNuevaConc">
+									<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+									<tumih:selectItems var="sel"
+										value="#{conciliacionController.listaBancoCuentaFiltroNuevaConc}"
+										itemValue="#{sel.id.intItembancocuenta}"
+										itemLabel="#{sel.strEtiqueta}" />
+										<a4j:support event="onchange"
+										action="#{conciliacionController.seleccionarBancoCuentaNuevoConc}"
+										reRender="contPanelInferior" />
+								</h:selectOneMenu>
+							</rich:column>
+						
 						</h:panelGrid>
 
 						<rich:spacer height="10px"/>
 
-						<h:panelGrid columns="8">
-						<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
-							<rich:column width=	"120">
-								<h:outputText value="Cuenta Bancaria : "/>
-							</rich:column>
-
-							<rich:column width="450">
-								<h:inputText
-									rendered="#{empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-									size="70"
-									readonly="true"
-									style="background-color: #BFBFBF;font-weight:bold;"/>
-								<h:inputText
-									rendered="#{not empty conciliacionController.conciliacionNuevo.bancoCuenta}"
-									value="#{conciliacionController.conciliacionNuevo.bancoCuenta.strNombrecuenta} - #{conciliacionController.conciliacionNuevo.bancoCuenta.strNumerocuenta}"
-									size="70"
-									readonly="true"
-									style="background-color: #BFBFBF;font-weight:bold;"/>
-							</rich:column>
-						-->
+						<h:panelGrid id="pgUploadTelecreditoFile" columns="8">
 							<rich:column width=	"140">
 								<h:outputText value="Estado de Registro : "/>
 							</rich:column>
@@ -399,30 +366,33 @@
 								</h:selectOneMenu>
 							</rich:column>
 							
-							<rich:column>
-								<h:outputText value="Telecrédito: "/>
-							</rich:column>
-							
-							<rich:column>
-								<rich:fileUpload id="upload"
-									addControlLabel="Adjuntar Archivo"
-									clearControlLabel="Limpiar"
-									cancelEntryControlLabel="Cancelar"
-									uploadControlLabel="Subir Archivo"
-									listHeight="65"
-									listWidth="320"
-									fileUploadListener="#{conciliacionController.adjuntarDocTelecredito}"
-									maxFilesQuantity="1"
-									doneLabel="Archivo cargado correctamente"
-									immediateUpload="false"
-									autoclear="false"
-									disabled="#{conciliacionController.blDeshabilitarVerConc}"
-									acceptedTypes="xls,xlsx">
-									<f:facet name="label">
-										<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
-									</f:facet>
-								</rich:fileUpload>
-							</rich:column>
+							<h:panelGrid id="pgUplTelecredito" columns="2"
+								rendered="#{conciliacionController.showFileUpload}">
+								<rich:column>
+									<h:outputText value="Telecrédito: "/>
+								</rich:column>
+								
+								<rich:column>
+									<rich:fileUpload id="upload"
+										addControlLabel="Adjuntar Archivo"
+										clearControlLabel="Limpiar"
+										cancelEntryControlLabel="Cancelar"
+										uploadControlLabel="Subir Archivo"
+										listHeight="65"
+										listWidth="320"
+										fileUploadListener="#{conciliacionController.adjuntarDocTelecredito}"
+										maxFilesQuantity="1"
+										doneLabel="Archivo cargado correctamente"
+										immediateUpload="false"
+										autoclear="false"
+										disabled="#{conciliacionController.blDeshabilitarVerConc}"
+										acceptedTypes="xls,xlsx">
+										<f:facet name="label">
+											<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
+										</f:facet>
+									</rich:fileUpload>
+								</rich:column>
+							</h:panelGrid>
 							
 							<rich:column>
 								<a4j:commandButton value="Validar Checks" styleClass="btnEstilos"
