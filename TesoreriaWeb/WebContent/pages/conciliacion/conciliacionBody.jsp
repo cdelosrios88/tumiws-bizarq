@@ -311,55 +311,22 @@
 									itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
 								</h:selectOneMenu>	
 							</rich:column>
-							<rich:column width=	"70">
+							<rich:column width=	"120">
 								<h:outputText value="Cuenta Bancaria : "/>
 							</rich:column>
-						<rich:column width="120" rendered="#{!conciliacionController.blModoEdicion}">
-							<h:selectOneMenu style="width: 170px;"
-								disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
-								value="#{conciliacionController.intBancoNuevoSeleccionado}">
-								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
-								<tumih:selectItems var="sel"
-									cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
-									itemValue="#{sel.intIdDetalle}"
-									itemLabel="#{sel.strDescripcion}" />
-								<a4j:support event="onchange"
-									action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
-									reRender="cboListaCuentasNuevaConc" />
-							</h:selectOneMenu>
-						</rich:column>
-						<rich:column width="120" rendered="#{conciliacionController.blModoEdicion}">
-							<tumih:inputText readonly="true"
-							cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
-							itemValue="intIdDetalle" itemLabel="strDescripcion"
-							property="#{conciliacionController.intBancoNuevoSeleccionado}" />
-						</rich:column>
-						<rich:column width="120" rendered="#{!conciliacionController.blModoEdicion}">
-							<h:selectOneMenu
-								value="#{conciliacionController.intBancoCuentaNuevaConcSeleccionado}"
-								disabled="#{conciliacionController.deshabilitarBancoCuentaNuevoConc}"
-								style="width: 260px;" id="cboListaCuentasNuevaConc">
-								<f:selectItem itemValue="0" itemLabel="Seleccionar" />
-								<tumih:selectItems var="sel"
-									value="#{conciliacionController.listaBancoCuentaFiltroNuevaConc}"
-									itemValue="#{sel.id.intItembancocuenta}"
-									itemLabel="#{sel.strEtiqueta}" />
+							<rich:column width="120">
+								<h:selectOneMenu style="width: 170px;"
+									disabled="#{conciliacionController.deshabilitarBancoNuevoConc}"
+									value="#{conciliacionController.intBancoNuevoSeleccionado}">
+									<f:selectItem itemValue="0" itemLabel="Seleccionar" />
+									<tumih:selectItems var="sel"
+										cache="#{applicationScope.Constante.PARAM_T_BANCOS}"
+										itemValue="#{sel.intIdDetalle}"
+										itemLabel="#{sel.strDescripcion}" />
 									<a4j:support event="onchange"
-									action="#{conciliacionController.seleccionarBancoCuentaNuevoConc}"
-									reRender="contPanelInferior" />
-							</h:selectOneMenu>
-						</rich:column>
-						<rich:column width="120" rendered="#{conciliacionController.blModoEdicion}">
-							<h:inputText style="width: 260px;" value="#{conciliacionController.strDescCuentaBancariaConciliacion}"
-							readonly="true" />
-						</rich:column>
-
-												
-						
-
-							<!-- SE COMENTA PARA PRUEBAS BIZARQ - RSIS14-006
-							<rich:column width=	"140">
-								<h:outputText value="Estado de Registro : "/>
+										action="#{conciliacionController.seleccionarNuevoConcBancoFiltro}"
+										reRender="cboListaCuentasNuevaConc,pgUploadTelecreditoFile" />
+								</h:selectOneMenu>
 							</rich:column>
 							<rich:column width="120">
 								<h:selectOneMenu
