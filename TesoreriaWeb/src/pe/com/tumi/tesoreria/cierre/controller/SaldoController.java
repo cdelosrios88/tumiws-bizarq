@@ -461,7 +461,7 @@ public class SaldoController {
 	private boolean isValidCierreArqueoDiario(){
 		boolean isValid = Boolean.FALSE;
 		try {
-			isValid=cierreDiarioArqueoFacade.existeCierreDiaActualSaldo(usuario.getEmpresa().getIntIdEmpresa(), null, null);
+			isValid=cierreDiarioArqueoFacade.existeCierreDiaActualSaldo(usuario.getEmpresa().getIntIdEmpresa(), null, null,dtFechaFinSaldo);
 		} catch (BusinessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
