@@ -8,12 +8,14 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.MyUtilFormatoFecha;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
@@ -95,6 +97,7 @@ public class Conciliacionvalidate {
 	/**
 	 * Valida que al momento de Grabar o Grabar COncilaicion diara, se haya seleccionado cuenta bancaria y que existan
 	 * registros de conciliaicon detalle.
+	 * Ademas valida que sol se pueda actualizar una conciliacion solo el mismo dia de su registro.
 	 * @param conciliacion
 	 * @return
 	 */
@@ -106,6 +109,24 @@ public class Conciliacionvalidate {
 			|| conciliacion.getBancoCuenta() == null){
 			return true;	
 		}
+		
+		if(conciliacion != null && conciliacion.getTsFechaConciliacion() !=null){
+			Date dtFechaConciliacion = new Date(conciliacion.getTsFechaConciliacion().getTime());
+			Date dtHoy = Calendar.getInstance().getTime();
+			Integer intDif = -1;
+			
+			try {
+				intDif = MyUtilFormatoFecha.obtenerDiasEntreFechas(dtFechaConciliacion, dtHoy);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(intDif.compareTo(new Integer(0))!=0){
+				//mostrarMensaje(Boolean.FALSE, "Solo se puede 'Grabar Conciliacion Diaria'. La fecha de registro de la Conciliación ("+ Constante.sdf.format(dtFechaConciliacion) +")  no es igual a la fecha actual(" + Constante.sdf.format(dtHoy)+ ").");
+				return true;
+			}
+		}
+		
 		return isProcede;
 	}
 	
