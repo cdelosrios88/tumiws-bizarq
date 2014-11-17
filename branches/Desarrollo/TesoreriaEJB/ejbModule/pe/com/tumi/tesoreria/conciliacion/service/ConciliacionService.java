@@ -97,7 +97,7 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalleFinal = new ArrayList<ConciliacionDetalle>();
 		
 		Conciliacion concilLast = null;
-		Conciliacion conciliacionBusq = null;
+		Conciliacion conciliacionBusq = new Conciliacion();
 		Date dtSince = null;
 		Date dtSincePlusOne = null;
 		try{
@@ -107,17 +107,17 @@ public class ConciliacionService {
 			// verificamos la ultima conciliacion
 			concilLast = boConciliacion.getLastConciliacionByCuenta(conciliacionBusq);
 			if(concilLast != null){
-				dtSince = new Date(concilLast.getTsFechaConcilia().getTime());
+				dtSince = new Date(concilLast.getTsFechaConciliacion().getTime());
 				dtSincePlusOne = sumarFechasDias(dtSince, 1);
 
 				// Recuperamos las concilaiciones desde el dia de hoy hast un dia posterior a la ultima cocnilaicion
 				listaConciliacionDetallePlus = getConciliacionDetallePorFechas(
-						conciliacionBusq.getBancoCuenta().getId().getIntEmpresaPk(), 
-						conciliacionBusq.getIntParaDocumentoGeneralFiltro(), 
-						conciliacionBusq.getBancoCuenta().getId().getIntItembancofondo(), 
-						conciliacionBusq.getBancoCuenta().getId().getIntItembancocuenta(), 
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
 						dtSincePlusOne, 
-						new Date( conciliacionBusq.getTsFechaConciliacion().getTime()));
+						new Date( conciliacion.getTsFechaConciliacion().getTime()));
 				
 				
 				//recuperampos el detalle de la ultima concilaicion
@@ -198,7 +198,7 @@ public class ConciliacionService {
 						conciliacionBusq.getBancoCuenta().getId().getIntItembancocuenta(), 
 						null, 
 						new Date( conciliacionBusq.getTsFechaConciliacion().getTime()));		
-			}
+			} 
 			
 			
 			if(listaConciliacionDetalleResult != null && listaConciliacionDetalleResult.size()>0){
@@ -234,7 +234,7 @@ public class ConciliacionService {
 		List<ConciliacionDetalle> listaConciliacionDetalleTemp2 = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleResult = new ArrayList<ConciliacionDetalle>();
 		List<ConciliacionDetalle> listaConciliacionDetalleFinal = new ArrayList<ConciliacionDetalle>();
-		Conciliacion conciliacionBusq = null;
+		Conciliacion conciliacionBusq = new Conciliacion();
 		Conciliacion concilLast = null;
 		Date dtSince = null;
 		Date dtSincePlusOne = null;
@@ -251,12 +251,12 @@ public class ConciliacionService {
 
 				// Recuperamos las concilaiciones desde el dia de hoy hast un dia posterior a la ultima cocnilaicion
 				listaConciliacionDetallePlus = getConciliacionDetallePorFechas(
-						conciliacionBusq.getBancoCuenta().getId().getIntEmpresaPk(), 
-						conciliacionBusq.getIntParaDocumentoGeneralFiltro(), 
-						conciliacionBusq.getBancoCuenta().getId().getIntItembancofondo(), 
-						conciliacionBusq.getBancoCuenta().getId().getIntItembancocuenta(), 
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
 						dtSincePlusOne, 
-						new Date( conciliacionBusq.getTsFechaConciliacion().getTime()));
+						new Date( conciliacion.getTsFechaConciliacion().getTime()));
 				
 				
 				//recuperampos el detalle de la ultima concilaicion
@@ -325,10 +325,10 @@ public class ConciliacionService {
 				// Recuperamos las concilaiciones desde el inicio del tiempo hast el dia de hoy
 				System.out.println("XXX - recuperamos listaConciliacionDetalleRec");
 				listaConciliacionDetalleRec = getConciliacionDetallePorFechas(
-						conciliacionBusq.getBancoCuenta().getId().getIntEmpresaPk(), 
-						conciliacionBusq.getIntParaDocumentoGeneralFiltro(), 
-						conciliacionBusq.getBancoCuenta().getId().getIntItembancofondo(), 
-						conciliacionBusq.getBancoCuenta().getId().getIntItembancocuenta(), 
+						conciliacion.getBancoCuenta().getId().getIntEmpresaPk(), 
+						conciliacion.getIntParaDocumentoGeneralFiltro(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancofondo(), 
+						conciliacion.getBancoCuenta().getId().getIntItembancocuenta(), 
 						null, 
 						new Date( conciliacionBusq.getTsFechaConciliacion().getTime()));
 				System.out.println("XXX - listaConciliacionDetalleRec "+listaConciliacionDetalleRec.size());
