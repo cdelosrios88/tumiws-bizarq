@@ -6,6 +6,7 @@
 */
 package pe.com.tumi.tesoreria.egreso.bo;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -197,6 +198,25 @@ public class SaldoBO{
 			throw new BusinessException(e);
 		}
 		return lista;
+	}
+	public Date obtenerUltimoFechaCierre (Usuario usuario) throws BusinessException {
+		List<Map> lista = null;
+		Date dtUltimaFechaCierre = null;
+		Timestamp tsFecha = null;
+		HashMap<String,Object> mapa = new HashMap<String,Object>();
+		mapa.put("intPersEmpresa", usuario.getEmpresa().getIntIdEmpresa());
+		mapa.put("intSucuIdSucursal", usuario.getSucursal().getId().getIntIdSucursal());
+		mapa.put("intSudeIdSucursal", usuario.getSubSucursal().getId().getIntIdSubSucursal());
+		try {
+			lista = dao.obtenerUltimoFechaCierre(mapa);
+			tsFecha = (Timestamp)lista.get(0).get("fechaMax");
+			dtUltimaFechaCierre = new Date( tsFecha.getTime());
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return dtUltimaFechaCierre;
 	}
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 	//Inicio: REQ14-005 - bizarq - 19/10/2014

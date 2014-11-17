@@ -141,11 +141,23 @@
 	 <parameter property="intSudeIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	 
   	 <parameter property="dtFechaSaldo"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
   </parameterMap>
+  <parameterMap id="parObtFechCierre" class="java.util.Map">
+   	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSucuIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="intSudeIdSucursal"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>
   <resultMap id="resVerif" class="java.util.HashMap">
     <result property="cantReg" 		column="cant_reg" />
   </resultMap>
+  <resultMap id="resFechaCierre" class="java.util.HashMap">
+    <result property="fechaMax" 		column="fecha_max" />
+  </resultMap>
   <procedure id="verificarSaldoProcesado" parameterMap="parVerificacion" resultMap="resVerif"> 
 	{ call PKG_SALDOS.verificarSaldoProcesado(?,?,?,?,?) }  
+  </procedure>
+  <procedure id="obtenerUltimoFechaCierre" parameterMap="parObtFechCierre" resultMap="resFechaCierre"> 
+	{ call PKG_SALDOS.obtenerFechaCierreGeneral(?,?,?,?) }  
   </procedure>
   <procedure id="processDailyAmount" parameterMap="parPorProcessDailyAmountDB">
 	{ call PKG_SALDOS.processDailyAmount(?,?,?,?,?) }  

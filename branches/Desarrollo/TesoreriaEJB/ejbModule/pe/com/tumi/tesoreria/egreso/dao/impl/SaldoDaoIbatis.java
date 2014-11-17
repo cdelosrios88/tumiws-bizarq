@@ -138,5 +138,22 @@ public class SaldoDaoIbatis extends TumiDaoIbatis implements SaldoDao{
 		}
 		return lista;
 	}
+	/**
+	 * Método encargado de obtener la ultima fecha de cierre.
+	 * 
+     * @author Bizarq
+     * @param o: Objeto con la informacion a procesar en el cierre diario <code>Object</code>
+     * 
+     * @throws DAOException
+     * */
+	public List<Map> obtenerUltimoFechaCierre(Object o) throws DAOException{
+		List<Map> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".obtenerUltimoFechaCierre", o);
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return lista;
+	}
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 }
