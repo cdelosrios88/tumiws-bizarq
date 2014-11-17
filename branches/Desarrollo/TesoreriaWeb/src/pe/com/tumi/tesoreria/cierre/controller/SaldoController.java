@@ -6,10 +6,8 @@
 */
 package pe.com.tumi.tesoreria.cierre.controller;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -530,11 +528,17 @@ public class SaldoController {
 		//if(saldoUltimaFechaRegistro!=null)dtUltimaFechaCierreGeneral = saldoUltimaFechaRegistro.getTsFechaRegistro();
 		if(saldoUltimaFechaRegistro!=null){
 			dtUltimaFechaGenerada = saldoUltimaFechaRegistro;
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(dtUltimaFechaGenerada);
+			calendar.add(Calendar.DATE, 1);
+			if(calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY)	calendar.add(Calendar.DATE, 1);
+			dtFechaInicioSaldo = calendar.getTime();
 		}
 				//saldoUltimaFechaRegistro.getTsFechaRegistro();
 		
 		//dtUltimaFechaGenerada = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
-		dtUltimaFechaCierreGeneral = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+		dtUltimaFechaCierreGeneral = egresoFacade.obtenerUltimoFechaCierre(usuario);//egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+		dtFechaFinSaldo = MyUtil.obtenerFechaActual();
 		//Fin: REQ14-005 - bizarq - 19/10/2014
 	}
 	
