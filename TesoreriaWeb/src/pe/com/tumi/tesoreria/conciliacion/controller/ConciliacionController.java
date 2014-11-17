@@ -347,7 +347,7 @@ public class ConciliacionController{
 				conciliacionNuevo.getListaConciliacionDetalle().addAll(lstConcilDetTotal);
 				conciliacionNuevo.getListaConciliacionDetalleVisual().addAll(lstConcilDetTotal);
 				
-				//getListaVisualSegunFiltros(lstConcilDetTotal);
+				getListaVisualSegunFiltros(lstConcilDetTotal);
 				calcularResumen();
 			}else{
 				mostrarMensaje(Boolean.FALSE, "No se encontraron registros.");
@@ -703,6 +703,7 @@ public class ConciliacionController{
 						conciliacionNuevo.setIntParaEstado(Constante.INT_EST_CONCILIACION_REGISTRADO); // Estado Registrado					
 						conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 						mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
+						
 					}else{
 						mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
 					}
@@ -710,6 +711,7 @@ public class ConciliacionController{
 				}else{
 					//logging();
 					if(!isValidModificarConciliacion(conciliacionNuevo)){
+						conciliacionNuevo.setIntParaEstado(Constante.INT_EST_CONCILIACION_REGISTRADO);
 						conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 						mostrarMensaje(Boolean.TRUE, "Se actualizó éxitosamente la Conciliación Bancaria.");
 
@@ -1200,6 +1202,7 @@ public class ConciliacionController{
 			listaBancoCuentaFiltroNuevaConc = null;
 			
 			showFileUpload = Boolean.FALSE;
+			blModoEdicion = Boolean.FALSE;
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
 			//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -1329,6 +1332,9 @@ public class ConciliacionController{
 				deshabilitarBancoNuevoConc = Boolean.TRUE;
 				deshabilitarBancoCuentaNuevoConc = Boolean.TRUE;
 				blDeshabilitarVerComp = Boolean.FALSE;
+				blModoEdicion = Boolean.TRUE;
+				cargarDescripcionBancoYCuenta(getBancoCuentaConciliacion(conciliacionNuevo));	
+				
 			}
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 
