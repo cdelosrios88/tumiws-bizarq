@@ -16,22 +16,15 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtilFormatoFecha;
-import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
-import pe.com.tumi.seguridad.login.domain.Usuario;
-import pe.com.tumi.tesoreria.conciliacion.facade.ConciliacionFacadeLocal;
-import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 
-
 public class Conciliacionvalidate {
 	protected static Logger log;
 
-	private ConciliacionFacadeLocal conciliacionFacade;
-	private ConciliacionService conciliacionService;
 	private ConciliacionBO conciliacionBO;
 	
 	
@@ -49,10 +42,7 @@ public class Conciliacionvalidate {
 	 */
 	public void cargarValoresIniciales(){
 		try {
-			conciliacionFacade = (ConciliacionFacadeLocal) EJBFactory.getLocal(ConciliacionFacadeLocal.class);
-			conciliacionService = (ConciliacionService)TumiFactory.get(ConciliacionService.class);
 			conciliacionBO = (ConciliacionBO)TumiFactory.get(ConciliacionBO.class);
-			
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
