@@ -429,26 +429,15 @@ public class ConciliacionController{
 	public void anularConciliacion(){
 		boolean isProcedeAnulacion=false;
 		try {
-			conciliacionAnulacion.setUsuario(usuario);
+			conciliacionCompAnul.getConciliacion().setUsuario(usuario);
 			seleccionarBancoCuentaAnulaConc();
-			conciliacionCompAnul.setConciliacion(conciliacionAnulacion);
+			//conciliacionCompAnul.setConciliacion(conciliacionAnulacion);
 			isProcedeAnulacion = validarAnulacion();
 			
 			if(isProcedeAnulacion){
-				/*
-				mapa.put("dtBusqFechaDesde", 		conciliacionCompBusq.getDtBusqFechaDesde());
-				mapa.put("dtBusqFechaHasta", 		conciliacionCompBusq.getDtBusqFechaHasta());
-				mapa.put("intBusqPersEmpresa", 		conciliacionCompBusq.getIntBusqPersEmpresa());
-				mapa.put("intBusqItemBancoFondo", 	conciliacionCompBusq.getIntBusqItemBancoFondo());
-				mapa.put("intBusqItemBancoCuenta", 	conciliacionCompBusq.getIntBusqItemBancoCuenta());
-				intBancoAnuladoSeleccionado
-			intBancoCuentaAnuladoConcSeleccionado
-bancoCtaConcil = getBancoCuentaConciliacion(conciliacionNuevo);
-				cargarDescripcionBancoYCuenta(bancoCtaConcil);			
-			
-				*/
-				conciliacionCompAnul.setIntBusqItemBancoCuenta(intBancoCuentaAnuladoConcSeleccionado);
-				
+				conciliacionCompAnul.setIntBusqPersEmpresa(conciliacionCompAnul.getConciliacion().getIntPersEmpresa());
+				conciliacionCompAnul.setIntBusqItemBancoFondo(conciliacionCompAnul.getConciliacion().getIntItemBancoFondo());
+				conciliacionCompAnul.setIntBusqItemBancoCuenta(conciliacionCompAnul.getConciliacion().getIntItemBancoCuenta());
 				conciliacionFacade.anularConciliacion(conciliacionCompAnul);
 				mostrarMensaje(Boolean.TRUE, "Se realizo éxitosamente el Proceso de Anulación.");
 				registrarNuevo = Boolean.FALSE; 
@@ -489,8 +478,7 @@ bancoCtaConcil = getBancoCuentaConciliacion(conciliacionNuevo);
 			strMsgErrorAnulaObservacion = "Ingresar Observación de Anulación.";
 		}
 		
-		//if(conciliacionCompAnul.getConciliacion().getBancoCuenta() == null){
-		if(intBancoCuentaAnuladoConcSeleccionado == null){	
+		if(conciliacionCompAnul.getConciliacion().getIntItemBancoCuenta() == null){
 			isError = false;
 			strMsgErrorAnulaCuenta="Ingresar Cuenta Bancaria de Anulación.";
 		}
