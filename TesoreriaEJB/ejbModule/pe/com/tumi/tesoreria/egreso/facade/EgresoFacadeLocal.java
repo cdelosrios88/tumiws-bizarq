@@ -97,6 +97,7 @@ public interface EgresoFacadeLocal {
 	public void anularSaldo(Usuario usuario, Date dtFechaInicio)throws BusinessException;
 	public void anularSaldo(Usuario usuario, Saldo saldoFiltro)throws BusinessException;
 	public List<Map> verificarSaldoProcesado(Usuario usuario,Date dtFechaInicioSaldo) throws BusinessException;
+	public Date obtenerUltimoFechaCierre (Usuario usuario) throws BusinessException;
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 	public List<Egreso> buscarEgresoParaTelecredito(Egreso egreso)throws BusinessException;
 	public Egreso grabarTransferenciaTelecredito(Egreso egreso, List<Egreso> listaEgresoTelecredito) throws BusinessException;

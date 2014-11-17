@@ -700,7 +700,7 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
    			throw new BusinessException(e);
    		}
 	}
-    
+  //Inicio: REQ14-005 - bizarq - 19/10/2014
     public List<Map> verificarSaldoProcesado(Usuario usuario,Date dtFechaInicioSaldo) throws BusinessException {
     	List<Map> lista = null;
     	try {
@@ -712,7 +712,12 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
    		}
     	return lista;
     }
-    
+    public Date obtenerUltimoFechaCierre (Usuario usuario) throws BusinessException {
+    	Date dtUltimaFechaCierre = null;
+    	dtUltimaFechaCierre = saldoService.obtenerUltimoFechaCierre(usuario);
+    	return dtUltimaFechaCierre;
+    }
+  //Fin: REQ14-005 - bizarq - 19/10/2014
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Egreso> buscarEgresoParaTelecredito(Egreso egreso)throws BusinessException{
     	List<Egreso> lista = null;

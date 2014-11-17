@@ -615,5 +615,14 @@ public class SaldoService {
 		}
 		return dtUltimaFecha;
 	}
+	public Date obtenerUltimoFechaCierre (Usuario usuario) throws BusinessException{
+		Date dtUltimaFechaCierre = null;
+		try {
+			dtUltimaFechaCierre = boSaldo.obtenerUltimoFechaCierre(usuario);
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		return dtUltimaFechaCierre;
+	}
 	//Fin: REQ14-005 - bizarq - 19/10/2014
 }
