@@ -418,9 +418,10 @@ public class ConciliacionService {
 	 * @throws BusinessException
 	 */
 	public String getSucursalPaga(ConciliacionDetalle detalle) throws BusinessException{
-		String strSucursalPagaConcat = "";
+		String strSucursalPagaConcat = Constante.STR_EMPTY;
 		EmpresaFacadeRemote empresaFacade = null;
 		List<Sucursal> listaSucursal;
+		String strDummy = Constante.STR_EMPTY;
 
 		try {
 			empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
@@ -432,9 +433,13 @@ public class ConciliacionService {
 					lstEgresoDet = boEgresoDet.getPorEgreso(detalle.getEgreso());
 					if(lstEgresoDet != null && lstEgresoDet.size()>0){
 						for (EgresoDetalle egresoDetalle : lstEgresoDet) {
+							int cont = 0;
 							for (Sucursal sucursal : listaSucursal) {
 								if(sucursal.getId().getIntIdSucursal().compareTo(egresoDetalle.getIntSucuIdSucursalEgreso())==0){
-									strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial()+".";
+									if(!strSucursalPagaConcat.contains(sucursal.getJuridica().getStrRazonSocial()) && cont==0){
+										strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial()+".";
+										cont++;
+									}
 								}
 							}	
 						}
@@ -445,9 +450,13 @@ public class ConciliacionService {
 					lstIngresoDet = boIngresoDet.getPorIngreso(detalle.getIngreso());
 					if(lstIngresoDet != null && lstIngresoDet.size()>0){
 						for (IngresoDetalle ingresoDetalle : lstIngresoDet) {
+							int cont = 0;
 							for (Sucursal sucursal : listaSucursal) {
 								if(sucursal.getId().getIntIdSucursal().compareTo(ingresoDetalle.getIntSucuIdSucursalIn())==0){
-									strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial();
+									if(!strSucursalPagaConcat.contains(sucursal.getJuridica().getStrRazonSocial()) && cont==0){
+										strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial();
+										cont++;
+									}
 								}
 							}	
 						}
@@ -899,7 +908,7 @@ public class ConciliacionService {
 				  lstTemp = new ArrayList<ConciliacionDetalle>();
 				  for(ConciliacionDetalle detalle : pConciliacion.getListaConciliacionDetalle()){
 						if(detalle.getBlIndicadorCheck().equals(Boolean.TRUE) || 
-							detalle.getIntIndicadorCheck() == 1){
+							(detalle.getIntIndicadorCheck()!=null && detalle.getIntIndicadorCheck() == 1)){
 							detalle.setIntIndicadorConci(1);
 							detalle.setBlIndicadorConci(Boolean.TRUE);
 						}
