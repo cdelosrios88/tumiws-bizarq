@@ -34,10 +34,6 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Egreso	egreso;
 	private Boolean blIndicadorCheck;
 	private Boolean blIndicadorConci;
-	private Integer intSucuIdSucursalGira;
-	private Integer intSubSucuIdSucursalGira;
-	private Integer intSucuIdSucursalPaga;
-	private Integer intSubSucuIdSucursalPaga;
 	private Boolean blValid;
 	private String strDescripcionSucursalPaga;
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
@@ -152,33 +148,6 @@ public class ConciliacionDetalle extends TumiDomain{
 	}
 	
 	/* Inicio: REQ14-006 Bizarq - 28/10/2014 */
-	
-	public Integer getIntSucuIdSucursalGira() {
-		return intSucuIdSucursalGira;
-	}
-	public void setIntSucuIdSucursalGira(Integer intSucuIdSucursalGira) {
-		this.intSucuIdSucursalGira = intSucuIdSucursalGira;
-	}
-	public Integer getIntSubSucuIdSucursalGira() {
-		return intSubSucuIdSucursalGira;
-	}
-	public void setIntSubSucuIdSucursalGira(Integer intSubSucuIdSucursalGira) {
-		this.intSubSucuIdSucursalGira = intSubSucuIdSucursalGira;
-	}
-	public Integer getIntSucuIdSucursalPaga() {
-		return intSucuIdSucursalPaga;
-	}
-	public void setIntSucuIdSucursalPaga(Integer intSucuIdSucursalPaga) {
-		this.intSucuIdSucursalPaga = intSucuIdSucursalPaga;
-	}
-	public Integer getIntSubSucuIdSucursalPaga() {
-		return intSubSucuIdSucursalPaga;
-	}
-	
-	public void setIntSubSucuIdSucursalPaga(Integer intSubSucuIdSucursalPaga) {
-		this.intSubSucuIdSucursalPaga = intSubSucuIdSucursalPaga;
-	}
-	
 	public Boolean getBlValid() {
 		return blValid;
 	}
