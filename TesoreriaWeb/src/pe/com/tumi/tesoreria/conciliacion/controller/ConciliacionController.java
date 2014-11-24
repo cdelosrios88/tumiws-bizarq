@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +24,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.richfaces.event.UploadEvent;
+import org.springframework.util.CollectionUtils;
 
-import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.MyUtilFormatoFecha;
@@ -43,13 +46,11 @@ import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.domain.BancocuentaId;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
-import pe.com.tumi.tesoreria.banco.domain.BancofondoId;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.conciliacion.facade.ConciliacionFacadeLocal;
 import pe.com.tumi.tesoreria.conciliacion.service.ConciliacionService;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionDetalle;
-import pe.com.tumi.tesoreria.egreso.domain.Saldo;
 import pe.com.tumi.tesoreria.egreso.domain.TelecreditoDetailFile;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
 import pe.com.tumi.tesoreria.egreso.domain.comp.TelecreditoFileComp;
@@ -414,13 +415,41 @@ public class ConciliacionController{
 					}
 				}			
 			}
+			
+			Collections.sort(lstVisual, new Comparator<ConciliacionDetalle>(){
+				public int compare(ConciliacionDetalle uno, ConciliacionDetalle otro) {
+					if(uno.getEgreso()!=null){
+						return uno.getEgreso().getTsFechaProceso().compareTo(otro.getEgreso().getTsFechaProceso());
+					}else{
+						return uno.getIngreso().getTsFechaProceso().compareTo(otro.getIngreso().getTsFechaProceso());
+					}
+				}		
+			});
+			
 			conciliacionNuevo.getListaConciliacionDetalleVisual().clear();
 			conciliacionNuevo.getListaConciliacionDetalleVisual().addAll(lstVisual);	
-
+			
+			if(conciliacionNuevo.getIntEstadoCheckFiltro()!=null 
+					&& !conciliacionNuevo.getIntEstadoCheckFiltro().equals(Constante.INT_ZERO)){
+				Collection<ConciliacionDetalle> result = filter(lstVisual, validCheck);
+				conciliacionNuevo.setListaConciliacionDetalleVisual(new ArrayList<ConciliacionDetalle>(result));
+			}
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	Predicate<ConciliacionDetalle> validCheck = new Predicate<ConciliacionDetalle>(){
+		@Override
+		public boolean apply(ConciliacionDetalle type) {
+			if(conciliacionNuevo.getIntEstadoCheckFiltro().equals(Constante.INT_ONE)){
+				return type.getIntIndicadorCheck().equals(conciliacionNuevo.getIntEstadoCheckFiltro()) || type.getBlIndicadorCheck();				
+			} else {
+				return !type.getBlIndicadorCheck();
+			}
+		}
+	};
 	
 	
 	/**
@@ -776,9 +805,10 @@ public class ConciliacionController{
 	
 	private boolean isValidConciliacion(Conciliacion conciliacion){
 		boolean isValid = false;
-		Date dtLastArqueo = null;
+		/*Date dtLastArqueo = null;
 		Saldo dtoSaldo = null;
-		Date dtLastPreviousUtilDay = null;
+		Date dtLastPreviousUtilDay = null;*/
+		Conciliacionvalidate validate = new Conciliacionvalidate();
 		try {
 			
 			//3. Verificar la fecha de conciliacion con la fecha del dia actual
@@ -792,25 +822,38 @@ public class ConciliacionController{
 				return true;
 			}
 			
+			if(!validate.isValidCrearConciliacion(conciliacionNuevo)){
+				mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
+				return true;
+			}
+			
 			//1. Verificar el arqueo del día anterior
-			dtLastArqueo = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
+			/*dtLastArqueo = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
 			dtLastPreviousUtilDay = CommonUtils.getPreviousUtilDay(conciliacion.getTsFechaConciliacion(), Constante.INT_ONE);//Día anterior
 			if((dtLastArqueo!=null && dtLastPreviousUtilDay!=null)
 					&& (dtLastArqueo.compareTo(dtLastPreviousUtilDay))!=0){
 				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente al " + Constante.sdf.format(dtLastPreviousUtilDay));
 				return true;
 			}
+			Conciliacionvalidate validate = new Conciliacionvalidate();
+			if(validate.isValidCierreArqueoDiario(usuario)){
+				mostrarMensaje(Boolean.FALSE, "No se ha realizado arqueo correspondiente al " + Constante.sdf.format(MyUtil.obtenerFechaActual()));
+				return true;
+			}*/
 			
 			//2. Verificar los saldos del día anterior
-			dtoSaldo = conciliacionFacade.obtenerSaldoUltimaFechaSaldo(EMPRESA_USUARIO);
+			/*dtoSaldo = conciliacionFacade.obtenerSaldoUltimaFechaSaldo(EMPRESA_USUARIO);
 			if((dtoSaldo!=null && dtoSaldo.getId().getDtFechaSaldo()!=null && dtLastPreviousUtilDay!=null)
 					&& (dtoSaldo.getId().getDtFechaSaldo().compareTo(dtLastPreviousUtilDay))!=0){
 				mostrarMensaje(Boolean.FALSE, "No se ha realizado la generación de saldos correspondiente a " + Constante.sdf.format(dtLastPreviousUtilDay));
 				return true;
-			}
+			}*/
 			
-
-			
+			/*List<Map> lstResult = egresoFacade.verificarSaldoProcesado(usuario, MyUtil.obtenerFechaActual());
+			if(new Integer(lstResult.get(0).get("cantReg").toString())  <= 0){
+				mostrarMensaje(Boolean.FALSE, "No se ha realizado la generación de saldos correspondiente a " + Constante.sdf.format(MyUtil.obtenerFechaActual()));
+				return true;
+			}*/
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -1066,6 +1109,7 @@ public class ConciliacionController{
 				conciliacionNuevo.setBancoCuenta(bancoCtaConcil);
 				cargarDescripcionBancoYCuenta(bancoCtaConcil);
 				
+				showFileUpload = intBancoNuevoSeleccionado.equals(Constante.PARAM_T_BANCOS_BANCOCREDITO);
 
 				calcularResumen();
 			} else {
@@ -1151,13 +1195,10 @@ public class ConciliacionController{
 			listaBancoCuentaFiltro = new ArrayList<Bancocuenta>();
 			listaBancoCuentaFiltro.add(bcoCta);
 			intBancoCuentaNuevaConcSeleccionado = bcoCta.getId().getIntItembancocuenta();
-
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
-		
-		
 	}
 
 	
@@ -1333,6 +1374,13 @@ public class ConciliacionController{
 			datosValidados = Boolean.TRUE;
 			/* Inicio: REQ14-006 Bizarq - 26/10/2014 */
 			buscarRegistrosConciliacion();
+			
+			if(conciliacionNuevo.getIntEstadoCheckFiltro()!=null 
+					&& !conciliacionNuevo.getIntEstadoCheckFiltro().equals(Constante.INT_ZERO)){
+				Collection<ConciliacionDetalle> result = filter(conciliacionNuevo.getListaConciliacionDetalleVisual(), validCheck);
+				conciliacionNuevo.setListaConciliacionDetalleVisual(new ArrayList<ConciliacionDetalle>(result));
+			}
+			
 			if(conciliacionNuevo.getListaConciliacionDetalle() != null && conciliacionNuevo.getListaConciliacionDetalle().size() >0){
 				blDeshabilitaValidarDatos = Boolean.FALSE;
 				blDeshabilitarBuscar = Boolean.TRUE;
@@ -1398,10 +1446,6 @@ public class ConciliacionController{
 					}
 				}
 				
-				// bdResumenSaldoConciliacion
-				concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar).setScale(2, RoundingMode.HALF_UP));
-				concilResumen.setBdResumenPorConciliar(bdResumenPorConciliar);
-
 				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalleVisual()){
 					bdResumenDebe  = bdResumenDebe.add(detalle.getIngreso()!= null ? detalle.getIngreso().getBdMontoTotal() : BigDecimal.ZERO);
 					bdResumenHaber = bdResumenHaber.add(detalle.getEgreso()!= null ? detalle.getEgreso().getBdMontoTotal() : BigDecimal.ZERO);
@@ -1410,11 +1454,19 @@ public class ConciliacionController{
 						intRegNoConciliados = intRegNoConciliados + 1;					
 					}
 				}
+				// bdResumenSaldoConciliacion
+				//concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar).setScale(2, RoundingMode.HALF_UP));
+				//concilResumen.setBdResumenPorConciliar(bdResumenPorConciliar);
+				concilResumen.setBdResumenSaldoConciliacion(bdResumenDebe.subtract(bdResumenHaber));
+				
 				concilResumen.setBdDebe(bdResumenDebe);
 				concilResumen.setBdHaber(bdResumenHaber);
 				concilResumen.setBdResumenDebe(bdResumenDebe);
 				concilResumen.setBdResumenHaber(bdResumenHaber);
 				concilResumen.setBdResumenSaldoCaja(concilResumen.getBdResumenSaldoAnterior().add(bdResumenDebe).subtract(bdResumenHaber).setScale(2, RoundingMode.HALF_UP));
+				//por verificar aun
+				concilResumen.setBdResumenPorConciliar(concilResumen.getBdResumenSaldoCaja().subtract(concilResumen.getBdResumenSaldoConciliacion()));
+				
 				lstResumen.add(concilResumen);
 			
 			}		
@@ -2060,7 +2112,14 @@ public class ConciliacionController{
 	}
 
 
-	
-	
+	public static <T> Collection<T> filter(Collection<T> col, Predicate<T> predicate){
+		Collection<T> result = new ArrayList<T>();
+		for(T element: col){
+			if(predicate.apply(element)){
+				result.add(element);
+			}
+		}
+		return result;
+	}
 	/* Fin: REQ14-006 Bizarq - 18/10/2014 */
 }

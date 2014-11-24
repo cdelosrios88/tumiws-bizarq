@@ -15,18 +15,22 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.MyUtilFormatoFecha;
+import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
+import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
+import pe.com.tumi.tesoreria.egreso.facade.CierreDiarioArqueoFacadeRemote;
 
 public class Conciliacionvalidate {
 	protected static Logger log;
 
 	private ConciliacionBO conciliacionBO;
-	
+	private CierreDiarioArqueoFacadeRemote	cierreDiarioArqueoFacade;
 	
 	/**
 	 * 
@@ -43,6 +47,7 @@ public class Conciliacionvalidate {
 	public void cargarValoresIniciales(){
 		try {
 			conciliacionBO = (ConciliacionBO)TumiFactory.get(ConciliacionBO.class);
+			cierreDiarioArqueoFacade = (CierreDiarioArqueoFacadeRemote) EJBFactory.getRemote(CierreDiarioArqueoFacadeRemote.class);
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -120,8 +125,20 @@ public class Conciliacionvalidate {
 		return isProcede;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * @author Bizarq
+	 * @return boolean
+	 * 
+	 * Método que permite validar si se ha realizado un arqueo en el trascurso del día o no.
+	 * 
+	 * */
+	public boolean isValidCierreArqueoDiario(Usuario usuario){
+		boolean isValid = Boolean.FALSE;
+		try {
+			isValid=cierreDiarioArqueoFacade.existeCierreDiaActualSaldo(usuario.getEmpresa().getIntIdEmpresa(), null, null, MyUtil.obtenerFechaActual());
+		} catch (BusinessException e) {
+			log.error(e.getMessage(), e);
+		}
+		return isValid;
+	}
 }

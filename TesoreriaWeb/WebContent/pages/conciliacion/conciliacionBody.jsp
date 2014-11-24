@@ -250,13 +250,14 @@
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
 						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_ANALISTA_TESORERIA ||
 									conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"
-						disabled="false"/>
+						disabled="#{empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}"/>
 					<a4j:commandButton value="Grabar Conciliacion Diaria" 
 						styleClass="btnEstilos" 
 						style="width:170px"
 						action="#{conciliacionController.grabarConciliacionDiaria}" 
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
-						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"/>						
+						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"
+						disabled="#{empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}"/>
 					<a4j:commandButton value="Anular Conciliacion" 
 						styleClass="btnEstilos" 
 						style="width:140px"
@@ -368,8 +369,8 @@
 									style="width: 150px;"
 									value="#{conciliacionController.conciliacionNuevo.intEstadoCheckFiltro}">
 									<f:selectItem itemValue="0" itemLabel="Todos"/>
-									<f:selectItem itemValue="1" itemLabel="No Conciliado"/>
-									<f:selectItem itemValue="2" itemLabel="Chekeado"/>
+									<f:selectItem itemValue="1" itemLabel="Chekeado"/>
+									<f:selectItem itemValue="2" itemLabel="No Checkeado"/>
 									
 									<a4j:support event="onchange" reRender="dtResumen" actionListener="#{conciliacionController.onclickCheck}" />
 									
@@ -480,9 +481,9 @@
 										<h:outputText value="Número"/>
 									</f:facet>
 									<h:outputText rendered="#{not empty item.egreso}" 
-									value="#{item.egreso.intItemPeriodoEgreso}#{item.egreso.intItemEgreso}"/>  	
+									value="#{item.egreso.intItemPeriodoEgreso} - #{item.egreso.intItemEgreso}"/>  	
 									<h:outputText rendered="#{not empty item.ingreso}" 
-									value="#{item.ingreso.intItemPeriodoIngreso}#{item.ingreso.intItemIngreso}"/>
+									value="#{item.ingreso.intItemPeriodoIngreso} - #{item.ingreso.intItemIngreso}"/>
 								</rich:column>
 								<rich:column width="90" style="text-align: right">
 									<f:facet name="header">
