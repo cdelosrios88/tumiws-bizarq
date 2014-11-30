@@ -485,7 +485,7 @@
 									<h:outputText rendered="#{not empty item.ingreso}" 
 									value="#{item.ingreso.intItemPeriodoIngreso} - #{item.ingreso.intItemIngreso}"/>
 								</rich:column>
-								<rich:column width="90" style="text-align: right">
+								<rich:column width="90" style="text-align:center">
 									<f:facet name="header">
 										<h:outputText value="Fecha"/>
 									</f:facet>
@@ -503,21 +503,25 @@
 									<h:outputText rendered="#{not empty item.egreso}" value="#{item.egreso.intNumeroPlanilla}#{item.egreso.intNumeroCheque}#{item.egreso.intNumeroTransferencia}"/>  	
 									<h:outputText rendered="#{not empty item.ingreso}" value="#{item.ingreso.strNumeroOperacion}"/>
 								</rich:column>
-								<rich:column width="110" style="text-align: right">
+								<rich:column width="110" style="text-align:left">
 									<f:facet name="header">
 										<h:outputText value="Concepto"/>
 									</f:facet>
 									<h:panelGroup rendered="#{not empty item.egreso}">
+										<%-- 
 										<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
 										itemValue="intIdDetalle"
 										itemLabel="strDescripcion" 
-										property="#{item.egreso.strObservacion}"/>
+										property="#{item.egreso.strObservacion}"/>--%>
+										<h:outputText value="#{item.egreso.strObservacion}"/>
 									</h:panelGroup>
 									<h:panelGroup rendered="#{not empty item.ingreso}">
+										<%--
 										<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL}" 
 										itemValue="intIdDetalle"
 										itemLabel="strDescripcion" 
-										property="#{item.ingreso.strObservacion}"/>
+										property="#{item.ingreso.strObservacion}"/>--%>
+										<h:outputText value="#{item.ingreso.strObservacion}"/>
 									</h:panelGroup>
 								</rich:column>	
 								<rich:column>
@@ -549,7 +553,7 @@
 										<h:outputText value="Debe"/>
 									</f:facet>
 									<h:panelGroup rendered="#{not empty item.egreso}">
-										<h:outputText value="---"  style="align: center"/>				
+										<h:outputText value="---"  style="align: right"/>				
 									</h:panelGroup>
 									<h:panelGroup rendered="#{not empty item.ingreso}">
 										<h:outputText value="#{item.ingreso.bdMontoTotal}" style="align: right">
@@ -558,18 +562,18 @@
 
 									</h:panelGroup>                              
 								</rich:column>
-								<rich:column>
+								<rich:column width="120" style="text-align:right">
 									<f:facet name="header">
 										<h:outputText value="Haber"/>
 									</f:facet>
 									<h:panelGroup rendered="#{not empty item.egreso}">
-										<h:outputText value="#{item.egreso.bdMontoTotal}" style="align: right">
+										<h:outputText value="#{item.egreso.bdMontoTotal}">
 										<f:converter converterId="ConvertidorMontos" />
 										</h:outputText>				
 									</h:panelGroup>
-									<h:panelGroup rendered="#{not empty item.ingreso}" style="align: center">
+									<h:panelGroup rendered="#{not empty item.ingreso}">
 										<h:outputText value="---"/>
-									</h:panelGroup>                              
+									</h:panelGroup>
 								</rich:column>
 								<rich:column width="50" style="text-align: right">
 									<f:facet name="header">
@@ -578,7 +582,7 @@
 									<h:selectBooleanCheckbox value="#{item.blIndicadorCheck}" 
 										disabled="#{conciliacionController.blDeshabilitarVerConc}"/>
 								</rich:column>
-								<rich:column width="150" style="text-align: right">
+								<rich:column width="50" style="text-align: right">
 									<f:facet name="header">
 										<h:outputText value="Concil"/>
 									</f:facet>
