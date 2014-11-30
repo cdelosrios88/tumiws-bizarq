@@ -13,6 +13,9 @@
 	<!-- Fecha     : 14/09/2014             -->
 
 <h:form id="frmMayorizacion">
+	
+	<h:outputText value="#{mayorizacionController.limpiarFormulario}" />
+
    	<h:panelGroup id="divPlanCuentas" layout="block" style="padding:15px;border:1px solid #B3B3B3;">
    		
    		<h:panelGrid style="margin:0 auto; margin-bottom:15px">
