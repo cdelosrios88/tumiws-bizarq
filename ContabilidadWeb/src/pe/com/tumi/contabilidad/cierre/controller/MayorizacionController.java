@@ -15,7 +15,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -25,13 +24,13 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.contabilidad.cierre.domain.LibroMayor;
 import pe.com.tumi.contabilidad.cierre.facade.CierreFacadeLocal;
 import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
 import pe.com.tumi.contabilidad.core.facade.MayorizacionFacadeLocal;
 import pe.com.tumi.contabilidad.core.facade.PlanCuentaFacadeLocal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
-import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
@@ -62,6 +61,7 @@ public class MayorizacionController {
 	
 	public Integer INT_ID_EMPRESA;
 	public Integer INT_ID_USER;
+	private boolean poseePermiso;
 	
 	public Usuario getUsuario() {
 		return usuario;
@@ -192,10 +192,21 @@ public class MayorizacionController {
 			mayorizacionFacade = (MayorizacionFacadeLocal) EJBFactory.getLocal(MayorizacionFacadeLocal.class);
 			cierreFacade = (CierreFacadeLocal) EJBFactory.getLocal(CierreFacadeLocal.class);
 			planCuentaFacade = (PlanCuentaFacadeLocal) EJBFactory.getLocal(PlanCuentaFacadeLocal.class);
+			
+			cargarUsuario();
+			poseePermiso = PermisoUtil.poseePermiso(Constante.INT_IDTRANSACCION_MAYORIZACION);
+			if(usuario!=null && poseePermiso){
+				cargarValoresIniciales();
+			}else{
+				log.error("--Usuario obtenido es NULL.");
+			}
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
-		cargarValoresIniciales();
+	}
+	
+	private void cargarUsuario(){
+		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
 	}
 	
 	public void cargarValoresIniciales(){
@@ -448,6 +459,18 @@ public class MayorizacionController {
 		strMsgFailed = null;
 		lstResultMsgValidation = new ArrayList<String>();
 		libroMayorNuevo = new LibroMayor();
+	}
+	
+	public String getLimpiarFormulario(){
+		cargarUsuario();
+		poseePermiso = PermisoUtil.poseePermiso(Constante.INT_IDTRANSACCION_MAYORIZACION);
+		if(usuario!=null && poseePermiso){
+			cleanScreen();
+			listaLibroMayor = new ArrayList<LibroMayor>();
+			libroMayorFiltro = new LibroMayor();
+			deshabilitarPanelInferior(null);
+		}else log.error("--Usuario obtenido es NULL.");
+		return "";
 	}
 	
 	public String getStrPassword() {
