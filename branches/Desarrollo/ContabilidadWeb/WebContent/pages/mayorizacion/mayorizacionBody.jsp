@@ -162,8 +162,8 @@
 		
 		<h:panelGrid id="panelValidMsgSuccess">
 			<h:outputText value="#{mayorizacionController.strMsgSuccess}" styleClass="msgInfo"/>
-			<h:outputText value="#{mayorizacionController.strMsgFailed}" styleClass="msgError"/>
-			<h:outputText value="#{mayorizacionController.strMsgError}" styleClass="msgError"/>
+			<h:outputText value="#{mayorizacionController.strMsgFailed}" style="font-weight:bold;color:red;font-size=25px;"/>
+			<h:outputText value="#{mayorizacionController.strMsgError}" style="font-weight:bold;color:red;font-size=25px;"/>
 		</h:panelGrid>
 		
 		<rich:panel id="contPanelInferiorProcMay" style="border:0px;">
@@ -214,12 +214,12 @@
 				</rich:panel>
 		</rich:panel>
 		<h:panelGrid id="panelValidMsgError">
-			<h:outputText value="#{mayorizacionController.strErrorValidateMsg}" styleClass="msgError"/>
+			<h:outputText value="#{mayorizacionController.strErrorValidateMsg}" style="font-weight:bold;color:red;font-size=25px;"/>
 			<rich:dataList id="dlValidAccounts" var="item" value="#{mayorizacionController.lstResultMsgValidation}" 
 				rows="#{mayorizacionController.intValidResultAccounts}" type="disc"
 				title="Cuentas no válidas"
 				rendered="#{not empty mayorizacionController.lstResultMsgValidation}">
-                <h:outputText value="#{item}" styleClass="msgError"/>
+                <h:outputText value="#{item}" style="font-weight:bold;color:red;font-size=25px;"/>
         	</rich:dataList>
 		</h:panelGrid>
 		
