@@ -22,7 +22,6 @@
 				<td width="65px" align="left">
 					<b><h:outputText value="Sucursal:"/></b>
 				</td>
-				<td width="150px" align="left">
 					<h:selectOneMenu id="cboSucursalC" style="width: 140px;"
 						value="#{asociativoController.intIdSucursal}"
 						disabled="#{asociativoController.blnDisabledSucursal}">
@@ -48,6 +47,7 @@
 			<table>
 				<tr>
 					<td align="center">
+						<!-- Autor: jchavez / Tarea: modificación de cabecera / Fecha: 20.09.2014 -->
 						<rich:extendedDataTable id="edtConvenios" enableContextMenu="false" sortMode="single" 
 										var="itemGrilla" value="#{asociativoController.listaConvenios}" 
 						                rendered="#{not empty asociativoController.listaConvenios}" 
@@ -79,7 +79,7 @@
 										<h:outputText value="Documento Físico" />
 									</rich:column>
 									<rich:column width="80px" rowspan="2" style="text-align: center">
-										<h:outputText value="Por Vencer (30 días)" />
+										<h:outputText value="Por Vencer (90 días)" />
 									</rich:column>
 									<rich:column width="50px" breakBefore="true" style="text-align: center">
 										<h:outputText value="Hab." />

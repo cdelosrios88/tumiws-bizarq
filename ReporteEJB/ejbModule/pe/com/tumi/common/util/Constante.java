@@ -338,4 +338,10 @@ public class Constante {
 	public static final String PARAM_STR_VALUE_B = "B";
 	public static final String PARAM_T_TIPOCATEGORIADERIESGO = "169";
 	//Fin agregado por cdelosrios, 20/04/2014
+	
+	/* Inicio: REQ14-007 Bizarq - 15/12/2014 */
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_DEPOSITOBANCO = 302;
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_INGRESOCAJA = 324;
+	/* Fin: REQ14-007 Bizarq - 15/12/2014 */
+	
 }

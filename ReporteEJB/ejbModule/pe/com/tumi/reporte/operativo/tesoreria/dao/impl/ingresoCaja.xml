@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="IngresoCajaDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.IngresoCaja" alias="IngresoCaja"/>
+
+	<resultMap id="resIngresos" class="IngresoCaja" >
+	     <result property="intPersEmpresaPk"  		column="pEMPRESA" />
+	     <result property="strRecibi"    			column="pRECIBIDE" />
+	     <result property="intIdSubSucursal"    	column="pFECHAINGRESO" />
+	     <result property="intPeriodo"    			column="pMONTO" />
+	     <result property="intAnio"    				column="pFECANUL" />
+	     <result property="intMes"    				column="pDETALLE" />
+	</resultMap>
+	
+	<parameterMap id="parIngreso" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoIndicador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<procedure id="getListIngresosByTipo" parameterMap="parIngreso" resultMap="resCantProyectadas">
+		{ call PKG_TESORERIA_INGRESOS.getIngresosByTipo(?,?,?,?,?,?,?)}  
+  	</procedure>
+</sqlMap>  	
