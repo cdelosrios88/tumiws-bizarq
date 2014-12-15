@@ -146,6 +146,22 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<!-- Fin agregado, cdelosrios, 23/03/2014 -->
+		<!-- Inicio agregado, Cbarojas, 27/10/2014 -->
+	<navigation-rule>
+		<from-view-id>/pages/persona/personanatural.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>persona.personanatural</from-outcome>
+			<to-view-id>/pages/persona/personanatural.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<managed-bean>
+		<managed-bean-name>pernaturalController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.personanatural.controller.PernaturalController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin agregado, Cbarojas, 27/10/2014-->
+	
+	
 	
 	<!-- Inicio agregado, cdelosrios, 14/04/2014 -->
 	<navigation-rule>
@@ -163,6 +179,8 @@
 	</managed-bean>
 	<!-- Fin agregado, cdelosrios, 14/04/2014 -->
 	
+	
+	
 	<!-- Inicio agregado, cdelosrios, 23/05/2014 -->
 	<managed-bean>
 		<managed-bean-name>fenacrepController</managed-bean-name>
@@ -176,4 +194,29 @@
     	<converter-id>ConvertidorMontos</converter-id>
     	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
 	</converter>
+	
+	
+	<navigation-rule>
+		<from-view-id>/pages/colaborador/calculadora.jsf</from-view-id>
+		<navigation-case>
+<!-- 			<from-outcome>colaborador.calculadora</from-outcome> -->
+			<to-view-id>/pages/colaborador/calculadora.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		<managed-bean>
+		<managed-bean-name>calculadoraController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.calculadora.controller.Calculadora</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<navigation-rule>
+		<from-view-id>/pages/tesoreria/ingresos/ingresos.jsf</from-view-id>
+		<navigation-case>
+			<from-outcome>tesoreria.ingresos.ingresos</from-outcome>
+			<to-view-id>/pages/tesoreria/ingresos/ingresos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+	
 </faces-config>
