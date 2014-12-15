@@ -218,5 +218,18 @@
 		</navigation-case>
 	</navigation-rule>	
 	
+	<managed-bean>
+		<managed-bean-name>ingresosController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.tesoreria.ingresos.controller.IngresosController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	
+	<managed-bean>
+		<managed-bean-name>reporteFondosFijosController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.empresa.controller.ReporteFondosFijosController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	
 </faces-config>
