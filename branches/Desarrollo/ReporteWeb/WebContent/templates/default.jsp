@@ -22,11 +22,13 @@
 	</script>
 	
 	<script language="JavaScript" src="${pageContext.request.contextPath}/js/main.js"  type="text/javascript"></script>
+	
 </head>
 
-<body id="mainBody" onmousemove="moverMouse();" oncontextmenu="return false">
+<body id="mainBody" onload="iniciar();" onmousemove="moverMouse();" oncontextmenu="return false">
 <f:view>
 	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+
 	<tr><td>
 		<table border="0" cellpadding="0" cellspacing="0" width="1000px" style="margin:0 auto">
 		<%--
@@ -41,6 +43,12 @@
 			</td>
 			--%>
 			<td style="width:100%;">
+
+
+
+
+
+
 				<div id="pageTitle">
 					<tiles:getAsString name="pageTitle" ignore="true" />
 						<a4j:status id="staEstadoGeneral">
@@ -81,7 +89,7 @@
          </rich:panel>
          <rich:spacer height="4px"/>
     </h:form>
-</rich:modalPanel>	
+</rich:modalPanel>		
 </f:view>
 </body>
 </html>
