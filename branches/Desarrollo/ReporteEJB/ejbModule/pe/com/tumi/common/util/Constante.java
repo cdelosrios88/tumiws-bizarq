@@ -343,5 +343,9 @@ public class Constante {
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_DEPOSITOBANCO = 302;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_INGRESOCAJA = 324;
 	/* Fin: REQ14-007 Bizarq - 15/12/2014 */
+	/* Inicio: REQ14-010 Bizarq - 15/12/2014 */
+	public static final Integer PARAM_T_FONDOSFIJOS = 204;
+	public static final String PARAM_STR_AGRUP_B = "R";
+	/* Fin: REQ14-007 Bizarq - 15/12/2014 */
 	
 }
