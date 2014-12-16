@@ -225,11 +225,12 @@
 	</managed-bean>
 	
 	
+	<!-- Inicio REQ14-010 bizarq 15-12-2014 -->
 	
 	<managed-bean>
 		<managed-bean-name>reporteFondosFijosController</managed-bean-name>
-		<managed-bean-class>pe.com.tumi.empresa.controller.ReporteFondosFijosController</managed-bean-class>
+		<managed-bean-class>pe.com.tumi.fondosfijos.controller.ReporteFondosFijosController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	
+	<!-- Fin REQ14-010 bizarq 15-12-2014 -->
 </faces-config>
