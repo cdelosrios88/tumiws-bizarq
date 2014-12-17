@@ -346,6 +346,7 @@ public class Constante {
 	/* Inicio: REQ14-010 Bizarq - 15/12/2014 */
 	public static final Integer PARAM_T_FONDOSFIJOS = 204;
 	public static final String PARAM_STR_AGRUP_B = "R";
+	public static final int INT_INI_YEAR = 2014;
 	/* Fin: REQ14-007 Bizarq - 15/12/2014 */
 	
 }
