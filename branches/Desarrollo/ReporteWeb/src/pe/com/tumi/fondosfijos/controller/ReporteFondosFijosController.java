@@ -1,6 +1,11 @@
 package pe.com.tumi.fondosfijos.controller;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
@@ -11,6 +16,8 @@ import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
+import pe.com.tumi.reporte.operativo.tesoreria.facade.MovEgresoFacadeLocal;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 
 public class ReporteFondosFijosController {
@@ -21,11 +28,66 @@ public class ReporteFondosFijosController {
 	private List listaEgreso;
 	private List<Sucursal> listJuridicaSucursal;
 	private List<Tabla> lstTipoFondoFijo;
-	private Integer SESION_IDEMPRESA;
+	private List<SelectItem> listYears;
+	private List<MovEgreso> lstFondoFijo;
+	private int intIdSucursal;
+	private int intYear;
+	private int intIdTipoFondoFijo;
+	private String strIniciar;
 	
 	
-	
-	
+	public String getStrIniciar() {
+		lstFondoFijo = null;
+		intIdSucursal  =0;
+		intYear = 0;
+		intIdTipoFondoFijo = 0;
+		return strIniciar;
+	}
+
+	public void setStrIniciar(String strIniciar) {
+		this.strIniciar = strIniciar;
+	}
+
+	public List<MovEgreso> getLstFondoFijo() {
+		return lstFondoFijo;
+	}
+
+	public void setLstFondoFijo(List<MovEgreso> lstFondoFijo) {
+		this.lstFondoFijo = lstFondoFijo;
+	}
+
+	public int getIntIdSucursal() {
+		return intIdSucursal;
+	}
+
+	public void setIntIdSucursal(int intIdSucursal) {
+		this.intIdSucursal = intIdSucursal;
+	}
+
+	public int getIntYear() {
+		return intYear;
+	}
+
+	public void setIntYear(int intYear) {
+		this.intYear = intYear;
+	}
+
+	public int getIntIdTipoFondoFijo() {
+		return intIdTipoFondoFijo;
+	}
+
+	public void setIntIdTipoFondoFijo(int intIdTipoFondoFijo) {
+		this.intIdTipoFondoFijo = intIdTipoFondoFijo;
+	}
+
+	public List<SelectItem> getListYears() {
+		return listYears;
+	}
+
+	public void setListYears(List<SelectItem> listYears) {
+		this.listYears = listYears;
+	}
+
 	public List<Sucursal> getListJuridicaSucursal() {
 		return listJuridicaSucursal;
 	}
@@ -70,10 +132,44 @@ public class ReporteFondosFijosController {
 			listJuridicaSucursal = facade.getListaSucursalPorPkEmpresa(2);
 			TablaFacadeRemote   tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
 			lstTipoFondoFijo = tablaFacade.getListaTablaPorAgrupamientoA(Constante.PARAM_T_FONDOSFIJOS, Constante.PARAM_STR_AGRUP_B);
+			listYears = getListAnios(Constante.INT_INI_YEAR);
 		} catch (EJBFactoryException e) {
 			e.printStackTrace();
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
 	}
+	public List<SelectItem> getListAnios(int intIniAnio) {
+		List<SelectItem> listYears = new ArrayList<SelectItem>(); 
+		try {
+			int year=intIniAnio;
+			int cont=0;
+
+			for(int j=year; j<=Calendar.getInstance().get(Calendar.YEAR); j++){
+				cont++;
+			}			
+			for(int i=0; i<cont; i++){
+				listYears.add(i, new SelectItem(year));
+				year--;
+			}	
+		} catch (Exception e) {
+			log.error("Error en getListYears ---> "+e);
+		}
+		return listYears;
+	}
+	public void obtenerFondoFijo (ActionEvent event){
+		MovEgresoFacadeLocal objFacade;
+		try {
+			objFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);
+			lstFondoFijo = objFacade.getListFondoFijo(intIdSucursal, intYear, intIdTipoFondoFijo);
+		} catch (EJBFactoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
