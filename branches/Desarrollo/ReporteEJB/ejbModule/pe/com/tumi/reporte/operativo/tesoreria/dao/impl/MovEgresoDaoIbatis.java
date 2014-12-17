@@ -10,10 +10,11 @@ import pe.com.tumi.reporte.operativo.credito.asociativo.domain.Asociativo;
 import pe.com.tumi.reporte.operativo.tesoreria.dao.IngresoCajaDao;
 import pe.com.tumi.reporte.operativo.tesoreria.dao.MovEgresoDao;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.IngresoCaja;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
 
 public class MovEgresoDaoIbatis extends TumiDaoIbatis implements MovEgresoDao {
-	public List<SelectItem> getListFondoFijo(Object o) throws DAOException {
-		List<SelectItem> lista = null;
+	public List<MovEgreso> getListFondoFijo(Object o) throws DAOException {
+		List<MovEgreso> lista = null;
 		try{
 			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getCadenaCajaChica", o);
 		}catch(Exception e) {
