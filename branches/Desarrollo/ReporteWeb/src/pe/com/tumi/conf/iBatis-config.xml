@@ -21,4 +21,9 @@
 	<!-- Inicio agregado por cdelosrios, 27/05/2014 -->
 	<sqlMap resource="pe/com/tumi/reporte/operativo/cobranza/centralriesgo/dao/impl/fenacrep.xml"/>
 	<!-- Fin agregado por cdelosrios, 27/05/2014 -->
+		<sqlMap resource="pe/com/tumi/reporte/persona/natural/dao/impl/personanatural.xml"/>
+	<!-- Fin agregado por  CB rojas, 27/05/2014 -->
+	<!-- Inicio REQ14-010 bizarq 16-12-2014 -->
+	<sqlMap resource="pe/com/tumi/reporte/operativo/tesoreria/dao/impl/movEgreso.xml"/>
+	<!-- Fin REQ14-010 bizarq 16-12-2014 -->
 </sqlMapConfig>
