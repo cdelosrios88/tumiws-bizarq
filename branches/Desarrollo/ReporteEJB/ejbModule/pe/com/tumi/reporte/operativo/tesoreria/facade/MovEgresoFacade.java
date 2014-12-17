@@ -13,6 +13,7 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.reporte.operativo.tesoreria.bo.MovEgresoBO;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
 
 /**
  * Session Bean implementation class IngresoCajaFacade
@@ -31,8 +32,8 @@ public class MovEgresoFacade extends TumiFacade implements MovEgresoFacadeRemote
         super();
     }
     
-    public List<SelectItem> getListFondoFijo(int intSucursal,int intAnio, int intTipoFondoFijo) throws BusinessException{
-		List<SelectItem> lista = null;
+    public List<MovEgreso> getListFondoFijo(int intSucursal,int intAnio, int intTipoFondoFijo) throws BusinessException{
+		List<MovEgreso> lista = null;
 		try {
 			lista = boMovEgreso.getListFondoFijo(intSucursal,intAnio,intTipoFondoFijo);
 		} catch(BusinessException e){
