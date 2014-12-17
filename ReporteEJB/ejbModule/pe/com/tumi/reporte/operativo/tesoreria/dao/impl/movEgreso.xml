@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="MovEgresoDaoIbatis">
+<typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso" alias="MovEgreso"/>
+
+	<resultMap id="resMovEgreso" class="MovEgreso" >
+	     <result property="intEmpresaEgreso"  		column="pEMPRESAEGRESO" />
+	     <result property="intItemEgresoGeneral"   	column="pITEMEGRESO" />
+	     <result property="intPeriodoEgreso"    	column="pITEMPERIODO" />
+	     <result property="intItemFondoFijo"		column="pITEMFONDOFIJO" />
+	     <result property="dbMontoApertura"   		column="pMONTOAPERTURA" />
+	</resultMap>
+	
+	<parameterMap id="parMovEgreso" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intAnio" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intTipoFondoFijo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
+	<procedure id="getCadenaCajaChica" parameterMap="parMovEgreso" resultMap="resMovEgreso">
+		{ call PKG_TESORERIA_EGRESOS.getCadenaCajaChica(?,?,?,?,?,?,?)}  
+  	</procedure>
+</sqlMap>  	
