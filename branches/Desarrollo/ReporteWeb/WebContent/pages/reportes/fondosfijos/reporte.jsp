@@ -67,10 +67,12 @@
 				<rich:column style="width: 110px">
 					<h:selectOneMenu id="cboIdFondoFijoReporte" style="width: 150px;"
 					value="#{reporteFondosFijosController.intIdFondoFijo}">
-						<f:selectItem itemLabel="Seleccionar.." itemValue="-1" />
+						<f:selectItem itemLabel="Seleccionar.." itemValue="0" />
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.lstFondoFijo}"
 							itemValue="#{sel.intRow}" itemLabel="#{sel.strDescripcion}" />
+							<a4j:support event="onchange" actionListener="#{reporteFondosFijosController.seleccionarFondoFijo}"
+							ajaxSingle="true" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
