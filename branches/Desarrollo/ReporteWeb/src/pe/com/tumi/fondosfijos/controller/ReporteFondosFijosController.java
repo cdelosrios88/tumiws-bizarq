@@ -290,4 +290,40 @@ public class ReporteFondosFijosController {
 			mensajeOperacion = mensaje;
 		}
 	}
+	
+	public void generarReporte (){
+		HashMap<String,Object> parametro = new HashMap<String,Object>();
+		if(intIdFondoFijo < 0){
+			mostrarMensaje(Boolean.FALSE, "Por favor seleccionar fondo fijo.");
+		}else {
+			mostrarMensaje(Boolean.TRUE, "");
+			System.out.println(intIdFondoFijo);
+			MovEgreso objMovEgreso = new MovEgreso();
+			objMovEgreso = lstFondoFijo.get(intIdFondoFijo);
+			MovEgreso objMovEgresoHead = new MovEgreso();
+			MovEgresoFacadeLocal objFacade;
+			try {
+				objFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);
+				objMovEgresoHead = objFacade.getFondoFijoHead(objMovEgreso);
+				if(objMovEgresoHead != null){
+					parametro.put("P_SUCURSAL", objMovEgresoHead.getStrSucursal());
+					parametro.put("P_NROFONDOFIJO", objMovEgresoHead.getStrNroMovimiento() + " - "+objMovEgresoHead.getStrDescEstado());
+					parametro.put("P_MONTOASIGNADO", objMovEgresoHead.getBdMontoAsignado());
+					parametro.put("P_MONTOOTORGADO", objMovEgresoHead.getBdMontoOtorgado());
+					parametro.put("P_MONTOSALDO", objMovEgresoHead.getBdMontoSaldo());
+					parametro.put("P_FECHACIERRE", objMovEgresoHead.getStrFechaCierre());
+				}
+				listaEgreso = objFacade.getEgresos(objMovEgreso);
+				String strNombreReporte = "movimientoCaja";
+				UtilManagerReport.generateReport(strNombreReporte, parametro, 
+						new ArrayList<Object>(listaEgreso), Constante.PARAM_T_TIPOREPORTE_PDF);
+			} catch (EJBFactoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
