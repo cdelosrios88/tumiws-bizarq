@@ -1,10 +1,21 @@
 package pe.com.tumi.reporte.operativo.tesoreria.domain;
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-009       			15/12/2014     Christian De los Ríos        Creaciòn de componente         
+*/
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
+/**
+ * Clase Bean que gestiona la entidad IngresoCaja.
+ * 
+ * @author Bizarq
+ */
 public class IngresoCaja extends TumiDomain{
 	private Integer intParaTipoDocGeneral;
 	private Integer intIdSucursal;

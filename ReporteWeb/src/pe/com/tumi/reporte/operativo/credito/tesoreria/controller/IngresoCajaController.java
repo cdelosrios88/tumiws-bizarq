@@ -1,4 +1,10 @@
 package pe.com.tumi.reporte.operativo.credito.tesoreria.controller;
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-009       			15/12/2014     Christian De los Ríos        Creaciòn de componente         
+*/
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,6 +37,11 @@ import pe.com.tumi.reporte.operativo.tesoreria.facade.IngresoCajaFacadeLocal;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 
+/**
+ * Clase Controller para el formulario de Ingreso Caja.
+ * 
+ * @author Bizarq
+ */
 public class IngresoCajaController {
 	protected 	static Logger 	log;
 	//Inicio de Sesión
@@ -38,7 +49,6 @@ public class IngresoCajaController {
 	private Integer SESION_IDUSUARIO;
 	private Integer SESION_IDSUCURSAL;
 	private Integer SESION_IDSUBSUCURSAL;
-	
 	private	Integer	PERSONA_USUARIO;
 	private Usuario usuario;
 	private boolean poseePermiso;
@@ -53,8 +63,7 @@ public class IngresoCajaController {
 	
 	private boolean mostrarMensajeExito;
 	private boolean mostrarMensajeError;
-	private String 		mensajeOperacion;
-	
+	private String 	mensajeOperacion;
 	private Integer intTipoIndFecha;
 	private boolean mostrarRanFecha;
 	private boolean mostrarPeriodoMensual;
@@ -68,6 +77,10 @@ public class IngresoCajaController {
 	TablaFacadeRemote tablaFacade;
 	PersonaFacadeRemote personaFacade;
 	
+	/**
+	 * Constructor de la clase.
+	 * 
+	 */
 	public IngresoCajaController(){
 		log = Logger.getLogger(this.getClass());
 		//INICIO DE SESION
@@ -85,13 +98,20 @@ public class IngresoCajaController {
 		inicio();
 	}
 	
+	/**
+	 * Metodo que inicializa el formulario.
+	 * 
+	 */
 	public void inicio() {
 		//LLENANDO COMBOS DEL FORMULARIO
-		
 		listJuridicaSubsucursal = new ArrayList<Subsucursal>();
 		getListSucursales();
 	}
 	
+	/**
+	 * Metodo utilizado para buscar los ingresos con los filtros ingresados.
+	 * 
+	 */
 	public void buscarIngresos() {
 		bdTotIngresoCaja = BigDecimal.ZERO;
 		bdTotDepositoBanco = BigDecimal.ZERO;
@@ -126,6 +146,12 @@ public class IngresoCajaController {
 		}
 	}
 	
+	/**
+	 * Metodo para visualizar los mensajes en el formulario.
+	 * 
+	 * @param exito, Indicador booleano.
+	 * @param mensaje, Cadena a visualizar en el mensaje o alerta.
+	 */
 	public void mostrarMensaje(boolean exito, String mensaje){
 		if(exito){
 			mostrarMensajeExito = Boolean.TRUE;
@@ -138,6 +164,10 @@ public class IngresoCajaController {
 		}
 	}
 	
+	/**
+	 * Metodo para visualizar las fechas del formulario.
+	 * 
+	 */
 	public void showDatesByIndicator(){
 		if(intTipoIndFecha==1){
 			mostrarRanFecha = Boolean.FALSE;
@@ -158,6 +188,10 @@ public class IngresoCajaController {
 		}
 	}
 	
+	/**
+	 * Metodo para limpiar los datos del formulario de consulta.
+	 * 
+	 */
 	public String getLimpiarIngreso(){
 		cargarUsuario();
 		poseePermiso = PermisoUtil.poseePermiso(Constante.PARAM_TRANSACCION_REPORTE_INGRESOS);
@@ -168,10 +202,14 @@ public class IngresoCajaController {
 		}else{
 			log.error("--Usuario obtenido es NULL o no posee permiso.");
 		}
-		
 		return "";
 	}
 	
+	/**
+	 * Metodo para cargar los valores iniciales del formulario
+	 * al iniciar por primera vez.
+	 * 
+	 */
 	public void cargarValoresIniciales(){
 		try{
 			tablaFacade =  (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
@@ -188,17 +226,24 @@ public class IngresoCajaController {
 			intTipoIndFecha = null;
 			getListSucursales();
 			listYears = CommonUtils.getListAnios(Constante.INT_INI_YEAR);
-			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
 	
+	/**
+	 * Metodo para cargar los usuarios del sistema.
+	 * 
+	 */
 	private void cargarUsuario(){
 		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");		
 		PERSONA_USUARIO = usuario.getIntPersPersonaPk();
 	}
 	
+	/**
+	 * Metodo que invoca la funcionalidad o llamada al reporte jasper del sistema.
+	 * 
+	 */
 	public void printReport(){
 		String strNombreReporte = "";
 		HashMap<String,Object> parametro = new HashMap<String,Object>();
@@ -206,10 +251,8 @@ public class IngresoCajaController {
 		EmpresaFacadeRemote empresaFacade = null;
 		Tabla tablaTipoDocGeneral = null;
 		String strDocGeneralTipoIngreso = "";
-		
 		Date dtFecIni = null;
 		Date dtFecFin = null;
-		
 		try {
 			empresaFacade = (EmpresaFacadeRemote)EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			tablaTipoDocGeneral = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_DOCUMENTOGENERAL), Constante.PARAM_T_DOCUMENTOGENERAL_INGRESOCAJA);
@@ -217,10 +260,8 @@ public class IngresoCajaController {
 				strDocGeneralTipoIngreso = tablaTipoDocGeneral.getStrDescripcion();
 			}
 			parametro.put("P_TIPOINGRESOCAJA", strDocGeneralTipoIngreso);
-			
 			sucursal = empresaFacade.getSucursalPorId(ingresoCajaFiltro.getIntIdSucursal());
 			parametro.put("P_SUCURSAL", (sucursal!=null?sucursal.getJuridica().getStrRazonSocial():""));
-			
 			tablaTipoDocGeneral = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_DOCUMENTOGENERAL), Constante.PARAM_T_DOCUMENTOGENERAL_DEPOSITOBANCO);
 			if(tablaTipoDocGeneral!=null){
 				strDocGeneralTipoIngreso = tablaTipoDocGeneral.getStrDescripcion();
@@ -250,6 +291,10 @@ public class IngresoCajaController {
 		}
 	}
 	
+	/**
+	 * Metodo que recupera la lista de sucursales del sistema (para la empresa).
+	 * 
+	 */
 	public void getListSucursales() {
 		log.info("-------------------------------------Debugging AsociativoController.getListSucursales-------------------------------------");
 		try {
@@ -280,8 +325,7 @@ public class IngresoCajaController {
 		return sesion.getAttribute(beanName);
 	}
 	
-	public String getInicioPage() {		
-		//limpiarFormulario();
+	public String getInicioPage() {	
 		return "";
 	}
 
