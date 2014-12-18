@@ -10,5 +10,6 @@ import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
 
 public interface MovEgresoFacadeLocal {
 	public List<MovEgreso> getListFondoFijo(int intSucursal,int intAnio, int intTipoFondoFijo) throws BusinessException;
+	public MovEgreso getListEgresoById(MovEgreso o) throws BusinessException;
 	public List<EgresoFondoFijo> getEgresos (MovEgreso objMovEgreso) throws BusinessException;
 }

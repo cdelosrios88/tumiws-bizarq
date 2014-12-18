@@ -45,6 +45,18 @@ public class MovEgresoFacade extends TumiFacade implements MovEgresoFacadeRemote
 		return lista;
 	}
     
+    public MovEgreso getListEgresoById(MovEgreso o) throws BusinessException{
+		MovEgreso domain = null;
+		try {
+			domain = boMovEgreso.getListEgresoById(o);
+		} catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return domain;
+	}
+    
     public List<EgresoFondoFijo> getEgresos (MovEgreso objMovEgreso) throws BusinessException {
     	List<EgresoFondoFijo> lista  = null;
     	try {
