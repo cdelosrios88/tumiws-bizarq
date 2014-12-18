@@ -1,16 +1,21 @@
 package pe.com.tumi.reporte.operativo.credito.tesoreria.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.MyUtil;
 import pe.com.tumi.common.util.PermisoUtil;
 import pe.com.tumi.common.util.UtilManagerReport;
 import pe.com.tumi.empresa.domain.Subsucursal;
@@ -20,7 +25,7 @@ import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
-import pe.com.tumi.reporte.operativo.credito.asociativo.facade.ServicioFacadeLocal;
+import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.IngresoCaja;
 import pe.com.tumi.reporte.operativo.tesoreria.facade.IngresoCajaFacadeLocal;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
@@ -40,15 +45,28 @@ public class IngresoCajaController {
 	
 	private List<Sucursal> listJuridicaSucursal;
 	private List<Subsucursal> listJuridicaSubsucursal;
-	private List<Tabla> listaTipoCreditoEmpresa;
+	private List<SelectItem> listYears;
 	private IngresoCaja ingresoCajaFiltro;
+	private BigDecimal bdTotIngresoCaja;
+	private BigDecimal bdTotDepositoBanco;
+	private BigDecimal bdTotDifMontoTotal;
+	
+	private boolean mostrarMensajeExito;
+	private boolean mostrarMensajeError;
+	private String 		mensajeOperacion;
+	
+	private Integer intTipoIndFecha;
+	private boolean mostrarRanFecha;
+	private boolean mostrarPeriodoMensual;
 	
 	//CONTROLLER
 	private Integer intErrorFiltros;
 	private List<IngresoCaja> listaIngresosCaja;
+	private List<IngresoCaja> listaDepositosCaja;
 	
 	IngresoCajaFacadeLocal ingresoCajaFacade;
 	TablaFacadeRemote tablaFacade;
+	PersonaFacadeRemote personaFacade;
 	
 	public IngresoCajaController(){
 		log = Logger.getLogger(this.getClass());
@@ -75,16 +93,74 @@ public class IngresoCajaController {
 	}
 	
 	public void buscarIngresos() {
+		bdTotIngresoCaja = BigDecimal.ZERO;
+		bdTotDepositoBanco = BigDecimal.ZERO;
 		try {
+			if(ingresoCajaFiltro!=null){
+				if(ingresoCajaFiltro.getIntIdSucursal()!=null && ingresoCajaFiltro.getIntIdSucursal()==0){
+					mostrarMensaje(Boolean.FALSE, "Por favor elija una Sucursal.");
+				}else {
+					mostrarMensaje(Boolean.TRUE, "");
+				}
+			}
+			
+			ingresoCajaFiltro.setIntParaTipoDocGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_INGRESOCAJA);
 			listaIngresosCaja = ingresoCajaFacade.getListaIngresosByTipoIngreso(ingresoCajaFiltro);
+			ingresoCajaFiltro.setIntParaTipoDocGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_DEPOSITOBANCO);
+			listaDepositosCaja = ingresoCajaFacade.getListaIngresosByTipoIngreso(ingresoCajaFiltro);
+			
+			if(listaIngresosCaja!=null && !listaIngresosCaja.isEmpty()){
+				for(IngresoCaja ingresoCaja : listaIngresosCaja){
+					bdTotIngresoCaja = bdTotIngresoCaja.add(ingresoCaja.getBdMontoTotal());
+				}
+			}
+			if(listaDepositosCaja!=null && !listaDepositosCaja.isEmpty()){
+				for(IngresoCaja deposito : listaDepositosCaja){
+					bdTotDepositoBanco = bdTotDepositoBanco.add(deposito.getBdMontoTotal());
+				}
+			}
+			bdTotDifMontoTotal = bdTotIngresoCaja.subtract(bdTotDepositoBanco);
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 	}
 	
-	public String getLimpiarSaldoServicio(){
+	public void mostrarMensaje(boolean exito, String mensaje){
+		if(exito){
+			mostrarMensajeExito = Boolean.TRUE;
+			mostrarMensajeError = Boolean.FALSE;
+			mensajeOperacion = mensaje;
+		}else{
+			mostrarMensajeExito = Boolean.FALSE;
+			mostrarMensajeError = Boolean.TRUE;
+			mensajeOperacion = mensaje;
+		}
+	}
+	
+	public void showDatesByIndicator(){
+		if(intTipoIndFecha==1){
+			mostrarRanFecha = Boolean.FALSE;
+			mostrarPeriodoMensual = Boolean.TRUE;
+			ingresoCajaFiltro.setDtFecIni(null);
+			ingresoCajaFiltro.setDtFecFin(null);
+			ingresoCajaFiltro.setIntMesIngreso(null);
+			ingresoCajaFiltro.setIntAnioIngreso(null);
+		}
+		
+		if(intTipoIndFecha==2){
+			mostrarPeriodoMensual = Boolean.FALSE;
+			mostrarRanFecha = Boolean.TRUE;
+			ingresoCajaFiltro.setDtFecIni(null);
+			ingresoCajaFiltro.setDtFecFin(null);
+			ingresoCajaFiltro.setIntMesIngreso(null);
+			ingresoCajaFiltro.setIntAnioIngreso(null);
+		}
+	}
+	
+	public String getLimpiarIngreso(){
 		cargarUsuario();
-		poseePermiso = PermisoUtil.poseePermiso(Constante.PARAM_TRANSACCION_REPORTE_SALDOSERVICIOS);
+		poseePermiso = PermisoUtil.poseePermiso(Constante.PARAM_TRANSACCION_REPORTE_INGRESOS);
 		log.info("POSEE PERMISO" + poseePermiso);
 		//poseePermiso = Boolean.TRUE;
 		if(usuario!=null && poseePermiso){
@@ -100,8 +176,18 @@ public class IngresoCajaController {
 		try{
 			tablaFacade =  (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 			ingresoCajaFacade =(IngresoCajaFacadeLocal)EJBFactory.getLocal(IngresoCajaFacadeLocal.class);
+			personaFacade = (PersonaFacadeRemote) EJBFactory.getRemote(PersonaFacadeRemote.class);
 			listaIngresosCaja = new ArrayList<IngresoCaja>();
+			listaDepositosCaja = new ArrayList<IngresoCaja>();
+			ingresoCajaFiltro = new IngresoCaja();
+			bdTotIngresoCaja = BigDecimal.ZERO;
+			bdTotDepositoBanco = BigDecimal.ZERO;
+			bdTotDifMontoTotal = BigDecimal.ZERO;
+			mostrarRanFecha = Boolean.TRUE;
+			mostrarPeriodoMensual = Boolean.TRUE;
+			intTipoIndFecha = null;
 			getListSucursales();
+			listYears = CommonUtils.getListAnios();
 			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -120,6 +206,10 @@ public class IngresoCajaController {
 		EmpresaFacadeRemote empresaFacade = null;
 		Tabla tablaTipoDocGeneral = null;
 		String strDocGeneralTipoIngreso = "";
+		
+		Date dtFecIni = null;
+		Date dtFecFin = null;
+		
 		try {
 			empresaFacade = (EmpresaFacadeRemote)EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			tablaTipoDocGeneral = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_DOCUMENTOGENERAL), Constante.PARAM_T_DOCUMENTOGENERAL_INGRESOCAJA);
@@ -135,13 +225,25 @@ public class IngresoCajaController {
 			if(tablaTipoDocGeneral!=null){
 				strDocGeneralTipoIngreso = tablaTipoDocGeneral.getStrDescripcion();
 			}
-			parametro.put("P_TIPOINGRESODEPBANCO", strDocGeneralTipoIngreso);
 			
-			strNombreReporte = "saldoServicio";
+			if(intTipoIndFecha==1){
+				dtFecIni = ingresoCajaFiltro.getDtFecIni();
+				dtFecIni = ingresoCajaFiltro.getDtFecFin();
+			} else if(intTipoIndFecha==2) {
+				dtFecIni = MyUtil.getFirstDayOfMonth(ingresoCajaFiltro.getIntMesIngreso(), ingresoCajaFiltro.getIntAnioIngreso());
+				dtFecFin = MyUtil.getLastDayOfMonth(ingresoCajaFiltro.getIntMesIngreso(), ingresoCajaFiltro.getIntAnioIngreso());
+			}
+			
+			parametro.put("P_TIPOINGRESODEPBANCO", strDocGeneralTipoIngreso);
+			parametro.put("P_FECINI", dtFecIni);
+			parametro.put("P_FECFIN", dtFecFin);
+			parametro.put("P_LIST_DEPOSITOCAJA", listaDepositosCaja);
+			
+			strNombreReporte = "ingresosCaja";
 			UtilManagerReport.generateReport(strNombreReporte, parametro, 
 					new ArrayList<Object>(listaIngresosCaja), Constante.PARAM_T_TIPOREPORTE_PDF);
 		} catch (Exception e) {
-			log.error("Error en imprimirReporteCaptaciones ---> "+e);
+			log.error("Error en imprimirReporteIngresos ---> "+e);
 		}
 	}
 	
@@ -252,19 +354,99 @@ public class IngresoCajaController {
 		this.ingresoCajaFiltro = ingresoCajaFiltro;
 	}
 
-	public List<Tabla> getListaTipoCreditoEmpresa() {
-		return listaTipoCreditoEmpresa;
-	}
-
-	public void setListaTipoCreditoEmpresa(List<Tabla> listaTipoCreditoEmpresa) {
-		this.listaTipoCreditoEmpresa = listaTipoCreditoEmpresa;
-	}
-
 	public boolean isPoseePermiso() {
 		return poseePermiso;
 	}
 
 	public void setPoseePermiso(boolean poseePermiso) {
 		this.poseePermiso = poseePermiso;
+	}
+
+	public List<SelectItem> getListYears() {
+		return listYears;
+	}
+
+	public void setListYears(List<SelectItem> listYears) {
+		this.listYears = listYears;
+	}
+
+	public List<IngresoCaja> getListaDepositosCaja() {
+		return listaDepositosCaja;
+	}
+
+	public void setListaDepositosCaja(List<IngresoCaja> listaDepositosCaja) {
+		this.listaDepositosCaja = listaDepositosCaja;
+	}
+
+	public boolean isMostrarMensajeExito() {
+		return mostrarMensajeExito;
+	}
+
+	public void setMostrarMensajeExito(boolean mostrarMensajeExito) {
+		this.mostrarMensajeExito = mostrarMensajeExito;
+	}
+
+	public boolean isMostrarMensajeError() {
+		return mostrarMensajeError;
+	}
+
+	public void setMostrarMensajeError(boolean mostrarMensajeError) {
+		this.mostrarMensajeError = mostrarMensajeError;
+	}
+
+	public String getMensajeOperacion() {
+		return mensajeOperacion;
+	}
+
+	public void setMensajeOperacion(String mensajeOperacion) {
+		this.mensajeOperacion = mensajeOperacion;
+	}
+
+	public BigDecimal getBdTotIngresoCaja() {
+		return bdTotIngresoCaja;
+	}
+
+	public void setBdTotIngresoCaja(BigDecimal bdTotIngresoCaja) {
+		this.bdTotIngresoCaja = bdTotIngresoCaja;
+	}
+
+	public BigDecimal getBdTotDepositoBanco() {
+		return bdTotDepositoBanco;
+	}
+
+	public void setBdTotDepositoBanco(BigDecimal bdTotDepositoBanco) {
+		this.bdTotDepositoBanco = bdTotDepositoBanco;
+	}
+
+	public BigDecimal getBdTotDifMontoTotal() {
+		return bdTotDifMontoTotal;
+	}
+
+	public void setBdTotDifMontoTotal(BigDecimal bdTotDifMontoTotal) {
+		this.bdTotDifMontoTotal = bdTotDifMontoTotal;
+	}
+
+	public Integer getIntTipoIndFecha() {
+		return intTipoIndFecha;
+	}
+
+	public void setIntTipoIndFecha(Integer intTipoIndFecha) {
+		this.intTipoIndFecha = intTipoIndFecha;
+	}
+
+	public boolean isMostrarRanFecha() {
+		return mostrarRanFecha;
+	}
+
+	public void setMostrarRanFecha(boolean mostrarRanFecha) {
+		this.mostrarRanFecha = mostrarRanFecha;
+	}
+
+	public boolean isMostrarPeriodoMensual() {
+		return mostrarPeriodoMensual;
+	}
+
+	public void setMostrarPeriodoMensual(boolean mostrarPeriodoMensual) {
+		this.mostrarPeriodoMensual = mostrarPeriodoMensual;
 	}
 }
