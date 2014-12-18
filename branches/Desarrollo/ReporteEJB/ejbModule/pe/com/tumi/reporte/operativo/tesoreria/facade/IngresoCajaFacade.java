@@ -1,4 +1,10 @@
 package pe.com.tumi.reporte.operativo.tesoreria.facade;
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-009       			15/12/2014     Christian De los Ríos        Creaciòn de componente         
+*/
 
 import java.util.List;
 
@@ -9,13 +15,17 @@ import javax.ejb.Stateless;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.framework.negocio.exception.BusinessException;
+import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.reporte.operativo.tesoreria.bo.IngresoCajaBO;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.IngresoCaja;
 
+
 /**
- * Session Bean implementation class IngresoCajaFacade
+ * Clase de acceso Facade con implementacion Local y Remote
+ * 
+ * @author Bizarq
  */
 @Stateless
 @Local(IngresoCajaFacadeLocal.class)
@@ -31,6 +41,14 @@ public class IngresoCajaFacade extends TumiFacade implements IngresoCajaFacadeRe
         super();
     }
     
+    /**
+	 * Metodo para retornar la lista de ingresos a caja.
+	 * 
+	 * @param o, Object con el Bean de IngresoCaja.
+	 * @return Lista de componentes IngresoCaja.
+	 * 
+	 * @throws BusinessException
+	 */
     public List<IngresoCaja> getListaIngresosByTipoIngreso(IngresoCaja o) throws BusinessException{
 		List<IngresoCaja> lista = null;
 		try {
@@ -42,5 +60,4 @@ public class IngresoCajaFacade extends TumiFacade implements IngresoCajaFacadeRe
 		}
 		return lista;
 	}
-
 }
