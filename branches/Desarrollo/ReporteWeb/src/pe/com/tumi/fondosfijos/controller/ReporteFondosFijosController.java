@@ -16,6 +16,7 @@ import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.EgresoFondoFijo;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
 import pe.com.tumi.reporte.operativo.tesoreria.facade.MovEgresoFacadeLocal;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
@@ -25,7 +26,7 @@ public class ReporteFondosFijosController {
 	// Variables locales
 	protected static Logger log = Logger.getLogger(ReporteFondosFijosController.class);
 	private int intCboSucursalEmp;
-	private List listaEgreso;
+	private List<EgresoFondoFijo> listaEgreso;
 	private List<Sucursal> listJuridicaSucursal;
 	private List<Tabla> lstTipoFondoFijo;
 	private List<SelectItem> listYears;
@@ -104,11 +105,11 @@ public class ReporteFondosFijosController {
 		this.lstTipoFondoFijo = lstTipoFondoFijo;
 	}
 
-	public List getListaEgreso() {
+	public List<EgresoFondoFijo>  getListaEgreso() {
 		return listaEgreso;
 	}
 
-	public void setListaEgreso(List listaEgreso) {
+	public void setListaEgreso(List<EgresoFondoFijo>  listaEgreso) {
 		this.listaEgreso = listaEgreso;
 	}
 
