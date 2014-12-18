@@ -19,6 +19,7 @@ import pe.com.tumi.reporte.operativo.tesoreria.dao.MovEgresoDao;
 import pe.com.tumi.reporte.operativo.tesoreria.dao.impl.MovEgresoDaoIbatis;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.EgresoFondoFijo;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgresoDetalle;
 
 /**
  * Entidad de negocio (Bussiness Object) que gestiona la informacion
@@ -83,6 +84,22 @@ public class MovEgresoBO {
 			throw new BusinessException(e);
 		}
 		return domain;
+	}
+	
+	public List<MovEgresoDetalle> getListEgresoDetalleById(MovEgreso o) throws BusinessException{
+		List<MovEgresoDetalle> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresaEgreso", o.getIntEmpresaEgreso());
+			mapa.put("intItemEgresoGeneral", o.getIntItemEgresoGeneral());
+			lista = dao.getListEgresoDetalleById(mapa);
+			
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
 	}
 	
 	/**
