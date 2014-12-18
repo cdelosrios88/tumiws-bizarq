@@ -84,26 +84,26 @@ public class SeguridadFilterRemote implements Filter {
 			Session objSessionDB = null;
 			if(objSession != null){
 				LoginFacadeRemote loginFacade;
-				try {
+				//try {
 					//Instanciar el loginFacade para consulta a base de datos
-					loginFacade = (LoginFacadeRemote) EJBFactory.getRemote(LoginFacadeRemote.class);
-					objSessionDB = loginFacade.getSessionPorPk(objSession.getId().getIntSessionPk());
-				} catch (EJBFactoryException e) {
-					e.printStackTrace();
-				} catch (BusinessException e) {
-					e.printStackTrace();
-				}	
-				if(objSessionDB != null && objSessionDB.getIntIdEstado()!= null &&
+					//loginFacade = (LoginFacadeRemote) EJBFactory.getRemote(LoginFacadeRemote.class);
+					//objSessionDB = loginFacade.getSessionPorPk(objSession.getId().getIntSessionPk());
+				//} catch (EJBFactoryException e) {
+					//e.printStackTrace();
+				//} catch (BusinessException e) {
+					///e.printStackTrace();
+				//}	
+				/*if(objSessionDB != null && objSessionDB.getIntIdEstado()!= null &&
 							objSessionDB.getIntIdEstado().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)){
 						session.removeAttribute(USUARIO_LOGIN);
 						session.removeAttribute(OBJETO_SESSION);
 						session.invalidate();
 						PrintWriter out = response.getWriter();
 						out.println("<script>console.log('entro');top.frames['alto'].document.getElementById('hdnIndSesionSalir').value=1;top.frames['alto'].document.getElementById('linkLogin').click();</script>");
-				}else{
+				}else{*/
 					chain.doFilter(request, response);
 					return;
-				}
+				//}
 			}else{
 				chain.doFilter(request, response);
 				return;

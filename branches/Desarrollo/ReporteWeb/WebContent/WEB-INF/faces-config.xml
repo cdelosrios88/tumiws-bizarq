@@ -226,7 +226,13 @@
 	
 	
 	<!-- Inicio REQ14-010 bizarq 15-12-2014 -->
-	
+	<navigation-rule>
+		<from-view-id>/pages/reportes/fondosfijos/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportefondosfijos</from-outcome>
+			<to-view-id>/pages/reportes/fondosfijos/reportefondosfijos.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<managed-bean>
 		<managed-bean-name>reporteFondosFijosController</managed-bean-name>
 		<managed-bean-class>pe.com.tumi.fondosfijos.controller.ReporteFondosFijosController</managed-bean-class>
