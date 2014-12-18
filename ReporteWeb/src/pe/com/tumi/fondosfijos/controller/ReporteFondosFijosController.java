@@ -2,6 +2,7 @@ package pe.com.tumi.fondosfijos.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.UtilManagerReport;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
@@ -41,6 +43,8 @@ public class ReporteFondosFijosController {
 	private boolean mostrarMensajeError;
 	private String 		mensajeOperacion;
 	
+	TablaFacadeRemote tablaFacade;
+	MovEgresoFacadeLocal movEgresoFacade;
 	
 	public boolean isMostrarMensajeExito() {
 		return mostrarMensajeExito;
@@ -171,7 +175,8 @@ public class ReporteFondosFijosController {
 			EmpresaFacadeRemote facade = null;
 			facade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			listJuridicaSucursal = facade.getListaSucursalPorPkEmpresa(2);
-			TablaFacadeRemote   tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
+			tablaFacade =  (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
+			movEgresoFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);;
 			lstTipoFondoFijo = tablaFacade.getListaTablaPorAgrupamientoA(Constante.PARAM_T_FONDOSFIJOS, Constante.PARAM_STR_AGRUP_B);
 			listYears = CommonUtils.getListAnios(Constante.INT_INI_YEAR);
 		} catch (EJBFactoryException e) {
@@ -195,22 +200,59 @@ public class ReporteFondosFijosController {
 		System.out.println(intIdFondoFijo);
 	}
 	public void obtenerFondoFijo (ActionEvent event){
-		MovEgresoFacadeLocal objFacade;
 		try {
-			objFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);
 			if(intYear ==0)
 				intYear = Calendar.getInstance().get(Calendar.YEAR);
+			lstFondoFijo = movEgresoFacade.getListFondoFijo(intIdSucursal, intYear, intIdTipoFondoFijo);
 			intIdFondoFijo  = -1;
-			lstFondoFijo = objFacade.getListFondoFijo(intIdSucursal, intYear, intIdTipoFondoFijo);
+			lstFondoFijo = movEgresoFacade.getListFondoFijo(intIdSucursal, intYear, intIdTipoFondoFijo);
 			System.out.println(lstFondoFijo.size());
-		} catch (EJBFactoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void printFondoFijoDetalle(){
+		String strNombreReporte = "";
+		HashMap<String,Object> parametro = new HashMap<String,Object>();
+		MovEgreso objMovEgreso = null;
+		try {
+			if(lstFondoFijo!=null && !lstFondoFijo.isEmpty()){
+				for(MovEgreso movEgreso: lstFondoFijo){
+					if(movEgreso.getIntRow()==intIdFondoFijo){
+						objMovEgreso =  movEgreso;
+						break;
+					}
+				}
+			}
+			
+			if(objMovEgreso!=null){
+				objMovEgreso = movEgresoFacade.getListEgresoById(objMovEgreso);
+				
+				parametro.put("P_NROEGRESO", objMovEgreso.getStrNroEgreso());
+				parametro.put("P_SUCURSAL", objMovEgreso.getStrSucursal());
+				parametro.put("P_FECHAEGRESO", objMovEgreso.getStrFechaEgreso());
+				parametro.put("P_PAGOEGRESO", objMovEgreso.getStrFormaPago());
+				parametro.put("P_MONEDA", objMovEgreso.getStrMoneda());
+				parametro.put("P_MONTO", objMovEgreso.getBdMonto());
+				parametro.put("P_DESCMONTO", objMovEgreso.getStrDescMonto());
+				parametro.put("P_BANCO", objMovEgreso.getStrBanco());
+				parametro.put("P_NROCHEQUE", objMovEgreso.getStrNroCheque());
+				parametro.put("P_ENTREGUEA", objMovEgreso.getStrPersonaEntrega());
+				parametro.put("P_NROASIENTO", objMovEgreso.getStrNroAsiento());
+				parametro.put("P_CONCEPTO", objMovEgreso.getStrConcepto());
+				parametro.put("P_DNIENTREGUE", objMovEgreso.getStrNroDocEntrega());
+				parametro.put("P_USUARIO", objMovEgreso.getStrNombreUsuario());
+				parametro.put("P_FECHAHORA", objMovEgreso.getStrFechaHora());
+			}
+			
+			strNombreReporte = "egresoDet";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, 
+					new ArrayList<Object>(new ArrayList()), Constante.PARAM_T_TIPOREPORTE_PDF);
+		} catch (Exception e) {
+			log.error("Error en imprimirReporteIngresos ---> "+e);
+		}
 	}
 	
 	public void consultarEgreso (){
