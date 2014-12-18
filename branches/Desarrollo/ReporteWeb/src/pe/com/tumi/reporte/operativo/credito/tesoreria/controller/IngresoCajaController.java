@@ -187,7 +187,7 @@ public class IngresoCajaController {
 			mostrarPeriodoMensual = Boolean.TRUE;
 			intTipoIndFecha = null;
 			getListSucursales();
-			listYears = CommonUtils.getListAnios();
+			listYears = CommonUtils.getListAnios(Constante.INT_INI_YEAR);
 			
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -226,12 +226,15 @@ public class IngresoCajaController {
 				strDocGeneralTipoIngreso = tablaTipoDocGeneral.getStrDescripcion();
 			}
 			
-			if(intTipoIndFecha==1){
+			if(intTipoIndFecha!=null && intTipoIndFecha==1){
 				dtFecIni = ingresoCajaFiltro.getDtFecIni();
 				dtFecIni = ingresoCajaFiltro.getDtFecFin();
-			} else if(intTipoIndFecha==2) {
+			} else if(intTipoIndFecha!=null && intTipoIndFecha==2) {
 				dtFecIni = MyUtil.getFirstDayOfMonth(ingresoCajaFiltro.getIntMesIngreso(), ingresoCajaFiltro.getIntAnioIngreso());
 				dtFecFin = MyUtil.getLastDayOfMonth(ingresoCajaFiltro.getIntMesIngreso(), ingresoCajaFiltro.getIntAnioIngreso());
+			} else {
+				dtFecIni = null;
+				dtFecFin = null;
 			}
 			
 			parametro.put("P_TIPOINGRESODEPBANCO", strDocGeneralTipoIngreso);

@@ -194,7 +194,7 @@
 					rowKeyVar="rowKey"
 					rows="5" 
 					sortMode="single" 
-					width="850px" 
+					width="900px" 
 					height="190px"
 					value="#{ingresoCajaController.listaDepositosCaja}">					
 					
@@ -204,19 +204,19 @@
 						</f:facet>
 						<h:outputText value="#{rowKey + 1}"/>
 					</rich:column>
-					<rich:column> 
+					<rich:column width="80px"> 
 						<f:facet name="header">
 							<h:outputText value=" Nº Ingreso "/>
 						</f:facet>
 						<h:outputText value="#{item.strNroIngreso}"/>
 					</rich:column>
-					<rich:column width="250px"> 
+					<rich:column width="160px"> 
 						<f:facet name="header">
-							<h:outputText value="Recibí De ."/>
+							<h:outputText value="Recibí De"/>
 						</f:facet>
 						<h:outputText value="#{item.strRecibi}"/>
 					</rich:column>
-					<rich:column width="250px">
+					<rich:column width="160px">
 						<f:facet name="header">
 						<h:outputText value="Banco"/>
 						</f:facet>
@@ -228,7 +228,7 @@
 						</f:facet>
 						<h:outputText value="#{item.strNumeroCuenta}"/>
 					</rich:column>
-					<rich:column width="120px">
+					<rich:column width="90px">
 						<f:facet name="header">
 							<h:outputText value="Monto"/>
 						</f:facet>
@@ -236,13 +236,13 @@
 							<f:converter converterId="ConvertidorMontos"/>
 						</h:outputText>
 					</rich:column>
-					<rich:column>
+					<rich:column width="90px">
 						<f:facet name="header">
-							<h:outputText value="Fecha Depósito"/>
+							<h:outputText value="Fec. Dep."/>
 						</f:facet>
 						<h:outputText value="#{item.strFechaIngreso}"/>
 					</rich:column> 
-					<rich:column width="250px">
+					<rich:column width="180px">
 						<f:facet name="header">
 							<h:outputText value="Detalle"/>
 						</f:facet>

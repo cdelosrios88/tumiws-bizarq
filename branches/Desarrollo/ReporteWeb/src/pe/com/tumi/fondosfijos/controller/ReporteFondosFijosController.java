@@ -9,6 +9,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import pe.com.tumi.common.util.CommonUtils;
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
@@ -53,7 +54,7 @@ public class ReporteFondosFijosController {
 		intIdTipoFondoFijo = 0;
 		listaEgreso = null;
 		intIdFondoFijo = 0;
-		return strIniciar;
+		return "";
 	}
 
 	public void setStrIniciar(String strIniciar) {
@@ -144,33 +145,14 @@ public class ReporteFondosFijosController {
 			listJuridicaSucursal = facade.getListaSucursalPorPkEmpresa(2);
 			TablaFacadeRemote   tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
 			lstTipoFondoFijo = tablaFacade.getListaTablaPorAgrupamientoA(Constante.PARAM_T_FONDOSFIJOS, Constante.PARAM_STR_AGRUP_B);
-			listYears = getListAnios(Constante.INT_INI_YEAR);
+			listYears = CommonUtils.getListAnios(Constante.INT_INI_YEAR);
 		} catch (EJBFactoryException e) {
 			e.printStackTrace();
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
 	}
-	public List<SelectItem> getListAnios(int intIniAnio) {
-		List<SelectItem> listYears = new ArrayList<SelectItem>(); 
-		try {
-			int year=intIniAnio;
-			int cont=0;
-
-			for(int j=year; j<=Calendar.getInstance().get(Calendar.YEAR); j++){
-				cont++;
-			}			
-			for(int i=0; i<cont; i++){
-				listYears.add(i, new SelectItem(year));
-				year--;
-			}	
-		} catch (Exception e) {
-			log.error("Error en getListYears ---> "+e);
-		}
-		return listYears;
-	}
 	
-
 	public void seleccionarSucursasl (ActionEvent event){
 		intYear = 0;
 		intIdTipoFondoFijo = 0;
@@ -207,7 +189,6 @@ public class ReporteFondosFijosController {
 		objEgresoFondo.setDblMontoReporte(new Double(10));
 		listaEgreso =  new ArrayList<EgresoFondoFijo>();
 		listaEgreso.add(objEgresoFondo);
-		
 	}
 	
 }
