@@ -179,7 +179,7 @@
     	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
 	</converter>
 	
-	<!-- Inicio: REQ14-007 Bizarq - 15/12/2014 -->
+	<!-- Inicio: REQ14-009 Bizarq - 15/12/2014 -->
 	<navigation-rule>
 		<from-view-id>/pages/tesoreria/ingresos/ingresos.jsf</from-view-id>
 		<navigation-case>
@@ -193,8 +193,6 @@
 		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.tesoreria.controller.IngresoCajaController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<!-- Fin: REQ14-007 Bizarq - 15/12/2014 -->
-	<!-- Inicio REQ14-010 bizarq 15-12-2014 -->
 	<navigation-rule>
 		<from-view-id>/pages/reportes/fondosfijos/*</from-view-id>
 		<navigation-case>
@@ -207,5 +205,5 @@
 		<managed-bean-class>pe.com.tumi.fondosfijos.controller.ReporteFondosFijosController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<!-- Fin REQ14-010 bizarq 15-12-2014 -->
+	<!-- Fin REQ14-009 bizarq 15-12-2014 -->
 </faces-config>
