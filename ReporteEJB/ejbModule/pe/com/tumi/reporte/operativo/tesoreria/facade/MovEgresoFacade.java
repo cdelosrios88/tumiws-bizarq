@@ -13,6 +13,7 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.reporte.operativo.tesoreria.bo.MovEgresoBO;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.EgresoFondoFijo;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
 
 /**
@@ -43,5 +44,17 @@ public class MovEgresoFacade extends TumiFacade implements MovEgresoFacadeRemote
 		}
 		return lista;
 	}
+    
+    public List<EgresoFondoFijo> getEgresos (MovEgreso objMovEgreso) throws BusinessException {
+    	List<EgresoFondoFijo> lista  = null;
+    	try {
+			lista = boMovEgreso.getEgresos(objMovEgreso);
+		} catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+    	return lista;
+    }
 
 }

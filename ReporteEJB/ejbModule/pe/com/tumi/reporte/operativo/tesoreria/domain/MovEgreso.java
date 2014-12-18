@@ -1,6 +1,8 @@
 package pe.com.tumi.reporte.operativo.tesoreria.domain;
 
 
+import java.math.BigDecimal;
+
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
 public class MovEgreso extends TumiDomain{
@@ -9,9 +11,15 @@ public class MovEgreso extends TumiDomain{
 	private Integer intItemEgresoGeneral;
 	private Integer intPeriodoEgreso;
 	private Integer intItemFondoFijo;
-	private Double dbMontoApertura;
+	private BigDecimal bdMontoApertura;
 	private String strDescripcion;
 	
+	public BigDecimal getBdMontoApertura() {
+		return bdMontoApertura;
+	}
+	public void setBdMontoApertura(BigDecimal bdMontoApertura) {
+		this.bdMontoApertura = bdMontoApertura;
+	}
 	public int getIntRow() {
 		return intRow;
 	}
@@ -47,11 +55,5 @@ public class MovEgreso extends TumiDomain{
 	}
 	public void setIntPeriodoEgreso(Integer intPeriodoEgreso) {
 		this.intPeriodoEgreso = intPeriodoEgreso;
-	}
-	public Double getDbMontoApertura() {
-		return dbMontoApertura;
-	}
-	public void setDbMontoApertura(Double dbMontoApertura) {
-		this.dbMontoApertura = dbMontoApertura;
 	}
 }
