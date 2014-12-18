@@ -157,11 +157,27 @@ public class ReporteFondosFijosController {
 		}
 		return listYears;
 	}
+	
+
+	public void seleccionarSucursasl (ActionEvent event){
+		intYear = 0;
+		intIdTipoFondoFijo = 0;
+		lstFondoFijo = null;
+	}
+	
+	public void seleccionarAnio (ActionEvent event){
+		intIdTipoFondoFijo = 0;
+		lstFondoFijo = null;
+	}
+	
 	public void obtenerFondoFijo (ActionEvent event){
 		MovEgresoFacadeLocal objFacade;
 		try {
 			objFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);
+			if(intYear ==0)
+				intYear = Calendar.getInstance().get(Calendar.YEAR);
 			lstFondoFijo = objFacade.getListFondoFijo(intIdSucursal, intYear, intIdTipoFondoFijo);
+			System.out.println(lstFondoFijo.size());
 		} catch (EJBFactoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

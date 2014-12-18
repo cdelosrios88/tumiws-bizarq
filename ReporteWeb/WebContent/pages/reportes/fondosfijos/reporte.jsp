@@ -25,13 +25,16 @@
 				<rich:column>
 					<h:selectOneMenu id="cboSucursal" style="width: 140px;"
 						value="#{reporteFondosFijosController.intIdSucursal}"
-						onchange="document.getElementById('frmPrincipal:cboAnio').selectedIndex = 0;document.getElementById('frmPrincipal:cboTipoFondoFijo').selectedIndex = 0;">
+						>
 						<f:selectItem itemLabel="Seleccione.." itemValue="0" />
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.listJuridicaSucursal}"
 							itemValue="#{sel.id.intIdSucursal}"
 							itemLabel="#{sel.juridica.strRazonSocial}"
 							propertySort="juridica.strRazonSocial" />
+							<a4j:support event="onchange" reRender="cboAnio,cboTipoFondoFijo,cboIdFondoFijo"
+							actionListener="#{reporteFondosFijosController.seleccionarSucursasl}"
+							ajaxSingle="true" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column>
@@ -39,11 +42,13 @@
 				</rich:column>
 				<rich:column>
 					<h:selectOneMenu id="cboAnio" style="width: 70px;"
-						onchange="document.getElementById('frmPrincipal:cboTipoFondoFijo').selectedIndex = 0;"
 						value="#{reporteFondosFijosController.intYear}">
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.listYears}"
-							itemValue="#{sel.value}" itemLabel="#{sel.label}" />
+							itemValue="#{sel.label}" itemLabel="#{sel.label}" />
+							<a4j:support event="onchange" reRender="cboTipoFondoFijo,cboIdFondoFijo"
+							actionListener="#{reporteFondosFijosController.seleccionarAnio}"
+							ajaxSingle="true" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
