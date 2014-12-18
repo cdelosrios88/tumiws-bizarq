@@ -32,7 +32,7 @@
 							itemValue="#{sel.id.intIdSucursal}"
 							itemLabel="#{sel.juridica.strRazonSocial}"
 							propertySort="juridica.strRazonSocial" />
-							<a4j:support event="onchange" reRender="cboAnio,cboTipoFondoFijo,cboIdFondoFijo"
+							<a4j:support event="onchange" reRender="cboAnio,cboTipoFondoFijo,cboIdFondoFijoReporte"
 							actionListener="#{reporteFondosFijosController.seleccionarSucursasl}"
 							ajaxSingle="true" />
 					</h:selectOneMenu>
@@ -46,7 +46,7 @@
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.listYears}"
 							itemValue="#{sel.label}" itemLabel="#{sel.label}" />
-							<a4j:support event="onchange" reRender="cboTipoFondoFijo,cboIdFondoFijo"
+							<a4j:support event="onchange" reRender="cboTipoFondoFijo,cboIdFondoFijoReporte"
 							actionListener="#{reporteFondosFijosController.seleccionarAnio}"
 							ajaxSingle="true" />
 					</h:selectOneMenu>
@@ -59,13 +59,14 @@
 							value="#{reporteFondosFijosController.lstTipoFondoFijo}"
 							itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 							propertySort="intOrden" />
-						<a4j:support event="onchange" reRender="cboIdFondoFijo"
+						<a4j:support event="onchange" reRender="cboIdFondoFijoReporte"
 							actionListener="#{reporteFondosFijosController.obtenerFondoFijo}"
-							ajaxSingle="true" />
+							/>
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
-					<h:selectOneMenu id="cboIdFondoFijo" style="width: 150px;">
+					<h:selectOneMenu id="cboIdFondoFijoReporte" style="width: 150px;"
+					value="#{reporteFondosFijosController.intIdFondoFijo}">
 						<f:selectItem itemLabel="Seleccionar.." itemValue="-1" />
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.lstFondoFijo}"
@@ -81,35 +82,46 @@
 			<h:panelGrid id="pgEgresos" columns="1" border="0"
 				style="text-align:center;">
 				<rich:dataTable id="dtEgresos"
-					value="#{reporteFondosFijosController.listaEgreso}" rows="4"
+					value="#{reporteFondosFijosController.listaEgreso}" rows="5"
 					var="item" rowKeyVar="rowKey" sortMode="single">
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Item" />
 						</f:facet>
+						<h:outputText value="#{rowKey + 1}"></h:outputText>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Nro Movimiento" />
 						</f:facet>
+						<h:outputText value="#{item.strNroMovimiento}"/>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Fecha" />
 						</f:facet>
+						<h:outputText value="#{item.dtFechaEgreso}"/>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Concepto" />
 						</f:facet>
+						<h:outputText value="#{item.strConcepto}"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Monto" />
+						</f:facet>
+						<h:outputText value="#{item.dblMontoReporte}"/>
 					</rich:column>
 				</rich:dataTable>
 			</h:panelGrid>
 			<br />
-			<h:panelGrid columns="3">
+			<h:panelGrid columns="3" style="text-align:center;margin:auto;">
 				<rich:column style="width: 110px">
 					<a4j:commandButton styleClass="btnEstilos" value="Consultar"
-						reRender="" />
+						action="#{reporteFondosFijosController.consultarEgreso}"
+						reRender="pgEgresos" />
 				</rich:column>
 				<rich:column style="width: 110px">
 					<a4j:commandButton styleClass="btnEstilos" value="Reporte"
