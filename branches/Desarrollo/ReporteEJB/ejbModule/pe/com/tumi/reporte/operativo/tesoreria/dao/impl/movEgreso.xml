@@ -17,6 +17,17 @@
 	     <result property="strDescripcion"   		column="pTEXTOCOMBO" />
 	</resultMap>
 	
+	<resultMap id="resMovEgresoHead" class="MovEgreso" >
+		 <result property="strNroMovimiento"  		column="pNROMOVIMIENTO" />
+	     <result property="intCodigoEstado"  		column="pCODIGOESTADO" />
+	     <result property="strDescEstado"   		column="pDESCESTADO" />
+	     <result property="strSucursal"  		  	column="pNOMBRESUCURSAL" />
+	     <result property="bdMontoAsignado"			column="pMONTOASIGNADO" />
+	     <result property="bdMontoSaldo" 	  		column="pMONTOSALDO" />
+	     <result property="bdMontoOtorgado"   		column="pMONTOOTORGADO" />
+	     <result property="strFechaCierre"   		column="pFECHACIERRE" />
+	</resultMap>
+	
 	<resultMap id="resMovEgresoReport" class="MovEgreso" >
 		 <result property="intEmpresaEgreso"  		column="pIntEmpresaEgreso_n" />
 	     <result property="intItemEgresoGeneral"   	column="pInItemEgresoGeneral_n" />
@@ -105,5 +116,9 @@
   	
   	<procedure id="getMovimientosCajaChicaBody" parameterMap="parMovEgresoTabla" resultMap="resEgresoFondoFijo">
 		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaBody(?,?,?,?)}  
+  	</procedure>
+  	
+  	<procedure id="getMovimientosCajaChicaHead" parameterMap="parMovEgresoTabla" resultMap="resMovEgresoHead">
+		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaHead(?,?,?,?)}  
   	</procedure>
 </sqlMap>

@@ -65,4 +65,5 @@ public interface MovEgresoDao extends TumiDao {
 	 * @throws DAOException
 	 */
 	public List<EgresoFondoFijo> getEgresos (Object objMovEgreso) throws DAOException;
+	public MovEgreso getFondoFijoHead (Object objMovEgreso) throws DAOException;
 }

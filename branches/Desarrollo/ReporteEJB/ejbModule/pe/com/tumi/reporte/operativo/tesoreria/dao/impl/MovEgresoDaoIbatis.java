@@ -97,4 +97,13 @@ public class MovEgresoDaoIbatis extends TumiDaoIbatis implements MovEgresoDao {
 		}
 		return lista;
 	}
+	public MovEgreso getFondoFijoHead (Object objMovEgreso) throws DAOException {
+		MovEgreso objMovEgresoHead  = null;
+		try{
+			objMovEgresoHead = (MovEgreso) getSqlMapClientTemplate().queryForObject(getNameSpace() + ".getMovimientosCajaChicaHead", objMovEgreso);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return objMovEgresoHead;
+	}
 }

@@ -24,6 +24,10 @@ public class MovEgreso extends TumiDomain{
 	private Integer intItemFondoFijo;
 	private BigDecimal bdMontoApertura;
 	private String strDescripcion;
+	private Integer intCodigoEstado;
+	private String strDescEstado;
+	private BigDecimal bdMontoAsignado;
+	private BigDecimal bdMontoOtorgado;
 	
 	//Cabecera Reporte Egresos
 	private String strNroMovimiento;
@@ -57,6 +61,30 @@ public class MovEgreso extends TumiDomain{
 	
 	private List<MovEgresoDetalle> lstMovEgresoDetalle;
 	
+	public BigDecimal getBdMontoAsignado() {
+		return bdMontoAsignado;
+	}
+	public void setBdMontoAsignado(BigDecimal bdMontoAsignado) {
+		this.bdMontoAsignado = bdMontoAsignado;
+	}
+	public BigDecimal getBdMontoOtorgado() {
+		return bdMontoOtorgado;
+	}
+	public void setBdMontoOtorgado(BigDecimal bdMontoOtorgado) {
+		this.bdMontoOtorgado = bdMontoOtorgado;
+	}
+	public Integer getIntCodigoEstado() {
+		return intCodigoEstado;
+	}
+	public void setIntCodigoEstado(Integer intCodigoEstado) {
+		this.intCodigoEstado = intCodigoEstado;
+	}
+	public String getStrDescEstado() {
+		return strDescEstado;
+	}
+	public void setStrDescEstado(String strDescEstado) {
+		this.strDescEstado = strDescEstado;
+	}
 	public BigDecimal getBdMontoApertura() {
 		return bdMontoApertura;
 	}
