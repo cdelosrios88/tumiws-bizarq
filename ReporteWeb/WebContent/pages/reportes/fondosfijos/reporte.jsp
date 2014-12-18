@@ -17,15 +17,14 @@
 			<div style="text-align: center; font-size: 16px; font-weight: bold;">Movimientos
 				de Fondos Fijos</div>
 			<br />
-			<h:inputHidden id="strIniPage" value="#{reporteFondosFijosController.strIniciar}" />
+			<h:outputText id="strIniPage" value="#{reporteFondosFijosController.strIniciar}" />
 			<h:panelGrid columns="7">
 				<rich:column style="width: 70px">
 					<h:outputText value="Sucursal:" />
 				</rich:column>
 				<rich:column>
 					<h:selectOneMenu id="cboSucursal" style="width: 140px;"
-						value="#{reporteFondosFijosController.intIdSucursal}"
-						>
+						value="#{reporteFondosFijosController.intIdSucursal}">
 						<f:selectItem itemLabel="Seleccione.." itemValue="0" />
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.listJuridicaSucursal}"
@@ -33,8 +32,7 @@
 							itemLabel="#{sel.juridica.strRazonSocial}"
 							propertySort="juridica.strRazonSocial" />
 							<a4j:support event="onchange" reRender="cboAnio,cboTipoFondoFijo,cboIdFondoFijoReporte"
-							actionListener="#{reporteFondosFijosController.seleccionarSucursasl}"
-							ajaxSingle="true" />
+							actionListener="#{reporteFondosFijosController.seleccionarSucursasl}"/>
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column>
@@ -47,8 +45,7 @@
 							value="#{reporteFondosFijosController.listYears}"
 							itemValue="#{sel.label}" itemLabel="#{sel.label}" />
 							<a4j:support event="onchange" reRender="cboTipoFondoFijo,cboIdFondoFijoReporte"
-							actionListener="#{reporteFondosFijosController.seleccionarAnio}"
-							ajaxSingle="true" />
+							actionListener="#{reporteFondosFijosController.seleccionarAnio}"/>
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
@@ -60,8 +57,7 @@
 							itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 							propertySort="intOrden" />
 						<a4j:support event="onchange" reRender="cboIdFondoFijoReporte"
-							actionListener="#{reporteFondosFijosController.obtenerFondoFijo}"
-							/>
+							actionListener="#{reporteFondosFijosController.obtenerFondoFijo}"/>
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
@@ -71,13 +67,10 @@
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.lstFondoFijo}"
 							itemValue="#{sel.intRow}" itemLabel="#{sel.strDescripcion}" />
-							<a4j:support event="onchange" actionListener="#{reporteFondosFijosController.seleccionarFondoFijo}"
-							ajaxSingle="true" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
-					<a4j:commandButton styleClass="btnEstilos" value="Detalle"
-						reRender="" />
+					<h:commandButton styleClass="btnEstilos" value="Detalle"/>
 				</rich:column>
 			</h:panelGrid>
 			<br />
@@ -127,11 +120,11 @@
 				</rich:column>
 				<rich:column style="width: 110px">
 					<a4j:commandButton styleClass="btnEstilos" value="Reporte"
-						reRender="" />
+						 />
 				</rich:column>
 				<rich:column style="width: 110px">
 					<a4j:commandButton styleClass="btnEstilos" value="Cancelar"
-						reRender="" />
+						 />
 				</rich:column>
 			</h:panelGrid>
 		</h:form>

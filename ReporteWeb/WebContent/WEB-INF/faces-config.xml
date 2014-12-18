@@ -146,22 +146,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<!-- Fin agregado, cdelosrios, 23/03/2014 -->
-		<!-- Inicio agregado, Cbarojas, 27/10/2014 -->
-	<navigation-rule>
-		<from-view-id>/pages/persona/personanatural.jsf</from-view-id>
-		<navigation-case>
-			<from-outcome>persona.personanatural</from-outcome>
-			<to-view-id>/pages/persona/personanatural.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<managed-bean>
-		<managed-bean-name>pernaturalController</managed-bean-name>
-		<managed-bean-class>pe.com.tumi.personanatural.controller.PernaturalController</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<!-- Fin agregado, Cbarojas, 27/10/2014-->
-	
-	
 	
 	<!-- Inicio agregado, cdelosrios, 14/04/2014 -->
 	<navigation-rule>
@@ -203,11 +187,6 @@
 			<to-view-id>/pages/tesoreria/ingresos/ingresos.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<managed-bean>
-		<managed-bean-name>ingresosController</managed-bean-name>
-		<managed-bean-class>pe.com.tumi.reporte.operativo.tesoreria.ingresos.controller.IngresosController</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>ingresoCajaController</managed-bean-name>
