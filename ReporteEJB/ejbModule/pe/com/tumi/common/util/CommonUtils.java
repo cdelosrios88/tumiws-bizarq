@@ -61,4 +61,24 @@ public class CommonUtils {
 		return intPeriodo;
 	}
 	
+	/* Inicio: REQ14-009 Bizarq - 17/12/2014 */
+	public static List<SelectItem> getListAnios(int intIniAnio) {
+		List<SelectItem> listYears = new ArrayList<SelectItem>(); 
+		try {
+			int year=intIniAnio;
+			int cont=0;
+
+			for(int j=year; j<=Calendar.getInstance().get(Calendar.YEAR); j++){
+				cont++;
+			}
+			for(int i=0; i<cont; i++){
+				listYears.add(i, new SelectItem(year));
+				year--;
+			}	
+		} catch (Exception e) {
+			log.error("Error en getListYears ---> "+e);
+		}
+		return listYears;
+	}
+	/* Fin: REQ14-009 Bizarq - 17/12/2014 */
 }

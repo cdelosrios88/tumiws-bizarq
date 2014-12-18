@@ -20,6 +20,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.empresa.domain.Area;
