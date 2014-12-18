@@ -5,26 +5,33 @@
 <sqlMap namespace="IngresoCajaDaoIbatis">
 <typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.IngresoCaja" alias="IngresoCaja"/>
 
-	<resultMap id="resIngresos" class="IngresoCaja" >
-	     <result property="intPersEmpresaPk"  		column="pEMPRESA" />
+	<resultMap id="resIngresos" class="IngresoCaja">
+	     <result property="strNroIngreso"  			column="pNROINGRESO" />
+	     <result property="strNroAsiento"  			column="pNROASIENTO" />
 	     <result property="strRecibi"    			column="pRECIBIDE" />
-	     <result property="intIdSubSucursal"    	column="pFECHAINGRESO" />
-	     <result property="intPeriodo"    			column="pMONTO" />
-	     <result property="intAnio"    				column="pFECANUL" />
-	     <result property="intMes"    				column="pDETALLE" />
+	     <result property="strFechaIngreso"    		column="pFECHAINGRESO" />
+	     <result property="intMesIngreso"    		column="pMESINGRESO" />
+	     <result property="intAnioIngreso"    		column="pANIOINGRESO" />
+	     <result property="bdMontoTotal"    		column="pMONTO" />
+	     <result property="strFechaAnulado"    		column="pFECANUL" />
+	     <result property="strDetalle"    			column="pDETALLE" />
+	     <result property="strNombreCuenta"    		column="pNOMBRECUENTA" />
+	     <result property="strNumeroCuenta"    		column="pCONTNROCUENTA" />
+	     <result property="strNombreBanco"    		column="pNOMBREBANCO" />
+	     <result property="strDeposito"    			column="pNRODEPOSITO" />
 	</resultMap>
 	
 	<parameterMap id="parIngreso" class="java.util.Map">
-	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
-	   	 <parameter property="intEmpresa" 			javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intIdSubSucursal" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intTipoIndicador" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intPeriodoInicio" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intPeriodoFin" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intTipoIngreso" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="dtFechaInicio" 		javaType="java.util.Date"  		jdbcType="DATE" 	   mode="IN"/>
+	   	 <parameter property="dtFechaFin" 			javaType="java.util.Date"  		jdbcType="DATE" 	   mode="IN"/>
+	   	 <parameter property="strAnio" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="strMes" 				javaType="java.lang.Integer"  	jdbcType="NUMERIC" 	   mode="IN"/>
 	</parameterMap>
 	
-	<procedure id="getListIngresosByTipo" parameterMap="parIngreso" resultMap="resCantProyectadas">
+	<procedure id="getListIngresosByTipo" parameterMap="parIngreso" resultMap="resIngresos">
 		{ call PKG_TESORERIA_INGRESOS.getIngresosByTipo(?,?,?,?,?,?,?)}  
   	</procedure>
-</sqlMap>  	
+</sqlMap>

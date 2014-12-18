@@ -20,10 +20,12 @@ public class IngresoCajaBO {
 		List<IngresoCaja> lista = null;
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intTipoIngreso", o.getIntParaTipoDocGeneral());
 			mapa.put("intIdSucursal", o.getIntIdSucursal());
-			mapa.put("intIdTipoIngreso", o.getIntParaTipoDocGeneral());
 			mapa.put("dtFechaInicio", o.getDtFecIni());
 			mapa.put("dtFechaFin", o.getDtFecFin());
+			mapa.put("strAnio", o.getIntAnioIngreso());
+			mapa.put("strMes", o.getIntMesIngreso());
 			lista = dao.getListaIngresosByTipoIngreso(mapa);
 			
 		}catch(DAOException e){

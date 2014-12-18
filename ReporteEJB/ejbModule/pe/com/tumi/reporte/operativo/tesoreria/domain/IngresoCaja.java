@@ -11,13 +11,18 @@ public class IngresoCaja extends TumiDomain{
 	private Date dtFecIni;
 	private Date dtFecFin;
 	private String strNroIngreso;
+	private String strNroAsiento;
 	private String strRecibi;
 	private String strFechaIngreso;
+	private Integer intMesIngreso;
+	private Integer intAnioIngreso;
 	private BigDecimal bdMontoTotal;
 	private String strFechaAnulado;
 	private String strDetalle;
+	private String strNombreCuenta;
+	private String strNumeroCuenta;
+	private String strNombreBanco;
 	private String strDeposito;
-	
 	
 	public Integer getIntParaTipoDocGeneral() {
 		return intParaTipoDocGeneral;
@@ -84,5 +89,41 @@ public class IngresoCaja extends TumiDomain{
 	}
 	public void setStrDeposito(String strDeposito) {
 		this.strDeposito = strDeposito;
+	}
+	public String getStrNroAsiento() {
+		return strNroAsiento;
+	}
+	public void setStrNroAsiento(String strNroAsiento) {
+		this.strNroAsiento = strNroAsiento;
+	}
+	public Integer getIntMesIngreso() {
+		return intMesIngreso;
+	}
+	public void setIntMesIngreso(Integer intMesIngreso) {
+		this.intMesIngreso = intMesIngreso;
+	}
+	public Integer getIntAnioIngreso() {
+		return intAnioIngreso;
+	}
+	public void setIntAnioIngreso(Integer intAnioIngreso) {
+		this.intAnioIngreso = intAnioIngreso;
+	}
+	public String getStrNombreCuenta() {
+		return strNombreCuenta;
+	}
+	public void setStrNombreCuenta(String strNombreCuenta) {
+		this.strNombreCuenta = strNombreCuenta;
+	}
+	public String getStrNumeroCuenta() {
+		return strNumeroCuenta;
+	}
+	public void setStrNumeroCuenta(String strNumeroCuenta) {
+		this.strNumeroCuenta = strNumeroCuenta;
+	}
+	public String getStrNombreBanco() {
+		return strNombreBanco;
+	}
+	public void setStrNombreBanco(String strNombreBanco) {
+		this.strNombreBanco = strNombreBanco;
 	}
 }
