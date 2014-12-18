@@ -13,6 +13,7 @@ import javax.faces.model.SelectItem;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.EgresoFondoFijo;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
+import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgresoDetalle;
 
 /**
  * Interface de acceso Facade Local
@@ -35,6 +36,7 @@ public interface MovEgresoFacadeLocal {
 	public List<MovEgreso> getListFondoFijo(int intSucursal,int intAnio, int intTipoFondoFijo) throws BusinessException;
 
 	public MovEgreso getListEgresoById(MovEgreso o) throws BusinessException;
+	public List<MovEgresoDetalle> getListEgresoDetalleById(MovEgreso o) throws BusinessException;
 	
 	 /**
 	 * Metodo que recupera la lista de Egresos de monto fijo realizados a caja
