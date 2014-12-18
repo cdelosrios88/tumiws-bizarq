@@ -7,6 +7,7 @@ package pe.com.tumi.reporte.operativo.tesoreria.domain;
 */
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
@@ -53,6 +54,8 @@ public class MovEgreso extends TumiDomain{
 	private String strNroDocEntrega;
 	private Integer intIdTipoDocumentoEntrega;
 	private String strTipoDocumentoEntrega;
+	
+	private List<MovEgresoDetalle> lstMovEgresoDetalle;
 	
 	public BigDecimal getBdMontoApertura() {
 		return bdMontoApertura;
@@ -263,5 +266,11 @@ public class MovEgreso extends TumiDomain{
 	}
 	public void setStrTipoDocumentoEntrega(String strTipoDocumentoEntrega) {
 		this.strTipoDocumentoEntrega = strTipoDocumentoEntrega;
+	}
+	public List<MovEgresoDetalle> getLstMovEgresoDetalle() {
+		return lstMovEgresoDetalle;
+	}
+	public void setLstMovEgresoDetalle(List<MovEgresoDetalle> lstMovEgresoDetalle) {
+		this.lstMovEgresoDetalle = lstMovEgresoDetalle;
 	}
 }
