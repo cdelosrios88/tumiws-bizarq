@@ -73,6 +73,9 @@
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
+					<h:commandButton styleClass="btnEstilos"
+						action="#{reporteFondosFijosController.printFondoFijoDetalle}"
+						value="Detalle"/>
 					<h:commandButton styleClass="btnEstilos" value="Detalle" />
 				</rich:column>
 			</h:panelGrid>
