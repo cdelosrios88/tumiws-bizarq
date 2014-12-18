@@ -4,12 +4,26 @@ package pe.com.tumi.reporte.operativo.tesoreria.domain;
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
 public class MovEgreso extends TumiDomain{
+	private Integer intRow;
 	private Integer intEmpresaEgreso;
 	private Integer intItemEgresoGeneral;
 	private Integer intPeriodoEgreso;
 	private Integer intItemFondoFijo;
 	private Double dbMontoApertura;
+	private String strDescripcion;
 	
+	public Integer getIntRow() {
+		return intRow;
+	}
+	public void setIntRow(Integer intRow) {
+		this.intRow = intRow;
+	}
+	public String getStrDescripcion() {
+		return strDescripcion;
+	}
+	public void setStrDescripcion(String strDescripcion) {
+		this.strDescripcion = strDescripcion;
+	}
 	public Integer getIntItemFondoFijo() {
 		return intItemFondoFijo;
 	}

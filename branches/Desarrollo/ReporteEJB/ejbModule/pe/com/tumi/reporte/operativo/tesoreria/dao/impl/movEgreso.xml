@@ -6,11 +6,13 @@
 <typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso" alias="MovEgreso"/>
 
 	<resultMap id="resMovEgreso" class="MovEgreso" >
+		 <result property="intRow"  				column="pNROSECUENCIAL" />
 	     <result property="intEmpresaEgreso"  		column="pEMPRESAEGRESO" />
 	     <result property="intItemEgresoGeneral"   	column="pITEMEGRESO" />
 	     <result property="intPeriodoEgreso"    	column="pITEMPERIODO" />
 	     <result property="intItemFondoFijo"		column="pITEMFONDOFIJO" />
 	     <result property="dbMontoApertura"   		column="pMONTOAPERTURA" />
+	     <result property="strDescripcion"   		column="pDESCRIPCION" />
 	</resultMap>
 	
 	<parameterMap id="parMovEgreso" class="java.util.Map">
