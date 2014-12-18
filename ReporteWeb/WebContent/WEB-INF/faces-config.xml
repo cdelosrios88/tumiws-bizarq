@@ -195,36 +195,26 @@
     	<converter-class>pe.com.tumi.common.util.ConvertidorMontos</converter-class>
 	</converter>
 	
-	
-	<navigation-rule>
-		<from-view-id>/pages/colaborador/calculadora.jsf</from-view-id>
-		<navigation-case>
-<!-- 			<from-outcome>colaborador.calculadora</from-outcome> -->
-			<to-view-id>/pages/colaborador/calculadora.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-		<managed-bean>
-		<managed-bean-name>calculadoraController</managed-bean-name>
-		<managed-bean-class>pe.com.tumi.calculadora.controller.Calculadora</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	
-	
+	<!-- Inicio: REQ14-007 Bizarq - 15/12/2014 -->
 	<navigation-rule>
 		<from-view-id>/pages/tesoreria/ingresos/ingresos.jsf</from-view-id>
 		<navigation-case>
 			<from-outcome>tesoreria.ingresos.ingresos</from-outcome>
 			<to-view-id>/pages/tesoreria/ingresos/ingresos.jsp</to-view-id>
 		</navigation-case>
-	</navigation-rule>	
-	
+	</navigation-rule>
 	<managed-bean>
 		<managed-bean-name>ingresosController</managed-bean-name>
 		<managed-bean-class>pe.com.tumi.reporte.operativo.tesoreria.ingresos.controller.IngresosController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
-	
+	<managed-bean>
+		<managed-bean-name>ingresoCajaController</managed-bean-name>
+		<managed-bean-class>pe.com.tumi.reporte.operativo.credito.tesoreria.controller.IngresoCajaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- Fin: REQ14-007 Bizarq - 15/12/2014 -->
 	<!-- Inicio REQ14-010 bizarq 15-12-2014 -->
 	<navigation-rule>
 		<from-view-id>/pages/reportes/fondosfijos/*</from-view-id>
