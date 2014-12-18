@@ -4,7 +4,7 @@ package pe.com.tumi.reporte.operativo.tesoreria.domain;
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
 public class MovEgreso extends TumiDomain{
-	private Integer intRow;
+	private int intRow;
 	private Integer intEmpresaEgreso;
 	private Integer intItemEgresoGeneral;
 	private Integer intPeriodoEgreso;
@@ -12,10 +12,10 @@ public class MovEgreso extends TumiDomain{
 	private Double dbMontoApertura;
 	private String strDescripcion;
 	
-	public Integer getIntRow() {
+	public int getIntRow() {
 		return intRow;
 	}
-	public void setIntRow(Integer intRow) {
+	public void setIntRow(int intRow) {
 		this.intRow = intRow;
 	}
 	public String getStrDescripcion() {
