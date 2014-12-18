@@ -27,6 +27,7 @@ public class ReporteFondosFijosController {
 	protected static Logger log = Logger.getLogger(ReporteFondosFijosController.class);
 	private int intCboSucursalEmp;
 	private List<EgresoFondoFijo> listaEgreso;
+	private int intIdFondoFijo;
 	private List<Sucursal> listJuridicaSucursal;
 	private List<Tabla> lstTipoFondoFijo;
 	private List<SelectItem> listYears;
@@ -37,11 +38,21 @@ public class ReporteFondosFijosController {
 	private String strIniciar;
 	
 	
+	public int getIntIdFondoFijo() {
+		return intIdFondoFijo;
+	}
+
+	public void setIntIdFondoFijo(int intIdFondoFijo) {
+		this.intIdFondoFijo = intIdFondoFijo;
+	}
+
 	public String getStrIniciar() {
 		lstFondoFijo = null;
 		intIdSucursal  =0;
 		intYear = 0;
 		intIdTipoFondoFijo = 0;
+		listaEgreso = null;
+		intIdFondoFijo = 0;
 		return strIniciar;
 	}
 
@@ -186,6 +197,16 @@ public class ReporteFondosFijosController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	public void consultarEgreso (){
+		System.out.println(intIdFondoFijo);
+		EgresoFondoFijo objEgresoFondo = new EgresoFondoFijo();
+		objEgresoFondo.setStrNroMovimiento("2014-10-1");
+		objEgresoFondo.setStrConcepto("Texto de prueba");
+		objEgresoFondo.setDblMontoReporte(new Double(10));
+		listaEgreso =  new ArrayList<EgresoFondoFijo>();
+		listaEgreso.add(objEgresoFondo);
 		
 	}
 	
