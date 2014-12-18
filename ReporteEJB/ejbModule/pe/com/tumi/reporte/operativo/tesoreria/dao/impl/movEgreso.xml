@@ -12,7 +12,7 @@
 	     <result property="intPeriodoEgreso"    	column="pITEMPERIODO" />
 	     <result property="intItemFondoFijo"		column="pITEMFONDOFIJO" />
 	     <result property="dbMontoApertura"   		column="pMONTOAPERTURA" />
-	     <result property="strDescripcion"   		column="pDESCRIPCION" />
+	     <result property="strDescripcion"   		column="pTEXTOCOMBO" />
 	</resultMap>
 	
 	<parameterMap id="parMovEgreso" class="java.util.Map">
