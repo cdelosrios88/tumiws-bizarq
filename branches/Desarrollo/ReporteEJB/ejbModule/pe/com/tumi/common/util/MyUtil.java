@@ -1,3 +1,9 @@
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-009       			17/12/2014     Christian De los Ríos        Se agregan nuevos métodos reutilizables para el inicio y fin d dia         
+*/
 package pe.com.tumi.common.util;
 
 import java.math.BigDecimal;
@@ -269,5 +275,22 @@ public class MyUtil {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
-	}	
+	}
+	
+	/* Inicio: REQ14-009 Bizarq - 17/12/2014 */
+	public static Date getFirstDayOfMonth(Integer intMonth, Integer intYear){
+		Calendar cal =Calendar.getInstance();
+	    cal.set(Calendar.MONTH,intMonth-1);
+	    cal.set(Calendar.YEAR,intYear);
+	    cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH));
+	    return cal.getTime();
+	}
+	
+	public static Date getLastDayOfMonth(Integer intMonth, Integer intYear){
+		Calendar calendar = Calendar.getInstance();
+	    calendar.set(intYear, intMonth-1, 1);
+	    calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+	    return calendar.getTime();
+	}
+	/* Fin: REQ14-009 Bizarq - 17/12/2014 */
 }
