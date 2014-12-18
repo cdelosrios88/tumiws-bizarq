@@ -37,8 +37,35 @@ public class ReporteFondosFijosController {
 	private int intYear;
 	private int intIdTipoFondoFijo;
 	private String strIniciar;
+	private boolean mostrarMensajeExito;
+	private boolean mostrarMensajeError;
+	private String 		mensajeOperacion;
 	
 	
+	public boolean isMostrarMensajeExito() {
+		return mostrarMensajeExito;
+	}
+
+	public void setMostrarMensajeExito(boolean mostrarMensajeExito) {
+		this.mostrarMensajeExito = mostrarMensajeExito;
+	}
+
+	public boolean isMostrarMensajeError() {
+		return mostrarMensajeError;
+	}
+
+	public void setMostrarMensajeError(boolean mostrarMensajeError) {
+		this.mostrarMensajeError = mostrarMensajeError;
+	}
+
+	public String getMensajeOperacion() {
+		return mensajeOperacion;
+	}
+
+	public void setMensajeOperacion(String mensajeOperacion) {
+		this.mensajeOperacion = mensajeOperacion;
+	}
+
 	public int getIntIdFondoFijo() {
 		return intIdFondoFijo;
 	}
@@ -53,7 +80,8 @@ public class ReporteFondosFijosController {
 		intYear = 0;
 		intIdTipoFondoFijo = 0;
 		listaEgreso = null;
-		intIdFondoFijo = 0;
+		intIdFondoFijo = -1;
+		mostrarMensaje(Boolean.TRUE, "");
 		return "";
 	}
 
@@ -163,13 +191,16 @@ public class ReporteFondosFijosController {
 		intIdTipoFondoFijo = 0;
 		lstFondoFijo = null;
 	}
-	
+	public void seleccionarFondoFijo (ActionEvent event) {
+		System.out.println(intIdFondoFijo);
+	}
 	public void obtenerFondoFijo (ActionEvent event){
 		MovEgresoFacadeLocal objFacade;
 		try {
 			objFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);
 			if(intYear ==0)
 				intYear = Calendar.getInstance().get(Calendar.YEAR);
+			intIdFondoFijo  = -1;
 			lstFondoFijo = objFacade.getListFondoFijo(intIdSucursal, intYear, intIdTipoFondoFijo);
 			System.out.println(lstFondoFijo.size());
 		} catch (EJBFactoryException e) {
@@ -181,14 +212,38 @@ public class ReporteFondosFijosController {
 		}
 		
 	}
-	public void consultarEgreso (){
-		System.out.println(intIdFondoFijo);
-		EgresoFondoFijo objEgresoFondo = new EgresoFondoFijo();
-		objEgresoFondo.setStrNroMovimiento("2014-10-1");
-		objEgresoFondo.setStrConcepto("Texto de prueba");
-		objEgresoFondo.setDblMontoReporte(new Double(10));
-		listaEgreso =  new ArrayList<EgresoFondoFijo>();
-		listaEgreso.add(objEgresoFondo);
-	}
 	
+	public void consultarEgreso (){
+		
+		if(intIdFondoFijo < 0){
+			mostrarMensaje(Boolean.FALSE, "Por favor seleccionar fondo fijo.");
+		}else {
+			mostrarMensaje(Boolean.TRUE, "");
+			System.out.println(intIdFondoFijo);
+			MovEgreso objMovEgreso = new MovEgreso();
+			objMovEgreso = lstFondoFijo.get(intIdFondoFijo);
+			MovEgresoFacadeLocal objFacade;
+			try {
+				objFacade = (MovEgresoFacadeLocal) EJBFactory.getLocal(MovEgresoFacadeLocal.class);
+				listaEgreso = objFacade.getEgresos(objMovEgreso);
+			} catch (EJBFactoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public void mostrarMensaje(boolean exito, String mensaje){
+		if(exito){
+			mostrarMensajeExito = Boolean.TRUE;
+			mostrarMensajeError = Boolean.FALSE;
+			mensajeOperacion = mensaje;
+		}else{
+			mostrarMensajeExito = Boolean.FALSE;
+			mostrarMensajeError = Boolean.TRUE;
+			mensajeOperacion = mensaje;
+		}
+	}
 }
