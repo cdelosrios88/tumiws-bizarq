@@ -69,7 +69,7 @@
 						<f:selectItem itemLabel="Seleccionar.." itemValue="-1" />
 						<tumih:selectItems var="sel"
 							value="#{reporteFondosFijosController.lstFondoFijo}"
-							itemValue="#{sel.value}" itemLabel="#{sel.label}" />
+							itemValue="#{sel.intRow}" itemLabel="#{sel.strDescripcion}" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column style="width: 110px">
