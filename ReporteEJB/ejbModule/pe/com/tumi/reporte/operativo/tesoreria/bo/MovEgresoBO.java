@@ -127,4 +127,21 @@ public class MovEgresoBO {
 		}
 		return lista;
 	}
+	
+	public MovEgreso getFondoFijoHead  (MovEgreso objMovEgreso) throws BusinessException{
+		MovEgreso objMovEgresoReturn = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intItemFondo",objMovEgreso.getIntItemFondoFijo());
+			mapa.put("intPeriodoFondo", objMovEgreso.getIntPeriodoEgreso() );
+			mapa.put("dbMontoSaldo", null);
+			objMovEgresoReturn = dao.getFondoFijoHead(mapa);
+			
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return objMovEgresoReturn;
+	}
 }

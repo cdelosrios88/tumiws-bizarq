@@ -43,4 +43,5 @@ public interface MovEgresoFacadeRemote {
 	 * @throws BusinessException
 	 */
 	public List<EgresoFondoFijo> getEgresos (MovEgreso objMovEgreso) throws BusinessException;
+	public MovEgreso getFondoFijoHead  (MovEgreso objMovEgreso) throws BusinessException;
 }

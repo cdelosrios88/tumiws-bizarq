@@ -80,5 +80,15 @@ public class MovEgresoFacade extends TumiFacade implements MovEgresoFacadeRemote
 		}
     	return lista;
     }
-
+    public MovEgreso getFondoFijoHead  (MovEgreso objMovEgreso) throws BusinessException{
+    	MovEgreso objMovEgresoReturn = null;
+    	try {
+    		objMovEgresoReturn = boMovEgreso.getFondoFijoHead(objMovEgreso);
+		} catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+    	return objMovEgresoReturn;
+    }
 }
