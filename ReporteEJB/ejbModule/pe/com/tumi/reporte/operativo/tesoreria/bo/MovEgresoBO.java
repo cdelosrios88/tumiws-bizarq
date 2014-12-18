@@ -1,7 +1,14 @@
 package pe.com.tumi.reporte.operativo.tesoreria.bo;
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-009       			15/12/2014     Christian De los Ríos        Creaciòn de componente         
+*/
 
 import java.util.HashMap;
 import java.util.List;
+
 
 import org.apache.log4j.Logger;
 
@@ -13,9 +20,27 @@ import pe.com.tumi.reporte.operativo.tesoreria.dao.impl.MovEgresoDaoIbatis;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.EgresoFondoFijo;
 import pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso;
 
+/**
+ * Entidad de negocio (Bussiness Object) que gestiona la informacion
+ * del reporte Egreso de Caja
+ * 
+ * @author Bizarq
+ */
 public class MovEgresoBO {
 	protected  static Logger log = Logger.getLogger(MovEgresoBO.class);
 	private MovEgresoDao dao = (MovEgresoDao) TumiFactory.get(MovEgresoDaoIbatis.class);
+	
+	/**
+	 * Metodo que recupera la lista de Egresos realizados a caja
+	 * segun los filtros ingresados.
+	 * 
+	 * @param intSucursal, Identificador de la sucursal.
+	 * @param intAnio, Anio de consulta.
+	 * @param intTipoFondoFijo, Indicador de tipo de fondo fijo.
+	 * @return Lista de entidades del tipo EgresosCaja.
+	 * 
+	 * @throws BusinessException
+	 */
 	public List<MovEgreso> getListFondoFijo(int intSucursal,int intAnio, int intTipoFondoFijo) throws BusinessException{
 		List<MovEgreso> lista = null;
 		try{
@@ -59,6 +84,16 @@ public class MovEgresoBO {
 		}
 		return domain;
 	}
+	
+	/**
+	 * Metodo que recupera la lista de Egresos de monto fijo realizados a caja
+	 * segun los filtros ingresados.
+	 * 
+	 * @param objMovEgreso, Entidad de tipo Moviemiento Egreso.
+	 * @return Lista de entidades del tipo EgresoFondoFijo.
+	 * 
+	 * @throws BusinessException
+	 */
 	public List<EgresoFondoFijo> getEgresos (MovEgreso objMovEgreso) throws BusinessException {
 		List<EgresoFondoFijo> lista  = null;
 		try{

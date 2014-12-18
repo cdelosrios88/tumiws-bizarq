@@ -1,10 +1,20 @@
 package pe.com.tumi.reporte.operativo.tesoreria.domain;
-
+/* -----------------------------------------------------------------------------------------------------------
+* Modificaciones
+* Motivo                      Fecha            Nombre                      Descripción
+* -----------------------------------------------------------------------------------------------------------
+* REQ14-009       			15/12/2014     Christian De los Ríos        Creaciòn de componente         
+*/
 
 import java.math.BigDecimal;
 
 import pe.com.tumi.framework.negocio.domain.TumiDomain;
 
+/**
+ * Clase Bean que se utiliza el mapeo con la tabla MovEgreso.
+ * 
+ * @author Bizarq
+ */
 public class MovEgreso extends TumiDomain{
 	private int intRow;
 	private Integer intEmpresaEgreso;
