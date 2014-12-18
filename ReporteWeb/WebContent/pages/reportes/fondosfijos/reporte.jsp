@@ -136,7 +136,8 @@
 						reRender="pgEgresos,panelMensaje" />
 				</rich:column>
 				<rich:column style="width: 110px">
-					<a4j:commandButton styleClass="btnEstilos" value="Reporte" />
+					<h:commandButton styleClass="btnEstilos" value="Reporte"
+						action="#{reporteFondosFijosController.generarReporte}" />
 				</rich:column>
 				<rich:column style="width: 110px">
 					<a4j:commandButton styleClass="btnEstilos" value="Cancelar" />
