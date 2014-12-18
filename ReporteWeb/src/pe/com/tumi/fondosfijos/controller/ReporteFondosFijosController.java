@@ -229,6 +229,7 @@ public class ReporteFondosFijosController {
 			
 			if(objMovEgreso!=null){
 				objMovEgreso = movEgresoFacade.getListEgresoById(objMovEgreso);
+				objMovEgreso.setLstMovEgresoDetalle(movEgresoFacade.getListEgresoDetalleById(objMovEgreso));
 				
 				parametro.put("P_NROEGRESO", objMovEgreso.getStrNroEgreso());
 				parametro.put("P_SUCURSAL", objMovEgreso.getStrSucursal());
@@ -249,7 +250,8 @@ public class ReporteFondosFijosController {
 			
 			strNombreReporte = "egresoDet";
 			UtilManagerReport.generateReport(strNombreReporte, parametro, 
-					new ArrayList<Object>(new ArrayList()), Constante.PARAM_T_TIPOREPORTE_PDF);
+					new ArrayList<Object>(objMovEgreso.getLstMovEgresoDetalle()), 
+					Constante.PARAM_T_TIPOREPORTE_PDF);
 		} catch (Exception e) {
 			log.error("Error en imprimirReporteIngresos ---> "+e);
 		}

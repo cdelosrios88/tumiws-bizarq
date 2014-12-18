@@ -76,7 +76,6 @@
 					<h:commandButton styleClass="btnEstilos"
 						action="#{reporteFondosFijosController.printFondoFijoDetalle}"
 						value="Detalle"/>
-					<h:commandButton styleClass="btnEstilos" value="Detalle" />
 				</rich:column>
 			</h:panelGrid>
 			<br />
