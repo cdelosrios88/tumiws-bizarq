@@ -4,6 +4,8 @@
 	
 <sqlMap namespace="MovEgresoDaoIbatis">
 <typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgreso" alias="MovEgreso"/>
+<typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.MovEgresoDetalle" alias="MovEgresoDetalle"/>
+
 <typeAlias type="pe.com.tumi.reporte.operativo.tesoreria.domain.EgresoFondoFijo" alias="EgresoFondoFijo"/>
 	<resultMap id="resMovEgreso" class="MovEgreso" >
 		 <result property="intRow"  				column="pNROSECUENCIAL" />
@@ -13,6 +15,52 @@
 	     <result property="intItemFondoFijo"		column="pITEMFONDOFIJO" />
 	     <result property="bdMontoApertura"   		column="pMONTOAPERTURA" />
 	     <result property="strDescripcion"   		column="pTEXTOCOMBO" />
+	</resultMap>
+	
+	<resultMap id="resMovEgresoReport" class="MovEgreso" >
+		 <result property="intEmpresaEgreso"  		column="pIntEmpresaEgreso_n" />
+	     <result property="intItemEgresoGeneral"   	column="pInItemEgresoGeneral_n" />
+	     <result property="strNroMovimiento"    	column="pNROMOVIMIENTO" />
+	     <result property="strNroEgreso"			column="pNROEGRESO" />
+	     <result property="intIdSucursal"   		column="pIDSUCURSAL_N" />
+	     <result property="strSucursal"   			column="pNOMBRESUCURSAL" />
+	     <result property="strFechaEgreso"   		column="pFECHAEGRESO" />
+	     <result property="strConcepto"   			column="pCONCEPTO" />
+	     <result property="intParaFormaPago"   		column="pNROFORMAPAGO" />
+	     <result property="strFormaPago"   			column="pFORMAPAGO" />
+	     <result property="strMoneda"   			column="pMONEDA" />
+	     <result property="bdMonto"   				column="pMONTO" />
+	     <result property="strDescMonto"   			column="pDESCRIPCIONMONTO" />
+	     <result property="bdMontoApertura"   		column="pMONTOAPERTURA" />
+	     <result property="bdMontoSaldo"   			column="pMONTOSALDO" />
+	     <result property="bdMontoUtilizado"   		column="pMONTOUTILIZADO" />
+	     <result property="strFechaCierre"   		column="pFECHACIERRE" />
+	     <result property="strNombreCuenta"   		column="pNOMBRECUENTA" />
+	     <result property="strNumeroCuenta"   		column="pCONTNROCUENTA" />
+	     <result property="strBanco"   				column="pNOMBREBANCO" />
+	     <result property="strNroCheque"   			column="pNROCHEQUE" />
+	     <result property="strNroPlanilla"   		column="pNROPLANILLA" />
+	     <result property="strNroAsiento"   		column="pNROASIENTO" />
+	     <result property="intIdUsuario"   			column="pPKNOMBREUSUARIO" />
+	     <result property="strNombreUsuario"   		column="pNOMBREUSUARIO" />
+	     <result property="strFechaHora"   			column="pFECHAHORA" />
+	     <result property="intIdPersResponsable"   	column="pPKPERSONAENTREGUE" />
+	     <result property="strPersonaEntrega"   	column="pPERSONAENTREGUE" />
+	     <result property="strNroDocEntrega"   		column="pNRODOCUMENTO" />
+	     <result property="intIdTipoDocumentoEntrega" column="pCODTIPODOCUMENTO" />
+	     <result property="strTipoDocumentoEntrega" column="pDESCTIPODOCUMENTO" />
+	</resultMap>
+	
+	<resultMap id="resMovEgresoDetalle" class="MovEgresoDetalle" >
+	     <result property="intEmpresaEgreso"  		column="pIntEmpresaEgreso_n" />
+	     <result property="intItemEgresoGeneral"   	column="pInItemEgresoGeneral_n" />
+	     <result property="intParaMoneda"    		column="pCODMONEDA" />
+	     <result property="strDescMoneda"			column="pNOMBREMONEDA" />
+	     <result property="strDescEgreso"   		column="pDESCRIPCION" />
+	     <result property="intIdSucursal"   		column="pCODSUCURSAL" />
+	     <result property="strSucursal"   			column="pNOMBRESUCURSAL" />
+	     <result property="bdMontoDebe"   			column="pMONTODEBE" />
+	     <result property="bdMontoAbono"   			column="pMONTOABONO" />
 	</resultMap>
 	
 	<resultMap id="resEgresoFondoFijo" class="EgresoFondoFijo" >
@@ -30,6 +78,12 @@
 	   	 <parameter property="intAnio" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
 	</parameterMap>
 	
+	<parameterMap id="parMovEgresoReport" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intEmpresaEgresoPk" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="intItemEgresoGeneral" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+	</parameterMap>
+	
 	<parameterMap id="parMovEgresoTabla" class="java.util.Map">
 	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
 	   	 <parameter property="intItemFondo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
@@ -40,7 +94,16 @@
 	<procedure id="getCadenaCajaChica" parameterMap="parMovEgreso" resultMap="resMovEgreso">
 		{ call PKG_TESORERIA_EGRESOS.getCadenaCajaChica(?,?,?,?)}  
   	</procedure>
+  	
+  	<procedure id="getEgresoHead" parameterMap="parMovEgresoReport" resultMap="resMovEgresoReport">
+		{ call PKG_TESORERIA_EGRESOS.getEgresoHead(?,?,?)}
+  	</procedure>
+  	
+  	<procedure id="getEgresoBody" parameterMap="parMovEgresoReport" resultMap="resMovEgresoDetalle">
+		{ call PKG_TESORERIA_EGRESOS.getEgresoDetalleBody(?,?,?)}
+  	</procedure>
+  	
   	<procedure id="getMovimientosCajaChicaBody" parameterMap="parMovEgresoTabla" resultMap="resEgresoFondoFijo">
 		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaBody(?,?,?,?)}  
   	</procedure>
-</sqlMap>  	
+</sqlMap>
