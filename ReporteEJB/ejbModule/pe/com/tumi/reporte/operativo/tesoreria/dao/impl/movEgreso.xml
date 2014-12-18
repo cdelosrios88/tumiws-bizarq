@@ -15,12 +15,12 @@
 	
 	<parameterMap id="parMovEgreso" class="java.util.Map">
 	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
+	   	 <parameter property="intTipoFondoFijo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
 	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
 	   	 <parameter property="intAnio" 				javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intTipoFondoFijo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
 	</parameterMap>
 	
 	<procedure id="getCadenaCajaChica" parameterMap="parMovEgreso" resultMap="resMovEgreso">
-		{ call PKG_TESORERIA_EGRESOS.getCadenaCajaChica(?,?,?,?,?,?,?)}  
+		{ call PKG_TESORERIA_EGRESOS.getCadenaCajaChica(?,?,?,?)}  
   	</procedure>
 </sqlMap>  	
