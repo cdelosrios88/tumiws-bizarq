@@ -118,8 +118,24 @@ public class IngresoCajaController {
 		try {
 			if(ingresoCajaFiltro!=null){
 				if(ingresoCajaFiltro.getIntIdSucursal()!=null && ingresoCajaFiltro.getIntIdSucursal()==0){
-					mostrarMensaje(Boolean.FALSE, "Por favor elija una Sucursal.");
-				}else {
+					mostrarMensaje(Boolean.FALSE, "Por favor, elija una Sucursal.");
+					return;
+				}else mostrarMensaje(Boolean.TRUE, "");
+				if(intTipoIndFecha==null){
+					mostrarMensaje(Boolean.FALSE, "Para continuar con la búsqueda, debe elegir un Rango de Fechas o un periodo mensual.");
+					return;
+				}else if(intTipoIndFecha!=null && intTipoIndFecha==1){
+					if(ingresoCajaFiltro.getDtFecIni()==null || ingresoCajaFiltro.getDtFecFin()==null){
+						mostrarMensaje(Boolean.FALSE, "Por favor, elija un rango de fechas para realizar la búsqueda.");
+						return;
+					}else mostrarMensaje(Boolean.TRUE, "");
+				}else if(intTipoIndFecha!=null && intTipoIndFecha==2){
+					if(ingresoCajaFiltro.getIntAnioIngreso()==null || ingresoCajaFiltro.getIntMesIngreso()==null){
+						mostrarMensaje(Boolean.FALSE, "Para continuar con la búsqueda, debe elegir un mes u año");
+						return;
+					}else mostrarMensaje(Boolean.TRUE, "");
+				}
+				else {
 					mostrarMensaje(Boolean.TRUE, "");
 				}
 			}
@@ -169,7 +185,7 @@ public class IngresoCajaController {
 	 * 
 	 */
 	public void showDatesByIndicator(){
-		if(intTipoIndFecha==1){
+		if(intTipoIndFecha!=null && intTipoIndFecha==1){
 			mostrarRanFecha = Boolean.FALSE;
 			mostrarPeriodoMensual = Boolean.TRUE;
 			ingresoCajaFiltro.setDtFecIni(null);
@@ -178,7 +194,7 @@ public class IngresoCajaController {
 			ingresoCajaFiltro.setIntAnioIngreso(null);
 		}
 		
-		if(intTipoIndFecha==2){
+		if(intTipoIndFecha!=null && intTipoIndFecha==2){
 			mostrarPeriodoMensual = Boolean.FALSE;
 			mostrarRanFecha = Boolean.TRUE;
 			ingresoCajaFiltro.setDtFecIni(null);
@@ -269,7 +285,7 @@ public class IngresoCajaController {
 			
 			if(intTipoIndFecha!=null && intTipoIndFecha==1){
 				dtFecIni = ingresoCajaFiltro.getDtFecIni();
-				dtFecIni = ingresoCajaFiltro.getDtFecFin();
+				dtFecFin = ingresoCajaFiltro.getDtFecFin();
 			} else if(intTipoIndFecha!=null && intTipoIndFecha==2) {
 				dtFecIni = MyUtil.getFirstDayOfMonth(ingresoCajaFiltro.getIntMesIngreso(), ingresoCajaFiltro.getIntAnioIngreso());
 				dtFecFin = MyUtil.getLastDayOfMonth(ingresoCajaFiltro.getIntMesIngreso(), ingresoCajaFiltro.getIntAnioIngreso());
@@ -279,8 +295,8 @@ public class IngresoCajaController {
 			}
 			
 			parametro.put("P_TIPOINGRESODEPBANCO", strDocGeneralTipoIngreso);
-			parametro.put("P_FECINI", dtFecIni);
-			parametro.put("P_FECFIN", dtFecFin);
+			parametro.put("P_FECINI", Constante.sdf.format(dtFecIni));
+			parametro.put("P_FECFIN", Constante.sdf.format(dtFecFin));
 			parametro.put("P_LIST_DEPOSITOCAJA", listaDepositosCaja);
 			
 			strNombreReporte = "ingresosCaja";
