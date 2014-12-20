@@ -116,8 +116,9 @@ public class MovEgresoBO {
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
 			mapa.put("intItemFondo",objMovEgreso.getIntItemFondoFijo());
-			mapa.put("intPeriodoFondo", objMovEgreso.getIntPeriodoEgreso() );
-			mapa.put("dbMontoSaldo", null);
+			mapa.put("intPeriodoFondo", objMovEgreso.getIntPeriodoEgreso());
+			mapa.put("intParaTipoFondoFijo", objMovEgreso.getIntParaTipoFondoFijo());
+			mapa.put("intIdSucursal", objMovEgreso.getIntIdSucursal());
 			lista = dao.getEgresos(mapa);
 			
 		}catch(DAOException e){
@@ -133,8 +134,9 @@ public class MovEgresoBO {
 		try{
 			HashMap<String,Object> mapa = new HashMap<String,Object>();
 			mapa.put("intItemFondo",objMovEgreso.getIntItemFondoFijo());
-			mapa.put("intPeriodoFondo", objMovEgreso.getIntPeriodoEgreso() );
-			mapa.put("dbMontoSaldo", null);
+			mapa.put("intPeriodoFondo", objMovEgreso.getIntPeriodoEgreso());
+			mapa.put("intParaTipoFondoFijo", objMovEgreso.getIntParaTipoFondoFijo());
+			mapa.put("intIdSucursal", objMovEgreso.getIntIdSucursal());
 			objMovEgresoReturn = dao.getFondoFijoHead(mapa);
 			
 		}catch(DAOException e){

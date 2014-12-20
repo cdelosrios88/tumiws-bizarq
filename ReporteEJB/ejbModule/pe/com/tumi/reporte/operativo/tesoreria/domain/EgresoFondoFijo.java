@@ -21,8 +21,15 @@ public class EgresoFondoFijo extends TumiDomain{
 	private String strConcepto;
 	private BigDecimal bdMontoReporte;
 	private Integer intItemEgresoGeneral;
+	private String strRecibiDePersona;
 	
 	
+	public String getStrRecibiDePersona() {
+		return strRecibiDePersona;
+	}
+	public void setStrRecibiDePersona(String strRecibiDePersona) {
+		this.strRecibiDePersona = strRecibiDePersona;
+	}
 	public BigDecimal getBdMontoReporte() {
 		return bdMontoReporte;
 	}
