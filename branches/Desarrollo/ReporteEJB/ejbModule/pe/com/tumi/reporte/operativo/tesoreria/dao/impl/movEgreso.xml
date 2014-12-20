@@ -15,6 +15,8 @@
 	     <result property="intItemFondoFijo"		column="pITEMFONDOFIJO" />
 	     <result property="bdMontoApertura"   		column="pMONTOAPERTURA" />
 	     <result property="strDescripcion"   		column="pTEXTOCOMBO" />
+	     <result property="intParaTipoFondoFijo"   	column="pPARATIPOFONDOFIJO" />
+	     <result property="intIdSucursal"   		column="pSUCURSAL" />
 	</resultMap>
 	
 	<resultMap id="resMovEgresoHead" class="MovEgreso" >
@@ -80,6 +82,7 @@
 	     <result property="strConcepto"   			column="pCONCEPTO" />
 	     <result property="bdMontoReporte"   	 	column="pMONTOREPORTE" />
 	     <result property="intItemEgresoGeneral"	column="pITEMEGRESO" />
+	     <result property="strRecibiDePersona"		column="pRECIBIDE" />
 	</resultMap>
 	
 	<parameterMap id="parMovEgreso" class="java.util.Map">
@@ -95,11 +98,20 @@
 	   	 <parameter property="intItemEgresoGeneral" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
 	</parameterMap>
 	
+	<parameterMap id="parMovEgresoTablaHead" class="java.util.Map">
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+	   	 <parameter property="intItemFondo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	 <parameter property="intPeriodoFondo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>   	 
+	   	 <parameter property="intParaTipoFondoFijo" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+	</parameterMap>
+	
 	<parameterMap id="parMovEgresoTabla" class="java.util.Map">
-	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  mode="OUT"/>
-	   	 <parameter property="intItemFondo" 	javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="intPeriodoFondo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
-	   	 <parameter property="dbMontoSaldo" 				javaType="java.lang.Double"  jdbcType="NUMERIC" 	   mode="IN"/>
+	   	 <parameter property="cursorLista" 			javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR"  	mode="OUT"/>
+	   	 <parameter property="intItemFondo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	 <parameter property="intPeriodoFondo" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	 <parameter property="intParaTipoFondoFijo" javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
+	   	 <parameter property="intIdSucursal" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   	mode="IN"/>
 	</parameterMap>
 	
 	<procedure id="getCadenaCajaChica" parameterMap="parMovEgreso" resultMap="resMovEgreso">
@@ -115,10 +127,10 @@
   	</procedure>
   	
   	<procedure id="getMovimientosCajaChicaBody" parameterMap="parMovEgresoTabla" resultMap="resEgresoFondoFijo">
-		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaBody(?,?,?,?)}  
+		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaBody(?,?,?,?,?)}  
   	</procedure>
   	
-  	<procedure id="getMovimientosCajaChicaHead" parameterMap="parMovEgresoTabla" resultMap="resMovEgresoHead">
-		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaHead(?,?,?,?)}  
+  	<procedure id="getMovimientosCajaChicaHead" parameterMap="parMovEgresoTablaHead" resultMap="resMovEgresoHead">
+		{ call PKG_TESORERIA_EGRESOS.getMovimientosCajaChicaHead(?,?,?,?,?)}
   	</procedure>
 </sqlMap>

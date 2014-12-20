@@ -29,6 +29,8 @@ public class MovEgreso extends TumiDomain{
 	private BigDecimal bdMontoAsignado;
 	private BigDecimal bdMontoOtorgado;
 	
+	private Integer intParaTipoFondoFijo;
+	
 	//Cabecera Reporte Egresos
 	private String strNroMovimiento;
 	private String strNroEgreso;
@@ -300,5 +302,11 @@ public class MovEgreso extends TumiDomain{
 	}
 	public void setLstMovEgresoDetalle(List<MovEgresoDetalle> lstMovEgresoDetalle) {
 		this.lstMovEgresoDetalle = lstMovEgresoDetalle;
+	}
+	public Integer getIntParaTipoFondoFijo() {
+		return intParaTipoFondoFijo;
+	}
+	public void setIntParaTipoFondoFijo(Integer intParaTipoFondoFijo) {
+		this.intParaTipoFondoFijo = intParaTipoFondoFijo;
 	}
 }
