@@ -8,7 +8,7 @@
 <h:form>
 	<h:outputText value="#{ingresoCajaController.limpiarIngreso}"/>
 	
-	<div align="center" style="font-size:medium;"><b>LIBRO CAJA</b></div>
+	<div align="center" style="font-size:medium;"><b>INGRESOS</b></div>
 	<br/>
 	
 	<h:panelGrid style="border-spacing:5px 0px; border-collapse:separate" columns="2">
@@ -33,14 +33,14 @@
 			<f:selectItem itemValue="1" itemLabel="Rango Fechas   "/>
    			<f:selectItem itemValue="2" itemLabel="Mensual" />
    			<a4j:support event="onchange" action="#{ingresoCajaController.showDatesByIndicator}" 
-   				reRender="pgRanFecha,pgPeriodoMensual"/>
+   				reRender="pgRanFecha,panelMensaje"/>
 		</h:selectOneRadio>
 	</h:panelGrid>
 	<br/>
 	
 	<rich:panel style="border: 1px solid #17356f;background-color:#DEEBF5;">
 		<h:panelGrid id="pgRanFecha" columns="2">
-			<rich:columnGroup>
+			<rich:columnGroup rendered="#{ingresoCajaController.intTipoIndFecha!=null && ingresoCajaController.intTipoIndFecha==1}">
 				<rich:column>
 					<h:outputText value="Fecha Ini.:"/>
 				</rich:column>
@@ -60,9 +60,9 @@
 			</rich:columnGroup>
 			<br/>
 		    
-		    <rich:columnGroup>
+		    <rich:columnGroup rendered="#{ingresoCajaController.intTipoIndFecha!=null && ingresoCajaController.intTipoIndFecha==2}">
 		    	<rich:column>
-						<h:outputText value="Mes:"></h:outputText>
+					<h:outputText value="Mes:"/>
 				</rich:column>
 		  		<rich:column>
 		  			<h:selectOneMenu id="cboMesDesde" value="#{ingresoCajaController.ingresoCajaFiltro.intMesIngreso}"
@@ -87,7 +87,7 @@
     <br/>
 		
 	<h:panelGrid columns="3">
-		<a4j:commandButton value="Buscar" action="#{ingresoCajaController.buscarIngresos}" 
+		<a4j:commandButton value="Consultar" action="#{ingresoCajaController.buscarIngresos}" 
 			styleClass="btnEstilos" reRender="divTblIngresosCaja,divTblDepositosBanco,tblResumen,panelMensaje" />
 	 	
 	 	<h:commandButton id="btnImprimir" value="Imprimir" styleClass="btnEstilos"
@@ -118,10 +118,10 @@
 					style="margin:0 auto"
 					var="item"
 					rowKeyVar="rowKey"
-					rows="5" 
+					rows="10" 
 					sortMode="single" 
 					width="850px" 
-					height="180px"
+					height="267px"
 					value="#{ingresoCajaController.listaIngresosCaja}">
 					
 					<rich:column width="31px">
@@ -168,7 +168,7 @@
 						</f:facet>
 						<h:outputText value="#{item.strDetalle}"/>
 					</rich:column> 
-					<rich:column width="100px">
+					<rich:column width="120px">
 						<f:facet name="header">
 							<h:outputText value="Nro. Deposito"/>
 						</f:facet>
@@ -192,10 +192,10 @@
 					style="margin:0 auto"
 					var="item"
 					rowKeyVar="rowKey"
-					rows="5" 
+					rows="10" 
 					sortMode="single" 
-					width="900px" 
-					height="190px"
+					width="980px" 
+					height="267px"
 					value="#{ingresoCajaController.listaDepositosCaja}">					
 					
 					<rich:column width="31px">
@@ -228,7 +228,7 @@
 						</f:facet>
 						<h:outputText value="#{item.strNumeroCuenta}"/>
 					</rich:column>
-					<rich:column width="90px">
+					<rich:column width="80px">
 						<f:facet name="header">
 							<h:outputText value="Monto"/>
 						</f:facet>
@@ -236,17 +236,23 @@
 							<f:converter converterId="ConvertidorMontos"/>
 						</h:outputText>
 					</rich:column>
-					<rich:column width="90px">
+					<rich:column width="80px">
 						<f:facet name="header">
 							<h:outputText value="Fec. Dep."/>
 						</f:facet>
 						<h:outputText value="#{item.strFechaIngreso}"/>
 					</rich:column> 
-					<rich:column width="180px">
+					<rich:column width="150px">
 						<f:facet name="header">
 							<h:outputText value="Detalle"/>
 						</f:facet>
 						<h:outputText value="#{item.strDetalle}"/>
+					</rich:column>
+					<rich:column width="120px">
+						<f:facet name="header">
+							<h:outputText value="Nro. Deposito"/>
+						</f:facet>
+						<h:outputText value="#{item.strDeposito}"/>
 					</rich:column>
 				  	<f:facet name="footer">   
 		            	<rich:datascroller for="tblDepositosBanco" maxPages="10"/>   

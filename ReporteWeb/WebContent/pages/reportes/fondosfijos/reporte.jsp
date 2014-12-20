@@ -90,37 +90,46 @@
 				style="text-align:center;margin:auto;">
 				<rich:extendedDataTable id="dtEgresos" enableContextMenu="false"
 					style="margin:0 auto" var="item" rowKeyVar="rowKey" rows="9"
-					sortMode="single" width="800px" height="250px"
+					sortMode="single" 
+					width="850px" height="250px"
 					value="#{reporteFondosFijosController.listaEgreso}">
-					<rich:column width="50px">
+					<rich:column width="35px">
 						<f:facet name="header">
 							<h:outputText value="Item" />
 						</f:facet>
 						<h:outputText value="#{rowKey + 1}"></h:outputText>
 					</rich:column>
-					<rich:column width="150px">
+					<rich:column width="300px">
+						<f:facet name="header">
+							<h:outputText value="Recibí de" />
+						</f:facet>
+						<h:outputText value="#{item.strRecibiDePersona}" />
+					</rich:column>
+					<rich:column width="120px">
 						<f:facet name="header">
 							<h:outputText value="Nro Movimiento" />
 						</f:facet>
 						<h:outputText value="#{item.strNroMovimiento}" />
 					</rich:column>
-					<rich:column width="100px">
+					<rich:column width="90px">
 						<f:facet name="header">
 							<h:outputText value="Fecha" />
 						</f:facet>
 						<h:outputText value="#{item.strFechaEgreso}" />
 					</rich:column>
-					<rich:column width="350px">
+					<rich:column width="200px">
 						<f:facet name="header">
 							<h:outputText value="Concepto" />
 						</f:facet>
 						<h:outputText value="#{item.strConcepto}" />
 					</rich:column>
-					<rich:column width="150px">
+					<rich:column width="80px">
 						<f:facet name="header">
 							<h:outputText value="Monto" />
 						</f:facet>
-						<h:outputText value="#{item.bdMontoReporte}" />
+						<h:outputText value="#{item.bdMontoReporte}">
+							<f:converter converterId="ConvertidorMontos"/>
+						</h:outputText>
 					</rich:column>
 					<f:facet name="footer">
 						<rich:datascroller for="dtEgresos" maxPages="10" />
