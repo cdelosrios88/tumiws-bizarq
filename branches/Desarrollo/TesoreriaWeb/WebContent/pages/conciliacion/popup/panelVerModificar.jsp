@@ -44,7 +44,7 @@
 				<a4j:commandButton value="Modificar"
 					
 					action="#{conciliacionController.irModificarConciliacion}"
-					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje,panelDatosAnular"
+					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje,panelDatosAnular,panelBotones"
 					oncomplete="Richfaces.hideModalPanel('panelUpdateViewConciliacion')" />
 
 				<a4j:commandButton value="Ver"
