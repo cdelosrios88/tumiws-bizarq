@@ -822,7 +822,7 @@ public class ConciliacionController{
 				return true;
 			}
 			
-			if(!validate.isValidCrearConciliacion(conciliacionNuevo)){
+			if(!validate.isValidCrearConciliacion(conciliacionNuevo) && (conciliacionNuevo.getId()!=null && conciliacionNuevo.getId().getIntItemConciliacion()!=null)){
 				mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
 				return true;
 			}

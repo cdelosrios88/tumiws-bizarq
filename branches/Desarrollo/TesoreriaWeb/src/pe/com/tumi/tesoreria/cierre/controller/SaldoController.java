@@ -108,6 +108,7 @@ public class SaldoController {
 		if(usuario!=null && poseePermiso){
 			limpiarFormulario();
 			listaSaldo.clear();
+			saldoFiltro = new Saldo();
 			deshabilitarPanelInferior();
 			/*
 			intIdSucursal = SESION_IDSUCURSAL;
