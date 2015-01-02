@@ -592,5 +592,19 @@ public class BancoFacade extends TumiFacade implements BancoFacadeRemote, BancoF
    			throw new BusinessException(e);
    		}
 		return lista;
-	} 
+	}
+    
+    //Autor y Fecha: Rodolfo Villarreal Acuña 01/12/2014 
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Bancocuenta getBancoCuentaPorPk(BancocuentaId o) throws BusinessException{
+    	Bancocuenta dto = null;
+		try{					
+			dto = boBancoCuenta.getPorPk(o);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return dto;
+	}
 }

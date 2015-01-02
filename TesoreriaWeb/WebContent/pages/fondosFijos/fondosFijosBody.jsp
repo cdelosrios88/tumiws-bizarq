@@ -398,8 +398,29 @@
    <a4j:include viewId="/pages/fondosFijos/popup/buscarCuentaBancariaTelecredito.jsp"/>
 </rich:modalPanel>
 
+	<!-- Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014 -->
+	<rich:modalPanel id="pBuscarDocumentoSunat" width="630" height="230"
+		resizeable="false" style="background-color:#DEEBF5;">
+	    <f:facet name="header">
+	        <h:panelGrid>
+	          <rich:column style="border: none;">
+	            <h:outputText value="Buscar Documento Sunat"/>
+	          </rich:column>
+	        </h:panelGrid>
+	    </f:facet>
+	    <f:facet name="controls">
+	        <h:panelGroup>
+	           <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+	           		<rich:componentControl for="pBuscarDocumentoSunat" operation="hide" event="onclick"/>
+	           </h:graphicImage>
+	       </h:panelGroup>
+	    </f:facet>
+	   <a4j:include viewId="/pages/fondosFijos/popup/buscarDocumentoSunat.jsp"/>
+	</rich:modalPanel>
+	<!-- Fin jchavez - 29.12.2014 -->
+	
 	<a4j:region>
-		<a4j:jsFunction name="getPersonaRolC" reRender="cboPersonaRolC,opDatosPersonaSelect"
+		<a4j:jsFunction name="getPersonaRolC" reRender="cboPersonaRolC, opDatosPersonaSelect, opCuentaSocioC, "
 			action="#{cajaController.cargarListaPersonaRol}">
 			<f:param name="pCboTipoPersonaC"></f:param>
 		</a4j:jsFunction>
@@ -419,7 +440,7 @@
 			<f:param name="pCboFiltroBusqC"></f:param>
 		</a4j:jsFunction>
 		
-		<a4j:jsFunction name="getCuentaC" reRender="pgModalidadC, cboModalidadC"
+		<a4j:jsFunction name="getCuentaC" reRender="pgModalidadC, cboModalidadC, msgErrorSubCondCta"
 			actionListener="#{cajaController.seleccionarCuenta}">
 			<f:param name="pCboCuentaC"></f:param>
 		</a4j:jsFunction>

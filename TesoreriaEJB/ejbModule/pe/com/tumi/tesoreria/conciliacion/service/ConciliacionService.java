@@ -637,6 +637,17 @@ public class ConciliacionService {
 				conciliacionDetalle = checkConciliacionDetalle(conciliacionDetalle);
 				//conciliacionDetalle = convertEgresoIngresoAConcilDet(conciliacionDetalle);
 				
+				/* Inicio: REQ14-006 Bizarq - 01/01/2015 */
+				if(conciliacionDetalle!=null && conciliacionDetalle.getIngreso()!=null){
+					conciliacionDetalle.setIntIdSucursalGira(conciliacionDetalle.getIngreso().getIntSucuIdSucursal());
+					conciliacionDetalle.setIntIdSubSucursalGira(conciliacionDetalle.getIngreso().getIntSudeIdSubsucursal());
+				}
+				if(conciliacionDetalle!=null && conciliacionDetalle.getEgreso()!=null){
+					conciliacionDetalle.setIntIdSucursalPaga(conciliacionDetalle.getEgreso().getIntSucuIdSucursal());
+					conciliacionDetalle.setIntIdSubSucursalPaga(conciliacionDetalle.getEgreso().getIntSudeIdSubsucursal());
+				}
+				/* Fin: REQ14-006 Bizarq - 01/01/2015 */
+				
 				if(conciliacionDetalle.getId()== null || conciliacionDetalle.getId().getIntItemConciliacionDetalle()==null){
 					pk = new ConciliacionDetalleId();
 					pk.setIntPersEmpresa(pPK.getIntPersEmpresa());

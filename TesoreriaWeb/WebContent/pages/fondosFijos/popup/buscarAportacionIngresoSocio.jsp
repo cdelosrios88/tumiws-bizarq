@@ -13,7 +13,7 @@
                     <rich:column width="500" style="text-align: left">		
 						<a4j:commandButton styleClass="btnEstilos" id="btnAceptarIngresoSocioC"
 	                		value="Aceptar"
-	                		reRender="opTablaIngresoSocioAportacionC,msgErrorMontoIngresadoAportacionC,pgMontoIngresadoC,pgModalidadC,panelDetalleIngresoSocioC"
+	                		reRender="opTablaIngresoSocioAportacionC,msgErrorMontoIngresadoAportacionC,pgMontoIngresadoC,opCuentaSocioC,panelDetalleIngresoSocioC, opTipoDePersona"
 	                    	action="#{cajaController.agregarIngresoSocio}"
 	                    	oncomplete="if(#{cajaController.strMsgErrorMontoIngresado == ''}){Richfaces.hideModalPanel('pBuscarAportacionIngresoSocio')}"
 	                    	style="width:80x"/>
@@ -22,7 +22,6 @@
 			</h:panelGrid>
 			<h:outputText id="msgErrorMontoIngresadoAportacionC" value="#{cajaController.strMsgErrorMontoIngresado}" 
 				styleClass="msgError"
-				style="font-weight:bold; text-align: left"
 				rendered="#{!cajaController.strMsgErrorMontoIngresado}"/>		
 			<h:panelGroup>
 				<a4j:outputPanel id="opTablaIngresoSocioAportacionC">
@@ -90,7 +89,7 @@
 								<rich:column width="420px" colspan="4" style="text-align: center">
 									<b><h:outputText value="TOTAL APORTACIONES" /></b>
 								</rich:column>
-								<rich:column width="90PX" style="text-align: right; color:red; font-weight: bold;">
+								<rich:column width="90PX" styleClass="txtMontoFinal">
 									<h:outputText id="txtMontoIngresadoTotalC" value="#{cajaController.bdMontoIngresadoTotal}">
 										<f:converter converterId="ConvertidorMontos"/>
 									</h:outputText>

@@ -109,6 +109,9 @@ public interface LogisticaFacadeLocal {
     public OrdenCompraDetalle getOrdenCompraDetallePorPk(OrdenCompraDetalleId pId) throws BusinessException;
     //Fin jchavez - 07.11.2014
     //Autor: jchavez / Tarea: Creacion / Fecha: 09.11.2014
-    public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat) throws BusinessException;
+    public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat, OrdenCompra ordenCompra) throws BusinessException;
     //Fin jchavez - 09.11.2014
+    //Autor: jchavez / Tarea: Creacion / Fecha: 29.12.2014
+    public List<DocumentoSunat> getDocSunatParaGiro(Integer intPersEmpresa, Integer intPersProveedor, Integer intTipoComprobante) throws BusinessException;
+    //Fin jchavez - 29.12.2014
 }

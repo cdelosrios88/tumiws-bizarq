@@ -111,6 +111,10 @@ public class DocumentoSunat extends TumiDomain{
 	private Boolean blnGeneraDetraccionNota;
 	private BigDecimal bdMontoSaldoTemp;
 	private TipoCambio tipoCambio;
+	private BigDecimal bdMontoIngresado;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014
+	private DocumentoSunatDetalle documentoSunatDetalle;
 	
 	//BD
 	public DocumentoSunat(){
@@ -656,5 +660,18 @@ public class DocumentoSunat extends TumiDomain{
 	}
 	public void setTipoCambio(TipoCambio tipoCambio) {
 		this.tipoCambio = tipoCambio;
+	}
+	public BigDecimal getBdMontoIngresado() {
+		return bdMontoIngresado;
+	}
+	public void setBdMontoIngresado(BigDecimal bdMontoIngresado) {
+		this.bdMontoIngresado = bdMontoIngresado;
+	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014
+	public DocumentoSunatDetalle getDocumentoSunatDetalle() {
+		return documentoSunatDetalle;
+	}
+	public void setDocumentoSunatDetalle(DocumentoSunatDetalle documentoSunatDetalle) {
+		this.documentoSunatDetalle = documentoSunatDetalle;
 	}	
 }

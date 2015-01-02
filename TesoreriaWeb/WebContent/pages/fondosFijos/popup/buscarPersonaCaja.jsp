@@ -10,14 +10,15 @@
 	   	<h:panelGroup>
 	   		<h:outputText id="msgErrorMontoPllaEfect" value="#{cajaController.strMsgErrorSocioSeleccionado}" 
 				styleClass="msgError"
-				style="font-weight:bold"
 				rendered="#{!cajaController.strMsgErrorSocioSeleccionado}"/>		    	
 	    	<h:panelGrid columns="12" id="panelPopUpBuscarPersonaC">
 	    		<rich:column width="30">
 	    			<h:selectOneMenu id="cboTipoPersonaC"
 	    				onchange="getFiltroBusqC(#{applicationScope.Constante.ONCHANGE_VALUE})"
 						style="width: 130px;"
-						value="#{cajaController.intOpcionBusquedaC}">
+						value="#{cajaController.intOpcionBusquedaC}"
+						disabled="true" >
+						
 						<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 						<tumih:selectItems var="sel"
 							value="#{cajaController.listaTablaOpcionBusqueda}"
@@ -44,7 +45,7 @@
            		<rich:column>
            			<a4j:commandButton styleClass="btnEstilos"
                 		value="Buscar" 
-                		reRender="tablaPersonaC"
+                		reRender="msgErrorMontoPllaEfect, tablaPersonaC"
                     	action="#{cajaController.buscarPersona}" 
                     	style="width:100px"/>
            		</rich:column>

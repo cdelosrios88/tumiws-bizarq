@@ -18,5 +18,6 @@ public interface DocumentoSunatDao extends TumiDao{
 	//Fin agregado por cdelosrios, 18/11/2013
 	//Autor: jchavez / Tarea: Creación / Fecha: 24.10.2014
 	public Integer getValidarCierreDocumento(Object o) throws DAOException;
-	//Fin jchavez - 24.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 29.12.2014
+	public List<DocumentoSunat> getDocSunatParaGiro(Object o) throws DAOException;
 }

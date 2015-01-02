@@ -98,5 +98,15 @@ public class DocumentoSunatDaoIbatis extends TumiDaoIbatis implements DocumentoS
 		}		
 		return vExisteCierre;
 	}	
-	//Fin jchavez - 24.10.2014
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 29.12.2014
+	public List<DocumentoSunat> getDocSunatParaGiro(Object o) throws DAOException{
+		List<DocumentoSunat> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getDocSunatParaGiro", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}	
 }

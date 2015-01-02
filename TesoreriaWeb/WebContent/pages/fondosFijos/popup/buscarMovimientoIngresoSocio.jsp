@@ -29,7 +29,7 @@
                     <rich:column width="500" style="text-align: left">		
 						<a4j:commandButton styleClass="btnEstilos" id="btnAceptarIngresoSocioC"
 	                		value="Aceptar"
-	                		reRender="opTablaIngresoSocioC,msgErrorMontoIngresadoC,pgMontoIngresadoC,pgModalidadC,panelDetalleIngresoSocioC"
+	                		reRender="opTablaIngresoSocioC,msgErrorMontoIngresadoC,pgMontoIngresadoC,opCuentaSocioC,panelDetalleIngresoSocioC,opTipoDePersona"
 	                    	action="#{cajaController.agregarIngresoSocio}"
 	                    	oncomplete="if(#{cajaController.strMsgErrorMontoIngresado == ''}){Richfaces.hideModalPanel('pBuscarMovimientoIngresoSocio')}"
 	                    	style="width:80x"/>
@@ -41,7 +41,6 @@
 			</h:panelGrid>
 			<h:outputText id="msgErrorMontoIngresadoC" value="#{cajaController.strMsgErrorMontoIngresado}" 
 				styleClass="msgError"
-				style="font-weight:bold; text-align: left"
 				rendered="#{!cajaController.strMsgErrorMontoIngresado}"/>		
 			<h:panelGroup>
 				<a4j:outputPanel id="opTablaIngresoSocioC">
@@ -149,7 +148,7 @@
 										<f:converter converterId="ConvertidorMontos"/>
 									</h:outputText>
 								</rich:column>
-								<rich:column width="100" style="text-align: right; color:red; font-weight: bold;">
+								<rich:column width="100" styleClass="txtMontoFinal">
 									<h:outputText value="#{cajaController.bdMontoIngresadoTotalSimulacion}">
 										<f:converter converterId="ConvertidorMontos"/>
 									</h:outputText>

@@ -130,4 +130,7 @@ public interface EgresoFacadeRemote {
 	//Autor: jchavez / Tarea: Creacion / Fecha: 15.10.2014
 	public Egreso grabarGiroOrdenCompraDocumentoPorCheque(List<EgresoDetalleInterfaz> listaEgresoDetalleInterfaz, Bancocuenta bancoCuenta, Usuario usuario, Integer intNroCheque, Integer intParaTipoDocumento, Integer intTipoDocumentoValidar)throws BusinessException;
 	//Fin jchavez - 15.10.2014
+	//Autor: jchavez / Tarea: Creacion / Fecha: 30.12.2014
+	public List<EgresoDetalleInterfaz> cargarListaEgresoDetalleInterfazDocumentoSunat(DocumentoSunat documentoSunat)throws BusinessException;
+	//Fin jchavez - 30.12.2014
 }

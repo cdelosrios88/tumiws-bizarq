@@ -21,143 +21,156 @@
         	<h:panelGrid style="margin:0 auto; margin-bottom:10px">
 	    		<rich:columnGroup>
 	    			<rich:column>
-	    				<h:outputText value="FONDOS FIJOS" style="font-weight:bold; font-size:14px"/>
+	    				<h:outputText value="FONDOS FIJOS" styleClass="tagTitulo"/>
 	    			</rich:column>
 	    		</rich:columnGroup>
     		</h:panelGrid>
         	
-        	<h:panelGrid columns="11" id="panelCFFFiltroF">
-            	<rich:column width="90" style="text-align: left;">
-                	<h:outputText value="Tipo Fondo Fijo :"/>
-            	</rich:column>
-            	<rich:column width="140">
-            		<h:selectOneMenu
-						style="width: 137px;"
-						value="#{fondosFijosController.egresoFiltro.intParaTipoFondoFijo}">
-						<tumih:selectItems var="sel"
-							value="#{fondosFijosController.listaTablaTipoFondoFijo}"
-							itemValue="#{sel.intIdDetalle}"
-							itemLabel="#{sel.strDescripcion}"/>						
-						<a4j:support event="onchange" 
-							action="#{fondosFijosController.obtenerListaNumeroApertura}"
-							reRender="panelCFFFiltroF"/>
-					</h:selectOneMenu>
-            	</rich:column>
-            	<rich:column width="70">
-					<h:outputText value="Sucursal :"/>
-				</rich:column>
-				<rich:column width="150">
-					<h:selectOneMenu
-						disabled="#{!fondosFijosController.habilitarFiltroSucursal}"
-						value="#{fondosFijosController.egresoFiltro.intSucuIdSucursal}"
-						style="width: 150px;">
-						<tumih:selectItems var="sel"
-							value="#{fondosFijosController.listaTablaSucursal}"
-							itemValue="#{sel.intIdDetalle}"
-							itemLabel="#{sel.strDescripcion}"/>
-						<a4j:support event="onchange" 
-							action="#{fondosFijosController.obtenerListaNumeroApertura}"
-							reRender="panelCFFFiltroF"/>												
-					</h:selectOneMenu>
-				</rich:column>
-            	<rich:column width="125" style="text-align: center;">
-                	<h:outputText value="Nro. de Apertura :"/>
-            	</rich:column>
-            	<rich:column width="210">
-            		<h:selectOneMenu
-            			value="#{fondosFijosController.intItemControlFiltro}"
-						style="width: 210px;">
-						<f:selectItem itemValue="0" itemLabel="Seleccione"/>
-						<tumih:selectItems var="sel"
-							value="#{fondosFijosController.listaControlFondosFijosBusqueda}"
-							itemValue="#{sel.intItemFiltro}"
-							itemLabel="#{sel.strNumeroApertura}"/>
-					</h:selectOneMenu>
-            	</rich:column>
-            	<rich:column width="100">
-            		<h:selectOneMenu
-						style="width: 80px;"
-						value="#{fondosFijosController.intAñoFiltro}">
-						<tumih:selectItems var="sel"
-							value="#{fondosFijosController.listaAño}"
-							itemValue="#{sel.intIdDetalle}"
-							itemLabel="#{sel.strDescripcion}"/>
-						<a4j:support event="onchange" 
-							action="#{fondosFijosController.obtenerListaNumeroApertura}"
-							reRender="panelCFFFiltroF"/>
-					</h:selectOneMenu>					
-            	</rich:column>
-            	
+        	<h:panelGrid id="panelCFFFiltroF">
+        		<rich:columnGroup>
+	            	<rich:column width="100" style="text-align: left;">
+	                	<h:outputText value="Tipo Fondo Fijo :"/>
+	            	</rich:column>
+	            	<rich:column width="140" style="text-align: left;">
+	            		<h:selectOneMenu
+							style="width: 137px;"
+							value="#{fondosFijosController.egresoFiltro.intParaTipoFondoFijo}">
+							<tumih:selectItems var="sel"
+								value="#{fondosFijosController.listaTablaTipoFondoFijo}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>						
+							<a4j:support event="onchange" 
+								action="#{fondosFijosController.obtenerListaNumeroApertura}"
+								reRender="panelCFFFiltroF"/>
+						</h:selectOneMenu>
+	            	</rich:column>
+	            	<rich:column width="60" style="text-align: left;">
+						<h:outputText value="Sucursal :"/>
+					</rich:column>
+					<rich:column width="150" style="text-align: left;">
+						<h:selectOneMenu
+							disabled="#{!fondosFijosController.habilitarFiltroSucursal}"
+							value="#{fondosFijosController.egresoFiltro.intSucuIdSucursal}"
+							style="width: 150px;">
+							<tumih:selectItems var="sel"
+								value="#{fondosFijosController.listaTablaSucursal}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>
+							<a4j:support event="onchange" 
+								action="#{fondosFijosController.obtenerListaNumeroApertura}"
+								reRender="panelCFFFiltroF"/>												
+						</h:selectOneMenu>
+					</rich:column>
+	            	<rich:column width="110" style="text-align: left;">
+	                	<h:outputText value="Nro. de Apertura :"/>
+	            	</rich:column>
+	            	<rich:column width="210">
+	            		<h:selectOneMenu
+	            			value="#{fondosFijosController.intItemControlFiltro}"
+							style="width: 210px;">
+							<f:selectItem itemValue="0" itemLabel="Seleccione"/>
+							<tumih:selectItems var="sel"
+								value="#{fondosFijosController.listaControlFondosFijosBusqueda}"
+								itemValue="#{sel.intItemFiltro}"
+								itemLabel="#{sel.strNumeroApertura}"/>
+						</h:selectOneMenu>
+	            	</rich:column>
+	            	<rich:column width="100">
+	            		<h:selectOneMenu
+							style="width: 80px;"
+							value="#{fondosFijosController.intAñoFiltro}">
+							<tumih:selectItems var="sel"
+								value="#{fondosFijosController.listaAño}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>
+							<a4j:support event="onchange" 
+								action="#{fondosFijosController.obtenerListaNumeroApertura}"
+								reRender="panelCFFFiltroF"/>
+						</h:selectOneMenu>					
+	            	</rich:column>
+	            	<rich:column colspan="3"/>
+            	</rich:columnGroup>
             </h:panelGrid>
             
-        	<h:panelGrid columns="11" id="panelPersonaFiltroF">
-        		<rich:column width="90">
-					<h:outputText value="Tipo de Persona : "/>
-				</rich:column>
-				<rich:column width="137" style="text-align: left;">
-					<h:selectOneMenu
-						value="#{fondosFijosController.intTipoPersonaFiltro}"
-						style="width: 137px;">
-						<tumih:selectItems var="sel" 
-							cache="#{applicationScope.Constante.PARAM_T_TIPOPERSONA}" 
-							itemValue="#{sel.intIdDetalle}"
-							itemLabel="#{sel.strDescripcion}"/>
-						<a4j:support event="onchange" reRender="panelPersonaFiltroF"/>
-					</h:selectOneMenu>
-				</rich:column>
-				<rich:column width="80" style="text-align: left;">
-					<h:selectOneMenu
-						rendered="#{fondosFijosController.intTipoPersonaFiltro==applicationScope.Constante.PARAM_T_TIPOPERSONA_NATURAL}"
-						value="#{fondosFijosController.intTipoBusquedaPersona}"
-						style="width: 80px;">
-						<f:selectItem itemValue="1" itemLabel="Nombre"/>
-						<f:selectItem itemValue="2" itemLabel="DNI"/>
-					</h:selectOneMenu>
-					<h:selectOneMenu
-						rendered="#{fondosFijosController.intTipoPersonaFiltro==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
-						value="#{fondosFijosController.intTipoBusquedaPersona}"
-						style="width: 80px;">
-						<f:selectItem itemValue="1" itemLabel="Nombre"/>
-						<f:selectItem itemValue="3" itemLabel="RUC"/>
-					</h:selectOneMenu>
-				</rich:column>
-				<rich:column width="150" style="text-align: left;">
-					<h:inputText size="20"
-						value="#{fondosFijosController.strTextoPersonaFiltro}"/>
-				</rich:column>
-				<rich:column width="45" style="text-align: left;">
-					<h:outputText value="Estado : "/>
-				</rich:column>
-				<rich:column width="80">
-					<h:selectOneMenu
-						value="#{fondosFijosController.egresoFiltro.intParaEstado}"
-						style="width: 80px;">
-						<tumih:selectItems var="sel" 
-							value="#{fondosFijosController.listaTablaEstado}" 
-							itemValue="#{sel.intIdDetalle}"
-							itemLabel="#{sel.strDescripcion}"/>
-					</h:selectOneMenu>
-				</rich:column>
-				<rich:column width="95" style="text-align: left;">
-                	<h:outputText value="Fecha de Egreso: "/>
-            	</rich:column>
-            	<rich:column width="100" style="text-align: right;">
-                	<rich:calendar datePattern="dd/MM/yyyy"  
-						value="#{fondosFijosController.dtDesdeFiltro}"  
-						jointPoint="top-right" direction="right" inputSize="10" showApplyButton="true"/>
-            	</rich:column>
-            	<rich:column width="100" style="text-align: left;">
-                	<rich:calendar datePattern="dd/MM/yyyy"  
-						value="#{fondosFijosController.dtHastaFiltro}"  
-						jointPoint="top-right" direction="right" inputSize="10" showApplyButton="true"/>
-            	</rich:column>
-            	<rich:column width="70" style="text-align: right;">
-                	<a4j:commandButton styleClass="btnEstilos"
-                		value="Buscar" 
-                		reRender="panelTablaResultados,panelMensajeF"
-                    	action="#{fondosFijosController.buscar}" 
-                    	style="width:70px"/>
-            	</rich:column>
+        	<h:panelGrid id="panelPersonaFiltroF">
+        		<rich:columnGroup>
+	        		<rich:column width="100" style="text-align: left;">
+						<h:outputText value="Tipo de Persona :"/>
+					</rich:column>
+					<rich:column width="95" style="text-align: left;">
+						<h:selectOneMenu
+							value="#{fondosFijosController.intTipoPersonaFiltro}"
+							style="width: 95px;">
+							<tumih:selectItems var="sel" 
+								cache="#{applicationScope.Constante.PARAM_T_TIPOPERSONA}" 
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>
+							<a4j:support event="onchange" reRender="panelPersonaFiltroF"/>
+						</h:selectOneMenu>
+					</rich:column>
+					<rich:column width="80" style="text-align: left;">
+						<h:selectOneMenu
+							rendered="#{fondosFijosController.intTipoPersonaFiltro==applicationScope.Constante.PARAM_T_TIPOPERSONA_NATURAL}"
+							value="#{fondosFijosController.intTipoBusquedaPersona}"
+							style="width: 80px;">
+							<f:selectItem itemValue="1" itemLabel="Nombre"/>
+							<f:selectItem itemValue="2" itemLabel="DNI"/>
+						</h:selectOneMenu>
+						<h:selectOneMenu
+							rendered="#{fondosFijosController.intTipoPersonaFiltro==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
+							value="#{fondosFijosController.intTipoBusquedaPersona}"
+							style="width: 80px;">
+							<f:selectItem itemValue="1" itemLabel="Nombre"/>
+							<f:selectItem itemValue="3" itemLabel="RUC"/>
+						</h:selectOneMenu>
+					</rich:column>
+					<rich:column width="140" style="text-align: left;">
+						<h:inputText size="20"
+							value="#{fondosFijosController.strTextoPersonaFiltro}"/>
+					</rich:column>
+					<rich:column width="50" style="text-align: left;">
+						<h:outputText value="Estado : "/>
+					</rich:column>
+					<rich:column width="80" style="text-align: left;">
+						<h:selectOneMenu
+							value="#{fondosFijosController.egresoFiltro.intParaEstado}"
+							style="width: 80px;">
+							<tumih:selectItems var="sel" 
+								value="#{fondosFijosController.listaTablaEstado}" 
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"/>
+						</h:selectOneMenu>
+					</rich:column>
+					<rich:column width="100" style="text-align: left;">
+	                	<h:outputText value="Fecha de Egreso: "/>
+	            	</rich:column>
+	            	<rich:column width="110" style="text-align: left;">
+	                	<rich:calendar datePattern="dd/MM/yyyy"  
+							value="#{fondosFijosController.dtDesdeFiltro}"  
+							jointPoint="top-right" direction="right" inputSize="10" showApplyButton="true"/>
+	            	</rich:column>
+	            	<rich:column width="110" style="text-align: left;">
+	                	<rich:calendar datePattern="dd/MM/yyyy"  
+							value="#{fondosFijosController.dtHastaFiltro}"  
+							jointPoint="top-right" direction="right" inputSize="10" showApplyButton="true"/>
+	            	</rich:column>
+	            	
+            	</rich:columnGroup>
+            	<rich:columnGroup>
+            		<rich:column width="1020px" colspan="9" style="text-align: right;" >
+	                	<a4j:commandButton styleClass="btnEstilos"
+	                		value="Buscar" 
+	                		reRender="panelTablaResultados,panelMensajeF"
+	                    	action="#{fondosFijosController.buscar}" 
+	                    	style="width:70px"/>
+	                    <rich:spacer width="10px"/>
+	                    <a4j:commandButton styleClass="btnEstilos"
+	                		value="Limpiar" 
+	                		reRender="panelCFFFiltroF, panelPersonaFiltroF"
+	                    	action="#{fondosFijosController.limpiarFiltrosBusqueda}" 
+	                    	style="width:70px"/>
+	            	</rich:column>
+            	</rich:columnGroup>
             </h:panelGrid>
             
             
@@ -277,7 +290,7 @@
 			<h:panelGrid columns="3">
 				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
 					action="#{fondosFijosController.habilitarPanelInferior}"
-					reRender="contPanelInferior,panelMensajeF,panelBotones" />                     
+					reRender="panelMensajeF,panelBotones,contPanelInferior" />                     
 			    <a4j:commandButton value="Grabar" styleClass="btnEstilos" style="width:90px"
 			    	action="#{fondosFijosController.grabar}" 
 			    	reRender="contPanelInferior,panelMensajeF,panelBotones,panelTablaResultados"
@@ -294,7 +307,7 @@
 			
 		<rich:panel  rendered="#{fondosFijosController.mostrarPanelInferior}" style="border:1px solid #17356f;background-color:#DEEBF5;">
 			
-			<h:panelGroup rendered="#{!fondosFijosController.datosValidados}">
+			<h:panelGroup id="pgNvoFondoFijo" rendered="#{!fondosFijosController.datosValidados}">
 				<h:panelGrid columns="12" id="panelValidar">
 					<rich:column width="120">
 						<h:outputText value="Tipo de Fondo Fijo :"/>
@@ -356,7 +369,7 @@
 				
 				<h:panelGrid columns="1">
 					<rich:column width="120">
-						<h:outputText value="FONDO FIJO"/>
+						<h:outputText value="FONDO FIJO" styleClass="tagSubTitulo"/>
 					</rich:column>
 				</h:panelGrid>
 				
@@ -364,15 +377,18 @@
 				
 				<h:panelGrid columns="8">
 					<rich:column width="120" rendered="#{fondosFijosController.blnActivarNroApertura}">
-						<h:outputText value="Nro. Apertura :"/>
+						<h:outputText value="Nro. Apertura"/>
 					</rich:column>
-					<rich:column width="175" rendered="#{fondosFijosController.blnActivarNroApertura}">
+					<rich:column width="4" rendered="#{fondosFijosController.blnActivarNroApertura}">
+						<h:outputText value=":"/>
+					</rich:column>
+					<rich:column width="180" rendered="#{fondosFijosController.blnActivarNroApertura}">
 						<h:inputText readonly="true"
 							value="#{fondosFijosController.controlFondosFijos.strNumeroApertura}"
 							style="background-color: #BFBFBF;"
-							size="25"/>
+							size="27"/>
 					</rich:column>
-					<rich:column width="175">
+					<rich:column width="180">
 						<tumih:inputText
 							cache="#{applicationScope.Constante.PARAM_T_TIPOFONDOFIJO}"							
 							itemValue="intIdDetalle" 
@@ -380,10 +396,13 @@
 							property="#{fondosFijosController.intTipoFondoFijoValidar}"
 							readonly="true"
 							style="background-color: #BFBFBF;"
-							size="25"/>
+							size="27"/>
 					</rich:column>
 					<rich:column width="120" style="text-align: left;">
-						<h:outputText value="Tipo de Documento :"/>
+						<h:outputText value="Tipo de Documento"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="150">
 						<tumih:inputText
@@ -401,7 +420,10 @@
 				
 				<h:panelGrid columns="8">
 					<rich:column width="120">
-						<h:outputText value="Sucursal :"/>
+						<h:outputText value="Sucursal"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="360">
 						<h:inputText readonly="true"
@@ -410,7 +432,10 @@
 							size="60"/>
 					</rich:column>
 					<rich:column width="120" style="text-align: left;">
-						<h:outputText value="Fecha de Egreso :"/>
+						<h:outputText value="Fecha de Egreso"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="150">
 						<h:inputText readonly="true"
@@ -426,7 +451,7 @@
 				
 				<h:panelGrid columns="1">
 					<rich:column width="200">
-						<h:outputText value="DOCUMENTO A CANCELAR"/>
+						<h:outputText value="DOCUMENTO A CANCELAR" styleClass="tagSubTitulo"/>
 					</rich:column>
 				</h:panelGrid>
 				
@@ -436,30 +461,33 @@
 				
 				<h:panelGrid columns="11" >
 					<rich:column width="120">
-						<h:outputText value="Persona :"/>
+						<h:outputText value="Persona"/>
 					</rich:column>
-					<rich:column width="685">
+					<rich:column width="4">
+						<h:outputText value=":"/>
+					</rich:column>
+					<rich:column width="675">
 						<h:inputText readonly="true"
 							rendered="#{empty fondosFijosController.personaSeleccionada}"
 							style="background-color: #BFBFBF;"
-							size="124"/>
+							size="120"/>
 						<h:inputText readonly="true"
 							rendered="#{(fondosFijosController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_NATURAL)
 							&& (empty fondosFijosController.cuentaActual)}"
 							value="DNI : #{fondosFijosController.personaSeleccionada.documento.strNumeroIdentidad} - #{fondosFijosController.personaSeleccionada.natural.strNombreCompleto}"
 							style="background-color: #BFBFBF;"
-							size="124"/>
+							size="120"/>
 						<h:inputText readonly="true"
 							rendered="#{(fondosFijosController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_NATURAL)
 							&& (not empty fondosFijosController.cuentaActual)}"
 							value="DNI : #{fondosFijosController.personaSeleccionada.documento.strNumeroIdentidad} - #{fondosFijosController.personaSeleccionada.natural.strNombreCompleto} - Cuenta : #{fondosFijosController.cuentaActual.strNumeroCuenta}"
 							style="background-color: #BFBFBF;"
-							size="124"/>
+							size="120"/>
 						<h:inputText readonly="true"
 							rendered="#{fondosFijosController.personaSeleccionada.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"
 							value="RUC : #{fondosFijosController.personaSeleccionada.strRuc} - #{fondosFijosController.personaSeleccionada.juridica.strRazonSocial}"
 							style="background-color: #BFBFBF;"
-							size="124"/>
+							size="120"/>
 					</rich:column>
 	            	<rich:column width="80">
 	                	<a4j:commandButton styleClass="btnEstilos"
@@ -483,7 +511,10 @@
 	            
 	            <h:panelGrid columns="11" >
 					<rich:column width="120">
-						<h:outputText value="Roles :"/>
+						<h:outputText value="Roles"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="685">
 						<h:inputText readonly="true"
@@ -500,10 +531,13 @@
 	            
 	            <h:panelGroup id="panelDocumentoF">
 	            
-	            <h:panelGrid columns="8">
+	            <h:panelGrid columns="8" id="panelTipoDocumento">
 					<rich:column width="120" style="text-align: left;">
 						<h:outputText value="Tipo de Documento : "/>
 			        </rich:column>
+			        <rich:column width="4">
+						<h:outputText value=":"/>
+					</rich:column>
 			        <rich:column width="175">
 						<h:selectOneMenu
 							style="width: 160px;"
@@ -515,10 +549,34 @@
 								itemValue="#{sel.intIdDetalle}"
 								itemLabel="#{sel.strDescripcion}"
 								propertySort="strDescripcion"/>
+								<a4j:support event="onchange" 
+									reRender="panelTipoDocumento"
+									action="#{fondosFijosController.seleccionarTipoDocumento}"/>
+
 						</h:selectOneMenu>
 			        </rich:column>
-			        <rich:column width="503">
-						<h:inputText size="89" 
+			        <rich:column width="175">
+						<h:selectOneMenu
+							style="width: 160px;"
+							disabled="#{(not empty fondosFijosController.listaEgresoDetalleInterfazAgregado)||(fondosFijosController.deshabilitarNuevo)}"
+							value="#{fondosFijosController.intTipoComprobanteAgregar}">
+							<f:selectItem itemValue="0" itemLabel="Seleccione"/>
+							<tumih:selectItems var="sel"
+								value="#{fondosFijosController.listaTablaTipoComprobante}"
+								itemValue="#{sel.intIdDetalle}"
+								itemLabel="#{sel.strDescripcion}"
+								propertySort="strDescripcion"/>
+						</h:selectOneMenu>
+			        </rich:column>
+			        
+				</h:panelGrid>
+				
+				<h:panelGrid columns="8">
+					<rich:column width="124" style="text-align: left;">
+						<h:outputText value=""/>
+			        </rich:column>
+					<rich:column width="500">
+						<h:inputText size="78" 
 							readonly="true"
 							style="background-color: #BFBFBF;"
 							value="#{fondosFijosController.documentoGeneralSeleccionado.strEtiqueta}"/>
@@ -527,9 +585,10 @@
 	                	<a4j:commandButton styleClass="btnEstilos"
 	                		disabled="#{(empty fondosFijosController.personaSeleccionada) || (fondosFijosController.deshabilitarNuevo)}"
 	                		value="Buscar"
-	                		reRender="frmBuscarDocumento"
+	                		reRender="frmBuscarDocumento, frmBuscarDocumentoSunat"
 	                    	action="#{fondosFijosController.abrirPopUpBuscarDocumento}"
-	                    	oncomplete="Richfaces.showModalPanel('pBuscarDocumento')"
+	                    	oncomplete="if(#{fondosFijosController.intTipoDocumentoAgregar != applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS}){Richfaces.showModalPanel('pBuscarDocumento')}
+	                    				else {Richfaces.showModalPanel('pBuscarDocumentoSunat')}"
 	                    	style="width:80px"/>
 	            	</rich:column>
 	            	<rich:column width="80">
@@ -548,8 +607,11 @@
 					||	(fondosFijosController.documentoGeneralSeleccionado.intTipoDocumento==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)}">
 					
 					<rich:column width="120" style="text-align: left;">
-						<h:outputText value="Beneficiario : "/>
+						<h:outputText value="Beneficiario"/>
 				    </rich:column>
+				    <rich:column width="4">
+						<h:outputText value=":"/>
+					</rich:column>
 				    <rich:column width="680">
 						<h:selectOneMenu
 							disabled="#{fondosFijosController.deshabilitarNuevo}"
@@ -571,8 +633,11 @@
 					rendered="#{(fondosFijosController.documentoGeneralSeleccionado.intTipoDocumento==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_LIQUIDACIONCUENTA)}">
 					
 					<rich:column width="120" style="text-align: left;">
-						<h:outputText value="Beneficiario : "/>
+						<h:outputText value="Beneficiario"/>
 				    </rich:column>
+				    <rich:column width="4">
+						<h:outputText value=":"/>
+					</rich:column>
 				    <rich:column width="680">
 						<h:selectOneMenu
 							disabled="#{fondosFijosController.deshabilitarNuevo}"
@@ -604,7 +669,10 @@
 					||	(fondosFijosController.documentoGeneralSeleccionado.intTipoDocumento==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)}">
 					
 					<rich:column width="120">
-						<h:outputText value="Apoderado :"/>
+						<h:outputText value="Apoderado"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="360">
 						<h:inputText rendered="#{empty fondosFijosController.personaApoderado}" 
@@ -644,7 +712,7 @@
 					||	(fondosFijosController.documentoGeneralSeleccionado.intTipoDocumento==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_FONDOSEPELIO)
 					||	(fondosFijosController.documentoGeneralSeleccionado.intTipoDocumento==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO)}">
 					
-					<rich:column width="120">
+					<rich:column colspan="2" width="124">
 					</rich:column>
 					<rich:column width="360">
 						<h:inputText rendered="#{empty fondosFijosController.archivoCartaPoder}" 
@@ -692,7 +760,10 @@
 				
 				<h:panelGrid columns="6">
 					<rich:column width="120">
-						<h:outputText value="Monto a Girar :"/>
+						<h:outputText value="Monto a Girar"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="175">
 						<h:inputText size="20"	
@@ -714,7 +785,10 @@
 				
 				<h:panelGrid columns="6">
 					<rich:column width="120">
-						<h:outputText value="Diferencial Cambiario :"/>
+						<h:outputText value="Diferencial Cambiario"/>
+					</rich:column>
+					<rich:column width="4">
+						<h:outputText value=":"/>
 					</rich:column>
 					<rich:column width="175">
 						<h:inputText size="20"
@@ -738,7 +812,10 @@
 				<h:panelGroup>
 					<h:panelGrid columns="6">
 						<rich:column width="120" style="vertical-align: top">
-							<h:outputText value="Observación :"/>
+							<h:outputText value="Observación"/>
+						</rich:column>
+						<rich:column width="4">
+							<h:outputText value=":"/>
 						</rich:column>
 						<rich:column>
 							<h:inputTextarea rows="2" cols="124"
@@ -759,10 +836,10 @@
 							  	width="950px"
 				                rows="#{fn:length(fondosFijosController.listaEgresoDetalleInterfazAgregado)}">
 				                    
-								<rich:column width="20px" style="text-align: left">
+								<rich:column width="20px" style="text-align: center">
 				            		<h:outputText value="#{item.intOrden}"/>
 				            	</rich:column>
-				            	<rich:column width="120" style="text-align: left">
+				            	<rich:column width="120" style="text-align: center">
 				                   	<f:facet name="header">
 				                		<h:outputText value="Documento"/>
 				                   	</f:facet>
@@ -770,13 +847,13 @@
 										itemValue="intIdDetalle" itemLabel="strDescripcion"
 										property="#{item.intParaDocumentoGeneral}"/>
 				                </rich:column>
-				                <rich:column width="100" style="text-align: left">
+				                <rich:column width="100" style="text-align: center">
 				                   	<f:facet name="header">
 				                   		<h:outputText value="Nro de Documento"/>
 				                   	</f:facet>
 				                  	<h:outputText value="#{item.strNroDocumento}"/>
 				                </rich:column>
-				                <rich:column width="150" style="text-align: left">
+				                <rich:column width="150" style="text-align: center">
 				                  	<f:facet name="header">
 				                   		<h:outputText value="Persona"/>
 				                   	</f:facet>
@@ -785,13 +862,13 @@
 				                   	<h:outputText value="#{item.persona.juridica.strRazonSocial}" 
 				                   		rendered="#{item.persona.intTipoPersonaCod==applicationScope.Constante.PARAM_T_TIPOPERSONA_JURIDICA}"/>	
 				                </rich:column>
-				                <rich:column width="160" style="text-align: left">
+				                <rich:column width="160" style="text-align: center">
 				                    <f:facet name="header">
 				                    	<h:outputText value="Sucursal"/>                      		
 				                    </f:facet>
 				                    <h:outputText value="#{item.sucursal.juridica.strSiglas} - #{item.subsucursal.strDescripcion}"/>
 				               	</rich:column>
-				                <rich:column width="100" style="text-align: left">
+				                <rich:column width="100" style="text-align: center">
 				                    <f:facet name="header">
 				                    	<h:outputText value="Descripción"/>                      		
 				                    </f:facet>
@@ -805,7 +882,7 @@
 				                      	<f:converter converterId="ConvertidorMontos" />
 				                    </h:outputText>
 				              	</rich:column>
-				               	<rich:column width="80" style="text-align: right">
+				               	<rich:column width="80" style="text-align: right" rendered="#{fondosFijosController.intTipoDocumentoAgregar != applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_COMPRAS}">
 				                    <f:facet name="header">
 				                      	<h:outputText value="Sub Total"/>                      		
 				                    </f:facet>

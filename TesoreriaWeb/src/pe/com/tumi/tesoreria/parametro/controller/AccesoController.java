@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -17,15 +16,12 @@ import org.apache.log4j.Logger;
 
 
 import pe.com.tumi.common.util.Constante;
-import pe.com.tumi.contabilidad.core.domain.PlanCuenta;
-import pe.com.tumi.contabilidad.core.domain.PlanCuentaId;
 import pe.com.tumi.empresa.domain.SubSucursalPK;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.empresa.domain.SucursalId;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
-import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.contacto.domain.Documento;
@@ -33,7 +29,6 @@ import pe.com.tumi.persona.core.domain.CuentaBancaria;
 import pe.com.tumi.persona.core.domain.CuentaBancariaPK;
 import pe.com.tumi.persona.core.domain.Natural;
 import pe.com.tumi.persona.core.domain.Persona;
-import pe.com.tumi.persona.core.domain.PersonaEmpresa;
 import pe.com.tumi.persona.core.domain.PersonaRol;
 import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
@@ -45,8 +40,6 @@ import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.domain.BancocuentaId;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.domain.BancofondoId;
-import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
-import pe.com.tumi.tesoreria.banco.domain.FondodetalleId;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 
 public class AccesoController {
@@ -362,7 +355,11 @@ public class AccesoController {
 				bancoCuenta = bancoFacade.getBancoCuentaPorId(bancoCuentaId);
 				
 				cuentaBancariaPK = new CuentaBancariaPK();
-				cuentaBancariaPK.setIntIdPersona(bancoCuenta.getIntPersona());
+				/* Autor: jchavez / Tarea: Modificación / Fecha: 10.12.2014
+				 * La persona a la que le pertenece las cuentas es la Cooperativa El Tumi, 
+				 * en este caso sería Pers_Empresa. */
+				cuentaBancariaPK.setIntIdPersona(bancoCuenta.getId().getIntEmpresaPk());
+				//Fin jchavez - 10.12.2014
 				cuentaBancariaPK.setIntIdCuentaBancaria(bancoCuenta.getIntCuentabancaria());
 				cuentaBancaria = personaFacade.getCuentaBancariaPorPK(cuentaBancariaPK);
 				

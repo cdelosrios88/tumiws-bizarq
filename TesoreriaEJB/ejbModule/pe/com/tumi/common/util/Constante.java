@@ -564,6 +564,8 @@ public class Constante {
 	//JCHAVEZ 27.10.2014
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_PERCEPCION = 310;
 	public static final Integer PARAM_T_DOCUMENTOGENERAL_DETRACCION = 311;
+	//Autor: jchavez / Tarea: Creación / Fecha: 11.12.2014
+	public static final Integer PARAM_T_DOCUMENTOGENERAL_AHORRO	= 106;
 	
 	//PARAM_T_OPCIONPERSONABUSQUEDA
 	public static final Integer PARAM_T_OPCIONPERSONABUSQ_NOMBRE = 1;
@@ -720,6 +722,11 @@ public class Constante {
 	public static final Integer PARAM_T_MODELOCONTABLE_LETRADECAMBIO = 507;
 	public static final Integer PARAM_T_MODELOCONTABLE_NOTACREDITO = 509;
 	public static final Integer PARAM_T_MODELOCONTABLE_NOTADEBITO = 513;
+	//JCHAVEZ 31.12.2014
+	public static final Integer PARAM_T_TIPOMODELOCONTABLE_GIRO_DOCUMENTOSUNAT = 505;
+	public static final Integer PARAM_T_TIPOMODELOCONTABLE_GIRO_NOTACREDITO = 510;
+	public static final Integer PARAM_T_TIPOMODELOCONTABLE_GIRO_NOTADEBITO = 511;
+	
 	
 	//PARAM_T_TIPOCAMBIO
 	public static final Integer PARAM_T_TIPOCAMBIO_BANCARIO = 1;
@@ -809,6 +816,14 @@ public class Constante {
 	public static final Integer ID_PERFIL_ASISTENTEVERIFICADOR = 28;
 	public static final Integer ID_PERFIL_ASESORCOMERCIAL = 29;
 	public static final Integer ID_PERFIL_ASISTENTELOGISTICA = 30;
+	//Autor: jchavez / Tarea: Creación / Fecha: 31.12.2014
+	public static final Integer ID_PERFIL_GERENTE_NEGOCIOS = 37;
+	public static final Integer ID_PERFIL_GERENTE_ADMINISTRATIVO = 38;
+	public static final Integer ID_PERFIL_ANALISTA_COMPRAS = 46;
+	public static final Integer ID_PERFIL_GERENTE_OPERACIONES = 48;
+	public static final Integer ID_PERFIL_JEFE_PRESUPUESTO = 54;
+	public static final Integer ID_PERFIL_ANALISTA_FACTURACION_Y_CONTROLPATRIMONIAL = 57;
+	public static final Integer ID_PERFIL_PLANEAMIENTO_Y_DESARROLLO = 69;
 	
 	//PARAM_T_TIPOCONDCONTRIBUYENTE
 	public static final Integer PARAM_T_TIPOCONDCONTRIBUYENTE_HABIDO = 1;
@@ -985,8 +1000,7 @@ public class Constante {
 	//jchavez 13.07.2014
 	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_AHORRO         = 8;
 	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_DEPOSITO       = 9;
-	//
-	
+	//	
 	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_CTAXPAGAR 	   = 13;
 	public static final Integer PARAM_T_TIPOCONCEPTOGENERAL_FDORETIRO_INTERES     = 14;
 	//PARAM_T_TIPO_MOVIMIENTO 226
@@ -1014,7 +1028,7 @@ public class Constante {
 	//PARAM_T_MOTIVOSOLICITUDCTACTE 249
 	public static final Integer PARAM_T_MOTIVOSOLICITUDCTACTE_PAGOMESSGTE = 26;
 	public static final Integer PARAM_T_MOTIVOSOLICITUDCTACTE_REGULARIZACION = 26;
-	
+		
 	//JCHAVEZ 21.07.2014 PARAMETROS DEL MODELO CONTABLE
 	public static final String PARAM_T_MODELO_INGRESOCAJA_CONFCREDITO = "Cso_ConfCredito";
 	public static final String PARAM_T_MODELO_INGRESOCAJA_CONCEPTOGRAL = "Para_ConceptoGeneral_N_Cod";
@@ -1022,6 +1036,10 @@ public class Constante {
 	public static final String PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO = "Para_TipoConcepto_N_Cod";
 	public static final String PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO = "Csoc_ItemConcepto_N_Cod";
 	public static final String PARAM_T_MODELO_INGRESOCAJA_ROL = "Para_Rol_N";
+	//Autor: jchavez / Tarea: Creación / Fecha: 12.11.2014
+	public static final String PARAM_T_MODELO_INGRESOCAJA_TIPOCTACTEAHORRO = "Para_TipoCtacte_N_Cod";
+	public static final String PARAM_T_MODELO_INGRESOCAJA_ITEMCTACTEAHORRO = "Csoc_ItemCtacte_N";
+	
 	
 	public static final Integer PARAM_T_TIPOCUENTASOCIO_SOCIO = 1;
 	public static final Integer PARAM_T_TIPOCUENTASOCIO_AHORRO = 2;
@@ -1107,4 +1125,25 @@ public class Constante {
 	public static final Integer INT_INAFECTOIGV = 2;
 	public static final Integer PARAM_T_INDICADORIGV_GENERA = 1;
 	public static final Integer PARAM_T_INDICADORIGV_NOGENERA = 0;
+	
+	/* Autor: jchavez / Tarea: Creación / Fecha: 12.12.2014
+	 * PARAM_T_TIPOTARIFA */
+	public static final Integer PARAM_T_TIPOTARIFA_IGV = 1;
+	public static final Integer PARAM_T_TIPOTARIFA_UIT = 2;
+	public static final Integer PARAM_T_TIPOTARIFA_RETENCION_3ERA = 3;
+	public static final Integer PARAM_T_TIPOTARIFA_ITAN = 4;
+	public static final Integer PARAM_T_TIPOTARIFA_PERCEPCION = 5;
+	public static final Integer PARAM_T_TIPOTARIFA_RETENCION_4TA = 6;
+	
+	// Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	public static final Integer NO_CORRESPONDE_CAMBIO_CONDICION = 0;
+	public static final Integer CORRESPONDE_CAMBIO_CONDICION = 1;
+	
+	// Autor: jchavez / Tarea: Creación / Fecha: 31.12.2014
+	public static final String PARAM_T_MODELODETALLENIVEL_GIRODOCUMENTOSUNAT_TIPODOCGRAL = "PARA_TIPODOCUMENTOGENERAL_N_COD";
+	public static final String PARAM_T_MODELODETALLENIVEL_GIRODOCUMENTOSUNAT_TIPOCOMPROBANTE = "PARA_TIPOCOMPROBANTE_N_COD";
+	public static final String PARAM_T_MODELODETALLENIVEL_GIRODOCUMENTOSUNAT_TIPOCPTODOCSUNAT = "PARA_TIPOCPTODOCSUNAT_N_COD";
+	public static final String PARAM_T_MODELODETALLENIVEL_GIRODOCUMENTOSUNAT_TIPOREQUISICION = "PARA_TIPOREQUISICION_N_COD";
+	public static final String PARAM_T_MODELODETALLENIVEL_GIRODOCUMENTOSUNAT_ESTADOPAGODS = "PARA_ESTADOPAGODS_N_COD";	
+	
 }

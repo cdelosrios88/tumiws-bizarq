@@ -115,7 +115,7 @@
                       		<f:convertDateTime pattern="dd/MM/yyyy"/>
                       	</h:outputText>
                   	</rich:column>
-                    <rich:column width="150" style="text-align: center">
+                    <rich:column width="260" style="text-align: center">
                     	<f:facet name="header">
                       		<h:outputText value="Banco / Fondo Fijo"/>                      		
                       	</f:facet>
@@ -127,7 +127,7 @@
                       	</f:facet>
                       	<h:outputText value="#{item.strEtiquetaSucursal}"/>
                 	</rich:column>
-                    <rich:column width="180" style="text-align: rigth">
+                    <rich:column width="120" style="text-align: rigth">
                     	<f:facet name="header">
                       		<h:outputText value="Saldo Inicial"/>                      		
                       	</f:facet>
@@ -135,7 +135,7 @@
                       		<f:converter converterId="ConvertidorMontos"/>
                       	</h:outputText>
                   	</rich:column>
-                    <rich:column width="180" style="text-align: rigth">
+                    <rich:column width="120" style="text-align: rigth">
                    		<f:facet name="header">
                         	<h:outputText value="Movimientos"/>
                         </f:facet>

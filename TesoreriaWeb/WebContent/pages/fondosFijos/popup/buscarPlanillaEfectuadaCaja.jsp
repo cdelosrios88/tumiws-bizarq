@@ -14,7 +14,6 @@
 										 -->
 			<h:outputText id="msgErrorMontoPllaEfect" value="#{cajaController.strMsgErrorMontoIngresado}" 
 				styleClass="msgError"
-				style="font-weight:bold"
 				rendered="#{!cajaController.strMsgErrorMontoIngresado}"/>											
 			<h:panelGroup>
 	    		<rich:dataTable
@@ -102,7 +101,7 @@
 	                 		disabled="#{item.isDisabledDocPlanillaEfect==null || item.isDisabledDocPlanillaEfect}"
 	   						styleClass="btnEstilos1"
 	   						oncomplete="if(#{cajaController.blnMontoIngresadoOK}){Richfaces.hideModalPanel('pBuscarDocPlanillaEfectuadaCaja')}"
-	   						reRender="panelDocumentoC,tablaDocPlanillaEfectuadaC,msgErrorMontoPllaEfect">
+	   						reRender="panelDocumentoC,tablaDocPlanillaEfectuadaC,msgErrorMontoPllaEfect, opTipoDePersona">
 	   						<f:attribute name="item" value="#{item}"/>
 	   					</a4j:commandButton>
 			        	

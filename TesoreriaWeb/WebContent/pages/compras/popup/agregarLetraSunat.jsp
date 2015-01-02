@@ -154,15 +154,16 @@
 			<rich:column width=	"110">
 				<h:outputText value="Monto :"/>
 			</rich:column>
-			<rich:column width="200">
-				<h:inputText size="32" id="txtMontoIngresadoTotalL" readonly="true"
+
+			<rich:column width="200" style="text-align: left; color:red; font-weight: bold; font-size:17px">
+				<h:outputText id="txtMontoIngresadoTotalL" 
 					value="#{sunatController.documentoSunatLetra.detalleLetra.bdMontoSinTipoCambio}">
 					<f:converter converterId="ConvertidorMontos"/>
-				</h:inputText>
+				</h:outputText>
 			</rich:column>
 		</h:panelGrid>
 		
-		<h:panelGrid columns="4">
+		<h:panelGrid columns="4" id="panelDocumentoSunatLetra">
 			<rich:column width=	"110">
 				<h:outputText value="Documento :"/>
 			</rich:column>
