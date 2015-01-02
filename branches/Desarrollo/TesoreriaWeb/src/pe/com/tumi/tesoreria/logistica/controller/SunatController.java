@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -349,14 +347,14 @@ public class SunatController {
 		return false;
 	}
 	
-	private boolean detalleValido(DocumentoSunatDetalle documentoSunatDetalle){
-		if(documentoSunatDetalle != null
-		&& documentoSunatDetalle.getBdMontoTotal()!=null 
-		&& documentoSunatDetalle.getBdMontoTotal().compareTo(new BigDecimal(0))!=0){
-			return Boolean.TRUE;
-		}		
-		return Boolean.FALSE;
-	}
+//	private boolean detalleValido(DocumentoSunatDetalle documentoSunatDetalle){
+//		if(documentoSunatDetalle != null
+//		&& documentoSunatDetalle.getBdMontoTotal()!=null 
+//		&& documentoSunatDetalle.getBdMontoTotal().compareTo(new BigDecimal(0))!=0){
+//			return Boolean.TRUE;
+//		}		
+//		return Boolean.FALSE;
+//	}
 	/**
 	 * Autor: jchavez / Tarea: Modificación / Fecha: 29.10.2014
 	 * Funcionalidad: Setea la llave del Documento Sunat adjunto ingresado a la variable "documentoSunatNuevo"
@@ -669,22 +667,31 @@ public class SunatController {
 		strMsgErrorMontoDocSunatNota = "";
 		bdMontoIngresadoTotal = BigDecimal.ZERO;
 		try{
-			for (DocumentoSunatDetalle x : listaDocSunatDetDeDocSunatRel) {
-				if (x.getBdMontoAplicar()!=null) {
-					if (x.getBdMontoSaldoTemp().compareTo(x.getBdMontoAplicar())==-1) {
-						strMsgErrorMontoDocSunatNota = "El monto ingresado supera el máximo permitodo para la orden detalle "+x.getOrdenCompraDetalle().getId().getIntItemOrdenCompraDetalle();
-					}else {
+			if (intTipoComprobante.equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+				for (DocumentoSunatDetalle x : listaDocSunatDetDeDocSunatRel) {
+					if (x.getBdMontoAplicar()!=null) {
+						if (x.getBdMontoSaldoTemp().compareTo(x.getBdMontoAplicar())==-1) {
+							strMsgErrorMontoDocSunatNota = "El monto ingresado supera el máximo permitodo para la orden detalle "+x.getOrdenCompraDetalle().getId().getIntItemOrdenCompraDetalle();
+						}else {
+							bdMontoIngresadoTotal = bdMontoIngresadoTotal.add(x.getBdMontoAplicar()!=null?x.getBdMontoAplicar():BigDecimal.ZERO);
+						}
+					}
+				}
+				
+//				if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+					if (docSunatRelacionado.getDetalleTotalGeneral().getBdMontoTotal().compareTo(bdMontoIngresadoTotal)==-1) {
+						strMsgErrorMontoDocSunatNota = "El monto ingresado supera el monto del Documento Sunat Relacionado";
+					}
+					documentoSunatNota.getDetalleNotaCredito().setBdMontoSinTipoCambio(bdMontoIngresadoTotal);
+//				}else if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
+//					documentoSunatNota.getDetalleNotaDebito().setBdMontoSinTipoCambio(bdMontoIngresadoTotal);
+//				}				
+			}else if (intTipoComprobante.equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
+				for (DocumentoSunatDetalle x : listaDocSunatDetDeDocSunatRel) {
+					if (x.getBdMontoAplicar()!=null) {
 						bdMontoIngresadoTotal = bdMontoIngresadoTotal.add(x.getBdMontoAplicar()!=null?x.getBdMontoAplicar():BigDecimal.ZERO);
 					}
 				}
-			}
-			
-			if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
-				if (docSunatRelacionado.getDetalleTotalGeneral().getBdMontoTotal().compareTo(bdMontoIngresadoTotal)==-1) {
-					strMsgErrorMontoDocSunatNota = "El monto ingresado supera el monto del Documento Sunat Relacionado";
-				}
-				documentoSunatNota.getDetalleNotaCredito().setBdMontoSinTipoCambio(bdMontoIngresadoTotal);
-			}else if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
 				documentoSunatNota.getDetalleNotaDebito().setBdMontoSinTipoCambio(bdMontoIngresadoTotal);
 			}
 			
@@ -808,7 +815,7 @@ public class SunatController {
 	public void validaDocSunatDetalle(){
 		try {
 			/* Cuando se registra la fecha de emisión, se debe validar que el periodo del documento (año – mes) 
-			 * se encuentre abierto. En el proceso de cierre de logística y en el cierre de contabilidad, 
+			 * se encuentre abierto. En el proceso de 'Cierre de Logística' y en el 'Cierre de Contabilidad', 
 			 * ambos cierres se encuentran grabados en las tablas: TES_CIERRELOGISTICAOPER y CON_CIERRECONTABILIDAD
 			 * */
 			//Autor: jchavez / Tarea: Modificación / Fecha: 24.10.2014
@@ -846,6 +853,12 @@ public class SunatController {
 			//VALIDACION FECHA DE PROVISION...
 			if (documentoSunatNuevo.getTsFechaProvision().equals(null)) {
 				mostrarMensajeAgregarDocSunatDetalle(Boolean.FALSE, "Debe seleccionar una Fecha de Provisión.");
+				return;
+			}
+			//VALIDACION CHECKED'S
+//			sunatController.documentoSunatNuevo.seleccionaInafecto
+			if (documentoSunatNuevo.isSeleccionaInafecto()==true && documentoSunatNuevo.isSeleccionaIGVContable()==true) {
+				mostrarMensajeAgregarDocSunatDetalle(Boolean.FALSE, "No puede seleccionar inafecto e I.G.V. contable a la vez.");
 				return;
 			}
 			//VALIDACION GLOSA...
@@ -928,10 +941,10 @@ public class SunatController {
 				mostrarMensajeAgregarDocSunatLetra(Boolean.FALSE, "Debe ingresar monto de la Letra.");
 			}		
 			//VALIDACION ARCHIVO ADJUNTO...
-//			if (documentoSunatLetra.getArchivoDocumento()==null){
-//				mostrarMensajeAgregarDocSunatLetra(Boolean.FALSE, "Debe ingresar un Archivo adjunto.");
-//				return;
-//			}
+			if (documentoSunatLetra.getArchivoDocumento()==null){
+				mostrarMensajeAgregarDocSunatLetra(Boolean.FALSE, "Debe ingresar un Archivo adjunto.");
+				return;
+			}
 			//VALIDACION FECHA EMISION Y VENCIMIENTO... convertirTimestampAStringPeriodo
 //			Integer intPeriodoFechaVencimiento = Integer.parseInt(MyUtilFormatoFecha.convertirTimestampAStringPeriodo(new Timestamp(documentoSunatNuevo.getDtFechaVencimiento().getTime())));
 //			Integer intPeriodoFechaEmision = Integer.parseInt(MyUtilFormatoFecha.convertirTimestampAStringPeriodo(new Timestamp(documentoSunatNuevo.getDtFechaEmision().getTime())));
@@ -1128,6 +1141,22 @@ public class SunatController {
 		}
 	}
 	
+	private DocumentoSunatOrdenComDoc agregarDocumentoSunatOrdenComDoc(OrdenCompraDocumento ordenCompraDocumento){
+		DocumentoSunatOrdenComDoc docSunatOrdenCompraDoc = new DocumentoSunatOrdenComDoc();
+		docSunatOrdenCompraDoc.setId(new DocumentoSunatOrdenComDocId());
+		
+		docSunatOrdenCompraDoc.getId().setIntPersEmpresaDocSunatOrden(EMPRESA_USUARIO);		
+		docSunatOrdenCompraDoc.setIntPersEmpresaOrden(ordenCompra.getId().getIntPersEmpresa());
+		docSunatOrdenCompraDoc.setIntItemOrdenCompra(ordenCompra.getId().getIntItemOrdenCompra());
+		docSunatOrdenCompraDoc.setIntItemOrdenCompraDoc(ordenCompraDocumento.getId().getIntItemOrdenCompraDocumento());
+		docSunatOrdenCompraDoc.setBdMonto(ordenCompraDocumento.getBdMontoUsarDocumento());
+		docSunatOrdenCompraDoc.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+		docSunatOrdenCompraDoc.setIntItemOrdenCompraDetalle(null);
+		log.info(docSunatOrdenCompraDoc);
+		
+		return docSunatOrdenCompraDoc;
+	}
+	
 	/**
 	 * Autor: jchavez / Tarea: Modificación / Fecha: 05.11.2014
 	 * Funcionalidad: Se carga el Documento Sunat Doc a grabar en la lista "listaDocSunatDetraccionPercepcion".
@@ -1178,6 +1207,8 @@ public class SunatController {
 		documentoSunatNuevo.setDtFechaVencimiento(new Date());
 		documentoSunatNuevo.setIntParaMoneda(intParaTipoMoneda);			
 		documentoSunatNuevo.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA);
+		
+		documentoSunatNuevo.setIntIndicadorLetras(Constante.PARAM_T_INDICADORLETRAS_SINLETRAS);
 		
 		documentoSunatNuevo.setOrdenCompra(ordenCompra);
 		
@@ -1396,15 +1427,19 @@ public class SunatController {
 					documentoSunatLetra.getDetalleLetra().getBdMontoSinTipoCambio().multiply(tipoCambioLetra.getBdPromedio()));
 			
 			for (DocumentoSunat docSunat : listaDocSunatValidosParaLetraDeCambio) {
+				BigDecimal bdMontoIngresado = BigDecimal.ZERO;
 				if (docSunat.getBdMontoAplicar()!=null) {
+					bdMontoIngresado = bdMontoIngresado.add(docSunat.getBdMontoAplicar());
 					docSunat.setBdMontoSaldoTemp(docSunat.getBdMontoSaldoTemp().subtract(docSunat.getBdMontoAplicar()));
 					docSunat.setBdMontoAplicar(null);
 					if (documentoValido(docSunat.getDocPercepcion())) {
 						if (docSunat.getDocPercepcion().getBdMontoAplicar()!=null) {
+							bdMontoIngresado = bdMontoIngresado.add(docSunat.getDocPercepcion().getBdMontoAplicar());
 							docSunat.getDocPercepcion().setBdMontoSaldoTemp(docSunat.getDocPercepcion().getBdMontoSaldoTemp().subtract(docSunat.getDocPercepcion().getBdMontoAplicar()));
 							docSunat.getDocPercepcion().setBdMontoAplicar(null);
 						}
 					}
+					docSunat.setBdMontoIngresado(bdMontoIngresado);
 					documentoSunatLetra.getListaDocSunatRelacionadosConLetraDeCambio().add(docSunat);
 				}
 			}
@@ -1451,7 +1486,10 @@ public class SunatController {
 			documentoSunatNota.setListaDocumentoSunatDetalle(new ArrayList<DocumentoSunatDetalle>());
 			for (DocumentoSunatDetalle docSunDet : listaDocSunatDetDeDocSunatRel) {
 				if (docSunDet.getBdMontoAplicar()!=null && docSunDet.getBdMontoAplicar().compareTo(BigDecimal.ZERO)!=0) {
+					docSunDet.setIntSucuIdSucursal(SUCURSAL_USUARIO);
+					docSunDet.setIntSudeIdSubsucursal(SUBSUCURSAL_USUARIO);
 					docSunDet.setBdMontoSinTipoCambio(docSunDet.getBdMontoAplicar());
+					docSunDet.setBdMontoTotal(docSunDet.getBdMontoAplicar());
 					docSunDet.setBdMontoSaldoTemp(docSunDet.getBdMontoSaldoTemp().subtract(docSunDet.getBdMontoAplicar()));
 					docSunDet.setBdMontoAplicar(null);
 					documentoSunatNota.getListaDocumentoSunatDetalle().add(docSunDet);
@@ -1465,7 +1503,8 @@ public class SunatController {
 					}else if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
 						docSunat.setBdMontoSaldoTemp(docSunat.getDetalleTotalGeneral().getBdMontoTotal().subtract(documentoSunatNota.getDetalleNotaDebito().getBdMontoSinTipoCambio()));
 					}
-					
+					documentoSunatNota.setDocPercepcion(docSunat.getDocPercepcion());
+					documentoSunatNota.setBlnGeneraDetraccionNota(docSunat.getBlnGeneraDetraccionNota());
 					documentoSunatNota.setIntPersEmpresaDocSunatEnlazado(docSunat.getId().getIntPersEmpresa());
 					documentoSunatNota.setIntItemDocumentoSunatEnlazado(docSunat.getId().getIntItemDocumentoSunat());
 					break;
@@ -1536,12 +1575,11 @@ public class SunatController {
 					return;
 				}
 			}				
-					
 			//VALIDACION ARCHIVO ADJUNTO...
-//			if (documentoSunatNota.getArchivoDocumento()==null){
-//				mostrarMensajeAgregarDocSunatNota(Boolean.FALSE, "Debe ingresar un Archivo adjunto.");
-//				return;
-//			}
+			if (documentoSunatNota.getArchivoDocumento()==null){
+				mostrarMensajeAgregarDocSunatNota(Boolean.FALSE, "Debe ingresar un Archivo adjunto.");
+				return;
+			}
 			//VALIDACION FECHA EMISION Y VENCIMIENTO... convertirTimestampAStringPeriodo
 //			Integer intPeriodoFechaVencimiento = Integer.parseInt(MyUtilFormatoFecha.convertirTimestampAStringPeriodo(new Timestamp(documentoSunatNuevo.getDtFechaVencimiento().getTime())));
 //			Integer intPeriodoFechaEmision = Integer.parseInt(MyUtilFormatoFecha.convertirTimestampAStringPeriodo(new Timestamp(documentoSunatNuevo.getDtFechaEmision().getTime())));
@@ -1622,8 +1660,84 @@ public class SunatController {
 	}
 	//Fin agregado por cdelosrios, 08/11/2013
 	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private void cargarListaDocumentoSunatDoc(){
+		try {
+			for (DocumentoSunat docSunat : listaDocumentoSunatGrabar) {
+				if (documentoValido(docSunat.getDocDetraccion())) {
+					docSunat.getDocDetraccion().setIntTipoMoneda(documentoSunatNuevo.getIntParaMoneda());
+					docSunat.getDocDetraccion().setBdTipoCambio(tipoCambio.getBdPromedio());
+					listaDocSunatDetraccionPercepcion.add(docSunat.getDocDetraccion());
+				}else if (documentoValido(docSunat.getDocPercepcion())) {
+					docSunat.getDocPercepcion().setIntTipoMoneda(documentoSunatNuevo.getIntParaMoneda());
+					docSunat.getDocPercepcion().setBdTipoCambio(tipoCambio.getBdPromedio());
+					listaDocSunatDetraccionPercepcion.add(docSunat.getDocPercepcion());
+				}
+			}
+			
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+	}
+	
 
+	private void cargarListaDocumentoSunatLetrasYNotas(DocumentoSunat documentoSunat){
+		List<DocumentoSunat> listDocSunatLetra = null;
+		List<DocumentoSunat> listDocSunatNotaDebito = null;
+		List<DocumentoSunat> listDocSunatNotaCrebito = null;
+		listaDocumentoSunatLetra = new ArrayList<DocumentoSunat>();
+		try {
+			documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO);
+			listDocSunatLetra = logisticaFacade.getListDocumentoSunatPorOrdenCompraYTipoDocumento(documentoSunat);
+			documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO);
+			listDocSunatNotaDebito = logisticaFacade.getListDocumentoSunatPorOrdenCompraYTipoDocumento(documentoSunat);
+			documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO);
+			listDocSunatNotaCrebito = logisticaFacade.getListDocumentoSunatPorOrdenCompraYTipoDocumento(documentoSunat);
+			
+//			listaDocumentoSunatLetra.addAll(documentoSunat.getListaDocumentoSunatLetra());
+			listaDocumentoSunatLetra.addAll(listDocSunatLetra);
+			listaDocumentoSunatLetra.addAll(listDocSunatNotaDebito);
+			listaDocumentoSunatLetra.addAll(listDocSunatNotaCrebito);
+			
+			if(listaDocumentoSunatLetra!=null){
+				for(DocumentoSunat documentoSunatLetra : listaDocumentoSunatLetra){
+					cargarSucursal(documentoSunatLetra.getDetalleLetra());
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	private void cargarSucursal(OrdenCompraDetalle ordenCompraDetalle)throws Exception{
+		for(Sucursal sucursal : listaSucursal){
+			if(ordenCompraDetalle.getIntSucuIdSucursal().equals(sucursal.getId().getIntIdSucursal())){
+				ordenCompraDetalle.setSucursal(sucursal);
+				for(Area area : sucursal.getListaArea()){
+					if(ordenCompraDetalle.getIntIdArea().equals(area.getId().getIntIdArea())){
+						ordenCompraDetalle.setArea(area);
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+	
+	private void cargarSucursal(DocumentoSunatDetalle documentoSunatDetalle)throws Exception{
+		for(Sucursal sucursal : listaSucursal){
+			if(documentoSunatDetalle.getIntSucuIdSucursal().equals(sucursal.getId().getIntIdSucursal())){
+				documentoSunatDetalle.setOrdenCompraDetalle(new OrdenCompraDetalle());
+				documentoSunatDetalle.getOrdenCompraDetalle().setSucursal(sucursal);
+				for(Area area : sucursal.getListaArea()){
+					if(documentoSunatDetalle.getIntIdArea().equals(area.getId().getIntIdArea())){
+						documentoSunatDetalle.getOrdenCompraDetalle().setArea(area);
+						break;
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Autor
 	 */
@@ -1652,9 +1766,6 @@ public class SunatController {
 			}
 			
 			//LIMPIEZA DE FORMULARIO
-//			for (DocumentoSunat docSun : listaDocSunatValidosParaNota) {
-//				docSun.setRbDocSunatSelected(null);
-//			}
 			listaDocSunatDetDeDocSunatRel.clear();
 			
 			documentoSunatNota = new DocumentoSunat();
@@ -1727,7 +1838,13 @@ public class SunatController {
 					// Agrega Notas de Débito en todos los casos
 					if (intTipoComprobante.equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
 						blnGeneraDetraccion = true;
-//						listaDocSunatValidosParaNota.addAll(lstDocSunatRelTmp);
+						for (DocumentoSunat documentoSunat : lstDocSunatRelTmp) {
+							if (documentoSunat.getIntIndicadorLetras()==null || documentoSunat.getIntIndicadorLetras().equals(Constante.PARAM_T_INDICADORLETRAS_SINLETRAS)) {
+								documentoSunat.setBdMontoSaldoTemp(documentoSunat.getDetalleTotalGeneral().getBdMontoTotal());
+								documentoSunat.setBlnGeneraDetraccionNota(blnGeneraDetraccion);
+								listaDocSunatValidosParaNota.add(documentoSunat);
+							}
+						}
 					}
 					// Solo debe permitirse agregar Notas de Crédito cuando ...
 					else if (intTipoComprobante.equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
@@ -1854,29 +1971,6 @@ public class SunatController {
 		}	
 	}
 	
-//	private void cargarListaSucursal() throws Exception {
-//		listaSucursal = empresaFacade
-//				.getListaSucursalPorPkEmpresa(EMPRESA_USUARIO);
-//		for (Sucursal sucursal : listaSucursal)
-//			sucursal.setListaArea(empresaFacade
-//					.getListaAreaPorSucursal(sucursal));
-//
-//		// Ordenamos por nombre
-//		Collections.sort(listaSucursal, new Comparator<Sucursal>() {
-//			public int compare(Sucursal uno, Sucursal otro) {
-//				return uno.getJuridica().getStrSiglas()
-//						.compareTo(otro.getJuridica().getStrSiglas());
-//			}
-//		});
-//	}
-	
-	
-	
-	
-	
-	
-	
-	
 	public void deshabilitarPanelInferior(){
 		registrarNuevo = Boolean.FALSE; 
 		mostrarPanelInferior = Boolean.FALSE;
@@ -1908,46 +2002,49 @@ public class SunatController {
 		
 		mostrarMensajeExitoDocSunatNota = false;
 		mostrarMensajeErrorDocSunatNota= false;
+		
+		strSunat = "";
 	}	
 	
 	public void grabar(){
 		log.info("--grabar");
 		try{
-//			if(listaDocumentoSunatGrabar!=null && !listaDocumentoSunatGrabar.isEmpty()){
-//				if(listaDocumentoSunatGrabar.isEmpty()){
-//					mostrarMensaje(Boolean.FALSE, "Debe agregar al menos un Documento Sunat."); return;
-//				}
-//
-//				listaDocumentoSunatGrabar = logisticaFacade.grabarDocumentoSunat(listaDocumentoSunatGrabar,	ordenCompra);
-//				listaDocSunatDetraccionPercepcion.clear();
-//				for (DocumentoSunat x : listaDocumentoSunatGrabar) {
-//					if (documentoValido(x.getDocDetraccion())) {
-//						x.getDocDetraccion().setIntTipoMoneda(x.getIntParaMoneda());
-//						x.getDocDetraccion().setBdTipoCambio(tipoCambio.getBdPromedio());
-//						listaDocSunatDetraccionPercepcion.add(x.getDocDetraccion());
-//					}
-//					if (documentoValido(x.getDocPercepcion())) {
-//						x.getDocPercepcion().setIntTipoMoneda(x.getIntParaMoneda());
-//						x.getDocPercepcion().setBdTipoCambio(tipoCambio.getBdPromedio());
-//						listaDocSunatDetraccionPercepcion.add(x.getDocPercepcion());
-//					}
-//				}
-//				//Agregado por cdelosrios, 25/10/2013
-//				mostrarPanelDatosSunat = Boolean.FALSE;
-//				//Fin agregado por cdelosrios, 25/10/2013
-//				buscar();
-//				mostrarMensaje(Boolean.TRUE, "Se registró correctamente el Documento Sunat.");
-			//Agregado por cdelosrios, 18/11/2013
-//			}else {
-				DocumentoSunat docSunatLetra = null;
-				if(listaDocumentoSunatLetra!=null && !listaDocumentoSunatLetra.isEmpty()){
-					docSunatLetra = new DocumentoSunat();
-					docSunatLetra.setOrdenCompra(ordenCompra);
-					docSunatLetra.setListaDocumentoSunatLetra(listaDocumentoSunatLetra);
-					logisticaFacade.agregarDocumentoSunatLetra(docSunatLetra);
-					mostrarMensaje(Boolean.TRUE, "Se registro correctamente la Letra de cambio.");
+			if(listaDocumentoSunatGrabar!=null && !listaDocumentoSunatGrabar.isEmpty()){
+				if(listaDocumentoSunatGrabar.isEmpty()){
+					mostrarMensaje(Boolean.FALSE, "Debe agregar al menos un Documento Sunat."); return;
 				}
-//			}
+
+				listaDocumentoSunatGrabar = logisticaFacade.grabarDocumentoSunat(listaDocumentoSunatGrabar,	ordenCompra);
+				listaDocSunatDetraccionPercepcion.clear();
+				for (DocumentoSunat x : listaDocumentoSunatGrabar) {
+					if (documentoValido(x.getDocDetraccion())) {
+						x.getDocDetraccion().setIntTipoMoneda(x.getIntParaMoneda());
+						x.getDocDetraccion().setBdTipoCambio(tipoCambio.getBdPromedio());
+						listaDocSunatDetraccionPercepcion.add(x.getDocDetraccion());
+					}
+					if (documentoValido(x.getDocPercepcion())) {
+						x.getDocPercepcion().setIntTipoMoneda(x.getIntParaMoneda());
+						x.getDocPercepcion().setBdTipoCambio(tipoCambio.getBdPromedio());
+						listaDocSunatDetraccionPercepcion.add(x.getDocPercepcion());
+					}
+				}
+				//Agregado por cdelosrios, 25/10/2013
+				mostrarPanelDatosSunat = Boolean.FALSE;
+				//Fin agregado por cdelosrios, 25/10/2013
+				buscar();
+				mostrarMensaje(Boolean.TRUE, "Se registró correctamente el Documento Sunat.");
+//			Agregado por cdelosrios, 18/11/2013
+			}
+//			else {
+//				DocumentoSunat docSunatLetra = null;
+//				if(listaDocumentoSunatLetra!=null && !listaDocumentoSunatLetra.isEmpty()){
+//					docSunatLetra = new DocumentoSunat();
+//					docSunatLetra.setOrdenCompra(ordenCompra);
+//					docSunatLetra.setListaDocumentoSunatLetra(listaDocumentoSunatLetra);
+//					logisticaFacade.agregarDocumentoSunatLetra(docSunatLetra);
+//					mostrarMensaje(Boolean.TRUE, "Se registro correctamente la Letra de cambio.");
+//				}
+////			}
 			//Fin agregado por cdelosrios, 18/11/2013
 			habilitarGrabar = Boolean.FALSE;
 			deshabilitarNuevo = Boolean.TRUE;
@@ -1957,51 +2054,37 @@ public class SunatController {
 			log.error(e.getMessage(),e);
 		}
 	}	
-	
-	//Agregado por cdelosrios, 01/11/2013
-//	public void modificar(){
-//		log.info("--modificar");
-//		try{
-//			if(listaDocumentoSunatGrabar!=null){
-//				if(listaDocumentoSunatGrabar.isEmpty()){
-//					mostrarMensaje(Boolean.FALSE, "Debe agregar al menos un Documento Sunat."); return;
-//				}
-//				//Modificado por cdelosrios, 18/11/2013
-//				//listaDocumentoSunatGrabar = logisticaFacade.modificarDocumentoSunat(listaDocumentoSunatGrabar, ordenCompra);
-//				listaDocumentoSunatGrabar = logisticaFacade.modificarDocumentoSunat(listaDocumentoSunatGrabar, ordenCompra, listaDocumentoSunatLetra);
-//				//Fin modificado por cdelosrios, 18/11/2013
-//				//Agregado por cdelosrios, 18/11/2013
-//				/*if(documentoSunatNuevo.getListaDocumentoSunatLetra()!=null 
-//						&& !documentoSunatNuevo.getListaDocumentoSunatLetra().isEmpty()){
-//						documentoSunatNuevo.getId().setIntItemDocumentoSunat(
-//								registroSeleccionado.getId().getIntItemDocumentoSunat());
-//						logisticaFacade.agregarDocumentoSunatLetra(documentoSunatNuevo);
-//				}*/
-//				//Fin agregado por cdelosrios, 18/11/2013
-//				mostrarPanelDatosSunat = Boolean.TRUE;
-//				buscar();
-//				mostrarMensaje(Boolean.TRUE, "Se modificó correctamente el Documento Sunat.");
-//			}
-//			habilitarGrabar = Boolean.FALSE;
-//			deshabilitarNuevo = Boolean.TRUE;
-//			modificarRegistro = Boolean.FALSE;
-//		} catch (Exception e) {
-//			mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro del Documento Sunat.");
-//			log.error(e.getMessage(),e);
-//		}
-//	}
-	//Fin agregado por cdelosrios, 01/11/2013
-	
+
 	public void modificar(){
-		log.info("--modificar");
-//		DocumentoSunat docSunatLetra = null;
+		log.info("------- modificar() -------");
 		try{
 			if(listaDocumentoSunatGrabar!=null){
-//				if(listaDocumentoSunatGrabar.isEmpty()){
-//					mostrarMensaje(Boolean.FALSE, "Debe agregar al menos un Documento Sunat."); return;
+				List<DocumentoSunat> listaDocumentoSunatGrabarTemp = new ArrayList<DocumentoSunat>();
+				for (DocumentoSunat x : listaDocumentoSunatGrabar) {
+					if (x.getId().getIntItemDocumentoSunat()==null) {
+						x.setIntParaEstadoPago(Constante.PARAM_T_ESTADOPAGO_PENDIENTE);
+						listaDocumentoSunatGrabarTemp.add(x);
+					}
+				}
+				
+				listaDocumentoSunatGrabarTemp = logisticaFacade.grabarDocumentoSunat(listaDocumentoSunatGrabarTemp,	ordenCompra);
+//				if (listaDocumentoSunatGrabarTemp!=null && !listaDocumentoSunatGrabarTemp.isEmpty()) {
+//					listaDocumentoSunatGrabar.addAll(listaDocumentoSunatGrabarTemp);
 //				}
-//
-//				listaDocumentoSunatGrabar = logisticaFacade.modificarDocumentoSunat(listaDocumentoSunatGrabar, ordenCompra, listaDocumentoSunatLetra);
+//				
+				listaDocSunatDetraccionPercepcion.clear();
+				for (DocumentoSunat x : listaDocumentoSunatGrabar) {
+					if (documentoValido(x.getDocDetraccion())) {
+						x.getDocDetraccion().setIntTipoMoneda(x.getIntParaMoneda());
+						x.getDocDetraccion().setBdTipoCambio(tipoCambio.getBdPromedio());
+						listaDocSunatDetraccionPercepcion.add(x.getDocDetraccion());
+					}
+					if (documentoValido(x.getDocPercepcion())) {
+						x.getDocPercepcion().setIntTipoMoneda(x.getIntParaMoneda());
+						x.getDocPercepcion().setBdTipoCambio(tipoCambio.getBdPromedio());
+						listaDocSunatDetraccionPercepcion.add(x.getDocPercepcion());
+					}
+				}
 			}
 
 			if(listaDocumentoSunatLetra!=null && !listaDocumentoSunatLetra.isEmpty()){
@@ -2010,7 +2093,6 @@ public class SunatController {
 //						docSunatLetra.setOrdenCompra(ordenCompra);
 						docSunatLetra.setListaDocumentoSunatLetra(listaDocumentoSunatLetra);
 						logisticaFacade.agregarDocumentoSunatLetra(docSunatLetra);
-//						mostrarMensaje(Boolean.TRUE, "Se registro correctamente la Letra de cambio.");
 					}
 				}				
 			}
@@ -2019,7 +2101,7 @@ public class SunatController {
 				for (DocumentoSunat docSunatNota : listaDocumentoSunatNota) {
 					if (docSunatNota.getId().getIntItemDocumentoSunat()==null) {
 						docSunatNota.setListaDocumentoSunatNota(listaDocumentoSunatNota);
-						logisticaFacade.agregarDocumentoSunatNota(docSunatNota);
+						logisticaFacade.agregarDocumentoSunatNota(docSunatNota, ordenCompra);
 					}
 				}
 			}
@@ -2036,8 +2118,6 @@ public class SunatController {
 		}
 	}
 	
-
-
 	public void agregarLetras(){
 		try{
 			log.info("--agregarLetras");			
@@ -2058,6 +2138,8 @@ public class SunatController {
 	
 	public void modificarRegistro(){
 		DocumentoSunat documentoSunatLetra = null;
+		limpiarPanelInferior();
+		
 		try{
 			log.info("--modificarRegistro");
 			habilitarGrabar = Boolean.TRUE;
@@ -2067,50 +2149,47 @@ public class SunatController {
 			
 			cargarRegistro();
 			
-			//Agregado por cdelosrios, 14/11/2013
 			if(PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_CENTRAL) 
 				|| PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_FILIAL) 
 				|| PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_LIMA)){
 				agregarLetras = Boolean.FALSE;
 			}else
 				agregarLetras = Boolean.TRUE;
-			//Fin agregado por cdelosrios, 14/11/2013
 			
 			modificarRegistro = Boolean.TRUE;
 			ocultarMensaje();
 			if(documentoSunatNuevo.getIntParaEstadoPago().equals(Constante.PARAM_T_ESTADOPAGO_CANCELADO)
-			//Modificado por cdelosrios, 18/11/2013
-			//||(documentoSunatNuevo.getListaDocumentoSunatLetra()!=null && !documentoSunatNuevo.getListaDocumentoSunatLetra().isEmpty())
 			||(listaDocumentoSunatLetra!=null && !listaDocumentoSunatLetra.isEmpty())
-			//Fin modificado por cdelosrios, 18/11/2013
+
 			|| documentoSunatNuevo.getIntItemEgresoGeneral()!=null)
 				modificarRegistro = Boolean.FALSE;
-			//Agregado por cdelosrios, 29/10/2013
 			mostrarPanelDatosSunat = Boolean.TRUE;
 			cargarDocumentoSunatPorOrdenCompra(registroSeleccionado);
 			
-			//Fin agregado por cdelosrios, 29/10/2013
-			//Agregado por cdelosrios, 01/11/2013
 			strSunat = Constante.MANTENIMIENTO_MODIFICAR;
 			cargarDocumentoSunatNuevo();
-			//Fin agregado por cdelosrios, 01/11/2013
-			
-			//Agregado por cdelosrios, 18/11/2013
+
 			documentoSunatLetra = documentoSunatNuevo;
 			cargarListaDocumentoSunatLetrasYNotas(documentoSunatLetra);
 			cargarListaDocumentoSunatDoc();
-			//Fin agregado por cdelosrios, 18/11/2013
 			
 			obtenerDocSunatValidosParaLetraDeCambio();
-//			obtenerDocSunatValidosParaNota();
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
 	}
 	
-	//Agregado por cdelosrios, 01/11/2013
+	private void limpiarPanelInferior(){
+		listaDocSunatDetraccionPercepcion.clear();
+		listaDocumentoSunatNota.clear();
+		listaDocSunatValidosParaNota.clear();
+		intTipoComprobante = 0;
+	}
+	
 	public void verRegistro(){
 		DocumentoSunat documentoSunatLetra = null;
+		limpiarPanelInferior();
+		
 		try{
 			log.info("----- ver registro -----");			
 			habilitarGrabar = Boolean.TRUE;
@@ -2120,21 +2199,17 @@ public class SunatController {
 
 			cargarRegistro();
 			
-			//Agregado por cdelosrios, 14/11/2013
 			if(PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_CENTRAL) 
 				|| PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_FILIAL) 
 				|| PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_LIMA)){
 				agregarLetras = Boolean.FALSE;
 			}else
 				agregarLetras = Boolean.TRUE;
-			//Fin agregado por cdelosrios, 14/11/2013
+
 			modificarRegistro = Boolean.TRUE;
 			ocultarMensaje();
 			if(documentoSunatNuevo.getIntParaEstadoPago().equals(Constante.PARAM_T_ESTADOPAGO_CANCELADO)
-			//Modificado por cdelosrios, 18/11/2013
-			//||(documentoSunatNuevo.getListaDocumentoSunatLetra()!=null && !documentoSunatNuevo.getListaDocumentoSunatLetra().isEmpty())
 			||(listaDocumentoSunatLetra!=null && !listaDocumentoSunatLetra.isEmpty())
-			//Fin modificado por cdelosrios, 18/11/2013
 			|| documentoSunatNuevo.getIntItemEgresoGeneral()!=null)
 				modificarRegistro = Boolean.FALSE;
 			mostrarPanelDatosSunat = Boolean.FALSE;
@@ -2142,12 +2217,9 @@ public class SunatController {
 			cargarDocumentoSunatPorOrdenCompra(registroSeleccionado);
 			cargarDocumentoSunatNuevo();
 			
-			//Agregado por cdelosrios, 18/11/2013
 			documentoSunatLetra = documentoSunatNuevo;
-//			documentoSunatLetra.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO);
 			cargarListaDocumentoSunatLetrasYNotas(documentoSunatLetra);
 			cargarListaDocumentoSunatDoc();
-			//Fin agregado por cdelosrios, 18/11/2013
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
@@ -2158,17 +2230,12 @@ public class SunatController {
 		try {
 			listaDocSunat = logisticaFacade.getListaDocumentoSunatPorOrdenCompra(docSunat.getOrdenCompra());
 			listaDocumentoSunatGrabar = listaDocSunat;
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 	}
-	
-	
-	
-	
-	
 
-	
 	public void verDocumentoSunat(ActionEvent event) {
 		try {
 			itemDocumentoSunat = (DocumentoSunat) event.getComponent()
@@ -2180,16 +2247,23 @@ public class SunatController {
 			archivoId.setIntItemArchivo(itemDocumentoSunat.getIntItemArchivo());
 			archivoId.setIntItemHistorico(itemDocumentoSunat.getIntItemHistorico());			
 			itemDocumentoSunat.setArchivoDocumento(generalFacade.getArchivoPorPK(archivoId));
-			
+			if (itemDocumentoSunat.getIntIndicadorIGV().equals(1)) {
+				itemDocumentoSunat.setSeleccionaIGVContable(true);
+			}
+			if (itemDocumentoSunat.getIntIndicadorInafecto().equals(1)) {
+				itemDocumentoSunat.setSeleccionaInafecto(true);
+			}
+			if (itemDocumentoSunat.getIntIndicadorPercepcion().equals(1)) {
+				itemDocumentoSunat.setSeleccionaPercepcion(true);
+			}				
+
 			//seleccionarSucursalDocumento();
 			//strMensajeDocumento = "";
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 	}
-	//Fin agregado por cdelosrios, 01/11/2013
-	
-	//Agregado por cdelosrios, 15/11/2013
+
 	public void verDocumentoAdelanto(ActionEvent event) {
 		try {
 			itemOrdenCompraDocumento = (OrdenCompraDocumento) event.getComponent()
@@ -2199,8 +2273,7 @@ public class SunatController {
 			log.error(e.getMessage(), e);
 		}
 	}
-	//Fin agregado por cdelosrios, 15/11/2013
-	
+
 	private void cargarRegistro()throws Exception{
 		if (registroSeleccionado!=null) {
 			documentoSunatNuevo = registroSeleccionado;
@@ -2224,10 +2297,7 @@ public class SunatController {
 			ordenCompra.setBdMontoTotalDetalle(ordenCompra.getBdMontoTotalDetalle().add(ordenCompraDetalle.getBdPrecioTotal()));
 		cargarOrdenCompra(ordenCompra);
 		
-		//Modificado por cdelosrios, 29/10/2013
-		//listaDocumentoSunatGrabar = null;
 		listaDocumentoSunatGrabar = new ArrayList<DocumentoSunat>();
-		//Fin modificado por cdelosrios, 29/10/2013
 		
 		Tarifa tarifaIGV = logisticaFacade.cargarTarifaIGVDesdeDocumentoSunat(documentoSunatNuevo);
 		cargarTipoCambio();
@@ -2241,12 +2311,9 @@ public class SunatController {
 			}
 			documentoSunatDetalle = calcularIGV(documentoSunatDetalle, tarifaIGV);
 		}
-		//Modificado por cdelosrios, 18/11/2013
-		//if(documentoSunatNuevo.getListaDocumentoSunatLetra()!=null){
-		//	for(DocumentoSunat documentoSunatLetra : documentoSunatNuevo.getListaDocumentoSunatLetra())
+		
 		if(listaDocumentoSunatLetra!=null){
 			for(DocumentoSunat documentoSunatLetra : listaDocumentoSunatLetra){
-		//Fin modificado por cdelosrios, 18/11/2013
 				cargarSucursal(documentoSunatLetra.getDetalleLetra());
 			}
 		}else{
@@ -2278,15 +2345,8 @@ public class SunatController {
 			if (listaDocumentoSunatGrabar!=null && !listaDocumentoSunatGrabar.isEmpty()) {
 				modificarRegistro();
 			}else{
-				//Fin agregado por cdelosrios, 04/11/2013
-				//Agregado por cdelosrios, 18/11/2013
 				documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO);
 				cargarListaDocumentoSunatLetrasYNotas(documentoSunat);
-				//Fin agregado por cdelosrios, 18/11/2013
-				
-//				cargarListaDocumentoSunatDoc();
-//				obtenerDocSunatValidosParaLetraDeCambio();
-//				obtenerDocSunatValidosParaNota();
 			}
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -2308,92 +2368,6 @@ public class SunatController {
 		
 	}
 	
-	private void cargarListaDocumentoSunatDoc(){
-		try {
-			for (DocumentoSunat docSunat : listaDocumentoSunatGrabar) {
-				if (documentoValido(docSunat.getDocDetraccion())) {
-					docSunat.getDocDetraccion().setIntTipoMoneda(documentoSunatNuevo.getIntParaMoneda());
-					docSunat.getDocDetraccion().setBdTipoCambio(tipoCambio.getBdPromedio());
-					listaDocSunatDetraccionPercepcion.add(docSunat.getDocDetraccion());
-				}else if (documentoValido(docSunat.getDocPercepcion())) {
-					docSunat.getDocPercepcion().setIntTipoMoneda(documentoSunatNuevo.getIntParaMoneda());
-					docSunat.getDocPercepcion().setBdTipoCambio(tipoCambio.getBdPromedio());
-					listaDocSunatDetraccionPercepcion.add(docSunat.getDocPercepcion());
-				}
-			}
-			
-		} catch (Exception e) {
-			log.info(e.getMessage());
-		}
-	}
-	
-	
-	//Agregado por cdelosrios, 18/11/2013
-	private void cargarListaDocumentoSunatLetrasYNotas(DocumentoSunat documentoSunat){
-		List<DocumentoSunat> listDocSunatLetra = null;
-		List<DocumentoSunat> listDocSunatNotaDebito = null;
-		List<DocumentoSunat> listDocSunatNotaCrebito = null;
-		listaDocumentoSunatLetra = new ArrayList<DocumentoSunat>();
-		try {
-			documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO);
-			listDocSunatLetra = logisticaFacade.getListDocumentoSunatPorOrdenCompraYTipoDocumento(documentoSunat);
-			documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO);
-			listDocSunatNotaDebito = logisticaFacade.getListDocumentoSunatPorOrdenCompraYTipoDocumento(documentoSunat);
-			documentoSunat.setIntParaTipoComprobante(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO);
-			listDocSunatNotaCrebito = logisticaFacade.getListDocumentoSunatPorOrdenCompraYTipoDocumento(documentoSunat);
-			
-//			listaDocumentoSunatLetra.addAll(documentoSunat.getListaDocumentoSunatLetra());
-			listaDocumentoSunatLetra.addAll(listDocSunatLetra);
-			listaDocumentoSunatLetra.addAll(listDocSunatNotaDebito);
-			listaDocumentoSunatLetra.addAll(listDocSunatNotaCrebito);
-			
-			if(listaDocumentoSunatLetra!=null){
-				for(DocumentoSunat documentoSunatLetra : listaDocumentoSunatLetra){
-					cargarSucursal(documentoSunatLetra.getDetalleLetra());
-				}
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-	}
-	//Fin agregado por cdelosrios, 18/11/2013
-	
-	
-		
-
-	
-	
-	
-	
-	private void cargarSucursal(OrdenCompraDetalle ordenCompraDetalle)throws Exception{
-		for(Sucursal sucursal : listaSucursal){
-			if(ordenCompraDetalle.getIntSucuIdSucursal().equals(sucursal.getId().getIntIdSucursal())){
-				ordenCompraDetalle.setSucursal(sucursal);
-				for(Area area : sucursal.getListaArea()){
-					if(ordenCompraDetalle.getIntIdArea().equals(area.getId().getIntIdArea())){
-						ordenCompraDetalle.setArea(area);
-						break;
-					}
-				}
-				break;
-			}
-		}
-	}
-	
-	private void cargarSucursal(DocumentoSunatDetalle documentoSunatDetalle)throws Exception{
-		for(Sucursal sucursal : listaSucursal){
-			if(documentoSunatDetalle.getIntSucuIdSucursal().equals(sucursal.getId().getIntIdSucursal())){
-				documentoSunatDetalle.setOrdenCompraDetalle(new OrdenCompraDetalle());
-				documentoSunatDetalle.getOrdenCompraDetalle().setSucursal(sucursal);
-				for(Area area : sucursal.getListaArea()){
-					if(documentoSunatDetalle.getIntIdArea().equals(area.getId().getIntIdArea())){
-						documentoSunatDetalle.getOrdenCompraDetalle().setArea(area);
-						break;
-					}
-				}
-			}
-		}
-	}
 	
 	public void eliminarRegistro(){
 		try{
@@ -2421,21 +2395,20 @@ public class SunatController {
 	
 	public void habilitarPanelInferior(){
 		try{
-			cargarUsuario();
+//			cargarUsuario();
 			registrarNuevo = Boolean.TRUE;
 			mostrarPanelInferior = Boolean.TRUE;
 			deshabilitarNuevo = Boolean.FALSE;
 			
 			ordenCompra = null;
 			modificarRegistro = Boolean.FALSE;
-			//Agregado por cdelosrios, 14/11/2013
+
 			if(PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_CENTRAL) 
 				|| PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_FILIAL) 
 				|| PERFIL_USUARIO.equals(ADMINISTRADOR_ZONAL_LIMA)){
 				agregarLetras = Boolean.FALSE;
 			}else
 				agregarLetras = Boolean.TRUE;
-			//Fin agregado por cdelosrios, 14/11/2013
 			
 			poseePermisoDescuento();
 			poseePermisoIGVContable();
@@ -2443,52 +2416,20 @@ public class SunatController {
 			poseePermisoPercepcion();
 			listaDocumentoSunatGrabar = new ArrayList<DocumentoSunat>();
 			habilitarGrabar = Boolean.TRUE;
-			//Agregado por cdelosrios, 26/10/2013
 			mostrarPanelDatosSunat = Boolean.TRUE;
 			habilitarVerRegistro = Boolean.FALSE;
 			strSunat = Constante.MANTENIMIENTO_GRABAR;
-			//Fin agregado por cdelosrios, 26/10/2013
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}	
 	
-	
-
-	
-
-
-	
-
-	
-
-	
-
-	
-	
-		
-	
-
-	
-
-	
-
-	
 	private DocumentoSunatDetalle calcularIGV(DocumentoSunatDetalle documentoSunatDetalle, Tarifa tarifaIGV){
 		OrdenCompraDetalle ordenCompraDetalle = documentoSunatDetalle.getOrdenCompraDetalle();
 		log.info(documentoSunatDetalle.getBdMontoSinTipoCambio());
 		log.info(tipoCambio.getBdPromedio());
-		//Agregado por cdelosrios, 05/11/2013
-		/*DocumentoSunat documentoSunat = new DocumentoSunat();
-		documentoSunat.getId().setIntPersEmpresa(documentoSunatDetalle.getId().getIntPersEmpresa());
-		documentoSunat.getId().setIntItemDocumentoSunat(documentoSunatDetalle.getId().getIntItemDocumentoSunat());
-		try {
-			documentoSunat = logisticaFacade.getDocumentoSunat(documentoSunat);
-		} catch (BusinessException e) {
-			log.error(e.getMessage(), e);
-		}*/
+
 		if(documentoSunatNuevo.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA)){
-		//Fin agregado por cdelosrios, 05/11/2013
 			
 			if(documentoSunatDetalle.getId().getIntItemDocumentoSunat()==null)
 				documentoSunatDetalle.setBdMontoTotal(documentoSunatDetalle.getBdMontoSinTipoCambio().multiply(tipoCambio.getBdPromedio()));				
@@ -2500,123 +2441,68 @@ public class SunatController {
 				documentoSunatDetalle.setBdMontoIGV(new BigDecimal(0));
 			}
 			documentoSunatDetalle.setBdMontoSinIGV(documentoSunatDetalle.getBdMontoTotal().subtract(documentoSunatDetalle.getBdMontoIGV()));
-		//Agregado por cdelosrios, 05/11/2013
+
 		} else {
 			documentoSunatDetalle.setBdMontoTotal(BigDecimal.ZERO);
 			documentoSunatDetalle.setBdMontoIGV(BigDecimal.ZERO);
 			documentoSunatDetalle.setBdMontoSinIGV(BigDecimal.ZERO);
 		}
-		//Fin agregado por cdelosrios, 05/11/2013
 		return documentoSunatDetalle;
 	}
 	
-
-	
-
-	
-	//Autor: jchavez / Tarea: Se comenta dado que la tabla AdelantoSunat SE ELIMINÓ / Fecha: 17.10.2014
-//	private AdelantoSunat agregarAdelantoSunat(OrdenCompraDocumento ordenCompraDocumento){
-//		AdelantoSunat adelantoSunat = new AdelantoSunat();
-//		adelantoSunat.getId().setIntPersEmpresa(EMPRESA_USUARIO);
-//		adelantoSunat.setOrdenCompraDocumentoId(ordenCompraDocumento.getId());
-//		adelantoSunat.setBdMonto(ordenCompraDocumento.getBdMontoUsarDocumento());
-//		adelantoSunat.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
-//		
-//		log.info(adelantoSunat);
-//		return adelantoSunat;
-//	}
-	
-	private DocumentoSunatOrdenComDoc agregarDocumentoSunatOrdenComDoc(OrdenCompraDocumento ordenCompraDocumento){
-		DocumentoSunatOrdenComDoc docSunatOrdenCompraDoc = new DocumentoSunatOrdenComDoc();
-		docSunatOrdenCompraDoc.setId(new DocumentoSunatOrdenComDocId());
-		
-		docSunatOrdenCompraDoc.getId().setIntPersEmpresaDocSunatOrden(EMPRESA_USUARIO);		
-		docSunatOrdenCompraDoc.setIntPersEmpresaOrden(ordenCompra.getId().getIntPersEmpresa());
-		docSunatOrdenCompraDoc.setIntItemOrdenCompra(ordenCompra.getId().getIntItemOrdenCompra());
-		docSunatOrdenCompraDoc.setIntItemOrdenCompraDoc(ordenCompraDocumento.getId().getIntItemOrdenCompraDocumento());
-		docSunatOrdenCompraDoc.setBdMonto(ordenCompraDocumento.getBdMontoUsarDocumento());
-		docSunatOrdenCompraDoc.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
-		docSunatOrdenCompraDoc.setIntItemOrdenCompraDetalle(null);
-		log.info(docSunatOrdenCompraDoc);
-		
-		return docSunatOrdenCompraDoc;
-	}
-	
-	
-	
-	//Modificado por cdelosrios, 20/10/2013
-	/*public void seleccionarTipoComprobante(){
-		try{
-			if(documentoSunatNuevo.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS))
-				documentoSunatNuevo.setStrSerieDocumento("001");
-			
-			if(!documentoSunatNuevo.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA))
-				documentoSunatNuevo.setSeleccionaPercepcion(Boolean.FALSE);
-			
-			calcularMontos();
-		}catch (Exception e) {
-			log.error(e.getMessage(),e);
-		}
-	}*/
-	//Fin modificado por cdelosrios, 20/10/2013
 	
 	//Agregado por cdelosrios, 04/11/2013
-	public void eliminarDocumentoSunat(){
-		String rowKey = getRequestParameter("rowKeyDocSunat");
-		DocumentoSunat documentoSunatTmp = null;
-		if(listaDocumentoSunatGrabar!=null){
-			for(int i=0; i<listaDocumentoSunatGrabar.size(); i++){
-				if(Integer.parseInt(rowKey)==i){
-					DocumentoSunat documentoSunat = listaDocumentoSunatGrabar.get(i);
-					if(documentoSunat.getId()!=null && documentoSunat.getId().getIntItemDocumentoSunat()!=null){
-						documentoSunatTmp = listaDocumentoSunatGrabar.get(i);
-						documentoSunatTmp.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO);
-						try {
-							logisticaFacade.eliminarDocumentoSunat(documentoSunatTmp);
-						} catch (Exception e) {
-							log.error(e.getMessage(), e);
-						}
-					}
-					removeDocSunat(documentoSunat);
-					listaDocumentoSunatGrabar.remove(i);
-					break;
-				}
-			}
-			if(documentoSunatTmp!=null){
-				listaDocumentoSunatGrabar.add(documentoSunatTmp);
-			}
-		}
-	}
+//	public void eliminarDocumentoSunat(){
+//		String rowKey = getRequestParameter("rowKeyDocSunat");
+//		DocumentoSunat documentoSunatTmp = null;
+//		if(listaDocumentoSunatGrabar!=null){
+//			for(int i=0; i<listaDocumentoSunatGrabar.size(); i++){
+//				if(Integer.parseInt(rowKey)==i){
+//					DocumentoSunat documentoSunat = listaDocumentoSunatGrabar.get(i);
+//					if(documentoSunat.getId()!=null && documentoSunat.getId().getIntItemDocumentoSunat()!=null){
+//						documentoSunatTmp = listaDocumentoSunatGrabar.get(i);
+//						documentoSunatTmp.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ANULADO);
+//						try {
+//							logisticaFacade.eliminarDocumentoSunat(documentoSunatTmp);
+//						} catch (Exception e) {
+//							log.error(e.getMessage(), e);
+//						}
+//					}
+//					removeDocSunat(documentoSunat);
+//					listaDocumentoSunatGrabar.remove(i);
+//					break;
+//				}
+//			}
+//			if(documentoSunatTmp!=null){
+//				listaDocumentoSunatGrabar.add(documentoSunatTmp);
+//			}
+//		}
+//	}
+//	//12.11.2014
+//	public void removeDocSunat(DocumentoSunat documentoSunat){
+//		for(OrdenCompraDetalle ordenCompraDetalle : ordenCompra.getListaOrdenCompraDetalle()){
+//			if(ordenCompraDetalle.getId().getIntItemOrdenCompra().equals(
+//					documentoSunat.getOrdenCompra().getId().getIntItemOrdenCompra())){
+//				ordenCompraDetalle.setBdMontoSaldoTemp(ordenCompraDetalle.getBdMontoSaldoTemp().add(
+//						documentoSunat.getDetalleTotalGeneral().getBdMontoTotal()));
+//			}
+//			
+//			/*if(ordenCompraDetalle.getBdMontoUsar().compareTo(bdMontoAdelantarTotal)>0){
+//				ordenCompraDetalle.setBdMontoUsar(ordenCompraDetalle.getBdMontoUsar().subtract(bdMontoAdelantarTotal));
+//				bdMontoAdelantarTotal = new BigDecimal(0);
+//			}else{
+//				bdMontoAdelantarTotal = bdMontoAdelantarTotal.subtract(ordenCompraDetalle.getBdMontoUsar());
+//				ordenCompraDetalle.setBdMontoUsar(new BigDecimal(0));
+//			}*/
+//		}
+//	}
 	
-	public void removeDocSunat(DocumentoSunat documentoSunat){
-		for(OrdenCompraDetalle ordenCompraDetalle : ordenCompra.getListaOrdenCompraDetalle()){
-			if(ordenCompraDetalle.getId().getIntItemOrdenCompra().equals(
-					documentoSunat.getOrdenCompra().getId().getIntItemOrdenCompra())){
-				ordenCompraDetalle.setBdMontoSaldoTemp(ordenCompraDetalle.getBdMontoSaldoTemp().add(
-						documentoSunat.getDetalleTotal().getBdMontoTotal()));
-			}
-			
-			/*if(ordenCompraDetalle.getBdMontoUsar().compareTo(bdMontoAdelantarTotal)>0){
-				ordenCompraDetalle.setBdMontoUsar(ordenCompraDetalle.getBdMontoUsar().subtract(bdMontoAdelantarTotal));
-				bdMontoAdelantarTotal = new BigDecimal(0);
-			}else{
-				bdMontoAdelantarTotal = bdMontoAdelantarTotal.subtract(ordenCompraDetalle.getBdMontoUsar());
-				ordenCompraDetalle.setBdMontoUsar(new BigDecimal(0));
-			}*/
-		}
-	}
+	
 	
 	protected String getRequestParameter(String name) {
 		return (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name);
 	}
-	//Fin agregado por cdelosrios, 04/11/2013
-	
 
-	
-	
-	
-
-	
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}

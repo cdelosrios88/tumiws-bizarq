@@ -152,21 +152,21 @@
 				<rich:column width=	"110">
 					<h:outputText value="Monto :"/>
 				</rich:column>
-				<rich:column width="200">
-					<h:inputText id="txtMontoIngresadoTotalNotaCredito"
-						size="32" readonly="true" rendered="#{sunatController.documentoSunatNota.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO }"
+				<rich:column width="200" style="text-align: left; color:red; font-weight: bold; font-size:17px">
+					<h:outputText id="txtMontoIngresadoTotalNotaCredito" 
+						rendered="#{sunatController.documentoSunatNota.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO }"
 						value="#{sunatController.documentoSunatNota.detalleNotaCredito.bdMontoSinTipoCambio}">
 						<f:converter converterId="ConvertidorMontos"/>
-					</h:inputText>
-					<h:inputText id="txtMontoIngresadoTotalNotaDebito"
-						size="32" readonly="true" rendered="#{sunatController.documentoSunatNota.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO }"
+					</h:outputText>
+					<h:outputText id="txtMontoIngresadoTotalNotaDebito" 
+						rendered="#{sunatController.documentoSunatNota.intParaTipoComprobante==applicationScope.Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO }"
 						value="#{sunatController.documentoSunatNota.detalleNotaDebito.bdMontoSinTipoCambio}">
 						<f:converter converterId="ConvertidorMontos"/>
-					</h:inputText>
+					</h:outputText>
 				</rich:column>
 			</h:panelGrid>
 			
-			<h:panelGrid columns="4">
+			<h:panelGrid columns="4" id="panelDocumentoSunatNota">
 				<rich:column width=	"110">
 					<h:outputText value="Documento :"/>
 				</rich:column>

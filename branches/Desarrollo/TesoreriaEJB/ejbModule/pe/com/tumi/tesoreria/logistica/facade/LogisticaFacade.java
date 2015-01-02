@@ -770,7 +770,7 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
     
     /**
      * Autor: jchavez / Tarea: Creacion / Fecha: 24.10.2014
-     * Funcionalidad: Método que valida si existe un cierre logistico y un cierre contable abierto para el documento en gestion.
+     * Funcionalidad: Método que valida si existe 'Cierre Logística' y 'Cierre Contablilidad' abiertos para el documento en gestion.
 	 * @author jchavez
 	 * @param ordenCompra
 	 * @return vResult - 0: NO EXISTE 1:EXISTE
@@ -801,10 +801,8 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
 		try{
 			lista = boDocumentoSunatOrdenComDoc.getListaPorOrdenCompraDoc(ordenComDoc);
 		}catch(BusinessException e){
-			context.setRollbackOnly();
 			throw e;
 		}catch(Exception e){
-			context.setRollbackOnly();
 			throw new BusinessException(e);
 		}
 		return lista;
@@ -822,10 +820,10 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
 		return dto;
     }
     
-    public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat) throws BusinessException{
+    public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat, OrdenCompra ordenCompra) throws BusinessException{
     	DocumentoSunat dto = null;
 		try{
-			dto = documentoSunatService.agregarDocumentoSunatNota(documentoSunat);
+			dto = documentoSunatService.agregarDocumentoSunatNota(documentoSunat, ordenCompra);
    		}catch(BusinessException e){
    			throw e;
    		}catch(Exception e){
@@ -833,4 +831,26 @@ public class LogisticaFacade extends TumiFacade implements LogisticaFacadeRemote
    		}
 		return dto;
 	}
+    
+    /**
+     * Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014
+     * Funcionalidad: de retorna los Documentos Sunat a girar por id del proveedor y tipo de 
+     *				  comprobante.
+     * @param intPersEmpresa
+     * @param intPersProveedor
+     * @param intTipoComprobante
+     * @return
+     * @throws BusinessException
+     */
+    public List<DocumentoSunat> getDocSunatParaGiro(Integer intPersEmpresa, Integer intPersProveedor, Integer intTipoComprobante) throws BusinessException{
+    	List<DocumentoSunat> lista = null;
+		try{
+			lista = boDocumentoSunat.getDocSunatParaGiro(intPersEmpresa, intPersProveedor, intTipoComprobante);
+		}catch(BusinessException e){
+			throw e;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+		return lista;
+    }
 }

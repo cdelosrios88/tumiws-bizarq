@@ -739,6 +739,7 @@ public class ConciliacionController{
 						
 					}else{
 						mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
+						return;
 					}
 
 				}else{

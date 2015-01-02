@@ -66,7 +66,7 @@
 			<rich:column width=	"120">
 				<h:outputText value="Fecha Emisión : "/>
 			</rich:column>
-			<rich:column width="150">
+			<rich:column width="170">
 				<rich:calendar datePattern="dd/MM/yyyy"  
 					disabled="true"
 					value="#{sunatController.itemDocumentoSunat.dtFechaEmision}"  
@@ -212,10 +212,10 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="10">
-				<rich:column width="100" style="text-align: right">
+				<rich:column width="100" style="text-align: right" rendered="#{sunatController.itemDocumentoSunat.detalleIGV.bdMontoTotal!=null}">
 					<h:outputText style="padding-right:10px;" value="IGV :"/>
 				</rich:column>
-				<rich:column width="140" style="text-align: left">
+				<rich:column width="140" style="text-align: left" rendered="#{sunatController.itemDocumentoSunat.detalleIGV.bdMontoTotal!=null}">
 					<h:inputText size="15"
 						readonly="true"
 						style="background-color: #BFBFBF;font-weight:bold;"					

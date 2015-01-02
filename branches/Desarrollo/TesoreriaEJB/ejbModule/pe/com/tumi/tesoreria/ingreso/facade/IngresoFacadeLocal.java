@@ -62,6 +62,7 @@ public interface IngresoFacadeLocal {
 	public ReciboManual getReciboPorGestorYSucursal(Integer intEmpresa, Integer intIdGestor, Integer intIdSucursal, Integer intIdSubsucursal) throws BusinessException;
 	
 	//jchavez 11.07.2014
+	//Autor: jchavez / Tarea: Modificación / Fecha: 11.12.2014
 	public DocumentoGeneral generarIngresoSocio(List<ExpedienteComp> listaIngresoSocio, DocumentoGeneral documentoGeneral, Bancofondo bancoFondo, Usuario usuario, Integer intModalidadC, Integer intPersonaRolC) throws BusinessException;
 	//jchavez 13.07.2014
 	public Ingreso grabarIngresoSocio(List<ExpedienteComp> listaIngresosSocio, DocumentoGeneral documentoGeneral, Usuario usuario, Integer intModalidadC) throws BusinessException;

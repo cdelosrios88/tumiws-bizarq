@@ -20,7 +20,7 @@
         	<h:panelGrid style="margin:0 auto; margin-bottom:10px">
 	    		<rich:columnGroup>
 	    			<rich:column>
-	    				<h:outputText value="CAJA" style="font-weight:bold; font-size:14px"/>
+	    				<h:outputText value="CAJA" styleClass="tagTitulo"/>
 	    			</rich:column>
 	    		</rich:columnGroup>
     		</h:panelGrid>
@@ -38,20 +38,20 @@
 					</h:selectOneMenu>
 				</rich:column>
             	<rich:column width="120">
-					<h:outputText value="Número de Operación :"/>
+					<h:outputText value="Nro. de Operación :"/>
 				</rich:column>
 				<rich:column width="220">
 					<h:inputText size="35" value="#{cajaController.ingresoFiltro.strNumeroOperacion}"/>
 				</rich:column>
-            	<rich:column width="95" style="text-align: left;">
+            	<rich:column width="120" style="text-align: left;">
                 	<h:outputText value="Fecha de Ingreso: "/>
             	</rich:column>
-            	<rich:column width="100" style="text-align: right;">
+            	<rich:column width="120" style="text-align: right;">
                 	<rich:calendar datePattern="dd/MM/yyyy"  
 						value="#{cajaController.ingresoFiltro.dtDechaDesde}"  
 						jointPoint="top-right" direction="right" inputSize="10" showApplyButton="true"/>
             	</rich:column>
-            	<rich:column width="100" style="text-align: left;">
+            	<rich:column width="120" style="text-align: left;">
                 	<rich:calendar datePattern="dd/MM/yyyy"  
 						value="#{cajaController.ingresoFiltro.dtDechaHasta}"
 						jointPoint="top-right" direction="right" inputSize="10" showApplyButton="true"/>
@@ -61,7 +61,7 @@
             
             
         	<h:panelGrid columns="11" id="panelPersonaFiltroC">
-            	<rich:column width="90">
+            	<rich:column width="100">
 					<h:outputText value="Tipo de Persona : "/>
 				</rich:column>
 				<rich:column width="200" style="text-align: left;">
@@ -261,11 +261,9 @@
 			styleClass="rich-tabcell-noborder">
 			<h:outputText value="#{cajaController.mensajeOperacion}" 
 				styleClass="msgInfo"
-				style="font-weight:bold"
 				rendered="#{cajaController.mostrarMensajeExito}"/>
 			<h:outputText value="#{cajaController.mensajeOperacion}" 
 				styleClass="msgError"
-				style="font-weight:bold"
 				rendered="#{cajaController.mostrarMensajeError}"/>	
 		</h:panelGroup>
 				 		
@@ -356,10 +354,16 @@
 			<h:panelGroup rendered="#{(cajaController.datosValidados) 
 							&& (cajaController.intTipoDocumentoValidar==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_INGRESODECAJA)}">
 				
-				<h:panelGrid columns="1">
-					<rich:column width="120">
-						<h:outputText value="INGRESO A CAJA"/>
+				<h:panelGrid columns="2">
+					<rich:column width="280">
+						<h:outputText value="INGRESO A CAJA" styleClass="tagSubTitulo"/>
 					</rich:column>
+					<rich:column width="150" style="text-align: center">
+            			<h:commandLink 
+            						  id="btnReporte" 
+            						  value="Ver Reporte"
+            						  action="#{cajaController.imprimirIngresoCaja}"/>
+          			</rich:column>
 				</h:panelGrid>
 				
 				<rich:spacer height="3px"/>
@@ -464,7 +468,7 @@
 				
 				<h:panelGrid columns="3">
 					<rich:column width="280">
-						<h:outputText value="PERSONA QUE REALIZO EL INGRESO"/>
+						<h:outputText value="PERSONA QUE REALIZO EL INGRESO" styleClass="tagSubTitulo"/>
 					</rich:column>
 				</h:panelGrid>
 				
@@ -481,7 +485,8 @@
 							<h:selectOneMenu id="cboTipoPersonaC"
 								onchange="getPersonaRolC(#{applicationScope.Constante.ONCHANGE_VALUE})"
 								style="width: 100px;"
-								value="#{cajaController.intTipoPersonaC}">
+								value="#{cajaController.intTipoPersonaC}"
+								disabled="#{cajaController.blnDocumentoAgregado}">
 								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 								<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOPERSONA}" 
 									itemValue="#{sel.intIdDetalle}"
@@ -493,7 +498,8 @@
 							<h:selectOneMenu id="cboPersonaRolC"
 								onchange="getTipoDocumentoC(#{applicationScope.Constante.ONCHANGE_VALUE})"
 								style="width: 130px;"
-								value="#{cajaController.intPersonaRolC}">
+								value="#{cajaController.intPersonaRolC}"
+								disabled="#{cajaController.blnDocumentoAgregado}">
 								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 								<tumih:selectItems var="sel"
 									value="#{cajaController.lstPersonaRol}"
@@ -578,7 +584,7 @@
 			        <rich:column width="175">
 						<h:selectOneMenu id="cboTipoDocumentoC"
 							style="width: 160;"
-							disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)}"
+							disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)||cajaController.blnDocumentoAgregado}"
 							value="#{cajaController.intTipoDocumentoAgregar}">
 							<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 							<tumih:selectItems var="sel"
@@ -608,7 +614,7 @@
 	                	<a4j:commandButton styleClass="btnEstilos"
 	                		disabled="#{(empty cajaController.documentoGeneralSeleccionado) || (cajaController.deshabilitarNuevo)}"
 	                		value="Agregar"
-	                		reRender="panelDocumentosAgregadosC,panelDocumentoC,panelMensajeC,panelDetallePlanillaEfectuadaC"
+	                		reRender="panelDocumentosAgregadosC,panelDocumentoC,panelMensajeC,panelDetallePlanillaEfectuadaC, pgModalidadC"
 	                    	action="#{cajaController.agregarDocumento}"
 	                    	style="width:80px"/>
 	            	</rich:column>				
@@ -624,7 +630,7 @@
 							<h:selectOneMenu id="cboCuentaSocioC"
 								onchange="getCuentaC(#{applicationScope.Constante.ONCHANGE_VALUE})"
 								style="width: 160;"
-								disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)}"
+								disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)||cajaController.blnDocumentoAgregado}"
 								value="#{cajaController.intCuentaSocioC}">
 								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 								<tumih:selectItems var="sel"
@@ -649,7 +655,7 @@
 						<h:selectOneMenu id="cboModalidadC"
 								onchange="getValorModalidadC(#{applicationScope.Constante.ONCHANGE_VALUE})"
 								style="width: 160;"
-								disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo) }"
+								disabled="#{(not empty cajaController.listaIngresoDetalleInterfaz)||(cajaController.deshabilitarNuevo)||cajaController.blnDocumentoAgregado}"
 								value="#{cajaController.intModalidadC}">
 								<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 								<tumih:selectItems var="sel" 
@@ -684,10 +690,9 @@
 				<h:panelGrid id="msgErrorSubCondCta" columns="6">
 					<rich:column width="120" style="text-align: left;">
 					</rich:column>
-					<rich:column width="600">
+					<rich:column width="950">
 						<h:outputText value="#{cajaController.strMsgSubCondicionCuenta}" 
 							styleClass="msgError"
-							style="font-weight:bold"
 							rendered="#{not empty cajaController.strMsgSubCondicionCuenta}"/>	
 					</rich:column>
 				</h:panelGrid>
@@ -741,9 +746,7 @@
 				<h:panelGroup id="panelGestorC">
 					<h:panelGrid columns="11"  rendered="#{not empty cajaController.strMensajeErrorGestor}">
 						<rich:column width="600" colspan="11">
-							<h:outputText value="#{cajaController.strMensajeErrorGestor}"
-										  styleClass="msgError"
-										  style="font-weight:bold"/>
+							<h:outputText value="#{cajaController.strMensajeErrorGestor}" styleClass="msgError"/>
 						</rich:column>
 					</h:panelGrid>
 				<h:panelGrid columns="11" rendered="#{cajaController.reciboManual != null || cajaController.habilitarGrabar}">
@@ -983,7 +986,7 @@
 												<f:converter converterId="ConvertidorMontos"/>
 											</h:outputText></b>
 										</rich:column>
-										<rich:column width="100" style="text-align: right; color:red; font-weight: bold;">
+										<rich:column width="100" styleClass="txtMontoFinal">
 											<b><h:outputText value="#{cajaController.bdMontoIngresadoTotal}">
 												<f:converter converterId="ConvertidorMontos"/>
 											</h:outputText></b>
@@ -1076,7 +1079,7 @@
 									<rich:column width="840px" colspan="7" style="text-align: right">
 										<b><h:outputText value="TOTAL CANCELADO" /></b>
 									</rich:column>
-									<rich:column width="80px" style="text-align: right; color:red; font-weight: bold;">
+									<rich:column width="80px" styleClass="txtMontoFinal">
 										<h:outputText value="#{cajaController.bdMontoIngresadoTotal}">
 											<f:converter converterId="ConvertidorMontos"/>
 										</h:outputText>
@@ -1093,10 +1096,16 @@
 			<h:panelGroup rendered="#{(cajaController.datosValidados) 
 							&& (cajaController.intTipoDocumentoValidar==applicationScope.Constante.PARAM_T_DOCUMENTOGENERAL_DEPOSITODEBANCO)}">
 				
-				<h:panelGrid columns="1">
+				<h:panelGrid columns="2">
 					<rich:column width="120">
-						<h:outputText value="DEPÓSITO DE BANCO"/>
+						<h:outputText value="DEPÓSITO DE BANCO" styleClass="tagSubTitulo"/>
 					</rich:column>
+					<rich:column width="150" style="text-align: center">
+            			<h:commandLink 
+            						  id="btnReporteDeposito" 
+            						  value="Ver Reporte"
+            						  action="#{cajaController.imprimirDepositoBanco}"/>
+          			</rich:column>
 				</h:panelGrid>
 				
 				<rich:spacer height="3px"/>
@@ -1242,7 +1251,7 @@
 				
 				<h:panelGrid columns="1">
 					<rich:column width="300">
-						<h:outputText value="DOCUMENTOS ASOCIADOS AL DEPÓSITO"/>
+						<h:outputText value="DOCUMENTOS ASOCIADOS AL DEPÓSITO" styleClass="tagSubTitulo"/>
 					</rich:column>
 				</h:panelGrid>
 				
@@ -1334,7 +1343,7 @@
 									<rich:column width="613" colspan="6" style="text-align: center">
 										<b><h:outputText value="TOTAL DEPÓSITOS" /></b>
 									</rich:column>
-									<rich:column width="80" style="text-align: right; color:red; font-weight: bold; font-size:17px">
+									<rich:column width="80" styleClass="txtMontoFinal">
 										<h:outputText id="txtMontoDepositadoTotalC" value="#{cajaController.bdMontoDepositadoTotal}">
 											<f:converter converterId="ConvertidorMontos"/>
 										</h:outputText>
@@ -1369,7 +1378,7 @@
 				
 				<rich:spacer height="3px"/>
 				
-				<h:panelGrid columns="6" rendered="#{cajaController.blnExisteRedondeo}">
+				<h:panelGrid columns="6" rendered="#{cajaController.bdMontoAjuste!=null && cajaController.bdMontoAjuste!=0}">
 					<rich:column width="120">
 						<h:outputText value="Ajuste Redondeo :"/>
 					</rich:column>

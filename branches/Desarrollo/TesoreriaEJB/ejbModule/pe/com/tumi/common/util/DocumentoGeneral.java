@@ -64,6 +64,10 @@ public class DocumentoGeneral extends TumiDomain{
 	private Ingreso ingresoCaja;
 	
 	private OrdenCompra ordenCompra;
+	private Integer intTipoCuentaSocio;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	private Integer intCorrespodeCambioCondicion; 
 	
 	public Integer getIntTipoDocumento() {
 		return intTipoDocumento;
@@ -289,5 +293,17 @@ public class DocumentoGeneral extends TumiDomain{
 	}
 	public void setOrdenCompra(OrdenCompra ordenCompra) {
 		this.ordenCompra = ordenCompra;
+	}
+	public Integer getIntTipoCuentaSocio() {
+		return intTipoCuentaSocio;
+	}
+	public void setIntTipoCuentaSocio(Integer intTipoCuentaSocio) {
+		this.intTipoCuentaSocio = intTipoCuentaSocio;
+	}
+	public Integer getIntCorrespodeCambioCondicion() {
+		return intCorrespodeCambioCondicion;
+	}
+	public void setIntCorrespodeCambioCondicion(Integer intCorrespodeCambioCondicion) {
+		this.intCorrespodeCambioCondicion = intCorrespodeCambioCondicion;
 	}
 }

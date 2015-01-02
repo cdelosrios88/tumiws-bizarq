@@ -24,6 +24,9 @@ import pe.com.tumi.contabilidad.core.domain.Modelo;
 import pe.com.tumi.contabilidad.core.domain.ModeloDetalle;
 import pe.com.tumi.contabilidad.core.domain.ModeloDetalleNivel;
 import pe.com.tumi.contabilidad.core.facade.ModeloFacadeRemote;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.Cuenta;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaId;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.facade.CuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
@@ -49,6 +52,8 @@ import pe.com.tumi.movimiento.concepto.domain.InteresCanceladoId;
 import pe.com.tumi.movimiento.concepto.domain.Movimiento;
 import pe.com.tumi.movimiento.concepto.domain.composite.ExpedienteComp;
 import pe.com.tumi.movimiento.concepto.facade.ConceptoFacadeRemote;
+import pe.com.tumi.movimiento.cuentaCteAhorro.domain.CuentaCteAhorro;
+import pe.com.tumi.movimiento.cuentaCteAhorro.facade.CuentaCteAhorroFacadeRemote;
 import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.parametro.general.domain.ArchivoId;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
@@ -292,7 +297,7 @@ public class IngresoService {
 			}
 			libroDiario = libroDiarioFacade.grabarLibroDiario(libroDiario);
 			//jchavez 23.07.2014 seteamos los valores del libro grabado
-			ingreso.setLibroDiario(libroDiario);
+			
 			
 			ingreso.setIntPersEmpresaLibro(libroDiario.getId().getIntPersEmpresaLibro());
 			ingreso.setIntContPeriodoLibro(libroDiario.getId().getIntContPeriodoLibro());
@@ -315,6 +320,8 @@ public class IngresoService {
 					libroDiarioFacade.modificarLibroDiarioDetalle(libroDiarioDetalle);
 				}
 			}
+			
+			ingreso.setLibroDiario(libroDiario);
 		}catch(BusinessException e){
 			throw e;
 		}catch(Exception e){
@@ -378,6 +385,7 @@ public class IngresoService {
 	public DocumentoGeneral generarIngresoSocio(List<ExpedienteComp> listaIngresosSocio, DocumentoGeneral documentoGeneral, Bancofondo bancoFondo, Usuario usuario, Integer intModalidadC, Integer intPersonaRolC) throws BusinessException{
 //		ExpedienteComp expedienteComp = null;
 		Ingreso ingreso = new Ingreso();
+		Integer intTipoCuentaC = documentoGeneral.getIntTipoCuentaSocio();
 		try{			
 			Integer intIdEmpresa = listaIngresosSocio.get(0).getIntIngCajaIdEmpresa();
 			
@@ -429,7 +437,7 @@ public class IngresoService {
 				ingreso.setIntHistoricoIngreso(archivoAdjuntoCheque.getId().getIntItemHistorico());
 			}
 			
-			ingreso.setListaIngresoDetalle(generarIngresoDetalle(listaIngresosSocio, documentoGeneral, bancoFondo, usuario, intModalidadC, intPersonaRolC, modelo));
+			ingreso.setListaIngresoDetalle(generarIngresoDetalle(listaIngresosSocio, documentoGeneral, bancoFondo, usuario, intModalidadC, intPersonaRolC, modelo, intTipoCuentaC));
 			
 			LibroDiario libroDiario = new LibroDiario();
 			libroDiario.setId(new LibroDiarioId());
@@ -444,7 +452,7 @@ public class IngresoService {
 			libroDiario.setIntParaTipoDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_INGRESODECAJA);
 			libroDiario.setListaLibroDiarioDetalle(new ArrayList<LibroDiarioDetalle>());
 			
-			libroDiario.getListaLibroDiarioDetalle().addAll(generarLibroDiarioDetalleSocioHaber(listaIngresosSocio, documentoGeneral, modelo, bancoFondo, usuario, intModalidadC, intPersonaRolC));
+			libroDiario.getListaLibroDiarioDetalle().addAll(generarLibroDiarioDetalleSocioDebeHaber(listaIngresosSocio, documentoGeneral, modelo, bancoFondo, usuario, intModalidadC, intPersonaRolC, intTipoCuentaC));
 			
 			LibroDiarioDetalle libroDiarioDetalleDebe = new LibroDiarioDetalle();
 			libroDiarioDetalleDebe.setId(new LibroDiarioDetalleId());
@@ -479,7 +487,7 @@ public class IngresoService {
 	}
 
 	
-	private List<IngresoDetalle> generarIngresoDetalle(List<ExpedienteComp> listaIngresosSocio,  DocumentoGeneral documentoGeneral, Bancofondo bancoFondo, Usuario usuario, Integer intModalidadC, Integer intPersonaRolC, Modelo modelo)throws Exception{
+	private List<IngresoDetalle> generarIngresoDetalle(List<ExpedienteComp> listaIngresosSocio,  DocumentoGeneral documentoGeneral, Bancofondo bancoFondo, Usuario usuario, Integer intModalidadC, Integer intPersonaRolC, Modelo modelo, Integer intTipoCuentaC)throws Exception{
 		List<IngresoDetalle> lstIngresoDetalle = new ArrayList<IngresoDetalle>();
 		Integer intIdEmpresa = listaIngresosSocio.get(0).getIntIngCajaIdEmpresa();		
 		CarteraCreditoDetalle cartera = null;
@@ -614,50 +622,76 @@ public class IngresoService {
 								Boolean blnPersonaRol = false;
 								if (md.getListModeloDetalleNivel()!=null && !md.getListModeloDetalleNivel().isEmpty()) {
 									if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA)) {
-										//validamos el para_tipo_concepto
-										for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-											//validamos que el modelo corresponda para tipo concepto
-											if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO)) {
-												if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaParaTipoX())) {
-													blnParaTipoConcepto = true;
-													break;
+										//Validamos el tipo de cuenta si es ahorro.
+										if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)) {
+											//validamos el para_tipo_ctacteahorro
+											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+												//validamos que el modelo corresponda para tipo concepto
+												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCTACTEAHORRO)) {
+													if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaParaTipoX())) {
+														blnParaTipoConcepto = true;
+														break;
+													}
+												}
+											}
+											if (blnParaTipoConcepto) {
+												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+													//validamos que le corresponda item ctacteahorro											
+													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCTACTEAHORRO)) {
+														if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaItemX())) {
+															blnItemConcepto = true;
+															break;
+														}
+													}
+												}
+											}
+										}else{
+											//validamos el para_tipo_concepto
+											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+												//validamos que el modelo corresponda para tipo concepto
+												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO)) {
+													if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaParaTipoX())) {
+														blnParaTipoConcepto = true;
+														break;
+													}
+												}
+											}
+											if (blnParaTipoConcepto) {
+												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+													//validamos que le corresponda item concepto											
+													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO)) {
+														if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaItemX())) {
+															blnItemConcepto = true;
+															break;
+														}
+													}
 												}
 											}
 										}
-										if (blnParaTipoConcepto) {
-											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-												//validamos que le corresponda item concepto											
-												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO)) {
-													if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaItemX())) {
-														blnItemConcepto = true;
-														break;
-													}
+										
+										if (blnItemConcepto) {
+											//validamos que el modelo tenga rol
+											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
+												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
+													blnModeloRol = true;
+													break;
 												}
 											}
-											if (blnItemConcepto) {
-												//validamos que el modelo tenga rol
+											if (blnModeloRol) {
+												//Si tuviera rol, se valida que sea el rol buscado
 												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
 													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
-														blnModeloRol = true;
-														break;
-													}
-												}
-												if (blnModeloRol) {
-													//Si tuviera rol, se valida que sea el rol buscado
-													for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
-														if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
-															if (mdn.getIntDatoArgumento().equals(intPersonaRolC)) {
-																blnPersonaRol = true;
-																break;
-															}
+														if (mdn.getIntDatoArgumento().equals(intPersonaRolC)) {
+															blnPersonaRol = true;
+															break;
 														}
 													}
-													if (blnPersonaRol) {
-														lstIngresoDetalle.add(seteoIngresoDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado(), usuario));
-													}													
-												}else {
-													lstIngresoDetalle.add(seteoIngresoDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado(), usuario));
 												}
+												if (blnPersonaRol) {
+													lstIngresoDetalle.add(seteoIngresoDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado(), usuario));
+												}													
+											}else {
+												lstIngresoDetalle.add(seteoIngresoDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado(), usuario));
 											}
 										}
 									} else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION)) {
@@ -734,7 +768,11 @@ public class IngresoService {
 		ingresoDetalle.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_INGRESODECAJA);
 		ingresoDetalle.setIntParaTipoComprobante(null);
 		ingresoDetalle.setStrSerieDocumento(null);
-		ingresoDetalle.setStrNumeroDocumento(null);
+		/* Autor: jchavez / Tarea: Modificación / Fecha: 27.11.2014
+		 * Se concatena el id de la cuenta, Id1 (itemexpediente o itemcuentaconcepto) y Id2 (itemexpedientedetalle o itemdetallecuentaconcepto)*/
+//		ingresoDetalle.setStrNumeroDocumento(null);
+		ingresoDetalle.setStrNumeroDocumento(ingresoDetSocio.getIntIngCajaIdCuenta()+"-"+ingresoDetSocio.getIntIngCajaId1()+"-"+ingresoDetSocio.getIntIngCajaId2());
+		//Fin jchavez - 27.11.2014
 		
 		ingresoDetalle.setIntPersEmpresaGirado(intIdEmpresa);
 		ingresoDetalle.setIntPersPersonaGirado(documentoGeneral.getSocioIngreso().getIntIngCajaIdPersona());
@@ -764,7 +802,7 @@ public class IngresoService {
 	}
 	
 	//jchavez 21.07.2014
-	private List<LibroDiarioDetalle> generarLibroDiarioDetalleSocioHaber(List<ExpedienteComp> listaIngresosSocio, DocumentoGeneral documentoGeneral, Modelo modelo, Bancofondo bancoFondo, Usuario usuario, Integer intModalidadC, Integer intPersonaRolC) throws Exception{
+	private List<LibroDiarioDetalle> generarLibroDiarioDetalleSocioDebeHaber(List<ExpedienteComp> listaIngresosSocio, DocumentoGeneral documentoGeneral, Modelo modelo, Bancofondo bancoFondo, Usuario usuario, Integer intModalidadC, Integer intPersonaRolC, Integer intTipoCuentaC) throws Exception{
 		Integer intIdEmpresa = listaIngresosSocio.get(0).getIntIngCajaIdEmpresa();
 		List<LibroDiarioDetalle> lstLibroDiarioDetalleHaber = new ArrayList<LibroDiarioDetalle>();
 		CarteraCreditoDetalle cartera = null;
@@ -775,7 +813,7 @@ public class IngresoService {
 			
 			//generacion del modelo detalle
 			for (ExpedienteComp ingresoDetSocio : listaIngresosSocio) {
-				//Caso Servicios
+				//Caso Servicios (PRESTAMOS)
 				if (ingresoDetSocio.getStrIngCajaNroSolicitud()!=null && ingresoDetSocio.getIntIngCajaFlagAmortizacionInteres()!=null) {
 					ExpedienteId pId = new ExpedienteId();
 					pId.setIntPersEmpresaPk(ingresoDetSocio.getIntIngCajaIdEmpresa());
@@ -789,6 +827,7 @@ public class IngresoService {
 								for (ModeloDetalle md : modelo.getListModeloDetalle()) {
 									Boolean blnConceptoGeneral = false;
 									Boolean blnConfCredito = false;
+									Boolean blnTieneCategoriaRiesgo = false;
 									Boolean blnCategoriaRiesgo = false;
 									if (md.getListModeloDetalleNivel()!=null && !md.getListModeloDetalleNivel().isEmpty()) {
 										for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
@@ -811,24 +850,36 @@ public class IngresoService {
 												}
 											}
 											if (blnConfCredito) {
-												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-													//validamos que le corresponda una categoria de riesgo													
+												//Validamos que el modelo tenga categoria de riesgo
+												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
 													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_CATEGORIARIESGO)) {
-														if (cartera!=null) {
-															if (mdn.getIntDatoArgumento().equals(cartera.getIntParaTipocategoriariesgo())) {
-																blnCategoriaRiesgo = true;
-																break;
-															}
-														}else{
-															if (mdn.getIntDatoArgumento().equals(1)) { //vigente
-																blnCategoriaRiesgo = true;
-																break;
-															}
-														}														
+														blnTieneCategoriaRiesgo = true;
+														break;
 													}
 												}
-												if (blnCategoriaRiesgo) {
-//													ingresoDetSocio.setIngCajaModeloDetalle(md);
+												if (blnTieneCategoriaRiesgo) {
+													for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+														//validamos que le corresponda una categoria de riesgo													
+														if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_CATEGORIARIESGO)) {
+															if (cartera!=null) {
+																if (mdn.getIntDatoArgumento().equals(cartera.getIntParaTipocategoriariesgo())) {
+																	blnCategoriaRiesgo = true;
+																	break;
+																}
+															}else{
+																//Si no existe categoría de riesgo, se toma como NORMAL(1)
+																if (mdn.getIntDatoArgumento().equals(1)) {
+																	blnCategoriaRiesgo = true;
+																	break;
+																}
+															}														
+														}
+													}
+													if (blnCategoriaRiesgo) {
+														lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
+													}
+												}else{
+													//Si el modelo no tiene categoria de riesgo, generamos el libro.
 													lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
 												}
 											}											
@@ -843,10 +894,11 @@ public class IngresoService {
 								for (ModeloDetalle md : modelo.getListModeloDetalle()) {
 									Boolean blnConceptoGeneral = false;
 									Boolean blnConfCredito = false;
+									Boolean blnTieneCategoriaRiesgo = false;
 									Boolean blnCategoriaRiesgo = false;
 									if (md.getListModeloDetalleNivel()!=null && !md.getListModeloDetalleNivel().isEmpty()) {
 										for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-											//validamos que el modelo corresponda a una amortizacion
+											//validamos que el modelo corresponda a un interés
 											if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_CONCEPTOGRAL)) {
 												if (mdn.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_INTERES)) {
 													blnConceptoGeneral = true;
@@ -865,24 +917,36 @@ public class IngresoService {
 												}
 											}
 											if (blnConfCredito) {
-												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-													//validamos que le corresponda una categoria de riesgo													
+												//Validamos que el modelo tenga categoria de riesgo
+												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
 													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_CATEGORIARIESGO)) {
-														if (cartera!=null) {
-															if (mdn.getIntDatoArgumento().equals(cartera.getIntParaTipocategoriariesgo())) {
-																blnCategoriaRiesgo = true;
-																break;
-															}
-														}else{
-															if (mdn.getIntDatoArgumento().equals(1)) { //vigente
-																blnCategoriaRiesgo = true;
-																break;
-															}
-														}														
+														blnTieneCategoriaRiesgo = true;
+														break;
 													}
 												}
-												if (blnCategoriaRiesgo) {
-//													ingresoDetSocio.setIngCajaModeloDetalle(md);
+												if (blnTieneCategoriaRiesgo) {
+													for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+														//validamos que le corresponda una categoria de riesgo													
+														if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_CATEGORIARIESGO)) {
+															if (cartera!=null) {
+																if (mdn.getIntDatoArgumento().equals(cartera.getIntParaTipocategoriariesgo())) {
+																	blnCategoriaRiesgo = true;
+																	break;
+																}
+															}else{
+																//Si no existe categoría de riesgo, se toma como NORMAL(1)
+																if (mdn.getIntDatoArgumento().equals(1)) {
+																	blnCategoriaRiesgo = true;
+																	break;
+																}
+															}														
+														}
+													}
+													if (blnCategoriaRiesgo) {
+														lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
+													}
+												}else{
+													//Si el modelo no tiene categoria de riesgo, generamos el libro.
 													lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
 												}
 											}											
@@ -892,7 +956,8 @@ public class IngresoService {
 							}
 						}
 					}
-				}else if (ingresoDetSocio.getStrIngCajaNroSolicitud()==null && ingresoDetSocio.getIntIngCajaFlagAmortizacionInteres()==null) {//Caso Beneficios
+				}//Caso Beneficios
+				else if (ingresoDetSocio.getStrIngCajaNroSolicitud()==null && ingresoDetSocio.getIntIngCajaFlagAmortizacionInteres()==null) {
 					if (modelo!=null) {							
 						if (modelo.getListModeloDetalle()!=null && !modelo.getListModeloDetalle().isEmpty()) {
 							for (ModeloDetalle md : modelo.getListModeloDetalle()) {
@@ -903,50 +968,74 @@ public class IngresoService {
 								if (md.getListModeloDetalleNivel()!=null && !md.getListModeloDetalleNivel().isEmpty()) {
 									if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA)) {
 										//validamos el para_tipo_concepto
-										for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-											//validamos que el modelo corresponda a un expediente
-											if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO)) {
-												if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaParaTipoX())) {
-													blnParaTipoConcepto = true;
-													break;
+										if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)) {
+											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+												//validamos que el modelo tenga el para_tipoconcepto buscado
+												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCTACTEAHORRO)) {
+													if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaParaTipoX())) {
+														blnParaTipoConcepto = true;
+														break;
+													}
+												}
+											}
+											if (blnParaTipoConcepto) {
+												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+													//validamos que el modelo tenga el item_concepto buscado
+													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCTACTEAHORRO)) {
+														if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaItemX())) {
+															blnItemConcepto = true;
+															break;
+														}
+													}
+												}
+											}
+										}else {
+											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+												//validamos que el modelo tenga el para_tipoconcepto buscado
+												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO)) {
+													if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaParaTipoX())) {
+														blnParaTipoConcepto = true;
+														break;
+													}
+												}
+											}
+											if (blnParaTipoConcepto) {
+												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
+													//validamos que el modelo tenga el item_concepto buscado
+													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO)) {
+														if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaItemX())) {
+															blnItemConcepto = true;
+															break;
+														}
+													}
 												}
 											}
 										}
-										if (blnParaTipoConcepto) {
-											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-												//validamos que le corresponda una categoria de riesgo													
-												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO)) {
-													if (mdn.getIntValor().equals(ingresoDetSocio.getIntIngCajaItemX())) {
-														blnItemConcepto = true;
-														break;
-													}
+										
+										if (blnItemConcepto) {
+											//validamos que el modelo tenga la validación de ROL
+											for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
+												if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
+													blnModeloRol = true;
+													break;
 												}
 											}
-											if (blnItemConcepto) {
-												//validamos que el modelo tenga rol
+											if (blnModeloRol) {
+												//Si tuviera rol, se valida que sea el rol buscado
 												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
 													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
-														blnModeloRol = true;
-														break;
-													}
-												}
-												if (blnModeloRol) {
-													//Si tuviera rol, se valida que sea el rol buscado
-													for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
-														if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
-															if (mdn.getIntDatoArgumento().equals(intPersonaRolC)) {
-																blnPersonaRol = true;
-																break;
-															}
+														if (mdn.getIntDatoArgumento().equals(intPersonaRolC)) {
+															blnPersonaRol = true;
+															break;
 														}
 													}
-													if (blnPersonaRol) {
-														//ingresoDetSocio.setIngCajaModeloDetalle(md);
-														lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
-													}
-												}else {
+												}
+												if (blnPersonaRol) {
+													//Si el modelo no tiene rol, generamos el libro.
 													lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
 												}
+											}else {
+												lstLibroDiarioDetalleHaber.add(seteoLibroDiarioDetalle(md, intIdEmpresa, documentoGeneral, bancoFondo, ingresoDetSocio, ingresoDetSocio.getBdIngCajaMontoPagado()));
 											}
 										}
 									} else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION)) {
@@ -954,7 +1043,7 @@ public class IngresoService {
 										if (ingresoDetSocio.getLstCajaCuentaConceptoDetalle()!=null && !ingresoDetSocio.getLstCajaCuentaConceptoDetalle().isEmpty()) {
 											for (CuentaConceptoDetalle ccd : ingresoDetSocio.getLstCajaCuentaConceptoDetalle()) {
 												for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-													//validamos que el modelo corresponda a un expediente
+													//validamos que el modelo tenga el para_tipoconcepto buscado
 													if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_TIPOCONCEPTO)) {
 														if (mdn.getIntValor().equals(ccd.getIntParaTipoConceptoCod())) {
 															blnParaTipoConcepto = true;
@@ -964,7 +1053,7 @@ public class IngresoService {
 												}
 												if (blnParaTipoConcepto) {
 													for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {
-														//validamos que le corresponda una categoria de riesgo													
+														//validamos que el modelo tenga el item_concepto buscado
 														if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ITEMCONCEPTO)) {
 															if (mdn.getIntValor().equals(ccd.getIntItemConcepto())) {
 																blnItemConcepto = true;
@@ -973,7 +1062,7 @@ public class IngresoService {
 														}
 													}
 													if (blnItemConcepto) {
-														//validamos que el modelo tenga rol
+														//validamos que el modelo tenga la validación de ROL
 														for (ModeloDetalleNivel mdn : md.getListModeloDetalleNivel()) {																									
 															if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_INGRESOCAJA_ROL)) {
 																blnModeloRol = true;
@@ -1015,7 +1104,7 @@ public class IngresoService {
 		return lstLibroDiarioDetalleHaber;
 	}
 	
-	private LibroDiarioDetalle seteoLibroDiarioDetalle(ModeloDetalle modeloDetalle, Integer intIdEmpresa, DocumentoGeneral documentoGeneral, Bancofondo bancoFondo, ExpedienteComp ingresoDetSocio, BigDecimal bdMontoHaber){
+	private LibroDiarioDetalle seteoLibroDiarioDetalle(ModeloDetalle modeloDetalle, Integer intIdEmpresa, DocumentoGeneral documentoGeneral, Bancofondo bancoFondo, ExpedienteComp ingresoDetSocio, BigDecimal bdMontoDebeHaber){
 		LibroDiarioDetalle libroDiarioDetalleHaber = new LibroDiarioDetalle();
 		libroDiarioDetalleHaber.setId(new LibroDiarioDetalleId());
 		libroDiarioDetalleHaber.getId().setIntPersEmpresaLibro(intIdEmpresa);
@@ -1032,10 +1121,18 @@ public class IngresoService {
 		libroDiarioDetalleHaber.setIntSudeIdSubSucursal(ingresoDetSocio.getIntIngCajaIdSubSucursalAdministra());
 		libroDiarioDetalleHaber.setIntParaMonedaDocumento(bancoFondo.getIntMonedaCod());
 		libroDiarioDetalleHaber.setStrComentario(modeloDetalle.getPlanCuenta().getStrDescripcion());
-		libroDiarioDetalleHaber.setBdDebeSoles(null);
+		
+		//Autor: jchavez / Tarea: Modificación / Fecha: 11.12.2014
+		if (modeloDetalle.getIntParaOpcionDebeHaber().equals(Constante.PARAM_T_OPCIONDEBEHABER_DEBE)) {
+			libroDiarioDetalleHaber.setBdDebeSoles(bdMontoDebeHaber);
+			libroDiarioDetalleHaber.setBdHaberSoles(null);
+		}else if (modeloDetalle.getIntParaOpcionDebeHaber().equals(Constante.PARAM_T_OPCIONDEBEHABER_HABER)) {
+			libroDiarioDetalleHaber.setBdDebeSoles(null);
+			libroDiarioDetalleHaber.setBdHaberSoles(bdMontoDebeHaber);
+		}
+		//Fin jchavez - 11.12.2014
 		libroDiarioDetalleHaber.setBdHaberExtranjero(null);
 		libroDiarioDetalleHaber.setBdDebeExtranjero(null);
-		libroDiarioDetalleHaber.setBdHaberSoles(bdMontoHaber);
 		
 		return libroDiarioDetalleHaber;		
 	}
@@ -1056,7 +1153,7 @@ public class IngresoService {
 		Ingreso ingreso = documentoGeneral.getIngresoCaja();
 		try{
 			ConceptoFacadeRemote conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
-
+			CuentaFacadeRemote cuentaFacade = (CuentaFacadeRemote) EJBFactory.getRemote(CuentaFacadeRemote.class);
 			//1. Grabacion del ingreso.
 			ingreso = grabarIngresoGeneral(ingreso);
 			
@@ -1072,7 +1169,7 @@ public class IngresoService {
 			
 			
 			//3. Generación y grabación de Movimiento (CMO_MOVIMIENTOCTACTE)
-			List<Movimiento> lstMovimiento = generarMovimiento(listaIngresosSocio,documentoGeneral, ingreso, reciboManual, usuario, intModalidadC);
+			List<Movimiento> lstMovimiento = generarMovimiento(listaIngresosSocio,documentoGeneral, ingreso, reciboManual, usuario, intModalidadC, documentoGeneral.getIntTipoCuentaSocio());
 			log.info("Movimiento generado ---> "+lstMovimiento);
 			if (lstMovimiento!=null && !lstMovimiento.isEmpty()) {
 				for (Movimiento mov : lstMovimiento) {
@@ -1109,9 +1206,12 @@ public class IngresoService {
 							|| mov.getIntParaTipoConceptoGeneral().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_MANTENIMIENTO)
 							|| mov.getIntParaTipoConceptoGeneral().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_FDOSEPELIO)
 							|| mov.getIntParaTipoConceptoGeneral().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_FDORETIRO)
-							|| mov.getIntParaTipoConceptoGeneral().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_AHORRO)
+							/* Autor: jchavez / Tarea: Modificación / Fecha: 10.12.2014 / 
+							 * El ahorro no se considera para estos casos, dado que no graba Concepto Pago*/
+//							|| mov.getIntParaTipoConceptoGeneral().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_AHORRO)
+							//Fin jchavez - 10.12.2014
 							|| mov.getIntParaTipoConceptoGeneral().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_DEPOSITO)) {
-						//3.2.1 Caso Pago Mes Siguiente
+						//3.2.1 Caso Pago Mes Siguiente o Planilla Enviada
 						if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA)) {
 							for (ExpedienteComp x : listaIngresosSocio) {
 								if (mov.getIntItemCuentaConcepto().equals(x.getIntIngCajaId1())) {
@@ -1230,12 +1330,26 @@ public class IngresoService {
 									}
 								}
 							}
+							/* Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+							 * Se agrega validación, si la regularización ha sido por el total, el estado del socio debe cambiar
+							 */
+							if (documentoGeneral.getIntCorrespodeCambioCondicion().equals(Constante.CORRESPONDE_CAMBIO_CONDICION)) {
+								Cuenta cta = new Cuenta();
+								cta.setId(new CuentaId());
+								
+								cta.getId().setIntPersEmpresaPk(listaIngresosSocio.get(0).getIntIngCajaIdEmpresa());
+								cta.getId().setIntCuenta(listaIngresosSocio.get(0).getIntIngCajaIdCuenta());
+								
+								cta = cuentaFacade.getCuentaPorId(cta.getId());
+								cta.setIntParaSubCondicionCuentaCod(Constante.PARAM_T_TIPO_CONDSOCIO_VIGENTE);
+								cuentaFacade.modificarCuenta(cta);
+							}
 						}
 						//3.2.3 Caso Aportaciones
 						else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES)) {
 							for (ExpedienteComp x : listaIngresosSocio) {
 								if (mov.getIntItemCuentaConcepto().equals(x.getIntIngCajaId1())) {
-									//Por cada Cuenta Concepto Detalle a regularizar , se realiza su registro de Concepto Pago
+									//Por cada Cuenta Concepto Detalle agregada, se realiza su registro de Concepto Pago
 									if (x.getLstCajaCuentaConceptoDetalle()!=null && !x.getLstCajaCuentaConceptoDetalle().isEmpty()) {
 										for (CuentaConceptoDetalle ctaCptoDet : x.getLstCajaCuentaConceptoDetalle()) {
 											if (ctaCptoDet.getListaConceptoPago()!=null && !ctaCptoDet.getListaConceptoPago().isEmpty()) {
@@ -1297,11 +1411,12 @@ public class IngresoService {
      * @return lstMovimientos - lista de movimientos generados.
      * @throws Exception
      */
-	private List<Movimiento> generarMovimiento(List<ExpedienteComp> listaIngresosSocio, DocumentoGeneral documentoGeneral, Ingreso ingreso, ReciboManual reciboManual, Usuario usuario, Integer intModalidadC) throws Exception{
+	private List<Movimiento> generarMovimiento(List<ExpedienteComp> listaIngresosSocio, DocumentoGeneral documentoGeneral, Ingreso ingreso, ReciboManual reciboManual, Usuario usuario, Integer intModalidadC, Integer intTipoCuentaC) throws Exception{
 		List<Movimiento> lstMovimientos = new ArrayList<Movimiento>();
 
 		try {
 			ConceptoFacadeRemote conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
+			CuentaCteAhorroFacadeRemote ctaCteAhorroFacade = (CuentaCteAhorroFacadeRemote) EJBFactory.getRemote(CuentaCteAhorroFacadeRemote.class);
 			for (ExpedienteComp expedienteComp : listaIngresosSocio) {
 				
 				Movimiento movimiento = new Movimiento();
@@ -1333,7 +1448,7 @@ public class IngresoService {
 						conceptoFacade.modificarExpediente(exp);
 						//c. Actualización del cronograma
 						//c.1 Si la modalidad es DIFERENTE a Adelanto - Cancelación
-						if (!intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION)) {
+						if (!intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION) && !intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION)) {
 							List<Cronograma> lstCronograma = conceptoFacade.getListaCronogramaPorPkExpediente(pId);
 							if (lstCronograma!=null && !lstCronograma.isEmpty()) {
 								for (Cronograma cronograma : lstCronograma) {
@@ -1376,6 +1491,37 @@ public class IngresoService {
 									}
 								}
 							}
+						}else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION)) {
+							BigDecimal bdMonto = expedienteComp.getBdIngCajaMontoPagado();
+							List<Cronograma> lstCronograma = conceptoFacade.getListaCronogramaPorPkExpediente(pId);
+							//Ordenamos la lista cronograma de manera descendente.
+							Collections.sort(lstCronograma, new Comparator<Cronograma>() {
+					            public int compare(Cronograma o1, Cronograma o2) {
+					            	Cronograma e1 = (Cronograma) o1;
+					            	Cronograma e2 = (Cronograma) o2;
+					                return e2.getId().getIntItemCronograma().compareTo(e1.getId().getIntItemCronograma());
+					            }
+					        });
+							log.info("Cronograma ordenado descendentemente: "+lstCronograma);
+							//Se realiza modificación del cronograma
+							if (lstCronograma!=null && !lstCronograma.isEmpty()) {
+								for (Cronograma cronograma : lstCronograma) {
+									if (cronograma.getIntPeriodoPlanilla().compareTo(documentoGeneral.getIntPeriodoPlanilla())<=0) {
+										if (cronograma.getIntParaTipoConceptoCreditoCod().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_AMORTIZACION) && !bdMonto.equals(BigDecimal.ZERO) && !cronograma.getBdSaldoDetalleCredito().equals(BigDecimal.ZERO)) {
+											if (cronograma.getBdSaldoDetalleCredito().compareTo(bdMonto)==1) {
+												cronograma.setBdSaldoDetalleCredito(cronograma.getBdSaldoDetalleCredito().subtract(bdMonto));
+												bdMonto = BigDecimal.ZERO;
+												cronograma = conceptoFacade.modificarCronograma(cronograma);
+												break;
+											}else if (cronograma.getBdSaldoDetalleCredito().compareTo(bdMonto)==0 || cronograma.getBdSaldoDetalleCredito().compareTo(bdMonto)==-1) {
+												bdMonto = bdMonto.subtract(cronograma.getBdSaldoDetalleCredito());
+												cronograma.setBdSaldoDetalleCredito(BigDecimal.ZERO);
+												cronograma = conceptoFacade.modificarCronograma(cronograma);
+											}
+										}
+									}									
+								}
+							}
 						}
 						
 						//c.2.1 Registrar Estado Credito
@@ -1413,7 +1559,9 @@ public class IngresoService {
 				}
 				//2. Caso Beneficio
 				else{
+					//Autor: jchavez / Tarea: Modificación / Fecha: 11.12.2014 / Se agregan validaciones caso AHORROS
 					movimiento.setIntItemCuentaConcepto(expedienteComp.getIntIngCajaId1());
+					
 					movimiento.setIntItemExpediente(null);
 					movimiento.setIntItemExpedienteDetalle(null);
 					
@@ -1446,16 +1594,33 @@ public class IngresoService {
 					CuentaConcepto ctaCpto = conceptoFacade.getCuentaConceptoPorPK(pId);
 					ctaCpto.setBdSaldo(movimiento.getBdMontoSaldo());
 					ctaCpto = conceptoFacade.modificarCuentaConcepto(ctaCpto);
+					
 					if (!intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION)) {
-						//Actualización de Cuenta Concepto Detalle
-						CuentaConceptoDetalleId pId2 = new CuentaConceptoDetalleId();
-						pId2.setIntPersEmpresaPk(expedienteComp.getIntIngCajaIdEmpresa());
-						pId2.setIntCuentaPk(documentoGeneral.getSocioIngreso().getIntIngCajaIdCta());
-						pId2.setIntItemCuentaConcepto(expedienteComp.getIntIngCajaId1());
-						pId2.setIntItemCtaCptoDet(expedienteComp.getIntIngCajaId2());
-						CuentaConceptoDetalle ctaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPK(pId2);
-						ctaCptoDet.setBdSaldoDetalle(movimiento.getBdMontoSaldo());
-						ctaCptoDet = conceptoFacade.modificarCuentaConceptoDetalle(ctaCptoDet);
+						/* Autor: jchavez / Tarea: Modificación / Fecha: 10.12.2014 /
+						 * Para el caso de ahorros, se actualiza cuenta concepto y cuenta cte ahorro*/
+						if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_SOCIO)) {
+							//Actualización de Cuenta Concepto Detalle
+							CuentaConceptoDetalleId pId2 = new CuentaConceptoDetalleId();
+							pId2.setIntPersEmpresaPk(expedienteComp.getIntIngCajaIdEmpresa());
+							pId2.setIntCuentaPk(documentoGeneral.getSocioIngreso().getIntIngCajaIdCta());
+							pId2.setIntItemCuentaConcepto(expedienteComp.getIntIngCajaId1());
+							pId2.setIntItemCtaCptoDet(expedienteComp.getIntIngCajaId2());
+							CuentaConceptoDetalle ctaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPK(pId2);
+							ctaCptoDet.setBdSaldoDetalle(movimiento.getBdMontoSaldo());
+							ctaCptoDet = conceptoFacade.modificarCuentaConceptoDetalle(ctaCptoDet);
+						}else if(intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)){
+							//Actualización de Cuenta Corriente Ahorro 
+							CuentaCteAhorro o = new CuentaCteAhorro();
+							o.getId().setIntPersEmpresaPk(expedienteComp.getIntIngCajaIdEmpresa());
+							o.getId().setIntCsocCuentaPk(documentoGeneral.getSocioIngreso().getIntIngCajaIdCta());
+							o.getId().setIntItemCuentaConcepto(expedienteComp.getIntIngCajaId1());
+							o.getId().setIntItemCtaCteAhorro(expedienteComp.getIntIngCajaId2());
+							o = ctaCteAhorroFacade.getCuentaCteAhorroPorPk(o);
+							o.setBdSaldoDetalle(movimiento.getBdMontoSaldo());
+							o = ctaCteAhorroFacade.modificarCuentaCteAhorro(o);							
+						}
+						//fin jchavez - 10.12.2014
+						
 						//Registrar Bloqueo Cuenta //solo lo genera Pago mes siguiente (por el momento)
 						if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE)) {
 							BloqueoCuenta bloqueoCuenta = new BloqueoCuenta();
@@ -1503,6 +1668,10 @@ public class IngresoService {
 							}
 						}
 					}
+					if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)) {
+						movimiento.setIntParaTipoDocumentoGralReferido(Constante.PARAM_T_DOCUMENTOGENERAL_AHORRO);
+					}					
+					movimiento.setStrNumeroDocumentoReferido(""+expedienteComp.getIntIngCajaId1()+"-"+expedienteComp.getIntIngCajaId2());
 				}
 				movimiento.setIntParaTipoMovimiento(Constante.PARAM_T_TIPO_MOVIMIENTO_INGRESO_POR_CAJA);
 				movimiento.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_INGRESODECAJA);

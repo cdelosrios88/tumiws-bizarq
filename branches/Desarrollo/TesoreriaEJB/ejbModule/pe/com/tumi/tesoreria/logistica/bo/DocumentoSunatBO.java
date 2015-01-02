@@ -166,5 +166,22 @@ public class DocumentoSunatBO{
 		}
 		return vResult;
 	}
-	//Fin jchavez - 24.10.2014
+
+	//Autor: jchavez / Tarea: Creacion / Fecha: 29.12.2014
+	public List<DocumentoSunat> getDocSunatParaGiro(Integer intPersEmpresa, Integer intPersProveedor, Integer intTipoComprobante) throws BusinessException{
+		List<DocumentoSunat> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresa", intPersEmpresa);
+			mapa.put("intPersProveedor", intPersProveedor);
+			mapa.put("intTipoComprobante", intTipoComprobante);
+			
+			lista = dao.getDocSunatParaGiro(mapa);			
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
 }

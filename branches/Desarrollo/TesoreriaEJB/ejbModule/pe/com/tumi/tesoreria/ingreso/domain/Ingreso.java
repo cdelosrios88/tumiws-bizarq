@@ -83,6 +83,14 @@ public class Ingreso extends TumiDomain{
 	private IngresoDetalle ingresoDetConciliacion;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
+	/* Inicio: rVillarreal - 01/12/2014 variables para reporte de deposito de banco */
+	private String strDescripcionPersona;
+	private String strNombrePersona;
+	private String strDescripcionMoneda;
+	private String strFechaIngreso;
+	private String strMontoDepositar;
+	/* Fin: rVillarreal - 01/12/2014 */
+	
 	public Ingreso(){
 		id = new IngresoId();
 		listaIngresoDetalle = new ArrayList<IngresoDetalle>();
@@ -497,6 +505,46 @@ public class Ingreso extends TumiDomain{
 
 	public void setIngresoDetConciliacion(IngresoDetalle ingresoDetConciliacion) {
 		this.ingresoDetConciliacion = ingresoDetConciliacion;
+	}
+
+	public String getStrDescripcionPersona() {
+		return strDescripcionPersona;
+	}
+
+	public void setStrDescripcionPersona(String strDescripcionPersona) {
+		this.strDescripcionPersona = strDescripcionPersona;
+	}
+
+	public String getStrNombrePersona() {
+		return strNombrePersona;
+	}
+
+	public void setStrNombrePersona(String strNombrePersona) {
+		this.strNombrePersona = strNombrePersona;
+	}
+
+	public String getStrDescripcionMoneda() {
+		return strDescripcionMoneda;
+	}
+
+	public void setStrDescripcionMoneda(String strDescripcionMoneda) {
+		this.strDescripcionMoneda = strDescripcionMoneda;
+	}
+
+	public String getStrFechaIngreso() {
+		return strFechaIngreso;
+	}
+
+	public void setStrFechaIngreso(String strFechaIngreso) {
+		this.strFechaIngreso = strFechaIngreso;
+	}
+
+	public String getStrMontoDepositar() {
+		return strMontoDepositar;
+	}
+
+	public void setStrMontoDepositar(String strMontoDepositar) {
+		this.strMontoDepositar = strMontoDepositar;
 	}
 	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */

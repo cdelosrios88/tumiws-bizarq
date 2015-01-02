@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.MyUtil;
+import pe.com.tumi.common.util.MyUtilFormatoFecha;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioDetalle;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiarioId;
@@ -502,16 +503,27 @@ public class DocumentoSunatService {
 			libroDiarioDetalle.setStrComentario(planCta.getStrDescripcion());
 			
 			if (docSunatDetalle.getIntParaTipoMoneda().equals(Constante.PARAM_T_TIPOMONEDA_SOLES)) {
-				libroDiarioDetalle.setBdDebeSoles(docSunatDetalle.getBdMontoGrabarEnLibro());
-				libroDiarioDetalle.setBdHaberSoles(null);
+				if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+					libroDiarioDetalle.setBdDebeSoles(null);
+					libroDiarioDetalle.setBdHaberSoles(docSunatDetalle.getBdMontoGrabarEnLibro());
+				}else {
+					libroDiarioDetalle.setBdDebeSoles(docSunatDetalle.getBdMontoGrabarEnLibro());
+					libroDiarioDetalle.setBdHaberSoles(null);
+				}
+				
 				libroDiarioDetalle.setBdHaberExtranjero(null);
 				libroDiarioDetalle.setBdDebeExtranjero(null);
 			}else {
 				tipoCambio = generalFacade.getTipoCambioPorMonedaYFecha(docSunatDetalle.getIntParaTipoMoneda(), documentoSunat.getDtFechaEmision(), documentoSunat.getId().getIntPersEmpresa());
+				if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+					libroDiarioDetalle.setBdDebeExtranjero(null);
+					libroDiarioDetalle.setBdHaberExtranjero(docSunatDetalle.getBdMontoGrabarEnLibro().multiply(tipoCambio.getBdPromedio()));
+				}else {
+					libroDiarioDetalle.setBdDebeExtranjero(docSunatDetalle.getBdMontoGrabarEnLibro().multiply(tipoCambio.getBdPromedio()));
+					libroDiarioDetalle.setBdHaberExtranjero(null);
+				}
 				libroDiarioDetalle.setBdDebeSoles(null);
-				libroDiarioDetalle.setBdHaberSoles(null);
-				libroDiarioDetalle.setBdDebeExtranjero(docSunatDetalle.getBdMontoGrabarEnLibro().multiply(tipoCambio.getBdPromedio()));
-				libroDiarioDetalle.setBdHaberExtranjero(null);
+				libroDiarioDetalle.setBdHaberSoles(null);				
 			}
 			libroDiarioDetalle.setIntParaTipoComprobante(documentoSunat.getIntParaTipoComprobante());
 		} catch (Exception e) {
@@ -642,6 +654,47 @@ public class DocumentoSunatService {
 			docSunatDet.getId().setIntItemDocumentoSunat(documentoSunat.getId().getIntItemDocumentoSunat());
 			
 			docSunatDet.setIntParaTipoCptoDocumentoSunat(Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_LETRA);		
+			docSunatDet.setIntPersEmpresaOrdenCompra(null);
+			docSunatDet.setIntItemOrdenCompra(null);
+			docSunatDet.setIntItemOrdenCompraDetalle(null);
+			docSunatDet.setIntAfectoIGV(null);
+			docSunatDet.setIntParaTipoMoneda(documentoSunat.getIntParaMoneda());
+			
+			if (documentoSunat.getIntParaMoneda().equals(Constante.PARAM_T_TIPOMONEDA_SOLES)) {
+				docSunatDet.setBdMontoSinTipoCambio(null);
+			}else {
+				tipoCambio = generalFacade.getTipoCambioPorMonedaYFecha(documentoSunat.getIntParaMoneda(), documentoSunat.getDtFechaEmision(), documentoSunat.getId().getIntPersEmpresa());
+				docSunatDet.setBdMontoSinTipoCambio(detalleProcesa.getBdMontoSinTipoCambio().multiply(tipoCambio.getBdPromedio()));
+			}
+			
+			docSunatDet.setBdMontoTotal(detalleProcesa.getBdMontoSinTipoCambio());
+			docSunatDet.setStrDescripcion(detalleProcesa.getStrDescripcion());
+			docSunatDet.setIntSucuIdSucursal(detalleProcesa.getIntSucuIdSucursal());
+			docSunatDet.setIntSudeIdSubsucursal(detalleProcesa.getIntSudeIdSubsucursal());
+			docSunatDet.setIntIdArea(detalleProcesa.getIntIdArea());
+			docSunatDet.setIntParaEstado(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+			docSunatDet.setIntPersEmpresaCuenta(null);
+			docSunatDet.setIntContPeriodoCuenta(null);
+			docSunatDet.setStrContNumeroCuenta(null);
+			
+			docSunatDet = boDocumentoSunatDetalle.grabar(docSunatDet);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return docSunatDet;
+	}
+	
+	private DocumentoSunatDetalle grabarDocumentoSunatDetalleNota(DocumentoSunat documentoSunat, DocumentoSunatDetalle detalleProcesa)throws Exception{
+		DocumentoSunatDetalle docSunatDet = new DocumentoSunatDetalle();
+		TipoCambio tipoCambio = null;
+		try {
+			GeneralFacadeRemote generalFacade =  (GeneralFacadeRemote) EJBFactory.getRemote(GeneralFacadeRemote.class);
+			
+//			docSunatDet.setId(new DocumentoSunatDetalleId());
+			docSunatDet.getId().setIntPersEmpresa(documentoSunat.getId().getIntPersEmpresa());
+			docSunatDet.getId().setIntItemDocumentoSunat(documentoSunat.getId().getIntItemDocumentoSunat());
+			
+			docSunatDet.setIntParaTipoCptoDocumentoSunat(Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL);		
 			docSunatDet.setIntPersEmpresaOrdenCompra(null);
 			docSunatDet.setIntItemOrdenCompra(null);
 			docSunatDet.setIntItemOrdenCompraDetalle(null);
@@ -864,7 +917,9 @@ public class DocumentoSunatService {
 			listaDocumentoSunatTmp = boDocumentoSunat.getPorBuscar(documentoSunatFiltro);
 			
 			for(DocumentoSunat documentoSunat : listaDocumentoSunatTmp){
-				if (!(documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO))) {
+				if (!(documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_LETRA_CAMBIO))
+						&& !(documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO))
+						&& !(documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO))) {
 					documentoSunat.setOrdenCompra(boOrdenCompra.getPorDocumentoSunat(documentoSunat));
 					Persona proveedor = personaFacade.devolverPersonaCargada(documentoSunat.getOrdenCompra().getIntPersPersonaProveedor());
 					documentoSunat.getOrdenCompra().setPersonaProveedor(proveedor);
@@ -1171,7 +1226,7 @@ public class DocumentoSunatService {
 						docSunatLetra.getId().setIntItemDocumentoSunat(docSunatRel.getId().getIntItemDocumentoSunat());
 						docSunatLetra.setIntPersEmpresaDocSunatLetra(documentoSunatLetra.getId().getIntPersEmpresa());
 						docSunatLetra.setIntItemDocSunatLetraEnlazada(documentoSunatLetra.getId().getIntItemDocumentoSunat());
-						docSunatLetra.setBdMontoCancelado(docSunatRel.getBdMontoAplicar());
+						docSunatLetra.setBdMontoCancelado(docSunatRel.getBdMontoIngresado());
 						if (documentoValido(docSunatRel.getDocPercepcion())) {
 							docSunatLetra.setIntItemDocumentoSunatDoc(docSunatRel.getDocPercepcion().getId().getIntItemDocumentoSunatDoc());
 						}
@@ -1217,6 +1272,7 @@ public class DocumentoSunatService {
 	public DocumentoSunat calcularMontos(DocumentoSunat documentoSunat, TipoCambio tipoCambio) throws BusinessException{
 		try{
 			log.info("--calcularMontos");			
+			
 			Tarifa tarifaIGV = cargarTarifaIGV(documentoSunat);
 			//TipoCambio tipoCambio = cargarTipoCambio(documentoSunat);
 			
@@ -1304,20 +1360,25 @@ public class DocumentoSunatService {
 			
 			//RETENCION
 			BigDecimal bdMontoRetencion = null;
+			
+			// Autor: jchavez / Tarea: Creación / Fecha: 12.12.2014
 			Proveedor proveedor = documentoSunat.getOrdenCompra().getProveedor();
 			if(proveedor.getIntRetencionCuarta()!=null 
-			&& documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS)){
+			&& documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS)){				
+				Tarifa tarifaRetencion4ta = cargarTarifaRetencion4ta(documentoSunat);
+				BigDecimal bdPorcentajeRetencion4ta = tarifaRetencion4ta.getBdValor().divide(new BigDecimal(100), 2);
+				
 				if(proveedor.getIntRetencionCuarta().equals(Constante.PARAM_T_RETENCION_NO)){
 					bdMontoRetencion = new BigDecimal(0);
 				}else if(proveedor.getIntRetencionCuarta().equals(Constante.PARAM_T_RETENCION_SI_CONDICION)
 						&& documentoSunat.getDetalleTotal().getBdMontoTotal().compareTo(new BigDecimal(1500))>0){
-					bdMontoRetencion = documentoSunat.getDetalleTotal().getBdMontoTotal().multiply(new BigDecimal(0.1));
+					bdMontoRetencion = documentoSunat.getDetalleTotal().getBdMontoTotal().multiply(bdPorcentajeRetencion4ta);
 				}else if(proveedor.getIntRetencionCuarta().equals(Constante.PARAM_T_RETENCION_SI_INDISTINTO)){
-					bdMontoRetencion = documentoSunat.getDetalleTotal().getBdMontoTotal().multiply(new BigDecimal(0.1));
+					bdMontoRetencion = documentoSunat.getDetalleTotal().getBdMontoTotal().multiply(bdPorcentajeRetencion4ta);
 				}
 			}else{
 				bdMontoRetencion = new BigDecimal(0);
-			}
+			}//Fin jchavez - 12.12.2014
 			documentoSunat.getDetalleRetencion().setBdMontoTotal(bdMontoRetencion);
 			
 			//Autor: jchavez / Tarea: nueva validacion / Fecha: 27.10.2014
@@ -1354,7 +1415,9 @@ public class DocumentoSunatService {
 			Double dbMontoSinIGV = documentoSunatDetalle.getBdMontoSinTipoCambio().doubleValue()/bdMontoSinIGV.doubleValue();
 			
 			if(ordenCompraDetalle.getIntAfectoIGV().equals(new Integer(1))&& !documentoSunat.isSeleccionaInafecto()
-					&& (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA) || documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO))){
+					&& (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_FACTURA) 
+							|| documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)
+							|| documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO))){
 				documentoSunatDetalle.setBdMontoSinIGV(MyUtil.round(new BigDecimal(dbMontoSinIGV), 2, true));
 				documentoSunatDetalle.setBdMontoIGV(documentoSunatDetalle.getBdMontoSinTipoCambio().subtract(documentoSunatDetalle.getBdMontoSinIGV()));
 			}else{
@@ -1380,6 +1443,42 @@ public class DocumentoSunatService {
 		}catch(Exception e){
 			throw new BusinessException(e);
 		}
+	}
+	
+	/**
+	 * Autor: jchavez / Tarea: Creacion / Fecha: 12.12.2014
+	 * Funcionalidad: Método que recupera la tarifa vigente de Retención de 4ta categoría.
+	 * @param documentoSunat
+	 * @return
+	 * @throws Exception
+	 */
+	public Tarifa cargarTarifaRetencion4ta(DocumentoSunat documentoSunat)throws Exception{
+		try{
+			GeneralFacadeRemote generalFacade =  (GeneralFacadeRemote) EJBFactory.getRemote(GeneralFacadeRemote.class);
+			Tarifa tarifa = generalFacade.getTarifaRet4ta(documentoSunat.getId().getIntPersEmpresa(), MyUtilFormatoFecha.obtenerFechaActual());
+			if(tarifa==null){
+				tarifa = new Tarifa();
+				tarifa.setBdValor(new BigDecimal(0));
+			}
+			return tarifa;
+		}catch(Exception e){
+			throw new BusinessException(e);
+		}
+//		try{
+//			GeneralFacadeRemote generalFacade =  (GeneralFacadeRemote) EJBFactory.getRemote(GeneralFacadeRemote.class);
+//			Tarifa tarifa = new Tarifa();
+//			tarifa.setId(new TarifaId());
+//			tarifa.getId().setIntPersEmpresaTarifa(documentoSunat.getId().getIntPersEmpresa());
+//			tarifa.getId().setIntParaTipoTarifaCod(Constante.PARAM_T_TIPOTARIFA_RETENCION_4TA);
+//			tarifa = generalFacade.getTarifaVigente(tarifa);
+//			if(tarifa==null){
+//				tarifa = new Tarifa();
+//				tarifa.setBdValor(new BigDecimal(0));
+//			}
+//			return tarifa;
+//		}catch(Exception e){
+//			throw new BusinessException(e);
+//		}
 	}
 	
 	//Agregado por cdelosrios, 01/11/2013
@@ -1423,8 +1522,6 @@ public class DocumentoSunatService {
 					//Autor: jchavez / Tarea: Modificacion / Fecha: 27.10.2014
 					documentoSunat.setDocPercepcion(boDocumentoSunatDoc.getPorDocumentoSunatYTipoDoc(documentoSunat, Constante.PARAM_T_DOCUMENTOGENERAL_PERCEPCION));
 					documentoSunat.setDocDetraccion(boDocumentoSunatDoc.getPorDocumentoSunatYTipoDoc(documentoSunat, Constante.PARAM_T_DOCUMENTOGENERAL_DETRACCION));
-//					documentoSunat.setDocPercepcion(boDocumentoSunatDetalle.getPorDocumentoSunatYTipoDocSunat(documentoSunat, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_PERCEPCION));
-//					documentoSunat.setDocDetraccion(boDocumentoSunatDetalle.getPorDocumentoSunatYTipoDocSunat(documentoSunat, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_DETRACCION));
 					//Fin jchavez - 27.10.2014
 					//DETALLE RETENCION...
 					List<DocumentoSunatDetalle> lstDetalleRetencion = boDocumentoSunatDetalle.getPorDocumentoSunatYTipoDocSunat(documentoSunat, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_RETENCION);
@@ -1500,7 +1597,7 @@ public class DocumentoSunatService {
     	Boolean blnTipoRequisicion = false;
     	try {
 			for (ModeloDetalle modeloDetalle : modelo.getListModeloDetalle()) {
-				if (detalleProcesa.getIntAfectoIGV()!=null && detalleProcesa.getIntAfectoIGV().equals(1)) {
+				if (detalleProcesa.getIntAfectoIGV()!=null && detalleProcesa.getIntAfectoIGV().equals(Constante.INT_AFECTOIGV)) {
 					for (ModeloDetalleNivel mdn : modeloDetalle.getListModeloDetalleNivel()) {
 						if (mdn.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELOCONTABLE_DOCUMENTOSUNAT_INDICADORIGV)) {
 							libroDiarioDet = generarLibroDiarioDetalle(documentoSunat, detalleProcesa, modeloDetalle);
@@ -1616,7 +1713,7 @@ public class DocumentoSunatService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat) throws BusinessException{
+	public DocumentoSunat agregarDocumentoSunatNota(DocumentoSunat documentoSunat, OrdenCompra ordenCompra) throws BusinessException{
 		try{
 			LibroDiarioFacadeRemote libroDiarioFacade =  (LibroDiarioFacadeRemote) EJBFactory.getRemote(LibroDiarioFacadeRemote.class);
 			
@@ -1630,18 +1727,122 @@ public class DocumentoSunatService {
 				}
 				
 				LibroDiario libroDiario = procesarLibroDiarioNota(documentoSunatNota, documentoSunatNota.getOrdenCompra());
-//				libroDiario = libroDiarioFacade.grabarLibroDiario(libroDiario);
+				libroDiario = libroDiarioFacade.grabarLibroDiario(libroDiario);
 				
-//				documentoSunatNota.setIntEmpresaLibro(libroDiario.getId().getIntPersEmpresaLibro());
-//				documentoSunatNota.setIntPeriodoLibro(libroDiario.getId().getIntContPeriodoLibro());
-//				documentoSunatNota.setIntCodigoLibro(libroDiario.getId().getIntContCodigoLibro());
-//				//GRABACION DOCUMENTO SUNAT...
-//				log.info(documentoSunatNota);
-//				documentoSunatNota = boDocumentoSunat.grabar(documentoSunatNota);
-//				//GRABACION DOCUMENTO SUNAT DETALLE...
-//				DocumentoSunatDetalle documentoSunatDetalleLetra = documentoSunatNota.getDetalleLetra();
-//				documentoSunatDetalleLetra = grabarDocumentoSunatDetalleLetra(documentoSunatNota, documentoSunatDetalleLetra);
-//				//GRABACION DOCUMENTO SUNAT LETRA...
+				documentoSunatNota.setIntEmpresaLibro(libroDiario.getId().getIntPersEmpresaLibro());
+				documentoSunatNota.setIntPeriodoLibro(libroDiario.getId().getIntContPeriodoLibro());
+				documentoSunatNota.setIntCodigoLibro(libroDiario.getId().getIntContCodigoLibro());
+				//GRABACION DOCUMENTO SUNAT...
+				log.info(documentoSunatNota);
+				log.info("---------- GRABACION DOCUMENTO SUNAT ----------");
+				log.info("PERS_EMPRESAORDEN_N_PK: "+documentoSunatNota.getIntPersEmpresaOrden());
+				log.info("TESO_ITEMORDENCOMPRA_N: "+documentoSunatNota.getIntItemOrdenCompra());
+				log.info("PERS_EMPRESAREQUISICION_N_PK: "+documentoSunatNota.getIntPersEmpresaRequisicion());
+				log.info("TESO_ITEMREQUISICION_N: "+documentoSunatNota.getIntItemRequisicion());
+				log.info("DOSU_FECHAPROVISION_D: "+documentoSunatNota.getTsFechaProvision());
+				log.info("PARA_DOCUMENTOGENERAL_N_COD: "+documentoSunatNota.getIntParaDocumentoGeneral());
+				log.info("PARA_TIPOCOMPROBANTE_N_COD: "+documentoSunatNota.getIntParaTipoComprobante());
+				log.info("DOSU_SERIEDOCUMENTO_V: "+documentoSunatNota.getStrSerieDocumento());
+				log.info("DOSU_NUMERODOC_V: "+documentoSunatNota.getStrNumeroDocumento());
+				log.info("DOSU_FECHAREGISTRO_D: "+documentoSunatNota.getTsFechaRegistro());
+				log.info("DOSU_FECHAEMISION_D: "+documentoSunatNota.getDtFechaEmision());
+				log.info("DOSU_FECHAVENCIMIENTO_D: "+documentoSunatNota.getDtFechaVencimiento());
+				log.info("DOSU_FECHAPAGO_D: "+documentoSunatNota.getDtFechaPago());
+				log.info("DOSU_INDICADORINAFECTO_N: "+documentoSunatNota.getIntIndicadorInafecto());
+				log.info("DOSU_INDICADORIGV_N: "+documentoSunatNota.getIntIndicadorIGV());
+				log.info("DOSU_INDICADORPERCEPCION_N: "+documentoSunatNota.getIntIndicadorPercepcion());
+				log.info("DOSU_INDICADORLETRAS_N: "+documentoSunatNota.getIntIndicadorLetras());
+				log.info("DOSU_GLOSA_V: "+documentoSunatNota.getStrGlosa());
+				log.info("PARA_ESTADO_N_COD: "+documentoSunatNota.getIntParaEstado());
+				log.info("PARA_ESTADOPAGO_N_COD: "+documentoSunatNota.getIntParaEstadoPago());
+				log.info("PERS_EMPRESAUSUARIO_N_PK: "+documentoSunatNota.getIntPersEmpresaUsuario());
+				log.info("PERS_PERSONAUSUARIO_N_PK: "+documentoSunatNota.getIntPersPersonaUsuario());
+				log.info("SUCU_IDSUCURSAL_N: "+documentoSunatNota.getIntSucuIdSucursal());
+				log.info("SUDE_IDSUBSUCURSAL_N: "+documentoSunatNota.getIntSubIdSubsucursal());
+				log.info("PERS_EMPRESADOCSUNATAN_N_PK: "+documentoSunatNota.getIntPersEmpresaDocSunatAnula());
+				log.info("TESO_ITEMDOCSUNAN_N: "+documentoSunatNota.getIntItemDocumentoSunatAnula());
+				log.info("DOSU_FECHAANULA_D: "+documentoSunatNota.getTsFechaAnula());
+				log.info("PERS_EMPRESAANULA_N_PK: "+documentoSunatNota.getIntPersEmpresaAnula());
+				log.info("PERS_PERSONAANULA_N_PK: "+documentoSunatNota.getIntPersPersonaAnula());
+				log.info("PERS_EMPRESAEGRESO_N_PK: "+documentoSunatNota.getIntPersEmpresaEgreso());
+				log.info("TESO_ITEMEGRESOGENERAL_N: "+documentoSunatNota.getIntItemEgresoGeneral());
+				log.info("PERS_EMPRESALIBRO_N_PK: "+documentoSunatNota.getIntEmpresaLibro());
+				log.info("CONT_PERIODOLIBRO_N: "+documentoSunatNota.getIntPeriodoLibro());
+				log.info("CONT_CODIGOLIBRO_N: "+documentoSunatNota.getIntCodigoLibro());
+				log.info("PARA_TIPO_N_COD: "+documentoSunatNota.getIntParaTipo());
+				log.info("MAE_ITEMARCHIVO_N: "+documentoSunatNota.getIntItemArchivo());
+				log.info("MAE_ITEMHISTORICO_N: "+documentoSunatNota.getIntItemHistorico());
+				log.info("PERS_EMPRESADOCSUNATREL_N_PK: "+documentoSunatNota.getIntPersEmpresaDocSunatEnlazado());
+				log.info("TESO_ITEMDOCSUNREL_N: "+documentoSunatNota.getIntItemDocumentoSunatEnlazado());	
+				log.info("PERS_EMPRESAINGRESO_N_PK: "+documentoSunatNota.getIntPersEmpresaIngreso());
+				log.info("TESO_ITEMINGRESOGENERAL_N: "+documentoSunatNota.getIntItemIngresoGeneral());
+				log.info("-------------------------------------------------------");
+				documentoSunatNota = boDocumentoSunat.grabar(documentoSunatNota);
+				//GRABACION DOCUMENTO SUNAT DETALLE...
+				for (DocumentoSunatDetalle docSunatDet : documentoSunat.getListaDocumentoSunatDetalle()) {
+					log.info("---------- GRABACION DOCUMENTO SUNAT DETALLE "+" ----------");
+					log.info("PARA_TIPOCPTODOCSUNAT_N_COD: "+docSunatDet.getIntParaTipoCptoDocumentoSunat());
+					log.info("PERS_EMPRESAORDEN_N_PK: "+docSunatDet.getIntPersEmpresaOrdenCompra());
+					log.info("TESO_ITEMORDENCOMPRA_N: "+docSunatDet.getIntItemOrdenCompra());
+					log.info("TESO_ITEMORDENCOMPRADET_N: "+docSunatDet.getIntItemOrdenCompraDetalle());
+					log.info("ORCD_AFECTOIGV_N: "+docSunatDet.getIntAfectoIGV());
+					log.info("PARA_TIPOMONEDA_N_COD: "+docSunatDet.getIntParaTipoMoneda());
+					log.info("ORCD_MONTOSINTIPOCAMBIO_N: "+docSunatDet.getBdMontoSinTipoCambio());
+					log.info("ORCD_MONTOTOTAL_N: "+docSunatDet.getBdMontoTotal());
+					log.info("ORCD_DESCRIPCION_V: "+docSunatDet.getStrDescripcion());
+					log.info("SUCU_IDSUCURSAL_N: "+docSunatDet.getIntSucuIdSucursal());	
+					log.info("SUDE_IDSUBSUCURSAL_N: "+docSunatDet.getIntSudeIdSubsucursal());
+					log.info("AREA_IDAREA_N: "+docSunatDet.getIntIdArea());
+					log.info("PARA_ESTADO_N_COD: "+docSunatDet.getIntParaEstado());
+					log.info("PERS_EMPRESACUENTA_N_PK: "+docSunatDet.getIntPersEmpresaCuenta());
+					log.info("CONT_PERIODOCUENTA_N: "+docSunatDet.getIntContPeriodoCuenta());
+					log.info("CONT_NUMEROCUENTA_V: "+docSunatDet.getStrContNumeroCuenta());
+					log.info("-------------------------------------------------------");
+					//Autor: jchavez / Tarea: Modificación / Fecha: 29.12.2014 
+//					docSunatDet = grabarDocumentoSunatDetalleLetra(documentoSunatNota, docSunatDet);
+					docSunatDet = grabarDocumentoSunatDetalleNota(documentoSunatNota, docSunatDet);
+				}
+				
+				//GRABACION DE DOCUMENTO SUNAT DOC SI TUVIERA PERCEPCION O DETRACCION
+				BigDecimal bdMontoPercepcion = BigDecimal.ZERO;
+				BigDecimal bdMontoDetraccion = BigDecimal.ZERO;
+				BigDecimal bdMontoParaDetraccion = BigDecimal.ZERO;
+				if (documentoValido(documentoSunatNota.getDocPercepcion())) {
+					if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+						bdMontoPercepcion = documentoSunatNota.getDetalleNotaCredito().getBdMontoSinTipoCambio().multiply(new BigDecimal(0.02));
+					}else if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
+						bdMontoPercepcion = documentoSunatNota.getDetalleNotaDebito().getBdMontoSinTipoCambio().multiply(new BigDecimal(0.02));
+					}
+					documentoSunatNota.getDocPercepcion().setBdMontoDocumento(bdMontoPercepcion);
+					grabarDocumentoSunatDoc(documentoSunatNota, documentoSunatNota.getDocPercepcion(), Constante.PARAM_T_DOCUMENTOGENERAL_PERCEPCION);
+				}
+				if (documentoSunatNota.getBlnGeneraDetraccionNota()) {
+					log.info("Porcentaje Detraccion: "+ordenCompra.getDetraccion());
+					if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+						bdMontoParaDetraccion = documentoSunatNota.getDetalleNotaCredito().getBdMontoSinTipoCambio();
+					}else if (documentoSunatNota.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
+						bdMontoParaDetraccion = documentoSunatNota.getDetalleNotaDebito().getBdMontoSinTipoCambio();
+					}
+					
+					if(ordenCompra.getIntParaTipoDetraccion()!=null 
+						&& !ordenCompra.getIntParaTipoDetraccion().equals(new Integer(0))		
+						&& detalleValido(documentoSunatNota.getDetalleIGV())){
+							bdMontoDetraccion = bdMontoParaDetraccion.multiply(ordenCompra.getDetraccion().
+									getBdPorcentaje().divide(new BigDecimal(100)));
+							if(bdMontoDetraccion.compareTo(Constante.MONTO_MAXIMO_DETRACCION)>0){
+								bdMontoDetraccion = Constante.MONTO_MAXIMO_DETRACCION;
+							}
+					}else{
+						bdMontoDetraccion = new BigDecimal(0);
+					}					
+					documentoSunatNota.setDocDetraccion(new DocumentoSunatDoc());
+					documentoSunatNota.getDocDetraccion().setBdMontoDocumento(bdMontoDetraccion);
+					grabarDocumentoSunatDoc(documentoSunatNota, documentoSunatNota.getDocDetraccion(), Constante.PARAM_T_DOCUMENTOGENERAL_DETRACCION);
+				}
+				
+//				bdMontoPercepcion = documentoSunat.getDetalleTotal().getBdMontoTotal().multiply(new BigDecimal(0.02));
+				
+				//GRABACION DOCUMENTO SUNAT LETRA...
 //				if (documentoSunatNota.getListaDocSunatRelacionadosConLetraDeCambio()!=null && !documentoSunatNota.getListaDocSunatRelacionadosConLetraDeCambio().isEmpty()) {
 //					for (DocumentoSunat docSunatRel : documentoSunatNota.getListaDocSunatRelacionadosConLetraDeCambio()) {
 //						DocumentoSunatLetra docSunatLetra = new DocumentoSunatLetra();
@@ -1697,150 +1898,162 @@ public class DocumentoSunatService {
 		Integer intParaTipoRequisicion = null;
 		List<LibroDiarioDetalle> libroDiarioDetalleTemp = new ArrayList<LibroDiarioDetalle>();
 		Boolean blnIGVContable = false;
-//		try {
-//			ModeloFacadeRemote modeloFacade =  (ModeloFacadeRemote) EJBFactory.getRemote(ModeloFacadeRemote.class);
-//			intParaTipoRequisicion = ordenCompra.getDocumentoRequisicion().getRequisicion().getIntParaTipoRequisicion();
-//			log.info("TIPO DE REQUISICION: "+intParaTipoRequisicion);
-//			log.info("moneda: "+documentoSunat.getIntParaMoneda());
-//
-//			Modelo modelo = modeloFacade.obtenerTipoModeloActual
-//			(Constante.PARAM_T_MODELOCONTABLE_LETRADECAMBIO, documentoSunat.getId().getIntPersEmpresa()).get(0);
-//			log.info("MODELO CONTABLE: "+modelo);
-//
-//			libroDiario.getListaLibroDiarioDetalle().addAll(obtenerLibroDiarioDetalleLetraDeCambio(documentoSunat, documentoSunat.getDetalleLetra(), intParaTipoRequisicion, modelo));
-//		} catch (Exception e) {
-//			log.info(e.getMessage());
-//		}	
-		ModeloFacadeRemote modeloFacade =  (ModeloFacadeRemote) EJBFactory.getRemote(ModeloFacadeRemote.class);
-		intParaTipoRequisicion = ordenCompra.getDocumentoRequisicion().getRequisicion().getIntParaTipoRequisicion();
-		log.info("TIPO DE REQUISICION: "+intParaTipoRequisicion);
 
-		Modelo modelo = null;
-		if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
-			modelo = modeloFacade.obtenerTipoModeloActual(Constante.PARAM_T_MODELOCONTABLE_NOTACREDITO, documentoSunat.getId().getIntPersEmpresa()).get(0);
-		}else if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
-			modelo = modeloFacade.obtenerTipoModeloActual(Constante.PARAM_T_MODELOCONTABLE_NOTADEBITO, documentoSunat.getId().getIntPersEmpresa()).get(0);
-		}
+		try {
+			ModeloFacadeRemote modeloFacade =  (ModeloFacadeRemote) EJBFactory.getRemote(ModeloFacadeRemote.class);
+			intParaTipoRequisicion = ordenCompra.getDocumentoRequisicion().getRequisicion().getIntParaTipoRequisicion();
+			log.info("TIPO DE REQUISICION: "+intParaTipoRequisicion);
 
+			Modelo modelo = null;
+			if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
+				modelo = modeloFacade.obtenerTipoModeloActual(Constante.PARAM_T_MODELOCONTABLE_NOTACREDITO, documentoSunat.getId().getIntPersEmpresa()).get(0);
+			}else if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
+				modelo = modeloFacade.obtenerTipoModeloActual(Constante.PARAM_T_MODELOCONTABLE_NOTADEBITO, documentoSunat.getId().getIntPersEmpresa()).get(0);
+			}
 
-		
-		log.info("MODELO CONTABLE: "+modelo);
-//
-//		
-		if(documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS)){				
-//			if (detalleValido(documentoSunat.getDetalleRetencion())) {
-//				log.info("----- LLD RETENCION -----");
-//				libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleRetencion(), null, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_RETENCION, documentoSunat.getIntParaTipoComprobante()));
-				log.info("----- LLD TOTAL GENERAL-----");
-//				libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
-				printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
-//			}
-//			else { 
-//				log.info("----- LLD TOTAL GENERAL -----");
-//				libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTAL, documentoSunat.getIntParaTipoComprobante()));
-////				printLibroDiarioDetalle(obtenerLibroDiarioDetalle(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTAL, documentoSunat.getIntParaTipoComprobante()));
-//			}
-		}else {
-			if (documentoSunat.getIntIndicadorIGV()!=null && documentoSunat.getIntIndicadorIGV().equals(1)) {
-				blnIGVContable = true;
-				Tarifa tarifaIGV = cargarTarifaIGV(documentoSunat);
-//				if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTACREDITO)) {
-//					calcularIGV(documentoSunat.getDetalleNotaCredito(), documentoSunat.getTipoCambio(), documentoSunat, tarifaIGV);
-//				}else if (documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_NOTADEBITO)) {
-//					calcularIGV(documentoSunat.getDetalleNotaDebito(), documentoSunat.getTipoCambio(), documentoSunat, tarifaIGV);
+			log.info("MODELO CONTABLE: "+modelo);
+
+			if(documentoSunat.getIntParaTipoComprobante().equals(Constante.PARAM_T_TIPOCOMPROBANTE_RECIBOHONORARIOS)){				
+//				if (detalleValido(documentoSunat.getDetalleRetencion())) {
+//					log.info("----- LLD RETENCION -----");
+//					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleRetencion(), null, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_RETENCION, documentoSunat.getIntParaTipoComprobante()));
+//					log.info("----- LLD TOTAL GENERAL-----");
+//					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
+//					printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
 //				}
-				documentoSunat.setDetalleIGV(new DocumentoSunatDetalle());
-				documentoSunat.getDetalleIGV().setBdMontoTotal(BigDecimal.ZERO);
-				BigDecimal bdMontoSubtotal = new BigDecimal(0);
-				BigDecimal bdMontoIGV = new BigDecimal(0);
-				if (documentoSunat.getListaDocumentoSunatDetalle()!=null && !documentoSunat.getListaDocumentoSunatDetalle().isEmpty()) {
-					for (DocumentoSunatDetalle documentoSunatDetalle : documentoSunat.getListaDocumentoSunatDetalle()) {
-						if (documentoSunatDetalle.getOrdenCompraDetalle().getIntAfectoIGV().equals(Constante.INT_AFECTOIGV)) {
-							documentoSunatDetalle = calcularIGV(documentoSunatDetalle, documentoSunat.getTipoCambio(), documentoSunat, tarifaIGV);
-							bdMontoSubtotal = bdMontoSubtotal.add(documentoSunatDetalle.getBdMontoSinIGV());
-							bdMontoIGV = bdMontoIGV.add(documentoSunatDetalle.getBdMontoIGV());
-//							documentoSunat.getDetalleIGV().setBdMontoTotal(documentoSunat.getDetalleIGV().getBdMontoTotal().add(documentoSunat.getDetalleIGV().getBdMontoIGV()));
+//				else { 
+//					log.info("----- LLD TOTAL GENERAL -----");
+//					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTAL, documentoSunat.getIntParaTipoComprobante()));
+////					printLibroDiarioDetalle(obtenerLibroDiarioDetalle(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTAL, documentoSunat.getIntParaTipoComprobante()));
+//				}
+			}else {
+				if (documentoSunat.getIntIndicadorIGV()!=null && documentoSunat.getIntIndicadorIGV().equals(1)) {
+					blnIGVContable = true;
+					Tarifa tarifaIGV = cargarTarifaIGV(documentoSunat);
+
+					documentoSunat.setDetalleIGV(new DocumentoSunatDetalle());
+					documentoSunat.getDetalleIGV().setBdMontoTotal(BigDecimal.ZERO);
+					
+					documentoSunat.setDetalleTotalGeneral(new DocumentoSunatDetalle());
+					documentoSunat.getDetalleTotalGeneral().setBdMontoTotal(BigDecimal.ZERO);
+					
+					BigDecimal bdMontoSubtotal = new BigDecimal(0);
+					BigDecimal bdMontoTotalGeneral = new BigDecimal(0);
+					BigDecimal bdMontoIGV = new BigDecimal(0);
+					if (documentoSunat.getListaDocumentoSunatDetalle()!=null && !documentoSunat.getListaDocumentoSunatDetalle().isEmpty()) {
+						for (DocumentoSunatDetalle documentoSunatDetalle : documentoSunat.getListaDocumentoSunatDetalle()) {
+							if (documentoSunatDetalle.getOrdenCompraDetalle().getIntAfectoIGV().equals(Constante.INT_AFECTOIGV)) {
+								documentoSunatDetalle = calcularIGV(documentoSunatDetalle, documentoSunat.getTipoCambio(), documentoSunat, tarifaIGV);
+								bdMontoSubtotal = bdMontoSubtotal.add(documentoSunatDetalle.getBdMontoSinIGV());
+								bdMontoIGV = bdMontoIGV.add(documentoSunatDetalle.getBdMontoIGV());
+								bdMontoTotalGeneral = bdMontoSubtotal.add(bdMontoIGV);
+							}else {
+								documentoSunatDetalle.setBdMontoSinIGV(documentoSunatDetalle.getBdMontoSinTipoCambio());
+								bdMontoTotalGeneral = bdMontoTotalGeneral.add(documentoSunatDetalle.getBdMontoSinTipoCambio());
+							}
 						}
 					}
-				}
-				if(!documentoSunat.isSeleccionaInafecto()){
-					documentoSunat.getDetalleIGV().setBdMontoTotal(bdMontoIGV);
-				}else{
-					bdMontoSubtotal = bdMontoSubtotal.add(bdMontoIGV);
-					documentoSunat.getDetalleIGV().setBdMontoTotal(new BigDecimal(0));
-				}
-				
-				
-				documentoSunat.getDetalleIGV().setIntAfectoIGV(1);
-				log.info("----- LLD SUNAT -----");
-//					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleIGV(), null, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_IGV, documentoSunat.getIntParaTipoComprobante()));
-					printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleIGV(), null, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_IGV, documentoSunat.getIntParaTipoComprobante()));
+					if(!documentoSunat.isSeleccionaInafecto()){
+						documentoSunat.getDetalleIGV().setBdMontoTotal(bdMontoIGV);
+					}else{
+						bdMontoSubtotal = bdMontoSubtotal.add(bdMontoIGV);
+						documentoSunat.getDetalleIGV().setBdMontoTotal(new BigDecimal(0));
+					}
+					
+					documentoSunat.getDetalleIGV().setIntParaTipoMoneda(documentoSunat.getIntParaMoneda());
+					documentoSunat.getDetalleIGV().setIntAfectoIGV(Constante.INT_AFECTOIGV);
+					
+					documentoSunat.getDetalleTotalGeneral().setIntAfectoIGV(Constante.INT_INAFECTOIGV);
+					documentoSunat.getDetalleTotalGeneral().setIntParaTipoMoneda(documentoSunat.getIntParaMoneda());
+					documentoSunat.getDetalleTotalGeneral().setBdMontoTotal(bdMontoTotalGeneral);
 
-				
-				log.info("----- LLD TOTAL GENERAL -----");
-//				libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
-				printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
-			}else{
-				log.info("----- LLD TOTAL GENERAL -----");
-//				libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
-				printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
+					log.info("----- LLD SUNAT -----");
+					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleIGV(), null, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_IGV, documentoSunat.getIntParaTipoComprobante()));
+//					printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleIGV(), null, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_IGV, documentoSunat.getIntParaTipoComprobante()));
+					
+					log.info("----- LLD TOTAL GENERAL -----");
+					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
+//					printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
+				}else{
+					log.info("----- LLD TOTAL GENERAL -----");
+					documentoSunat.setDetalleTotalGeneral(new DocumentoSunatDetalle());
+					documentoSunat.getDetalleTotalGeneral().setBdMontoTotal(BigDecimal.ZERO);
+					BigDecimal bdMontoTotalGeneral = new BigDecimal(0);
+					
+					if (documentoSunat.getListaDocumentoSunatDetalle()!=null && !documentoSunat.getListaDocumentoSunatDetalle().isEmpty()) {
+						for (DocumentoSunatDetalle documentoSunatDetalle : documentoSunat.getListaDocumentoSunatDetalle()) {
+							documentoSunatDetalle.setBdMontoSinIGV(documentoSunatDetalle.getBdMontoSinTipoCambio());
+							bdMontoTotalGeneral = bdMontoTotalGeneral.add(documentoSunatDetalle.getBdMontoSinTipoCambio());
+						}
+					}		
+
+					documentoSunat.getDetalleTotalGeneral().setIntAfectoIGV(Constante.INT_INAFECTOIGV);
+					documentoSunat.getDetalleTotalGeneral().setIntParaTipoMoneda(documentoSunat.getIntParaMoneda());
+					documentoSunat.getDetalleTotalGeneral().setBdMontoTotal(bdMontoTotalGeneral);
+
+					libroDiarioDetalleTemp.add(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
+//					printLibroDiarioDetalle(obtenerLibroDiarioDetalleDocumentoSunat(documentoSunat, documentoSunat.getDetalleTotalGeneral(), intParaTipoRequisicion, modelo, Constante.PARAM_T_CONCEPTODOCUMENTOSUNAT_TOTALGENERAL, documentoSunat.getIntParaTipoComprobante()));
+				}
 			}
+
+			BigDecimal bdMontoSinIgv = BigDecimal.ZERO;
+			BigDecimal bdMontoTotal = BigDecimal.ZERO;
+			DocumentoSunatDetalle docSunDetAnt = null; 
+			List<DocumentoSunatDetalle> lstDocSunatDetalleTemp = new ArrayList<DocumentoSunatDetalle>();
+			for (int i = 0; i < documentoSunat.getListaDocumentoSunatDetalle().size(); i++) {
+				DocumentoSunatDetalle docSunDet = documentoSunat.getListaDocumentoSunatDetalle().get(i);
+				
+				if (i==0) {
+					bdMontoSinIgv = bdMontoSinIgv.add(docSunDet.getBdMontoSinIGV());
+					bdMontoTotal = bdMontoTotal.add(docSunDet.getBdMontoTotal());
+					docSunDetAnt = documentoSunat.getListaDocumentoSunatDetalle().get(i);
+				}else {
+					if (docSunDetAnt.getIntSucuIdSucursal().equals(docSunDet.getIntSucuIdSucursal())
+							&& docSunDetAnt.getIntSudeIdSubsucursal().equals(docSunDet.getIntSudeIdSubsucursal())) {
+						bdMontoSinIgv = bdMontoSinIgv.add(docSunDet.getBdMontoSinIGV()!=null?docSunDet.getBdMontoSinIGV():BigDecimal.ZERO);
+						bdMontoTotal = bdMontoTotal.add(docSunDet.getBdMontoTotal());
+						docSunDetAnt = documentoSunat.getListaDocumentoSunatDetalle().get(i);
+					}else {
+						docSunDetAnt.setBdMontoGrabarEnLibro(blnIGVContable?bdMontoSinIgv:bdMontoTotal);
+						lstDocSunatDetalleTemp.add(docSunDetAnt);
+						bdMontoSinIgv = BigDecimal.ZERO;
+						bdMontoSinIgv = bdMontoSinIgv.add(docSunDet.getBdMontoSinIGV());
+						bdMontoTotal = BigDecimal.ZERO;
+						bdMontoTotal = bdMontoTotal.add(docSunDet.getBdMontoTotal());
+					}
+				}
+				if (i==documentoSunat.getListaDocumentoSunatDetalle().size()-1) {
+					docSunDet.setBdMontoGrabarEnLibro(blnIGVContable?bdMontoSinIgv:bdMontoTotal);
+					lstDocSunatDetalleTemp.add(docSunDet);
+				}
+			}
+			for (DocumentoSunatDetalle docSunatDetalle : lstDocSunatDetalleTemp) {
+				log.info("----- ORDEN DE COMPRA -----");
+				libroDiarioDetalleTemp.add(generarLibroDiarioDetalleOrdenCompra(documentoSunat, docSunatDetalle));	
+//				printLibroDiarioDetalle(generarLibroDiarioDetalleOrdenCompra(documentoSunat, docSunatDetalle));
+			}
+			
+			libroDiario.setListaLibroDiarioDetalle(libroDiarioDetalleTemp);
+		} catch (Exception e) {
+			log.info("Error en procesarLibroDiarioNota() ---> "+e.getMessage());
 		}
-//		
-//		BigDecimal bdMontoSinIgv = BigDecimal.ZERO;
-//		BigDecimal bdMontoTotal = BigDecimal.ZERO;
-//		DocumentoSunatDetalle docSunDetAnt = null; 
-//		List<DocumentoSunatDetalle> lstDocSunatDetalleTemp = new ArrayList<DocumentoSunatDetalle>();
-//		for (int i = 0; i < documentoSunat.getListaDocumentoSunatDetalle().size(); i++) {
-//			DocumentoSunatDetalle docSunDet = documentoSunat.getListaDocumentoSunatDetalle().get(i);
-//			
-//			if (i==0) {
-//				bdMontoSinIgv = bdMontoSinIgv.add(docSunDet.getBdMontoSinIGV());
-//				bdMontoTotal = bdMontoTotal.add(docSunDet.getBdMontoTotal());
-//				docSunDetAnt = documentoSunat.getListaDocumentoSunatDetalle().get(i);
-//			}else {
-//				if (docSunDetAnt.getIntSucuIdSucursal().equals(docSunDet.getIntSucuIdSucursal())
-//						&& docSunDetAnt.getIntSudeIdSubsucursal().equals(docSunDet.getIntSudeIdSubsucursal())) {
-//					bdMontoSinIgv = bdMontoSinIgv.add(docSunDet.getBdMontoSinIGV());
-//					bdMontoTotal = bdMontoTotal.add(docSunDet.getBdMontoTotal());
-//					docSunDetAnt = documentoSunat.getListaDocumentoSunatDetalle().get(i);
-//				}else {
-//					docSunDetAnt.setBdMontoGrabarEnLibro(blnIGVContable?bdMontoSinIgv:bdMontoTotal);
-//					lstDocSunatDetalleTemp.add(docSunDetAnt);
-//					bdMontoSinIgv = BigDecimal.ZERO;
-//					bdMontoSinIgv = bdMontoSinIgv.add(docSunDet.getBdMontoSinIGV());
-//					bdMontoTotal = BigDecimal.ZERO;
-//					bdMontoTotal = bdMontoTotal.add(docSunDet.getBdMontoTotal());
-//				}
-//			}
-//			if (i==documentoSunat.getListaDocumentoSunatDetalle().size()-1) {
-//				docSunDet.setBdMontoGrabarEnLibro(blnIGVContable?bdMontoSinIgv:bdMontoTotal);
-//				lstDocSunatDetalleTemp.add(docSunDet);
-//			}
-//		}
-//		for (DocumentoSunatDetalle docSunatDetalle : lstDocSunatDetalleTemp) {
-//			log.info("----- ORDEN DE COMPRA -----");
-//			libroDiarioDetalleTemp.add(generarLibroDiarioDetalleOrdenCompra(documentoSunat, docSunatDetalle));	
-////			printLibroDiarioDetalle(generarLibroDiarioDetalleOrdenCompra(documentoSunat, docSunatDetalle));
-//		}
-//		
-//		libroDiario.setListaLibroDiarioDetalle(libroDiarioDetalleTemp);
+		
 		return libroDiario;
-	}
-    private void printLibroDiarioDetalle(LibroDiarioDetalle libroDiarioDetalle){
-    	log.info("EMPRESACUENTA: "+libroDiarioDetalle.getIntPersEmpresaCuenta());
-    	log.info("CONTPERIODO: "+libroDiarioDetalle.getIntContPeriodo());
-    	log.info("NROCTA: "+libroDiarioDetalle.getStrContNumeroCuenta());
-    	log.info("PERSONA: "+libroDiarioDetalle.getIntPersPersona());
-    	log.info("DOC GRAL: "+libroDiarioDetalle.getIntParaDocumentoGeneral());
-    	log.info("SERI: "+libroDiarioDetalle.getStrSerieDocumento());
-    	log.info("NRO DOC: "+libroDiarioDetalle.getStrNumeroDocumento());
-    	log.info("EMPRESA SUCURSAL: "+libroDiarioDetalle.getIntPersEmpresaSucursal());
-    	log.info("SUCURSAL: "+libroDiarioDetalle.getIntSucuIdSucursal());
-    	log.info("SUBSUCURSAL: "+libroDiarioDetalle.getIntSudeIdSubSucursal());
-    	log.info("MODENA: "+libroDiarioDetalle.getIntParaMonedaDocumento());
-    	log.info("COMENTARIO: "+libroDiarioDetalle.getStrComentario());
-    	log.info("DEBE: "+libroDiarioDetalle.getBdDebeSoles());
-    	log.info("HABER: "+libroDiarioDetalle.getBdHaberSoles());
-    }
+	}	
+//    private void printLibroDiarioDetalle(LibroDiarioDetalle libroDiarioDetalle){
+//    	log.info("EMPRESACUENTA: "+libroDiarioDetalle.getIntPersEmpresaCuenta());
+//    	log.info("CONTPERIODO: "+libroDiarioDetalle.getIntContPeriodo());
+//    	log.info("NROCTA: "+libroDiarioDetalle.getStrContNumeroCuenta());
+//    	log.info("PERSONA: "+libroDiarioDetalle.getIntPersPersona());
+//    	log.info("DOC GRAL: "+libroDiarioDetalle.getIntParaDocumentoGeneral());
+//    	log.info("SERI: "+libroDiarioDetalle.getStrSerieDocumento());
+//    	log.info("NRO DOC: "+libroDiarioDetalle.getStrNumeroDocumento());
+//    	log.info("EMPRESA SUCURSAL: "+libroDiarioDetalle.getIntPersEmpresaSucursal());
+//    	log.info("SUCURSAL: "+libroDiarioDetalle.getIntSucuIdSucursal());
+//    	log.info("SUBSUCURSAL: "+libroDiarioDetalle.getIntSudeIdSubSucursal());
+//    	log.info("MODENA: "+libroDiarioDetalle.getIntParaMonedaDocumento());
+//    	log.info("COMENTARIO: "+libroDiarioDetalle.getStrComentario());
+//    	log.info("DEBE: "+libroDiarioDetalle.getBdDebeSoles());
+//    	log.info("HABER: "+libroDiarioDetalle.getBdHaberSoles());
+//    }
 }

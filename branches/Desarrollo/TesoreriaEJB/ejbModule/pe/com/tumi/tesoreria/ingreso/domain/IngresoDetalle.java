@@ -36,6 +36,11 @@ public class IngresoDetalle extends TumiDomain{
 	private Integer intSucuIdSucursal;
 	private Integer intItemFondoFijo;
 	
+	//Autor y Fecha: Rodolfo Villarreal Acuña 28/11/2014
+	private String strDescripcionAgencia;
+	private String strDesTipoComprobante;
+	private String strMontoCargoReport;
+	
 	public IngresoDetalle(){
 		id = new IngresoDetalleId();
 	}
@@ -237,5 +242,29 @@ public class IngresoDetalle extends TumiDomain{
 				+ ", intSucuIdSucursal=" + intSucuIdSucursal
 				+ ", intItemFondoFijo=" + intItemFondoFijo + "]";
 	}
-	
+
+	public String getStrDesTipoComprobante() {
+		return strDesTipoComprobante;
+	}
+
+	public void setStrDesTipoComprobante(String strDesTipoComprobante) {
+		this.strDesTipoComprobante = strDesTipoComprobante;
+	}
+
+	public String getStrDescripcionAgencia() {
+		return strDescripcionAgencia;
+	}
+
+	public void setStrDescripcionAgencia(String strDescripcionAgencia) {
+		this.strDescripcionAgencia = strDescripcionAgencia;
+	}
+
+	public String getStrMontoCargoReport() {
+		return strMontoCargoReport;
+	}
+
+	public void setStrMontoCargoReport(String strMontoCargoReport) {
+		this.strMontoCargoReport = strMontoCargoReport;
+	}
+
 }

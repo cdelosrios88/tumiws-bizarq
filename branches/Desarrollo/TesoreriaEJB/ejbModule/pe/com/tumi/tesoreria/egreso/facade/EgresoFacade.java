@@ -1020,4 +1020,22 @@ public class EgresoFacade extends TumiFacade implements EgresoFacadeRemote, Egre
 		return dto;
 	}
     
+    /**
+     * Autor: jchavez / Tarea: Modificación / Fecha: 30.12.2014
+     * Funcionalidad: Método que genera el egreso detalle para mostrar en la interfaz de usuario. 
+     * @param documentoSunat
+     * @return
+     * @throws BusinessException
+     */
+    public List<EgresoDetalleInterfaz> cargarListaEgresoDetalleInterfazDocumentoSunat(DocumentoSunat documentoSunat)throws BusinessException{
+    	List<EgresoDetalleInterfaz> lista = null;
+		try{
+			lista = egresoDocumentoSunatService.cargarListaEgresoDetalleInterfazDocumentoSunat(documentoSunat);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+		return lista;
+	}
 }

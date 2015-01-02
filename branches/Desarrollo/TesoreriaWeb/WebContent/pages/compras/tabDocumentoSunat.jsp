@@ -9,6 +9,7 @@
 	<!-- Autor     : Arturo Julca   	-->
 	<!-- Modulo    :                	-->
 	<!-- Fecha     :                	-->
+	<!-- Modificacion     : Junior Chavez   	-->
 <h:form>
    	<rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;">
         	
@@ -46,13 +47,13 @@
 						<f:selectItem itemValue="3" itemLabel="Fecha de Programación"/>
 					</h:selectOneMenu>
             	</rich:column>
-            	<rich:column width="100" style="text-align: right;">
+            	<rich:column width="120" style="text-align: right;">
                 	<rich:calendar datePattern="dd/MM/yyyy"  
 						value="#{sunatController.dtDesdeFiltro}"  
 						inputSize="10" 
 						showApplyButton="true"/>
             	</rich:column>
-            	<rich:column width="100" style="text-align: left;">
+            	<rich:column width="120" style="text-align: left;">
                 	<rich:calendar datePattern="dd/MM/yyyy"  
 						value="#{sunatController.dtHastaFiltro}"  
 						inputSize="10" 
@@ -106,7 +107,7 @@
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column width="160" style="text-align: left;">
-					<h:outputText value="Nro. Documento Sunat : "/>
+					<h:outputText value="Nro. Doc. Sunat : "/>
 				</rich:column>
 				<rich:column>
 					<h:inputText value="#{sunatController.documentoSunatFiltro.id.intItemDocumentoSunat}" 
@@ -264,25 +265,32 @@
 				 		
 		<h:panelGroup style="border: 0px solid #17356f;background-color:#DEEBF5;" styleClass="rich-tabcell-noborder"
 			id="panelBotonesD">
-			<h:panelGrid columns="5">
-				<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
-					action="#{sunatController.habilitarPanelInferior}" 
-					reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,pnDatosSunat" />
-			    <h:panelGroup rendered="#{sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_GRABAR}">
-		         	<a4j:commandButton value="Grabar GR" styleClass="btnEstilos" style="width:90px"
+			<h:panelGrid columns="4">
+				<rich:column>
+					<a4j:commandButton value="Nuevo" styleClass="btnEstilos" style="width:90px" 
+						action="#{sunatController.habilitarPanelInferior}" 
+						reRender="contPanelInferiorD,panelMensajeD,panelBotonesD" />
+				</rich:column>
+	
+				<rich:column rendered="#{sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_GRABAR}">
+					<a4j:commandButton value="Grabar" styleClass="btnEstilos" style="width:90px"
 				    	action="#{sunatController.grabar}"
-				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,panelTablaResultadosD,pnDatosSunat"
-				    	disabled="#{!sunatController.habilitarGrabar}"/>
-		      	</h:panelGroup>
-		      	<h:panelGroup rendered="#{sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_MODIFICAR}">
-		         	<a4j:commandButton value="Grabar MD" styleClass="btnEstilos" style="width:90px"
+				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,panelTablaResultadosD"
+				    	disabled="#{!sunatController.habilitarGrabar}"/>			
+				</rich:column>
+	
+				<rich:column rendered="#{sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_MODIFICAR}">
+					<a4j:commandButton value="Grabar" styleClass="btnEstilos" style="width:90px"
 				    	action="#{sunatController.modificar}"
-				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,panelTablaResultadosD,pnDatosSunat"
-				    	disabled="#{!sunatController.habilitarGrabar}"/>
-		      	</h:panelGroup>
-			    <a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
-			    	action="#{sunatController.deshabilitarPanelInferior}"
-			    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,pnDatosSunat"/>
+				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD,panelTablaResultadosD"
+				    	disabled="#{!sunatController.habilitarGrabar}"/>			
+				</rich:column>
+				
+				<rich:column>
+					<a4j:commandButton value="Cancelar" styleClass="btnEstilos"style="width:90px"
+				    	action="#{sunatController.deshabilitarPanelInferior}"
+				    	reRender="contPanelInferiorD,panelMensajeD,panelBotonesD"/>
+				</rich:column>
 			</h:panelGrid>
 		</h:panelGroup>
 
@@ -837,11 +845,11 @@
 			rendered="#{not empty sunatController.strMensajeAgregar}"/>
 		<rich:spacer height="5px"/>
 		
-		<h:panelGrid columns="1">
+		<h:panelGrid columns="1" id="bntAgregarDocSunat">
 			<rich:column width="960">
 				<a4j:commandButton styleClass="btnEstilos"
 		 			value="Agregar Documento Sunat"
-		            reRender="contPanelInferiorD, panelModificadores, panelFechasDocumento, pnDatosSunat"
+		            reRender="contPanelInferiorD, panelModificadores, panelFechasDocumento"
 		            rendered="#{sunatController.mostrarPanelDatosSunat}"
 		            action="#{sunatController.agregarDocumentoSunat}" 
 		            disabled="#{sunatController.documentoSunatNuevo.detalleTotalGeneral.bdMontoTotal==null}"
@@ -981,16 +989,6 @@
 								ajaxSingle="true" process="idLnkVerRegistroSunat"
 								oncomplete="Richfaces.showModalPanel('pVerDocumentoSunat')">
 								<f:attribute name="item" value="#{item}"/>
-							</a4j:commandLink>
-				   		</rich:column>
-				   		<rich:column>
-				   			<a4j:commandLink value="Eliminar"
-				   				rendered="#{item.intParaEstadoPago==applicationScope.Constante.PARAM_T_ESTADOPAGO_PENDIENTE
-				   							&& item.intIndicadorLetras!=applicationScope.Constante.PARAM_T_INDICADORLETRAS_CONLETRAS}"
-								disabled="#{sunatController.habilitarVerRegistro}"
-								action="#{sunatController.eliminarDocumentoSunat}"
-								reRender="dtDocumentoSunat,pAgregarDetalleSunat,fAgregarDetalleSunat" >
-								<f:param name="rowKeyDocSunat" value="#{rowKey}"/>
 							</a4j:commandLink>
 				   		</rich:column>
 				   		<rich:column>
@@ -1209,14 +1207,6 @@
 								<f:attribute name="item" value="#{item}"/>
 							</a4j:commandLink>
 				   		</rich:column>
-				   		<rich:column>
-				   			<a4j:commandLink value="Eliminar"
-								disabled="#{sunatController.habilitarVerRegistro}"
-								action="#{sunatController.eliminarDocumentoAdelanto}"
-								reRender="dtDocumentoAdelanto" >
-								<f:param name="rowKeyDocSunat" value="#{rowKey}"/>
-							</a4j:commandLink>
-				   		</rich:column>		            
 		            </rich:columnGroup>
 
 				</rich:dataTable>
@@ -1224,7 +1214,7 @@
 		</h:panelGrid>	
 		</rich:panel>
 		
-		<h:panelGroup id="panelLetrasDocumento"	rendered="#{sunatController.agregarLetras}">
+		<h:panelGroup id="panelLetrasDocumento"	rendered="#{sunatController.agregarLetras && sunatController.strSunat == applicationScope.Constante.MANTENIMIENTO_MODIFICAR}">
 		
 		<h:panelGrid columns="8" id="pgDocSunatLetrasYNotas" rendered="#{sunatController.mostrarPanelDatosSunat}">
 			<rich:column width=	"250">
@@ -1427,3 +1417,29 @@
 	</h:panelGroup>	
 </rich:panel>
 </h:form>
+
+				   		<!-- Autor: jchavez / Tarea: Se quita la eliminacion, dado que  involucra mas que un cambio de estado / Fecha: 12.11.2014
+				   		<rich:column>
+				   			<a4j:commandLink value="Eliminar"
+				   				rendered="#{(item.intParaEstadoPago==applicationScope.Constante.PARAM_T_ESTADOPAGO_PENDIENTE
+				   							&& item.intIndicadorLetras!=applicationScope.Constante.PARAM_T_INDICADORLETRAS_CONLETRAS)
+				   							&& sunatController.mostrarPanelDatosSunat}"
+								disabled="#{sunatController.habilitarVerRegistro}"
+								action="#{sunatController.eliminarDocumentoSunat}"
+								reRender="dtDocumentoSunat,pAgregarDetalleSunat,fAgregarDetalleSunat" >
+								<f:param name="rowKeyDocSunat" value="#{rowKey}"/>
+							</a4j:commandLink>
+				   		</rich:column> -->
+				   		
+				   		
+				   		
+				   						   		<!-- 
+				   		<rich:column>
+				   			<a4j:commandLink value="Eliminar"
+				   				rendered="#{sunatController.mostrarPanelDatosSunat}"
+								disabled="#{sunatController.habilitarVerRegistro}"
+								action="#{sunatController.eliminarDocumentoAdelanto}"
+								reRender="dtDocumentoAdelanto" >
+								<f:param name="rowKeyDocSunat" value="#{rowKey}"/>
+							</a4j:commandLink>
+				   		</rich:column> -->		  

@@ -329,6 +329,12 @@ public class RequisicionController {
 			|| intIdPerfil.equals(Constante.ID_PERFIL_RECURSOSHUMANOS)
 			|| intIdPerfil.equals(Constante.ID_PERFIL_ASESORLEGAL)
 			|| intIdPerfil.equals(Constante.ID_PERFIL_RIESGOS)
+			//Autor: jchavez / Tarea: Modificación / Fecha: 31.12.2014 / Se agregan mas perfiles para validación
+			|| intIdPerfil.equals(Constante.ID_PERFIL_GERENTE_NEGOCIOS)
+			|| intIdPerfil.equals(Constante.ID_PERFIL_GERENTE_ADMINISTRATIVO)
+			|| intIdPerfil.equals(Constante.ID_PERFIL_GERENTE_OPERACIONES)
+			|| intIdPerfil.equals(Constante.ID_PERFIL_JEFE_PRESUPUESTO)
+			|| intIdPerfil.equals(Constante.ID_PERFIL_PLANEAMIENTO_Y_DESARROLLO)
 			){
 				return Boolean.TRUE;
 			}
@@ -337,6 +343,9 @@ public class RequisicionController {
 			if(intIdPerfil.equals(Constante.ID_PERFIL_LOGISTICA)  
 			|| intIdPerfil.equals(Constante.ID_PERFIL_ASISTENTELOGISTICA)
 			|| intIdPerfil.equals(Constante.ID_PERFIL_SISTEMAS)
+			//Autor: jchavez / Tarea: Modificación / Fecha: 31.12.2014 / Se agregan mas perfiles para validación
+			|| intIdPerfil.equals(Constante.ID_PERFIL_ANALISTA_COMPRAS)
+			|| intIdPerfil.equals(Constante.ID_PERFIL_ANALISTA_FACTURACION_Y_CONTROLPATRIMONIAL)
 			){
 				return Boolean.TRUE;
 			}

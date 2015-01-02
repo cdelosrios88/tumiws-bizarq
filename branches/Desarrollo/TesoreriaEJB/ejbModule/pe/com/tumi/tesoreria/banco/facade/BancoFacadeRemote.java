@@ -65,4 +65,6 @@ public interface BancoFacadeRemote {
 	public List<Bancocuenta> buscarListaBancoCuenta(Bancocuenta bancoCuentaFiltro) throws BusinessException;
 	//Autor: jchavez / Tarea: Creación / Fecha: 16.10.2014
 	public List<Fondodetalle> getDocumentoPorFondoFijo(Integer intEmpresa, Integer intTipoFondoFijo, Integer intMoneda) throws BusinessException;
+	//Autor: rVillarreal / Tarea: Creación / Fecha: 01.12.2014
+	public Bancocuenta getBancoCuentaPorPk(BancocuentaId o) throws BusinessException;
 }

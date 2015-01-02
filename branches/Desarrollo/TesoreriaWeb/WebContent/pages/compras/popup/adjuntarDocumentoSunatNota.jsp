@@ -63,13 +63,13 @@
 						<a4j:commandButton value="Aceptar" 
 				    		styleClass="btnEstilos"
 				    		action="#{sunatController.aceptarAdjuntarDocumentoSunatNota}"
-				    		reRender="panelDocumentoSunat"
+				    		reRender="panelDocumentoSunatNota"
 			        		oncomplete="Richfaces.hideModalPanel('pAdjuntarDocumentoSunatNota')"/>
 				    </rich:column>
 				    <rich:column style="border:none">
 				    	<a4j:commandButton value="Cancelar" 
 				    		styleClass="btnEstilos"
-				    		reRender="panelDocumentoSunat"
+				    		reRender="panelDocumentoSunatNota"
 			        		oncomplete="Richfaces.hideModalPanel('pAdjuntarDocumentoSunatNota')"/>
 				 	</rich:column>
 				</h:panelGrid>

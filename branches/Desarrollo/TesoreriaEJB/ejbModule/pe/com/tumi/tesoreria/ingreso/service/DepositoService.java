@@ -402,11 +402,11 @@ public class DepositoService {
 			IngresoDetalle ingresoDetalleFondoFijo = generarIngresoDetalle(INGRESODETALLE_FONDOFIJO, bancoFondoDepositar, usuario, bdMontoDepositoIngresado, null, bancoFondoIngresar);
 			ingreso.getListaIngresoDetalle().add(ingresoDetalleFondoFijo);
 			
-			if(bdMontoAjuste != null && !(bdMontoAjuste.equals(BigDecimal.ZERO))){
+			if(bdMontoAjuste != null && !(bdMontoAjuste.compareTo(BigDecimal.ZERO)==0)){
 				IngresoDetalle ingresoDetalleAjuste = generarIngresoDetalle(INGRESODETALLE_AJUSTE, bancoFondoDepositar, usuario, bdMontoAjuste, listaModeloDetalle, bancoFondoIngresar);
 				ingreso.getListaIngresoDetalle().add(ingresoDetalleAjuste);
 			}
-			if(bdOtrosIngresos != null && !(bdOtrosIngresos.equals(BigDecimal.ZERO))){
+			if(bdOtrosIngresos != null && !(bdOtrosIngresos.compareTo(BigDecimal.ZERO)==0)){
 				IngresoDetalle ingresoDetalleOtros = generarIngresoDetalle(INGRESODETALLE_OTROS, bancoFondoDepositar, usuario, bdOtrosIngresos, listaModeloDetalle, bancoFondoIngresar);
 				ingreso.getListaIngresoDetalle().add(ingresoDetalleOtros);
 			}
@@ -431,11 +431,11 @@ public class DepositoService {
 			LibroDiarioDetalle libroDiarioDetalleFondo = generarLibroDiarioDetalle(INGRESODETALLE_FONDOFIJO, bancoFondoDepositar, usuario, bdMontoDepositoIngresado, null, bancoFondoIngresar);
 			libroDiario.getListaLibroDiarioDetalle().add(libroDiarioDetalleFondo);
 			
-			if(bdMontoAjuste != null && !(bdMontoAjuste.equals(BigDecimal.ZERO))){
+			if(bdMontoAjuste != null && !(bdMontoAjuste.compareTo(BigDecimal.ZERO)==0)){
 				LibroDiarioDetalle libroDiarioDetalleAjuste = generarLibroDiarioDetalle(INGRESODETALLE_AJUSTE, bancoFondoDepositar, usuario, bdMontoAjuste, listaModeloDetalle, null);
 				libroDiario.getListaLibroDiarioDetalle().add(libroDiarioDetalleAjuste);
 			}			
-			if(bdOtrosIngresos != null && !(bdOtrosIngresos.equals(BigDecimal.ZERO))){
+			if(bdOtrosIngresos != null && !(bdOtrosIngresos.compareTo(BigDecimal.ZERO)==0)){
 				LibroDiarioDetalle libroDetalleOtros = generarLibroDiarioDetalle(INGRESODETALLE_OTROS, bancoFondoDepositar, usuario, bdOtrosIngresos, listaModeloDetalle, null);
 				libroDiario.getListaLibroDiarioDetalle().add(libroDetalleOtros);
 			}

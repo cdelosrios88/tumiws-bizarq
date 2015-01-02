@@ -6,11 +6,13 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -19,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-
 
 import pe.com.tumi.cobranza.gestion.domain.GestorCobranza;
 import pe.com.tumi.cobranza.gestion.facade.GestionCobranzaFacadeRemote;
@@ -32,6 +33,7 @@ import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.common.util.ConvertirLetras;
 import pe.com.tumi.common.util.DocumentoGeneral;
 import pe.com.tumi.common.util.MyUtilFormatoFecha;
+import pe.com.tumi.common.util.UtilManagerReport;
 import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.core.domain.Modelo;
 import pe.com.tumi.contabilidad.core.domain.PlanCuentaId;
@@ -61,10 +63,14 @@ import pe.com.tumi.movimiento.concepto.domain.InteresCancelado;
 import pe.com.tumi.movimiento.concepto.domain.Movimiento;
 import pe.com.tumi.movimiento.concepto.domain.composite.ExpedienteComp;
 import pe.com.tumi.movimiento.concepto.facade.ConceptoFacadeRemote;
+import pe.com.tumi.movimiento.cuentaCteAhorro.domain.CuentaCteAhorro;
+import pe.com.tumi.movimiento.cuentaCteAhorro.facade.CuentaCteAhorroFacadeRemote;
 import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.persona.contacto.domain.Documento;
+import pe.com.tumi.persona.core.domain.CuentaBancaria;
+import pe.com.tumi.persona.core.domain.CuentaBancariaPK;
 import pe.com.tumi.persona.core.domain.Natural;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.persona.core.domain.PersonaEmpresa;
@@ -81,6 +87,7 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.EstadoCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCreditoId;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeRemote;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
+import pe.com.tumi.tesoreria.banco.domain.BancocuentaId;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.facade.CierreDiarioArqueoFacadeRemote;
@@ -111,6 +118,7 @@ public class CajaController {
 	private	SocioFacadeRemote 				socioFacade;
 	private	ConceptoFacadeRemote 			conceptoFacade;
 	private SolicitudPrestamoFacadeRemote 	solicitudPrestamoFacade;
+	private	CuentaCteAhorroFacadeRemote 	ctaCteAhorroFacade;
 	private	List<Ingreso>				listaIngreso;
 	private List<Persona>				listaPersona;
 	private List<DocumentoGeneral>		listaDocumentoPorAgregar;
@@ -256,9 +264,15 @@ public class CajaController {
 	private Ingreso depositoGeneradoTrasGrabacion;
 	private Boolean blnExisteRedondeo;
 	private Boolean blnDepositoCajaView;
+	//Autor: Rodolfo Villarreal Acuña / Tarea: Creación / Fecha: 27.11.2014
+	private List<Tabla> lstReporteIngreso;
 	
 	//
 	private String strMensajeErrorGestor;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+	private Integer intTipoCuentaC;
+	private Boolean blnDocumentoAgregado;
 	
 	public CajaController(){
 		cargarUsuario();
@@ -330,6 +344,7 @@ public class CajaController {
 			estructuraFacade = (EstructuraFacadeRemote) EJBFactory.getRemote(EstructuraFacadeRemote.class);
 			socioFacade = (SocioFacadeRemote) EJBFactory.getRemote(SocioFacadeRemote.class);
 			conceptoFacade  = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
+			ctaCteAhorroFacade = (CuentaCteAhorroFacadeRemote) EJBFactory.getRemote(CuentaCteAhorroFacadeRemote.class);
 			solicitudPrestamoFacade = (SolicitudPrestamoFacadeRemote) EJBFactory.getRemote(SolicitudPrestamoFacadeRemote.class);
 			
 			listaIngreso = new ArrayList<Ingreso>();
@@ -365,6 +380,8 @@ public class CajaController {
 			listaDocumentoPorAgregar = new ArrayList<DocumentoGeneral>();
 			listaIngresoSocio = new ArrayList<ExpedienteComp>();
 			ingresoGeneradoTrasGrabacion = null;
+			//Autor: Rodolfo Villarreal Acuña / Tarea: Creación / Fecha: 27.11.2014
+			lstReporteIngreso = new ArrayList<Tabla>();
 
 			blnValidacionesOK = true;
 			strMsgErrorMontoIngresado = "";
@@ -373,6 +390,7 @@ public class CajaController {
 			blnDepositoCajaView = false;
 			blnExisteRedondeo = false;
 			strMensajeErrorGestor = "";
+			blnDocumentoAgregado = true;
 			
 			cargarUsuario();
 			cargarListaTablaSucursal();
@@ -492,7 +510,7 @@ public class CajaController {
 					grabarGiro(listaDocumentoAgregados, bancoFondoIngresar, usuarioSesion);				
 					
 				}else if (intPersonaRolC.equals(Constante.PARAM_T_TIPOROL_SOCIO)) {
-					documentoGeneralSeleccionado = agregarDatosComplementarios2();
+					documentoGeneralSeleccionado = agregarDatosComplementariosSocio();
 					grabarIngresoSocio(listaIngresoSocio, documentoGeneralSeleccionado, bancoFondoIngresar, usuarioSesion);
 				}
 				
@@ -599,16 +617,19 @@ public class CajaController {
 		return listaDocumentoGeneral;
 	}
 	
-	private DocumentoGeneral agregarDatosComplementarios2() throws Exception{
+	private DocumentoGeneral agregarDatosComplementariosSocio() throws Exception{
 		documentoGeneralSeleccionado.setStrObservacionIngreso(strObservacion);
 		documentoGeneralSeleccionado.setStrNumeroCheque(strNumeroCheque);
 		documentoGeneralSeleccionado.setGestorCobranza(gestorCobranzaSeleccionado);
-		documentoGeneralSeleccionado.setSocioIngreso(socioSeleccionado);
+		documentoGeneralSeleccionado.setSocioIngreso(new SocioComp());
+		documentoGeneralSeleccionado.getSocioIngreso().setIntIngCajaIdPersona(socioSeleccionado.getIntIngCajaIdPersona());
+		documentoGeneralSeleccionado.getSocioIngreso().setIntIngCajaIdCta(intCuentaSocioC);
 		documentoGeneralSeleccionado.setIntParaFormaPago(intFormaPagoValidar);
 		documentoGeneralSeleccionado.setBdMontoAIngresar(bdMontoIngresadoTotal);
 		documentoGeneralSeleccionado.setReciboManualIngreso(reciboManual);
 		documentoGeneralSeleccionado.setArchivoCheque(archivoAdjuntoCheque);
 		documentoGeneralSeleccionado.setIntParaModalidadPago(intModalidadC);
+		documentoGeneralSeleccionado.setIntTipoCuentaSocio(intTipoCuentaC);
 		return documentoGeneralSeleccionado;
 	}
 	
@@ -632,9 +653,10 @@ public class CajaController {
 		if (listaIngresosSocio!=null && !listaIngresosSocio.isEmpty()) {
 			documentoGeneral = ingresoFacade.generarIngresoSocio(listaIngresosSocio, documentoGeneral, bancoFondo, usuario, intModalidadC, intPersonaRolC);
 			log.info(documentoGeneral);
-			Ingreso ingreso = ingresoFacade.grabarIngresoSocio(listaIngresosSocio, documentoGeneral, usuario, intModalidadC);
+		Ingreso ingreso = ingresoFacade.grabarIngresoSocio(listaIngresosSocio, documentoGeneral, usuario, intModalidadC);
 			log.info(ingreso);
 			ingresoGeneradoTrasGrabacion = ingreso;
+			procesarItems(ingresoGeneradoTrasGrabacion);
 		}
 	}
 	private void buscarPersonaFiltro(){
@@ -737,6 +759,7 @@ public class CajaController {
 			subsucursalIngreso = empresaFacade.getSubSucursalPorIdSubSucursal(ingreso.getIntSudeIdSubsucursal());
 
 			ocultarMensaje();
+
 		}catch (Exception e) {
 			mostrarMensaje(Boolean.FALSE, "Ocurrio un error en la selección del ingreso.");
 			log.error(e.getMessage(),e);
@@ -787,10 +810,12 @@ public class CajaController {
 		
 		// Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014
 		depositoGeneradoTrasGrabacion = new Ingreso();
-		depositoGeneradoTrasGrabacion.setIntItemPeriodoIngreso(ingreso.getIntItemPeriodoIngreso());
-		depositoGeneradoTrasGrabacion.setIntItemIngreso(ingreso.getIntItemIngreso());
-		depositoGeneradoTrasGrabacion.setIntContPeriodoLibro(ingreso.getIntContPeriodoLibro());
-		depositoGeneradoTrasGrabacion.setIntContCodigoLibro(ingreso.getIntContCodigoLibro());
+		// Autor: rVillarreal / Tarea: Modificación / Fecha: 29.11.2014
+		depositoGeneradoTrasGrabacion = ingreso;
+//		depositoGeneradoTrasGrabacion.setIntItemPeriodoIngreso(ingreso.getIntItemPeriodoIngreso());
+//		depositoGeneradoTrasGrabacion.setIntItemIngreso(ingreso.getIntItemIngreso());
+//		depositoGeneradoTrasGrabacion.setIntContPeriodoLibro(ingreso.getIntContPeriodoLibro());
+//		depositoGeneradoTrasGrabacion.setIntContCodigoLibro(ingreso.getIntContCodigoLibro());
 		procesarItems(depositoGeneradoTrasGrabacion);
 		
 		//Mostramos el ajuste
@@ -814,18 +839,25 @@ public class CajaController {
 		seleccionarBanco();
 		intBancoCuentaSeleccionado = ingreso.getIntItemBancoCuenta(); //jchavez - Observación: Si no pintara es xq los registros no tienen la configuración de banco actual.
 		intFormaPagoValidar = ingreso.getIntParaFormaPago();
-		bdMontoDepositadoTotal = ingreso.getBdMontoTotal();
+//		bdMontoDepositadoTotal = ingreso.getBdMontoTotal();
 		
+
 //		String str = bdMontoDepositar;
 		// Autor: jchavez / Tarea: Creación / Fecha: 11.09.2014
 		if (intFormaPagoValidar.equals(Constante.PARAM_T_PAGOINGRESO_CHEQUE)) {
-			bdMontoDepositarTotal = bdMontoDepositadoTotal;
+			bdMontoDepositarTotal = ingreso.getBdMontoTotal();
 		}else {
-			bdMontoDepositarTotal = AjusteMonto.obtenerMontoAjustado(bdMontoDepositadoTotal);
+			bdMontoDepositarTotal = AjusteMonto.obtenerMontoAjustado(ingreso.getBdMontoTotal());
 		}
 		strMontoDepositarTotalDescripcion = ConvertirLetras.convertirMontoALetras(bdMontoDepositarTotal, intMonedaValidar);
 		//Fin jchavez - 11.09.2014
 //		calcularTotalDepositar();	
+		bdMontoDepositadoTotal = BigDecimal.ZERO;
+		if (listaIngresoDepositar!=null && !listaIngresoDepositar.isEmpty()) {
+			for (Ingreso x : listaIngresoDepositar) {
+				bdMontoDepositadoTotal = bdMontoDepositadoTotal.add(x.getBdMontoDepositar());
+			}
+		}
 	}
 	
 	private void calcularOtrosIngresos(Ingreso ingreso)throws Exception{
@@ -876,11 +908,13 @@ public class CajaController {
 		try {
 			CuentaFacadeRemote cuentaFacade = (CuentaFacadeRemote) EJBFactory.getRemote(CuentaFacadeRemote.class);
 			
-			ingresoGeneradoTrasGrabacion = new Ingreso();			
-			ingresoGeneradoTrasGrabacion.setIntItemPeriodoIngreso(ingreso.getIntItemPeriodoIngreso());
-			ingresoGeneradoTrasGrabacion.setIntItemIngreso(ingreso.getIntItemIngreso());			
-			ingresoGeneradoTrasGrabacion.setIntContPeriodoLibro(ingreso.getIntContPeriodoLibro());
-			ingresoGeneradoTrasGrabacion.setIntContCodigoLibro(ingreso.getIntContCodigoLibro());
+			ingresoGeneradoTrasGrabacion = new Ingreso();	
+			//Autor: rvillarreal / Tarea: Modificación / Fecha: 27.11.2014
+			ingresoGeneradoTrasGrabacion = ingreso;			
+//			ingresoGeneradoTrasGrabacion.setIntItemPeriodoIngreso(ingreso.getIntItemPeriodoIngreso());
+//			ingresoGeneradoTrasGrabacion.setIntItemIngreso(ingreso.getIntItemIngreso());			
+//			ingresoGeneradoTrasGrabacion.setIntContPeriodoLibro(ingreso.getIntContPeriodoLibro());
+//			ingresoGeneradoTrasGrabacion.setIntContCodigoLibro(ingreso.getIntContCodigoLibro());
 			
 			procesarItems(ingresoGeneradoTrasGrabacion);
 			
@@ -1156,6 +1190,9 @@ public class CajaController {
 		blnDepositoCajaView = false;
 		blnExisteRedondeo = false;
 		strMensajeErrorGestor = "";
+		intTipoCuentaC = 0;
+		blnDocumentoAgregado = false;
+		listaTablaModalidadSocio.clear();
 	}
 	
 	private void calcularTotalDepositar()throws Exception{
@@ -1264,7 +1301,7 @@ public class CajaController {
 			strFiltroTextoPersona = "";
 //			intTipoPersona = Constante.PARAM_T_TIPOPERSONA_NATURAL;
 			intTipoBuscarPersona = BUSCAR_PERSONA;
-			intOpcionBusquedaC = 0;
+//			intOpcionBusquedaC = 1;
 			socioSeleccionado = new SocioComp();
 			listaSocioCuentaIngresoCaja.clear();
 			listaPersonaIngresoCaja.clear();
@@ -1272,8 +1309,10 @@ public class CajaController {
 			
 			if (intTipoPersonaC.equals(Constante.PARAM_T_TIPOPERSONA_NATURAL)) {
 				listaTablaOpcionBusqueda = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_OPCIONPERSONABUSQUEDA), "A");
+				intOpcionBusquedaC = Constante.PARAM_T_OPCIONPERSONABUSQ_DNI;
 			}else if(intTipoPersonaC.equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA)){
 				listaTablaOpcionBusqueda = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_OPCIONPERSONABUSQUEDA), "B");
+				intOpcionBusquedaC = Constante.PARAM_T_OPCIONPERSONABUSQ_RUC;
 			}			
 			
 		}catch(Exception e){
@@ -1326,6 +1365,14 @@ public class CajaController {
 		}
 	}
 	
+	public void quitarAdjuntoCheque(){
+		try{
+			archivoAdjuntoCheque = null;
+			((FileUploadController)getSessionBean("fileUploadController")).setArchivoCheque(null);
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
 	/*
 	 * Autor: jchavez / Tarea: Creación / Fecha: 18.06.2014 / 
 	 * Funcionalidad: Buscar entidades para el caso de Ingreso Caja - Juridica - Entidad Descuento
@@ -1383,6 +1430,7 @@ public class CajaController {
 //		List<SocioComp> listaSocioComp = null;
 		SocioComp persona = null;
 		listaPersonaIngresoCaja.clear();
+		strMsgErrorSocioSeleccionado = "";
 		try{
 			listaPersona = new ArrayList<Persona>();
 			strFiltroTextoPersona = strFiltroTextoPersona.trim();
@@ -1392,14 +1440,18 @@ public class CajaController {
 					listaSocioIngresoCaja = socioFacade.getListaSocioIngresoCaja(intOpcionBusquedaC, strFiltroTextoPersona, SESION_IDEMPRESA);
 					if (listaSocioIngresoCaja!=null && !listaSocioIngresoCaja.isEmpty()) {
 						persona = listaSocioIngresoCaja.get(0);
-						listaPersonaIngresoCaja.add(persona);
-						for (SocioComp socioComp : listaSocioIngresoCaja) {
-							if (!socioComp.getIntIngCajaIdPersona().equals(persona.getIntIngCajaIdPersona())) {
-								listaPersonaIngresoCaja.add(socioComp);
-//								persona = new SocioComp();
-								persona = socioComp;
+						if (persona.getIntIngCajaEstadoPersona().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)) {
+							listaPersonaIngresoCaja.add(persona);
+							for (SocioComp socioComp : listaSocioIngresoCaja) {
+								if (!socioComp.getIntIngCajaIdPersona().equals(persona.getIntIngCajaIdPersona())) {
+									listaPersonaIngresoCaja.add(socioComp);
+//									persona = new SocioComp();
+									persona = socioComp;
+								}
 							}
-						}						
+						}else if (persona.getIntIngCajaEstadoPersona().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)) {
+							strMsgErrorSocioSeleccionado = "La persona se encuentra fallecida.";
+						}
 					}
 				}
 
@@ -1413,14 +1465,19 @@ public class CajaController {
 					listaSocioIngresoCaja = socioFacade.getListaSocioIngresoCaja(intOpcionBusquedaC, strFiltroTextoPersona, SESION_IDEMPRESA);
 					if (listaSocioIngresoCaja!=null && !listaSocioIngresoCaja.isEmpty()) {
 						persona = listaSocioIngresoCaja.get(0);
-						listaPersonaIngresoCaja.add(persona);
-						for (SocioComp socioComp : listaSocioIngresoCaja) {
-							if (!socioComp.getIntIngCajaIdPersona().equals(persona.getIntIngCajaIdPersona())) {
-								listaPersonaIngresoCaja.add(socioComp);
-//								persona = new SocioComp();
-								persona = socioComp;
+						if (persona.getIntIngCajaEstadoPersona().equals(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)) {
+							listaPersonaIngresoCaja.add(persona);
+							for (SocioComp socioComp : listaSocioIngresoCaja) {
+								if (!socioComp.getIntIngCajaIdPersona().equals(persona.getIntIngCajaIdPersona())) {
+									listaPersonaIngresoCaja.add(socioComp);
+//									persona = new SocioComp();
+									persona = socioComp;
+								}
 							}
+						}else if (persona.getIntIngCajaEstadoPersona().equals(Constante.PARAM_T_ESTADOUNIVERSAL_INACTIVO)) {
+							strMsgErrorSocioSeleccionado = "La persona jurídica está de baja..";
 						}
+						
 					}
 				}
 //				persona = personaFacade.getPersonaJuridicaYListaPersonaPorRucYIdEmpresa2(strFiltroTextoPersona,SESION_IDEMPRESA);
@@ -1435,6 +1492,7 @@ public class CajaController {
 //				if(persona!=null) gestorCobranzaTemp = gestionCobranzaFacade.getGestorCobranzaPorPersona(persona, SESION_IDEMPRESA);
 //				if(gestorCobranzaTemp!=null) listaPersona.add(gestorCobranzaTemp.getPersona());
 //			}
+			log.info("mensaje estado persona: "+strMsgErrorSocioSeleccionado);
 		}catch(Exception e){
 			log.error(e.getMessage(), e);
 		}
@@ -1460,8 +1518,14 @@ public class CajaController {
 //		Integer intTipoPersona = null;
 		List<Tabla> listPersonaRol = null;
 		blnEsNaturalSocio = true;
+		//Autor: jchavez / Tarea: Modificación / Fecha: 22.12.2014
+		blnIngresoCajaView = false;
+		strMsgSubCondicionCuenta = "";
+		listaSocioCuentaIngresoCaja.clear();
+		listaTablaModalidadSocio.clear();		
 		
 		try {
+			socioSeleccionado = null;
 			intTipoPersonaC = Integer.valueOf(getRequestParameter("pCboTipoPersonaC"));
 			
 			if(intTipoPersonaC.equals(Constante.PARAM_T_TIPOPERSONA_NATURAL)){
@@ -1667,24 +1731,26 @@ public class CajaController {
 						
 				if (listaSocioCuentaIngresoCaja!=null && !listaSocioCuentaIngresoCaja.isEmpty()) {
 					for (SocioComp cuenta : listaSocioCuentaIngresoCaja) {
-						if ((intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA))  && cuenta.getIntIngCajaIdCta().equals(intCuentaSocioC) && !cuenta.getIntIngCajaParaSubCondicionCuenta().equals(Constante.PARAM_T_TIPO_CONDSOCIO_VIGENTE)) {
-							for (Tabla subCondCta : listaTablaSubCondicionCuenta) {
-								if (subCondCta.getIntIdDetalle().equals(cuenta.getIntIngCajaParaSubCondicionCuenta())) {
-									strDescripcion=subCondCta.getStrDescripcion();
-									strMsgSubCondicionCuenta = "Socio tiene subcondicion cuenta "+strDescripcion.toUpperCase()+", no procede ingreso por esta modalidad";
-									blnValidacionesOK = false;
-									break;
-								}							
+						if (cuenta.getIntIngCajaIdCta().equals(intCuentaSocioC)) {
+							if ((intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION) || intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA))  && cuenta.getIntIngCajaIdCta().equals(intCuentaSocioC) && !cuenta.getIntIngCajaParaSubCondicionCuenta().equals(Constante.PARAM_T_TIPO_CONDSOCIO_VIGENTE)) {
+								for (Tabla subCondCta : listaTablaSubCondicionCuenta) {
+									if (subCondCta.getIntIdDetalle().equals(cuenta.getIntIngCajaParaSubCondicionCuenta())) {
+										strDescripcion=subCondCta.getStrDescripcion();
+										strMsgSubCondicionCuenta = "Socio tiene subcondicion cuenta "+strDescripcion.toUpperCase()+", no procede ingreso por esta modalidad";
+										blnValidacionesOK = false;
+										break;
+									}							
+								}
 							}
-						}
-						if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION) && cuenta.getIntIngCajaIdCta().equals(intCuentaSocioC) && !cuenta.getIntIngCajaParaSubCondicionCuenta().equals(Constante.PARAM_T_TIPO_CONDSOCIO_IRREGULAR)) {
-							for (Tabla subCondCta : listaTablaSubCondicionCuenta) {
-								if (subCondCta.getIntIdDetalle().equals(cuenta.getIntIngCajaParaSubCondicionCuenta())) {
-									strDescripcion=subCondCta.getStrDescripcion();
-									strMsgSubCondicionCuenta = "Socio tiene subcondicion cuenta "+strDescripcion.toUpperCase()+", no procede ingreso por esta modalidad";
-									blnValidacionesOK = false;
-									break;
-								}							
+							if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_REGULARIZACION) && cuenta.getIntIngCajaIdCta().equals(intCuentaSocioC) && !cuenta.getIntIngCajaParaSubCondicionCuenta().equals(Constante.PARAM_T_TIPO_CONDSOCIO_IRREGULAR)) {
+								for (Tabla subCondCta : listaTablaSubCondicionCuenta) {
+									if (subCondCta.getIntIdDetalle().equals(cuenta.getIntIngCajaParaSubCondicionCuenta())) {
+										strDescripcion=subCondCta.getStrDescripcion();
+										strMsgSubCondicionCuenta = "Socio tiene subcondicion cuenta "+strDescripcion.toUpperCase()+", no procede ingreso por esta modalidad";
+										blnValidacionesOK = false;
+										break;
+									}							
+								}
 							}
 						}
 					}
@@ -1701,8 +1767,9 @@ public class CajaController {
 		strMsgSubCondicionCuenta = "";
 		blnValidacionesOK = true;
 		listaTablaModalidadSocio.clear();
+		intModalidadC = 0;
+		intTipoCuentaC = 0;
 		try {
-			
 			intCuentaSocioC = Integer.valueOf(getRequestParameter("pCboCuentaC"));
 			if (intCuentaSocioC.equals(0)) {
 				strMsgSubCondicionCuenta = "Debe de seleccionar una cuenta";
@@ -1712,6 +1779,7 @@ public class CajaController {
 			//Autor: jchavez / Tarea: Creación / Fecha: 12.08.2014 / 
 			for (SocioComp o : listaSocioCuentaIngresoCaja) {
 				if (o.getIntIngCajaIdCta().compareTo(intCuentaSocioC)==0 && o.getIntIngCajaIdTipoCta().compareTo(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)==0) {
+					intTipoCuentaC = Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO;
 					List<Tabla> listaTablaModalidadSocioTemp =  tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOMODALIDADINGRESO));
 					if (listaTablaModalidadSocioTemp!=null && !listaTablaModalidadSocioTemp.isEmpty()) {
 						for (Tabla tabla : listaTablaModalidadSocioTemp) {
@@ -1722,11 +1790,11 @@ public class CajaController {
 						}
 					}					
 				}else if (o.getIntIngCajaIdCta().compareTo(intCuentaSocioC)==0 && o.getIntIngCajaIdTipoCta().compareTo(Constante.PARAM_T_TIPOCUENTASOCIO_SOCIO)==0) {
+					intTipoCuentaC = Constante.PARAM_T_TIPOCUENTASOCIO_SOCIO;
 					listaTablaModalidadSocio = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOMODALIDADINGRESO));
 					break;
 				}
 			}
-			socioSeleccionado.setIntIngCajaIdCta(intCuentaSocioC);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -1834,6 +1902,7 @@ public class CajaController {
 		
 		strMsgErrorMontoIngresado = "";
 		try{
+//			socioSeleccionado.setIntIngCajaIdCta(intCuentaSocioC);
 			listaDocumentoPorAgregar = new ArrayList<DocumentoGeneral>();
 			log.info("intTipoDocumentoAgregar:"+intTipoDocumentoAgregar);
 			
@@ -1857,7 +1926,7 @@ public class CajaController {
 				}
 			}
 			//Procedimiento para obtener el periodo de envio concepto (caso socio), envio planilla (caso entidad) o dia y salto de mes (caso configuracion entidad)
-			String strUltPeriodo = planillaFacadeRemote.getMaxPeriodoIngCaja(SESION_IDEMPRESA,socioSeleccionado.getIntIngCajaIdCta(),socioSeleccionado.getIntIngCajaIdPersona());
+			String strUltPeriodo = planillaFacadeRemote.getMaxPeriodoIngCaja(SESION_IDEMPRESA,intCuentaSocioC,socioSeleccionado.getIntIngCajaIdPersona()); //socioSeleccionado.getIntIngCajaIdCta
 			pos = strUltPeriodo.indexOf('-');
 
 			if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PAGOMESSGTE)) {
@@ -1913,7 +1982,7 @@ public class CajaController {
 				log.info("periodo sgte: "+strPeriodoSgte);
 				documentoGeneralSeleccionado.setIntPeriodoPlanilla(Integer.valueOf(strPeriodoSgte));
 				strDescPeriodo = MyUtilFormatoFecha.mesesEnTexto(Integer.valueOf(strPeriodoSgte.substring(4,6)))+" del "+strPeriodoSgte.substring(0,4);
-				lstExpedienteComp = conceptoFacade.getLstIngCajaPagoMesSgte(SESION_IDEMPRESA,socioSeleccionado.getIntIngCajaIdCta(),Integer.valueOf(strPeriodoSgte));
+				lstExpedienteComp = conceptoFacade.getLstIngCajaPagoMesSgte(SESION_IDEMPRESA,intCuentaSocioC,Integer.valueOf(strPeriodoSgte)); //socioSeleccionado.getIntIngCajaIdCta()
 				log.info(lstExpedienteComp);
 				if (lstExpedienteComp!=null && !lstExpedienteComp.isEmpty()) {
 					for (ExpedienteComp o : lstExpedienteComp) {
@@ -1935,7 +2004,7 @@ public class CajaController {
 				log.info("periodo ACTUAL: "+strPeriodoActual);
 				documentoGeneralSeleccionado.setIntPeriodoPlanilla(Integer.valueOf(strPeriodoActual));
 				strDescPeriodo = MyUtilFormatoFecha.mesesEnTexto(Integer.valueOf(strPeriodoActual.substring(4,6)))+" del "+strPeriodoActual.substring(0,4);
-				lstExpedienteCompRegularizacion = conceptoFacade.getLstIngCajaRegularizacion(SESION_IDEMPRESA,socioSeleccionado.getIntIngCajaIdCta(),Integer.valueOf(strPeriodoActual));
+				lstExpedienteCompRegularizacion = conceptoFacade.getLstIngCajaRegularizacion(SESION_IDEMPRESA,intCuentaSocioC,Integer.valueOf(strPeriodoActual)); //socioSeleccionado.getIntIngCajaIdCta()
 				//Luego tendremos que ajustar la lista con todos los periodo a regularizar hasta el periodo actual.
 				log.info("Lista obtenida: "+lstExpedienteCompRegularizacion);
 				List<ExpedienteComp> lstCuentaConceptoDetalle = new ArrayList<ExpedienteComp>();
@@ -2161,28 +2230,44 @@ public class CajaController {
 				}
 			}else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES)) {
 				//Autor: jchavez / Tarea: Creación / Fecha: 12.08.2014 / 
-				lstExpedienteCompAportaciones = conceptoFacade.getLstIngCajaAportaciones(SESION_IDEMPRESA,intCuentaSocioC);//socioSeleccionado.getIntIngCajaIdCta()
+				lstExpedienteCompAportaciones = conceptoFacade.getLstIngCajaAportaciones(SESION_IDEMPRESA,intCuentaSocioC, intTipoCuentaC);//socioSeleccionado.getIntIngCajaIdCta()
+				
 				if (lstExpedienteCompAportaciones!=null && !lstExpedienteCompAportaciones.isEmpty()) {
+					
 					for (ExpedienteComp x : lstExpedienteCompAportaciones) {
-						x.setLstCajaCuentaConceptoDetalle(new ArrayList<CuentaConceptoDetalle>());
-						//Recuperamos los datos de la cuenta concepto detalle
-						CuentaConceptoDetalle ctaCptoDet = new CuentaConceptoDetalle();
-						ctaCptoDet.setId(new CuentaConceptoDetalleId());						
-						ctaCptoDet.getId().setIntPersEmpresaPk(x.getIntIngCajaIdEmpresa());
-						ctaCptoDet.getId().setIntCuentaPk(x.getIntIngCajaIdCuenta());
-						ctaCptoDet.getId().setIntItemCuentaConcepto(x.getIntIngCajaId1());
-						ctaCptoDet.getId().setIntItemCtaCptoDet(x.getIntIngCajaId2());
-						ctaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPK(ctaCptoDet.getId());
-						x.getLstCajaCuentaConceptoDetalle().add(ctaCptoDet);
+						if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_SOCIO)) {
+							x.setLstCajaCuentaConceptoDetalle(new ArrayList<CuentaConceptoDetalle>());
+							//Recuperamos los datos de la cuenta concepto detalle
+							CuentaConceptoDetalle ctaCptoDet = new CuentaConceptoDetalle();
+							ctaCptoDet.setId(new CuentaConceptoDetalleId());						
+							ctaCptoDet.getId().setIntPersEmpresaPk(x.getIntIngCajaIdEmpresa());
+							ctaCptoDet.getId().setIntCuentaPk(x.getIntIngCajaIdCuenta());
+							ctaCptoDet.getId().setIntItemCuentaConcepto(x.getIntIngCajaId1());
+							ctaCptoDet.getId().setIntItemCtaCptoDet(x.getIntIngCajaId2());
+							ctaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPK(ctaCptoDet.getId());
+							x.getLstCajaCuentaConceptoDetalle().add(ctaCptoDet);
 
-						if (x.getIntIngCajaParaTipoX().equals(Constante.CAPTACION_FDO_RETIRO)) {
-							x = calcularInteresAportacion(x);
-						}
+							if (x.getIntIngCajaParaTipoX().equals(Constante.CAPTACION_FDO_RETIRO)) {
+								x = calcularInteresAportacion(x);
+							}
+						}//Autor: jchavez / Tarea: Modificación / Fecha: 09.12.2014 / Se agrega lógica de ahorros
+						else if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)) {
+							CuentaCteAhorro ctaCteAhorro = new CuentaCteAhorro();
+							//Recuperamos los datos de la cuenta corriente ahorro.
+							ctaCteAhorro.getId().setIntPersEmpresaPk(x.getIntIngCajaIdEmpresa());
+							ctaCteAhorro.getId().setIntCsocCuentaPk(x.getIntIngCajaIdCuenta());
+							ctaCteAhorro.getId().setIntItemCuentaConcepto(x.getIntIngCajaId1());
+							ctaCteAhorro.getId().setIntItemCtaCteAhorro(x.getIntIngCajaId2());
+							
+							ctaCteAhorro = ctaCteAhorroFacade.getCuentaCteAhorroPorPk(ctaCteAhorro);
+							x.getLstCajaCuentaCteAhorro().add(ctaCteAhorro);
+							x.setBdIngCajaInteres(ctaCteAhorroFacade.getCalculoInteresPasivoAhorro(ctaCteAhorro));
+						}							
 					}
 					lstExpedienteComp.addAll(lstExpedienteCompAportaciones);
 				}
 			}else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_ADELANTO_CANCELACION)) {
-				lstExpedienteComp = conceptoFacade.getLstIngCajaAdelantoCanc(SESION_IDEMPRESA,socioSeleccionado.getIntIngCajaIdCta());
+				lstExpedienteComp = conceptoFacade.getLstIngCajaAdelantoCanc(SESION_IDEMPRESA,intCuentaSocioC); //socioSeleccionado.getIntIngCajaIdCta()
 				log.info(lstExpedienteComp);
 				if (lstExpedienteComp!=null && !lstExpedienteComp.isEmpty()) {
 					for (ExpedienteComp o : lstExpedienteComp) {
@@ -2193,7 +2278,7 @@ public class CajaController {
 					}
 				}	
 			}else if (intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_PLANILLA_ENVIADA)) {
-				lstExpedienteComp = conceptoFacade.getLstIngCajaPlanillaEnviada(SESION_IDEMPRESA,socioSeleccionado.getIntIngCajaIdCta());
+				lstExpedienteComp = conceptoFacade.getLstIngCajaPlanillaEnviada(SESION_IDEMPRESA,intCuentaSocioC); //socioSeleccionado.getIntIngCajaIdCta()
 				log.info(lstExpedienteComp);
 				if (lstExpedienteComp!=null && !lstExpedienteComp.isEmpty()) {
 					Integer intPeriodo = lstExpedienteComp.get(0).getIntIngCajaPeriodo();
@@ -2353,10 +2438,10 @@ public class CajaController {
 	public void agregarIngresoSocio(){
 		SocioPK pkSocio = new SocioPK();
 		SocioEstructura socioEstructura = null;
-		listaIngresoSocio = new ArrayList<ExpedienteComp>();
+		listaIngresoSocio.clear();
 		String strSucursal = "";
 		strMsgErrorMontoIngresado = "";
-		
+
 		try {
 			if (bdMontoIngresadoTotal==null || bdMontoIngresadoTotal.compareTo(BigDecimal.ZERO)==0) {
 				strMsgErrorMontoIngresado = "El monto a ingresar debe ser mayor a 0";
@@ -2416,85 +2501,109 @@ public class CajaController {
 							listaIngresoSocio.add(x);
 						}
 					}
+					if(bdSumatoriaMontosTotalesAPagar.compareTo(bdMontoIngresadoTotalSimulacion)==0) {
+						documentoGeneralSeleccionado.setIntCorrespodeCambioCondicion(Constante.CORRESPONDE_CAMBIO_CONDICION);
+					}else {
+						documentoGeneralSeleccionado.setIntCorrespodeCambioCondicion(Constante.NO_CORRESPONDE_CAMBIO_CONDICION);
+					}
 				}else if(intModalidadC.equals(Constante.PARAM_T_TIPOMODALIDADINGRESO_APORTACIONES)){
-					for (ExpedienteComp x : listaMovimientoSocio) {
-						if (x.getBdIngCajaMontoPagado()!=null && x.getBdIngCajaMontoPagado().compareTo(BigDecimal.ZERO)!=0) {						
-							CuentaConceptoDetalle ctaCptoDet = null;
-							for (CuentaConceptoDetalle o : x.getLstCajaCuentaConceptoDetalle()) {
-								if (o.getTsFin()==null) {
-									o.setListaConceptoPago(new ArrayList<ConceptoPago>());
-									//Recuperamos los datos de la cuenta concepto detalle
-									ctaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPK(o.getId());
-									//Recuperamos la lista de conceptos pago existentes por cuenta concepto detalle.
-									List<ConceptoPago> lstCptoPgo = conceptoFacade.getListaConceptoPagoPorCuentaConceptoDet(ctaCptoDet.getId());
-									//Obtenemos el ultimo periodo pagado
-									Integer intUltimoPeriodoPagado = 0;
-									if (lstCptoPgo!=null && !lstCptoPgo.isEmpty()) {
-										List<ConceptoPago> lstPendientePago = new ArrayList<ConceptoPago>();
-										for (ConceptoPago cp : lstCptoPgo) {
-											/*Recorremos la lista de conceptos hallados para filtrar los q tengan saldo 
-											  diferente a 0, y hasta encontrar un registro cuyo saldo sea 0*/
-											if (cp.getBdMontoSaldo().compareTo(BigDecimal.ZERO)!=0) {
-												lstPendientePago.add(cp);
-											}else if (cp.getBdMontoSaldo().compareTo(BigDecimal.ZERO)==0) {
-												intUltimoPeriodoPagado = cp.getIntPeriodo();
-												break;
+					if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_SOCIO)) {
+						for (ExpedienteComp x : listaMovimientoSocio) {
+							if (x.getBdIngCajaMontoPagado()!=null && x.getBdIngCajaMontoPagado().compareTo(BigDecimal.ZERO)!=0) {						
+								CuentaConceptoDetalle ctaCptoDet = null;
+								for (CuentaConceptoDetalle o : x.getLstCajaCuentaConceptoDetalle()) {
+									if (o.getTsFin()==null) {
+										o.setListaConceptoPago(new ArrayList<ConceptoPago>());
+										//Recuperamos los datos de la cuenta concepto detalle
+										ctaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPK(o.getId());
+										//Recuperamos la lista de conceptos pago existentes por cuenta concepto detalle.
+										List<ConceptoPago> lstCptoPgo = conceptoFacade.getListaConceptoPagoPorCuentaConceptoDet(ctaCptoDet.getId());
+										//Obtenemos el ultimo periodo pagado
+										Integer intUltimoPeriodoPagado = 0;
+										if (lstCptoPgo!=null && !lstCptoPgo.isEmpty()) {
+											List<ConceptoPago> lstPendientePago = new ArrayList<ConceptoPago>();
+											for (ConceptoPago cp : lstCptoPgo) {
+												/*Recorremos la lista de conceptos hallados para filtrar los q tengan saldo 
+												  diferente a 0, y hasta encontrar un registro cuyo saldo sea 0*/
+												if (cp.getBdMontoSaldo().compareTo(BigDecimal.ZERO)!=0) {
+													lstPendientePago.add(cp);
+												}else if (cp.getBdMontoSaldo().compareTo(BigDecimal.ZERO)==0) {
+													intUltimoPeriodoPagado = cp.getIntPeriodo();
+													break;
+												}
 											}
 										}
-									}
-									if (intUltimoPeriodoPagado.equals(0)) {
-										intUltimoPeriodoPagado = Integer.parseInt(MyUtilFormatoFecha.convertirTimestampAStringPeriodo(MyUtilFormatoFecha.obtenerFechaActual()));
-									}
-									Integer intNroCptoPago = (x.getBdIngCajaMontoPagado().divide(ctaCptoDet.getBdMontoConcepto(),0,RoundingMode.HALF_UP)).intValueExact();
-									BigDecimal bdMto1 = x.getBdIngCajaMontoPagado();
-									Integer periodo = intUltimoPeriodoPagado;
-									for (int i = 0; i < (intNroCptoPago+1); i++) {
-										periodo = MyUtilFormatoFecha.obtenerPeriodoSiguiente(periodo.toString());
-										List<ConceptoPago> lstCptoPgoAport = conceptoFacade.getListaConceptoPagoPorCtaCptoDetYPeriodo(ctaCptoDet.getId(), periodo, null);
-										if (lstCptoPgoAport!=null && !lstCptoPgoAport.isEmpty()) {
-											for (ConceptoPago conceptoPago : lstCptoPgoAport) {
-												if (conceptoPago.getBdMontoSaldo().compareTo(bdMto1)==-1) {
-													bdMto1 = bdMto1.subtract(conceptoPago.getBdMontoSaldo());
-													conceptoPago.setBdMontoPago(conceptoPago.getBdMontoPago().add(conceptoPago.getBdMontoSaldo()));
-													conceptoPago.setBdMontoSaldo(conceptoPago.getBdMontoSaldo().subtract(conceptoPago.getBdMontoSaldo()));
+										if (intUltimoPeriodoPagado.equals(0)) {
+											intUltimoPeriodoPagado = Integer.parseInt(MyUtilFormatoFecha.convertirTimestampAStringPeriodo(MyUtilFormatoFecha.obtenerFechaActual()));
+										}
+										// Autor: jchavez / Tarea: Modificación / Fecha: 09.12.2014
+										BigDecimal bdNroCptoPago = (x.getBdIngCajaMontoPagado().divide(ctaCptoDet.getBdMontoConcepto(), 2, RoundingMode.CEILING));
+										Integer intNroCptoPagoTemp = (x.getBdIngCajaMontoPagado().divide(ctaCptoDet.getBdMontoConcepto(),0,RoundingMode.DOWN)).intValueExact();
+										//Si la división da parte decimal, al numero de conceptos se le suma 1 ()
+										Integer intNroCptoPago =  ((bdNroCptoPago.subtract(new BigDecimal(intNroCptoPagoTemp))).compareTo(BigDecimal.ZERO)==1)?(intNroCptoPagoTemp+1):intNroCptoPagoTemp;
+										//Fin jchavez - 09.12.2014
+										BigDecimal bdMto1 = x.getBdIngCajaMontoPagado();
+										Integer periodo = intUltimoPeriodoPagado;
+										for (int i = 0; i < (intNroCptoPago); i++) {
+											List<ConceptoPago> lstCptoPgoAport = conceptoFacade.getListaConceptoPagoPorCtaCptoDetYPeriodo(ctaCptoDet.getId(), periodo, null);
+											if (lstCptoPgoAport!=null && !lstCptoPgoAport.isEmpty()) {
+												for (ConceptoPago conceptoPago : lstCptoPgoAport) {
+													if (conceptoPago.getBdMontoSaldo().compareTo(bdMto1)==-1) {
+														bdMto1 = bdMto1.subtract(conceptoPago.getBdMontoSaldo());
+														conceptoPago.setBdMontoPago(conceptoPago.getBdMontoPago().add(conceptoPago.getBdMontoSaldo()));
+														conceptoPago.setBdMontoSaldo(conceptoPago.getBdMontoSaldo().subtract(conceptoPago.getBdMontoSaldo()));
+													}else {
+														conceptoPago.setBdMontoPago(conceptoPago.getBdMontoPago().add(bdMto1));
+														conceptoPago.setBdMontoSaldo(conceptoPago.getBdMontoSaldo().subtract(bdMto1));
+														bdMto1 = BigDecimal.ZERO;
+													}
+													o.getListaConceptoPago().add(conceptoPago);
+												}
+											}else{
+												//Registrar Concepto Pago 
+												ConceptoPago cptoPgo = new ConceptoPago();
+												cptoPgo.setId(new ConceptoPagoId());
+												cptoPgo.getId().setIntPersEmpresaPk(o.getId().getIntPersEmpresaPk());
+												cptoPgo.getId().setIntCuentaPk(o.getId().getIntCuentaPk());
+												cptoPgo.getId().setIntItemCuentaConcepto(o.getId().getIntItemCuentaConcepto());
+												cptoPgo.getId().setIntItemCtaCptoDet(o.getId().getIntItemCtaCptoDet());
+												cptoPgo.setIntPeriodo(periodo);
+												cptoPgo.setIntEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+												if (o.getBdMontoConcepto().compareTo(bdMto1)==-1) {
+													cptoPgo.setBdMontoPago(o.getBdMontoConcepto());
+													cptoPgo.setBdMontoSaldo(BigDecimal.ZERO);
+													bdMto1 = bdMto1.subtract(o.getBdMontoConcepto());
 												}else {
-													conceptoPago.setBdMontoPago(conceptoPago.getBdMontoPago().add(bdMto1));
-													conceptoPago.setBdMontoSaldo(conceptoPago.getBdMontoSaldo().subtract(bdMto1));
+													cptoPgo.setBdMontoPago(bdMto1);
+													cptoPgo.setBdMontoSaldo(o.getBdMontoConcepto().subtract(bdMto1));
 													bdMto1 = BigDecimal.ZERO;
 												}
-												o.getListaConceptoPago().add(conceptoPago);
+												o.getListaConceptoPago().add(cptoPgo);
 											}
-										}else{
-											//Registrar Concepto Pago 
-											ConceptoPago cptoPgo = new ConceptoPago();
-											cptoPgo.setId(new ConceptoPagoId());
-											cptoPgo.getId().setIntPersEmpresaPk(o.getId().getIntPersEmpresaPk());
-											cptoPgo.getId().setIntCuentaPk(o.getId().getIntCuentaPk());
-											cptoPgo.getId().setIntItemCuentaConcepto(o.getId().getIntItemCuentaConcepto());
-											cptoPgo.getId().setIntItemCtaCptoDet(o.getId().getIntItemCtaCptoDet());
-											cptoPgo.setIntPeriodo(periodo);
-											cptoPgo.setIntEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
-											if (o.getBdMontoConcepto().compareTo(bdMto1)==-1) {
-												cptoPgo.setBdMontoPago(o.getBdMontoConcepto());
-												cptoPgo.setBdMontoSaldo(BigDecimal.ZERO);
-												bdMto1 = bdMto1.subtract(o.getBdMontoConcepto());
-											}else {
-												cptoPgo.setBdMontoPago(bdMto1);
-												cptoPgo.setBdMontoSaldo(o.getBdMontoConcepto().subtract(bdMto1));
-												bdMto1 = BigDecimal.ZERO;
-											}
-											o.getListaConceptoPago().add(cptoPgo);
+											periodo = MyUtilFormatoFecha.obtenerPeriodoSiguiente(periodo.toString());
 										}
+										break;
 									}
-									break;
-								}
+								}					
+								x.setIntIngCajaParaTipoPagoCuenta(0);
+								x.setIntIngCajaIdSucursalAdministra(socioEstructura.getIntIdSucursalAdministra());
+								x.setIntIngCajaIdSubSucursalAdministra(socioEstructura.getIntIdSubsucurAdministra());
+								listaIngresoSocio.add(x);
 							}					
-							x.setIntIngCajaParaTipoPagoCuenta(0);
-							x.setIntIngCajaIdSucursalAdministra(socioEstructura.getIntIdSucursalAdministra());
-							x.setIntIngCajaIdSubSucursalAdministra(socioEstructura.getIntIdSubsucurAdministra());
-							listaIngresoSocio.add(x);
-						}					
+						}
 					}
+					//Autor: jchavez / Tarea: Creación / Fecha: 10.12.2014
+					if (intTipoCuentaC.equals(Constante.PARAM_T_TIPOCUENTASOCIO_AHORRO)) {
+						for (ExpedienteComp x : listaMovimientoSocio) {
+							if (x.getBdIngCajaMontoPagado()!=null && x.getBdIngCajaMontoPagado().compareTo(BigDecimal.ZERO)!=0) {	
+								x.setIntIngCajaParaTipoPagoCuenta(0);
+								x.setIntIngCajaIdSucursalAdministra(socioEstructura.getIntIdSucursalAdministra());
+								x.setIntIngCajaIdSubSucursalAdministra(socioEstructura.getIntIdSubsucurAdministra());
+								listaIngresoSocio.add(x);
+							}
+						}
+					}
+					//Fin jchavez - 10.12.2014
 				}
 				
 				if (!listaIngresoSocio.isEmpty()) {
@@ -2566,6 +2675,7 @@ public class CajaController {
 						}
 					}
 				}
+				blnDocumentoAgregado = true;
 			}else {
 				strMsgErrorMontoIngresado = "El socio no cuneta con Socio Estructura ORIGEN";
 				return;
@@ -2944,6 +3054,7 @@ public class CajaController {
 			//debe de funcar
 			strMontoIngresarTotalDescripcion = ConvertirLetras.convertirMontoALetras(bdMontoIngresadoTotal, Constante.PARAM_T_TIPOMONEDA_SOLES);
 			listaDocumentoAgregados.add(documentoGeneralSeleccionado);
+			blnDocumentoAgregado = true;
 //			bdMontoIngresar = null;
 			//Ordenamos por intOrden
 //			Collections.sort(listaIngresoDetalleInterfaz, new Comparator<IngresoDetalleInterfaz>(){
@@ -3048,6 +3159,225 @@ public class CajaController {
 			log.error(e.getMessage(),e);
 		}
 	}	
+	
+	//se inicia la imprecion de reporte de ingreso de caja
+	public void imprimirIngresoCaja(){
+    	String strNombreReporte = "";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	Tabla formPago = new Tabla();
+    	Tabla tipoMoneda = new Tabla();
+    	Tabla tipoComprobante = new Tabla();
+    	TablaFacadeRemote tablaFacade = null;
+    	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		NumberFormat formato = new DecimalFormat("#,###.00",otherSymbols);
+		PersonaFacadeRemote facadePersona = null;
+		Natural usuario = new Natural();
+		try {
+			tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
+			facadePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+			
+			formPago = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_PAGOINGRESO), 
+																	ingresoGeneradoTrasGrabacion.getIntParaFormaPago());
+			
+			tipoMoneda = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOMONEDA_INT), 
+																	ingresoGeneradoTrasGrabacion.getIntParaTipoMoneda()); 
+			
+			parametro.put("P_NUMINGRESO", ingresoGeneradoTrasGrabacion.getIntItemPeriodoIngreso() +" - "+ ingresoGeneradoTrasGrabacion.getIntItemIngreso());
+			parametro.put("P_SUCURSAL", sucursalIngreso.getJuridica().getStrSiglas() +" - "+subsucursalIngreso.getStrDescripcion());
+			parametro.put("P_FECHAINGRESO", Constante.sdf.format(ingresoGeneradoTrasGrabacion.getDtFechaIngreso()));
+			parametro.put("P_FORMPAGO", formPago.getStrDescripcion());
+			parametro.put("P_MONEDA", tipoMoneda.getStrDescripcion());
+			parametro.put("P_TIPOCAMBIO", ingresoGeneradoTrasGrabacion.getBdTipoCambio());
+			parametro.put("P_MONTO", formato.format(ingresoGeneradoTrasGrabacion.getBdMontoTotal()));
+			parametro.put("P_DESCRIPCIONMONTO", getStrMontoIngresarTotalDescripcion());
+//			if(ingresoGeneradoTrasGrabacion.getPersona().getIntTipoPersonaCod()==1){
+//				parametro.put("P_NOMBRECOMPLETO", ingresoGeneradoTrasGrabacion.getIntPersEmpresaGirado()+"-"+
+//												  ingresoGeneradoTrasGrabacion.getIntPersPersonaGirado()+" - DNI : "+ 
+//												  ingresoGeneradoTrasGrabacion.getPersona().getDocumento().getStrNumeroIdentidad()+" - "+
+//												  ingresoGeneradoTrasGrabacion.getPersona().getNatural().getStrApellidoPaterno()+" "+
+//												  ingresoGeneradoTrasGrabacion.getPersona().getNatural().getStrApellidoMaterno()+", "+
+//												  ingresoGeneradoTrasGrabacion.getPersona().getNatural().getStrNombres());
+//			}else{
+//				parametro.put("P_NOMBRECOMPLETO", ingresoGeneradoTrasGrabacion.getIntPersEmpresaGirado()+"-"+
+//												  ingresoGeneradoTrasGrabacion.getIntPersPersonaGirado()+"-"+
+//												  ingresoGeneradoTrasGrabacion.getIntCuentaGirado()+" - RUC : "+
+//												  ingresoGeneradoTrasGrabacion.getPersona().getStrRuc()+" - "+
+//												  ingresoGeneradoTrasGrabacion.getPersona().getJuridica().getStrRazonSocial());
+//			}
+			parametro.put("P_NROASIENTO", ingresoGeneradoTrasGrabacion.getStrNumeroLibro());
+			parametro.put("P_PORCONCEPTODE", getStrObservacion());
+			parametro.put("P_PERIODO", ingresoGeneradoTrasGrabacion.getIntPeriodoSocio());
+			parametro.put("P_NUMCHEQUE", ingresoGeneradoTrasGrabacion.getStrNumeroCheque());
+			parametro.put("P_MODALIDADPAGO", getStrIngCajaViewDescModalidadPago());
+			
+//			if(ingresoGeneradoTrasGrabacion.getPersona().getIntTipoPersonaCod()==1){
+//				parametro.put("P_NOMBREFIRMA", ingresoGeneradoTrasGrabacion.getPersona().getNatural().getStrApellidoPaterno()+" "+
+//						  ingresoGeneradoTrasGrabacion.getPersona().getNatural().getStrApellidoMaterno()+", "+
+//						  ingresoGeneradoTrasGrabacion.getPersona().getNatural().getStrNombres());
+//				parametro.put("P_DNI", "D.N.I: "+ingresoGeneradoTrasGrabacion.getPersona().getDocumento().getStrNumeroIdentidad());
+//			}else{
+//				parametro.put("P_NOMBREFIRMA",  ingresoGeneradoTrasGrabacion.getPersona().getJuridica().getStrRazonSocial());
+//				parametro.put("P_DNI", "RUC: "+ingresoGeneradoTrasGrabacion.getPersona().getStrRuc());
+//			}
+			//21.12.2014 para salir del paso - jchavez
+			parametro.put("P_NOMBREFIRMA",  "");
+			parametro.put("P_DNI", "");
+			
+			usuario = facadePersona.getNaturalPorPK(ingresoGeneradoTrasGrabacion.getIntPersPersonaUsuario());
+			SimpleDateFormat formateador = new SimpleDateFormat("hh:mm:ss");
+			parametro.put("P_USUARIO", usuario.getStrApellidoPaterno()+" "+usuario.getStrApellidoMaterno()+", "+usuario.getStrNombres());
+			parametro.put("P_FECHAHORA", Constante.sdf.format(ingresoGeneradoTrasGrabacion.getDtFechaIngreso()) +" "+formateador.format(ingresoGeneradoTrasGrabacion.getDtFechaIngreso()));
+			Date fecha = new Date();
+			parametro.put("P_SYSDATE", Constante.sdf.format(fecha));
+			parametro.put("P_HORADIA", formateador.format(fecha));
+			
+			List<IngresoDetalle> listIngreso = new ArrayList<IngresoDetalle>();
+			Sucursal sucursal = new Sucursal();
+			for (IngresoDetalle ingresoReporte : ingresoGeneradoTrasGrabacion.getListaIngresoDetalle()) {
+				IngresoDetalle ingresoTemp = new IngresoDetalle();
+				sucursal.getId().setIntPersEmpresaPk(ingresoGeneradoTrasGrabacion.getId().getIntIdEmpresa());
+				sucursal.getId().setIntIdSucursal(ingresoGeneradoTrasGrabacion.getIntSucuIdSucursal());
+				EmpresaFacadeRemote empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
+				sucursal = empresaFacade.getSucursalPorPK(sucursal);
+				Subsucursal subsucursal = empresaFacade.getSubSucursalPorIdSubSucursal(ingresoGeneradoTrasGrabacion.getIntSudeIdSubsucursal());
+				
+				tipoComprobante = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOCOMPROBANTE), 
+						ingresoReporte.getIntParaTipoComprobante());
+				if(tipoComprobante!=null){
+					ingresoTemp.setStrDesTipoComprobante(tipoComprobante.getStrDescripcion());
+				}else{
+					ingresoTemp.setStrDesTipoComprobante("");
+				}
+				ingresoTemp.setStrDescripcionAgencia(sucursal.getJuridica().getStrRazonSocial() +"-"+subsucursal.getStrDescripcion());
+				ingresoTemp.setStrDescripcionIngreso(ingresoReporte.getStrDescripcionIngreso());
+				if(ingresoReporte.getBdMontoAbono()!=null){
+					ingresoTemp.setStrMontoCargoReport(formato.format(ingresoReporte.getBdMontoAbono()));
+				}
+				if(ingresoReporte.getBdMontoCargo()!=null){
+					ingresoTemp.setStrMontoCargoReport("-"+formato.format(ingresoReporte.getBdMontoCargo()));
+				}
+				ingresoTemp.setStrNumeroDocumento(ingresoReporte.getStrNumeroDocumento());
+				listIngreso.add(ingresoTemp);
+			}
+			System.out.println("Parametro " +parametro);
+			strNombreReporte = "ingresoCaja";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(listIngreso), Constante.PARAM_T_TIPOREPORTE_PDF);
+			
+		} catch (Exception e) {
+			log.error("Error en imprimirPlanillaDescuento ---> "+e);
+		}
+    }
+	
+	//Se inicia la imprecion del deposito de banco
+	public void imprimirDepositoBanco(){
+		String strNombreReporte = "";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	SimpleDateFormat formateador = new SimpleDateFormat("hh:mm:ss");
+    	Date fecha = new Date();
+    	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		NumberFormat formato = new DecimalFormat("#,###.00",otherSymbols);
+		TablaFacadeRemote tablaFacade = null;
+		Tabla formaPago = new Tabla();
+		Tabla tipoMoneda = new Tabla();
+		Tabla tipoPersona = new Tabla();
+		Tabla tipoMonList = new Tabla();
+		Natural usuario = new Natural();
+		PersonaFacadeRemote facadePersona = null;
+		BancoFacadeLocal facadeBancoCuenta = null;
+		BancocuentaId cuentapk = null;
+		Bancocuenta banCuenta = null ;
+		PersonaFacadeRemote personaFacade = null;
+		Juridica juri =null;
+		CuentaBancaria cuentaBancaria = null;
+		CuentaBancariaPK cueBancariaPk = null;
+		try {
+			tablaFacade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
+			facadePersona = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+			facadeBancoCuenta = (BancoFacadeLocal)EJBFactory.getLocal(BancoFacadeLocal.class);
+			personaFacade = (PersonaFacadeRemote)EJBFactory.getRemote(PersonaFacadeRemote.class);
+			
+			formaPago = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_PAGOINGRESO), 
+																	getIntFormaPagoValidar());
+			
+			tipoMoneda = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOMONEDA_INT), 
+																	depositoGeneradoTrasGrabacion.getIntParaTipoMoneda()); 
+			
+			parametro.put("P_NUMEROINGRESO", depositoGeneradoTrasGrabacion.getIntItemPeriodoIngreso()+"-"+depositoGeneradoTrasGrabacion.getIntItemIngreso());
+			parametro.put("P_SUCURSAL", sucursalIngreso.getJuridica().getStrSiglas() +" - "+subsucursalIngreso.getStrDescripcion());
+			parametro.put("P_FECHAINGRESO", Constante.sdf.format(depositoGeneradoTrasGrabacion.getDtFechaIngreso()));
+			parametro.put("P_SYSDATE", Constante.sdf.format(fecha));
+			parametro.put("P_HORADIA", formateador.format(fecha));
+			parametro.put("P_FORMPAGO", formaPago.getStrDescripcion());
+			parametro.put("P_MONEDA", tipoMoneda.getStrDescripcion());
+			parametro.put("P_TIPOCAMBIO", depositoGeneradoTrasGrabacion.getBdTipoCambio());
+			parametro.put("P_MONTO", formato.format(getBdMontoDepositarTotal()));
+			parametro.put("P_DESCRIPCIONMONTO", getStrMontoDepositarTotalDescripcion());
+			parametro.put("P_ASIENTO", depositoGeneradoTrasGrabacion.getIntContPeriodoLibro()+"-"+depositoGeneradoTrasGrabacion.getIntContCodigoLibro());
+			parametro.put("P_NUMOPERACION", depositoGeneradoTrasGrabacion.getStrNumeroOperacion());
+			parametro.put("P_PORCOMCEPTO", depositoGeneradoTrasGrabacion.getStrObservacion());
+			if(getBdMontoAjuste()!=null){
+				parametro.put("P_REDONDEO", formato.format(getBdMontoAjuste()));
+			}
+			parametro.put("P_DESCRIPCIONREDONDEO", getStrMontoAjusteDescripcion());
+			usuario = facadePersona.getNaturalPorPK(depositoGeneradoTrasGrabacion.getIntPersPersonaUsuario());
+			parametro.put("P_USUARIO", usuario.getStrApellidoPaterno()+" "+usuario.getStrApellidoMaterno()+", "+usuario.getStrNombres());
+			parametro.put("P_FECHAHORA", Constante.sdf.format(depositoGeneradoTrasGrabacion.getDtFechaIngreso()) +" "+formateador.format(depositoGeneradoTrasGrabacion.getDtFechaIngreso()));
+			parametro.put("P_TOTALDEPOSITO", getBdMontoDepositadoTotal());
+			
+			banCuenta =new Bancocuenta();
+			cuentapk = new BancocuentaId();
+			cuentapk.setIntEmpresaPk(depositoGeneradoTrasGrabacion.getId().getIntIdEmpresa());
+			cuentapk.setIntItembancofondo(depositoGeneradoTrasGrabacion.getIntItemBancoFondo());
+			cuentapk.setIntItembancocuenta(depositoGeneradoTrasGrabacion.getIntItemBancoCuenta());
+			
+			banCuenta = facadeBancoCuenta.getBancoCuentaPorPk(cuentapk);
+			juri = new Juridica();
+			juri = personaFacade.getJuridicaPorPK(banCuenta.getIntPersona());
+			if(juri!=null){
+				parametro.put("P_BANCO", juri.getStrRazonSocial());
+			}
+			cuentaBancaria = new CuentaBancaria();
+			cueBancariaPk = new CuentaBancariaPK();
+			
+			cueBancariaPk.setIntIdPersona(banCuenta.getId().getIntEmpresaPk());
+			cueBancariaPk.setIntIdCuentaBancaria(banCuenta.getIntCuentabancaria());
+			
+			cuentaBancaria = personaFacade.getCuentaBancariaPorPK(cueBancariaPk);
+			
+			if(cuentaBancaria!=null){
+				parametro.put("P_CTACTE", cuentaBancaria.getStrNroCuentaBancaria());
+			}
+			
+			List<Ingreso> listDeposito = new ArrayList<Ingreso>();
+			for (Ingreso ingreso : listaIngresoDepositar) {
+				Ingreso depo = new Ingreso();
+				depo.setStrFechaIngreso(Constante.sdf.format(ingreso.getDtFechaIngreso()));
+				tipoPersona = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOPERSONA), 
+																		 ingreso.getPersona().getIntTipoPersonaCod());
+				depo.setStrDescripcionPersona(tipoPersona.getStrDescripcion());
+				if(ingreso.getPersona().getIntTipoPersonaCod()==1){
+					depo.setStrNombrePersona(ingreso.getPersona().getNatural().getStrNombreCompleto());
+				}else if(ingreso.getPersona().getIntTipoPersonaCod()==2){
+					depo.setStrNombrePersona(ingreso.getPersona().getJuridica().getStrRazonSocial());
+				}
+				tipoMonList = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOMONEDA), 
+																		 ingreso.getIntParaTipoMoneda());
+				depo.setStrDescripcionMoneda(tipoMonList.getStrDescripcion());
+				depo.setBdMontoDepositable(ingreso.getBdMontoDepositable());
+				depo.setStrMontoDepositar(formato.format(ingreso.getBdMontoDepositar()));
+				depo.setStrNumeroIngreso(ingreso.getStrNumeroIngreso());
+				listDeposito.add(depo);
+			}
+			strNombreReporte = "depositoBanco";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(listDeposito), Constante.PARAM_T_TIPOREPORTE_PDF);
+			
+		} catch (Exception e) {
+		}
+	}
 	
 	protected HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -3751,4 +4081,23 @@ public class CajaController {
 	public void setStrMensajeErrorGestor(String strMensajeErrorGestor) {
 		this.strMensajeErrorGestor = strMensajeErrorGestor;
 	}
+
+	public List<Tabla> getLstReporteIngreso() {
+		return lstReporteIngreso;
+	}
+	public void setLstReporteIngreso(List<Tabla> lstReporteIngreso) {
+		this.lstReporteIngreso = lstReporteIngreso;
+	}
+	public Integer getIntTipoCuentaC() {
+		return intTipoCuentaC;
+	}
+	public void setIntTipoCuentaC(Integer intTipoCuentaC) {
+		this.intTipoCuentaC = intTipoCuentaC;
+	}
+	public Boolean getBlnDocumentoAgregado() {
+		return blnDocumentoAgregado;
+	}
+	public void setBlnDocumentoAgregado(Boolean blnDocumentoAgregado) {
+		this.blnDocumentoAgregado = blnDocumentoAgregado;
+	}	
 }

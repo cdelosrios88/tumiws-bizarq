@@ -29,14 +29,17 @@ import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
+import pe.com.tumi.persona.core.domain.CuentaBancaria;
+import pe.com.tumi.persona.core.domain.CuentaBancariaPK;
+import pe.com.tumi.persona.core.facade.PersonaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.seguridad.permiso.domain.Password;
 import pe.com.tumi.seguridad.permiso.domain.PasswordId;
 import pe.com.tumi.seguridad.permiso.facade.PermisoFacadeRemote;
+import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeLocal;
-import pe.com.tumi.tesoreria.egreso.domain.CierreDiarioArqueoDetalle;
 import pe.com.tumi.tesoreria.egreso.domain.Saldo;
 import pe.com.tumi.tesoreria.egreso.facade.CierreDiarioArqueoFacadeRemote;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeLocal;
@@ -52,6 +55,9 @@ public class SaldoController {
 	private EgresoFacadeLocal 	egresoFacade;
 	private BancoFacadeLocal 	bancoFacade;
 	private CierreDiarioArqueoFacadeRemote	cierreDiarioArqueoFacade;
+	//Inicio: REQ14-005 - bizarq - 01/01/2015
+	private PersonaFacadeRemote personaFacade;
+	//Fin: REQ14-005 - bizarq - 01/01/2015
 	
 	private List<Saldo>	listaSaldo;
 	private List<IngresoDetalleInterfaz>listaIngresoDetalleInterfaz;
@@ -107,8 +113,7 @@ public class SaldoController {
 		poseePermiso = PermisoUtil.poseePermiso(Constante.TRANSACCION_CIERRE_CIERREFONDOS);
 		if(usuario!=null && poseePermiso){
 			limpiarFormulario();
-			listaSaldo.clear();
-			saldoFiltro = new Saldo();
+			cargarValoresIniciales();
 			deshabilitarPanelInferior();
 			/*
 			intIdSucursal = SESION_IDSUCURSAL;
@@ -154,6 +159,9 @@ public class SaldoController {
 			permisoFacade = (PermisoFacadeRemote) EJBFactory.getRemote(PermisoFacadeRemote.class);
 			cierreDiarioArqueoFacade = (CierreDiarioArqueoFacadeRemote) EJBFactory.getRemote(CierreDiarioArqueoFacadeRemote.class);
 			//Fin: REQ14-005 - bizarq - 19/10/2014
+			//Inicio: REQ14-005 - bizarq - 01/01/2015
+			personaFacade = (PersonaFacadeRemote) EJBFactory.getRemote(PersonaFacadeRemote.class);
+			//Fin: REQ14-005 - bizarq - 01/01/2015
 			
 			listaBanco = bancoFacade.obtenerListaBancoExistente(EMPRESA_USUARIO);
 			listaFondo = bancoFacade.obtenerListaFondoExistente(EMPRESA_USUARIO);
@@ -264,8 +272,17 @@ public class SaldoController {
 				}
 				for(Bancofondo banco : listaBanco){
 					if(saldo.getIntItemBancoFondo().equals(banco.getId().getIntItembancofondo())){
-						saldo.setStrEtiqueta(banco.getStrEtiqueta());
-						break;
+						for(Bancocuenta bcoCta : banco.getListaBancocuenta()){
+							//if(saldo.getIntItemBancoFondo().equals(bcoCta.getId().getIntItembancofondo())){
+							if(saldo.getIntItemBancoCuenta().equals(bcoCta.getId().getIntItembancocuenta())){
+								CuentaBancariaPK ctaBancariaId = new CuentaBancariaPK();
+								ctaBancariaId.setIntIdPersona(bcoCta.getIntEmpresacuentaPk());
+								ctaBancariaId.setIntIdCuentaBancaria(bcoCta.getIntCuentabancaria());
+								CuentaBancaria ctaBancaria = personaFacade.getCuentaBancariaPorPK(ctaBancariaId);
+								saldo.setStrEtiqueta(banco.getStrEtiqueta() + " - " + ctaBancaria.getStrNroCuentaBancaria());
+								break;
+							}
+						}
 					}
 				}
 				for(Tabla tablaSucursal : listaTablaSucursal){
@@ -345,6 +362,8 @@ public class SaldoController {
 				intResult = egresoFacade.processDailyAmount(dtFechaInicioSaldo, dtFechaFinSaldo, usuario);
 				if(intResult!=null && intResult.equals(Constante.ON_SUCCESS)){
 					mostrarMensaje(Boolean.TRUE, "Se registro correctamene el saldo para el rango de fechas indicadas.");
+					mostrarPanelInferiorNuevo = Boolean.FALSE;
+					mostrarPanelInferiorAnular = Boolean.FALSE;
 				}else{
 					mostrarMensaje(Boolean.FALSE, "Ocurrió un error en el proceso de Saldos Diarios.");
 				}
@@ -397,10 +416,10 @@ public class SaldoController {
 	private boolean isValidDailyAmountProcess(){
 		boolean isValid = Boolean.FALSE;
 		try {
-			if(!isValidCierreArqueoDiario()){
+			/*if(!isValidCierreArqueoDiario()){
 				mostrarMensaje(Boolean.FALSE, "Es necesario ejecutar el cierre de caja para continuar con el proceso de generación de saldos.");
 				return Boolean.TRUE;
-			}
+			}*/
 			
 			if(dtFechaInicioSaldo==null){
 				mostrarMensaje(Boolean.FALSE, "Debe ingresar una fecha de inicio a calcular el saldo.");

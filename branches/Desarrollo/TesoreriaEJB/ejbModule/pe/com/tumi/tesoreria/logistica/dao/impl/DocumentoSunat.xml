@@ -51,6 +51,31 @@
 	<result property="intItemIngresoGeneral"   			column="pitemingresogeneral" />
   </resultMap>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014 -->
+  <resultMap id="resDocSunatParaGiro" class="DocumentoSunat" >
+	<result property="id.intPersEmpresa"  										column="pEMPRESADS" />
+	<result property="id.intItemDocumentoSunat"   								column="pITEMDS" />
+	<result property="intParaDocumentoGeneral"   								column="pDOCGRALDS" />
+	<result property="intParaTipoComprobante"   								column="pTIPOCOMPROBANTE" />
+	<result property="strSerieDocumento"   										column="pSERIEDS" />
+	<result property="strNumeroDocumento"   									column="pNUMERODS" />
+	<result property="strGlosa"  												column="pGLOSADS" />
+	<result property="intPersEmpresaDocSunatEnlazado" 							column="pEMPRESADSREL" />
+	<result property="intItemDocumentoSunatEnlazado"  							column="pITEMDSREL" />
+	<result property="documentoSunatDetalle.id.intItemDocumentoSunatDetalle"  	column="pITEMDSDET" />
+	<result property="documentoSunatDetalle.intSucuIdSucursal"  				column="pIDSUCURSALDS" />
+	<result property="documentoSunatDetalle.intSudeIdSubsucursal"  				column="pIDSUBSUCURSALDS" />
+	<result property="documentoSunatDetalle.intParaTipoCptoDocumentoSunat"  	column="pTIPOCPTODS" />
+	<result property="documentoSunatDetalle.intParaTipoMoneda"  				column="pTIPOMONEDA" />
+	<result property="documentoSunatDetalle.bdMontoTotal"  						column="pMONTODS" />
+	<result property="docDetraccion.id.intItemDocumentoSunatDoc"  				column="pITEMDSDOC" />
+	<result property="docDetraccion.intParaTipoDocumentoGeneral"  				column="pDOCGRALDSDOC" />
+	<result property="docDetraccion.intParaEstadoPagoDocSunat"  				column="pESTPAGODS" />
+	<result property="docDetraccion.bdMontoDocumento"  							column="pMONTODSDOC" />
+	<result property="documentoRequisicion.requisicion.intParaTipoRequisicion"  column="pTIPOREQ" />
+  </resultMap>  
+  <!-- Fin jchavez - 29.12.2014 -->
+  
   <parameterMap id="parDocumentoSunat" class="DocumentoSunat">
 	 <parameter property="id.intPersEmpresa"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="id.intItemDocumentoSunat"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
@@ -157,6 +182,15 @@
   </parameterMap>  
   <!-- Fin jchavez - 24.10.2014 -->
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014 -->
+  <parameterMap id="parPorProveedorYComprobante" class="java.util.Map">
+  	 <parameter property="cursorLista" 				javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT"/>
+   	 <parameter property="intPersEmpresa" 			javaType="java.lang.Integer" 		jdbcType="NUMERIC"      mode="IN"/>
+   	 <parameter property="intPersProveedor"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+   	 <parameter property="intTipoComprobante"		javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+  </parameterMap>  
+  <!-- Fin jchavez - 29.12.2014 -->
+  
   <procedure id="grabar" parameterMap="parDocumentoSunat">
 	{ call PKG_DOCUMENTOSUNAT.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
@@ -192,4 +226,10 @@
 	{ call PKG_DOCUMENTOSUNAT.getValidarCierreDocumento(?,?) }	
   </procedure>  
   <!-- Fin jchavez - 24.10.2014 -->
+  
+    <!-- Autor: jchavez / Tarea: Creación / Fecha: 29.12.2014 -->
+  <procedure id="getDocSunatParaGiro" parameterMap="parPorProveedorYComprobante" resultMap="resDocSunatParaGiro"> 
+	{ call PKG_DOCUMENTOSUNAT.getDocSunatParaGiro(?,?,?,?) }	
+  </procedure>  
+  <!-- Fin jchavez - 29.12.2014 -->
 </sqlMap>

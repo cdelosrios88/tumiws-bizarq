@@ -320,7 +320,7 @@ public class OrdenCompraService {
 		List<OrdenCompra> lstOrdenCompra = new ArrayList<OrdenCompra>();
 		try {
 			OrdenCompra ordComp = new OrdenCompra();
-			List<OrdenCompraDocumento> lstOrdComDoc = boOrdenCompraDocumento.getListaPorEgreso(egreso);
+			List<OrdenCompraDocumento> lstOrdComDoc = null;//boOrdenCompraDocumento.getListaPorEgreso(egreso);
 			
 			if (lstOrdComDoc!=null && !lstOrdComDoc.isEmpty()) {
 				ordComp.setId(new OrdenCompraId());
