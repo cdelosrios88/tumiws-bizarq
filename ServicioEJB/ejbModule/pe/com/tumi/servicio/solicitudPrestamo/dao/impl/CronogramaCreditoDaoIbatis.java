@@ -76,5 +76,14 @@ public class CronogramaCreditoDaoIbatis extends TumiDaoIbatis implements Cronogr
 		return lista;
 	}
 	
-	
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014
+	public List<CronogramaCredito> getListaPorPkExpCredYPeriodo(Object o) throws DAOException{
+		List<CronogramaCredito> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaPorPkExpCredYPeriodo", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}	
 }

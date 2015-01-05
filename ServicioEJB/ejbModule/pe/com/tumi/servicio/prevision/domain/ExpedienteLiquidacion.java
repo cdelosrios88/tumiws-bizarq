@@ -81,6 +81,8 @@ public class ExpedienteLiquidacion extends TumiDomain{
 	private Movimiento movimiento;
 	private CuentaConceptoComp cuentaConceptoComp;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+	private Integer	intCorrespondePrevision;
 	
 	public SocioComp getSocioComp() {
 		return socioComp;
@@ -442,6 +444,14 @@ public class ExpedienteLiquidacion extends TumiDomain{
 
 	public void setCuentaConceptoComp(CuentaConceptoComp cuentaConceptoComp) {
 		this.cuentaConceptoComp = cuentaConceptoComp;
+	}
+
+	public Integer getIntCorrespondePrevision() {
+		return intCorrespondePrevision;
+	}
+
+	public void setIntCorrespondePrevision(Integer intCorrespondePrevision) {
+		this.intCorrespondePrevision = intCorrespondePrevision;
 	}
 	
 }

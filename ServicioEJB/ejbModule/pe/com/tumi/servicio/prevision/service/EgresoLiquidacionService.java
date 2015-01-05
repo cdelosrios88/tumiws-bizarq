@@ -29,6 +29,8 @@ import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.Cuenta;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.facade.CuentaFacadeRemote;
 import pe.com.tumi.credito.socio.core.domain.SocioEstructura;
 import pe.com.tumi.credito.socio.core.facade.SocioFacadeRemote;
+import pe.com.tumi.empresa.domain.Subsucursal;
+import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.movimiento.concepto.domain.CuentaConcepto;
@@ -41,6 +43,7 @@ import pe.com.tumi.parametro.general.domain.TipoCambioId;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.persona.core.domain.CuentaBancaria;
 import pe.com.tumi.persona.core.domain.Persona;
+import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.EstadoLiquidacion;
@@ -48,6 +51,10 @@ import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionDetalle;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.EgresoDetalleInterfaz;
 import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
+import pe.com.tumi.tesoreria.banco.domain.Bancofondo;
+import pe.com.tumi.tesoreria.banco.domain.BancofondoId;
+import pe.com.tumi.tesoreria.banco.domain.Fondodetalle;
+import pe.com.tumi.tesoreria.banco.facade.BancoFacadeRemote;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.egreso.domain.EgresoDetalle;
@@ -354,6 +361,144 @@ public class EgresoLiquidacionService {
 		return planCuenta;
 	}
 	
+	private PlanCuenta obtenerPlanCuentaOrigenTelecredito(ControlFondosFijos controlFondosFijos, Usuario usuarioSesion) throws Exception{		
+		BancoFacadeRemote bancoFacade = (BancoFacadeRemote) EJBFactory.getRemote(BancoFacadeRemote.class);
+		EmpresaFacadeRemote empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
+		
+		List<Fondodetalle> lstFondoDetalle = null;
+		List<Sucursal> lstSucursal = null;
+		List<Subsucursal> lstSubSucursal = null;
+		
+		Bancofondo bancofondo = new Bancofondo();
+		bancofondo.setId(new BancofondoId());
+		PlanCuenta planCuenta = new PlanCuenta();
+		planCuenta.setId(new PlanCuentaId());
+		bancofondo.getId().setIntEmpresaPk(controlFondosFijos.getId().getIntPersEmpresa());
+		bancofondo.setIntTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
+		bancofondo = bancoFacade.getBancoFondoPorTipoFondoFijoYMoneda(bancofondo);
+		
+		if (bancofondo!=null) {
+			lstFondoDetalle = bancoFacade.getListaFondoDetallePorBancoFondo(bancofondo);
+			if (lstFondoDetalle!=null && !lstFondoDetalle.isEmpty()) {
+				for (Fondodetalle fd : lstFondoDetalle) {
+					if (fd.getIntCodigodetalle().equals(1)) {
+						if (fd.getIntIdsucursal()!=null && fd.getIntIdsucursal().equals(usuarioSesion.getSucursal().getId().getIntIdSucursal())) {
+							if (fd.getIntIdsubsucursal()!=null && fd.getIntIdsubsucursal().equals(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal())) {
+								planCuenta.getId().setIntEmpresaCuentaPk(fd.getIntEmpresacuentaPk());
+								planCuenta.getId().setIntPeriodoCuenta(fd.getIntPeriodocuenta());
+								planCuenta.getId().setStrNumeroCuenta(fd.getStrNumerocuenta());
+								break;
+							}
+						}else if(fd.getIntIdsucursal()==null && fd.getIntIdsubsucursal()==null){
+							if (fd.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_SUCURSALES)) {//-2
+								lstSucursal = empresaFacade.getListaSucursalPorPkEmpresa(bancofondo.getId().getIntEmpresaPk());
+								if (lstSucursal!=null && !lstSucursal.isEmpty()) {
+									for (Sucursal sucursal : lstSucursal) {
+										if (sucursal.getId().getIntIdSucursal().equals(usuarioSesion.getSucursal().getId().getIntIdSucursal())) {
+											lstSubSucursal = empresaFacade.getListaSubSucursalPorIdSucursal(sucursal.getId().getIntIdSucursal());
+											if (lstSubSucursal!=null && !lstSubSucursal.isEmpty()) {
+												for (Subsucursal subsucursal : lstSubSucursal) {
+													if (subsucursal.getId().getIntIdSubSucursal().equals(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal())) {
+														planCuenta.getId().setIntEmpresaCuentaPk(fd.getIntEmpresacuentaPk());
+														planCuenta.getId().setIntPeriodoCuenta(fd.getIntPeriodocuenta());
+														planCuenta.getId().setStrNumeroCuenta(fd.getStrNumerocuenta());
+														break;
+													}
+												}
+											}
+										}
+										
+									}
+								}
+							}else if (fd.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_AGENCIAS)) {//-3
+								lstSucursal = empresaFacade.getListaSucursalPorEmpresaYTipoSucursal(bancofondo.getId().getIntEmpresaPk(),Constante.PARAM_T_TIPOSUCURSAL_AGENCIA);//1
+								if (lstSucursal!=null && !lstSucursal.isEmpty()) {
+									for (Sucursal sucursal : lstSucursal) {
+										if (sucursal.getId().getIntIdSucursal().equals(usuarioSesion.getSucursal().getId().getIntIdSucursal())) {
+											lstSubSucursal = empresaFacade.getListaSubSucursalPorIdSucursal(sucursal.getId().getIntIdSucursal());
+											if (lstSubSucursal!=null && !lstSubSucursal.isEmpty()) {
+												for (Subsucursal subsucursal : lstSubSucursal) {
+													if (subsucursal.getId().getIntIdSubSucursal().equals(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal())) {
+														planCuenta.getId().setIntEmpresaCuentaPk(fd.getIntEmpresacuentaPk());
+														planCuenta.getId().setIntPeriodoCuenta(fd.getIntPeriodocuenta());
+														planCuenta.getId().setStrNumeroCuenta(fd.getStrNumerocuenta());
+														break;
+													}
+												}
+											}
+										}
+										
+									}
+								}
+							}else if (fd.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_FILIALES)) {//-4
+								lstSucursal = empresaFacade.getListaSucursalPorEmpresaYTipoSucursal(bancofondo.getId().getIntEmpresaPk(),Constante.PARAM_T_TIPOSUCURSAL_FILIAL);//2
+								if (lstSucursal!=null && !lstSucursal.isEmpty()) {
+									for (Sucursal sucursal : lstSucursal) {
+										if (sucursal.getId().getIntIdSucursal().equals(usuarioSesion.getSucursal().getId().getIntIdSucursal())) {
+											lstSubSucursal = empresaFacade.getListaSubSucursalPorIdSucursal(sucursal.getId().getIntIdSucursal());
+											if (lstSubSucursal!=null && !lstSubSucursal.isEmpty()) {
+												for (Subsucursal subsucursal : lstSubSucursal) {
+													if (subsucursal.getId().getIntIdSubSucursal().equals(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal())) {
+														planCuenta.getId().setIntEmpresaCuentaPk(fd.getIntEmpresacuentaPk());
+														planCuenta.getId().setIntPeriodoCuenta(fd.getIntPeriodocuenta());
+														planCuenta.getId().setStrNumeroCuenta(fd.getStrNumerocuenta());
+														break;
+													}
+												}
+											}
+										}
+										
+									}
+								}
+							}else if (fd.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_OFICINAPRINCIPAL)) {//-5
+								lstSucursal = empresaFacade.getListaSucursalPorEmpresaYTipoSucursal(bancofondo.getId().getIntEmpresaPk(),Constante.PARAM_T_TIPOSUCURSAL_OFICINAPRINCIPAL);//4
+								if (lstSucursal!=null && !lstSucursal.isEmpty()) {
+									for (Sucursal sucursal : lstSucursal) {
+										if (sucursal.getId().getIntIdSucursal().equals(usuarioSesion.getSucursal().getId().getIntIdSucursal())) {
+											lstSubSucursal = empresaFacade.getListaSubSucursalPorIdSucursal(sucursal.getId().getIntIdSucursal());
+											if (lstSubSucursal!=null && !lstSubSucursal.isEmpty()) {
+												for (Subsucursal subsucursal : lstSubSucursal) {
+													if (subsucursal.getId().getIntIdSubSucursal().equals(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal())) {
+														planCuenta.getId().setIntEmpresaCuentaPk(fd.getIntEmpresacuentaPk());
+														planCuenta.getId().setIntPeriodoCuenta(fd.getIntPeriodocuenta());
+														planCuenta.getId().setStrNumeroCuenta(fd.getStrNumerocuenta());
+														break;
+													}
+												}
+											}
+										}
+										
+									}
+								}
+							}else if (fd.getIntTotalsucursalCod().equals(Constante.PARAM_T_TOTALESSUCURSALES_SEDE)) {//-6
+								lstSucursal = empresaFacade.getListaSucursalPorEmpresaYTipoSucursal(bancofondo.getId().getIntEmpresaPk(),Constante.PARAM_T_TIPOSUCURSAL_SEDECENTRAL);//3
+								if (lstSucursal!=null && !lstSucursal.isEmpty()) {
+									for (Sucursal sucursal : lstSucursal) {
+										if (sucursal.getId().getIntIdSucursal().equals(usuarioSesion.getSucursal().getId().getIntIdSucursal())) {
+											lstSubSucursal = empresaFacade.getListaSubSucursalPorIdSucursal(sucursal.getId().getIntIdSucursal());
+											if (lstSubSucursal!=null && !lstSubSucursal.isEmpty()) {
+												for (Subsucursal subsucursal : lstSubSucursal) {
+													if (subsucursal.getId().getIntIdSubSucursal().equals(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal())) {
+														planCuenta.getId().setIntEmpresaCuentaPk(fd.getIntEmpresacuentaPk());
+														planCuenta.getId().setIntPeriodoCuenta(fd.getIntPeriodocuenta());
+														planCuenta.getId().setStrNumeroCuenta(fd.getStrNumerocuenta());
+														break;
+													}
+												}
+											}
+										}
+										
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return planCuenta;
+	}
+	
 	private LibroDiarioDetalle generarLibroDiarioDetalle(SocioEstructura socioEstructura, EgresoDetalleInterfaz egresoDetalleInterfaz,
 		ExpedienteLiquidacion expedienteLiquidacion, ControlFondosFijos controlFondosFijos, BigDecimal bdTotalEgresoDetalleInterfaz)
 		throws Exception{
@@ -572,8 +717,10 @@ public class EgresoLiquidacionService {
 			egreso.setIntCuentaGirado(null);
 			egreso.setIntCuentaGirado(null);
 			//20.05.2014 jchavez cambio de tipo de dato
-			egreso.setStrPersCuentaBancariaGirado(null);			
-//			egreso.setIntPersCuentaBancariaGirado(null);
+			//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//			egreso.setStrPersCuentaBancariaGirado(null);			
+			egreso.setIntPersCuentaBancariaGirado(null);
+			//Fin jchavez - 19.09.2014
 			egreso.setIntPersEmpresaBeneficiario(intIdEmpresa);
 			egreso.setIntPersPersonaBeneficiario(intIdPersonaBeneficiarioSeleccionar);
 			egreso.setIntPersCuentaBancariaBeneficiario(null);
@@ -790,8 +937,11 @@ public class EgresoLiquidacionService {
 			egreso.setIntCuentaGirado(null);
 			egreso.setIntCuentaGirado(null);
 			//20.05.2014 jchavez cambio de tipo de dato
-			egreso.setStrPersCuentaBancariaGirado(cuentaBancariaDestino.getStrNroCuentaBancaria());
-//			egreso.setIntPersCuentaBancariaGirado(cuentaBancariaDestino.getId().getIntIdCuentaBancaria());
+			//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//			egreso.setStrPersCuentaBancariaGirado(cuentaBancariaDestino.getStrNroCuentaBancaria());
+			egreso.setIntPersCuentaBancariaGirado(cuentaBancariaDestino.getId().getIntIdCuentaBancaria());
+			//Fin jchavez - 19.09.2014
+			
 			egreso.setIntPersEmpresaBeneficiario(intIdEmpresa);
 			egreso.setIntPersPersonaBeneficiario(intIdPersonaBeneficiarioSeleccionar);
 			egreso.setIntPersCuentaBancariaBeneficiario(null);
@@ -969,7 +1119,7 @@ public class EgresoLiquidacionService {
 			//Generación del Egreso (cabecera)
 			egreso.getId().setIntPersEmpresaEgreso(intIdEmpresa);
 			egreso.setIntParaTipoOperacion(Constante.PARAM_T_TIPODEOPERACION_EGRESO);
-			egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_EFECTIVO);
+			
 			egreso.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION);
 			egreso.setIntItemPeriodoEgreso(obtenerPeriodoActual());
 			egreso.setIntItemEgreso(null);
@@ -982,9 +1132,28 @@ public class EgresoLiquidacionService {
 			}
 			egreso.setTsFechaProceso(obtenerFechaActual());
 			egreso.setDtFechaEgreso(obtenerFechaActual());
-			egreso.setIntParaTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
-			egreso.setIntItemPeriodoFondo(controlFondosFijos.getId().getIntItemPeriodoFondo());
-			egreso.setIntItemFondoFijo(controlFondosFijos.getId().getIntItemFondoFijo());
+			//Autor: jchavez / Tarea: Modificación / Fecha: 21.08.2014 /
+			if (controlFondosFijos.getId().getIntParaTipoFondoFijo().equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+				egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_TRANSFERENCIA);
+				egreso.setIntParaTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
+				egreso.setIntItemPeriodoFondo(null);
+				egreso.setIntItemFondoFijo(null);
+				//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//				egreso.setStrPersCuentaBancariaGirado(controlFondosFijos.getCuentaBancaria().getStrNroCuentaBancaria());
+				egreso.setIntPersCuentaBancariaGirado(controlFondosFijos.getCuentaBancaria().getId().getIntIdCuentaBancaria());
+				//Fin jchavez - 19.09.2014
+				
+			}else {
+				egreso.setIntParaFormaPago(Constante.PARAM_T_FORMAPAGOEGRESO_EFECTIVO);
+				egreso.setIntParaTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
+				egreso.setIntItemPeriodoFondo(controlFondosFijos.getId().getIntItemPeriodoFondo());
+				egreso.setIntItemFondoFijo(controlFondosFijos.getId().getIntItemFondoFijo());
+				//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//				egreso.setStrPersCuentaBancariaGirado(null);
+				egreso.setIntPersCuentaBancariaGirado(null);
+				//Fin jchavez - 19.09.2014
+			}
+			//fin jchavez - 21.08.2014
 			egreso.setIntItemBancoFondo(null);
 			egreso.setIntItemBancoCuenta(null);
 			egreso.setIntItemBancoCuentaCheque(null);
@@ -996,7 +1165,6 @@ public class EgresoLiquidacionService {
 			egreso.setIntPersPersonaGirado(personaGirar.getIntIdPersona());
 			egreso.setIntCuentaGirado(expedienteLiquidacion.getCuentaLiquidar().getId().getIntCuenta());
 			//20.05.2014 jchavez cambio de tipo de dato
-			egreso.setStrPersCuentaBancariaGirado(null);
 //			egreso.setIntPersCuentaBancariaGirado(null);
 			egreso.setIntPersEmpresaBeneficiario(intIdEmpresa);
 			egreso.setIntPersPersonaBeneficiario(intIdPersonaBeneficiarioSeleccionar);
@@ -1063,7 +1231,7 @@ public class EgresoLiquidacionService {
 			}
 			
 			//Generando el Libro Diario Detalle fondo de cambio
-			LibroDiarioDetalle libroDiarioDetalleFondoFijo = generarCFFLibroDiarioDetalle(expedienteLiquidacion, controlFondosFijos, tipoCambioActual,bdMontoDebeHaberTotal);			
+			LibroDiarioDetalle libroDiarioDetalleFondoFijo = generarCFFLibroDiarioDetalle(expedienteLiquidacion, controlFondosFijos, tipoCambioActual,bdMontoDebeHaberTotal,usuario);			
 			if(libroDiarioDetalleFondoFijo != null) libroDiario.getListaLibroDiarioDetalle().add(libroDiarioDetalleFondoFijo);
 			
 
@@ -1219,8 +1387,11 @@ public class EgresoLiquidacionService {
 			egreso.setIntPersPersonaGirado(personaGirar.getIntIdPersona());
 			egreso.setIntCuentaGirado(expedienteLiquidacion.getCuentaLiquidar().getId().getIntCuenta());
 			//20.05.2014 jchavez cambio de tipo de dato
-			egreso.setStrPersCuentaBancariaGirado(null);
-//			egreso.setIntPersCuentaBancariaGirado(null);
+			//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//			egreso.setStrPersCuentaBancariaGirado(null);
+			egreso.setIntPersCuentaBancariaGirado(null);
+			//Fin jchavez - 19.09.2014
+			
 			egreso.setIntPersEmpresaBeneficiario(intIdEmpresa);
 			egreso.setIntPersPersonaBeneficiario(intIdPersonaBeneficiarioSeleccionar);
 			egreso.setIntPersCuentaBancariaBeneficiario(null);
@@ -1427,8 +1598,11 @@ public class EgresoLiquidacionService {
 			egreso.setIntPersPersonaGirado(personaGirar.getIntIdPersona());
 			egreso.setIntCuentaGirado(expedienteLiquidacion.getCuentaLiquidar().getId().getIntCuenta());
 			//20.05.2014 jchavez cambio de tipo de dato
-			egreso.setStrPersCuentaBancariaGirado(cuentaBancariaDestino!=null?cuentaBancariaDestino.getStrNroCuentaBancaria():null);
-//			egreso.setIntPersCuentaBancariaGirado(cuentaBancariaDestino!=null?Integer.parseInt(cuentaBancariaDestino.getStrNroCuentaBancaria()):null);
+			//Autor jchavez / Tarea: Se regresa al tipo de dato integer y se graba la llave de la cuenta / Fecha: 19.09.2014
+//			egreso.setStrPersCuentaBancariaGirado(cuentaBancariaDestino!=null?cuentaBancariaDestino.getStrNroCuentaBancaria():null);
+			egreso.setIntPersCuentaBancariaGirado(cuentaBancariaDestino!=null?cuentaBancariaDestino.getId().getIntIdCuentaBancaria():null);
+			//Fin jchavez - 19.09.2014
+
 			egreso.setIntPersEmpresaBeneficiario(intIdEmpresa);
 			egreso.setIntPersPersonaBeneficiario(intIdPersonaBeneficiarioSeleccionar);
 			egreso.setIntPersCuentaBancariaBeneficiario(null);
@@ -1596,10 +1770,19 @@ public class EgresoLiquidacionService {
 
 		
 		if(controlFondosFijos!=null){
-			egresoDetalle.setIntParaTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
-			egresoDetalle.setIntItemPeriodoFondo(controlFondosFijos.getId().getIntItemPeriodoFondo());
-			egresoDetalle.setIntSucuIdSucursal(controlFondosFijos.getId().getIntSucuIdSucursal());
-			egresoDetalle.setIntItemFondoFijo(controlFondosFijos.getId().getIntItemFondoFijo());
+			//Autor: jchavez / Tarea: Modificación / Fecha: 21.08.2014 /
+			if (controlFondosFijos.getId().getIntParaTipoFondoFijo().equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+				egresoDetalle.setIntParaTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
+				egresoDetalle.setIntItemPeriodoFondo(null);
+				egresoDetalle.setIntSucuIdSucursal(null);
+				egresoDetalle.setIntItemFondoFijo(null);
+			}else {
+				egresoDetalle.setIntParaTipoFondoFijo(controlFondosFijos.getId().getIntParaTipoFondoFijo());
+				egresoDetalle.setIntItemPeriodoFondo(controlFondosFijos.getId().getIntItemPeriodoFondo());
+				egresoDetalle.setIntSucuIdSucursal(controlFondosFijos.getId().getIntSucuIdSucursal());
+				egresoDetalle.setIntItemFondoFijo(controlFondosFijos.getId().getIntItemFondoFijo());
+			}
+			//fin jchavez - 21.08.2014
 		}
 		egresoDetalle.setExpedienteLiquidacionDetalle(expedienteLiquidacionDetalle);
 		return egresoDetalle;
@@ -1682,7 +1865,7 @@ public class EgresoLiquidacionService {
 	 * @return
 	 * @throws Exception
 	 */
-	private LibroDiarioDetalle generarCFFLibroDiarioDetalle(ExpedienteLiquidacion expedienteLiquidacion, ControlFondosFijos controlFondosFijos, TipoCambio tipoCambioActual, BigDecimal bdMontoDebeHaberTotal) throws Exception{
+	private LibroDiarioDetalle generarCFFLibroDiarioDetalle(ExpedienteLiquidacion expedienteLiquidacion, ControlFondosFijos controlFondosFijos, TipoCambio tipoCambioActual, BigDecimal bdMontoDebeHaberTotal,Usuario usuarioSesion) throws Exception{
 		LibroDiarioDetalle libroDiarioDetalle = null;
 		Integer intIdEmpresa = expedienteLiquidacion.getId().getIntPersEmpresaPk();
 		PlanCuentaId pId = new PlanCuentaId();
@@ -1697,7 +1880,16 @@ public class EgresoLiquidacionService {
 	
 			libroDiarioDetalle.setIntPersPersona(expedienteLiquidacion.getPersonaGirar().getIntIdPersona());
 			//Datos Generales del Plan de Cuenta 
-			PlanCuenta planCuenta = obtenerPlanCuentaOrigenCFF(controlFondosFijos);
+			PlanCuenta planCuenta = null;
+			//Autor: jchavez / Tarea: Modificación / Fecha: 21.08.2014 /
+			if (controlFondosFijos.getId().getIntParaTipoFondoFijo().equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+				planCuenta = obtenerPlanCuentaOrigenTelecredito(controlFondosFijos, usuarioSesion);
+			}else{
+				planCuenta = obtenerPlanCuentaOrigenCFF(controlFondosFijos);
+			}
+			if (planCuenta.getId().getIntPeriodoCuenta()==null) {
+				throw new Exception("El plan de cuenta tiene un problema al obtener la cuenta");
+			}	
 			libroDiarioDetalle.setIntPersEmpresaCuenta(planCuenta.getId().getIntEmpresaCuentaPk());
 			libroDiarioDetalle.setIntContPeriodo(planCuenta.getId().getIntPeriodoCuenta());
 			libroDiarioDetalle.setStrContNumeroCuenta(planCuenta.getId().getStrNumeroCuenta());			
@@ -1709,9 +1901,17 @@ public class EgresoLiquidacionService {
 			libroDiarioDetalle.setStrComentario(planCuentaFacade.getPlanCuentaPorPk(pId).getStrDescripcion().length()<20?planCuentaFacade.getPlanCuentaPorPk(pId).getStrDescripcion():planCuentaFacade.getPlanCuentaPorPk(pId).getStrDescripcion().substring(0, 20));
 				
 			libroDiarioDetalle.setStrSerieDocumento(null);
-			libroDiarioDetalle.setIntPersEmpresaSucursal(controlFondosFijos.getSucursal().getId().getIntPersEmpresaPk());
-			libroDiarioDetalle.setIntSucuIdSucursal(controlFondosFijos.getSucursal().getId().getIntIdSucursal());
-			libroDiarioDetalle.setIntSudeIdSubSucursal(controlFondosFijos.getSubsucursal().getId().getIntIdSubSucursal());			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 21.08.2014 /
+			if (controlFondosFijos.getId().getIntParaTipoFondoFijo().equals(Constante.PARAM_T_TIPOFONDOFIJO_PLANILLATELECREDITO)) {
+				libroDiarioDetalle.setIntPersEmpresaSucursal(usuarioSesion.getPerfil().getId().getIntPersEmpresaPk());
+				libroDiarioDetalle.setIntSucuIdSucursal(usuarioSesion.getSucursal().getId().getIntIdSucursal());
+				libroDiarioDetalle.setIntSudeIdSubSucursal(usuarioSesion.getSubSucursal().getId().getIntIdSubSucursal());
+			}else{
+				libroDiarioDetalle.setIntPersEmpresaSucursal(controlFondosFijos.getSucursal().getId().getIntPersEmpresaPk());
+				libroDiarioDetalle.setIntSucuIdSucursal(controlFondosFijos.getSucursal().getId().getIntIdSucursal());
+				libroDiarioDetalle.setIntSudeIdSubSucursal(controlFondosFijos.getSubsucursal().getId().getIntIdSubSucursal());	
+			}
+					
 	
 			if(cuenta.getIntParaTipoMonedaCod().compareTo(Constante.PARAM_T_TIPOMONEDA_SOL)==0){
 				libroDiarioDetalle.setIntParaMonedaDocumento(Constante.PARAM_T_TIPOMONEDA_SOL);

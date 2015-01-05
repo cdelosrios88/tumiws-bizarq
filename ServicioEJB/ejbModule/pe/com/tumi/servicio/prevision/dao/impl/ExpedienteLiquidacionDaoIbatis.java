@@ -1,5 +1,6 @@
 package pe.com.tumi.servicio.prevision.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import pe.com.tumi.framework.negocio.exception.DAOException;
@@ -124,5 +125,19 @@ public class ExpedienteLiquidacionDaoIbatis extends TumiDaoIbatis implements Exp
 			throw new DAOException (e);
 		}
 		return lista;
+	}	
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+	public Integer getCorrespondePrevision(Object o) throws DAOException {
+		Integer escalar = null;
+		try{
+			HashMap<String, Object> m = null;
+			getSqlMapClientTemplate().queryForObject(getNameSpace() + ".getCorrespondePrevision",o);
+			m = (HashMap<String, Object>)o;
+			escalar = (Integer)m.get("intCorrespondePrevision");
+		}catch(Exception e) {
+			throw new DAOException(e);
+		}
+		return escalar;
 	}	
 }

@@ -455,14 +455,15 @@ public class SolicitudPrestamoService {
 						ConfServDetalle confServDetalle = new ConfServDetalle();
 						for(RequisitoCredito requisitoCredito : listaRequisitoCredito){
 							//jchavez 23.06.2014 se quita de la lista el adjunto de giro para mostrar en la solicitud
+							//Autor: jchavez / Tarea: Modificación / Fecha: 18.12.2014 / Se vuelve a mostrar el adjunto de giro. 
 							ConfServDetalleId id = new ConfServDetalleId();
 							id.setIntPersEmpresaPk(requisitoCredito.getIntPersEmpresaRequisitoPk());
 							id.setIntItemSolicitud(requisitoCredito.getIntItemReqAut());
 							id.setIntItemDetalle(requisitoCredito.getIntItemReqAutDet());
 							confServDetalle = boConfServDetalle.getPorPk(id);
 
-							if(requisitoCredito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0 
-									&& !(confServDetalle.getIntParaTipoDescripcion().compareTo(22)==0)){
+							if(requisitoCredito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0) {
+//									&& !(confServDetalle.getIntParaTipoDescripcion().compareTo(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)==0)){ //Fin jchavez - 18.12.2014
 								requisitoCreditoComp = new RequisitoCreditoComp();
 								detalle = new ConfServDetalle();
 								detalle.setId(new ConfServDetalleId());
@@ -493,7 +494,18 @@ public class SolicitudPrestamoService {
 											
 											try {
 												if (existFile(tipoArchivo.getStrRuta()+ "\\" + archivo.getStrNombrearchivo())) {
-													byteImg = FileUtil.getDataImage(tipoArchivo.getStrRuta()+ "\\" + archivo.getStrNombrearchivo());
+													// Autor: jchavez / Tarea: Modificacion / Fecha: 18.12.2014 / Salida rápida que valida si el adjunto es imagen o no
+													if ((archivo.getStrNombrearchivo().trim().indexOf("JPG") > -1)
+															|| (archivo.getStrNombrearchivo().trim().indexOf("GIF") > -1) 
+															|| (archivo.getStrNombrearchivo().trim().indexOf("PNG") > -1)
+															|| (archivo.getStrNombrearchivo().trim().indexOf("BMP") > -1)) {
+														byteImg = FileUtil.getDataImage(tipoArchivo.getStrRuta()+ "\\" + archivo.getStrNombrearchivo());
+													}else {
+														archivo.setRutaActual(tipoArchivo.getStrRuta());
+														archivo.setStrNombrearchivo(archivo.getStrNombrearchivo());
+														requisitoCreditoComp.setFileDocAdjunto(null);
+														requisitoCreditoComp.setArchivoAdjunto(archivo);
+													}
 												}												
 											} catch (IOException e) {
 												e.printStackTrace();
@@ -506,8 +518,7 @@ public class SolicitudPrestamoService {
 												archivo.setStrNombrearchivo(archivo.getStrNombrearchivo());
 												requisitoCreditoComp.setFileDocAdjunto(myFile);
 												requisitoCreditoComp.setArchivoAdjunto(archivo);
-											}
-											
+											}											
 										}
 			
 									}
@@ -2128,9 +2139,16 @@ public class SolicitudPrestamoService {
      * @return
      * @throws Exception
      */
+//    public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}
+    
     public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
     
 	/**
 	 * 
@@ -5748,7 +5766,8 @@ public class SolicitudPrestamoService {
 								|| confCreditoViejo.getIntParaTipoCreditoEmpresa().equals(Constante.PARAM_T_TIPOCREDITOEMPRESA_REFINANCIAMIENTO_PROMOCIONAL)
 								|| confCreditoViejo.getIntParaTipoCreditoEmpresa().equals(Constante.PARAM_T_TIPOCREDITOEMPRESA_REFINANCIAMIENTO_ESPECIAL)) {
 							estadoCredito = boEstadoCredito.getMaxEstadoCreditoPorPokExpedienteCredito(expCredViejo.getId());
-							if (estadoCredito.getIntParaEstadoCreditoCod().equals(Constante.PARAM_T_ESTADOSOLICPRESTAMO_APROBADO)) {
+							//Autor: jchavez / Tarea: Modificación, se cambia de aprobado a girado / Fecha: 18.11.2014
+							if (estadoCredito.getIntParaEstadoCreditoCod().equals(Constante.PARAM_T_ESTADOSOLICPRESTAMO_GIRADO)) {
 								calendar.setTimeInMillis(estadoCredito.getTsFechaEstado().getTime());
 								calendar.add(Calendar.DATE, 1);
 								tsFechaInicial = new Timestamp(calendar.getTimeInMillis());
@@ -5824,12 +5843,62 @@ public class SolicitudPrestamoService {
 									}
 								}
 								if (!blnTieneRiesgo) {
+									Boolean blnTipoCptoGralInteres = false;
 									for (ModeloDetalleNivel modeloDetalleNivel : listaModDetNiv) {
 										if(modeloDetalleNivel.getIntParaTipoRegistro().compareTo(Constante.PARAM_T_MODELO_TIPO_REGISTRO_TABLA)==0){
 											if ((modeloDetalleNivel.getIntDatoTablas().equals(Integer.parseInt(Constante.PARAM_T_TIPOCONCEPTOGENERAL)))
 													&& (modeloDetalleNivel.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_AMORTIZACION))){
 												blnTipoConceptoGral = true;
 												break;
+											}
+											if ((modeloDetalleNivel.getIntDatoTablas().equals(Integer.parseInt(Constante.PARAM_T_TIPOCONCEPTOGENERAL)))
+													&& (modeloDetalleNivel.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_INTERES))){
+												blnTipoCptoGralInteres = true;
+												break;
+											}
+										}
+									}
+									if (blnTipoCptoGralInteres) {
+										bdMontoDebeHaber = BigDecimal.ZERO;
+										//Se reinicia el objeto.
+										diarioDet = new LibroDiarioDetalle();
+										diarioDet.setId(new LibroDiarioDetalleId());
+										for (ModeloDetalleNivel modeloDetalleNivel : listaModDetNiv) {
+											if (modeloDetalleNivel.getIntParaTipoRegistro().equals(Constante.PARAM_T_MODELO_TIPO_REGISTRO_FIJO)) {
+												if (modeloDetalleNivel.getStrDescripcion().equalsIgnoreCase(Constante.PARAM_T_MODELO_REFINANCIAMIENTO_MONTO_INTERES_ATRASADO)) {
+													bdMontoDebeHaber = bdMontoDebeHaber.add(expedienteCreditoRef.getBdMontoInteresAtrasado());
+												}
+												
+												if (bdMontoDebeHaber.compareTo(BigDecimal.ZERO)==1) {
+													diarioDet.setIntParaMonedaDocumento(Constante.PARAM_T_TIPOMONEDA_SOLES);
+													diarioDet.setIntContPeriodo(modeloDetalle.getId().getIntContPeriodoCuenta());
+													diarioDet.setIntPersEmpresaCuenta(modeloDetalle.getId().getIntPersEmpresaCuenta());
+													//
+													CuentaId cId=new CuentaId();
+													cId.setIntPersEmpresaPk(Constante.PARAM_EMPRESASESION);
+													cId.setIntCuenta(expedienteCreditoRef.getId().getIntCuentaPk());
+													ctaInt = cuentaFacade.getListaCuentaIntegrantePorPKCuenta(cId).get(0);
+													//MOD 13.03.2014
+													diarioDet.setIntPersPersona(ctaInt.getId().getIntPersonaIntegrante());
+													diarioDet.setIntPersEmpresaSucursal(Constante.PARAM_EMPRESASESION);
+													diarioDet.setIntSucuIdSucursal(usuario.getSucursal().getId().getIntIdSucursal());
+													diarioDet.setIntSudeIdSubSucursal(usuario.getSubSucursal().getId().getIntIdSubSucursal());
+													diarioDet.setStrContNumeroCuenta(modeloDetalle.getId().getStrContNumeroCuenta());								
+													diarioDet.setStrComentario(strObservacionPlanCta);
+													//
+													diarioDet.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_PRESTAMOS);
+													diarioDet.setStrNumeroDocumento(expedienteCreditoRef.getId().getIntItemExpediente()+"-"+expedienteCreditoRef.getId().getIntItemDetExpediente());
+													if(modeloDetalle.getIntParaOpcionDebeHaber().compareTo(Constante.PARAM_T_LIBRO_DIARIO_DEBE)==0){
+														diarioDet.setIntParaDocumentoGeneral(modeloDetalle.getIntParaDocumentoGral());
+														diarioDet.setBdDebeSoles(bdMontoDebeHaber);
+														diarioDet.setBdHaberSoles(null);
+													}else if(modeloDetalle.getIntParaOpcionDebeHaber().compareTo(Constante.PARAM_T_LIBRO_DIARIO_HABER)==0){
+														diarioDet.setIntParaDocumentoGeneral(modeloDetalle.getIntParaDocumentoGral());
+														diarioDet.setBdHaberSoles(bdMontoDebeHaber);
+														diarioDet.setBdDebeSoles(null);
+													}
+													lstDiarioDetalle.add(diarioDet);
+												}
 											}
 										}
 									}
@@ -5936,8 +6005,7 @@ public class SolicitudPrestamoService {
 									for (ModeloDetalleNivel modeloDetalleNivel : listaModDetNiv) {
 										if(modeloDetalleNivel.getIntParaTipoRegistro().equals(Constante.PARAM_T_MODELO_TIPO_REGISTRO_TABLA)){
 											if (modeloDetalleNivel.getIntDatoTablas().equals(Integer.parseInt(Constante.PARAM_T_TIPOCONCEPTOGENERAL))
-													&& (modeloDetalleNivel.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_AMORTIZACION) 
-													|| modeloDetalleNivel.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_INTERES))) {
+													&& (modeloDetalleNivel.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_AMORTIZACION))) {//|| modeloDetalleNivel.getIntDatoArgumento().equals(Constante.PARAM_T_TIPOCONCEPTOGENERAL_INTERES)
 												blnTipoConceptoGral = true;
 												break;
 											}
@@ -7406,8 +7474,16 @@ public class SolicitudPrestamoService {
 	public CronogramaCreditoComp recuperarCronogramaCompVistaPopUp(ExpedienteCreditoId expedienteId, Integer intNroCuota) throws BusinessException{
 		CronogramaCreditoComp cronogramaComp = null;
 		List<CronogramaCredito> lstCronogramaCredito = null;
+//		List<CronogramaCredito> lstCronogramaCreditoExpVigentes = null;
+//		List<Cronograma> lstCronCredActMov = null;
+//		BigDecimal bdMntActCtaZero = BigDecimal.ZERO;
+//		BigDecimal bdMntActCtaUno = BigDecimal.ZERO;
+		
 		try {
-			lstCronogramaCredito= boCronogramaCredito.getListaPorPkExpedienteCuota(expedienteId, intNroCuota);
+//			ConceptoFacadeRemote conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
+//			CreditoFacadeRemote creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
+//			TablaFacadeRemote tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
+			lstCronogramaCredito = boCronogramaCredito.getListaPorPkExpedienteCuota(expedienteId, intNroCuota);
 			if(lstCronogramaCredito != null && !lstCronogramaCredito.isEmpty()){
 				cronogramaComp = new CronogramaCreditoComp();
 				CronogramaCredito cronogramaCredito= new CronogramaCredito();
@@ -7437,6 +7513,326 @@ public class SolicitudPrestamoService {
 				bdMontoTotalCuota = bdMontoCuotaMensual.add(cronogramaCredito.getBdAportesView());
 				bdMontoTotalCuota = bdMontoTotalCuota.divide(BigDecimal.ONE, 4,RoundingMode.HALF_UP);
 				cronogramaComp.setBdTotalCuotaMensual(bdMontoTotalCuota);
+				//Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014 / 
+				cronogramaComp.setIntPeriodoPlanilla(cronogramaCredito.getIntPeriodoPlanilla());
+				cronogramaComp.setStrConcatenadoExpediente1(cronogramaCredito.getStrCuotaFijaExpediente1());
+				cronogramaComp.setStrConcatenadoExpediente2(cronogramaCredito.getStrCuotaFijaExpediente2());
+				cronogramaComp.setStrConcatenadoExpediente3(cronogramaCredito.getStrCuotaFijaExpediente3());
+				cronogramaComp.setStrConcatenadoExpediente4(cronogramaCredito.getStrCuotaFijaExpediente4());
+				//Fin jchavez - 02.09.2014
+				//Autor: jchavez / Tarea: Creación / Fecha: 06.09.2014 /
+//				if (cronogramaCredito.getStrCuotaFijaExpediente1()!=null) {
+//					Integer r = cronogramaCredito.getStrCuotaFijaExpediente1().indexOf("-");
+//					//SERVICIO: Expediente Credito
+//					ExpedienteCredito expediente = new ExpedienteCredito();
+//					expediente.setId(new ExpedienteCreditoId());
+//					expediente.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expediente.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expediente.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente1().substring(0,r)));
+//					expediente.getId().setIntItemDetExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente1().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente1().length())));
+//					//MOVIMIENTO: Expediente Credito
+//					Expediente expedientemov = new Expediente();
+//					expedientemov.setId(new ExpedienteId());
+//					expedientemov.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expedientemov.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expedientemov.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente1().substring(0,r)));
+//					expedientemov.getId().setIntItemExpedienteDetalle(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente1().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente1().length())));
+//					//Descripcion Expediente Credito
+//					Credito credito = null;
+//					CreditoId cId = new CreditoId();
+//					cId.setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					cId.setIntItemCredito(expediente.getIntItemCredito());
+//					cId.setIntParaTipoCreditoCod(expediente.getIntParaTipoCreditoCod());
+//					credito = creditoFacade.getCreditoPorIdCreditoDirecto(cId);
+//					List<Tabla> listaTipoCreditoEmpresa = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+//					for (Tabla tipCredEmp : listaTipoCreditoEmpresa) {
+//						if (tipCredEmp.getIntIdDetalle().equals(credito.getIntParaTipoCreditoEmpresa())) {
+//							cronogramaComp.setStrDescExpediente1(tipCredEmp.getStrDescripcion());
+//							break;
+//						}
+//					}
+//					if (expediente.equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCreditoExpVigentes!=null && !lstCronogramaCreditoExpVigentes.isEmpty()) {
+//							if (lstCronogramaCreditoExpVigentes.size()==1) {
+//								//Ir a movimiento y validar el saldo detalle empresa
+//								lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//								if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//									for (Cronograma cronMov : lstCronCredActMov) {
+//										if (cronMov.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla()) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//											cronogramaComp.setBdCuotaFijaExpediente1(cronMov.getBdSaldoDetalleCredito());
+//										}
+//									}
+//								}
+//							}else{								
+//								for (CronogramaCredito cronCred : lstCronogramaCreditoExpVigentes) {
+//									if (cronCred.getIntNroCuota().equals(0)) {
+//										bdMntActCtaZero = cronCred.getBdMontoConcepto();
+//									}else  {
+//										bdMntActCtaUno = cronCred.getBdMontoConcepto();
+//									}
+//								}
+//								if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==-1) {
+//									cronogramaComp.setBdCuotaFijaExpediente1(bdMntActCtaUno);
+//
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==1) {
+//									//Ir a movimiento y validar el saldo detalle credito
+//									lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//									if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//										for (Cronograma cronMov : lstCronCredActMov) {
+//											if (cronMov.getIntNumeroCuota().equals(0) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//												if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==1) {
+//													cronogramaComp.setBdCuotaFijaExpediente1(cronMov.getBdSaldoDetalleCredito());
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==-1) {
+//													cronogramaComp.setBdCuotaFijaExpediente1(bdMntActCtaUno);
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==0) {
+//													cronogramaComp.setBdCuotaFijaExpediente1(bdMntActCtaUno);
+//												}
+//											}
+//										}
+//									}									
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==0) {
+//									cronogramaComp.setBdCuotaFijaExpediente1(bdMntActCtaUno);
+//								}
+//							}							
+//						}
+//					}else{		
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCredito!=null && !lstCronogramaCredito.isEmpty()) {
+//							BigDecimal bdSumaCronCred = BigDecimal.ZERO;
+//							for (CronogramaCredito lstccred : lstCronogramaCredito) {
+//								if (lstccred.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla())) {
+//									bdSumaCronCred = bdSumaCronCred.add(lstccred.getBdMontoConcepto());
+//								}
+//							}
+//							cronogramaComp.setBdCuotaFijaExpediente1(bdSumaCronCred);
+//						}						
+//					}
+//				}else if (cronogramaCredito.getStrCuotaFijaExpediente2()!=null) {
+//					Integer r = cronogramaCredito.getStrCuotaFijaExpediente2().indexOf("-");
+//					//SERVICIO: Expediente Credito
+//					ExpedienteCredito expediente = new ExpedienteCredito();
+//					expediente.setId(new ExpedienteCreditoId());
+//					expediente.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expediente.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expediente.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente2().substring(0,r)));
+//					expediente.getId().setIntItemDetExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente2().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente2().length())));
+//					//MOVIMIENTO: Expediente Credito
+//					Expediente expedientemov = new Expediente();
+//					expedientemov.setId(new ExpedienteId());
+//					expedientemov.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expedientemov.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expedientemov.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente2().substring(0,r)));
+//					expedientemov.getId().setIntItemExpedienteDetalle(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente2().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente2().length())));
+//					//
+//					if (expediente.equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCreditoExpVigentes!=null && !lstCronogramaCreditoExpVigentes.isEmpty()) {
+//							if (lstCronogramaCreditoExpVigentes.size()==1) {
+//								//Ir a movimiento y validar el saldo detalle empresa
+//								lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//								if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//									for (Cronograma cronMov : lstCronCredActMov) {
+//										if (cronMov.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla()) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//											cronogramaComp.setBdCuotaFijaExpediente2(cronMov.getBdSaldoDetalleCredito());
+//										}
+//									}
+//								}
+//							}else{								
+//								for (CronogramaCredito cronCred : lstCronogramaCreditoExpVigentes) {
+//									if (cronCred.getIntNroCuota().equals(0)) {
+//										bdMntActCtaZero = cronCred.getBdMontoConcepto();
+//									}else  {
+//										bdMntActCtaUno = cronCred.getBdMontoConcepto();
+//									}
+//								}
+//								if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==-1) {
+//									cronogramaComp.setBdCuotaFijaExpediente2(bdMntActCtaUno);
+//
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==1) {
+//									//Ir a movimiento y validar el saldo detalle credito
+//									lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//									if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//										for (Cronograma cronMov : lstCronCredActMov) {
+//											if (cronMov.getIntNumeroCuota().equals(0) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//												if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==1) {
+//													cronogramaComp.setBdCuotaFijaExpediente2(cronMov.getBdSaldoDetalleCredito());
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==-1) {
+//													cronogramaComp.setBdCuotaFijaExpediente2(bdMntActCtaUno);
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==0) {
+//													cronogramaComp.setBdCuotaFijaExpediente2(bdMntActCtaUno);
+//												}
+//											}
+//										}
+//									}									
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==0) {
+//									cronogramaComp.setBdCuotaFijaExpediente2(bdMntActCtaUno);
+//								}
+//							}							
+//						}
+//					}else{		
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCredito!=null && !lstCronogramaCredito.isEmpty()) {
+//							BigDecimal bdSumaCronCred = BigDecimal.ZERO;
+//							for (CronogramaCredito lstccred : lstCronogramaCredito) {
+//								if (lstccred.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla())) {
+//									bdSumaCronCred = bdSumaCronCred.add(lstccred.getBdMontoConcepto());
+//								}
+//							}
+//							cronogramaComp.setBdCuotaFijaExpediente2(bdSumaCronCred);
+//						}						
+//					}
+//				}else if (cronogramaCredito.getStrCuotaFijaExpediente3()!=null) {
+//					Integer r = cronogramaCredito.getStrCuotaFijaExpediente3().indexOf("-");
+//					//SERVICIO: Expediente Credito
+//					ExpedienteCredito expediente = new ExpedienteCredito();
+//					expediente.setId(new ExpedienteCreditoId());
+//					expediente.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expediente.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expediente.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente3().substring(0,r)));
+//					expediente.getId().setIntItemDetExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente3().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente3().length())));
+//					//MOVIMIENTO: Expediente Credito
+//					Expediente expedientemov = new Expediente();
+//					expedientemov.setId(new ExpedienteId());
+//					expedientemov.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expedientemov.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expedientemov.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente3().substring(0,r)));
+//					expedientemov.getId().setIntItemExpedienteDetalle(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente3().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente3().length())));
+//					//
+//					if (expediente.equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCreditoExpVigentes!=null && !lstCronogramaCreditoExpVigentes.isEmpty()) {
+//							if (lstCronogramaCreditoExpVigentes.size()==1) {
+//								//Ir a movimiento y validar el saldo detalle empresa
+//								lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//								if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//									for (Cronograma cronMov : lstCronCredActMov) {
+//										if (cronMov.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla()) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//											cronogramaComp.setBdCuotaFijaExpediente3(cronMov.getBdSaldoDetalleCredito());
+//										}
+//									}
+//								}
+//							}else{								
+//								for (CronogramaCredito cronCred : lstCronogramaCreditoExpVigentes) {
+//									if (cronCred.getIntNroCuota().equals(0)) {
+//										bdMntActCtaZero = cronCred.getBdMontoConcepto();
+//									}else  {
+//										bdMntActCtaUno = cronCred.getBdMontoConcepto();
+//									}
+//								}
+//								if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==-1) {
+//									cronogramaComp.setBdCuotaFijaExpediente3(bdMntActCtaUno);
+//
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==1) {
+//									//Ir a movimiento y validar el saldo detalle credito
+//									lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//									if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//										for (Cronograma cronMov : lstCronCredActMov) {
+//											if (cronMov.getIntNumeroCuota().equals(0) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//												if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==1) {
+//													cronogramaComp.setBdCuotaFijaExpediente3(cronMov.getBdSaldoDetalleCredito());
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==-1) {
+//													cronogramaComp.setBdCuotaFijaExpediente3(bdMntActCtaUno);
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==0) {
+//													cronogramaComp.setBdCuotaFijaExpediente3(bdMntActCtaUno);
+//												}
+//											}
+//										}
+//									}									
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==0) {
+//									cronogramaComp.setBdCuotaFijaExpediente3(bdMntActCtaUno);
+//								}
+//							}							
+//						}
+//					}else{		
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCredito!=null && !lstCronogramaCredito.isEmpty()) {
+//							BigDecimal bdSumaCronCred = BigDecimal.ZERO;
+//							for (CronogramaCredito lstccred : lstCronogramaCredito) {
+//								if (lstccred.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla())) {
+//									bdSumaCronCred = bdSumaCronCred.add(lstccred.getBdMontoConcepto());
+//								}
+//							}
+//							cronogramaComp.setBdCuotaFijaExpediente3(bdSumaCronCred);
+//						}						
+//					}
+//				}else if (cronogramaCredito.getStrCuotaFijaExpediente4()!=null) {
+//					Integer r = cronogramaCredito.getStrCuotaFijaExpediente4().indexOf("-");
+//					//SERVICIO: Expediente Credito
+//					ExpedienteCredito expediente = new ExpedienteCredito();
+//					expediente.setId(new ExpedienteCreditoId());
+//					expediente.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expediente.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expediente.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente4().substring(0,r)));
+//					expediente.getId().setIntItemDetExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente4().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente4().length())));
+//					//MOVIMIENTO: Expediente Credito
+//					Expediente expedientemov = new Expediente();
+//					expedientemov.setId(new ExpedienteId());
+//					expedientemov.getId().setIntPersEmpresaPk(cronogramaCredito.getId().getIntPersEmpresaPk());
+//					expedientemov.getId().setIntCuentaPk(cronogramaCredito.getId().getIntCuentaPk());
+//					expedientemov.getId().setIntItemExpediente(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente4().substring(0,r)));
+//					expedientemov.getId().setIntItemExpedienteDetalle(Integer.parseInt(cronogramaCredito.getStrCuotaFijaExpediente4().substring(r+1,cronogramaCredito.getStrCuotaFijaExpediente4().length())));
+//					//
+//					if (expediente.equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCreditoExpVigentes!=null && !lstCronogramaCreditoExpVigentes.isEmpty()) {
+//							if (lstCronogramaCreditoExpVigentes.size()==1) {
+//								//Ir a movimiento y validar el saldo detalle empresa
+//								lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//								if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//									for (Cronograma cronMov : lstCronCredActMov) {
+//										if (cronMov.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla()) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//											cronogramaComp.setBdCuotaFijaExpediente4(cronMov.getBdSaldoDetalleCredito());
+//										}
+//									}
+//								}
+//							}else{								
+//								for (CronogramaCredito cronCred : lstCronogramaCreditoExpVigentes) {
+//									if (cronCred.getIntNroCuota().equals(0)) {
+//										bdMntActCtaZero = cronCred.getBdMontoConcepto();
+//									}else  {
+//										bdMntActCtaUno = cronCred.getBdMontoConcepto();
+//									}
+//								}
+//								if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==-1) {
+//									cronogramaComp.setBdCuotaFijaExpediente4(bdMntActCtaUno);
+//
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==1) {
+//									//Ir a movimiento y validar el saldo detalle credito
+//									lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expedientemov.getId());
+//									if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+//										for (Cronograma cronMov : lstCronCredActMov) {
+//											if (cronMov.getIntNumeroCuota().equals(0) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+//												if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==1) {
+//													cronogramaComp.setBdCuotaFijaExpediente4(cronMov.getBdSaldoDetalleCredito());
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==-1) {
+//													cronogramaComp.setBdCuotaFijaExpediente4(bdMntActCtaUno);
+//												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==0) {
+//													cronogramaComp.setBdCuotaFijaExpediente4(bdMntActCtaUno);
+//												}
+//											}
+//										}
+//									}									
+//								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==0) {
+//									cronogramaComp.setBdCuotaFijaExpediente4(bdMntActCtaUno);
+//								}
+//							}							
+//						}
+//					}else{		
+//						lstCronogramaCreditoExpVigentes = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expediente,cronogramaCredito.getIntPeriodoPlanilla());
+//						if (lstCronogramaCredito!=null && !lstCronogramaCredito.isEmpty()) {
+//							BigDecimal bdSumaCronCred = BigDecimal.ZERO;
+//							for (CronogramaCredito lstccred : lstCronogramaCredito) {
+//								if (lstccred.getIntPeriodoPlanilla().equals(cronogramaCredito.getIntPeriodoPlanilla())) {
+//									bdSumaCronCred = bdSumaCronCred.add(lstccred.getBdMontoConcepto());
+//								}
+//							}
+//							cronogramaComp.setBdCuotaFijaExpediente4(bdSumaCronCred);
+//						}						
+//					}
+//				}	
+				
+				//Fin jchavez - 06.09.2014
 			}
 
 		} catch (Exception e) {

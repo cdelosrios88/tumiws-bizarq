@@ -102,5 +102,21 @@ public class ConfServSolicitudBO {
 		}
 		return lista;
 	}
-	
+	public List<ConfServSolicitud> buscarRequisito(ConfServSolicitud confServSolicitud, Date fechaFiltroInicio, Date fechaFiltroFin) throws BusinessException{
+		List<ConfServSolicitud> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intParaTipoOperacionCod", confServSolicitud.getIntParaTipoOperacionCod());
+			mapa.put("fechaFiltroInicio", fechaFiltroInicio);
+			mapa.put("fechaFiltroFin", fechaFiltroFin);
+			mapa.put("intParaEstadoCod", confServSolicitud.getIntParaEstadoCod());
+			lista = dao.getListaPorBuscarRequisito(mapa);
+			
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
 }

@@ -15,7 +15,8 @@ public class ConfServSolicitudDaoIbatis extends TumiDaoIbatis implements ConfSer
 			getSqlMapClientTemplate().insert(getNameSpace() + ".grabar", o);
 			dto = o;
 		}catch(Exception e) {
-			throw new DAOException(e);
+			e.printStackTrace();
+//			throw new DAOException(e);
 		}
 		return dto;
 	}
@@ -55,6 +56,15 @@ public class ConfServSolicitudDaoIbatis extends TumiDaoIbatis implements ConfSer
 		List<ConfServSolicitud> lista = null;
 		try{
 			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaPorTipoOperacionTipoRequisito", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	public List<ConfServSolicitud> getListaPorBuscarRequisito(Object o) throws DAOException{
+		List<ConfServSolicitud> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaPorBuscarRequisitos", o);
 		}catch(Exception e) {
 			throw new DAOException (e);
 		}

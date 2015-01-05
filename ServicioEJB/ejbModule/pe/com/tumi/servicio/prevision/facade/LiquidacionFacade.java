@@ -30,7 +30,7 @@ import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionComp;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionDetalle;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionId;
-import pe.com.tumi.servicio.prevision.domain.ExpedientePrevision;
+//import pe.com.tumi.servicio.prevision.domain.ExpedientePrevision;
 import pe.com.tumi.servicio.prevision.domain.RequisitoLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.composite.RequisitoLiquidacionComp;
 //import pe.com.tumi.servicio.prevision.domain.composite.RequisitoLiquidacionComp2;
@@ -736,4 +736,23 @@ public class LiquidacionFacade extends TumiFacade implements LiquidacionFacadeRe
 			throw new BusinessException(e);
 		}
 	}
+    /**
+     * Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+     * Funcionalidad: Realiza la verificación si al socio le corresponde o no el beneficio de Previsión.
+     * @param intEmpresa
+     * @param intCuenta
+     * @return intResult - (0)NO CORRESPONDE / (1)CORRESPONDE
+     * @throws BusinessException
+     */
+    public Integer getCorrespondePrevision(Integer intEmpresa, Integer intCuenta) throws BusinessException{
+    	Integer intResult = null;
+   		try{
+   			intResult = boExpedienteLiquidacion.getCorrespondePrevision(intEmpresa, intCuenta);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+   		return intResult;
+   	}
 }

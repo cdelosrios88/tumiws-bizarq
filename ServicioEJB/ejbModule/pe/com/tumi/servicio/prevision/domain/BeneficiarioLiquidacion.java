@@ -6,6 +6,7 @@ import pe.com.tumi.framework.negocio.domain.TumiDomain;
 import pe.com.tumi.movimiento.concepto.domain.CuentaDetalleBeneficio;
 import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.persona.core.domain.Persona;
+import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 
 public class BeneficiarioLiquidacion extends TumiDomain{
 
@@ -35,6 +36,13 @@ public class BeneficiarioLiquidacion extends TumiDomain{
 	//JCHAVEZ 28.01.2014
 	private Persona	personaApoderado;
 	private	Archivo	archivoCartaPoder;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 / 
+	private Egreso egreso;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 03.12.2014 /
+	private BigDecimal bdPorcentajeBeneficioAhorro;
+	private BigDecimal bdMontoAhorro;
 	
 	public BeneficiarioLiquidacion(){
 		id = new BeneficiarioLiquidacionId();
@@ -190,5 +198,25 @@ public class BeneficiarioLiquidacion extends TumiDomain{
 	}
 	public void setArchivoCartaPoder(Archivo archivoCartaPoder) {
 		this.archivoCartaPoder = archivoCartaPoder;
+	}
+
+	public Egreso getEgreso() {
+		return egreso;
+	}
+	public void setEgreso(Egreso egreso) {
+		this.egreso = egreso;
+	}
+	public BigDecimal getBdPorcentajeBeneficioAhorro() {
+		return bdPorcentajeBeneficioAhorro;
+	}
+	public void setBdPorcentajeBeneficioAhorro(
+			BigDecimal bdPorcentajeBeneficioAhorro) {
+		this.bdPorcentajeBeneficioAhorro = bdPorcentajeBeneficioAhorro;
+	}
+	public BigDecimal getBdMontoAhorro() {
+		return bdMontoAhorro;
+	}
+	public void setBdMontoAhorro(BigDecimal bdMontoAhorro) {
+		this.bdMontoAhorro = bdMontoAhorro;
 	}
 }

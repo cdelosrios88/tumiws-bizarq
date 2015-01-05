@@ -1,7 +1,6 @@
 package pe.com.tumi.servicio.configuracion.facade;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -11,7 +10,6 @@ import javax.ejb.TransactionAttributeType;
 
 import pe.com.tumi.credito.socio.creditos.domain.Credito;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
-import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.facade.TumiFacade;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
 import pe.com.tumi.servicio.configuracion.bo.ConfServDetalleBO;
@@ -371,6 +369,4 @@ public class ConfSolicitudFacade extends TumiFacade implements ConfSolicitudFaca
 		}
 		return lista;
 	}
-
-
 }

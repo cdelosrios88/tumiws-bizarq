@@ -26,12 +26,14 @@ public class GarantiaCreditoFacade extends TumiFacade implements GarantiaCredito
 	
 	private GarantiaCreditoService garantiaCreditoService = (GarantiaCreditoService)TumiFactory.get(GarantiaCreditoService.class);
 	private GarantiaCreditoBO garantiaCreditoBo = (GarantiaCreditoBO)TumiFactory.get(GarantiaCreditoBO.class);
-
-	public List<GarantiaCreditoComp> getListaGarantiaCreditoCompPorExpediente(ExpedienteCreditoId pId) throws BusinessException{
+	
+	//fyalico, fecha:2014/11/04 mofidificacion: se agrego intTipoCuenta, que es el tipo de cuenta en la tabla Cuenta ej socio, ahorro, etc. 
+	public List<GarantiaCreditoComp> getListaGarantiaCreditoCompPorExpediente(ExpedienteCreditoId pId,
+																			  Integer intTipoCuenta) throws BusinessException{
 		List<GarantiaCreditoComp> lista = null;
 		try{
 			
-			lista = garantiaCreditoService.getListaGarantiaCreditoCompPorExpediente(pId);
+			lista = garantiaCreditoService.getListaGarantiaCreditoCompPorExpediente(pId, intTipoCuenta);
 			
 		}catch(BusinessException e){
 			throw e;

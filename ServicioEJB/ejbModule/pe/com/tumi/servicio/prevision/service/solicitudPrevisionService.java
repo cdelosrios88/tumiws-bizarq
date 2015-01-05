@@ -2520,8 +2520,10 @@ protected static Logger log = Logger.getLogger(solicitudPrevisionService.class);
 			 CuentacteFacadeRemote cuentaCteFacadeRemote= null;
 			 
 			 try {
-				 Calendar fecHoy = Calendar.getInstance();
-				 Date dtAhora = fecHoy.getTime();
+				 //Autor: jchavez / Tarea: Modificación / Fecha: 12.08.2014 / 
+//				 Calendar fecHoy = Calendar.getInstance();
+//				 Date dtAhora = fecHoy.getTime();
+				 Timestamp dtAhora = new Timestamp(new Date().getTime());
 				 cuentaCteFacadeRemote = (CuentacteFacadeRemote)EJBFactory.getRemote(CuentacteFacadeRemote.class);
 				 
 					if(socioComp != null){
@@ -4076,9 +4078,16 @@ protected static Logger log = Logger.getLogger(solicitudPrevisionService.class);
 		 * @return
 		 * @throws Exception
 		 */
+//		public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//			return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//		}
+		
 		public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-			return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-		}
+			SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+			Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+			Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+			return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+		} 
 		
 		
 		/**
@@ -4270,8 +4279,10 @@ protected static Logger log = Logger.getLogger(solicitudPrevisionService.class);
 			 CuentacteFacadeRemote cuentaCteFacadeRemote= null;
 			 
 			 try {
-				 Calendar fecHoy = Calendar.getInstance();
-				 Date dtAhora = fecHoy.getTime();
+				 //Autor: jchavez / Tarea: Modificación / Fecha: 12.08.2014 / 
+//				 Calendar fecHoy = Calendar.getInstance();
+//				 Date dtAhora = fecHoy.getTime();
+				 Timestamp dtAhora = new Timestamp(new Date().getTime());				 
 				 cuentaCteFacadeRemote = (CuentacteFacadeRemote)EJBFactory.getRemote(CuentacteFacadeRemote.class);
 				 
 					if(socioComp != null){
@@ -4387,8 +4398,10 @@ protected static Logger log = Logger.getLogger(solicitudPrevisionService.class);
 				 CuentacteFacadeRemote cuentaCteFacadeRemote= null;
 				 
 				 try {
-					 Calendar fecHoy = Calendar.getInstance();
-					 Date dtAhora = fecHoy.getTime();
+					 //Autor: jchavez / Tarea: Modificación / Fecha: 12.08.2014 / 
+//					 Calendar fecHoy = Calendar.getInstance();
+//					 Date dtAhora = fecHoy.getTime();
+					 Timestamp dtAhora = new Timestamp(new Date().getTime());					 
 					 cuentaCteFacadeRemote = (CuentacteFacadeRemote)EJBFactory.getRemote(CuentacteFacadeRemote.class);
 					 
 						if(socioComp != null){

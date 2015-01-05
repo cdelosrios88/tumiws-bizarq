@@ -10,6 +10,7 @@ import pe.com.tumi.servicio.solicitudPrestamo.dao.CronogramaCreditoDao;
 import pe.com.tumi.servicio.solicitudPrestamo.dao.impl.CronogramaCreditoDaoIbatis;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.CronogramaCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.CronogramaCreditoId;
+import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCreditoId;
 
 public class CronogramaCreditoBO {
@@ -129,6 +130,26 @@ public class CronogramaCreditoBO {
 			mapa.put("intNroCuota", 			intNroCuota);
 			
 			lista = dao.getListaPorPkExpedienteCuota(mapa);
+		} catch(DAOException e){
+			throw new BusinessException(e);
+		} catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014
+	public List<CronogramaCredito> getListaPorPkExpCredYPeriodo(ExpedienteCredito expCred, Integer intPeriodoPlanilla) throws BusinessException{
+		List<CronogramaCredito> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intPersEmpresaPk", 		expCred.getId().getIntPersEmpresaPk());
+			mapa.put("intCuentaPk", 			expCred.getId().getIntCuentaPk());
+			mapa.put("intItemExpediente", 		expCred.getId().getIntItemExpediente());
+			mapa.put("intItemDetExpediente", 	expCred.getId().getIntItemDetExpediente());
+			mapa.put("intPeriodoPlanilla", 		intPeriodoPlanilla);
+			
+			lista = dao.getListaPorPkExpCredYPeriodo(mapa);
 		} catch(DAOException e){
 			throw new BusinessException(e);
 		} catch(Exception e) {

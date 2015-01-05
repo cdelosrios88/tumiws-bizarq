@@ -79,4 +79,6 @@ public interface LiquidacionFacadeRemote {
 	public List<RequisitoLiquidacionComp> getRequisitoGiroLiquidacionBanco(ExpedienteLiquidacion expLiq) throws BusinessException;
 	public ExpedienteLiquidacion grabarGiroLiquidacionPorTesoreria(ExpedienteLiquidacion expedienteLiquidacion) throws BusinessException;
 	public void eliminarVerificaAutorizacionAdjuntosPorObservacion(ExpedienteLiquidacion pExpedienteLiquidacion) throws BusinessException;
+	//Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+	public Integer getCorrespondePrevision(Integer intEmpresa, Integer intCuenta) throws BusinessException;
 }

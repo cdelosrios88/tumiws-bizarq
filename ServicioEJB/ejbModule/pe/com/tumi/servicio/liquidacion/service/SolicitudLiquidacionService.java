@@ -4497,12 +4497,21 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 							
 							//4. Generamos el movimiento del interes calculado
 						 	Movimiento ultimoMovimientoInteresRetiro = recuperarUltimoMovimeintoInteresRetiro(cuentaConceptoRetiroComp, expedienteLiquidacion);
-							String strFechaUltimoInteres = Constante.sdf.format(ultimoMovimientoInteresRetiro.getTsFechaMovimiento());
+						 	String strFechaUltimoInteres = "";
+//						 	BigDecimal bdMontoRegistro = BigDecimal.ZERO;
+							if(ultimoMovimientoInteresRetiro != null){
+								strFechaUltimoInteres = Constante.sdf.format(ultimoMovimientoInteresRetiro.getTsFechaMovimiento());
+							}else{
+								strFechaUltimoInteres = Constante.sdf.format(cuentaConceptoRetiroComp.getLstCuentaConceptoDetalle().get(0).getTsInicio());
+							}
+						 	
+//						 	String strFechaUltimoInteres = Constante.sdf.format(ultimoMovimientoInteresRetiro.getTsFechaMovimiento());
 							Date dtFechaUltimoInteres = Constante.sdf.parse(strFechaUltimoInteres);
 							
 							Date dtHoy = new Date();
 
 							Integer nroDias =  obtenerDiasEntreFechas(dtHoy, dtFechaUltimoInteres);
+							log.info("numero de dias calculados: "+nroDias);
 							nroDias = Math.abs(nroDias);
 							if(nroDias.compareTo(0)!= 0){
 								//5. Realizamos el calculo del interes generado a la fecha de registro...
@@ -4518,7 +4527,7 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 								movInteresGanado.setIntParaTipoMovimiento(Constante.PARAM_T_TIPO_MOVIMIENTO_TRANSFERENCIA_PROVISIONES);
 								movInteresGanado.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_FONDORETIRO);
 								movInteresGanado.setIntParaTipoCargoAbono(Constante.PARAM_T_CARGOABONO_ABONO);
-								movInteresGanado.setBdMontoSaldo(ultimoMovimientoInteresRetiro.getBdMontoSaldo().add(bdMontoInteresCalculado));
+								movInteresGanado.setBdMontoSaldo(ultimoMovimientoInteresRetiro.getBdMontoSaldo()!=null?ultimoMovimientoInteresRetiro.getBdMontoSaldo():BigDecimal.ZERO.add(bdMontoInteresCalculado));
 								movInteresGanado.setBdMontoMovimiento(bdMontoInteresCalculado);
 								movInteresGanado.setIntPersEmpresaUsuario(usuario.getEmpresa().getIntIdEmpresa()); // usuario
 								movInteresGanado.setIntPersPersonaUsuario(usuario.getIntPersPersonaPk()); // usuario
@@ -4578,7 +4587,7 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 													
 													ExpedienteLiquidacionDetalle expLiqDetalle = boExpedienteLiquidacionDetalle.getPorPk(expLiqDetId);
 													if (expLiqDetalle!=null && expLiqDetalle.getId().getIntCuenta()!=null) {
-														expLiqDetalle.setBdSaldo(expLiqDetalle.getBdSaldo().add(expedienteLiquidacion.getMovimiento().getBdMontoSaldo()));
+														expLiqDetalle.setBdSaldo(expLiqDetalle.getBdSaldo().add(expedienteLiquidacion.getMovimiento()!=null?expedienteLiquidacion.getMovimiento().getBdMontoSaldo():BigDecimal.ZERO));
 														boExpedienteLiquidacionDetalle.modificar(expLiqDetalle);
 														break;
 													}else{
@@ -5115,8 +5124,10 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 		 CuentacteFacadeRemote cuentaCteFacadeRemote= null;
 		 
 		 try {
-			 Calendar fecHoy = Calendar.getInstance();
-			 Date dtAhora = fecHoy.getTime();
+			 //Autor: jchavez / Tarea: Modificación / Fecha: 12.08.2014 / 
+//			 Calendar fecHoy = Calendar.getInstance();
+//			 Date dtAhora = fecHoy.getTime();
+			 Timestamp dtAhora = new Timestamp(new Date().getTime());				 
 			 cuentaCteFacadeRemote = (CuentacteFacadeRemote)EJBFactory.getRemote(CuentacteFacadeRemote.class);
 			 
 				if(socioComp != null){
@@ -5421,11 +5432,12 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 				// El interes se agrega a la cuenta concepto fdo de retiro
 				
 				listaCuentaConceptosComp = recuperarCuentasConceptoRetiroAportesXSocio(socioComp.getCuenta().getId());
-				
+				Timestamp tsFechaInicioCtaCptoDet = null;
 				if(listaCuentaConceptosComp != null && !listaCuentaConceptosComp.isEmpty()){
 					for (CuentaConceptoComp cuentaConceptoComp : listaCuentaConceptosComp) {
 						if(cuentaConceptoComp.getIntParaTipoCaptacionModelo().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0){
-							cuentaConceptoComp.getCuentaConcepto().setBdSaldo(cuentaConceptoComp.getCuentaConcepto().getBdSaldo().add(expedienteLIquidacion.getMovimiento().getBdMontoSaldo()));
+							cuentaConceptoComp.getCuentaConcepto().setBdSaldo(cuentaConceptoComp.getCuentaConcepto().getBdSaldo().add(expedienteLIquidacion.getMovimiento()!=null?expedienteLIquidacion.getMovimiento().getBdMontoSaldo():BigDecimal.ZERO));
+							tsFechaInicioCtaCptoDet = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0).getTsInicio(); 
 						}
 					}
 				}
@@ -5663,7 +5675,7 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 //					// Captuaramos la fecha del ultimo movimiento interes
 //					if (lstMovInteres!=null && !lstMovInteres.isEmpty()) tsFechaUltimoMovFdoRetiroInteres = lstMovInteres.get(0).getTsFechaMovimiento();
 //					Movimiento ultimoMovimientoInteresRetiro = recuperarUltimoMovimeintoInteresRetiro(cuentaConceptoRetiroComp, expedienteLiquidacion);
-					tsFechaUltimoMovFdoRetiroInteres = expedienteLIquidacion.getMovimiento().getTsFechaMovimiento();
+					tsFechaUltimoMovFdoRetiroInteres = expedienteLIquidacion.getMovimiento()!=null?expedienteLIquidacion.getMovimiento().getTsFechaMovimiento():tsFechaInicioCtaCptoDet;
 					String strFechaUltimoInteres = Constante.sdf.format(tsFechaUltimoMovFdoRetiroInteres);
 					Date dtFechaUltimoInteres = Constante.sdf.parse(strFechaUltimoInteres);					
 					Date dtHoy = new Date();
@@ -6100,9 +6112,16 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 	 * @return
 	 * @throws Exception
 	 */
+//	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}
+	
 	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
 	
 	public CuentaConceptoComp recuperarCuentaConceptoPorTipo(Integer intCuentaConcepto, SocioComp socioComp){
 		//Boolean blnContinuaAporte = Boolean.TRUE;
@@ -6168,8 +6187,10 @@ public ExpedienteLiquidacion grabarAutorizacionLiquidacion(ExpedienteLiquidacion
 		 CuentacteFacadeRemote cuentaCteFacadeRemote= null;
 		 
 		 try {
-			 Calendar fecHoy = Calendar.getInstance();
-			 Date dtAhora = fecHoy.getTime();
+			 //Autor: jchavez / Tarea: Modificación / Fecha: 12.08.2014 / 
+//			 Calendar fecHoy = Calendar.getInstance();
+//			 Date dtAhora = fecHoy.getTime();
+			 Timestamp dtAhora = new Timestamp(new Date().getTime());				 
 			 cuentaCteFacadeRemote = (CuentacteFacadeRemote)EJBFactory.getRemote(CuentacteFacadeRemote.class);
 			 
 				if(socioComp != null){

@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -58,6 +60,7 @@ import pe.com.tumi.movimiento.concepto.domain.InteresCancelado;
 import pe.com.tumi.movimiento.concepto.domain.InteresCanceladoId;
 import pe.com.tumi.movimiento.concepto.domain.Movimiento;
 import pe.com.tumi.movimiento.concepto.facade.ConceptoFacadeRemote;
+import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.servicio.solicitudPrestamo.bo.CancelacionCreditoBO;
@@ -73,6 +76,7 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCreditoId;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.CapacidadCreditoComp;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.CronogramaCreditoComp;
+import pe.com.tumi.servicio.solicitudPrestamo.facade.PrestamoFacadeLocal;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
 import pe.com.tumi.tesoreria.egreso.domain.EgresoDetalle;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeRemote;
@@ -85,16 +89,20 @@ public class GiroPrestamoService {
 	private EstadoCreditoBO boEstadoCredito = (EstadoCreditoBO)TumiFactory.get(EstadoCreditoBO.class);
 	private CronogramaCreditoBO boCronogramaCredito = (CronogramaCreditoBO)TumiFactory.get(CronogramaCreditoBO.class);
 	private CancelacionCreditoBO boCancelacionCredito = (CancelacionCreditoBO)TumiFactory.get(CancelacionCreditoBO.class);
-	
+	// Autor: jchavez / Tarea: Creación / Fecha: 03.09.2014
+	private List<Expediente> lstExpedientesVigentes;
+	private List<Tabla> lstTablaExpedientesVigentes;
 	
 	public List<ExpedienteCredito> buscarExpedienteParaGiro(List<Persona> listaPersonaFiltro, Integer intTipoCreditoFiltro,
 			EstadoCredito estadoCreditoFiltro, Integer intItemExpedienteFiltro, Integer intTipoBusquedaSucursal, 
 			Integer intIdSucursalFiltro, Integer intIdSubsucursalFiltro) throws BusinessException{
 		
 		List<ExpedienteCredito> listaExpedienteCredito = new ArrayList<ExpedienteCredito>();
+		
 		try{
 			CuentaFacadeRemote cuentaFacade = (CuentaFacadeRemote) EJBFactory.getRemote(CuentaFacadeRemote.class);
 			EmpresaFacadeRemote empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
+			CreditoFacadeRemote creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
 			
 			List<ExpedienteCredito> listaTemp = new ArrayList<ExpedienteCredito>();
 			List<Cuenta> listaCuenta = new ArrayList<Cuenta>();			
@@ -140,24 +148,40 @@ public class GiroPrestamoService {
 				//log.info(cuenta.getStrNumeroCuenta());				
 				//log.info("size:"+cuenta.getListaIntegrante().size());
 				List<ExpedienteCredito> listaExpedienteCreditoTemp = boExpedienteCredito.getListaPorCuenta(cuenta);
-				for(ExpedienteCredito expedienteCreditoTemp : listaExpedienteCreditoTemp){
-					boolean pasaFiltroItem = Boolean.FALSE;
-					//log.info(expedienteCreditoTemp);
-					expedienteCreditoTemp.setCuenta(cuenta);
-					if(intItemExpedienteFiltro!=null && expedienteCreditoTemp.getId().getIntItemExpediente().equals(intItemExpedienteFiltro)){
-						pasaFiltroItem = Boolean.TRUE;
-					}else if(intItemExpedienteFiltro==null){
-						pasaFiltroItem = Boolean.TRUE;
+				//Autor: jchavez / Tarea: Modificación / Fecha: 12.08.2014 /
+				if (listaExpedienteCreditoTemp!=null && !listaExpedienteCreditoTemp.isEmpty()) {
+					for(ExpedienteCredito expedienteCreditoTemp : listaExpedienteCreditoTemp){
+						//Validación: solo se deben mostrar préstamos.
+						if (expedienteCreditoTemp.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_PRESTAMO)) {
+							boolean pasaFiltroItem = Boolean.FALSE;
+							//log.info(expedienteCreditoTemp);
+							expedienteCreditoTemp.setCuenta(cuenta);
+							if(intItemExpedienteFiltro!=null && expedienteCreditoTemp.getId().getIntItemExpediente().equals(intItemExpedienteFiltro)){
+								pasaFiltroItem = Boolean.TRUE;
+							}else if(intItemExpedienteFiltro==null){
+								pasaFiltroItem = Boolean.TRUE;
+							}
+							
+							if(pasaFiltroItem){
+								if(intParaTipoCreditoFiltro!=null) { // && expedienteCreditoTemp.getIntParaTipoCreditoCod().equals(intParaTipoCreditoFiltro)){
+									Credito credito = new Credito();
+									credito.setId(new CreditoId());
+									credito.getId().setIntPersEmpresaPk(expedienteCreditoTemp.getId().getIntPersEmpresaPk());
+									credito.getId().setIntParaTipoCreditoCod(expedienteCreditoTemp.getIntParaTipoCreditoCod());
+									credito.getId().setIntItemCredito(expedienteCreditoTemp.getIntItemCredito());
+									
+									credito = creditoFacade.getCreditoPorIdCreditoDirecto(credito.getId());
+									if (credito!=null && credito.getIntParaTipoCreditoEmpresa()!=null && credito.getIntParaTipoCreditoEmpresa().compareTo(intParaTipoCreditoFiltro)==0) {
+										listaExpedienteCredito.add(expedienteCreditoTemp);
+									}
+									
+								}else if(intParaTipoCreditoFiltro==null){
+									listaExpedienteCredito.add(expedienteCreditoTemp);
+								}
+							}
+						}						
 					}
-					
-					if(pasaFiltroItem){
-						if(intParaTipoCreditoFiltro!=null && expedienteCreditoTemp.getIntParaTipoCreditoCod().equals(intParaTipoCreditoFiltro)){
-							listaExpedienteCredito.add(expedienteCreditoTemp);
-						}else if(intParaTipoCreditoFiltro==null){
-							listaExpedienteCredito.add(expedienteCreditoTemp);
-						}
-					}
-				}
+				}				
 			}
 			
 			
@@ -482,9 +506,33 @@ public class GiroPrestamoService {
 		return expedienteMovimiento;
 	}
 	
-	private Movimiento generarMovimiento(ExpedienteCredito expediente, Egreso egreso) throws Exception{
-		//JCHAVEZ 07.01.2014
+	private List<Movimiento> generarMovimiento(ExpedienteCredito expediente, Expediente expedienteMovimiento, Egreso egreso) throws Exception{
 		log.info("---- GiroPrestamoService.generarMovimiento ----");
+		List<Movimiento> lstMovimiento = new ArrayList<Movimiento>();
+		//jchavez 01.08.2014 generar movimiento interes (adicionado)
+		Movimiento movInteres = new Movimiento();
+		movInteres.setTsFechaMovimiento(expediente.getEgreso().getTsFechaProceso());
+		movInteres.setIntPersEmpresa(expediente.getId().getIntPersEmpresaPk());
+		movInteres.setIntCuenta(expediente.getCuenta().getId().getIntCuenta());
+		movInteres.setIntPersPersonaIntegrante(expediente.getEgreso().getIntPersPersonaGirado());
+		movInteres.setIntItemCuentaConcepto(null);
+		movInteres.setIntItemExpediente(expediente.getId().getIntItemExpediente());
+		movInteres.setIntItemExpedienteDetalle(expediente.getId().getIntItemDetExpediente());
+		movInteres.setIntParaTipoConceptoGeneral(Constante.PARAM_T_CONCEPTOGENERAL_INTERES);
+		movInteres.setIntParaTipoMovimiento(Constante.PARAM_T_MOVIMIENTOCTACTE_EGRESOCAJA);
+		//Se graba el mismo que se grabo en el Egreso
+		movInteres.setIntParaDocumentoGeneral(Constante.PARAM_T_DOCUMENTOGENERAL_RENDICION);
+		movInteres.setStrSerieDocumento(null);
+		movInteres.setStrNumeroDocumento(""+expediente.getId().getIntItemExpediente()+"-"+expediente.getId().getIntItemDetExpediente());
+		movInteres.setIntParaTipoCargoAbono(Constante.PARAM_T_CARGOABONO_CARGO);
+		movInteres.setBdMontoMovimiento(expedienteMovimiento.getBdSaldoInteres());
+		movInteres.setBdMontoSaldo(expedienteMovimiento.getBdSaldoInteres());
+		movInteres.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
+		movInteres.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
+		movInteres.setIntPersEmpresaUsuario(expediente.getEgreso().getIntPersEmpresaUsuario());
+		movInteres.setIntPersPersonaUsuario(expediente.getEgreso().getIntPersPersonaUsuario());
+		lstMovimiento.add(movInteres);
+		//JCHAVEZ 07.01.2014
 		Movimiento movimiento = new Movimiento();
 		movimiento.setTsFechaMovimiento(expediente.getEgreso().getTsFechaProceso());
 		movimiento.setIntPersEmpresa(expediente.getId().getIntPersEmpresaPk());
@@ -506,8 +554,8 @@ public class GiroPrestamoService {
 		movimiento.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());
 		movimiento.setIntPersEmpresaUsuario(expediente.getEgreso().getIntPersEmpresaUsuario());
 		movimiento.setIntPersPersonaUsuario(expediente.getEgreso().getIntPersPersonaUsuario());
-		
-		return movimiento;
+		lstMovimiento.add(movimiento);
+		return lstMovimiento;
 	}
 	
 	private Integer	obtenerPeriodoActual() throws Exception{
@@ -871,7 +919,8 @@ public class GiroPrestamoService {
 			//Generación y grabación de Expediente Movimiento (CMO_EXPEDIENTECREDITO)
 			Expediente expedienteMovimiento = generarExpedienteMovimiento(expedienteCredito, listaCronogramaServicio);
 			log.info("Expediente Movimiento generado ---> "+expedienteMovimiento);
-			conceptoFacade.grabarExpediente(expedienteMovimiento);
+			//jchavez 01.08.2014
+			expedienteMovimiento = conceptoFacade.grabarExpediente(expedienteMovimiento);
 			
 			//Agregado 14.04.2014 
 			if (expedienteCredito.getExpedienteCreditoCancelacion()!=null) {
@@ -923,9 +972,15 @@ public class GiroPrestamoService {
 			}
 						
 			//Generación y grabación de Movimiento (CMO_MOVIMIENTOCTACTE)
-			Movimiento movimiento = generarMovimiento(expedienteCredito, egreso);
-			log.info("Movimiento generado ---> "+movimiento);
-			conceptoFacade.grabarMovimiento(movimiento);
+			//jchavez 01.08.2014 adicion del movimiento interes
+			List<Movimiento> lstMovimiento = generarMovimiento(expedienteCredito, expedienteMovimiento, egreso);
+			log.info("Movimiento generado ---> "+lstMovimiento);
+			if (lstMovimiento!=null && !lstMovimiento.isEmpty()) {
+				for (Movimiento mov : lstMovimiento) {
+					conceptoFacade.grabarMovimiento(mov);
+				}
+			}
+			
 			//Agregado 14.04.2014
 			//Generacion del movimiento del prestamo cancelado..
 			if (expedienteCredito.getExpedienteCreditoCancelacion()!=null) {
@@ -2403,6 +2458,34 @@ public class GiroPrestamoService {
 											cronogramaCredito.setTsFechaEnvioView(new Timestamp(clEnvio2.getTime().getTime()));
 											listaCronogramaCredito.add(cronogramaCredito);
 										}
+										//Autor: jchavez / Tarea: Creación / Fecha: 05.09.2014
+										List<CronogramaCreditoComp> listaCronogramaCreditoCompTemp = new ArrayList<CronogramaCreditoComp>();
+										listaCronogramaCreditoCompTemp.addAll(listaCronogramaCreditoComp);
+										listaCronogramaCreditoComp.clear();
+										if (listaCronogramaCreditoCompTemp!=null && !listaCronogramaCreditoCompTemp.isEmpty()) {
+											calculoCtaFijaYCronogramaConExpCredVigentes(listaCronogramaCreditoCompTemp.get(0).getIntPeriodoPlanilla(),
+													expedienteCredito.getId().getIntPersEmpresaPk(),
+													expedienteCredito.getId().getIntCuentaPk());
+											for (int k = 0; k < lstTablaExpedientesVigentes.size(); k++) {
+												if (k==0) {
+													listaCronogramaCredito.get(0).setStrCuotaFijaExpediente1(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+												}else if (k==1) {
+													listaCronogramaCredito.get(0).setStrCuotaFijaExpediente2(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+												}else if (k==2) {
+													listaCronogramaCredito.get(0).setStrCuotaFijaExpediente3(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+												}else if (k==3) {
+													listaCronogramaCredito.get(0).setStrCuotaFijaExpediente4(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+												}
+											}
+											listaCronogramaCreditoComp.addAll(listaCronogramaCreditoCompTemp);
+											Collections.sort(listaCronogramaCreditoComp, new Comparator<CronogramaCreditoComp>(){
+												public int compare(CronogramaCreditoComp uno, CronogramaCreditoComp otro) {
+													return uno.getIntPeriodoPlanilla().compareTo(otro.getIntPeriodoPlanilla());
+												}
+											});
+											//Autor: jchavez / Tarea: Creación / Fecha: 05.09.2014 / Concatenando cronogramas para vista
+//											lstCngmCredExpVigentes
+										}
 
 										bdTotalCuotaMensual = bdCuotaFinal.add(bdAportes);
 //										Boolean bln90Por = Boolean.FALSE;
@@ -2750,9 +2833,16 @@ public class GiroPrestamoService {
 		return fecha;
 	}
     
+//	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}
+	
 	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
     
     private static Date convertirTimestampToDate(Timestamp timestamp) {
         return new Date(timestamp.getTime());
@@ -2828,6 +2918,9 @@ public class GiroPrestamoService {
 				expedienteCredito.getEgreso().setStrMsgErrorGeneracionEgreso(egreso.getStrMsgErrorGeneracionEgreso());
 				return expedienteCredito;
 			}
+			/* Autor: jchavez / Tarea: Modificación / Fecha: 11.09.2014
+			   Se setea  el egreso grabado en el expediente prevision*/
+			expedienteCredito.setEgreso(egreso);
 		
 			//Generación y grabación de Cronograma Movimiento (CMO_CRONOGRAMACREDITO)
 			
@@ -2899,7 +2992,7 @@ public class GiroPrestamoService {
 			//Generación y grabación de Expediente Movimiento (CMO_EXPEDIENTECREDITO)
 			Expediente expedienteMovimiento = generarExpedienteMovimiento(expedienteCredito, listaCronogramaServicio);
 			log.info("Expediente Movimiento generado ---> "+expedienteMovimiento);
-			conceptoFacade.grabarExpediente(expedienteMovimiento);
+			expedienteMovimiento = conceptoFacade.grabarExpediente(expedienteMovimiento);
 			
 			//Agregado 14.04.2014 
 			if (expedienteCredito.getExpedienteCreditoCancelacion()!=null) {
@@ -2951,9 +3044,15 @@ public class GiroPrestamoService {
 			}
 						
 			//Generación y grabación de Movimiento (CMO_MOVIMIENTOCTACTE)
-			Movimiento movimiento = generarMovimiento(expedienteCredito, egreso);
-			log.info("Movimiento generado ---> "+movimiento);
-			conceptoFacade.grabarMovimiento(movimiento);
+			//jchavez 01.08.2014 Se adiciona grabacion del movimiento interes
+			List<Movimiento> lstMovimiento = generarMovimiento(expedienteCredito, expedienteMovimiento, egreso);
+			log.info("Movimiento generado ---> "+lstMovimiento);
+			if (lstMovimiento!=null && !lstMovimiento.isEmpty()) {
+				for (Movimiento mov : lstMovimiento) {
+					conceptoFacade.grabarMovimiento(mov);
+				}
+			}
+
 			//Agregado 14.04.2014
 			//Generacion del movimiento del prestamo cancelado..
 			if (expedienteCredito.getExpedienteCreditoCancelacion()!=null) {
@@ -3241,5 +3340,64 @@ public class GiroPrestamoService {
 		expedienteCredito.getEgreso().setIntErrorGeneracionEgreso(0);
 		expedienteCredito.getEgreso().setStrMsgErrorGeneracionEgreso("Gabación satisfactoria del Giro de Préstamo");
 		return expedienteCredito;
+	}
+    
+	/**
+	 * Autor: jchavez / Tarea: Creación / Fecha: 05.09.2014
+	 * Funcionalidad: Calcula las cuotas de los expedientes creditos VIGENTES y con SALDO > 0 del socio.
+	 * @author jchavez
+   	 * @version 1.0
+	 * @param intPeriodoPlanilla
+	 * @throws BusinessException
+	 * @throws  
+	 */
+	public void calculoCtaFijaYCronogramaConExpCredVigentes(Integer intPeriodoPlanilla, Integer intEmpresa, Integer intCuenta) throws Exception{	
+		ExpedienteCredito expCred = null;
+		List<CronogramaCredito> lstCronogramaCredito = null;
+		List<CronogramaCredito> lstCronogramaActividad = null;
+		lstExpedientesVigentes = new ArrayList<Expediente>();
+		lstTablaExpedientesVigentes = new ArrayList<Tabla>();
+		try {			
+			ConceptoFacadeRemote conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
+			PrestamoFacadeLocal prestamoFacade = (PrestamoFacadeLocal)EJBFactory.getLocal(PrestamoFacadeLocal.class);
+			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+			String strDescTipoCreditoEmpresa = "";
+			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+				
+				for (Expediente expediente : lstExpedientesVigentes) {
+					expCred = new ExpedienteCredito();
+					expCred.setId(new ExpedienteCreditoId());
+					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+
+					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+						lstCronogramaActividad = prestamoFacade.getListaPorPkExpCredYPeriodo(expCred, intPeriodoPlanilla);
+						if (lstCronogramaActividad!=null && !lstCronogramaActividad.isEmpty()) {
+							Tabla tbl = new Tabla();
+							tbl.setStrDescripcion(strDescTipoCreditoEmpresa);//expCred.getId().getIntItemExpediente()+"-"+expCred.getId().getIntItemDetExpediente());
+							tbl.setStrIdAgrupamientoA(expCred.getId().getIntItemExpediente()+"");
+							tbl.setStrIdAgrupamientoB(expCred.getId().getIntItemDetExpediente()+"");							
+							lstTablaExpedientesVigentes.add(tbl);
+						}
+
+					}else{					
+						lstCronogramaCredito = prestamoFacade.getListaPorPkExpCredYPeriodo(expCred, intPeriodoPlanilla);
+						if (lstCronogramaCredito!=null && !lstCronogramaCredito.isEmpty()) {
+							Tabla tbl = new Tabla();
+							tbl.setStrDescripcion(strDescTipoCreditoEmpresa);//expCred.getId().getIntItemExpediente()+"-"+expCred.getId().getIntItemDetExpediente());
+							tbl.setStrIdAgrupamientoA(expCred.getId().getIntItemExpediente()+"");
+							tbl.setStrIdAgrupamientoB(expCred.getId().getIntItemDetExpediente()+"");	
+							lstTablaExpedientesVigentes.add(tbl);
+						}
+					}
+					
+				}
+			}
+		} catch (BusinessException e) {
+			log.info("Error en calculoCtaFijaYCronogramaConExpCredVigentes() ---> "+e.getMessage());
+		}
+		
 	}
 }
