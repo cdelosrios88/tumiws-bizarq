@@ -33,6 +33,7 @@ public interface PrestamoFacadeRemote {
 	public List<CancelacionCredito> getListaCancelacionCreditoPorExpedienteCredito(ExpedienteCredito expedienteCredito) throws BusinessException;
 	public ExpedienteCredito grabarGiroPrestamo(ExpedienteCredito expedienteCredito) throws BusinessException;
 	public List<CronogramaCredito> getListaCronogramaCreditoPorExpedienteCredito(ExpedienteCredito expedienteCredito) throws BusinessException;
+	public List<CronogramaCredito> getListaPorPkExpedienteCuota(ExpedienteCreditoId pId, Integer intNroCuota) throws BusinessException;
 	public EstadoCredito obtenerUltimoEstadoCredito(ExpedienteCredito expedienteCredito, Integer intTipoEstado) throws BusinessException;
 	public Cuenta getCuentaActualPorIdPersona(Integer intIdPersona, Integer intIdEmpresa) throws BusinessException;
 	public List<EgresoDetalleInterfaz> cargarListaEgresoDetalleInterfaz(ExpedienteCredito expedienteCredito) throws BusinessException;
@@ -53,4 +54,6 @@ public interface PrestamoFacadeRemote {
 	//JCHAVEZ 11.02.2014
 	public List<RequisitoCreditoComp2> getRequisitoGiroPrestamoBanco(ExpedienteCredito expCred) throws BusinessException;
 	public ExpedienteCredito grabarGiroPrestamoPorTesoreria(ExpedienteCredito expedienteCredito) throws BusinessException;
+	//Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014 / 
+	public List<CronogramaCredito> getListaPorPkExpCredYPeriodo(ExpedienteCredito expedienteCredito, Integer intPeriodoPlanilla) throws BusinessException;
 }

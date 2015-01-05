@@ -26,7 +26,11 @@
 		<result property="bdAmortizacionView" 		column="pCRCR_VIEWAMORTIZACION_N" />
 		<result property="bdInteresView" 			column="pCRCR_VIEWINTERES_N" />
 		<result property="bdAportesView" 			column="pCRCR_VIEWTOTALAPORTE_N" />
-		<result property="tsFechaEnvioView" 		column="pCRCR_VIEWFECHAENVIO_D" />    
+		<result property="tsFechaEnvioView" 		column="pCRCR_VIEWFECHAENVIO_D" />
+		<result property="strCuotaFijaExpediente1" 	column="pCRCR_VIEWCUOTAFIJAEXP1_N" />    
+		<result property="strCuotaFijaExpediente2" 	column="pCRCR_VIEWCUOTAFIJAEXP2_N" />    
+		<result property="strCuotaFijaExpediente3" 	column="pCRCR_VIEWCUOTAFIJAEXP3_N" />    
+		<result property="strCuotaFijaExpediente4" 	column="pCRCR_VIEWCUOTAFIJAEXP4_N" />  
 	</resultMap>
 
 	<parameterMap id="parCronogramaCredito" class="CronogramaCredito">
@@ -49,6 +53,10 @@
 		<parameter property="bdInteresView" 			jdbcType="NUMERIC"		javaType="java.math.BigDecimal" mode="INOUT" />
 		<parameter property="bdAportesView" 			jdbcType="NUMERIC"		javaType="java.math.BigDecimal" mode="INOUT" />
 		<parameter property="tsFechaEnvioView" 			jdbcType="TIMESTAMP"	javaType="java.sql.Timestamp" 	mode="INOUT" />
+		<parameter property="strCuotaFijaExpediente1" 	jdbcType="VARCHAR"		javaType="java.lang.String" 	mode="INOUT" />
+		<parameter property="strCuotaFijaExpediente2" 	jdbcType="VARCHAR"		javaType="java.lang.String" 	mode="INOUT" />
+		<parameter property="strCuotaFijaExpediente3" 	jdbcType="VARCHAR"		javaType="java.lang.String" 	mode="INOUT" />
+		<parameter property="strCuotaFijaExpediente4" 	jdbcType="VARCHAR"		javaType="java.lang.String" 	mode="INOUT" />
 	</parameterMap>
 	
 	<parameterMap id="parPorPk" class="java.util.Map">
@@ -68,12 +76,12 @@
 		<parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN" />
 	</parameterMap>
 	
-<parameterMap id="parDeleteCronogramaCredito"  class="java.util.Map">
+	<parameterMap id="parDeleteCronogramaCredito"  class="java.util.Map">
 		<parameter property="intPersEmpresaPk" 		jdbcType="NUMERIC" 		javaType="java.lang.Integer" mode="IN" />
 		<parameter property="intCuentaPk" 			jdbcType="NUMERIC"		javaType="java.lang.Integer" mode="IN" />
 		<parameter property="intItemExpediente" 	jdbcType="NUMERIC"		javaType="java.lang.Integer" mode="IN" />
 		<parameter property="intItemDetExpediente" 	jdbcType="NUMERIC" 		javaType="java.lang.Integer" mode="IN" />
-</parameterMap>
+	</parameterMap>
 
 	<parameterMap id="parPorPkExpedienteCuota" class="java.util.Map">
 		<parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" mode="OUT" />
@@ -83,14 +91,23 @@
 		<parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN" />
 		<parameter property="intNroCuota" 			javaType="java.lang.Integer"	jdbcType="NUMERIC" 		mode="IN" />
 	</parameterMap>
-	
-
+	<!-- Autor: jchavez / Tarea: Creación / Fecha: 03.09.2014 -->
+	<parameterMap id="parPorPkExpedientePeriodo"  class="java.util.Map">
+		<parameter property="cursorLista" 			javaType="java.sql.ResultSet" 	jdbcType="ORACLECURSOR" 	mode="OUT" />
+		<parameter property="intPersEmpresaPk" 		javaType="java.lang.Integer"	jdbcType="NUMERIC" 			mode="IN" />
+		<parameter property="intCuentaPk" 			javaType="java.lang.Integer"	jdbcType="NUMERIC"			mode="IN" />
+		<parameter property="intItemExpediente" 	javaType="java.lang.Integer"	jdbcType="NUMERIC"			mode="IN" />
+		<parameter property="intItemDetExpediente" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 			mode="IN" />
+		<parameter property="intPeriodoPlanilla" 	javaType="java.lang.Integer"	jdbcType="NUMERIC" 			mode="IN" />
+	</parameterMap>
+	<!-- Fin jchavez 03.09.2014 -->
+		
 	<procedure id="grabar"	parameterMap="parCronogramaCredito">
-		{ call PKG_CRONOGRAMACREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+		{ call PKG_CRONOGRAMACREDITO.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
 	</procedure>
 
 	<procedure id="modificar"	parameterMap="parCronogramaCredito">
-		{ call PKG_CRONOGRAMACREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
+		{ call PKG_CRONOGRAMACREDITO.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
 	</procedure>
 
 	<procedure id="getListaPorPk"	parameterMap="parPorPk"		resultMap="resCronogramaCredito">
@@ -108,5 +125,8 @@
 	<procedure id="getListaPorPkExpedienteCuota"	parameterMap="parPorPkExpedienteCuota" resultMap="resCronogramaCredito">
 		{ call PKG_CRONOGRAMACREDITO.getListaPorPkExpedienteCuota(?,?,?,?,?,?) }
 	</procedure>
-	
+
+	<procedure id="getListaPorPkExpCredYPeriodo"	parameterMap="parPorPkExpedientePeriodo" resultMap="resCronogramaCredito">
+		{ call PKG_CRONOGRAMACREDITO.getListaPorPkExpCredYPeriodo(?,?,?,?,?,?) }
+	</procedure>	
 </sqlMap>

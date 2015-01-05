@@ -402,7 +402,7 @@ public class ConfSolicitudService {
 			List <String> listaRazonSocialEstructura = new ArrayList<String>();
 			String razonSocialEstructura = "";
 			
-			listaConfServSolicitud = boConfServSolicitud.buscar(confServSolicitud,fechaFiltroInicio,fechaFiltroFin);
+			listaConfServSolicitud = boConfServSolicitud.buscarRequisito(confServSolicitud,fechaFiltroInicio,fechaFiltroFin);
 			boolean cumpleFiltroTipoCuenta = Boolean.FALSE;
 			for(ConfServSolicitud confServSolicitudAux : listaConfServSolicitud){
 				//log.info("encuentra : "+confServSolicitudAux);

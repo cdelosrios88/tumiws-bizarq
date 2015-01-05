@@ -11,6 +11,7 @@ import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.persona.core.domain.Persona;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionDetalle;
 import pe.com.tumi.tesoreria.logistica.domain.DocumentoSunat;
+import pe.com.tumi.tesoreria.logistica.domain.OrdenCompra;
 
 public class EgresoDetalleInterfaz extends TumiDomain{
 
@@ -46,6 +47,11 @@ public class EgresoDetalleInterfaz extends TumiDomain{
 	
 	//JCHAVEZ 17.02.2014
 	private Archivo archivoAdjuntoGiro;
+	
+	//Autor: jchavez / Tarea: Creacion / Fecha: 06.10.2014
+	private OrdenCompra ordenCompra;
+	private Integer intTipoMoneda;
+	//Fin jchavez - 06.10.2014
 	
 	public Integer getIntParaConcepto() {
 		return intParaConcepto;
@@ -191,4 +197,19 @@ public class EgresoDetalleInterfaz extends TumiDomain{
 	public void setArchivoAdjuntoGiro(Archivo archivoAdjuntoGiro) {
 		this.archivoAdjuntoGiro = archivoAdjuntoGiro;
 	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 06.10.2014
+	public OrdenCompra getOrdenCompra() {
+		return ordenCompra;
+	}
+	public void setOrdenCompra(OrdenCompra ordenCompra) {
+		this.ordenCompra = ordenCompra;
+	}
+	public Integer getIntTipoMoneda() {
+		return intTipoMoneda;
+	}
+	public void setIntTipoMoneda(Integer intTipoMoneda) {
+		this.intTipoMoneda = intTipoMoneda;
+	}
+	//fin jchavez 06.10.2014
+
 }

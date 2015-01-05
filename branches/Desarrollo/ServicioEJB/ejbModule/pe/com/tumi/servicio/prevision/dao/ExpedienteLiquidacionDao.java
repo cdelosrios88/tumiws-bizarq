@@ -17,4 +17,6 @@ public interface ExpedienteLiquidacionDao extends TumiDao{
 	public List<ExpedienteLiquidacion> getListaBusqExpLiqFiltros(Object o) throws DAOException;
 	public List<ExpedienteLiquidacion> getListaBusqAutLiqFiltros(Object o) throws DAOException;
 	public List<RequisitoLiquidacionComp> getRequisitoGiroLiquidacion(Object o) throws DAOException;
+	//Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+	public Integer getCorrespondePrevision(Object o) throws DAOException;
 }

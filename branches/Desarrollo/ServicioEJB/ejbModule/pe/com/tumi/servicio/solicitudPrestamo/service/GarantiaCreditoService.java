@@ -33,7 +33,8 @@ public class GarantiaCreditoService {
 	private GarantiaCreditoBO boGarantiaCredito = (GarantiaCreditoBO)TumiFactory.get(GarantiaCreditoBO.class);
 
 	
-	public List<GarantiaCreditoComp> getListaGarantiaCreditoCompPorExpediente(ExpedienteCreditoId pId) throws BusinessException{
+	public List<GarantiaCreditoComp> getListaGarantiaCreditoCompPorExpediente(ExpedienteCreditoId pId,
+																			  Integer intTipoCuenta) throws BusinessException{
 		
 		List<GarantiaCreditoComp> lista = new ArrayList<GarantiaCreditoComp>();
 		SocioComp socioComp = null;
@@ -65,14 +66,17 @@ public class GarantiaCreditoService {
 										}
 									}
 								}
-				    socioComp = socioFacade.getSocioNatuPorDocIdentidadYIdEmpresa(new Integer(Constante.PARAM_T_TIPODOCUMENTO_DNI), persona.getDocumento().getStrNumeroIdentidad(), Constante.PARAM_EMPRESASESION);
+				    socioComp = socioFacade.getSocioNatuPorDocIdentidadYIdEmpresaTipoCuenta(new Integer(Constante.PARAM_T_TIPODOCUMENTO_DNI),
+				    															  			persona.getDocumento().getStrNumeroIdentidad(),
+							    															Constante.PARAM_EMPRESASESION,
+							    															intTipoCuenta);
 				    
 				    
 				    cuentaIntegrante = new CuentaIntegrante();
 	        		cuentaIntegrante.setId(new CuentaIntegranteId());
 	        		cuentaIntegrante.getId().setIntPersEmpresaPk(garantiaCredito.getId().getIntPersEmpresaPk());
 	        		cuentaIntegrante.getId().setIntPersonaIntegrante(persona.getIntIdPersona());
-	        		cuentaIntegrante = cuentaFacade.getCuentaIntegrantePorPkSocio(cuentaIntegrante);
+	        		cuentaIntegrante = cuentaFacade.getCuentaIntegrantePorPkSocioTipoCuenta(cuentaIntegrante, intTipoCuenta);
 	        		
 	        		
 	        		if(cuentaIntegrante != null){

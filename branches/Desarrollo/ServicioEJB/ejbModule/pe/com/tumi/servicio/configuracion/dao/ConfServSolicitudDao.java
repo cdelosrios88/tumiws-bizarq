@@ -12,4 +12,5 @@ public interface ConfServSolicitudDao extends TumiDao{
 	public List<ConfServSolicitud> getListaPorPk(Object o) throws DAOException;
 	public List<ConfServSolicitud> getListaPorBuscar(Object o) throws DAOException;
 	public List<ConfServSolicitud> getListaPorTipoOperacionTipoRequisito(Object o) throws DAOException;
+	public List<ConfServSolicitud> getListaPorBuscarRequisito(Object o) throws DAOException;
 }

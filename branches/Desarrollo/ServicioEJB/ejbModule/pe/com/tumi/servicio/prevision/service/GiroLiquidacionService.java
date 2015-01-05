@@ -66,7 +66,7 @@ public class GiroLiquidacionService {
 	public List<ExpedienteLiquidacion> buscarExpedienteParaGiro(List<Persona> listaPersonaFiltro, Integer intTipoCreditoFiltro,
 			EstadoLiquidacion estadoLiquidacionFiltro, Integer intItemExpedienteFiltro, Integer intTipoBusquedaSucursal, 
 			Integer intIdSucursalFiltro, Integer intIdSubsucursalFiltro) throws BusinessException{
-		
+		List<ExpedienteLiquidacion> listaExpedienteLiquidacionTemp = new ArrayList<ExpedienteLiquidacion>();
 		List<ExpedienteLiquidacion> listaExpedienteLiquidacion = new ArrayList<ExpedienteLiquidacion>();
 		try{
 			CuentaFacadeRemote cuentaFacade = (CuentaFacadeRemote) EJBFactory.getRemote(CuentaFacadeRemote.class);
@@ -95,11 +95,22 @@ public class GiroLiquidacionService {
 			}else{
 				//listaCuentaIntegrante = cuentaFacade.getCuentaIntegrantePorIdPersona(null, intIdEmpresa);
 				if (intItemExpedienteFiltro!=null) {
-					listaExpedienteLiquidacion = new ArrayList<ExpedienteLiquidacion>();
-					listaExpedienteLiquidacion.add(boExpedienteLiquidacion.getPorPk(intIdEmpresa, intItemExpedienteFiltro));
-				}else listaExpedienteLiquidacion = boExpedienteLiquidacion.getPorIdEmpresa(intIdEmpresa);
-				
+//					listaExpedienteLiquidacionTemp = new ArrayList<ExpedienteLiquidacion>();
+					listaExpedienteLiquidacionTemp.add(boExpedienteLiquidacion.getPorPk(intIdEmpresa, intItemExpedienteFiltro));
+				}else listaExpedienteLiquidacionTemp = boExpedienteLiquidacion.getPorIdEmpresa(intIdEmpresa);
+				//Autor: jchavez / Tarea: Modificación / Fecha: 08.08.2014 /
+				//Funcionalidad: Solucion provisional filtros de busqueda
+				if (listaExpedienteLiquidacionTemp!=null && !listaExpedienteLiquidacionTemp.isEmpty()) {
+					for (ExpedienteLiquidacion expLiqTemp : listaExpedienteLiquidacionTemp) {
+						if (intTipoCreditoFiltro!=null && !intTipoCreditoFiltro.equals(0) && expLiqTemp.getIntParaSubTipoOperacion().compareTo(intTipoCreditoFiltro)==0) {
+							listaExpedienteLiquidacion.add(expLiqTemp);
+						}else if (intTipoCreditoFiltro==null || intTipoCreditoFiltro.equals(0)) {
+							listaExpedienteLiquidacion.add(expLiqTemp);
+						}
+					}
+				}
 				for(ExpedienteLiquidacion expedienteLiquidacion : listaExpedienteLiquidacion){
+					
 					expedienteLiquidacion.setListaExpedienteLiquidacionDetalle(obtenerExpedienteLiquidacionDetalle(expedienteLiquidacion));					
 				}
 			}
@@ -662,6 +673,11 @@ public class GiroLiquidacionService {
 			
 			egreso.setBlnEsGiroPorSedeCentral(true);
 			egreso = egresoFacade.grabarEgresoParaGiroPrestamo(egreso);
+
+			/* Autor: jchavez / Tarea: Modificación / Fecha: 11.09.2014
+			   Se setea  el egreso grabado en el expediente liquidacion*/
+			expedienteLiquidacion.setEgreso(egreso);
+			
 			BeneficiarioLiquidacion beneficiarioLiquidacionSeleccionado = expedienteLiquidacion.getBeneficiarioLiquidacionGirar(); //obtenerBeneficiarioSeleccionado(expedienteLiquidacion);
 			beneficiarioLiquidacionSeleccionado.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
 			beneficiarioLiquidacionSeleccionado.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());

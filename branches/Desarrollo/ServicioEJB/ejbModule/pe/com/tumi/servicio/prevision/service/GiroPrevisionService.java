@@ -597,7 +597,10 @@ public class GiroPrevisionService {
 			//Se procede a la grabación del Egreso, Egreso Detalle, Libro Diario y Libro Diario Detalle
 			egreso.setBlnEsGiroPorSedeCentral(true);
 			egreso = egresoFacade.grabarEgresoParaGiroPrestamo(egreso);
-						
+			/* Autor: jchavez / Tarea: Modificación / Fecha: 11.09.2014
+			   Se setea  el egreso grabado en el expediente prevision*/
+			expedientePrevision.setEgreso(egreso);
+			
 			BeneficiarioPrevision beneficiarioPrevisionSeleccionado = obtenerBeneficiarioSeleccionado(expedientePrevision);
 			beneficiarioPrevisionSeleccionado.setIntPersEmpresaEgreso(egreso.getId().getIntPersEmpresaEgreso());
 			beneficiarioPrevisionSeleccionado.setIntItemEgresoGeneral(egreso.getId().getIntItemEgresoGeneral());

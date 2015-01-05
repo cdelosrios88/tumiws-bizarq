@@ -12,7 +12,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/workspace/tumi-26-06-2014/ServicioWeb/WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar"/>
+	<classpathentry kind="lib" path="C:/tumi/erp/desarrollo/workspace/ServicioWeb/WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar"/>
 	<classpathentry kind="src" path="/RiesgoEJB"/>
 	<classpathentry kind="src" path="/CobranzaEJB"/>
 	<classpathentry kind="output" path="build/classes"/>

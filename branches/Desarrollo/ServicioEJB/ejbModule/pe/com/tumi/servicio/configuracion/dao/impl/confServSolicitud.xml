@@ -22,6 +22,26 @@
      <result property="intPersPersonaUsuarioPk"    			column="pPers_personausuario_n_pk" />
      <result property="tsFechaEliminacion"  				column="pFechaeliminacion_d" />
      <result property="intPersPersonaEliminaPk"				column="pPers_personaeliminar_n_pk" />
+     <result property="strDescripcionSubTipo"				column="pDescripcion" />
+  </resultMap>
+  
+  <resultMap id="resConfServRequisito" class="ConfServSolicitud" >
+     <result property="id.intPersEmpresaPk"      			column="pPers_empresa_n_pk" />
+     <result property="id.intItemSolicitud"    				column="pItemreqaut_n" />
+     <result property="intParaTipoRequertoAutorizaCod"  	column="pPara_tiporeqaut_n_cod" />
+     <result property="intParaTipoOperacionCod"      		column="pPara_tipooperacion_n_cod" />
+     <result property="intParaSubtipoOperacionCod"    		column="pPara_subtipooperacion_n_cod" />
+     <result property="dtDesde"      						column="pDesde_d" />
+     <result property="dtHasta"    							column="pHasta_d" />
+     <result property="bdMontoDesde"  						column="pMontodesde_n" />
+     <result property="bdMontoHasta"  						column="pMontohasta_n" />
+     <result property="bdCuotaDesde"      					column="pCuotadesde_n" />
+     <result property="bdCuotaHasta"    					column="pCuotahasta_n" />
+     <result property="intParaEstadoCod"  					column="pPara_estado_n_cod" />
+     <result property="tsFechaRegistro"      				column="pFecharegistro_d" />
+     <result property="intPersPersonaUsuarioPk"    			column="pPers_personausuario_n_pk" />
+     <result property="tsFechaEliminacion"  				column="pFechaeliminacion_d" />
+     <result property="intPersPersonaEliminaPk"				column="pPers_personaeliminar_n_pk" />
   </resultMap>
   
   <parameterMap id="parConfServSolicitud" class="ConfServSolicitud">
@@ -84,6 +104,8 @@
 	{ call PKG_CONFSOLICITUD.getListaXOperTipRequ(?,?,?,?) }  
   </procedure>  
   
-  
+  <procedure id="getListaPorBuscarRequisitos" parameterMap="parPorBuscar" resultMap="resConfServRequisito">
+	{ call PKG_CONFSOLICITUD.getListaPorBuscarRequisitos(?,?,?,?,?) }  
+  </procedure>
   
 </sqlMap>  

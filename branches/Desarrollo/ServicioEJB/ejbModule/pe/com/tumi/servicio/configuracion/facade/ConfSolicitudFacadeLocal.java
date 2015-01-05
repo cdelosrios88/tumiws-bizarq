@@ -47,5 +47,4 @@ public interface ConfSolicitudFacadeLocal {
 	public ConfServSolicitud modificarAutorizacion(ConfServSolicitud o)throws BusinessException;
 	public List<ConfServCaptacion> getListaConfServCaptacionPorCabecera(ConfServSolicitud o)throws BusinessException;
 	public List<ConfServSolicitud> buscarConfSolicitudRequisitoOptimizado(ConfServSolicitud o, Integer tipoCuentaFiltro, Credito credito)throws BusinessException;
-	
 }

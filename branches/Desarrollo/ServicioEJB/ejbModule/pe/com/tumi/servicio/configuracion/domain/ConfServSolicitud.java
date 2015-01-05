@@ -43,6 +43,8 @@ public class ConfServSolicitud extends TumiDomain{
 	private Boolean blnConfigurado;
 	private Boolean blnUsuario;
 	private Boolean blnPerfil;
+	//Autor: Rodolfo Villarreal Acuña
+	private String strDescripcionSubTipo;
 	
 	
 	public ConfServSolicitud(){
@@ -258,6 +260,14 @@ public class ConfServSolicitud extends TumiDomain{
 				+ listaUsuario + ", listaPerfil=" + listaPerfil
 				+ ", listaDetalle=" + listaDetalle + ", listaCredito="
 				+ listaCredito + ", listaRol=" + listaRol + "]";
+	}
+
+	public String getStrDescripcionSubTipo() {
+		return strDescripcionSubTipo;
+	}
+
+	public void setStrDescripcionSubTipo(String strDescripcionSubTipo) {
+		this.strDescripcionSubTipo = strDescripcionSubTipo;
 	}
 
 

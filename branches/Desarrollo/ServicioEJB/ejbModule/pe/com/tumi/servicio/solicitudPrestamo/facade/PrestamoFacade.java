@@ -126,6 +126,19 @@ public class PrestamoFacade extends TumiFacade implements PrestamoFacadeRemote, 
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public List<CronogramaCredito> getListaPorPkExpedienteCuota(ExpedienteCreditoId pId, Integer intNroCuota) throws BusinessException{
+		List<CronogramaCredito> lista = null;
+   		try{
+   			lista = boCronogramaCredito.getListaPorPkExpedienteCuota(pId, intNroCuota);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+   		return lista;
+	}
+	
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public EstadoCredito obtenerUltimoEstadoCredito(ExpedienteCredito expedienteCredito, Integer intTipoEstado) throws BusinessException{
 		EstadoCredito dto = null;
    		try{
@@ -366,6 +379,28 @@ public class PrestamoFacade extends TumiFacade implements PrestamoFacadeRemote, 
 			throw new BusinessException(e);
 		}
 		return dto;
+	}
+    
+    /**
+     * Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014 / 
+   	 * Funcionalidad: Método que recupera la lista de cronogramas activos por expediente a partir de un periodo dado 
+   	 * @author jchavez
+   	 * @version 1.0
+   	 * @param expedienteCredito
+   	 * @param intPeriodoPlanilla
+   	 * @return lista - lista de cronogramas
+	 * @throws BusinessException
+     */
+	public List<CronogramaCredito> getListaPorPkExpCredYPeriodo(ExpedienteCredito expedienteCredito, Integer intPeriodoPlanilla) throws BusinessException{
+		List<CronogramaCredito> lista = null;
+   		try{
+   			lista = boCronogramaCredito.getListaPorPkExpCredYPeriodo(expedienteCredito, intPeriodoPlanilla);
+   		}catch(BusinessException e){
+   			throw e;
+   		}catch(Exception e){
+   			throw new BusinessException(e);
+   		}
+   		return lista;
 	}
 }
 

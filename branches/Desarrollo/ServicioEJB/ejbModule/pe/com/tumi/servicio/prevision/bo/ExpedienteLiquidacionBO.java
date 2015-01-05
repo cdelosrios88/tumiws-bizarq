@@ -216,4 +216,20 @@ public class ExpedienteLiquidacionBO {
 		}
 		return lista;
 	}	
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014
+	public Integer getCorrespondePrevision(Integer intEmpresa, Integer intCuenta) throws BusinessException{
+		Integer intResult = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intEmpresa", 	intEmpresa);
+			mapa.put("intCuenta", 	intCuenta);
+			intResult = dao.getCorrespondePrevision(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return intResult;
+	}
 }

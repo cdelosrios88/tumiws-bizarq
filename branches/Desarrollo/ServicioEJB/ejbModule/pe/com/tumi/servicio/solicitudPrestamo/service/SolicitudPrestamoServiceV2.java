@@ -2144,10 +2144,16 @@ public class SolicitudPrestamoServiceV2 {
      * @return
      * @throws Exception
      */
-    public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}
+//    public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}
     
+    public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
 	/**
 	 * 
 	 * @return

@@ -14,7 +14,8 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.GarantiaCreditoCo
 
 @Local
 public interface GarantiaCreditoFacadeLocal {
-	public List<GarantiaCreditoComp> getListaGarantiaCreditoCompPorExpediente(ExpedienteCreditoId pId) throws BusinessException;
+	public List<GarantiaCreditoComp> getListaGarantiaCreditoCompPorExpediente(ExpedienteCreditoId pId,
+			  																  Integer intTipoCuenta) throws BusinessException;
 	public GarantiaCredito modificarGarantiaCredito(GarantiaCredito o) throws BusinessException;
 	public GarantiaCredito getGarantiaCredito(GarantiaCreditoId pId) throws BusinessException;
 	public GarantiaCredito grabarGarantiaCredito(GarantiaCredito o) throws BusinessException;

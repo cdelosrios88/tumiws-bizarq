@@ -120,6 +120,13 @@
    	 <parameter property="intParaSubTipoOperacion" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
   </parameterMap>
   
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014 -->
+  <parameterMap id="parPorCuenta2" class="java.util.Map">
+   	 <parameter property="intCorrespondePrevision" 		javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="OUT"/>
+   	 <parameter property="intEmpresa" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+   	 <parameter property="intCuenta" 					javaType="java.lang.Integer"  jdbcType="NUMERIC" 	   mode="IN"/>
+  </parameterMap>
+    
   <procedure id="grabar" parameterMap="parExpedienteLiquidacion">
 	{ call PKG_EXPEDIENTELIQUIDACION.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }
   </procedure>
@@ -152,9 +159,13 @@
 	{ call PKG_EXPEDIENTELIQUIDACION.getListaBusqAutLiqFiltros(?,?,?,?,?,?,?,?,?)}
   </procedure>
   
-  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 06.12.2014 -->
   <procedure id="getRequisitoGiroLiquidacion" parameterMap="parPorSubope" resultMap="resRequisitoParaGiro">
 	{ call PKG_EXPEDIENTELIQUIDACION.getRequisitoGiroLiquidacion(?,?,?) }
   </procedure>    
-
+  
+  <!-- Autor: jchavez / Tarea: Creación / Fecha: 09.12.2014 -->
+  <procedure id="getCorrespondePrevision" parameterMap="parPorCuenta2">
+	{ call PKG_EXPEDIENTELIQUIDACION.getCorrespondePrevision(?,?,?) }
+  </procedure>
 </sqlMap>
