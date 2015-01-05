@@ -145,6 +145,8 @@ public class AutorizacionActividadController {
 	private Date dtHoy = null;
 	private Calendar fecHoy = Calendar.getInstance();
 	
+	//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+	private List<Tabla> listaEstadoSolicitud;
 	
 	/**
 	 * Constructor por defecto.
@@ -181,7 +183,14 @@ public class AutorizacionActividadController {
 		intParaEstadoAutorizar = 0;
 		intParaTipoAureobCod = 0;
 		cargarFacadesServicesListas();
-		
+		//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+		try {
+			
+			listaEstadoSolicitud = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO),"D");
+		} catch (Exception e) {
+			log.error("error: " + e.getMessage());
+		}
+		//Fin jchavez - 01.09.2014
 		dtHoy = fecHoy.getTime();
 		
 	}
@@ -2231,6 +2240,18 @@ public ConfServSolicitud validarConfiguracion(ConfServSolicitud confServSolicitu
 
 	public void setIntBusqItemCredito(Integer intBusqItemCredito) {
 		this.intBusqItemCredito = intBusqItemCredito;
+	}
+
+
+
+	public List<Tabla> getListaEstadoSolicitud() {
+		return listaEstadoSolicitud;
+	}
+
+
+
+	public void setListaEstadoSolicitud(List<Tabla> listaEstadoSolicitud) {
+		this.listaEstadoSolicitud = listaEstadoSolicitud;
 	}
 
 	

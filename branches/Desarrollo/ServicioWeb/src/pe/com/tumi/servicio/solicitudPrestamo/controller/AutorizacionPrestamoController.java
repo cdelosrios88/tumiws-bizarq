@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import pe.com.tumi.cobranza.planilla.facade.PlanillaFacadeRemote;
 import pe.com.tumi.common.FileUtil;
 import pe.com.tumi.common.MyFile;
 import pe.com.tumi.common.util.Constante;
@@ -27,9 +31,12 @@ import pe.com.tumi.contabilidad.cierre.domain.LibroDiario;
 import pe.com.tumi.contabilidad.cierre.facade.LibroDiarioFacadeRemote;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.Cuenta;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaId;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaIntegrante;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.facade.CuentaFacadeRemote;
 import pe.com.tumi.credito.socio.core.domain.SocioComp;
 import pe.com.tumi.credito.socio.core.domain.SocioEstructura;
+import pe.com.tumi.credito.socio.core.domain.SocioEstructuraPK;
+import pe.com.tumi.credito.socio.core.domain.SocioPK;
 import pe.com.tumi.credito.socio.core.facade.SocioFacadeRemote;
 import pe.com.tumi.credito.socio.creditos.domain.Credito;
 import pe.com.tumi.credito.socio.creditos.domain.CreditoId;
@@ -128,6 +135,8 @@ public class AutorizacionPrestamoController {
 	private PermisoFacadeRemote permisoFacade = null;
 	private CreditoFacadeRemote creditoFacade = null;
 	
+	private PlanillaFacadeRemote planillaFacade = null;
+	
 	//BUSQUEDA - 22.05.2013 - CGD
 	// sesion
 	private Usuario 	usuario;
@@ -182,8 +191,12 @@ public class AutorizacionPrestamoController {
 	private Integer intBusqTipoCreditoEmpresa;
 	private ExpedienteCreditoComp expedienteCompBusq;
 	
+	//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+	private List<Tabla> listaEstadoSolicitud;
 	
-
+	//Autor: jchavez / Tarea: Creación / Fecha: 19.11.2014 /
+	private String strMensajeMorosidad;
+	private List<Tabla> listaTablaEstadoPagoEfectuado;
 	/**
 	 * 
 	 * @throws NumberFormatException
@@ -209,10 +222,15 @@ public class AutorizacionPrestamoController {
 			empresaFacade = (EmpresaFacadeRemote)EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			creditoFacade = (CreditoFacadeRemote)EJBFactory.getRemote(CreditoFacadeRemote.class);
 			conceptoFacade = (ConceptoFacadeRemote)EJBFactory.getRemote(ConceptoFacadeRemote.class);
-
+			planillaFacade = (PlanillaFacadeRemote)EJBFactory.getRemote(PlanillaFacadeRemote.class);
+			
 			listaTablaEstadoPago = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO), "C");
 			listaTablaTipoCredito = tablaFacade.getListaTablaPorAgrupamientoB(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA), 1);
 			listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(Constante.PARAM_EMPRESASESION);
+			//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+			listaEstadoSolicitud = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO),"D");
+			//Autor: jchavez / Tarea: Modificación / Fecha: 19.11.2014 / 
+			listaTablaEstadoPagoEfectuado = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_ESTADO_PAGO));
 			//Ordenamos por nombre
 			Collections.sort(listaSucursal, new Comparator<Sucursal>(){
 				public int compare(Sucursal sucUno, Sucursal sucDos) {
@@ -488,6 +506,38 @@ public class AutorizacionPrestamoController {
 				expedienteCreditoId.setIntPersEmpresaPk(expedienteCreditoCompSelected.getExpedienteCredito().getId().getIntPersEmpresaPk());
 				validarOperacionAutorizar();
 				validarEstadoCuenta(expedienteCreditoId);
+				//Autor: jchavez / Tarea: Creación / Fecha: 21.11.2014
+				String strMorosidad = "";
+				SocioEstructura socioEstructura = new SocioEstructura();
+				List<CuentaIntegrante> lstCtaInt = socioFacade.getListaCuentaIntegrantePorCuenta(expedienteCreditoCompSelected.getExpedienteCredito().getId().getIntPersEmpresaPk(),expedienteCreditoCompSelected.getExpedienteCredito().getId().getIntCuentaPk());
+				if (lstCtaInt!=null && !lstCtaInt.isEmpty()) {
+					SocioPK sPk = new SocioPK();
+					sPk.setIntIdEmpresa(EMPRESA_USUARIO);
+					sPk.setIntIdPersona(lstCtaInt.get(0).getId().getIntPersonaIntegrante());
+					socioEstructura = socioFacade.getSocioEstructuraDeOrigenPorPkSocio(sPk);
+				}
+				strMorosidad = planillaFacade.getSocioMorosidad(socioEstructura);
+				Integer r = strMorosidad.indexOf("-");
+				Integer s = strMorosidad.indexOf("/");
+				if (r==-1) {
+					strMensajeMorosidad = "";
+				}else {
+					if(strMorosidad.substring(0,r).equalsIgnoreCase("SIN_EFRE")) {
+						strMensajeMorosidad = "La planilla del periodo "+strMorosidad.substring(r+1,strMorosidad.length())+" no tiene efectuado";
+					}else{
+						if (s!=-1) {							
+							for (Tabla o : listaTablaEstadoPagoEfectuado) {
+								if (o.getIntIdDetalle().equals(Integer.parseInt(strMorosidad.substring(r+1,s)))) {
+									strMensajeMorosidad = "La morosidad del periodo "+strMorosidad.substring(s+1,strMorosidad.length())
+															+" es S/."+(convertirMonto(new BigDecimal(strMorosidad.substring(0,r))))
+															+". Estado pago: "+o.getStrDescripcion();
+									break;
+								}
+							}
+						}						
+					}
+				}
+				//Fin jchavez - 21.11.2014
 			}
 		}catch (Exception e) {
 			log.error("Error Exception en seleccionarRegistro ---> "+e);
@@ -495,7 +545,13 @@ public class AutorizacionPrestamoController {
 	}
 	
 
-	
+	public static String convertirMonto(BigDecimal bdMonto)throws Exception{
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		NumberFormat formato = new DecimalFormat("#,###.00",otherSymbols);
+		return formato.format(bdMonto);
+	}
 	
 	/**
 	 * Valida si la operacion Autorizar se visualiza o no en el popup de acciones.
@@ -1159,7 +1215,8 @@ public class AutorizacionPrestamoController {
 							
 							// validar si es represtamo
 							//CGD-25.11.2013
-							if(expedienteCreditoCompSelected.getExpedienteCredito().getIntParaSubTipoOperacionCod().compareTo(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)!=0){
+							if(expedienteCreditoCompSelected.getExpedienteCredito().getIntParaSubTipoOperacionCod().compareTo(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)!=0
+									&& expedienteCreditoCompSelected.getExpedienteCredito().getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PRESTATUMI)!=0){
 								blnExisteMovimiento = validarExistenciaPrestamoEnMovimiento(cuenta);	
 							}
 							
@@ -1202,7 +1259,8 @@ public class AutorizacionPrestamoController {
 							blnSeRegistaronTodos = faltaSoloUno(intTipoValidacion,autorizacionConfigurada);
 							
 							//CGD-25.11.2013
-							if(expedienteCreditoCompSelected.getExpedienteCredito().getIntParaSubTipoOperacionCod().compareTo(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)!=0){
+							if(expedienteCreditoCompSelected.getExpedienteCredito().getIntParaSubTipoOperacionCod().compareTo(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)!=0
+									&& expedienteCreditoCompSelected.getExpedienteCredito().getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PRESTATUMI)!=0){
 								blnExisteMovimiento = validarExistenciaPrestamoEnMovimiento(cuenta);	
 							}
 							if(blnExisteMovimiento){
@@ -3260,6 +3318,26 @@ public class AutorizacionPrestamoController {
 
 	public void setExpedienteCompBusq(ExpedienteCreditoComp expedienteCompBusq) {
 		this.expedienteCompBusq = expedienteCompBusq;
+	}
+
+
+	public List<Tabla> getListaEstadoSolicitud() {
+		return listaEstadoSolicitud;
+	}
+
+
+	public void setListaEstadoSolicitud(List<Tabla> listaEstadoSolicitud) {
+		this.listaEstadoSolicitud = listaEstadoSolicitud;
+	}
+
+
+	public String getStrMensajeMorosidad() {
+		return strMensajeMorosidad;
+	}
+
+
+	public void setStrMensajeMorosidad(String strMensajeMorosidad) {
+		this.strMensajeMorosidad = strMensajeMorosidad;
 	}
 
 	

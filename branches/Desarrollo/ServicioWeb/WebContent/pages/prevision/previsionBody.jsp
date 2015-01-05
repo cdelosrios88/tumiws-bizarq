@@ -83,6 +83,8 @@
                  <h:outputText value="Imprimir formatos de Previsión" style="padding-right: 2px;"/>
                  <rich:spacer height="16px"/>
                  <h:panelGrid columns="3" border="0"  style="width: 400px;">
+                 <rich:column width="120px">
+				 </rich:column>
                  <rich:column rendered="#{solicitudPrevisionController.mostrarBotonUno}"><h:commandButton id="btnImprimir11" value="Solicitud Sepelio" styleClass="btnEstilos1" action="#{solicitudPrevisionController.imprimirSepelio}"/></rich:column>
                  <rich:column rendered="#{solicitudPrevisionController.mostrarBoton}"><h:commandButton id="btnImprimir21" value="Solicitud de AES" styleClass="btnEstilos1" action="#{solicitudPrevisionController.imprimirSepelioAes}"/></rich:column>
                  <rich:column rendered="#{solicitudPrevisionController.mostrarBotonDos}"><h:commandButton id="btnImprimir3" value="Solicitud Renuncia Fonret" action="#{solicitudPrevisionController.renunciaFonret}" styleClass="btnEstilos1" /></rich:column>
@@ -328,3 +330,24 @@
 	<a4j:jsFunction name="recalcularGrillaBeneficiariosPrevision" reRender="pgLitstaBeneficiarios,pgLitstaFallecidosSepelio,pgBeneficiarioSepelio "
 					actionListener="#{solicitudPrevisionController.calcularMontosPorcentajeBeneficiariosSepelio}">
 	</a4j:jsFunction>
+	
+		<%--Inicio del popup autor: Rodolfo Villarreal Acuña --%>
+  <rich:modalPanel id="formEnBlancoPrevi" width="400" height="140" 
+	resizeable="false" style="background-color:#DEEBF5;" onhide="enableFormEnBlanco()">
+     <f:facet name="header">
+         <h:panelGrid>
+           <rich:column style="border: none;">
+             <h:outputText value="Opciones"/>
+           </rich:column>
+         </h:panelGrid>
+     </f:facet>
+     <f:facet name="controls">
+         <h:panelGroup>
+            <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+            	<rich:componentControl for="formEnBlancoPrevi" operation="hide" event="onclick"/>
+            </h:graphicImage>
+        </h:panelGroup>
+     </f:facet>
+     <a4j:include viewId="/pages/prevision/popup/formatosEnBlancoPrevision.jsp" layout="block"/>
+  </rich:modalPanel>
+			    <%--Fin del pop imprimir formtos en blanco --%>

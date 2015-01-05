@@ -490,7 +490,16 @@
 				</rich:column>
 			</h:panelGrid>
 			
-			<h:panelGrid columns="3">
+			<h:panelGrid columns="6">
+				<rich:column width="120px">
+						<h:outputText value="Cuota Préstamo" styleClass="estiloLetra1"/>
+					</rich:column>
+					<rich:column>
+						<h:outputText value=":"/>
+					</rich:column>
+					<rich:column>
+						<h:inputText value="#{solicitudPrestamoController.bdTotalCuotaPrestamo}" disabled="true"/>
+					</rich:column>
 				<rich:column width="120px">
 					<h:outputText value="Cuota Mensual"/>
 				</rich:column>
@@ -654,6 +663,16 @@
 								<h:outputText value="#{solicitudPrestamoController.msgTxtErrores}" styleClass="msgError"/>
 							</rich:column>
 						</h:panelGrid>
+						<h:panelGrid>
+							<rich:column width="400px">
+								<h:outputText value="La edad del socio es #{solicitudPrestamoController.intEdadSocio} años"/><br/>
+							</rich:column>
+						</h:panelGrid>
+						<h:panelGrid rendered = "#{solicitudPrestamoController.bdMontoDescJudicial != 0 && solicitudPrestamoController.bdMontoDescJudicial != null}">
+							<rich:column width="400px">
+								<h:outputText value="El socio tiene un descuento judicial de S/. #{solicitudPrestamoController.bdMontoDescJudicial}."/><br/>
+							</rich:column>
+						</h:panelGrid>
 					</rich:panel>
 				</rich:column>
 			</h:panelGrid>
@@ -731,7 +750,7 @@
 									</rich:column>
 									
 									<rich:column>
-										<h:commandLink  value=" Descargar1" action="#{solicitudPrestamoController.descargaArchivoUltimo}" target="_blank"
+										<h:commandLink  value=" Descargar" action="#{solicitudPrestamoController.descargaArchivoUltimo}" target="_blank"
 														style="color:black;padding-left: 5px;" rendered="#{not empty itemRequisitos.archivoAdjunto.strNombrearchivo}">
 												<f:param name="strRutaActual" value="#{itemRequisitos.archivoAdjunto.rutaActual}"/>
 												<f:param name="strNombreArchivo" value="#{itemRequisitos.archivoAdjunto.strNombrearchivo}"/>

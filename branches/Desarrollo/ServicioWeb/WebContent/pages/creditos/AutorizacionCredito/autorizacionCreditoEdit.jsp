@@ -48,7 +48,13 @@
 		<h:outputText value="#{autorizacionPrestamoController.strMsgErrorValidarMovimientos}" styleClass="msgError4" style="text-align: center"/>
 	</rich:panel>
 	
-
+	<h:panelGrid columns="1">
+		<rich:column width="800">
+			<h:outputText value="#{autorizacionPrestamoController.strMensajeMorosidad}" styleClass="msgError4" style="text-align: center"/>
+		</rich:column>
+	</h:panelGrid>
+	<rich:spacer height="10"></rich:spacer>
+	
 	<h:panelGrid columns="2">
 		<rich:column width="120px">
 			<h:outputText value="Autorización"

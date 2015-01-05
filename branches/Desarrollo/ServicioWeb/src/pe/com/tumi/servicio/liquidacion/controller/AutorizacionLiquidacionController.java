@@ -242,6 +242,9 @@ public class AutorizacionLiquidacionController {
 	private boolean mostrarMensajeError;
 	private String 	mensajeOperacion;
 	
+	//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+	private List<Tabla> listaEstadoSolicitud;
+	
 	public void cargarValoresIniciales(){
 		beanAutorizaLiquidacion = new AutorizaLiquidacion();
 		beanAutorizaVerificacion = new AutorizaVerificaLiquidacion();
@@ -324,7 +327,9 @@ public class AutorizacionLiquidacionController {
 			listaTipoOperacion = tablaFacade.getListaTablaPorIdMaestro(Constante.PARAM_T_TIPOOPERACION_AUTORIZACION_RETIRO);
 			listaTipoCuenta = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTA));
 			listaMotivoRenuncia =tablaFacade.getListaTablaPorIdMaestro(Constante.PARAM_T_MOTIVO_DE_RENUNCIA);
-
+			//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+			listaEstadoSolicitud = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO),"D");
+			
 			cargarCombosBusqueda();
 			cargarTipoConsultaBusqueda();
 		}catch(Exception e) {
@@ -2743,5 +2748,11 @@ public class AutorizacionLiquidacionController {
 	}
 	public void setMensajeOperacion(String mensajeOperacion) {
 		this.mensajeOperacion = mensajeOperacion;
+	}
+	public List<Tabla> getListaEstadoSolicitud() {
+		return listaEstadoSolicitud;
+	}
+	public void setListaEstadoSolicitud(List<Tabla> listaEstadoSolicitud) {
+		this.listaEstadoSolicitud = listaEstadoSolicitud;
 	}
 }

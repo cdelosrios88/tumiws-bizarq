@@ -124,7 +124,7 @@
 						style="width: 150px;">
 						<f:selectItem itemValue="0" itemLabel="Seleccione"/>
 						<tumih:selectItems var="sel"
-							cache="#{applicationScope.Constante.PARAM_T_TIPOCREDITOEMPRESA}"
+							value="#{giroCreditoController.listaTablaTipoCreditoEmpresa}"
 							itemValue="#{sel.intIdDetalle}" 
 							itemLabel="#{sel.strDescripcion}"
 							propertySort="intOrden" />
@@ -203,9 +203,9 @@
 							value="#{item.personaAdministra.juridica.strRazonSocial}" title="#{item.personaAdministra.juridica.strRazonSocial}"/>
 						
                   	</rich:column>
-                  	<rich:column width="100" style="text-align: center">
+                  	<rich:column width="40" style="text-align: center">
                     	<f:facet name="header">
-                      		<h:outputText value="Nro. Solicitud"/>                      		
+                      		<h:outputText value="Nro.Sol."/>                      		
                       	</f:facet>
                       	<h:outputText value="#{item.id.intItemExpediente}"/>
                   	</rich:column>
@@ -233,7 +233,7 @@
                       	</f:facet>
                       	<h:outputText value="#{item.estadoCreditoUltimo.sucursal.juridica.strSiglas}"/>
                   	</rich:column>
-                  	<rich:column width="100" style="text-align: center">
+                  	<rich:column width="125" style="text-align: center">
                     	<f:facet name="header">
                       		<h:outputText value="Aprobación"/>
                       	</f:facet>
@@ -241,12 +241,13 @@
                       		<f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
                       	</h:outputText>
                   	</rich:column>
-                  	<rich:column width="100" style="text-align: center">
+                  	<rich:column width="110" style="text-align: center">
                     	<f:facet name="header">
                       		<h:outputText value="Dcto. Giro"/>
                       	</f:facet>
+                      	<h:outputText value="#{item.archivoGiro.strNombrearchivo}"/>
                   	</rich:column>
-                  	<rich:column width="100" style="text-align: center">
+                  	<rich:column width="125" style="text-align: center">
                     	<f:facet name="header">
                       		<h:outputText value="Giro"/>
                       	</f:facet>
@@ -341,18 +342,18 @@
 						<a4j:commandButton
 							rendered="#{empty giroCreditoController.archivoAdjuntoGiro}"
 	                		styleClass="btnEstilos1"
-	                		value="Adjunto de Giro"
+	                		value="Adjunto Documento de Giro"
 	                		reRender="pAdjuntarGiroCredito,panelAdjuntoRequisito"
 	                		oncomplete="Richfaces.showModalPanel('pAdjuntarGiroCredito')"
-	                		style="width:130px"/>                 		
+	                		style="width:200px"/>                 		
 	                	<a4j:commandButton
 							rendered="#{not empty giroCreditoController.archivoAdjuntoGiro}"
 							disabled="#{giroCreditoController.deshabilitarNuevo}"
 	                		styleClass="btnEstilos"
-	                		value="Quitar Adjunto de Giro"
+	                		value="Quitar Adjunto Documento de Giro"
 	                		reRender="pAdjuntarGiroCredito,panelAdjuntoRequisito"
 	                		action="#{giroCreditoController.quitarAdjuntoGiro}"
-	                		style="width:130px"/>
+	                		style="width:220px"/>
 					</rich:column>
 					<rich:column width="130" 
 						rendered="#{(not empty giroCreditoController.archivoAdjuntoGiro)&&(giroCreditoController.deshabilitarNuevo)}">
@@ -434,14 +435,15 @@
 						style="background-color: #BFBFBF;"/>
 				</rich:column>
 				<rich:column width="250">
-					<h:outputText value="Monto Asignado : "/>
-					<h:outputText value="#{giroCreditoController.controlFondosFijosGirar.bdMontoApertura}">
+					<b><h:outputText value="Monto Asignado : " style="font-size:15px"/>
+					<h:outputText value="#{giroCreditoController.controlFondosFijosGirar.bdMontoApertura}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
-					<h:outputText value=" Saldo : "/>
-					<h:outputText value="#{giroCreditoController.controlFondosFijosGirar.bdMontoSaldo}">
+					<h:outputText value=" Saldo : " style="font-size:15px"/>
+					<h:outputText value="#{giroCreditoController.controlFondosFijosGirar.bdMontoSaldo}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
+					</b>
 				</rich:column>
 			</h:panelGrid>
 			
@@ -464,16 +466,17 @@
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column width="250">
-					<h:outputText value="Monto Asignado : "/>
+					<b><h:outputText value="Monto Asignado : " style="font-size:15px"/>
 					<h:outputText rendered ="#{not empty giroCreditoController.controlFondosFijosGirar.bdMontoApertura}" 
-						value="#{giroCreditoController.controlFondosFijosGirar.bdMontoApertura}">
+						value="#{giroCreditoController.controlFondosFijosGirar.bdMontoApertura}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
-					<h:outputText value=" Saldo : "/>
+					<h:outputText value=" Saldo : " style="font-size:15px"/>
 					<h:outputText rendered ="#{not empty giroCreditoController.controlFondosFijosGirar.bdMontoSaldo}" 
-						value="#{giroCreditoController.controlFondosFijosGirar.bdMontoSaldo}">
+						value="#{giroCreditoController.controlFondosFijosGirar.bdMontoSaldo}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
+					</b>
 				</rich:column>
 			</h:panelGrid>			
 
@@ -558,7 +561,7 @@
                 		value="Desleccionar Apoderado"
                 		action="#{giroCreditoController.deseleccionarPersonaApoderado}"
                 		reRender="panelApoderadoG,panelCartaPoderG"
-                		style="width:130px"/>
+                		style="width:150px"/>
 				</rich:column>
 			</h:panelGrid>
 			
@@ -584,15 +587,15 @@
                		value="Adjuntar Carta Poder"
                 		reRender="frmAjuntarCartaPoder"
                 		oncomplete="Richfaces.showModalPanel('pAdjuntarCartaPoder')"
-                		style="width:130px"/>
+                		style="width:140px"/>
                 	<a4j:commandButton
 						rendered="#{not empty giroCreditoController.archivoCartaPoder}"
 						disabled="#{giroCreditoController.deshabilitarNuevo}"
                 		styleClass="btnEstilos"
                 		value="Quitar Carta Poder"
-                		reRender="panelCartaPoderG"
+                		reRender="panelCartaPoderG, pAdjuntarCartaPoder"
                 		action="#{giroCreditoController.quitarCartaPoder}"
-                		style="width:130px"/>
+                		style="width:140px"/>
 				</rich:column>
 				<rich:column width="130" 
 					rendered="#{(not empty giroCreditoController.archivoCartaPoder)&&(giroCreditoController.deshabilitarNuevo)}">
@@ -716,11 +719,15 @@
 					<h:outputText value="Total General :"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText size ="15" value="#{giroCreditoController.bdTotalEgresoDetalleInterfaz}" 
+					<h:inputText value="#{giroCreditoController.bdTotalEgresoDetalleInterfaz}" 
 						readonly="true" 
-						style="background-color: #BFBFBF;">
+						style="background-color: #BFBFBF;font-weight:bold; width: 160;">
 						<f:converter converterId="ConvertidorMontos"/>
-					</h:inputText>
+					</h:inputText> - 
+					<h:inputText size="76"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"
+						value="#{giroCreditoController.strTotalEgresoDetalleInterfaz}"/>
 				</rich:column>
 			</h:panelGrid>
 		</rich:panel>

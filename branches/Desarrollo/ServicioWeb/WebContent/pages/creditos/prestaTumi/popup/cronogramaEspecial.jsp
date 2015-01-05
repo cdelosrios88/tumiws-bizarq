@@ -14,7 +14,7 @@
 	</script>
 	
 	<h:panelGrid>
-		<rich:extendedDataTable id="edtCronogramaEspecial" var="item" rowKeyVar="rowKey" sortMode="single" width="920px" 
+		<rich:extendedDataTable id="edtCronogramaEspecial" var="item" rowKeyVar="rowKey" sortMode="single" width="1000px" 
 			value="#{solicitudEspecialController.listaCronogramaCreditoComp}" rows="10" height="280px"
 			rendered="#{not empty solicitudEspecialController.listaCronogramaCreditoComp}"
 			enableContextMenu="false">
@@ -23,12 +23,6 @@
 					<h:outputText value="Cuota"/>
 				</f:facet>
 				<h:outputText value="#{rowKey+1}"/>
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="Fecha Envío"/>
-				</f:facet>
-				<h:outputText value="#{item.strFechaEnvio}"/>
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">
@@ -71,6 +65,38 @@
 					<h:outputText value="Aportes"/>
 				</f:facet>
 				<div align="right"><h:outputText value="#{item.bdAportes}"/></div>
+			</rich:column>
+			<rich:column rendered="#{solicitudEspecialController.intCantExpedientesVigentes == 1}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudEspecialController.strDescCuotaFijaExpCred1}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente1}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudEspecialController.intCantExpedientesVigentes == 2}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudEspecialController.strDescCuotaFijaExpCred2}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente2}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudEspecialController.intCantExpedientesVigentes == 3}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudEspecialController.strDescCuotaFijaExpCred3}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente3}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudEspecialController.intCantExpedientesVigentes == 4}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudEspecialController.strDescCuotaFijaExpCred4}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente4}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
 			</rich:column>
 			<rich:column width="140px">
 				<f:facet name="header">

@@ -16,14 +16,10 @@
 <a4j:include viewId="/pages/requisitos/popup/captacionBody.jsp"/>
 <a4j:include viewId="/pages/requisitos/popup/alerta.jsp"/>
 
-
-
-
 <rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;text-align: left;">
 <h:form id="frmRequisitos">
-
+	<h:outputLabel value="#{requisitosController.inicioPage}"/>
 		<rich:panel style="border: 0px solid #17356f;" styleClass="rich-tabcell-noborder">
-        	
         	<h:panelGrid style="margin:0 auto; margin-bottom:10px">
 	    		<rich:columnGroup>
 	    			<rich:column>
@@ -78,10 +74,9 @@
                     	action="#{requisitosController.buscar}"/>
             	</rich:column>
             </h:panelGrid>            
-            
-         	
-            <rich:spacer height="12px"/>           
-                
+
+            <rich:spacer height="12px"/>
+
             <h:panelGrid id="panelTablaConfiguracion">
 	        	<rich:extendedDataTable id="tblConfiguraciones" 
 	          		enableContextMenu="false" 
@@ -93,7 +88,6 @@
 					width="970px" 
 					height="170px" 
 					align="center">
-                                
 					<rich:column width="30px" style="text-align: center">
                     	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
                     </rich:column>
@@ -317,10 +311,9 @@
 							</h:selectOneMenu>
 		        	</rich:column>
 				</h:panelGrid>
-			        
-			    
+
 			    <h:panelGroup id="panelOperaciones">
-			    
+
 			    	<h:panelGroup id="panelLiquidacion" rendered="#{requisitosController.confServSolicitudNuevo.intParaTipoOperacionCod == applicationScope.Constante.PARAM_T_TIPOOPERACION_LIQUIDACIONDECUENTA}">
 			        	
 			        	<h:panelGrid columns="2">
@@ -418,7 +411,6 @@
 									rowKeyVar="rowKey" 
 									width="550px" 
 									rows="10">
-				                                
 									<rich:column width="30px" style="text-align: center">
 				                    	<h:outputText value="#{rowKey + 1}"></h:outputText>                        	
 				                    </rich:column>

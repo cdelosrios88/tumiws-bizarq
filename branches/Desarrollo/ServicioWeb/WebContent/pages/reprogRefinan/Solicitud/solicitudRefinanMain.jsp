@@ -270,13 +270,30 @@
 	<a4j:include viewId="/pages/mensajes/errorInfoMessages.jsp"/>
 		
 			
-	<h:panelGrid id="pgControls" columns="5">
+	<h:panelGrid id="pgControls" columns="9">
 		<a4j:commandButton value="Nuevo" actionListener="#{solicitudRefinanController.nuevaSolicitudRefinan}" styleClass="btnEstilos" reRender="pgControls,divFormRefinan,pgValidarDatos,pgSolicRefinan" />
 		<h:panelGroup>
            	<a4j:commandButton value="Grabar" actionListener="#{solicitudRefinanController.grabarExpedienteRefinanciamiento}" styleClass="btnEstilos" reRender="pgSolicRefinan,pgMsgErrorGarantesObs"/>
         </h:panelGroup>
 		<a4j:commandButton value="Cancelar" actionListener="#{solicitudRefinanController.cancelarGrabarSolicitud}"
 			styleClass="btnEstilos" reRender="pgControls,pgSolicRefinan,pgMsgErrorGarantesObs,divFormRefinan" />
+			
+			<rich:column width="100px">
+					</rich:column>
+					<rich:column width="150px">
+					</rich:column>
+				<rich:column width="120px">
+					</rich:column>
+					<rich:column width="120px">
+					</rich:column>
+				<rich:column width="200px" style="margin-left: auto; margin-right: auto">
+				<h:outputText
+					value="Hacer clic para imprimir formatos en blanco"
+					style="color:#8ca0bd" />
+				</rich:column>
+					<%--<a4j:commandButton value="Imprimir" styleClass="btnEstilos" onclick="#{rich:component('popup')}.show()"/>--%>
+				<a4j:commandButton value="Imprimir" styleClass="btnEstilos" oncomplete="Richfaces.showModalPanel('formEnBlancoRefi')"
+				reRender="pgFormEnBlancoSolicitudRefi,frmEnBlancoSolicitudRefi"/>
 	</h:panelGrid>
     
     

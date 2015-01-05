@@ -30,7 +30,7 @@
              
              <h:panelGrid columns="3">
 				<rich:column style="border:none" width="120">
-					<h:outputText value="Nombre de Perfil : "/>
+					<h:outputText value="Nombre de Usuario : "/>
 				</rich:column>
 				<rich:column>
 					<h:inputText size="35" value="#{autorizacionController.usuarioCompFiltro.usuario.strUsuario}"/>

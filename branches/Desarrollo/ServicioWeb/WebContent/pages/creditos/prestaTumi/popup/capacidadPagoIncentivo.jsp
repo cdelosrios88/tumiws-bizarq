@@ -19,7 +19,7 @@
 			<f:param name="bdTotalIngreso"/>
 		</a4j:jsFunction>
 		
-		<a4j:jsFunction name="addMontoTumi" reRender="idBaseCalculo"
+		<a4j:jsFunction name="addMontoTumi" reRender="idBaseCalculoEsp"
 			actionListener="#{capacidadPagoController.getBaseCalculo}">
 			<f:param name="bdMontoTumi"/>
 		</a4j:jsFunction>
@@ -71,7 +71,7 @@
     			<rich:column>
     				<a4j:commandButton value="Grabar" actionListener="#{capacidadPagoController.grabarCapacidadCreditoEspecial}" 
     					oncomplete="if(#{capacidadPagoController.validCapacidadCredito}){Richfaces.hideModalPanel('mpCapacidadCreditoEsp')}"
-    					styleClass="btnEstilos" reRender="frmCapacidadPagoEspecial,pgListCapacidadCreditoEspecial,pgDatosSocio,pgSolicitudRefinan"/>
+    					styleClass="btnEstilos" reRender="frmCapacidadPagoEspecial,pgListCapacidadCreditoEspecial,pgDatosSocio"/>
     			</rich:column>
     			<rich:column>
     				<a4j:commandButton value="Cancelar" styleClass="btnEstilos"/>
@@ -79,10 +79,10 @@
     		</h:panelGrid>
     		
     		<h:panelGroup id="pgIncentivoGralEspecial" layout="block">
-	    		<a4j:include viewId="/pages/reprogRefinan/Solicitud/capacidadPagoIncentivo/capacidadPagoIncentivoGral.jsp"/>
+	    		<a4j:include viewId="/pages/creditos/prestaTumi/popup/capacidadPagoIncentivo/capacidadPagoIncentivoGral.jsp"/>
     		</h:panelGroup>
     		
     		<h:panelGroup id="pgIncentivoProrrateoEspecial" layout="block">
-    			<a4j:include viewId="/pages/reprogRefinan/Solicitud/capacidadPagoIncentivo/capacidadPagoIncentivoProrrateo.jsp"/>
+    			<a4j:include viewId="/pages/creditos/prestaTumi/popup/capacidadPagoIncentivo/capacidadPagoIncentivoProrrateo.jsp"/>
     		</h:panelGroup>
     	</rich:panel>

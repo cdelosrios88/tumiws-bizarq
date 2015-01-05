@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
 import pe.com.tumi.credito.socio.core.domain.SocioComp;
-import pe.com.tumi.credito.socio.core.domain.SocioEstructura;
 import pe.com.tumi.credito.socio.estructura.domain.ConvenioEstructuraDetalle;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraDetalle;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraDetalleId;
@@ -25,15 +24,19 @@ import pe.com.tumi.credito.socio.estructura.facade.EstructuraFacadeRemote;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactoryException;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
-import pe.com.tumi.framework.negocio.factory.TumiFactory;
+import pe.com.tumi.movimiento.concepto.domain.Expediente;
+import pe.com.tumi.movimiento.concepto.facade.ConceptoFacadeRemote;
 import pe.com.tumi.seguridad.login.domain.Usuario;
 import pe.com.tumi.servicio.refinanciamiento.controller.SolicitudRefinanController;
 import pe.com.tumi.servicio.solicitudEspecial.controller.SolicitudEspecialController;
-import pe.com.tumi.servicio.solicitudPrestamo.bo.GarantiaCreditoBO;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.CapacidadCredito;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.CapacidadDescuento;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.CapacidadDescuentoId;
+import pe.com.tumi.servicio.solicitudPrestamo.domain.CronogramaCredito;
+import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCredito;
+import pe.com.tumi.servicio.solicitudPrestamo.domain.ExpedienteCreditoId;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.CapacidadCreditoComp;
+import pe.com.tumi.servicio.solicitudPrestamo.facade.PrestamoFacadeLocal;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeLocal;
 
 public class CapacidadPagoController {
@@ -58,11 +61,15 @@ public class CapacidadPagoController {
 	private Usuario 			usuario = null;
 	private BigDecimal			bdIndDscto;
 	private SolicitudPrestamoFacadeLocal solicitudPrestamoFacade = null;
+	private PrestamoFacadeLocal prestamoFacade = null;
 	private EstructuraFacadeRemote	estructuraFacade = null;
 	
 	private String strMsgErrorCapacidad = "";
 	private Boolean blnMostrarBoton  = Boolean.TRUE;
 
+	private ConceptoFacadeRemote conceptoFacade = null;
+	
+	private List<Expediente> lstExpedientesVigentes;
 	
 	public CapacidadPagoController(){
 		beanCapacidadCredito = new CapacidadCredito();
@@ -73,10 +80,13 @@ public class CapacidadPagoController {
 		blnFormTipoIncentivoGral = false;
 		blnFormTipoIncentivoProrrateo = false;
 		validCapacidadCredito = true;
+		lstExpedientesVigentes = new ArrayList<Expediente>();
 		try {
 			usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
 			solicitudPrestamoFacade = (SolicitudPrestamoFacadeLocal)EJBFactory.getLocal(SolicitudPrestamoFacadeLocal.class);
 			estructuraFacade = (EstructuraFacadeRemote)EJBFactory.getRemote(EstructuraFacadeRemote.class);
+			conceptoFacade = (ConceptoFacadeRemote) EJBFactory.getRemote(ConceptoFacadeRemote.class);
+			prestamoFacade = (PrestamoFacadeLocal) EJBFactory.getLocal(PrestamoFacadeLocal.class);
 		} catch(EJBFactoryException e){
 			log.error("error: " + e.getMessage());
 		}
@@ -253,6 +263,7 @@ public class CapacidadPagoController {
 	public void showTipoIncentivo(ActionEvent event){
 		log.info("intTipoIncentivo: " + beanCapacidadCredito.getIntParaTipoCapacidadCod());
 		try{
+			if(beanCapacidadCredito.getIntParaTipoCapacidadCod()==null) beanCapacidadCredito.setIntParaTipoCapacidadCod(0);
 			setBlnFormTipoIncentivoGral(beanCapacidadCredito.getIntParaTipoCapacidadCod().equals(Constante.PARAM_T_TIPOCAPACIDADINCENTIVO_GENERAL));
 			setBlnFormTipoIncentivoProrrateo(beanCapacidadCredito.getIntParaTipoCapacidadCod().equals(Constante.PARAM_T_TIPOCAPACIDADINCENTIVO_PRORRATEO));
 			limpiarFormCapacidadPago();
@@ -316,11 +327,11 @@ public class CapacidadPagoController {
 	 * @param event
 	 */
 	public void removeCapacidadDscto2(ActionEvent event){
-		SolicitudPrestamoController solicitudPrestamoController =  null;
+//		SolicitudPrestamoController solicitudPrestamoController =  null;
 		CapacidadDescuento capacidadDescuentoTmp = null;
 		
 		try {
-			solicitudPrestamoController = (SolicitudPrestamoController)getSessionBean("solicitudPrestamoController");
+//			solicitudPrestamoController = (SolicitudPrestamoController)getSessionBean("solicitudPrestamoController");
 			String rowKey = getRequestParameter("rowKeyCapacidadDscto");
 			
 			if(beanCapacidadCredito.getListaCapacidadDscto()!=null){
@@ -387,10 +398,8 @@ public class CapacidadPagoController {
 		try {
 			indDesc=recuperarIndiceDescuentoporDefecto(event);
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (EJBFactoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	beanCapacidadCredito.setBdIndiceDescuento(blnChkCartaAutorizacion==true?(new BigDecimal(100)):(indDesc));
@@ -406,10 +415,8 @@ public class CapacidadPagoController {
 		try {
 			indDesc=recuperarIndiceDescuentoporDefectoRef(event);
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (EJBFactoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	beanCapacidadCredito.setBdIndiceDescuento(blnChkCartaAutorizacion==true?(new BigDecimal(100)):(indDesc));
@@ -425,14 +432,12 @@ public class CapacidadPagoController {
 		try {
 			indDesc=recuperarIndiceDescuentoporDefectoEsp(event);
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (EJBFactoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	beanCapacidadCredito.setBdIndiceDescuento(blnChkCartaAutorizacion==true?(new BigDecimal(100)):(indDesc));
-		getBaseCalculoPagoHaberesRef(event);
+		getBaseCalculoPagoHaberesEsp(event);
 	}
 	
 	
@@ -441,6 +446,25 @@ public class CapacidadPagoController {
 	 * @param event
 	 */
 	public void getBaseCalculoPagoHaberesRef(ActionEvent event){
+		log.info("----------CapacidadPagoController.getBaseCalculoPagoHaberes----------");
+		String strTotalIngreso = getRequestParameter("bdTotalIngreso");
+		try{
+			if(strTotalIngreso!=null){
+				BigDecimal bdTotalIngreso = new BigDecimal(strTotalIngreso.equals("")?"0":strTotalIngreso);
+				beanCapacidadCredito.setBdTotalIngresos(bdTotalIngreso);
+				beanCapacidadCredito.setBdBaseCalculo(bdTotalIngreso);
+			}
+			if(beanCapacidadCredito.getBdTotalIngresos()!=null && beanCapacidadCredito.getBdIndiceDescuento()!=null){
+				beanCapacidadCredito.setBdBaseCalculo(beanCapacidadCredito.getBdTotalIngresos().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP));
+			}
+		}catch(Exception e){
+			log.error("error: " + e);
+		}finally{
+			getBaseTotalDscto(event);
+		}
+	}
+	
+	public void getBaseCalculoPagoHaberesEsp(ActionEvent event){
 		log.info("----------CapacidadPagoController.getBaseCalculoPagoHaberes----------");
 		String strTotalIngreso = getRequestParameter("bdTotalIngreso");
 		try{
@@ -555,10 +579,56 @@ public class CapacidadPagoController {
 	public void calcularCapacidadPago(ActionEvent event){
 		log.info("----------CapacidadPagoController.calcularCapacidadPago----------");
 		Integer intNroEntidades = 0;
-		SolicitudPrestamoController solicitudPrestamoController = null;
+//		SolicitudPrestamoController solicitudPrestamoController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
 		try {
-			solicitudPrestamoController =(SolicitudPrestamoController)getSessionBean("solicitudPrestamoController");
+//			solicitudPrestamoController =(SolicitudPrestamoController)getSessionBean("solicitudPrestamoController");
 			calcularDsctos(event);
+			
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudPrestamoController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudPrestamoController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+			
 			bdBaseTotYDsctos = beanCapacidadCredito.getBdBaseTotal().add(bdDsctosVarios);
 			beanCapacidadCredito.setIntNroEntidades(beanCapacidadCredito.getListaCapacidadDscto().size());
 			
@@ -571,8 +641,86 @@ public class CapacidadPagoController {
 				blnMostrarBoton = Boolean.FALSE;
 				intNroEntidades = beanCapacidadCredito.getIntNroEntidades();
 			}
+//			beanCapacidadCredito.setBdCapacidadPago((bdBaseTotYDsctos.divide(new BigDecimal(intNroEntidades), 2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
 			beanCapacidadCredito.setBdCapacidadPago(bdBaseTotYDsctos.divide(new BigDecimal(intNroEntidades), 2, RoundingMode.HALF_UP));
 
+			/*if(beanCapacidadCredito.getListaCapacidadDscto()== null || beanCapacidadCredito.getListaCapacidadDscto().isEmpty()){
+				beanCapacidadCredito.setBdCapacidadPago(bdBaseTotYDsctos);	
+			}*/
+		
+		
+		} catch (Exception e) {
+			log.error("error: " + e);
+		}
+	}
+	
+	public void calcularCapacidadPagoRefinan(ActionEvent event){
+		log.info("----------CapacidadPagoController.calcularCapacidadPago----------");
+		Integer intNroEntidades = 0;
+//		SolicitudRefinanController solicitudRefinanController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
+		try {
+//			solicitudRefinanController =(SolicitudRefinanController)getSessionBean("solicitudRefinanController");
+			calcularDsctos(event);
+			
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudRefinanController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudRefinanController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+			
+			bdBaseTotYDsctos = beanCapacidadCredito.getBdBaseTotal().add(bdDsctosVarios);
+			beanCapacidadCredito.setIntNroEntidades(beanCapacidadCredito.getListaCapacidadDscto().size());
+			
+			if( beanCapacidadCredito.getIntNroEntidades() == 0){
+				blnMostrarBoton = Boolean.TRUE;
+				strMsgErrorCapacidad = " * Se debe ingresar al menos un Descuento";
+				intNroEntidades = 1;
+			}else{
+				strMsgErrorCapacidad = "";
+				blnMostrarBoton = Boolean.FALSE;
+				intNroEntidades = beanCapacidadCredito.getIntNroEntidades();
+			}
+//			beanCapacidadCredito.setBdCapacidadPago((bdBaseTotYDsctos.divide(new BigDecimal(intNroEntidades), 2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
+			beanCapacidadCredito.setBdCapacidadPago(bdBaseTotYDsctos.divide(new BigDecimal(intNroEntidades), 2, RoundingMode.HALF_UP));
 			/*if(beanCapacidadCredito.getListaCapacidadDscto()== null || beanCapacidadCredito.getListaCapacidadDscto().isEmpty()){
 				beanCapacidadCredito.setBdCapacidadPago(bdBaseTotYDsctos);	
 			}*/
@@ -590,10 +738,57 @@ public class CapacidadPagoController {
 	
 	public void calcularCapacidadPagoEspecial(ActionEvent event){
 		Integer intNroEntidades = 0;
-		SolicitudEspecialController solicitudEspecialController = null;
+//		SolicitudEspecialController solicitudEspecialController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
 		try {
-			solicitudEspecialController =(SolicitudEspecialController)getSessionBean("solicitudEspecialController");
+//			solicitudEspecialController =(SolicitudEspecialController)getSessionBean("solicitudEspecialController");
 			calcularDsctos(event);
+			
+
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudEspecialController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudEspecialController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+			
 			bdBaseTotYDsctos = beanCapacidadCredito.getBdBaseTotal().add(bdDsctosVarios);
 			beanCapacidadCredito.setIntNroEntidades(beanCapacidadCredito.getListaCapacidadDscto().size());
 			
@@ -606,6 +801,7 @@ public class CapacidadPagoController {
 				blnMostrarBoton = Boolean.FALSE;
 				intNroEntidades = beanCapacidadCredito.getIntNroEntidades();
 			}
+//			beanCapacidadCredito.setBdCapacidadPago((bdBaseTotYDsctos.divide(new BigDecimal(intNroEntidades), 2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
 			beanCapacidadCredito.setBdCapacidadPago(bdBaseTotYDsctos.divide(new BigDecimal(intNroEntidades), 2, RoundingMode.HALF_UP));
 
 			/*if(beanCapacidadCredito.getListaCapacidadDscto()== null || beanCapacidadCredito.getListaCapacidadDscto().isEmpty()){
@@ -623,19 +819,339 @@ public class CapacidadPagoController {
 	 * @param event
 	 */
 	public void calcularPagoIncentGral(ActionEvent event){
+//		SolicitudPrestamoController solicitudPrestamoController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
 		try {
+//			solicitudPrestamoController =(SolicitudPrestamoController)getSessionBean("solicitudPrestamoController");
+			
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudPrestamoController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudPrestamoController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+			
+//			beanCapacidadCredito.setBdCapacidadPago((beanCapacidadCredito.getBdBaseCalculo().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
 			beanCapacidadCredito.setBdCapacidadPago(beanCapacidadCredito.getBdBaseCalculo().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP));
 		} catch (Exception e) {
 			log.error("error" + e);
 		}
 	}
 	
+	public void calcularPagoIncentGralRefinan(ActionEvent event){
+//		SolicitudRefinanController solicitudRefinanController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
+		try {
+//			solicitudRefinanController =(SolicitudRefinanController)getSessionBean("solicitudRefinanController");
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudRefinanController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudRefinanController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+			beanCapacidadCredito.setBdCapacidadPago(beanCapacidadCredito.getBdBaseCalculo().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP));
+//			beanCapacidadCredito.setBdCapacidadPago((beanCapacidadCredito.getBdBaseCalculo().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
+		} catch (Exception e) {
+			log.error("error" + e);
+		}
+	}
+	
+	public void calcularPagoIncentGralEspecial(ActionEvent event){
+//		SolicitudEspecialController solicitudEspecialController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
+		try {
+//			solicitudEspecialController =(SolicitudEspecialController)getSessionBean("solicitudEspecialController");
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudEspecialController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudEspecialController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+//			beanCapacidadCredito.setBdCapacidadPago((beanCapacidadCredito.getBdBaseCalculo().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
+			beanCapacidadCredito.setBdCapacidadPago(beanCapacidadCredito.getBdBaseCalculo().multiply(beanCapacidadCredito.getBdIndiceDescuento()).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP));
+		} catch (Exception e) {
+			log.error("error" + e);
+		}
+	}
 	/**
 	 * 
 	 * @param event
 	 */
 	public void calcularCapacPagoIncentProrrateo(ActionEvent event){
+//		SolicitudPrestamoController solicitudPrestamoController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
 		try {
+//			solicitudPrestamoController =(SolicitudPrestamoController)getSessionBean("solicitudPrestamoController");
+			
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudPrestamoController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudPrestamoController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+//			beanCapacidadCredito.setBdCapacidadPago((beanCapacidadCredito.getBdTotalIngresos().divide(new BigDecimal(beanCapacidadCredito.getIntNroEntidades()),2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
+			beanCapacidadCredito.setBdCapacidadPago(beanCapacidadCredito.getBdTotalIngresos().divide(new BigDecimal(beanCapacidadCredito.getIntNroEntidades()),2, RoundingMode.HALF_UP));
+		} catch (Exception e) {
+			log.error("error: " + e);
+		}
+	}
+	/**
+	 * Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014
+	 * Funcionalidad: Calcula la capacidad de credito refinanciamiento segun nueva forma de calculo
+	 * @param event
+	 */
+	public void calcularCapacPagoIncentProrrateoRefinan(ActionEvent event){
+//		SolicitudRefinanController solicitudRefinanController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
+		try {
+//			solicitudRefinanController =(SolicitudRefinanController)getSessionBean("solicitudRefinanController");
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudRefinanController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudRefinanController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+//			beanCapacidadCredito.setBdCapacidadPago((beanCapacidadCredito.getBdTotalIngresos().divide(new BigDecimal(beanCapacidadCredito.getIntNroEntidades()),2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
+			beanCapacidadCredito.setBdCapacidadPago(beanCapacidadCredito.getBdTotalIngresos().divide(new BigDecimal(beanCapacidadCredito.getIntNroEntidades()),2, RoundingMode.HALF_UP));
+		} catch (Exception e) {
+			log.error("error: " + e);
+		}
+	}
+	
+	public void calcularCapacPagoIncentProrrateoEspecial(ActionEvent event){
+//		SolicitudEspecialController solicitudEspecialController = null;
+//		BigDecimal bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+//		ExpedienteCredito expCred = null;
+		try {
+//			solicitudEspecialController =(SolicitudEspecialController)getSessionBean("solicitudEspecialController");
+			//Autor: jchavez / Tarea: Creación / Fecha: 01.09.2014 / Se agrega la recuperación de expedientes vigentes
+			//Autor: jchavez / Tarea: Modificación / Fecha: 03.09.2014 / Se quita resta en capacidad
+//			Integer intEmpresa = solicitudEspecialController.getBeanSocioComp().getCuenta().getId().getIntPersEmpresaPk();
+//			Integer intCuenta = solicitudEspecialController.getBeanSocioComp().getCuenta().getId().getIntCuenta();
+//			lstExpedientesVigentes = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				List<CapacidadCredito> lstCapCred = null;
+//				List<CronogramaCredito> lstCronogramaServicio = null;
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					
+//					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+//						lstCronogramaServicio = prestamoFacade.getListaCronogramaCreditoPorExpedienteCredito(expCred);
+//						if (lstCronogramaServicio!=null && !lstCronogramaServicio.isEmpty()) {
+//							if (lstCronogramaServicio.size()==1) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstCronogramaServicio.get(0).getBdMontoConcepto());
+//							}else{
+//								for (CronogramaCredito cronogramaCredito : lstCronogramaServicio) {
+//									if (cronogramaCredito.getIntNroCuota().equals(1)) {
+//										bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronogramaCredito.getBdMontoConcepto());
+//										break;
+//									}
+//								}
+//							}							
+//						}
+//					}else{						
+//						lstCapCred = solicitudPrestamoFacade.getListaPorPkExpedienteCredito(expCred.getId());
+//						if (lstCapCred!=null && !lstCapCred.isEmpty()) {
+//							for (CapacidadCredito capacidadCredito : lstCapCred) {
+//								bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(capacidadCredito.getBdCuotaFija());
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			//Fin jchavez - 01.09.2014
+//			beanCapacidadCredito.setBdCapacidadPago((beanCapacidadCredito.getBdTotalIngresos().divide(new BigDecimal(beanCapacidadCredito.getIntNroEntidades()),2, RoundingMode.HALF_UP)).subtract(bdCuotaFijaPrestamosVigentes));
 			beanCapacidadCredito.setBdCapacidadPago(beanCapacidadCredito.getBdTotalIngresos().divide(new BigDecimal(beanCapacidadCredito.getIntNroEntidades()),2, RoundingMode.HALF_UP));
 		} catch (Exception e) {
 			log.error("error: " + e);
@@ -653,6 +1169,8 @@ public class CapacidadPagoController {
 		this.rowKey = rowKey;
 		intPanelCapacidadPago = new Integer(strModalidad);
 		try {
+			solicitudPrestamoController.blnSocioMINSA();
+			log.info("Es Socio del MINSA? --> "+solicitudPrestamoController.getBlnEsMINSA());
 			viewCapacidadCredito(solicitudPrestamoController.getListaCapacidadCreditoComp(), rowKey);
 			limpiarMsgsError();
 		} catch (Exception e) {
@@ -671,6 +1189,8 @@ public class CapacidadPagoController {
 		this.rowKey = rowKey;
 		intPanelCapacidadPago = new Integer(strModalidad);
 		try {
+			solicitudEspecialController.blnSocioMINSA();
+			log.info("Es Socio del MINSA? --> "+solicitudEspecialController.getBlnEsMINSA());
 			viewCapacidadCreditoEspecial(solicitudEspecialController.getListaCapacidadCreditoComp(), rowKey);
 			limpiarMsgsError();
 		} catch (Exception e) {
@@ -688,6 +1208,8 @@ public class CapacidadPagoController {
 		this.rowKey = rowKey;
 		intPanelCapacidadPago = new Integer(strModalidad);
 		try {
+			solicitudRefinanController.blnSocioMINSA();
+			log.info("Es Socio del MINSA? --> "+solicitudRefinanController.getBlnEsMINSA());
 			viewCapacidadCreditoRef(solicitudRefinanController.getListaCapacidadCreditoComp(), rowKey);
 			limpiarMsgsError();
 		} catch (Exception e) {
@@ -729,8 +1251,9 @@ public class CapacidadPagoController {
 	    		blnFormTipoIncentivoGral = false;
 	    	}
 	    	ActionEvent event = null;
-	    	calcularCapacidadPago(event);
+	    	calcularCapacidadPagoRefinan(event);
 	    	socioComp = solicitudRefinanController.getBeanSocioComp();
+	    	log.info("SocioComp --> "+socioComp);
 	    	
 	    }else{
 	    	ActionEvent event = null;
@@ -783,6 +1306,7 @@ public class CapacidadPagoController {
 	    	indDesc=recuperarIndiceDescuentoporDefecto(event);
 	    	beanCapacidadCredito.setBdIndiceDescuento(indDesc);
 	    }
+	    log.info("socioComp --> "+socioComp);
 	}
 	
 	
@@ -830,6 +1354,7 @@ public class CapacidadPagoController {
 				if(beanCapacidadCredito == null) beanCapacidadCredito= new CapacidadCredito();
 				beanCapacidadCredito.setBdIndiceDescuento(indDesc);
 			}
+			log.info("socioComp --> "+socioComp);
 		} catch (Exception e) {
 			log.error("Error en viewCapacidadCreditoEspecial --->  "+e);
 		}
@@ -885,6 +1410,10 @@ public class CapacidadPagoController {
 			if(beanCapacidadCredito.getBdBaseCalculo()== null){
 				beanCapacidadCredito.setBdBaseCalculo(BigDecimal.ZERO);
 			}
+			//Autor: jchavez / Tarea: Creación / Fecha: 28.08.2014 
+			if (blnChkCartaAutorizacion==null) {
+				blnChkCartaAutorizacion = false;
+			}
 
 			beanCapacidadCredito.setIntCartaAutorizacion(blnChkCartaAutorizacion==true?1:0);
 			beanCapacidadCredito.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
@@ -935,6 +1464,11 @@ public class CapacidadPagoController {
 			beanCapacidadCredito.setBdBaseCalculo(BigDecimal.ZERO);
 		}
 
+		//Autor: jchavez / Tarea: Creación / Fecha: 28.08.2014 
+		if (blnChkCartaAutorizacion==null) {
+			blnChkCartaAutorizacion = false;
+		}
+		
 		beanCapacidadCredito.setIntCartaAutorizacion(blnChkCartaAutorizacion==true?1:0);
 		beanCapacidadCredito.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
 		beanCapacidadCredito.setTsFechaRegistro(new Timestamp(new Date().getTime()));
@@ -981,6 +1515,11 @@ public class CapacidadPagoController {
 				beanCapacidadCredito.setBdBaseCalculo(BigDecimal.ZERO);
 			}
 
+			//Autor: jchavez / Tarea: Creación / Fecha: 28.08.2014 
+			if (blnChkCartaAutorizacion==null) {
+				blnChkCartaAutorizacion = false;
+			}
+			
 			beanCapacidadCredito.setIntCartaAutorizacion(blnChkCartaAutorizacion==true?1:0);
 			beanCapacidadCredito.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
 			beanCapacidadCredito.setTsFechaRegistro(new Timestamp(new Date().getTime()));
@@ -1112,6 +1651,24 @@ public class CapacidadPagoController {
         
      return indice;
 	}
-	
+
+	public PrestamoFacadeLocal getPrestamoFacade() {
+		return prestamoFacade;
+	}
+	public void setPrestamoFacade(PrestamoFacadeLocal prestamoFacade) {
+		this.prestamoFacade = prestamoFacade;
+	}
+	public ConceptoFacadeRemote getConceptoFacade() {
+		return conceptoFacade;
+	}
+	public void setConceptoFacade(ConceptoFacadeRemote conceptoFacade) {
+		this.conceptoFacade = conceptoFacade;
+	}
+	public List<Expediente> getLstExpedientesVigentes() {
+		return lstExpedientesVigentes;
+	}
+	public void setLstExpedientesVigentes(List<Expediente> lstExpedientesVigentes) {
+		this.lstExpedientesVigentes = lstExpedientesVigentes;
+	}	
 	
 }

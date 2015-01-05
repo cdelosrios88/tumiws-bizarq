@@ -14,8 +14,8 @@
 	</script>
 	
 	<h:panelGrid>
-		<rich:extendedDataTable id="edtCronogramaCredito" var="item" rowKeyVar="rowKey" sortMode="single" width="920px" 
-			value="#{solicitudPrestamoController.listaCronogramaCreditoComp}" rows="10" height="280px"
+		<rich:extendedDataTable id="edtCronogramaCredito" var="item" rowKeyVar="rowKey" sortMode="single" width="1000px" 
+			value="#{solicitudPrestamoController.listaCronogramaCreditoComp}" rows="10" height="250px"
 			enableContextMenu="false">
 			<rich:column width="60px">
 				<f:facet name="header">
@@ -25,17 +25,11 @@
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">
-					<h:outputText value="Fecha Envío"/>
-				</f:facet>
-				<h:outputText value="#{item.strFechaEnvio}"/>
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
 					<h:outputText value="Fecha de Pago"/>
 				</f:facet>
 				<h:outputText value="#{item.strFechaVencimiento}"/>
 			</rich:column>
-			<rich:column>
+			<rich:column width="80px">
 				<f:facet name="header">
 					<h:outputText value="Días Transc."/>
 				</f:facet>
@@ -71,96 +65,47 @@
 				</f:facet>
 				<div align="right"><h:outputText value="#{item.bdAportes}"/></div>
 			</rich:column>
-			<rich:column width="140px">
+			<rich:column rendered="#{solicitudPrestamoController.intCantExpedientesVigentes == 1}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudPrestamoController.strDescCuotaFijaExpCred1}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente1}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudPrestamoController.intCantExpedientesVigentes == 2}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudPrestamoController.strDescCuotaFijaExpCred2}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente2}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudPrestamoController.intCantExpedientesVigentes == 3}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudPrestamoController.strDescCuotaFijaExpCred3}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente3}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudPrestamoController.intCantExpedientesVigentes == 4}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudPrestamoController.strDescCuotaFijaExpCred4}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente4}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column width="80px">
 				<f:facet name="header">
 					<h:outputText value="Total Cuota Mensual"/>
 				</f:facet>
 				<div align="right"><h:outputText value="#{item.bdTotalCuotaMensual}"/></div>
 			</rich:column>
+			
 			<f:facet name="footer">
 				<rich:datascroller for="edtCronogramaCredito" maxPages="20" />
 			</f:facet>
 		</rich:extendedDataTable>
-		<%--
-		<rich:extendedDataTable id="edtCronogramaCredito" var="item" rowKeyVar="rowKey" sortMode="single" width="920px" 
-			value="#{solicitudPrestamoController.beanExpedienteCredito.listaCronogramaCredito}" rows="10" height="280px"
-			rendered="#{not empty solicitudPrestamoController.beanExpedienteCredito.listaCronogramaCredito}"
-			enableContextMenu="false">
-			<rich:column width="60px">
-				<f:facet name="header">
-					<h:outputText value="Cuota"/>
-				</f:facet>
-				<h:outputText value="#{item.intNroCuota}"/>
-			</rich:column>
-			<rich:column width="80px">
-				<f:facet name="header">
-					<h:outputText value="Tipo Cuota"/>
-				</f:facet>
-				<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOCUOTACRONOGRAMA}" 
-                                itemValue="intIdDetalle" itemLabel="strDescripcion" 
-                                property="#{item.intParaTipoCuotaCod}"/>
-			</rich:column>
-			<rich:column width="110px">
-				<f:facet name="header">
-					<h:outputText value="Forma de Pago"/>
-				</f:facet>
-				<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_FORMADEPAGO}" 
-                                itemValue="intIdDetalle" itemLabel="strDescripcion" 
-                                property="#{item.intParaFormaPagoCod}"/>
-			</rich:column>
-			<rich:column width="120px">
-				<f:facet name="header">
-					<h:outputText value="Tipo de Concepto"/>
-				</f:facet>
-				<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOCONCEPTOPRESTAMO}" 
-                                itemValue="intIdDetalle" itemLabel="strDescripcion" 
-                                property="#{item.intParaTipoConceptoCod}"/>
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="Monto Concepto"/>
-				</f:facet>
-				<div align="right"><h:outputText value="#{item.bdMontoConcepto}"/></div>
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="Monto Capital"/>
-				</f:facet>
-				<div align="right"><h:outputText value="#{item.bdMontoCapital}"/></div>
-			</rich:column>
-			<rich:column width="100px">
-				<f:facet name="header">
-					<h:outputText value="Fecha Venc."/>
-				</f:facet>
-				<div align="right">
-					<h:outputText value="#{item.tsFechaVencimiento}">
-						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
-					</h:outputText>
-				</div>
-			</rich:column>
-			<rich:column width="110px">
-				<f:facet name="header">
-					<h:outputText value="Período Planilla"/>
-				</f:facet>
-				<div align="right"><h:outputText value="#{item.intPeriodoPlanilla}"/></div>
-			</rich:column>
-			<rich:column width="60px">
-				<f:facet name="header">
-					<h:outputText value="Aportes"/>
-				</f:facet>
-				<h:outputText value="#{solicitudPrestamoController.bdAportes}"/>
-			</rich:column>
-			<rich:column width="80px">
-				<f:facet name="header">
-					<h:outputText value="Estado"/>
-				</f:facet>
-				<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL}" 
-                                itemValue="intIdDetalle" itemLabel="strDescripcion" 
-                                property="#{item.intParaEstadoCod}"/>
-			</rich:column>
-			<f:facet name="footer">
-				<rich:datascroller for="edtCronogramaCredito" maxPages="20" />
-			</f:facet>
-		</rich:extendedDataTable>
-		--%>
 	</h:panelGrid>

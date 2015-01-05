@@ -100,13 +100,12 @@
 				<h:outputText value=":" styleClass="estiloLetra1"/>
 			</rich:column>
 			<rich:column>
-				<h:selectOneMenu style="width:120px"
-							value="#{autorizacionPrevisionController.intBusqEstado}"
-							style="width: 170px;">
-							<f:selectItem itemValue="0" itemLabel="Seleccione..."/>
-							<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_ESTADOSOLICPRESTAMO}"
-											itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
-											propertySort="intOrden" />
+				<!-- Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014  -->
+				<h:selectOneMenu value="#{autorizacionPrevisionController.intBusqEstado}" style="width: 120px;">
+					<f:selectItem itemValue="0" itemLabel="Seleccione..." />
+					<tumih:selectItems var="sel" value="#{autorizacionPrevisionController.listaEstadoSolicitud}"
+						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
+						propertySort="intOrden" />
 				</h:selectOneMenu>
 			</rich:column>
 			<rich:column>

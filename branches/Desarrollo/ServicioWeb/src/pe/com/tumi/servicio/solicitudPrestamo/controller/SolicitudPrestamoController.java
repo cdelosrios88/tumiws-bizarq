@@ -11,8 +11,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-//import java.text.NumberFormat;
-//import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,8 +31,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-//import com.ibm.gsk.ikeyman.gui.CenteredDialog;
-
 import pe.com.tumi.cobranza.planilla.domain.Efectuado;
 import pe.com.tumi.cobranza.planilla.domain.Envioconcepto;
 import pe.com.tumi.cobranza.planilla.domain.Enviomonto;
@@ -44,11 +40,11 @@ import pe.com.tumi.common.DownloadFile;
 import pe.com.tumi.common.FileUtil;
 import pe.com.tumi.common.MyFile;
 import pe.com.tumi.common.util.Constante;
-//import pe.com.tumi.common.util.ConvertidorMontos;
 import pe.com.tumi.common.util.ConvertirNumeroLetras;
 import pe.com.tumi.common.util.UtilManagerReport;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.Cuenta;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaId;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaIntegrante;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.composite.CuentaComp;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.facade.CuentaFacadeRemote;
 import pe.com.tumi.credito.socio.captacion.facade.CaptacionFacadeRemote;
@@ -83,6 +79,8 @@ import pe.com.tumi.credito.socio.estructura.domain.Estructura;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraDetalle;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraDetalleId;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraId;
+import pe.com.tumi.credito.socio.estructura.domain.Padron;
+import pe.com.tumi.credito.socio.estructura.domain.PadronId;
 import pe.com.tumi.credito.socio.estructura.domain.Terceros;
 import pe.com.tumi.credito.socio.estructura.domain.composite.ConvenioEstructuraDetalleComp;
 import pe.com.tumi.credito.socio.estructura.facade.EstructuraFacadeRemote;
@@ -94,6 +92,8 @@ import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.movimiento.concepto.domain.Cronograma;
 import pe.com.tumi.movimiento.concepto.domain.CuentaConcepto;
 import pe.com.tumi.movimiento.concepto.domain.CuentaConceptoDetalle;
+import pe.com.tumi.movimiento.concepto.domain.CuentaConceptoDetalleId;
+import pe.com.tumi.movimiento.concepto.domain.CuentaConceptoId;
 import pe.com.tumi.movimiento.concepto.domain.EstadoExpediente;
 import pe.com.tumi.movimiento.concepto.domain.Expediente;
 import pe.com.tumi.movimiento.concepto.domain.ExpedienteId;
@@ -104,6 +104,7 @@ import pe.com.tumi.movimiento.concepto.facade.ConceptoFacadeRemote;
 import pe.com.tumi.parametro.general.domain.Archivo;
 import pe.com.tumi.parametro.general.domain.ArchivoId;
 import pe.com.tumi.parametro.general.domain.TipoArchivo;
+import pe.com.tumi.parametro.general.domain.TopeOperacion;
 import pe.com.tumi.parametro.general.facade.GeneralFacadeRemote;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
 import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
@@ -149,6 +150,7 @@ import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.CronogramaCredito
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.ExpedienteCreditoComp;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.GarantiaCreditoComp;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.composite.RequisitoCreditoComp;
+import pe.com.tumi.servicio.solicitudPrestamo.facade.PrestamoFacadeLocal;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeLocal;
 import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeNuevoLocal;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
@@ -261,7 +263,7 @@ public class SolicitudPrestamoController {
 	private String msgTxtErrores;
 	private String msgTxtConvenioActivo;
 	private String msgTxtEvaluacionFinal;
-
+	private String msgTxtEdadLimite;
 
 	private String msgTxtCreditoConvenio;
 	private String msgTxtCreditoPk;
@@ -396,6 +398,36 @@ public class SolicitudPrestamoController {
 	//RVILLARREAL 23.04.2014
 	private List<Tabla> lstParaQuePinteReporte;
 	
+	// Autor: jchavez / Tarea: Creación / Fecha: 28.08.2014
+	private Boolean blnEsMINSA;
+	
+	private BigDecimal bdMontoAporteGaranteSolidario;
+	
+	private PrestamoFacadeLocal prestamoFacade = null;
+	
+	// Autor: jchavez / Tarea: Creación / Fecha: 03.09.2014
+	private BigDecimal bdCuotaFijaPrestamosVigentes;
+	private List<Expediente> lstExpedientesVigentes;
+	private CronogramaCreditoComp cngmCredExpVigentes;
+	private List<CronogramaCreditoComp> lstCngmCredExpVigentes;
+	
+	private List<Tabla> lstTablaExpedientesVigentes;
+	private Integer intCantExpedientesVigentes;
+	private List<Tabla> listaTipoCreditoEmpresa;
+	
+	private String strDescCuotaFijaExpCred1;
+	private String strDescCuotaFijaExpCred2;
+	private String strDescCuotaFijaExpCred3;
+	private String strDescCuotaFijaExpCred4;
+	
+	// Autor: jchavez / Tarea: Creación / Fecha: 10.09.2014
+	private BigDecimal bdTotalCuotaPrestamo;
+	
+	// Autor: jchavez / Tarea: Creación / Fecha: 17.11.2014
+	private Integer intEdadSocio;
+	private BigDecimal bdMontoDescJudicial;
+	private String strMensajeErrorTopeOperacion;
+	
 	/**
 	 * Constructor por defecto
 	 */
@@ -435,6 +467,7 @@ public class SolicitudPrestamoController {
 		bdAportes = new BigDecimal(0);
 		bdCuotaMensual = new BigDecimal(0);
 		bdTotalCuotaMensual = new BigDecimal(0);
+		bdTotalCuotaPrestamo = new BigDecimal(0);
 		bdPorcAporteMontoSolic = new BigDecimal(0);
 		personaBusqueda = new Persona();
 		personaBusqueda.setDocumento(new Documento());
@@ -479,6 +512,7 @@ public class SolicitudPrestamoController {
 		lstParaQuePinteReporte = new ArrayList<Tabla>();
 		beanSocioComp = new SocioComp();
 //		beanEstadoCredito = new EstadoCredito();
+		blnEsMINSA = false;
 
 		try {
 			tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
@@ -497,12 +531,16 @@ public class SolicitudPrestamoController {
 			empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
 			permisoFacade = (PermisoFacadeRemote)EJBFactory.getRemote(PermisoFacadeRemote.class);
 			cuentaFacade = (CuentaFacadeRemote)EJBFactory.getRemote(CuentaFacadeRemote.class);
+			prestamoFacade = (PrestamoFacadeLocal)EJBFactory.getLocal(PrestamoFacadeLocal.class);
 			
 			listaCondicionSocio = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_CONDICIONSOCIO)); 
 			listaTipoCondicionSocio = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPO_CONDSOCIO));
 			listaCondicionLaboral = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_CONDICIONLABORAL));
 			listaEstadoPrestamo = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_ESTADOSOLICPRESTAMO));
 			listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(Constante.PARAM_EMPRESASESION);
+			lstTablaExpedientesVigentes = new ArrayList<Tabla>();
+			
+			listaTipoCreditoEmpresa = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCREDITOEMPRESA));
 			//Ordenamos por nombre
 			Collections.sort(listaSucursal, new Comparator<Sucursal>(){
 				public int compare(Sucursal sucUno, Sucursal sucDos) {
@@ -644,6 +682,7 @@ public class SolicitudPrestamoController {
 				blnMostrarDescripciones = Boolean.FALSE;
 				strErrorGrabar="";
 				blnValidarGarantes = Boolean.FALSE;
+				lstCngmCredExpVigentes = new ArrayList<CronogramaCreditoComp>();
 				
 				cargarCombosBusqueda();
 				
@@ -805,6 +844,7 @@ public class SolicitudPrestamoController {
 			listaCapacidadCreditoComp = new ArrayList<CapacidadCreditoComp>();
 			listaRequisitoCreditoComp = new ArrayList<RequisitoCreditoComp>();
 			bdTotalCuotaMensual = null;
+			bdTotalCuotaPrestamo = null;
 			dtFechaRegistro = null;
 			strFechaRegistro = null;
 			bdPorcSeguroDesgravamen = null;
@@ -838,6 +878,7 @@ public class SolicitudPrestamoController {
 			strMsgErrorValidarDatos = null;
 			msgTxtEvaluacionFinal = "";
 			msgTxtErrores = "";
+			msgTxtEdadLimite = "";
 			msgTxtEstructuraRepetida = null;
 			msgTxtEstrucActivoRepetido = null;
 			msgTxtEstrucCesanteRepetido = null;
@@ -861,6 +902,10 @@ public class SolicitudPrestamoController {
 			bdMontoADescontarRePrestamo = BigDecimal.ZERO;
 			listaCapacidadCreditoComp = new ArrayList<CapacidadCreditoComp>();
 			bdMontoSaldoAnterior = BigDecimal.ZERO;
+			listaAutorizaCreditoComp = new ArrayList<AutorizaCreditoComp>();
+			
+			blnEsMINSA = false;
+			strMensajeErrorTopeOperacion = "";
 		} catch (Exception e) {
 			log.error("Error en limpiarFormSolicitudPrestamo ---> "+e);
 		}
@@ -1261,14 +1306,15 @@ public class SolicitudPrestamoController {
 										bdCalc4 = bdCalc3.divide(bdMontoTotalPrestamo, 2,RoundingMode.HALF_UP);
 									}
 
-									if(bdCalc2.compareTo(new BigDecimal(100))>=0){
+									//Autor: jchavez / Tarea: Modificación / Fecha: 25.08.2014 /
+									if(bdCalc2.compareTo(bdPorcentajeDefinido)>=0){
 										blnCumpleCaja = Boolean.TRUE;								
 									}
 									if(bdCalc4.compareTo(bdPorcentajeDefinido)>=0){
 										blnCumplePlanilla = Boolean.TRUE;
 									}
 		
-									// del monto pagado el 30% debe ser x planilla o el 100% x caja
+									// del monto pagado el 30% debe ser x planilla o x caja
 									if(blnCumplePlanilla || blnCumpleCaja){
 										expedienteComp.setChecked(true);
 										listaValidada.add(expedienteComp);
@@ -1314,9 +1360,207 @@ public class SolicitudPrestamoController {
 										
 									}
 								}
+							}else {
+								listaValidada = new ArrayList<ExpedienteComp>();
+								for (ExpedienteComp expedienteComp2 : lstExpedientesMovimientosRecuperados){							
+									// bdMontoADescontarRePrestamo	
+									bdMontoTotalPrestamo = expedienteComp2.getExpediente().getBdMontoTotal();
+//									List<Envioconcepto> lstEnviosXExp = null;
+//									lstEnviosXExp = planillaFacade.getListaEnvioconceptoPorPkExpedienteCredito(expedienteComp2.getExpediente().getId());
+//									if(lstEnviosXExp != null && !lstEnviosXExp.isEmpty()){
+										List<Movimiento> lstMovimientos = null;
+										// validamos el 30% sea por planilla o caja
+										lstMovimientos = conceptoFacade.getListXCtaExpediente(expedienteComp2.getExpediente().getId().getIntPersEmpresaPk(),
+																	expedienteComp2.getExpediente().getId().getIntCuentaPk(), 
+																	expedienteComp2.getExpediente().getId().getIntItemExpediente(), 
+																	expedienteComp2.getExpediente().getId().getIntItemExpedienteDetalle());
+										
+										if(lstMovimientos != null && !lstMovimientos.isEmpty()){
+											for (Movimiento movimiento : lstMovimientos) {
+												if(movimiento.getIntParaTipoCargoAbono().compareTo(Constante.PARAM_T_CARGOABONO_ABONO)==0){
+													if(movimiento.getIntParaTipoMovimiento().compareTo(Constante.PARAM_T_TIPO_MOVIMIENTO_INGRESO_POR_CAJA)==0){
+														bdMontoPagadoCaja = bdMontoPagadoCaja.add(movimiento.getBdMontoMovimiento());			
+													}
+													if(movimiento.getIntParaTipoMovimiento().compareTo(Constante.PARAM_T_TIPO_MOVIMIENTO_PROCESO_POR_PLANILLA)==0){
+														bdMontoPagadoPlanilla = bdMontoPagadoPlanilla.add(movimiento.getBdMontoMovimiento());
+													}
+												}
+											}
+											
+											// validando que se haya pagado el 30% del prestamo.
+											//bdMontoTotalPrestamo
+											BigDecimal bdCalc1 = BigDecimal.ZERO;
+											BigDecimal bdCalc2 = BigDecimal.ZERO;
+											bdCalc1 = bdMontoPagadoCaja.multiply(new BigDecimal(100));
+											if(bdCalc1.compareTo(BigDecimal.ZERO)>0){
+												bdCalc2 = bdCalc1.divide(bdMontoTotalPrestamo, 2,RoundingMode.HALF_UP);
+											}
+											
+											
+											BigDecimal bdCalc3 = BigDecimal.ZERO;
+											BigDecimal bdCalc4 = BigDecimal.ZERO;
+											bdCalc3 = bdMontoPagadoPlanilla.multiply(new BigDecimal(100));
+											if(bdCalc3.compareTo(BigDecimal.ZERO)>0){
+												bdCalc4 = bdCalc3.divide(bdMontoTotalPrestamo, 2,RoundingMode.HALF_UP);
+											}
+
+//											if(bdCalc2.compareTo(new BigDecimal(100))>=0){
+											//Autor: jchavez / Tarea: Creación / Fecha: 25.08.2014 /
+											if(bdCalc2.compareTo(bdPorcentajeDefinido)>=0){
+												blnCumpleCaja = Boolean.TRUE;								
+											}
+											if(bdCalc4.compareTo(bdPorcentajeDefinido)>=0){
+												blnCumplePlanilla = Boolean.TRUE;
+											}
+				
+											// del monto pagado el 30% debe ser x planilla o x caja
+											if(blnCumplePlanilla || blnCumpleCaja){
+												expedienteComp2.setChecked(true);
+												listaValidada.add(expedienteComp2);
+												BigDecimal bdMontoPorDescontar = BigDecimal.ZERO;
+												bdMontoADescontarRePrestamo = BigDecimal.ZERO;
+												
+//												for (Envioconcepto envioExp : lstEnviosXExp) {
+//													if(envioExp.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0
+//														&& envioExp.getIntPeriodoplanilla().compareTo(envioConcepto.getIntPeriodoplanilla())==0
+//														&& envioExp.getIntTipoconceptogeneralCod().compareTo(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)==0){
+//														bdMontoADescontarRePrestamo = envioExp.getBdMontoconcepto();
+//														bdMontoPorDescontar= bdMontoPorDescontar.add(envioExp.getBdMontoconcepto());
+//													}
+//												}
+//												if(lstEfectuado != null && !lstEfectuado.isEmpty()){
+//													bdMontoADescontarRePrestamo = BigDecimal.ZERO;
+//													bdMontoPorDescontar = BigDecimal.ZERO;
+//												}
+												BigDecimal bdMontoPrestamo = BigDecimal.ZERO;
+												BigDecimal bdMontoPrestamoDescontado = BigDecimal.ZERO;
+												BigDecimal bdMontoInteresAtrasado = BigDecimal.ZERO;
+												BigDecimal bdMontoTotalReprestamo = BigDecimal.ZERO;
+												
+												bdMontoPrestamo = expedienteComp2.getBdSaldo();
+												bdMontoPrestamoDescontado = bdMontoPrestamo.subtract(bdMontoPorDescontar);
+												
+												ExpedienteCreditoId expCredId = new ExpedienteCreditoId();
+												expCredId.setIntCuentaPk(expedienteComp2.getExpediente().getId().getIntCuentaPk());
+												expCredId.setIntItemDetExpediente(expedienteComp2.getExpediente().getId().getIntItemExpedienteDetalle());
+												expCredId.setIntItemExpediente(expedienteComp2.getExpediente().getId().getIntItemExpediente());
+												expCredId.setIntPersEmpresaPk(expedienteComp2.getExpediente().getId().getIntPersEmpresaPk());
+												
+												bdMontoInteresAtrasado = calcularInteresAtrasado(expCredId);
+												if(bdMontoInteresAtrasado.compareTo(BigDecimal.ZERO)!= 0){
+													beanExpedienteCredito.setBdMontoInteresAtrasado(bdMontoInteresAtrasado);
+												}
+												bdMontoTotalReprestamo = bdMontoPrestamoDescontado.add(bdMontoInteresAtrasado);
+												expedienteComp2.setBdMontoReprestamo(bdMontoTotalReprestamo);
+												
+												expedienteComp2.setBdMontoSaldoReprestamo(bdMontoPrestamoDescontado);
+											}
+										}
+//									}
+								}
 							}
 						}		
-					}	
+					}
+					//CASO NO EXISTE ENVIOCONCEPTO
+					else {
+						listaValidada = new ArrayList<ExpedienteComp>();
+						for (ExpedienteComp expedienteComp : lstExpedientesMovimientosRecuperados){							
+							// bdMontoADescontarRePrestamo	
+							bdMontoTotalPrestamo = expedienteComp.getExpediente().getBdMontoTotal();
+//							List<Envioconcepto> lstEnviosXExp = null;
+//							lstEnviosXExp = planillaFacade.getListaEnvioconceptoPorPkExpedienteCredito(expedienteComp.getExpediente().getId());
+//							if(lstEnviosXExp != null && !lstEnviosXExp.isEmpty()){
+								List<Movimiento> lstMovimientos = null;
+								// validamos el 30% sea por planilla o caja
+								lstMovimientos = conceptoFacade.getListXCtaExpediente(expedienteComp.getExpediente().getId().getIntPersEmpresaPk(),
+															expedienteComp.getExpediente().getId().getIntCuentaPk(), 
+															expedienteComp.getExpediente().getId().getIntItemExpediente(), 
+															expedienteComp.getExpediente().getId().getIntItemExpedienteDetalle());
+								
+								if(lstMovimientos != null && !lstMovimientos.isEmpty()){
+									for (Movimiento movimiento : lstMovimientos) {
+										if(movimiento.getIntParaTipoCargoAbono().compareTo(Constante.PARAM_T_CARGOABONO_ABONO)==0){
+											if(movimiento.getIntParaTipoMovimiento().compareTo(Constante.PARAM_T_TIPO_MOVIMIENTO_INGRESO_POR_CAJA)==0){
+												bdMontoPagadoCaja = bdMontoPagadoCaja.add(movimiento.getBdMontoMovimiento());			
+											}
+											if(movimiento.getIntParaTipoMovimiento().compareTo(Constante.PARAM_T_TIPO_MOVIMIENTO_PROCESO_POR_PLANILLA)==0){
+												bdMontoPagadoPlanilla = bdMontoPagadoPlanilla.add(movimiento.getBdMontoMovimiento());
+											}
+										}
+									}
+									
+									// validando que se haya pagado el 30% del prestamo.
+									//bdMontoTotalPrestamo
+									BigDecimal bdCalc1 = BigDecimal.ZERO;
+									BigDecimal bdCalc2 = BigDecimal.ZERO;
+									bdCalc1 = bdMontoPagadoCaja.multiply(new BigDecimal(100));
+									if(bdCalc1.compareTo(BigDecimal.ZERO)>0){
+										bdCalc2 = bdCalc1.divide(bdMontoTotalPrestamo, 2,RoundingMode.HALF_UP);
+									}
+									
+									
+									BigDecimal bdCalc3 = BigDecimal.ZERO;
+									BigDecimal bdCalc4 = BigDecimal.ZERO;
+									bdCalc3 = bdMontoPagadoPlanilla.multiply(new BigDecimal(100));
+									if(bdCalc3.compareTo(BigDecimal.ZERO)>0){
+										bdCalc4 = bdCalc3.divide(bdMontoTotalPrestamo, 2,RoundingMode.HALF_UP);
+									}
+
+//									if(bdCalc2.compareTo(new BigDecimal(100))>=0){
+									//Autor: jchavez / Tarea: Creación / Fecha: 25.08.2014 /
+									if(bdCalc2.compareTo(bdPorcentajeDefinido)>=0){
+										blnCumpleCaja = Boolean.TRUE;								
+									}
+									if(bdCalc4.compareTo(bdPorcentajeDefinido)>=0){
+										blnCumplePlanilla = Boolean.TRUE;
+									}
+		
+									// del monto pagado el 30% debe ser x planilla o x caja
+									if(blnCumplePlanilla || blnCumpleCaja){
+										expedienteComp.setChecked(true);
+										listaValidada.add(expedienteComp);
+										BigDecimal bdMontoPorDescontar = BigDecimal.ZERO;
+										bdMontoADescontarRePrestamo = BigDecimal.ZERO;
+										
+//										for (Envioconcepto envioExp : lstEnviosXExp) {
+//											if(envioExp.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0
+//												&& envioExp.getIntPeriodoplanilla().compareTo(envioConcepto.getIntPeriodoplanilla())==0
+//												&& envioExp.getIntTipoconceptogeneralCod().compareTo(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)==0){
+//												bdMontoADescontarRePrestamo = envioExp.getBdMontoconcepto();
+//												bdMontoPorDescontar= bdMontoPorDescontar.add(envioExp.getBdMontoconcepto());
+//											}
+//										}
+//										if(lstEfectuado != null && !lstEfectuado.isEmpty()){
+//											bdMontoADescontarRePrestamo = BigDecimal.ZERO;
+//											bdMontoPorDescontar = BigDecimal.ZERO;
+//										}
+										BigDecimal bdMontoPrestamo = BigDecimal.ZERO;
+										BigDecimal bdMontoPrestamoDescontado = BigDecimal.ZERO;
+										BigDecimal bdMontoInteresAtrasado = BigDecimal.ZERO;
+										BigDecimal bdMontoTotalReprestamo = BigDecimal.ZERO;
+										
+										bdMontoPrestamo = expedienteComp.getBdSaldo();
+										bdMontoPrestamoDescontado = bdMontoPrestamo.subtract(bdMontoPorDescontar);
+										
+										ExpedienteCreditoId expCredId = new ExpedienteCreditoId();
+										expCredId.setIntCuentaPk(expedienteComp.getExpediente().getId().getIntCuentaPk());
+										expCredId.setIntItemDetExpediente(expedienteComp.getExpediente().getId().getIntItemExpedienteDetalle());
+										expCredId.setIntItemExpediente(expedienteComp.getExpediente().getId().getIntItemExpediente());
+										expCredId.setIntPersEmpresaPk(expedienteComp.getExpediente().getId().getIntPersEmpresaPk());
+										
+										bdMontoInteresAtrasado = calcularInteresAtrasado(expCredId);
+										if(bdMontoInteresAtrasado.compareTo(BigDecimal.ZERO)!= 0){
+											beanExpedienteCredito.setBdMontoInteresAtrasado(bdMontoInteresAtrasado);
+										}
+										bdMontoTotalReprestamo = bdMontoPrestamoDescontado.add(bdMontoInteresAtrasado);
+										expedienteComp.setBdMontoReprestamo(bdMontoTotalReprestamo);
+										
+										expedienteComp.setBdMontoSaldoReprestamo(bdMontoPrestamoDescontado);
+									}
+								}
+//							}
+						}
+					}
 				}
 //			}	
 
@@ -1571,21 +1815,23 @@ public class SolicitudPrestamoController {
 				
 				forExpedientesEstados:
 				for (Expediente expediente : listaExpedientesMovimiento) {
-					List<EstadoCredito> lstEstados = null;
-					ExpedienteCreditoId pId = new ExpedienteCreditoId();
-					pId.setIntCuentaPk(expediente.getId().getIntCuentaPk());
-					pId.setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
-					pId.setIntItemExpediente(expediente.getId().getIntItemExpediente());
-					pId.setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
-					
-					lstEstados = solicitudPrestamoFacade.getListaEstadosPorExpedienteCreditoId(pId);
-					
-					if(lstEstados != null && !lstEstados.isEmpty()){
-						for (EstadoCredito estadoCredito : lstEstados) {
-							if(estadoCredito.getIntParaEstadoCreditoCod().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_GIRADO)==0){
+					if (!expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+						List<EstadoCredito> lstEstados = null;
+						ExpedienteCreditoId pId = new ExpedienteCreditoId();
+						pId.setIntCuentaPk(expediente.getId().getIntCuentaPk());
+						pId.setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+						pId.setIntItemExpediente(expediente.getId().getIntItemExpediente());
+						pId.setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+						
+						lstEstados = solicitudPrestamoFacade.getListaEstadosPorExpedienteCreditoId(pId);
+						
+						if(lstEstados != null && !lstEstados.isEmpty()){
+							for (EstadoCredito estadoCredito : lstEstados) {
+								if(estadoCredito.getIntParaEstadoCreditoCod().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_GIRADO)==0){
 
-									blnTiene = Boolean.TRUE;
-									break forExpedientesEstados;
+										blnTiene = Boolean.TRUE;
+										break forExpedientesEstados;
+								}
 							}
 						}
 					}
@@ -1596,16 +1842,16 @@ public class SolicitudPrestamoController {
 			if(blnTiene){
 				if(credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PROMOCIONAL)==0
 						|| credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_ADMINISTRATIVO)==0){
-					blnAplica = Boolean.TRUE;
+					blnAplica = Boolean.TRUE; //13.11.2014 ORIGINAL FALSE
 				}else{
-					blnAplica = Boolean.FALSE;
+					blnAplica = Boolean.FALSE; //13.11.2014 ORIGINAL TRUE
 				}
 			}else{
 				if(credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PROMOCIONAL)==0
 						|| credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_ADMINISTRATIVO)==0){
-					blnAplica = Boolean.FALSE;
+					blnAplica = Boolean.FALSE;//13.11.2014 ORIGINAL TRUE
 				}else{
-					blnAplica = Boolean.TRUE;
+					blnAplica = Boolean.TRUE;//13.11.2014 ORIGINAL FALSE
 				}
 			}
 		} catch (Exception e) {
@@ -3015,9 +3261,10 @@ public class SolicitudPrestamoController {
 	 * @param event
 	 * @throws IOException 
 	 * @throws EJBFactoryException 
+	 * @throws ParseException 
 	 */
 	
-	public void irModificarSolicitudPrestamo(ActionEvent event) throws EJBFactoryException, IOException {		
+	public void irModificarSolicitudPrestamo(ActionEvent event) throws BusinessException, EJBFactoryException, IOException {		
 		limpiarFormSolicitudPrestamo();
 		blnValidarGarantes = Boolean.TRUE;
 		intTipoEvaluacion = 2 ;
@@ -3028,6 +3275,9 @@ public class SolicitudPrestamoController {
 		CuentaComp cuentaComp = null;
 		
 		try {
+			Date today = new Date();
+			String strToday = Constante.sdf.format(today);
+			Date dtToday = Constante.sdf.parse(strToday);
 			
 			limpiarResultadoBusqueda();
 			blnModoVisualizacion = true;
@@ -3055,7 +3305,6 @@ public class SolicitudPrestamoController {
 				creditoRecuperadoId.setIntPersEmpresaPk(beanExpedienteCredito.getIntPersEmpresaCreditoPk());
 				creditoRecuperado = creditoFacade.getCreditoPorIdCredito(creditoRecuperadoId);
 				beanCredito = creditoRecuperado;
-				
 				
 				// Recuperamos el id de persona del socio desde la capacidad.
 				if (beanExpedienteCredito.getListaCapacidadCreditoComp() != null && beanExpedienteCredito.getListaCapacidadCreditoComp().size() > 0) {
@@ -3125,6 +3374,19 @@ public class SolicitudPrestamoController {
 							}
 							socioComp.setCuentaComp(cuentaComp);
 							beanSocioComp = socioComp;
+							
+							intEdadSocio = 0;
+							intEdadSocio = fechasDiferenciaEnAnnos(beanSocioComp.getPersona().getNatural().getDtFechaNacimiento(), dtToday);
+							
+							bdMontoDescJudicial = null;
+							Padron padron = new Padron();
+							padron.setId(new PadronId());
+							padron.getId().setIntNivel(beanSocioComp.getSocio().getSocioEstructura().getIntNivel());
+							padron.getId().setIntCodigo(beanSocioComp.getSocio().getSocioEstructura().getIntCodigo());
+							padron.getId().setIntParaModalidadCod(beanSocioComp.getSocio().getSocioEstructura().getIntModalidad());
+							padron.getId().setIntParaTipoSocioCod(beanSocioComp.getSocio().getSocioEstructura().getIntTipoSocio());
+							padron.setStrLibEle(beanSocioComp.getPersona().getDocumento().getStrNumeroIdentidad());
+							bdMontoDescJudicial = estructuraFacade.getDescuentoJudicial(padron);
 							
 							if(listaCuentaConcepto != null && !listaCuentaConcepto.isEmpty()){
 								for (CuentaConcepto ctaCto : listaCuentaConcepto) {
@@ -3348,7 +3610,7 @@ public class SolicitudPrestamoController {
 				}
 			}
 			
-		} catch (BusinessException e) {
+		} catch (Exception e) {
 			log.error("Error BusinessException en  irModificarSolicitudPrestamo ---> " + e);
 			e.printStackTrace();
 		} finally {
@@ -3367,6 +3629,7 @@ public class SolicitudPrestamoController {
 		CronogramaCreditoComp cronogramaComp = null;
 		Integer intNroCuotas = beanExpedienteCredito.getIntNumeroCuota();
 		BigDecimal bdTotalCuotaMensualCronograma = BigDecimal.ZERO;
+		CronogramaCreditoComp cronogramaCreditoComp = null;
 		
 		try {
 			listaCronogramaCreditoComp = new ArrayList<CronogramaCreditoComp>();
@@ -3377,12 +3640,202 @@ public class SolicitudPrestamoController {
 				}
 				listaCronogramaCreditoComp.add(cronogramaComp);
 			}
+			//Autor: jchavez / Tarea: Creación / Fecha: 08.09.2014
+			calculoCtaFijaYCronogramaConExpCredVigentes(listaCronogramaCreditoComp.get(0).getIntPeriodoPlanilla());
+			List<CronogramaCreditoComp> listaCronogramaCreditoCompTemp = new ArrayList<CronogramaCreditoComp>();
+			listaCronogramaCreditoCompTemp.addAll(listaCronogramaCreditoComp);
+			listaCronogramaCreditoComp.clear();
+			Boolean blnExisteEnCronograma = true;
+			for (int k = 0; k < lstTablaExpedientesVigentes.size(); k++) {
+				if (k==0) {
+					strDescCuotaFijaExpCred1 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+//					listaCronogramaCreditoComp.get(0).setStrConcatenadoExpediente1(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+					for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+						for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+							if (y.getIntParaTipoConceptoCod().equals(1)) {
+								if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+										&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+									blnExisteEnCronograma = false;
+									for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+										if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+											blnExisteEnCronograma = true;
+										}
+									}
+									if (blnExisteEnCronograma) {
+										for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+											if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+												ccc.setBdCuotaFijaExpediente1(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+												ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente1()));
+											}
+										}
+									}else{
+										if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+											cronogramaCreditoComp = new CronogramaCreditoComp();
+											cronogramaCreditoComp.setBdCuotaFijaExpediente1(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+											cronogramaCreditoComp.setStrFechaEnvio(null);
+											cronogramaCreditoComp.setStrFechaVencimiento(null);
+											cronogramaCreditoComp.setIntDiasTranscurridos(null);
+											cronogramaCreditoComp.setBdSaldoCapital(null);
+											cronogramaCreditoComp.setBdAmortizacion(null);
+											cronogramaCreditoComp.setBdInteres(null);
+											cronogramaCreditoComp.setBdCuotaMensual(null);
+											cronogramaCreditoComp.setBdAportes(null);
+											cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+											cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+											cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente1());
+											listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+										}									
+									}
+								}
+							}							
+						}
+					}
+				}else if (k==1) {
+					strDescCuotaFijaExpCred2 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+//					listaCronogramaCreditoComp.get(0).setStrConcatenadoExpediente2(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+					for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+						for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+							if (y.getIntParaTipoConceptoCod().equals(1)) {
+								if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+										&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+									blnExisteEnCronograma = false;
+									for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+										if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+											blnExisteEnCronograma = true;
+										}
+									}
+									if (blnExisteEnCronograma) {
+										for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+											if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+												ccc.setBdCuotaFijaExpediente2(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+												ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente2()));
+											}
+										}
+									}else{
+										if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+											cronogramaCreditoComp = new CronogramaCreditoComp();
+											cronogramaCreditoComp.setBdCuotaFijaExpediente1(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+											cronogramaCreditoComp.setStrFechaEnvio(null);
+											cronogramaCreditoComp.setStrFechaVencimiento(null);
+											cronogramaCreditoComp.setIntDiasTranscurridos(null);
+											cronogramaCreditoComp.setBdSaldoCapital(null);
+											cronogramaCreditoComp.setBdAmortizacion(null);
+											cronogramaCreditoComp.setBdInteres(null);
+											cronogramaCreditoComp.setBdCuotaMensual(null);
+											cronogramaCreditoComp.setBdAportes(null);
+											cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+											cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+											cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente2());
+											listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+										}									
+									}
+								}
+							}							
+						}
+					}
+				}else if (k==2) {
+					strDescCuotaFijaExpCred3 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+//					listaCronogramaCreditoComp.get(0).setStrConcatenadoExpediente3(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+					for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+						for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+							if (y.getIntParaTipoConceptoCod().equals(1)) {
+								if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+										&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+									blnExisteEnCronograma = false;
+									for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+										if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+											blnExisteEnCronograma = true;
+										}
+									}
+									if (blnExisteEnCronograma) {
+										for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+											if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+												ccc.setBdCuotaFijaExpediente3(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+												ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente3()));
+											}
+										}
+									}else{
+										if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+											cronogramaCreditoComp = new CronogramaCreditoComp();
+											cronogramaCreditoComp.setBdCuotaFijaExpediente3(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+											cronogramaCreditoComp.setStrFechaEnvio(null);
+											cronogramaCreditoComp.setStrFechaVencimiento(null);
+											cronogramaCreditoComp.setIntDiasTranscurridos(null);
+											cronogramaCreditoComp.setBdSaldoCapital(null);
+											cronogramaCreditoComp.setBdAmortizacion(null);
+											cronogramaCreditoComp.setBdInteres(null);
+											cronogramaCreditoComp.setBdCuotaMensual(null);
+											cronogramaCreditoComp.setBdAportes(null);
+											cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+											cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+											cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente3());
+											listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+										}									
+									}
+								}
+							}							
+						}
+					}
+				}else if (k==3) {
+					strDescCuotaFijaExpCred4 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+//					listaCronogramaCreditoComp.get(0).setStrConcatenadoExpediente4(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+					for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+						for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+							if (y.getIntParaTipoConceptoCod().equals(1)) {
+								if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+										&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+									blnExisteEnCronograma = false;
+									for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+										if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+											blnExisteEnCronograma = true;
+										}
+									}
+									if (blnExisteEnCronograma) {
+										for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+											if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+												ccc.setBdCuotaFijaExpediente4(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+												ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente4()));
+											}
+										}
+									}else{
+										if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+											cronogramaCreditoComp = new CronogramaCreditoComp();
+											cronogramaCreditoComp.setBdCuotaFijaExpediente4(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+											cronogramaCreditoComp.setStrFechaEnvio(null);
+											cronogramaCreditoComp.setStrFechaVencimiento(null);
+											cronogramaCreditoComp.setIntDiasTranscurridos(null);
+											cronogramaCreditoComp.setBdSaldoCapital(null);
+											cronogramaCreditoComp.setBdAmortizacion(null);
+											cronogramaCreditoComp.setBdInteres(null);
+											cronogramaCreditoComp.setBdCuotaMensual(null);
+											cronogramaCreditoComp.setBdAportes(null);
+											cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+											cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+											cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente4());
+											listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+										}									
+									}
+								}
+							}							
+						}
+					}
+				}
+			}
+			listaCronogramaCreditoComp.addAll(listaCronogramaCreditoCompTemp);
+			Collections.sort(listaCronogramaCreditoComp, new Comparator<CronogramaCreditoComp>(){
+				public int compare(CronogramaCreditoComp uno, CronogramaCreditoComp otro) {
+					return uno.getIntPeriodoPlanilla().compareTo(otro.getIntPeriodoPlanilla());
+				}
+			});
+			//Fin jchavez - 08.09.2014
 			strPorcInteres = "" + beanExpedienteCredito.getBdPorcentajeInteres().divide(BigDecimal.ONE, 2,RoundingMode.HALF_UP);
 			strPorcAportes = ""+beanExpedienteCredito.getBdPorcentajeAporte().divide(BigDecimal.ONE, 2,RoundingMode.HALF_UP);
 			bdMontoPrestamo = beanExpedienteCredito.getBdMontoTotal();
 			bdPorcSeguroDesgravamen = beanExpedienteCredito.getBdMontoGravamen();
 			bdTotalDstos = beanExpedienteCredito.getBdMontoAporte();
-			bdTotalCuotaMensual = bdTotalCuotaMensualCronograma;
+			// Autor: jchavez / Tarea: Creación / Fecha: 10.09.2014
+			bdTotalCuotaPrestamo =  bdTotalCuotaMensualCronograma.subtract(bdTotalDstos);
+			bdTotalCuotaMensual = bdTotalCuotaMensualCronograma.add(bdCuotaFijaPrestamosVigentes);
 
 		} catch (Exception e) {
 			log.error("Error en evaluarPrestamoCronogramaView ---> "+e);
@@ -3607,6 +4060,8 @@ public class SolicitudPrestamoController {
 		bdMontoPrestamo = new BigDecimal(0);
 		bdCuotaMensual = new BigDecimal(0);
 		bdTotalCuotaMensual = new BigDecimal(0);
+		// Autor: jchavez / Tarea: Creación / Fecha: 10.09.2014
+		bdTotalCuotaPrestamo = new BigDecimal(0);
 		listaCronogramaCreditoComp = null;
 		blnSeGeneroCronogramaCorrectamente = true;
 
@@ -3657,6 +4112,7 @@ public class SolicitudPrestamoController {
 		bdMontoPrestamo = new BigDecimal(0);
 		bdCuotaMensual = new BigDecimal(0);
 		bdTotalCuotaMensual = new BigDecimal(0);
+		bdTotalCuotaPrestamo = new BigDecimal(0);
 		listaCronogramaCreditoComp = null;
 		blnSeGeneroCronogramaCorrectamente = true;
 
@@ -3729,6 +4185,7 @@ public class SolicitudPrestamoController {
 		bdMontoPrestamo = new BigDecimal(0);
 		bdCuotaMensual = new BigDecimal(0);
 		bdTotalCuotaMensual = new BigDecimal(0);
+		bdTotalCuotaPrestamo = new BigDecimal(0);
 		listaCronogramaCreditoComp = null;
 		List<ConvenioEstructuraDetalleComp> listaConvenioEstructuraDetalle = null;
 		boolean blnContinua = true; 
@@ -3748,6 +4205,7 @@ public class SolicitudPrestamoController {
 
 			cargarDescripciones();
 			
+			log.info("beanCredito ---> "+beanCredito);
 			if (beanSocioComp.getSocio().getSocioEstructura() != null) {
 				estructuraDetalle = new EstructuraDetalle();	
 				estructuraDetalle.setId(new EstructuraDetalleId());
@@ -3828,28 +4286,30 @@ public class SolicitudPrestamoController {
 											credito.getId().setIntItemCredito(adenda.getListaAdendaCreditos().get(j).getId().getIntItemCredito());
 											credito = creditoFacade.getCreditoPorIdCredito(credito.getId());
 											
-											blnYaTieneCredito = aplicaPromocional(beanSocioComp,credito);
-											log.error("DESCRIPCION DE CREDITO ************* "+credito.getStrDescripcion());
-											log.error("APLICA CREDITO ************* "+blnYaTieneCredito);
-											
-											// Si teiene creditosd anterioes no debe caer en promocionale											
-											if(blnYaTieneCredito){
-												credito = null;
-											}else{
-												Boolean blnNoAplica = Boolean.FALSE;
-												blnNoAplica = validarExcepcionDiasPromocional(credito, beanSocioComp);
-												if(blnNoAplica){
+//											if (blnContinua) {
+												blnYaTieneCredito = aplicaPromocional(beanSocioComp,credito);
+												log.error("DESCRIPCION DE CREDITO ************* "+credito.getStrDescripcion());
+												log.error("APLICA CREDITO ************* "+blnYaTieneCredito);
+												
+												// Si teiene creditosd anterioes no debe caer en promocionale											
+												if(blnYaTieneCredito){
 													credito = null;
-												}
-											}
-
-											if (credito != null){
-												if(credito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) ==  0) {
-													if (credito.getIntParaRolPk().compareTo(intTipoRelacion)==0) {
-														listaCreditosValidados.add(credito);
+												}else{
+													Boolean blnNoAplica = Boolean.FALSE;
+													blnNoAplica = validarExcepcionDiasPromocional(credito, beanSocioComp);
+													if(blnNoAplica){
+														credito = null;
 													}
 												}
-											}
+
+												if (credito != null){
+													if(credito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) ==  0) {
+														if (credito.getIntParaRolPk().compareTo(intTipoRelacion)==0) {
+															listaCreditosValidados.add(credito);
+														}
+													}
+												}
+//											}	
 										}
 									}
 								} 
@@ -3858,7 +4318,7 @@ public class SolicitudPrestamoController {
 					}
 				}
 			}
-
+			log.info("beanCredito ---> "+beanCredito);
 			if(listaCreditosValidados != null && !listaCreditosValidados.isEmpty()){
 				List<CreditoComp> listaCreditosValidadosComp = new ArrayList<CreditoComp>();
 				
@@ -3882,13 +4342,68 @@ public class SolicitudPrestamoController {
 				}
 				calcularGarantesValidos();
 			}
-
+			log.info("beanCredito ---> "+beanCredito);
 		} catch (Exception e) {
 			log.error("Error Exception en evaluarPrestamo ---> " + e);
 		} 
 	}
+	/**
+	 * Autor: jchavez / Tarea: Creación / Fecha: 19.11.2014
+	 * Funcionalidad: Procedimiento de vaidación del monto Tope del préstamo
+	 * @throws BusinessException
+	 */
+	private Boolean validarMontoTopeOperacion() throws BusinessException{
+		strMensajeErrorTopeOperacion = "";
+		Boolean blnTopeOperacion = true;
+		try {
+			TopeOperacion tope = new TopeOperacion();
+			//Se prioriza la validación del tope de operación por la modalidad del socio.
+			for (CapacidadCreditoComp o : listaCapacidadCreditoComp) {
+				if (o.getSocioEstructura().getIntTipoEstructura().equals(Constante.PARAM_T_TIPOESTRUCTURA_ORIGEN)
+						&& o.getSocioEstructura().getIntModalidad().equals(Constante.PARAM_T_MODALIDADPLANILLA_CAS)) {
+					tope = new TopeOperacion();
+					tope.setIntPersEmpresa(usuario.getPerfil().getId().getIntPersEmpresaPk());
+					tope.setIntIdMaestro(Integer.parseInt(Constante.PARAM_T_MODALIDADPLANILLA));
+					tope.setIntIdDetalle(Constante.PARAM_T_MODALIDADPLANILLA_CAS);			
+					tope = generalFacade.getTopePorIdMaestroYDetalle(tope).get(0); //En teoría debería devolver solo un registro.
+					
+					if (bdMontoPrestamo.compareTo(tope.getBdMontoTope())==1){
+						strMensajeErrorTopeOperacion = "Socio CAS monto máximo es S/. "
+														+convertirMonto(tope.getBdMontoTope())
+														+", no procede";
+						blnTopeOperacion = false;
+						return blnTopeOperacion;
+					}
+				}
+			}
+			//Validación por tipo de préstamo
+			if (beanExpedienteCredito.getIntParaSubTipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)) {
+				tope = new TopeOperacion();
+				tope.setIntPersEmpresa(usuario.getPerfil().getId().getIntPersEmpresaPk());
+				tope.setIntIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONPRESTAMO));
+				tope.setIntIdDetalle(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO);			
+				tope = generalFacade.getTopePorIdMaestroYDetalle(tope).get(0);
+				if (bdMontoPrestamo.compareTo(tope.getBdMontoTope())==1) {
+					strMensajeErrorTopeOperacion = "El monto máximo para représtamo  es S/. "
+						+convertirMonto(tope.getBdMontoTope())
+						+", no procede";
+					blnTopeOperacion = false;
+					return blnTopeOperacion;
+				}
+			}
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}		
+		return blnTopeOperacion;
+	}
 	
-	
+	public static String convertirMonto(BigDecimal bdMonto)throws Exception{
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		NumberFormat formato = new DecimalFormat("#,###.00",otherSymbols);
+		return formato.format(bdMonto);
+	}
 	/**
 	 * ReEvalua solicitud que cubre margen de error sobre rangos de escala de tipo de credito.
 	 * @param listaCreditosComp
@@ -3897,7 +4412,16 @@ public class SolicitudPrestamoController {
 	public void evaluarCreditosComp (List<CreditoComp> listaCreditosComp, ActionEvent event){
 		EstructuraDetalle estructuraDetalle = null;
 		try {
-		
+			Date today = new Date();
+			String strToday = Constante.sdf.format(today);
+			Date dtToday = Constante.sdf.parse(strToday);
+			
+			log.info("-----------------------------------------------");
+			for (CreditoComp creditoComp : listaCreditosComp) {
+				log.info("---");
+				log.info("Créditos a evaluar: "+creditoComp.getCredito().getIntParaTipoCreditoEmpresa());
+			}
+			log.info("-----------------------------------------------");
 			if(listaCreditosComp != null && !listaCreditosComp.isEmpty()){	
 				if (beanSocioComp.getSocio().getSocioEstructura() != null) {
 					estructuraDetalle = new EstructuraDetalle();	
@@ -3911,119 +4435,266 @@ public class SolicitudPrestamoController {
 				
 				for (CreditoComp creditoComp : listaCreditosComp) {
 					if(creditoComp.getChkCredito().compareTo(Boolean.FALSE)==0){
-						if(blnSeGeneroCronogramaCorrectamente){
-							creditoComp.setChkCredito(Boolean.TRUE);
-							// Validamos que la configuracion del credito en la adenda este activo
-							if(creditoComp.getCredito().getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) == 0){
-								Credito credito = creditoFacade.getCreditoPorIdCredito(creditoComp.getCredito().getId());
-								
-								blnYaTieneCredito = aplicaPromocional(beanSocioComp, credito);
-								//log.error("DESCRIPCION DE CREDITO ************* "+credito.getStrDescripcion());
-								//log.error("APLICA CREDITO ************* "+blnYaTieneCredito);
-								
-								// Si teiene creditosd anterioes no debe caer en promocionales
-								if(blnYaTieneCredito){
-									//if(credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PROMOCIONAL)==0){
-										credito = null;
-									//}
-								}else{
-									Boolean blnNoAplica = Boolean.FALSE;
-									blnNoAplica = validarExcepcionDiasPromocional(credito, beanSocioComp);
-									if(blnNoAplica){
-										credito = null;
-									}
-								}
-								
-								// Validamos cada credito
-								if (credito != null){
-									if(credito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) ==  0) {
-										if (credito.getIntParaRolPk().compareTo(intTipoRelacion)==0) {
-											if (beanSocioComp.getSocio().getSocioEstructura() != null) {
-												boolean boFlag = false;
-												for (int k = 0; k < beanSocioComp.getPersona().getNatural().getListaPerLaboral().size(); k++) {
-													if (credito.getIntParaCondicionLaboralCod() == 
-													(beanSocioComp.getPersona().getNatural().getListaPerLaboral().get(k).getIntCondicionLaboral())) {
-														boFlag = true;
-													}
-													if (credito.getIntParaCondicionLaboralCod().equals(
-													(beanSocioComp.getPersona().getNatural().getListaPerLaboral().get(k).getIntCondicionLaboral()))) {
-														boFlag = true;
+//						if (creditoComp.getCredito().getIntParaTipoCreditoEmpresa().equals(Constante.PARAM_T_TIPOCREDITOEMPRESA_PROMOCIONAL)) {
+							log.info("TIPO CREDITO"+creditoComp.getCredito().getIntParaTipoCreditoEmpresa());
+							if(blnSeGeneroCronogramaCorrectamente){
+								creditoComp.setChkCredito(Boolean.TRUE);
+								// Validamos que la configuracion del credito en la adenda este activo
+								if(creditoComp.getCredito().getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) == 0){
+									Credito credito = creditoFacade.getCreditoPorIdCredito(creditoComp.getCredito().getId());
+//									int edad = 0;
+									intEdadSocio = 0;
+									intEdadSocio = fechasDiferenciaEnAnnos(beanSocioComp.getPersona().getNatural().getDtFechaNacimiento(), dtToday);
+									
+									bdMontoDescJudicial = null;
+									Padron padron = new Padron();
+									padron.setId(new PadronId());
+									padron.getId().setIntNivel(beanSocioComp.getSocio().getSocioEstructura().getIntNivel());
+									padron.getId().setIntCodigo(beanSocioComp.getSocio().getSocioEstructura().getIntCodigo());
+									padron.getId().setIntParaModalidadCod(beanSocioComp.getSocio().getSocioEstructura().getIntModalidad());
+									padron.getId().setIntParaTipoSocioCod(beanSocioComp.getSocio().getSocioEstructura().getIntTipoSocio());
+									padron.setStrLibEle(beanSocioComp.getPersona().getDocumento().getStrNumeroIdentidad());
+									bdMontoDescJudicial = estructuraFacade.getDescuentoJudicial(padron);
+									
+									if (credito.getListaExcepcion()!=null && !credito.getListaExcepcion().isEmpty()) {
+										for (CreditoExcepcion credExcep : credito.getListaExcepcion()) {
+											if((credExcep.getIntEdadLimite() !=null && intEdadSocio <= credExcep.getIntEdadLimite().intValue())
+													|| (credExcep.getIntEdadLimite() == null)){
+												msgTxtEdadLimite = "";
+												blnYaTieneCredito = aplicaPromocional(beanSocioComp, credito);
+												//log.error("DESCRIPCION DE CREDITO ************* "+credito.getStrDescripcion());
+												//log.error("APLICA CREDITO ************* "+blnYaTieneCredito);
+												
+												// Si teiene creditosd anterioes no debe caer en promocionales
+												if(blnYaTieneCredito){
+													//if(credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PROMOCIONAL)==0){
+														credito = null;
+													//}
+												}else{
+													Boolean blnNoAplica = Boolean.FALSE;
+													blnNoAplica = validarExcepcionDiasPromocional(credito, beanSocioComp);
+													if(blnNoAplica){
+														credito = null;
 													}
 												}
-	
-												if ((credito.getIntParaCondicionLaboralCod().compareTo(-1)==0)|| (boFlag)) {
-													// Verificar la condición de la cuenta
-													if (credito.getListaCondicion() != null) {
-														for (CondicionCredito condicionCredito : credito.getListaCondicion()) {
-															if(blnSeGeneroCronogramaCorrectamente){
-																if (beanSocioComp.getCuenta().getIntParaCondicionCuentaCod().equals(
-																condicionCredito.getId().getIntParaCondicionSocioCod())
-																&& condicionCredito.getIntValor() == 1) {
-																	// Verificar si la cuenta está activa o inactiva
-																	if (credito.getListaCondicionHabil() != null) {
-																		// forCondicionHabil:
-																		for (CondicionHabil condicionHabil : credito.getListaCondicionHabil()) {
+												
+												// Validamos cada credito
+												if (credito != null){
+													if(credito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) ==  0) {
+														if (credito.getIntParaRolPk().compareTo(intTipoRelacion)==0) {
+															if (beanSocioComp.getSocio().getSocioEstructura() != null) {
+																boolean boFlag = false;
+																for (int k = 0; k < beanSocioComp.getPersona().getNatural().getListaPerLaboral().size(); k++) {
+																	if (credito.getIntParaCondicionLaboralCod() == 
+																	(beanSocioComp.getPersona().getNatural().getListaPerLaboral().get(k).getIntCondicionLaboral())) {
+																		boFlag = true;
+																	}
+																	if (credito.getIntParaCondicionLaboralCod().equals(
+																	(beanSocioComp.getPersona().getNatural().getListaPerLaboral().get(k).getIntCondicionLaboral()))) {
+																		boFlag = true;
+																	}
+																}
+					
+																if ((credito.getIntParaCondicionLaboralCod().compareTo(-1)==0)|| (boFlag)) {
+																	// Verificar la condición de la cuenta
+																	if (credito.getListaCondicion() != null) {
+																		for (CondicionCredito condicionCredito : credito.getListaCondicion()) {
 																			if(blnSeGeneroCronogramaCorrectamente){
-																				// verificando condicion de regular
-																				if (beanSocioComp.getCuenta().getIntParaSubCondicionCuentaCod().equals(condicionHabil.getId().getIntParaTipoHabilCod())
-																				&& condicionHabil.getIntValor() == 1) {
-			
-																					Credito creditoRecuperado = null;
-																					creditoRecuperado = validarConfiguracionCredito(beanSocioComp,credito);
-																					if(blnSeGeneroCronogramaCorrectamente){
-																						if(creditoRecuperado != null){
-																							beanCredito = creditoRecuperado;
-																							List<Credito> listaCreditosRecuperados = new ArrayList<Credito>();
-																							listaCreditosRecuperados.add(creditoRecuperado);
-			
-																							boolean blnLast = calcularMontosCreditoValidado(listaCreditosRecuperados, estructuraDetalle);
-																							if(blnLast){
-																								generarCronograma(creditoRecuperado, estructuraDetalle);
-																								msgTxtErrores = "";
-																								blnEvaluacionCredito = true;
-																								blnMostrarDescripciones = true;
-																								mostrarArchivosAdjuntos(event);
-																								blnSeGeneroCronogramaCorrectamente = false;
-																							}else{
-																								blnSeGeneroCronogramaCorrectamente = true;
-																								blnEvaluacionCredito = false;
-																								blnMostrarDescripciones = false;
-																								intNroCuotas = 0;
-																								evaluarCreditosComp(listaCreditosComp, event);
+																				if (beanSocioComp.getCuenta().getIntParaCondicionCuentaCod().equals(
+																				condicionCredito.getId().getIntParaCondicionSocioCod())
+																				&& condicionCredito.getIntValor() == 1) {
+																					// Verificar si la cuenta está activa o inactiva
+																					if (credito.getListaCondicionHabil() != null) {
+																						// forCondicionHabil:
+																						for (CondicionHabil condicionHabil : credito.getListaCondicionHabil()) {
+																							if(blnSeGeneroCronogramaCorrectamente){
+																								// verificando condicion de regular
+																								if (beanSocioComp.getCuenta().getIntParaSubCondicionCuentaCod().equals(condicionHabil.getId().getIntParaTipoHabilCod())
+																								&& condicionHabil.getIntValor() == 1) {
+							
+																									Credito creditoRecuperado = null;
+																									creditoRecuperado = validarConfiguracionCredito(beanSocioComp,credito);
+																									if(blnSeGeneroCronogramaCorrectamente){
+																										if(creditoRecuperado != null){
+																											beanCredito = creditoRecuperado;
+																											List<Credito> listaCreditosRecuperados = new ArrayList<Credito>();
+																											listaCreditosRecuperados.add(creditoRecuperado);
+							
+																											boolean blnLast = calcularMontosCreditoValidado(listaCreditosRecuperados, estructuraDetalle);
+																											if(blnLast){
+																												generarCronograma(creditoRecuperado, estructuraDetalle);
+																												msgTxtErrores = "";
+																												blnEvaluacionCredito = true;
+																												blnMostrarDescripciones = true;
+																												mostrarArchivosAdjuntos(event);
+																												blnSeGeneroCronogramaCorrectamente = false;
+																												//Autor: jchavez / Tarea: Creación / Fecha: 20.11.2014
+																												if(!validarMontoTopeOperacion()){
+																													blnSeGeneroCronogramaCorrectamente = false;
+																													blnEvaluacionCredito = false;
+																													blnMostrarDescripciones = false;
+																													intNroCuotas = 0;
+																													evaluarCreditosComp(listaCreditosComp, event);
+																												}
+																											}else{
+																												blnSeGeneroCronogramaCorrectamente = true;
+																												blnEvaluacionCredito = false;
+																												blnMostrarDescripciones = false;
+																												intNroCuotas = 0;
+																												evaluarCreditosComp(listaCreditosComp, event);
+																											}
+																										}else{
+																											beanCredito = null;
+																											if(msgTxtEvaluacionFinal.length() > 0){
+																												msgTxtErrores = "";
+																											}else{
+																												msgTxtErrores = "No existen Creditos configurados o ninguno pasó las Validaciones de Monto, %Aporte, Excepción, etc.";
+																											}
+																											blnEvaluacionCredito = false;
+																										}
+																									}
+																									msgTxtCondicionHabil ="";
+																								} else{
+																									msgTxtCondicionHabil = "No se superó la validación de Condición Hábil.";
+																								}
 																							}
-																						}else{
-																							beanCredito = null;
-																							if(msgTxtEvaluacionFinal.length() > 0){
-																								msgTxtErrores = "";
-																							}else{
-																								msgTxtErrores = "No existen Creditos configurados o ninguno pasó las Validaciones de Monto, %Aporte, Excepción, etc.";
-																							}
-																							blnEvaluacionCredito = false;
 																						}
+																						msgTxtCondicionHabil = "";
+																					} else {
+																						msgTxtCondicionHabil = "No se superó la validación de Condición Hábil. ";
 																					}
-																					msgTxtCondicionHabil ="";
-																				} else{
-																					msgTxtCondicionHabil = "No se superó la validación de Condición Hábil.";
 																				}
 																			}
 																		}
-																		msgTxtCondicionHabil = "";
-																	} else {
-																		msgTxtCondicionHabil = "No se superó la validación de Condición Hábil. ";
-																	}
-																}
+																		msgTxtCondicionLaboral = "";
+																	}else{msgTxtCondicionLaboral = "No se superó la validación de Condición Laboral.";}
+																} else { msgTxtCondicionLaboral = "No se superó la validación de Condición Laboral.";}
+															}
+					
+														}
+													}
+												}
+											}else{
+												msgTxtEdadLimite = "La persona sobrepasa el límite de edad permitido: "+credExcep.getIntEdadLimite()+" años";
+											}
+										}
+									}else {
+										blnYaTieneCredito = aplicaPromocional(beanSocioComp, credito);
+										//log.error("DESCRIPCION DE CREDITO ************* "+credito.getStrDescripcion());
+										//log.error("APLICA CREDITO ************* "+blnYaTieneCredito);
+										
+										// Si teiene creditosd anterioes no debe caer en promocionales
+										if(blnYaTieneCredito){
+											//if(credito.getIntParaTipoCreditoEmpresa().compareTo(Constante.PARAM_T_TIPOCREDITOEMPRESA_PROMOCIONAL)==0){
+												credito = null;
+											//}
+										}else{
+											Boolean blnNoAplica = Boolean.FALSE;
+											blnNoAplica = validarExcepcionDiasPromocional(credito, beanSocioComp);
+											if(blnNoAplica){
+												credito = null;
+											}
+										}
+										
+										// Validamos cada credito
+										if (credito != null){
+											if(credito.getIntParaEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO) ==  0) {
+												if (credito.getIntParaRolPk().compareTo(intTipoRelacion)==0) {
+													if (beanSocioComp.getSocio().getSocioEstructura() != null) {
+														boolean boFlag = false;
+														for (int k = 0; k < beanSocioComp.getPersona().getNatural().getListaPerLaboral().size(); k++) {
+															if (credito.getIntParaCondicionLaboralCod() == 
+															(beanSocioComp.getPersona().getNatural().getListaPerLaboral().get(k).getIntCondicionLaboral())) {
+																boFlag = true;
+															}
+															if (credito.getIntParaCondicionLaboralCod().equals(
+															(beanSocioComp.getPersona().getNatural().getListaPerLaboral().get(k).getIntCondicionLaboral()))) {
+																boFlag = true;
 															}
 														}
-														msgTxtCondicionLaboral = "";
-													}else{msgTxtCondicionLaboral = "No se superó la validación de Condición Laboral.";}
-												} else { msgTxtCondicionLaboral = "No se superó la validación de Condición Laboral.";}
+			
+														if ((credito.getIntParaCondicionLaboralCod().compareTo(-1)==0)|| (boFlag)) {
+															// Verificar la condición de la cuenta
+															if (credito.getListaCondicion() != null) {
+																for (CondicionCredito condicionCredito : credito.getListaCondicion()) {
+																	if(blnSeGeneroCronogramaCorrectamente){
+																		if (beanSocioComp.getCuenta().getIntParaCondicionCuentaCod().equals(
+																		condicionCredito.getId().getIntParaCondicionSocioCod())
+																		&& condicionCredito.getIntValor() == 1) {
+																			// Verificar si la cuenta está activa o inactiva
+																			if (credito.getListaCondicionHabil() != null) {
+																				// forCondicionHabil:
+																				for (CondicionHabil condicionHabil : credito.getListaCondicionHabil()) {
+																					if(blnSeGeneroCronogramaCorrectamente){
+																						// verificando condicion de regular
+																						if (beanSocioComp.getCuenta().getIntParaSubCondicionCuentaCod().equals(condicionHabil.getId().getIntParaTipoHabilCod())
+																						&& condicionHabil.getIntValor() == 1) {
+					
+																							Credito creditoRecuperado = null;
+																							creditoRecuperado = validarConfiguracionCredito(beanSocioComp,credito);
+																							if(blnSeGeneroCronogramaCorrectamente){
+																								if(creditoRecuperado != null){
+																									beanCredito = creditoRecuperado;
+																									List<Credito> listaCreditosRecuperados = new ArrayList<Credito>();
+																									listaCreditosRecuperados.add(creditoRecuperado);
+					
+																									boolean blnLast = calcularMontosCreditoValidado(listaCreditosRecuperados, estructuraDetalle);
+																									if(blnLast){
+																										generarCronograma(creditoRecuperado, estructuraDetalle);
+																										msgTxtErrores = "";
+																										blnEvaluacionCredito = true;
+																										blnMostrarDescripciones = true;
+																										mostrarArchivosAdjuntos(event);
+																										blnSeGeneroCronogramaCorrectamente = false;
+																										//Autor: jchavez / Tarea: Creación / Fecha: 20.11.2014
+																										if(!validarMontoTopeOperacion()){
+																											blnSeGeneroCronogramaCorrectamente = false;
+																											blnEvaluacionCredito = false;
+																											blnMostrarDescripciones = false;
+																											intNroCuotas = 0;
+																											evaluarCreditosComp(listaCreditosComp, event);
+																										}
+																									}else{
+																										blnSeGeneroCronogramaCorrectamente = true;
+																										blnEvaluacionCredito = false;
+																										blnMostrarDescripciones = false;
+																										intNroCuotas = 0;
+																										evaluarCreditosComp(listaCreditosComp, event);
+																									}
+																								}else{
+																									beanCredito = null;
+																									if(msgTxtEvaluacionFinal.length() > 0){
+																										msgTxtErrores = "";
+																									}else{
+																										msgTxtErrores = "No existen Creditos configurados o ninguno pasó las Validaciones de Monto, %Aporte, Excepción, etc.";
+																									}
+																									blnEvaluacionCredito = false;
+																								}
+																							}
+																							msgTxtCondicionHabil ="";
+																						} else{
+																							msgTxtCondicionHabil = "No se superó la validación de Condición Hábil.";
+																						}
+																					}
+																				}
+																				msgTxtCondicionHabil = "";
+																			} else {
+																				msgTxtCondicionHabil = "No se superó la validación de Condición Hábil. ";
+																			}
+																		}
+																	}
+																}
+																msgTxtCondicionLaboral = "";
+															}else{msgTxtCondicionLaboral = "No se superó la validación de Condición Laboral.";}
+														} else { msgTxtCondicionLaboral = "No se superó la validación de Condición Laboral.";}
+													}
+												}
 											}
-	
 										}
 									}
 								}
 							}
-						}
+//						}
 					}
 					msgTxtCreditoConvenio = "";
 				}
@@ -4136,8 +4807,8 @@ public class SolicitudPrestamoController {
 					&& bdMontoTotalSolicitado.compareTo(recuperarMaximo(credito)) <= 0){
 						blnPasaUltimaValidacion = Boolean.TRUE;
 				}else{
-						blnPasaUltimaValidacion = Boolean.FALSE;
-					}
+					blnPasaUltimaValidacion = Boolean.FALSE;
+				}
 			}
 		} catch (Exception e) {
 			blnEvaluacionCredito = false;
@@ -4523,6 +5194,10 @@ public class SolicitudPrestamoController {
 												cronogramaCreditoComp.setBdCuotaMensual(bdCuotaMensual);
 												cronogramaCreditoComp.setBdAportes(bdAportes);
 												cronogramaCreditoComp.setBdTotalCuotaMensual(bdCuotaMensual.add(bdAportes));
+												//Autor: jchavez / Tarea: Creación / Fecha: 02.09.2014 / 
+												Date fechaVencComp = new Date();
+												fechaVencComp = (StringToCalendar(listaDiasVencimiento.get(i).toString())).getTime();
+												cronogramaCreditoComp.setIntPeriodoPlanilla(new Integer(sdfPeriodo.format(fechaVencComp.getTime())));
 												listaCronogramaCreditoComp.add(cronogramaCreditoComp);
 
 												
@@ -4584,7 +5259,201 @@ public class SolicitudPrestamoController {
 											}
 											//cortamos el for si hay cuotas negativas
 											if (intCuotaNegativa.compareTo(1)!=0) {
-												bdTotalCuotaMensual = bdCuotaFinal.add(bdAportes);
+												//Autor: jchavez / Tarea: Creación / Fecha: 05.09.2014
+												List<CronogramaCreditoComp> listaCronogramaCreditoCompTemp = new ArrayList<CronogramaCreditoComp>();
+												listaCronogramaCreditoCompTemp.addAll(listaCronogramaCreditoComp);
+												listaCronogramaCreditoComp.clear();
+												if (listaCronogramaCreditoCompTemp!=null && !listaCronogramaCreditoCompTemp.isEmpty()) {
+													calculoCtaFijaYCronogramaConExpCredVigentes(listaCronogramaCreditoCompTemp.get(0).getIntPeriodoPlanilla());
+													Boolean blnExisteEnCronograma = true;
+													for (int k = 0; k < lstTablaExpedientesVigentes.size(); k++) {
+														if (k==0) {
+															strDescCuotaFijaExpCred1 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+															listaCronogramaCredito.get(0).setStrCuotaFijaExpediente1(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+															for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+																for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+																	if (y.getIntParaTipoConceptoCod().equals(1)) {
+																		if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+																				&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+																			blnExisteEnCronograma = false;
+																			for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																				if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+																					blnExisteEnCronograma = true;
+																				}
+																			}
+																			if (blnExisteEnCronograma) {
+																				BigDecimal bdExp1 = BigDecimal.ZERO;
+																				for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																					if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+																						bdExp1 = new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura());
+																						ccc.setBdCuotaFijaExpediente1(bdExp1);
+																						ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(bdExp1));
+																					}
+																				}
+																			}else{
+																				if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																					cronogramaCreditoComp = new CronogramaCreditoComp();
+																					cronogramaCreditoComp.setBdCuotaFijaExpediente1(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																					cronogramaCreditoComp.setStrFechaEnvio(null);
+																					cronogramaCreditoComp.setStrFechaVencimiento(null);
+																					cronogramaCreditoComp.setIntDiasTranscurridos(null);
+																					cronogramaCreditoComp.setBdSaldoCapital(null);
+																					cronogramaCreditoComp.setBdAmortizacion(null);
+																					cronogramaCreditoComp.setBdInteres(null);
+																					cronogramaCreditoComp.setBdCuotaMensual(null);
+																					cronogramaCreditoComp.setBdAportes(null);
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+																					cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente1());
+																					listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+																				}																			
+																			}
+																		}
+																	}
+																}
+															}
+														}else if (k==1) {
+															strDescCuotaFijaExpCred2 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+															listaCronogramaCredito.get(0).setStrCuotaFijaExpediente2(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+															for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+																for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+																	if (y.getIntParaTipoConceptoCod().equals(1)) {
+																		if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+																				&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+																			blnExisteEnCronograma = false;
+																			for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																				if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+																					blnExisteEnCronograma = true;
+																				}
+																			}
+																			if (blnExisteEnCronograma) {
+																				for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																					if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																						ccc.setBdCuotaFijaExpediente2(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																						ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente2()));
+																					}
+																				}
+																			}else{
+																				if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																					cronogramaCreditoComp = new CronogramaCreditoComp();
+																					cronogramaCreditoComp.setBdCuotaFijaExpediente1(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																					cronogramaCreditoComp.setStrFechaEnvio(null);
+																					cronogramaCreditoComp.setStrFechaVencimiento(null);
+																					cronogramaCreditoComp.setIntDiasTranscurridos(null);
+																					cronogramaCreditoComp.setBdSaldoCapital(null);
+																					cronogramaCreditoComp.setBdAmortizacion(null);
+																					cronogramaCreditoComp.setBdInteres(null);
+																					cronogramaCreditoComp.setBdCuotaMensual(null);
+																					cronogramaCreditoComp.setBdAportes(null);
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+																					cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente2());
+																					listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+																				}																			
+																			}
+																		}
+																	}																	
+																}
+															}
+														}else if (k==2) {
+															strDescCuotaFijaExpCred3 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+															listaCronogramaCredito.get(0).setStrCuotaFijaExpediente3(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+															for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+																for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+																	if (y.getIntParaTipoConceptoCod().equals(1)) {
+																		if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+																				&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+																			blnExisteEnCronograma = false;
+																			for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																				if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+																					blnExisteEnCronograma = true;
+																				}
+																			}
+																			if (blnExisteEnCronograma) {
+																				for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																					if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																						ccc.setBdCuotaFijaExpediente3(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																						ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente3()));
+																					}
+																				}
+																			}else{
+																				if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																					cronogramaCreditoComp = new CronogramaCreditoComp();
+																					cronogramaCreditoComp.setBdCuotaFijaExpediente3(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																					cronogramaCreditoComp.setStrFechaEnvio(null);
+																					cronogramaCreditoComp.setStrFechaVencimiento(null);
+																					cronogramaCreditoComp.setIntDiasTranscurridos(null);
+																					cronogramaCreditoComp.setBdSaldoCapital(null);
+																					cronogramaCreditoComp.setBdAmortizacion(null);
+																					cronogramaCreditoComp.setBdInteres(null);
+																					cronogramaCreditoComp.setBdCuotaMensual(null);
+																					cronogramaCreditoComp.setBdAportes(null);
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+																					cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente3());
+																					listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+																				}																			
+																			}
+																		}
+																	}																	
+																}
+															}
+														}else if (k==3) {
+															strDescCuotaFijaExpCred4 = lstTablaExpedientesVigentes.get(k).getStrDescripcion();
+															listaCronogramaCredito.get(0).setStrCuotaFijaExpediente4(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA()+"-"+lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB());
+															for (CronogramaCreditoComp x : lstCngmCredExpVigentes) {
+																for (CronogramaCredito y : x.getLstCronogramaCreditoExpCredVigentes()) {
+																	if (y.getIntParaTipoConceptoCod().equals(1)) {
+																		if (y.getId().getIntItemExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoA())) 
+																				&& y.getId().getIntItemDetExpediente().equals(Integer.parseInt(lstTablaExpedientesVigentes.get(k).getStrIdAgrupamientoB()))) {
+																			blnExisteEnCronograma = false;
+																			for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																				if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla())) {
+																					blnExisteEnCronograma = true;
+																				}
+																			}
+																			if (blnExisteEnCronograma) {
+																				for (CronogramaCreditoComp ccc : listaCronogramaCreditoCompTemp) {
+																					if (y.getIntPeriodoPlanilla().equals(ccc.getIntPeriodoPlanilla()) && y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																						ccc.setBdCuotaFijaExpediente4(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																						ccc.setBdTotalCuotaMensual(ccc.getBdTotalCuotaMensual().add(ccc.getBdCuotaFijaExpediente4()));
+																					}
+																				}
+																			}else{
+																				if (y.getIntParaTipoConceptoCod().equals(Constante.PARAM_T_CONCEPTOGENERAL_AMORTIZACION_EXPEDIENTE)) {
+																					cronogramaCreditoComp = new CronogramaCreditoComp();
+																					cronogramaCreditoComp.setBdCuotaFijaExpediente4(new BigDecimal(lstTablaExpedientesVigentes.get(k).getStrAbreviatura()));
+																					cronogramaCreditoComp.setStrFechaEnvio(null);
+																					cronogramaCreditoComp.setStrFechaVencimiento(null);
+																					cronogramaCreditoComp.setIntDiasTranscurridos(null);
+																					cronogramaCreditoComp.setBdSaldoCapital(null);
+																					cronogramaCreditoComp.setBdAmortizacion(null);
+																					cronogramaCreditoComp.setBdInteres(null);
+																					cronogramaCreditoComp.setBdCuotaMensual(null);
+																					cronogramaCreditoComp.setBdAportes(null);
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(null);
+																					cronogramaCreditoComp.setIntPeriodoPlanilla(y.getIntPeriodoPlanilla());
+																					cronogramaCreditoComp.setBdTotalCuotaMensual(cronogramaCreditoComp.getBdCuotaFijaExpediente4());
+																					listaCronogramaCreditoComp.add(cronogramaCreditoComp);
+																				}																			
+																			}
+																		}
+																	}																	
+																}
+															}
+														}
+													}
+													listaCronogramaCreditoComp.addAll(listaCronogramaCreditoCompTemp);
+													Collections.sort(listaCronogramaCreditoComp, new Comparator<CronogramaCreditoComp>(){
+														public int compare(CronogramaCreditoComp uno, CronogramaCreditoComp otro) {
+															return uno.getIntPeriodoPlanilla().compareTo(otro.getIntPeriodoPlanilla());
+														}
+													});
+													//Autor: jchavez / Tarea: Creación / Fecha: 05.09.2014 / Concatenando cronogramas para vista
+//													lstCngmCredExpVigentes
+												}
+												bdTotalCuotaPrestamo = bdCuotaFinal;
+												bdTotalCuotaMensual = bdCuotaFinal.add(bdAportes).add(bdCuotaFijaPrestamosVigentes);
 //												Boolean bln90Por = Boolean.FALSE;
 
 												if (listaCapacidadCreditoComp != null && !listaCapacidadCreditoComp.isEmpty()) {
@@ -4648,7 +5517,196 @@ public class SolicitudPrestamoController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Autor: jchavez / Tarea: Creación / Fecha: 05.09.2014
+	 * Funcionalidad: Calcula las cuotas de los expedientes creditos VIGENTES y con SALDO > 0 del socio.
+	 * @author jchavez
+   	 * @version 1.0
+	 * @param intPeriodoPlanilla
+	 * @throws BusinessException
+	 */
+	public void calculoCtaFijaYCronogramaConExpCredVigentes(Integer intPeriodoPlanilla) throws BusinessException{	
+		bdCuotaFijaPrestamosVigentes = BigDecimal.ZERO;
+		ExpedienteCredito expCred = null;
+		List<CronogramaCredito> lstCronogramaCredito = null;
+		List<CronogramaCredito> lstCronogramaActividad = null;
+		BigDecimal bdMntActCtaZero = BigDecimal.ZERO;
+		BigDecimal bdMntActCtaUno = BigDecimal.ZERO;
+		lstCngmCredExpVigentes.clear();
+		lstTablaExpedientesVigentes.clear();
+		lstExpedientesVigentes = new ArrayList<Expediente>();
+		try {			
+			Integer intEmpresa = beanSocioComp.getCuenta().getId().getIntPersEmpresaPk();
+			Integer intCuenta = beanSocioComp.getCuenta().getId().getIntCuenta();
+			
+			//Autor: jchavez / Tarea: modificación / Fecha: 12.09.2014 / Se muestran los expedientes no refinanciados en el cronograma.
+			if (beanExpedienteCredito.getIntParaSubTipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)) {
+				List<Expediente> lstExpedientesVigentesTemp = conceptoFacade.getLstExpVigentesConSaldo(intEmpresa, intCuenta);
+				log.info("Lista de expedientes seleccionados"+beanSocioComp.getCuentaComp().getListExpedienteMovimientoComp());
+				if (lstExpedientesVigentesTemp!=null && !lstExpedientesVigentesTemp.isEmpty()) {
+					for (ExpedienteComp expMovComp : beanSocioComp.getCuentaComp().getListExpedienteMovimientoComp()) {
+						if (expMovComp.getChecked().equals(true)) {
+							for (Expediente expediente : lstExpedientesVigentesTemp) {
+								if (!(expMovComp.getExpediente().getId().getIntItemExpediente().equals(expediente.getId().getIntItemExpediente())
+										&& expMovComp.getExpediente().getId().getIntItemExpedienteDetalle().equals(expediente.getId().getIntItemExpedienteDetalle()))) {
+									lstExpedientesVigentes.add(expediente);
+								}
+							}
+						}
+					}
+				}			
+			}
+			//Fin - jchavez - 12.09.2014
+			
+			
+			String strDescTipoCreditoEmpresa = "";
+			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+				
+				List<Cronograma> lstCronCredActMov = null;
+				for (Expediente expediente : lstExpedientesVigentes) {
+					expCred = new ExpedienteCredito();
+					expCred.setId(new ExpedienteCreditoId());
+					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+					Credito credito = null;
+					CreditoId cId = new CreditoId();
+					cId.setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+					cId.setIntItemCredito(expediente.getIntItemCredito());
+					cId.setIntParaTipoCreditoCod(expediente.getIntParaTipoCreditoCod());
+					credito = creditoFacade.getCreditoPorIdCreditoDirecto(cId);
+					for (Tabla tipCredEmp : listaTipoCreditoEmpresa) {
+						if (tipCredEmp.getIntIdDetalle().equals(credito.getIntParaTipoCreditoEmpresa())) {
+							strDescTipoCreditoEmpresa = tipCredEmp.getStrAbreviatura();
+							break;
+						}
+					}
+					if (expediente.getIntParaTipoCreditoCod().equals(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)) {
+						lstCronogramaActividad = prestamoFacade.getListaPorPkExpCredYPeriodo(expCred, intPeriodoPlanilla);
+						if (lstCronogramaActividad!=null && !lstCronogramaActividad.isEmpty()) {
+							Tabla tbl = new Tabla();
+							tbl.setStrDescripcion(strDescTipoCreditoEmpresa);//expCred.getId().getIntItemExpediente()+"-"+expCred.getId().getIntItemDetExpediente());
+							tbl.setStrIdAgrupamientoA(expCred.getId().getIntItemExpediente()+"");
+							tbl.setStrIdAgrupamientoB(expCred.getId().getIntItemDetExpediente()+"");							
 
+							if (lstCronogramaActividad.size()==1) {
+								//Ir a movimiento y validar el saldo detalle empresa
+								BigDecimal bdSumaCronCred = BigDecimal.ZERO;
+								lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expediente.getId());
+								if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+									for (Cronograma cronMov : lstCronCredActMov) {
+										if (cronMov.getIntPeriodoPlanilla().equals(intPeriodoPlanilla) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+											bdSumaCronCred = bdSumaCronCred.add(cronMov.getBdSaldoDetalleCredito());
+											bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronMov.getBdSaldoDetalleCredito());
+										}
+									}
+								}
+								tbl.setStrAbreviatura(""+bdSumaCronCred);
+								lstTablaExpedientesVigentes.add(tbl);
+							}else{								
+								for (CronogramaCredito cronCred : lstCronogramaActividad) {
+									if (cronCred.getIntNroCuota().equals(0)) {
+										bdMntActCtaZero = cronCred.getBdMontoConcepto();
+									}else  {
+										bdMntActCtaUno = cronCred.getBdMontoConcepto();
+									}
+								}
+								if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==-1) {
+									bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(bdMntActCtaUno);
+									tbl.setStrAbreviatura(""+bdMntActCtaUno);
+									lstTablaExpedientesVigentes.add(tbl);
+								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==1) {
+									//Ir a movimiento y validar el saldo detalle credito
+									lstCronCredActMov = conceptoFacade.getListaCronogramaPorPkExpediente(expediente.getId());
+									if (lstCronCredActMov!=null && !lstCronCredActMov.isEmpty()) {
+										for (Cronograma cronMov : lstCronCredActMov) {
+											if (cronMov.getIntNumeroCuota().equals(0) && cronMov.getIntParaTipoConceptoCreditoCod().equals(1)) {
+												if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==1) {
+													bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronMov.getBdSaldoDetalleCredito());
+													tbl.setStrAbreviatura(""+cronMov.getBdSaldoDetalleCredito());
+												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==-1) {
+													bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(bdMntActCtaUno);
+													
+												}else if (cronMov.getBdSaldoDetalleCredito().compareTo(bdMntActCtaUno)==0) {
+													bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(bdMntActCtaUno);
+													tbl.setStrAbreviatura(""+bdMntActCtaUno);
+												}
+//												bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(cronMov.getBdSaldoDetalleCredito());
+											}
+										}
+									}									
+									lstTablaExpedientesVigentes.add(tbl);
+								}else if (bdMntActCtaZero.compareTo(bdMntActCtaUno)==0) {
+									bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(bdMntActCtaUno);
+									tbl.setStrAbreviatura(""+bdMntActCtaUno);
+									lstTablaExpedientesVigentes.add(tbl);
+								}
+							}							
+						}
+						CronogramaCreditoComp cngmCredExpVigentes = new CronogramaCreditoComp();
+						cngmCredExpVigentes.setLstCronogramaCreditoExpCredVigentes(lstCronogramaActividad);		
+						lstCngmCredExpVigentes.add(cngmCredExpVigentes);
+					}else{					
+						lstCronogramaCredito = prestamoFacade.getListaPorPkExpCredYPeriodo(expCred, intPeriodoPlanilla);
+						if (lstCronogramaCredito!=null && !lstCronogramaCredito.isEmpty()) {
+							Tabla tbl = new Tabla();
+							tbl.setStrDescripcion(strDescTipoCreditoEmpresa);//expCred.getId().getIntItemExpediente()+"-"+expCred.getId().getIntItemDetExpediente());
+							tbl.setStrIdAgrupamientoA(expCred.getId().getIntItemExpediente()+"");
+							tbl.setStrIdAgrupamientoB(expCred.getId().getIntItemDetExpediente()+"");	
+							BigDecimal bdSumaCronCred = BigDecimal.ZERO;
+							for (CronogramaCredito lstccred : lstCronogramaCredito) {
+								if (lstccred.getIntPeriodoPlanilla().equals(intPeriodoPlanilla)) {
+									bdSumaCronCred = bdSumaCronCred.add(lstccred.getBdMontoConcepto());
+									bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes.add(lstccred.getBdMontoConcepto());
+								}
+							}
+							tbl.setStrAbreviatura(""+bdSumaCronCred);
+							lstTablaExpedientesVigentes.add(tbl);
+						}
+						CronogramaCreditoComp cngmCredExpVigentes = new CronogramaCreditoComp();
+						cngmCredExpVigentes.setLstCronogramaCreditoExpCredVigentes(lstCronogramaCredito);
+						lstCngmCredExpVigentes.add(cngmCredExpVigentes);
+					}
+					
+				}
+			}
+			intCantExpedientesVigentes = lstCngmCredExpVigentes.size();
+			log.info("lstCngmCredExpVigentes ---> "+lstCngmCredExpVigentes);
+		} catch (BusinessException e) {
+			log.info("Error en calculoCtaFijaYCronogramaConExpCredVigentes() ---> "+e.getMessage());
+		}
+		
+	}
+
+//	public void agregarExpedientesVigentesAlCronograma(){
+//		CapacidadPagoController capacidadPagoController = null;
+//		List<Expediente> lstExpedientesVigentes = null;
+//		ExpedienteCredito expCred = null;
+//		List<CronogramaCredito> lstCronogramaExpCredVigentes = null;
+//		try {			
+//			capacidadPagoController =(CapacidadPagoController)getSessionBean("capacidadPagoController");
+//			lstExpedientesVigentes = capacidadPagoController.getLstExpedientesVigentes();
+//			;
+//			if (lstExpedientesVigentes!=null && !lstExpedientesVigentes.isEmpty()) {
+//				for (Expediente expediente : lstExpedientesVigentes) {
+//					expCred = new ExpedienteCredito();
+//					expCred.setId(new ExpedienteCreditoId());
+//					expCred.getId().setIntPersEmpresaPk(expediente.getId().getIntPersEmpresaPk());
+//					expCred.getId().setIntCuentaPk(expediente.getId().getIntCuentaPk());
+//					expCred.getId().setIntItemExpediente(expediente.getId().getIntItemExpediente());
+//					expCred.getId().setIntItemDetExpediente(expediente.getId().getIntItemExpedienteDetalle());
+//					lstCronogramaExpCredVigentes = prestamoFacade.getListaPorPkExpCredYPeriodo(expCred, beanExpedienteCredito.getListaCronogramaCredito().get(0).getIntPeriodoPlanilla());
+//					
+//				}
+//			}
+//			
+//		} catch (Exception e) {
+//			log.info("Error en agregarExpedientesVigentesAlCronograma()---> "+e.getMessage());
+//		}
+//	}
+	
 	public void chekeandoListaCronograma(){
 		log.info("lista cache: "+listaCronogramaCreditoComp);
 	}
@@ -4824,7 +5882,12 @@ public class SolicitudPrestamoController {
 			confServSolicitud = new ConfServSolicitud();
 			confServSolicitud.setIntParaTipoRequertoAutorizaCod(Constante.PARAM_T_TIPOREQAUT_REQUISITO);
 			confServSolicitud.setIntParaTipoOperacionCod(Constante.PARAM_T_TIPOOPERACION_PRESTAMO);
-			confServSolicitud.setIntParaSubtipoOperacionCod(Constante.PARAM_T_SUBOPERACIONPRESTAMO_NUEVO_PRESTAMO);
+			if (beanExpedienteCredito.getIntParaSubTipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_NUEVO_PRESTAMO)) {
+				confServSolicitud.setIntParaSubtipoOperacionCod(Constante.PARAM_T_SUBOPERACIONPRESTAMO_NUEVO_PRESTAMO);
+			}else {
+				confServSolicitud.setIntParaSubtipoOperacionCod(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO);
+			}			
+			
 			listaDocAdjuntos = facade.buscarConfSolicitudRequisitoOptimizado(confServSolicitud, Constante.PARAM_T_TIPOREQAUT_REQUISITO, beanCredito);
 			
 			if (listaDocAdjuntos != null && !listaDocAdjuntos.isEmpty()) {
@@ -4832,7 +5895,7 @@ public class SolicitudPrestamoController {
 				forSolicitud: 
 				for (ConfServSolicitud solicitud : listaDocAdjuntos) {
 					if (solicitud.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_PRESTAMO)) {
-						if (solicitud.getIntParaSubtipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_NUEVO_PRESTAMO)) {
+						if (solicitud.getIntParaSubtipoOperacionCod().equals(beanExpedienteCredito.getIntParaSubTipoOperacionCod())){//Constante.PARAM_T_SUBOPERACIONPRESTAMO_NUEVO_PRESTAMO)) {
 							if(solicitud.getListaCredito() != null){
 								
 								for (ConfServCredito ConfServCredito : solicitud.getListaCredito()) {
@@ -4952,6 +6015,26 @@ public class SolicitudPrestamoController {
 		}
 	}
 
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	public void aceptarAdjuntarDocumento(){
+		try{
+			FileUploadControllerServicio fileupload = (FileUploadControllerServicio) getSessionBean("fileUploadControllerServicio");
+			archivoAdjunto = fileupload.getArchivoSolicitudPrestamo();
+			listaRequisitoCreditoComp.get(0).setArchivoAdjunto(archivoAdjunto);
+			listaArchivo.add(archivoAdjunto);
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	public void quitarArchivoAdjunto(){
+		try{
+			archivoAdjunto = null;
+			((FileUploadControllerServicio)getSessionBean("fileUploadControllerServicio")).setArchivoSolicitudPrestamo(null);
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
 	
 	/**
 	 * Pinta la imagen miniatura de cada adjunto para la solicitud.
@@ -4969,7 +6052,6 @@ public class SolicitudPrestamoController {
 		FileUploadControllerServicio fileupload = (FileUploadControllerServicio) getSessionBean("fileUploadControllerServicio");
 		if (listaRequisitoCreditoComp != null) {
 			for (RequisitoCreditoComp requisitoCreditoComp : listaRequisitoCreditoComp) {
-
 		// PRESTAMO_CARTADESCUENTO
 				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_SUSTENTOPRESTAMO)) {
 					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_CARTADESCUENTO)
@@ -5590,11 +6672,46 @@ public class SolicitudPrestamoController {
 							requisitoCreditoComp.setFileDocAdjunto(file);
 					}
 				}
+				//Autor: jchavez / Tarea: Modificación / Fecha: 18.12.2014 / Se modifica los parametros de registro de adjuntos
+		// ADJUNTOS_CREDITOS 
+//				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS)) {
+//					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
+//						&& requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod().equals(Constante.PARAM_T_TIPOPERSONAREQUISITO_TITULAR)
+//						&& intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
+//						&& intParaTipoOperacionPersona.equals(requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod())) {
+//							requisitoCreditoComp.setArchivoAdjunto(fileupload.getObjArchivo());
+//							byte[] byteImg = fileupload.getDataImage();
+//							MyFile file = new MyFile();
+//							file.setLength(byteImg.length);
+//							file.setName(fileupload.getObjArchivo().getStrNombrearchivo());
+//							file.setData(byteImg);
+//							requisitoCreditoComp.setFileDocAdjunto(file);
+//					}
+//				}
+//				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS)) {
+//					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
+//						&& requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod().equals(Constante.PARAM_T_TIPOPERSONAREQUISITO_GARANTE)
+//						&& intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
+//						&& intParaTipoOperacionPersona.equals(requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod())) {
+//							requisitoCreditoComp.setArchivoAdjunto(fileupload.getObjArchivo());
+//							byte[] byteImg = fileupload.getDataImage();
+//							MyFile file = new MyFile();
+//							file.setLength(byteImg.length);
+//							file.setName(fileupload.getObjArchivo().getStrNombrearchivo());
+//							file.setData(byteImg);
+//							requisitoCreditoComp.setFileDocAdjunto(file);
+//					}
+//				}
+				//Autor: jchavez / Fecha: 19.12.2014 / Salida rapida represtamo, revisar para su modificacion
+				Integer intRequisitoDescripcion = 0;
+				if (beanExpedienteCredito.getIntParaSubTipoOperacionCod().equals(Constante.PARAM_T_SUBTIPO_OPERACION_NUEVO_PRESTAMO)) {
+					intRequisitoDescripcion = Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO;
+				}else if (beanExpedienteCredito.getIntParaSubTipoOperacionCod().equals(Constante.PARAM_T_SUBTIPO_OPERACION_REPRESTAMO)) {
+					intRequisitoDescripcion = Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_CARTADESCUENTO;
+				}
 				
-				
-		// ADJUNTOS_CREDITOS
-				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS)) {
-					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
+				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO)) {
+					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(intRequisitoDescripcion)
 						&& requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod().equals(Constante.PARAM_T_TIPOPERSONAREQUISITO_TITULAR)
 						&& intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
 						&& intParaTipoOperacionPersona.equals(requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod())) {
@@ -5607,8 +6724,8 @@ public class SolicitudPrestamoController {
 							requisitoCreditoComp.setFileDocAdjunto(file);
 					}
 				}
-				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS)) {
-					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
+				if (fileupload.getObjArchivo().getId().getIntParaTipoCod().equals(Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO)) {
+					if (requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(intRequisitoDescripcion)
 						&& requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod().equals(Constante.PARAM_T_TIPOPERSONAREQUISITO_GARANTE)
 						&& intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
 						&& intParaTipoOperacionPersona.equals(requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod())) {
@@ -5621,6 +6738,7 @@ public class SolicitudPrestamoController {
 							requisitoCreditoComp.setFileDocAdjunto(file);
 					}
 				}
+				//Fin jchavez - 18.12.2014
 			}
 		}
 	}
@@ -5635,7 +6753,6 @@ public class SolicitudPrestamoController {
 	public void paintImage(OutputStream stream, Object object)throws IOException {
 		stream.write(((MyFile) object).getData());
 	}
-
 	
 	/**
 	 * Asociado al boton Adjuntoar para subir documento adjunto.
@@ -6051,7 +7168,28 @@ public class SolicitudPrestamoController {
 						}
 						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_FICHA_REGISTRAL);
 				}
-				
+				//Autor: jchavez / Tarea: Modificación / Fecha: 18.12.2014 / Se modifica los parametros de registro de adjuntos
+		//--- PRESTAMO_ADJUNTOS_DEL_CREDITO - 22
+//				if (intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
+//						&& requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
+//						&& intParaTipoOperacionPersona.equals(requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod())
+//						&& requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod().equals(Constante.PARAM_T_TIPOPERSONAREQUISITO_TITULAR)) {
+//						if (requisitoCreditoComp.getRequisitoCredito() != null) {
+//							intItemArchivo = requisitoCreditoComp.getRequisitoCredito().getIntParaItemArchivo();
+//							intItemHistorico = requisitoCreditoComp.getRequisitoCredito().getIntParaItemHistorico();
+//						}
+//						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS);
+//					}
+//				if (intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
+//						&& requisitoCreditoComp	.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
+//						&& intParaTipoOperacionPersona.equals(requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod())
+//						&& requisitoCreditoComp.getDetalle().getIntParaTipoPersonaOperacionCod().equals(Constante.PARAM_T_TIPOPERSONAREQUISITO_GARANTE)) {
+//						if (requisitoCreditoComp.getRequisitoCredito() != null) {
+//							intItemArchivo = requisitoCreditoComp.getRequisitoCredito().getIntParaItemArchivo();
+//							intItemHistorico = requisitoCreditoComp.getRequisitoCredito().getIntParaItemHistorico();
+//						}
+//						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS);
+//				}
 		//--- PRESTAMO_ADJUNTOS_DEL_CREDITO - 22
 				if (intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
 						&& requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
@@ -6061,7 +7199,7 @@ public class SolicitudPrestamoController {
 							intItemArchivo = requisitoCreditoComp.getRequisitoCredito().getIntParaItemArchivo();
 							intItemHistorico = requisitoCreditoComp.getRequisitoCredito().getIntParaItemHistorico();
 						}
-						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS);
+						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO);
 					}
 				if (intParaTipoDescripcion.equals(requisitoCreditoComp.getDetalle().getIntParaTipoDescripcion())
 						&& requisitoCreditoComp	.getDetalle().getIntParaTipoDescripcion().equals(Constante.PARAM_T_REQUISITOSDESCRIPCION_PRESTAMO_ADJUNTOS_DEL_CREDITO)
@@ -6071,8 +7209,9 @@ public class SolicitudPrestamoController {
 							intItemArchivo = requisitoCreditoComp.getRequisitoCredito().getIntParaItemArchivo();
 							intItemHistorico = requisitoCreditoComp.getRequisitoCredito().getIntParaItemHistorico();
 						}
-						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_ADJUNTOS_CREDITOS);
+						fileupload.setParamArchivo(intItemArchivo,intItemHistorico,Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO);
 				}
+				//Fin jchavez - 18.12.2014
 			}
 		}
 		fileupload.setStrJsFunction("putFileDocAdjunto()");
@@ -6084,6 +7223,7 @@ public class SolicitudPrestamoController {
 	 * @param event
 	 */
 	public void validarGarante(ActionEvent event) {
+		bdMontoAporteGaranteSolidario = BigDecimal.ZERO;
 		SocioComp socioCompGarante = null;
 		Integer nroMaxAsegurados = null;
 		
@@ -6135,7 +7275,7 @@ public class SolicitudPrestamoController {
 												//	for (CreditoGarantia garantiaPersonal : beanCredito.getListaGarantiaPersonal()) {
 														//if (garantiaPersonal.getId().getIntParaTipoGarantiaCod().equals(Constante.CREDITOS_GARANTIA_PERSONAL)) {
 													//		msgTxtTipoGarantiaPersonal = ""; 
-															//intItemCreditoGarantia = garantiasPersonales.getId().getIntItemCreditoGarantia();
+															intItemCreditoGarantia = garantiasPersonales.getId().getIntItemCreditoGarantia();
 															//garantiaPersonal = creditoGarantiaFacade.getCreditoGarantiaPorIdCreditoGarantia(garantiaPersonal.getId());
 															
 															if (garantiasPersonales != null) {
@@ -6224,6 +7364,28 @@ public class SolicitudPrestamoController {
 																																				socioCompGarante.setCreditoTipoGarantiaAsignado(creditoTipoGarantia);
 																																				
 																																				//setIntItemCreditoGarantia(creditoTipoGarantia.getCreditoTipoGarantia().getId().getIntItemCreditoGarantia() | fghjm );
+																																				
+																																				//Autor: jchavez / Tarea: Creación / Fecha: 27.08.2014 / 
+																																				CuentaConceptoDetalle ccd = new CuentaConceptoDetalle();
+																																				List<CuentaConceptoDetalle> lstCtaCptoDet = new ArrayList<CuentaConceptoDetalle>();
+																																				ccd.setId(new CuentaConceptoDetalleId());
+																																				ccd.getId().setIntCuentaPk(socioCompGarante.getCuenta().getId().getIntCuenta());
+																																				ccd.getId().setIntPersEmpresaPk(socioCompGarante.getCuenta().getId().getIntPersEmpresaPk());
+																																				ccd.setIntParaTipoConceptoCod(Constante.PARAM_T_TIPOCUENTA_APORTES);
+																																				lstCtaCptoDet = conceptoFacade.getCuentaConceptoDetallePorPKCuentaYTipoConcepto(ccd);
+																																				if (lstCtaCptoDet!=null && !lstCtaCptoDet.isEmpty()) {
+																																					for (CuentaConceptoDetalle cuentaConceptoDetalle : lstCtaCptoDet) {
+																																						CuentaConcepto cc = new CuentaConcepto();
+																																						cc.setId(new CuentaConceptoId());
+																																						cc.getId().setIntCuentaPk(cuentaConceptoDetalle.getId().getIntCuentaPk());
+																																						cc.getId().setIntItemCuentaConcepto(cuentaConceptoDetalle.getId().getIntItemCuentaConcepto());
+																																						cc.getId().setIntPersEmpresaPk(cuentaConceptoDetalle.getId().getIntPersEmpresaPk());
+																																						cc = conceptoFacade.getCuentaConceptoPorPK(cc.getId());
+																																						bdMontoAporteGaranteSolidario = cc.getBdSaldo();
+																																						break;
+																																					}
+																																				}
+																																				//FIN jchavez - 29.08.2014
 																																				beanSocioCompGarante = socioCompGarante;
 																																				blnDatosGarante = true;
 																																				blnValidaDatosGarante = true;
@@ -6583,9 +7745,10 @@ public class SolicitudPrestamoController {
 			if(listaGarantiaCreditoComp != null && !listaGarantiaCreditoComp.isEmpty()){
 				intGarantesCorrectos = 0;
 				for (GarantiaCreditoComp garanteCreditoComp : listaGarantiaCreditoComp) {
-					if(garanteCreditoComp.getSocioComp().getCreditoTipoGarantiaAsignado() != null){
+					//20.11.2014 - NO TOMAR EN CUENTA AL MOMENTO DE CONTAR A LOS GARANTES
+//					if(garanteCreditoComp.getSocioComp().getCreditoTipoGarantiaAsignado() != null){
 						intGarantesCorrectos ++;
-					}
+//					}
 				}
 			}
 		} catch (Exception e) {
@@ -7362,6 +8525,10 @@ public class SolicitudPrestamoController {
 		CuentaComp cuentaComp = null;
 		
 		try {
+			Date today = new Date();
+			String strToday = Constante.sdf.format(today);
+			Date dtToday = Constante.sdf.parse(strToday);
+			
 			log.info("listaCronogramaCreditoComp :"+listaCronogramaCreditoComp);
 			limpiarFormSolicitudPrestamo();
 //			limpiarResultadoBusqueda();
@@ -7461,6 +8628,19 @@ public class SolicitudPrestamoController {
 							socioComp.setCuentaComp(cuentaComp);
 							beanSocioComp = socioComp;
 
+							intEdadSocio = 0;
+							intEdadSocio = fechasDiferenciaEnAnnos(beanSocioComp.getPersona().getNatural().getDtFechaNacimiento(), dtToday);
+
+							bdMontoDescJudicial = null;
+							Padron padron = new Padron();
+							padron.setId(new PadronId());
+							padron.getId().setIntNivel(beanSocioComp.getSocio().getSocioEstructura().getIntNivel());
+							padron.getId().setIntCodigo(beanSocioComp.getSocio().getSocioEstructura().getIntCodigo());
+							padron.getId().setIntParaModalidadCod(beanSocioComp.getSocio().getSocioEstructura().getIntModalidad());
+							padron.getId().setIntParaTipoSocioCod(beanSocioComp.getSocio().getSocioEstructura().getIntTipoSocio());
+							padron.setStrLibEle(beanSocioComp.getPersona().getDocumento().getStrNumeroIdentidad());
+							bdMontoDescJudicial = estructuraFacade.getDescuentoJudicial(padron);
+							
 							if(listaCuentaConcepto != null && !listaCuentaConcepto.isEmpty()){
 								for (CuentaConcepto ctaCto : listaCuentaConcepto) {
 									if(ctaCto.getListaCuentaConceptoDetalle() != null && !ctaCto.getListaCuentaConceptoDetalle().isEmpty()){
@@ -7661,8 +8841,8 @@ public class SolicitudPrestamoController {
 				}
 			}
 			log.info("lista: "+listaExpedienteCreditoComp);
-		} catch (BusinessException e) {
-			log.error("Error BusinessException en  irModificarSolicitudPrestamo ---> " + e);
+		} catch (Exception e) {
+			log.error("Error Exception en  irVerSolicitudPrestamo ---> " + e);
 			e.printStackTrace();
 		}finally {
 			formSolicitudPrestamoRendered = true;
@@ -7882,20 +9062,33 @@ public class SolicitudPrestamoController {
 				validarEstadoCuenta(expedienteCreditoId);
 				log.info("Es modificar? "+blnMostrarModificar);
 				log.info("paso esta validacion");
-//				irVerSolicitudPrestamo(null);
 				log.info("Es modificar? "+blnMostrarModificar);
-				
-//				if(beanSocioComp.getSocio().getSocioEstructura().getIntTipoSocio()==2)
-//					mostrarBoton = Boolean.TRUE;
-//				else
-//					mostrarBoton = Boolean.FALSE;
+
+			}
+			CuentaFacadeRemote cuentaInte =(CuentaFacadeRemote)EJBFactory.getRemote(CuentaFacadeRemote.class);
+			SocioFacadeRemote socioFacade =(SocioFacadeRemote)EJBFactory.getRemote(SocioFacadeRemote.class);
+			CuentaId cue = new CuentaId();
+			cue.setIntCuenta(registroSeleccionadoBusqueda.getExpedienteCredito().getId().getIntCuentaPk());
+			cue.setIntPersEmpresaPk(registroSeleccionadoBusqueda.getExpedienteCredito().getId().getIntPersEmpresaPk());
+			
+			List<CuentaIntegrante> cuentaIntegrante = cuentaInte.getListaCuentaIntegrantePorPKCuenta(cue);
+			
+			for (CuentaIntegrante listCuentaIntegrante : cuentaIntegrante) {
+				 List<SocioEstructura> socioEstru = socioFacade.getListaSocioEstrucuraPorIdPersona(listCuentaIntegrante.getId().getIntPersonaIntegrante(), 
+						 listCuentaIntegrante.getId().getIntPersEmpresaPk());
+				 for (SocioEstructura socioEstructura : socioEstru) {
+						if(socioEstructura.getIntTipoSocio()==2)
+							mostrarBoton = Boolean.TRUE;
+						else
+							mostrarBoton = Boolean.FALSE;
+					
+				}
 			}
 			log.info("Es modificar? "+blnMostrarModificar);
 		}catch (Exception e) {
 			log.error("Error Exception en seleccionarRegistro ---> "+e);
 		}
 	}
-	
 	
 	/**
 	 * Valida si la operacion ELIMINAR se visualiza o no en el popup de acciones.
@@ -8122,6 +9315,36 @@ public class SolicitudPrestamoController {
 			}
 		}
 		return listFilas;
+	}
+	
+	/**
+	 * 	Devuelve en años (int) la diferencia entre 2 fechas date
+	 * @param fechaInicial
+	 * @param fechaFinal
+	 * @return
+	 */
+	public int fechasDiferenciaEnAnnos(Date fechaInicial, Date fechaFinal) {
+		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+		String fechaInicioString = df.format(fechaInicial);
+		try {
+			fechaInicial = df.parse(fechaInicioString);
+		} catch (ParseException ex) {
+			log.error("error: " + ex);
+		}
+
+		String fechaFinalString = df.format(fechaFinal);
+		try {
+			fechaFinal = df.parse(fechaFinalString);
+		} catch (ParseException ex) {
+			log.error("error: " + ex);
+		}
+
+		long fechaInicialMs = fechaInicial.getTime();
+		long fechaFinalMs = fechaFinal.getTime();
+		long diferencia = fechaFinalMs - fechaInicialMs;
+		double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+				dias = Math.floor(dias/365);
+		return ((int) dias);
 	}
 	
 	/**
@@ -8474,7 +9697,7 @@ public class SolicitudPrestamoController {
 		BigDecimal bdNumeroDias = BigDecimal.ZERO;
 		BigDecimal bdMult100 = new BigDecimal(100);
 		BigDecimal bdMult30 = new BigDecimal(30);
-		
+		bdMontoInteresAtrasado = BigDecimal.ZERO;
 				
 		try {
 			dtHoy = fecHoy.getTime();
@@ -8645,7 +9868,7 @@ public class SolicitudPrestamoController {
 					(beanExpedienteCredito.getIntParaFinalidadCod()!=null?beanExpedienteCredito.getIntParaFinalidadCod():1));
 			
 			parametro.put("P_APORTE", formato.format(bdAporte));
-			parametro.put("P_CUOTAFIJA", bdCtaFija);	
+			parametro.put("P_CUOTAFIJA", formato.format(bdCtaFija));	
 			parametro.put("P_MOTIVO", ":" +tablaMotivo.getStrDescripcion()!=null?tablaMotivo.getStrDescripcion():" ");
 			parametro.put("P_IDCODIGOPERSONA", beanSocioComp.getPersona().getIntIdPersona()!=null?beanSocioComp.getPersona().getIntIdPersona():" ");
 			parametro.put("P_APELLIDOPATERNO", beanSocioComp.getPersona().getNatural().getStrApellidoPaterno()!=null?beanSocioComp.getPersona().getNatural().getStrApellidoPaterno():" ");
@@ -8654,7 +9877,11 @@ public class SolicitudPrestamoController {
 			if(beanSocioComp.getPersona().getDocumento().getIntEstadoCod()==1 && beanSocioComp.getPersona().getDocumento().getIntTipoIdentidadCod()==1){
 			parametro.put("P_DOCUMENTO", beanSocioComp.getPersona().getDocumento().getStrNumeroIdentidad()!=null?beanSocioComp.getPersona().getDocumento().getStrNumeroIdentidad():" ");
 			}
-			parametro.put("P_CARGOlABORAL", tablaCargoLaboral.getStrDescripcion());
+			if(tablaCargoLaboral!=null){
+				parametro.put("P_CARGOlABORAL", tablaCargoLaboral.getStrDescripcion());
+			}else{
+				parametro.put("P_CARGOlABORAL", "");
+			}
 			
 			if (lstEstadoCredito!=null && !lstEstadoCredito.isEmpty()) {
 				Timestamp fecha = lstEstadoCredito.get(0).getTsFechaEstado();
@@ -8681,8 +9908,8 @@ public class SolicitudPrestamoController {
 	        parametro.put("P_DEPARTAMENTO", (facade.getListaPorIdUbigeo(dom.getIntParaUbigeoPkDpto())).get(0).getStrDescripcion()!=null?(facade.getListaPorIdUbigeo(dom.getIntParaUbigeoPkDpto())).get(0).getStrDescripcion():" ");
 			//Trae la lista de comunicaciones telefono celular y correo electronico.
 			List<Comunicacion> lstComunicacion = beanSocioComp.getPersona().getListaComunicacion();
-            String telefMovil = " ";
-            String correoElectronico =" ";
+            String telefMovil = "";
+            String correoElectronico ="";
 	        	if(lstComunicacion != null && !lstComunicacion.isEmpty()){
 	        	for (Comunicacion com : lstComunicacion) {
 					if(com.getIntTipoComunicacionCod()!= null){
@@ -8724,7 +9951,10 @@ public class SolicitudPrestamoController {
 	        		   }
 	        	   	}
 	           	}
-	           parametro.put("P_COMUCASA", telefFijo);
+	           if(telefFijo !=null)
+	        	   parametro.put("P_COMUCASA", telefFijo);
+	           else
+	        	   parametro.put("P_COMUCASA", "");
 	        //CONTRATO DE PRESTAMO
 	        String apellidoPaterno = beanSocioComp.getPersona().getNatural().getStrApellidoPaterno().toUpperCase();
 	        String apellidoMaterno = beanSocioComp.getPersona().getNatural().getStrApellidoMaterno().toUpperCase();
@@ -8912,17 +10142,24 @@ public class SolicitudPrestamoController {
 						parametro.put("P_TELEFONOGARANTE1", "");
 						parametro.put("P_TELEFONOGARANTE2", "");
 						parametro.put("P_TELEFONOGARANTE3", "");
-						String strVia1=null;
-			            Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), personaGarante.getListaDomicilio().get(0).getIntTipoViaCod());
-			            if(tablaVia1!=null){
-			            	strVia1 = tablaVia1.getStrDescripcion();
-			            }
-						parametro.put("P_DIRECCIONGARANTE", strVia1+" "+(personaGarante.getListaDomicilio().get(0).getStrNombreVia()!=null?personaGarante.getListaDomicilio().get(0).getStrNombreVia():" ")
-															+ " " + (personaGarante.getListaDomicilio().get(0).getIntNumeroVia()!=null?personaGarante.getListaDomicilio().get(0).getIntNumeroVia():" ")
-															+ " " +(personaGarante.getListaDomicilio().get(0).getStrInterior()!=null?personaGarante.getListaDomicilio().get(0).getStrInterior():" "));
-						parametro.put("P_DIRECCIONGARANTE1", "");
-						parametro.put("P_DIRECCIONGARANTE2", "");
-						parametro.put("P_DIRECCIONGARANTE3", "");
+						if(personaGarante.getListaDomicilio()!=null && !personaGarante.getListaDomicilio().isEmpty()){
+							String strVia1=null;
+				            Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), personaGarante.getListaDomicilio().get(0).getIntTipoViaCod());
+				            if(tablaVia1!=null){
+				            	strVia1 = tablaVia1.getStrDescripcion();
+				            }
+							parametro.put("P_DIRECCIONGARANTE", strVia1+" "+(personaGarante.getListaDomicilio().get(0).getStrNombreVia()!=null?personaGarante.getListaDomicilio().get(0).getStrNombreVia():" ")
+																+ " " + (personaGarante.getListaDomicilio().get(0).getIntNumeroVia()!=null?personaGarante.getListaDomicilio().get(0).getIntNumeroVia():" ")
+																+ " " +(personaGarante.getListaDomicilio().get(0).getStrInterior()!=null?personaGarante.getListaDomicilio().get(0).getStrInterior():" "));
+							parametro.put("P_DIRECCIONGARANTE1", "");
+							parametro.put("P_DIRECCIONGARANTE2", "");
+							parametro.put("P_DIRECCIONGARANTE3", "");
+						}else{
+							parametro.put("P_DIRECCIONGARANTE", "");
+							parametro.put("P_DIRECCIONGARANTE1", "");
+							parametro.put("P_DIRECCIONGARANTE2", "");
+							parametro.put("P_DIRECCIONGARANTE3", "");
+						}
 						parametro.put("P_NOMBREGARANTE", personaGarante.getNatural().getStrApellidoPaterno().toUpperCase() 
 										+ " " + personaGarante.getNatural().getStrApellidoMaterno().toUpperCase() 
 										+ ", " + personaGarante.getNatural().getStrNombres().toUpperCase());
@@ -8964,15 +10201,23 @@ public class SolicitudPrestamoController {
 						parametro.put("P_TELEFONOGARANTE2", "");
 						parametro.put("P_TELEFONOGARANTE3", "");
 						String strVia1=null;
-			            Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), personaGarante.getListaDomicilio().get(0).getIntTipoViaCod());
-			            if(tablaVia1!=null){
-			            	strVia1 = tablaVia1.getStrDescripcion();
-			            }
-						parametro.put("P_DIRECCIONGARANTE1", strVia1+" "+(personaGarante.getListaDomicilio().get(0).getStrNombreVia()!=null?personaGarante.getListaDomicilio().get(0).getStrNombreVia():" ")
-															+ " " + (personaGarante.getListaDomicilio().get(0).getIntNumeroVia()!=null?personaGarante.getListaDomicilio().get(0).getIntNumeroVia():" ")
-															+ " " +(personaGarante.getListaDomicilio().get(0).getStrInterior()!=null?personaGarante.getListaDomicilio().get(0).getStrInterior():" "));
-						parametro.put("P_DIRECCIONGARANTE2", "");
-						parametro.put("P_DIRECCIONGARANTE3", "");
+						for(Domicilio domi: personaGarante.getListaDomicilio()){
+							if(domi.getIntTipoViaCod()!=null){
+							Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), domi.getIntTipoViaCod());
+				            if(tablaVia1!=null){//77 aqui es
+				            	strVia1 = tablaVia1.getStrDescripcion();
+				            }
+							parametro.put("P_DIRECCIONGARANTE1", strVia1+" "+(domi.getStrNombreVia()!=null?domi.getStrNombreVia():"")
+																	+ " " + (domi.getIntNumeroVia()!=null?domi.getIntNumeroVia():"")
+																	+ " " +(domi.getStrInterior()!=null?domi.getStrInterior():""));
+							parametro.put("P_DIRECCIONGARANTE2", "");
+							parametro.put("P_DIRECCIONGARANTE3", "");
+						}else{
+								parametro.put("P_DIRECCIONGARANTE1", "");
+								parametro.put("P_DIRECCIONGARANTE2", "");
+								parametro.put("P_DIRECCIONGARANTE3", "");
+						}
+					}
 						parametro.put("P_NOMBREGARANTE1", personaGarante.getNatural().getStrApellidoPaterno().toUpperCase() 
 														+ " " + personaGarante.getNatural().getStrApellidoMaterno().toUpperCase() 
 														+ ", " + personaGarante.getNatural().getStrNombres().toUpperCase());
@@ -9090,6 +10335,85 @@ public class SolicitudPrestamoController {
 			log.error("Error en imprimirSolicitudPrestamo ---> "+e);
 		}   	
     }
+    /*Inicio Formato en Blanco*/
+    public void imprimirSolicitudPrestamoEnBlanco(){
+    	String strNombreReporte = "";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	Tabla prestamo = new Tabla();
+
+		try {
+			parametro.put("P_APORTE", "");
+			parametro.put("P_CUOTAFIJA", "");	
+			parametro.put("P_MOTIVO", "");
+			parametro.put("P_IDCODIGOPERSONA", "");
+			parametro.put("P_APELLIDOPATERNO", "");
+			parametro.put("P_APELLIDOMATERNO", "");
+			parametro.put("P_NOMCOMPLETO", "");
+			parametro.put("P_DOCUMENTO", "");
+			parametro.put("P_CARGOlABORAL", "");
+			parametro.put("P_EXPEDIENTE", "");	
+			parametro.put("P_MONTOTOTAL1", "");
+	        parametro.put("P_NUMCUOTA", "");
+			parametro.put("P_DIRECCION", "");
+			parametro.put("P_DIRREFERENCIA", "");
+			parametro.put("P_DISTRITO", "");
+			parametro.put("P_PROVINCIA", "");
+	        parametro.put("P_DEPARTAMENTO", "");
+	        parametro.put("P_COMUMOVIL", "");
+	        parametro.put("P_CORREO", "");
+       	    parametro.put("P_COMUCASA", "");
+	        parametro.put("P_NOMYAPELLIDO", "");
+			parametro.put("P_CUENTABANCARIA", "");
+			parametro.put("P_INTERES", "");
+	        parametro.put("P_GRABAMEN", "");
+	        parametro.put("P_ESTADOCIVIL", "");
+			parametro.put("P_FECHAESTADO", "");
+			parametro.put("P_IDCODIGOPERSONA", "");
+			parametro.put("P_DOCUMENTO", "");
+	        parametro.put("P_MONTOENLETRAS", "");
+	        parametro.put("P_NUMCUOTA", "");
+			parametro.put("P_DIRECCION", "");
+        	parametro.put("P_GRABAMEN", "");
+	        parametro.put("P_ESTADOCIVIL", "");
+			parametro.put("P_NOMBREBANCO", "");
+			parametro.put("P_IDGARANTE", "");
+			parametro.put("P_IDGARANTE1", "");
+			parametro.put("P_IDGARANTE2", "");
+			parametro.put("P_IDGARANTE3", "");
+			parametro.put("P_DNIGARANTE", "");
+			parametro.put("P_DNIGARANTE1", "");
+			parametro.put("P_DNIGARANTE2", "");
+			parametro.put("P_DNIGARANTE3", "");
+			parametro.put("P_CENTROTRABAJOGARANTE", "");
+			parametro.put("P_CENTROTRABAJOGARANTE1", "");
+			parametro.put("P_CENTROTRABAJOGARANTE2", "");
+			parametro.put("P_CENTROTRABAJOGARANTE3", "");
+			parametro.put("P_TELEFONOGARANTE", "");
+			parametro.put("P_TELEFONOGARANTE1", "");
+			parametro.put("P_TELEFONOGARANTE2", "");
+			parametro.put("P_TELEFONOGARANTE3", "");
+			parametro.put("P_DIRECCIONGARANTE", "");
+			parametro.put("P_DIRECCIONGARANTE1", "");
+			parametro.put("P_DIRECCIONGARANTE2", "");
+			parametro.put("P_DIRECCIONGARANTE3", "");
+			parametro.put("P_NOMBREGARANTE", "");
+			parametro.put("P_NOMBREGARANTE1", "");
+			parametro.put("P_NOMBREGARANTE2", "");
+			parametro.put("P_NOMBREGARANTE3", "");
+			      /*Aqui Finaliza los parametros de las siguientes 2 hojas*/
+	        System.out.println("Parametro " + parametro);
+			prestamo.setStrAbreviatura(" ");
+			lstParaQuePinteReporte.add(prestamo);
+			
+			strNombreReporte = "solicitudDePrestamo";
+			//strNombreReporte = "jasperPadre";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteReporte), Constante.PARAM_T_TIPOREPORTE_PDF);
+					
+		} catch (Exception e) {
+			log.error("Error en imprimirSolicitudPrestamo ---> "+e);
+		}   	
+    }
+    /*Fin formato en blanco*/
     
     /**
      * 
@@ -9226,7 +10550,34 @@ public class SolicitudPrestamoController {
 		} catch (Exception e) {
 			log.error("Error en imprimirAutorizacionDescuento ---> "+e);
 		}   	
-    }      
+    } 
+    
+    /*Inicio Formato en blanco*/
+    public void imprimirAutorizacionDescuentoEnBlanco(){
+    	String strNombreReporte = " ";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+
+		try {
+			
+			parametro.put("P_CARGOlABORAL", "");
+			parametro.put("P_IDCODIGOPERSONA", "");
+	        parametro.put("P_NOMYAPELLIDO", "");
+			parametro.put("P_DOCUMENTO", "");
+			parametro.put("P_DIRECCION", "");
+			parametro.put("P_DEPENDENCIA", "");
+			parametro.put("P_FECHAESTADO", "");
+			
+		
+			strNombreReporte = "autorizacionDeDescuento";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteReporte), Constante.PARAM_T_TIPOREPORTE_PDF);
+					
+		} catch (Exception e) {
+			log.error("Error en imprimirAutorizacionDescuento ---> "+e);
+		}   	
+    }
+    
+    /*Fin Formato en blanco*/
+    
     
     public void imprimirAutorizacionDescuentoCesantes(){
     	String strNombreReporte = " ";
@@ -9260,7 +10611,29 @@ public class SolicitudPrestamoController {
 		} catch (Exception e) {
 			log.error("Error en imprimirPlanillaPrestamo ---> "+e);
 		}   	
-    }      
+    } 
+    /*Inicio Formatos en Blanco*/
+    public void imprimirAutorizacionDescuentoCesantesEnBlanco(){
+    	String strNombreReporte = " ";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	Tabla autorizacion = new Tabla();
+
+		try {
+			autorizacion.setStrAbreviatura(" ");
+			lstParaQuePinteReporte.add(autorizacion);
+			parametro.put("P_REGIMENLAB", "");
+			parametro.put("P_IDCODIGOPERSONA", "");
+	        parametro.put("P_NOMYAPELLIDO", "");
+			parametro.put("P_DOCUMENTO", "");
+			
+	       	strNombreReporte = "autorizacionDeDescuentoCesantes";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteReporte), Constante.PARAM_T_TIPOREPORTE_PDF);
+		
+		} catch (Exception e) {
+			log.error("Error en imprimirPlanillaPrestamo ---> "+e);
+		}   	
+    } 
+    /*Fin Formatos en Blanco*/
     
     public void imprimirautorizacionDscto100(){
     	String strNombreReporte = " ";
@@ -9287,6 +10660,28 @@ public class SolicitudPrestamoController {
 			log.error("Error en imprimirPlanillaPrestamo ---> "+e);
 		}   	
     }
+    /*Inicio Formatos en Blanco*/
+    public void imprimirautorizacionDscto100EnBlanco(){
+    	String strNombreReporte = " ";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	Tabla autorizacion = new Tabla();
+		try {
+			autorizacion.setStrAbreviatura(" ");
+			lstParaQuePinteReporte.add(autorizacion);
+			parametro.put("P_IDCODIGOPERSONA", "");
+	        parametro.put("P_NOMYAPELLIDO", "");
+			parametro.put("P_DOCUMENTO", "");
+			parametro.put("P_DEPENDENCIA", "");
+
+			strNombreReporte = "autorizacionDscto100";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteReporte), Constante.PARAM_T_TIPOREPORTE_PDF);
+					
+		} catch (Exception e) {
+			log.error("Error en imprimirPlanillaPrestamo ---> "+e);
+		}   	
+    }
+    /*FinFormatos en Blanco*/
+    
     /**
      * 
      * @param 02/05/2014
@@ -9484,7 +10879,38 @@ public class SolicitudPrestamoController {
 		} catch (Exception e) {
 			log.error("Error en imprimirDeclaraciónJurada ---> "+e);
 		}   	
-    } 
+    }
+    /*Inicio Formatos en Blanco*/
+    public void imprimirDeclaraciónJuradaEnBlanco(){
+    	String strNombreReporte = " ";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	Tabla autorizacion = new Tabla();
+		try {
+			autorizacion.setStrAbreviatura(" ");
+			lstParaQuePinteReporte.add(autorizacion);
+			parametro.put("P_NUMEROCHEQUE", "");
+			parametro.put("P_NOMBREBANCO", "");
+			parametro.put("P_TIPOPRESTAMO", "");
+			parametro.put("P_IDCODIGOPERSONA", "");
+			parametro.put("P_NOMYAPELLIDO", "");
+			parametro.put("P_DOCUMENTO", "");
+	        parametro.put("P_COMUCASA", "");
+	        parametro.put("P_COMUMOVIL", "");
+	        parametro.put("P_CUENTABANCARIA", "");
+	        parametro.put("P_MONTOTOTAL", "");
+	        parametro.put("P_MONTOENLETRAS", "");
+	        parametro.put("P_AGENCIA", "");
+	        parametro.put("P_FECHAHOY", "");
+				
+			System.out.println("Parametro "+ parametro);
+			strNombreReporte = "declaracionJurada";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteReporte), Constante.PARAM_T_TIPOREPORTE_PDF);
+					
+		} catch (Exception e) {
+			log.error("Error en imprimirDeclaraciónJurada ---> "+e);
+		}   	
+    }
+    /*Fin Formatos en Blanco*/
     
     /**
      * 
@@ -9535,35 +10961,6 @@ public class SolicitudPrestamoController {
 				parametro.put("P7",  siete);
 				parametro.put("P8",  ocho);
 			}
-//			List<Comunicacion> lstComunicacion = beanSocioComp.getPersona().getListaComunicacion();
-//	        String telefFijo = " ";
-//            String telefMovil = " ";
-//	        	if(lstComunicacion != null && !lstComunicacion.isEmpty()){
-//	        	for (Comunicacion com : lstComunicacion) {
-//					if(com.getIntTipoComunicacionCod()!= null){
-//						if(com.getIntTipoComunicacionCod().equals(Constante.PARAM_T_TIPOCOMUNICACION_TELEFONO) &&
-//                    			com.getIntTipoLineaCod().equals(Constante.PARAM_T_TIPOLINEATELEF_FIJO) && com.getIntEstadoCod().equals(Constante.PARAM_T_ESTADOCOMUNICACION)){
-//							
-//							telefFijo = String.valueOf(com.getIntNumero())!=null?String.valueOf(com.getIntNumero()): " ";
-//						}
-//						else if (com.getIntTipoComunicacionCod().equals(Constante.PARAM_T_TIPOCOMUNICACION_TELEFONO) && com.getIntEstadoCod().equals(Constante.PARAM_T_ESTADOCOMUNICACION) &&
-//                    			(com.getIntTipoLineaCod().equals(Constante.PARAM_T_TIPOLINEATELEF_CLARO) ||
-//                    					com.getIntTipoLineaCod().equals(Constante.PARAM_T_TIPOLINEATELEF_MOVISTAR) ||
-//                    							com.getIntTipoLineaCod().equals(Constante.PARAM_T_TIPOLINEATELEF_NEXTEL)) &&
-//                    							com.getIntSubTipoComunicacionCod().equals(Constante.PARAM_T_COMUNICACIONPERSONAL)) {
-//                    		telefMovil = String.valueOf(com.getIntNumero())!=null?String.valueOf(com.getIntNumero()): " ";
-//                     	}
-//					}
-//				}
-//	        }
-//	        //if((telefFijo!=null && !telefFijo.isEmpty()) || (telefMovil!=null && !telefMovil.isEmpty())){
-//	        if(telefFijo!=null && !telefFijo.trim().isEmpty())
-//	        	parametro.put("P_COMUCASA", telefFijo);
-//	        	
-//	        else if(telefMovil!=null && !telefMovil.trim().isEmpty())
-//	        	parametro.put("P_COMUCASA", telefMovil);
-//	        else
-//	        	parametro.put("P_COMUCASA", " ");
 			List<Comunicacion> lstComunicacion = beanSocioComp.getPersona().getListaComunicacion();
 	           
 	           Integer numero1=null;
@@ -9701,10 +11098,14 @@ public class SolicitudPrestamoController {
 			        			   numero =listaComunicacion.getIntNumero();
 			        		   }
 			        	   	}
-			           parametro.put("P_TELEFONOGARANTE", numero);
-						parametro.put("P_TELEFONOGARANTE1", " ");
-						parametro.put("P_TELEFONOGARANTE2", " ");
-						parametro.put("P_TELEFONOGARANTE3", " ");
+					        if(numero!=null){
+					          	parametro.put("P_TELEFONOGARANTE", numero);
+								parametro.put("P_TELEFONOGARANTE1", "");
+								parametro.put("P_TELEFONOGARANTE2", "");
+								parametro.put("P_TELEFONOGARANTE3", "");
+					        }else{
+					        	parametro.put("P_TELEFONOGARANTE", "");
+					        }
 						String strVia1=null;
 			            Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), personaGarante.getListaDomicilio().get(0).getIntTipoViaCod());
 			            if(tablaVia1!=null){
@@ -9798,15 +11199,23 @@ public class SolicitudPrestamoController {
 						parametro.put("P_TELEFONOGARANTE2", " ");
 						parametro.put("P_TELEFONOGARANTE3", " ");
 						String strVia1=null;
-			            Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), personaGarante.getListaDomicilio().get(0).getIntTipoViaCod());
-			            if(tablaVia1!=null){
-			            	strVia1 = tablaVia1.getStrDescripcion();
-			            }
-						parametro.put("P_DIRECCIONGARANTE1", strVia1+" "+(personaGarante.getListaDomicilio().get(0).getStrNombreVia()!=null?personaGarante.getListaDomicilio().get(0).getStrNombreVia():"")
-																+ " " + (personaGarante.getListaDomicilio().get(0).getIntNumeroVia()!=null?personaGarante.getListaDomicilio().get(0).getIntNumeroVia():"")
-																+ " " +(personaGarante.getListaDomicilio().get(0).getStrInterior()!=null?personaGarante.getListaDomicilio().get(0).getStrInterior():""));
-						parametro.put("P_DIRECCIONGARANTE2", "");
-						parametro.put("P_DIRECCIONGARANTE3", "");
+						for(Domicilio domi: personaGarante.getListaDomicilio()){
+							if(domi.getIntTipoViaCod()!=null){
+							Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), domi.getIntTipoViaCod());
+				            if(tablaVia1!=null){//77 aqui es
+				            	strVia1 = tablaVia1.getStrDescripcion();
+				            }
+							parametro.put("P_DIRECCIONGARANTE1", strVia1+" "+(domi.getStrNombreVia()!=null?domi.getStrNombreVia():"")
+																	+ " " + (domi.getIntNumeroVia()!=null?domi.getIntNumeroVia():"")
+																	+ " " +(domi.getStrInterior()!=null?domi.getStrInterior():""));
+							parametro.put("P_DIRECCIONGARANTE2", "");
+							parametro.put("P_DIRECCIONGARANTE3", "");
+						}else{
+								parametro.put("P_DIRECCIONGARANTE1", "");
+								parametro.put("P_DIRECCIONGARANTE2", "");
+								parametro.put("P_DIRECCIONGARANTE3", "");
+						}
+					}
 						parametro.put("P_NOMBREGARANTE1", personaGarante.getNatural().getStrApellidoPaterno().toUpperCase() 
 														+ " " + personaGarante.getNatural().getStrApellidoMaterno().toUpperCase()
 														+ " " + personaGarante.getNatural().getStrNombres().toUpperCase()); 
@@ -9873,7 +11282,7 @@ public class SolicitudPrestamoController {
 			        			   numero =listaComunicacion.getIntNumero();
 			        		   }
 			        	   	}
-			           parametro.put("P_TELEFONOGARANTE2", numero);
+			        	parametro.put("P_TELEFONOGARANTE2", numero);
 						parametro.put("P_TELEFONOGARANTE3", " ");
 						String strVia1=null;
 			            Tabla tablaVia1 = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_TIPOVIA), personaGarante.getListaDomicilio().get(0).getIntTipoViaCod());
@@ -9965,11 +11374,221 @@ public class SolicitudPrestamoController {
 		} catch (Exception e) {
 			log.error("Error en imprimirDeclaraciónJurada ---> "+e);
 		}   	
-    } 
+    }
+    /*Inicio Formatos en Blanco*/
+    public void imprimirPagareEnBlanco(){
+    	String strNombreReporte = " ";
+    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+    	Tabla autorizacion = new Tabla();
+		try {
+			autorizacion.setStrAbreviatura(" ");
+			lstParaQuePinteReporte.add(autorizacion);
+			    parametro.put("P_IDCODIGOPERSONA", "");
+	            parametro.put("P_NOMYAPELLIDO", "");
+				parametro.put("P1",  "");
+				parametro.put("P2",  "");
+				parametro.put("P3",  "");
+				parametro.put("P4",  "");
+				parametro.put("P5",  "");
+				parametro.put("P6",  "");
+				parametro.put("P7",  "");
+				parametro.put("P8",  "");
+	            parametro.put("P_COMUCASA", "");
+	        	parametro.put("P_DIRECCION", "");
+			    parametro.put("P_DEPENDENCIA", "");
+				parametro.put("P_TASAANUAL", "");
+				parametro.put("P_TASAMENSUAL", "");
+				parametro.put("P_MONTOTOTAL", "");
+                parametro.put("P_MONTOENLETRAS", "");
+				parametro.put("P_IDGARANTE", "");
+				parametro.put("P_IDGARANTE1", "");
+				parametro.put("P_IDGARANTE2", "");
+				parametro.put("P_IDGARANTE3", "");
+				parametro.put("PG1",  "");
+				parametro.put("PG11",  "");
+				parametro.put("PG12",  "");
+				parametro.put("PG13",  "");
+				parametro.put("PG2",  "");
+							parametro.put("PG21",  "");
+							parametro.put("PG22",  "");
+							parametro.put("PG23",  "");
+							parametro.put("PG3",  "");
+							parametro.put("PG31",  "");
+							parametro.put("PG32",  "");
+							parametro.put("PG33",  "");
+							parametro.put("PG4",  "");
+							parametro.put("PG41",  "");
+							parametro.put("PG42",  "");
+							parametro.put("PG43",  "");
+							parametro.put("PG5",  "");
+							parametro.put("PG51",  "");
+							parametro.put("PG52",  "");
+							parametro.put("PG53",  "");
+							parametro.put("PG6",  "");
+							parametro.put("PG61",  "");
+							parametro.put("PG62",  "");
+							parametro.put("PG63",  "");
+							parametro.put("PG7",  "");
+							parametro.put("PG71",  "");
+							parametro.put("PG72",  "");
+							parametro.put("PG73",  "");
+							parametro.put("PG8",  "");
+							parametro.put("PG81",  "");
+							parametro.put("PG82",  "");
+							parametro.put("PG83",  "");
+						parametro.put("P_CENTROTRABAJOGARANTE", "");
+						parametro.put("P_CENTROTRABAJOGARANTE1", "");
+						parametro.put("P_CENTROTRABAJOGARANTE2", "");
+						parametro.put("P_CENTROTRABAJOGARANTE3", "");
+						       	parametro.put("P_TELEFONOGARANTE", "");
+								parametro.put("P_TELEFONOGARANTE1", "");
+								parametro.put("P_TELEFONOGARANTE2", "");
+								parametro.put("P_TELEFONOGARANTE3", "");
+						parametro.put("P_DIRECCIONGARANTE", "");
+						parametro.put("P_DIRECCIONGARANTE1", "");
+						parametro.put("P_DIRECCIONGARANTE2", "");
+						parametro.put("P_DIRECCIONGARANTE3", "");
+						parametro.put("P_NOMBREGARANTE", "");
+						parametro.put("P_NOMBREGARANTE1", "");
+						parametro.put("P_NOMBREGARANTE2", "");
+						parametro.put("P_NOMBREGARANTE3", "");
+
+			System.out.println("parametro " + parametro);
+			strNombreReporte = "pagare";
+			UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteReporte), Constante.PARAM_T_TIPOREPORTE_PDF);
+					
+		} catch (Exception e) {
+			log.error("Error en imprimirDeclaraciónJurada ---> "+e);
+		}   	
+    }
+    /*Fin Formato en Blanco*/
+
+    /**
+     * Autor: jchavez / Tarea: Creación / Fecha: 27.08.2014 / 
+   	 * Funcionalidad: Método que valida si el Socio pertenece al MINSA
+   	 * @author jchavez
+   	 * @version 1.0
+   	 * @return blnEsMINSA - ¿es MINSA?.
+   	 * @throws Exception
+     */
+    public Boolean blnSocioMINSA(){
+    	blnEsMINSA = false;
+    	Estructura est = new Estructura();
+    	try {
+    		EstructuraFacadeRemote estructuraFacade = (EstructuraFacadeRemote) EJBFactory.getRemote(EstructuraFacadeRemote.class);
+    		if (listaCapacidadCreditoComp!=null && !listaCapacidadCreditoComp.isEmpty()) {
+				for (CapacidadCreditoComp ccred : listaCapacidadCreditoComp) {
+					est.setId(new EstructuraId());
+					est.getId().setIntNivel(ccred.getSocioEstructura().getIntNivel());
+					est.getId().setIntCodigo(ccred.getSocioEstructura().getIntCodigo());
+					est = estructuraFacade.getEstructuraPorPK(est.getId());
+					
+					if (est != null) {
+						if (est.getIntIdGrupo().equals(Constante.PARAM_T_TIPOENTIDAD_SALUD)) {
+							blnEsMINSA = true;
+							break;
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.info("Error en bnlSocioMINSA() ---> "+e.getMessage());
+		}
+    	return blnEsMINSA;
+    }
+    
+    public void listarExpedientesVigentes(ActionEvent event){
+//    	List<CronogramaCreditoComp> listaFilas = null;
+//		List<Expediente> listaColumnas = null;
+//		Persona persona = null;
+//		CapacidadPagoController capacidadPagoController = null;
+//
+//		try {
+//			capacidadPagoController =(CapacidadPagoController)getSessionBean("capacidadPagoController");
+//			capacidadPagoController.getLstExpedientesVigentes();
+//			if(beanSocioComp !=null && beanSocioComp.getPersona()!=null){
+//				persona = beanSocioComp.getPersona();				
+//				listaFilas = null;//estructuraFacade.getListaFilaTercerosPorDNI(persona.getDocumento().getStrNumeroIdentidad());
+//				listaColumnas = capacidadPagoController.getLstExpedientesVigentes();//estructuraFacade.getListaColumnaTercerosPorDNI(persona.getDocumento().getStrNumeroIdentidad());
+//				
+//				if(listaFilas!=null && listaColumnas!=null){					
+//					listColumnCpto = new ArrayList<Terceros>();
+//					listaFilas = filtrarPorPeriodoYMesSolicitudPrestamo(listaFilas);
+//					
+//					for(Terceros tercero : listaColumnas){
+//						int conta = 0;
+//						for(Terceros columna : listColumnCpto){
+//							if(columna.getStrCpto().equals(tercero.getStrCpto())){
+//								conta++;
+//								break;
+//							}
+//						}
+//						if(conta==0)listColumnCpto.add(tercero);
+//					}
+//					
+//					for(Terceros columna : listaColumnas){
+//						for(Terceros fila : listaFilas){
+//							if(fila.getId().getIntPeriodo().equals(columna.getId().getIntPeriodo()) &&
+//							fila.getId().getIntMes().equals(columna.getId().getIntMes())){
+//								if(fila.getLsMontos()==null){
+//									fila.setLsMontos(new String[1]);
+//								}else{
+//									String values[] = new String[fila.getLsMontos().length+1];
+//									for(int i=0; i<fila.getLsMontos().length; i++){
+//										values[i] = fila.getLsMontos()[i];
+//									}
+//									fila.setLsMontos(values);
+//								}
+//
+//								// cgd - 15.05.2013
+//								// FORMATEANDO LAS COLUMNAS DINAMICAS
+//								Integer intSizeCadena =columna.getIntMonto().toString().length();
+//								String intDecimal = (columna.getIntMonto().toString().substring(intSizeCadena - 2));
+//								String intEntero =(columna.getIntMonto().toString().substring(0,intSizeCadena - 2));
+//								String strMontoCorregido = intEntero +"."+intDecimal;
+//
+//								BigDecimal aDecimal = new BigDecimal(strMontoCorregido);  
+//								BigDecimal bdMonto = aDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);  
+//								String strMonto = bdMonto.toString();
+//								fila.getLsMontos()[fila.getLsMontos().length-1]=""+strMonto;
+//							}
+//							// FORMATEANDO EL TOTAL
+//							Integer intSize =fila.getIntMonto().toString().length();
+//							String intDec = (fila.getIntMonto().toString().substring(intSize - 2));
+//							String intEnt =(fila.getIntMonto().toString().substring(0,intSize - 2));
+//							String strMontoCorr = intEnt +"."+intDec;
+//
+//							BigDecimal aDecimalTot = new BigDecimal(strMontoCorr);  
+//							BigDecimal bdMontoTot = aDecimalTot.setScale(2, BigDecimal.ROUND_HALF_UP);  
+//
+//							fila.setBdMontoTotal(bdMontoTot);
+//						}
+//					}
+//					setListTerceros(listaFilas);
+//				}
+//			}
+//		} catch (BusinessException e) {
+//			log.error("Error en listarExpedientesVigentes ---> "+ e);
+//			e.printStackTrace();
+//		}
+	}
+    
+    public void limpiarGarante(){
+    	blnDatosGarante = false;
+    	beanSocioCompGarante = new SocioComp();
+    }
+    
+//    public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}   
     
     public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}   
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
+    
 	public Boolean getBlnMostrarEliminar() {
 		return blnMostrarEliminar;
 	}
@@ -11257,15 +12876,103 @@ public class SolicitudPrestamoController {
 	public void setBlnCreditosEspeciales(Boolean blnCreditosEspeciales) {
 		this.blnCreditosEspeciales = blnCreditosEspeciales;
 	}
-
-
 	public boolean isMostrarBoton() {
 		return mostrarBoton;
 	}
-
-
 	public void setMostrarBoton(boolean mostrarBoton) {
 		this.mostrarBoton = mostrarBoton;
+	}
+	public Boolean getBlnEsMINSA() {
+		return blnEsMINSA;
+	}
+	public void setBlnEsMINSA(Boolean blnEsMINSA) {
+		this.blnEsMINSA = blnEsMINSA;
+	}
+	public BigDecimal getBdMontoAporteGaranteSolidario() {
+		return bdMontoAporteGaranteSolidario;
+	}
+	public void setBdMontoAporteGaranteSolidario(
+			BigDecimal bdMontoAporteGaranteSolidario) {
+		this.bdMontoAporteGaranteSolidario = bdMontoAporteGaranteSolidario;
+	}
+	public BigDecimal getBdCuotaFijaPrestamosVigentes() {
+		return bdCuotaFijaPrestamosVigentes;
+	}
+	public void setBdCuotaFijaPrestamosVigentes(
+			BigDecimal bdCuotaFijaPrestamosVigentes) {
+		this.bdCuotaFijaPrestamosVigentes = bdCuotaFijaPrestamosVigentes;
+	}
+	public List<Expediente> getLstExpedientesVigentes() {
+		return lstExpedientesVigentes;
+	}
+	public void setLstExpedientesVigentes(List<Expediente> lstExpedientesVigentes) {
+		this.lstExpedientesVigentes = lstExpedientesVigentes;
+	}
+	public CronogramaCreditoComp getCngmCredExpVigentes() {
+		return cngmCredExpVigentes;
+	}
+	public void setCngmCredExpVigentes(CronogramaCreditoComp cngmCredExpVigentes) {
+		this.cngmCredExpVigentes = cngmCredExpVigentes;
+	}
+	public Integer getIntCantExpedientesVigentes() {
+		return intCantExpedientesVigentes;
+	}
+	public void setIntCantExpedientesVigentes(Integer intCantExpedientesVigentes) {
+		this.intCantExpedientesVigentes = intCantExpedientesVigentes;
+	}
+	public String getStrDescCuotaFijaExpCred1() {
+		return strDescCuotaFijaExpCred1;
+	}
+	public void setStrDescCuotaFijaExpCred1(String strDescCuotaFijaExpCred1) {
+		this.strDescCuotaFijaExpCred1 = strDescCuotaFijaExpCred1;
+	}
+	public String getStrDescCuotaFijaExpCred2() {
+		return strDescCuotaFijaExpCred2;
+	}
+	public void setStrDescCuotaFijaExpCred2(String strDescCuotaFijaExpCred2) {
+		this.strDescCuotaFijaExpCred2 = strDescCuotaFijaExpCred2;
+	}
+	public String getStrDescCuotaFijaExpCred3() {
+		return strDescCuotaFijaExpCred3;
+	}
+	public void setStrDescCuotaFijaExpCred3(String strDescCuotaFijaExpCred3) {
+		this.strDescCuotaFijaExpCred3 = strDescCuotaFijaExpCred3;
+	}
+	public String getStrDescCuotaFijaExpCred4() {
+		return strDescCuotaFijaExpCred4;
+	}
+	public void setStrDescCuotaFijaExpCred4(String strDescCuotaFijaExpCred4) {
+		this.strDescCuotaFijaExpCred4 = strDescCuotaFijaExpCred4;
+	}
+	public BigDecimal getBdTotalCuotaPrestamo() {
+		return bdTotalCuotaPrestamo;
+	}
+	public void setBdTotalCuotaPrestamo(BigDecimal bdTotalCuotaPrestamo) {
+		this.bdTotalCuotaPrestamo = bdTotalCuotaPrestamo;
+	}
+	public String getMsgTxtEdadLimite() {
+		return msgTxtEdadLimite;
+	}
+	public void setMsgTxtEdadLimite(String msgTxtEdadLimite) {
+		this.msgTxtEdadLimite = msgTxtEdadLimite;
+	}
+	public Integer getIntEdadSocio() {
+		return intEdadSocio;
+	}
+	public void setIntEdadSocio(Integer intEdadSocio) {
+		this.intEdadSocio = intEdadSocio;
+	}
+	public BigDecimal getBdMontoDescJudicial() {
+		return bdMontoDescJudicial;
+	}
+	public void setBdMontoDescJudicial(BigDecimal bdMontoDescJudicial) {
+		this.bdMontoDescJudicial = bdMontoDescJudicial;
+	}
+	public String getStrMensajeErrorTopeOperacion() {
+		return strMensajeErrorTopeOperacion;
+	}
+	public void setStrMensajeErrorTopeOperacion(String strMensajeErrorTopeOperacion) {
+		this.strMensajeErrorTopeOperacion = strMensajeErrorTopeOperacion;
 	}
 	
 }

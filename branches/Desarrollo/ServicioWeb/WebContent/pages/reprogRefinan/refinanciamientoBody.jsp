@@ -164,14 +164,14 @@
                  
                  <rich:spacer height="16px"/>
                  <h:panelGrid columns="3" border="0"  style="width: 400px;">
-                 <h:commandButton id="btnImprimir1" value="Solicitud de Préstamo" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirSolicitudPrestamo}"/>
-                 <h:commandButton id="btnImprimir3" value="Autorización Descuento" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirAutorizacionDescuento}"/>
-                 <h:commandButton id="btnImprimir4" value="Autorización de Dscto al 100%" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirautorizacionDscto100}"/>
+                 <h:commandButton id="btnImpre1" value="Solicitud de Préstamo" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirSolicitudPrestamo}"/>
+                 <h:commandButton id="btnImpre3" value="Autorización Descuento" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirAutorizacionDescuento}"/>
+                 <h:commandButton id="btnImpre4" value="Autorización de Dscto al 100%" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirautorizacionDscto100}"/>
                  </h:panelGrid>
                  <h:panelGrid columns="3" border="0"  style="width: 400px;">
-             	 <rich:column visible="#{solicitudPrestamoController.mostrarBoton}"><h:commandButton id="btnImprimir5" value="Autorización Descuento Cesantes" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirAutorizacionDescuentoCesantes}"/></rich:column>
-                 <rich:column ><h:commandButton id="btnImprimir6" value="Pagaré" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirPagare}"/></rich:column>
-                 <rich:column ><h:commandButton id="btnImprimir7" value="Declaración Jurada" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirDeclaraciónJurada}"/></rich:column>
+             	 <rich:column visible="#{solicitudRefinanController.mostrarBoton}"><h:commandButton id="btnImprimir5" value="Autorización Descuento Cesantes" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirAutorizacionDescuentoCesantes}"/></rich:column>
+                 <rich:column ><h:commandButton id="btnImpre6" value="Pagaré" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirPagare}"/></rich:column>
+                 <rich:column ><h:commandButton id="btnImpre7" value="Declaración Jurada" styleClass="btnEstilos1" action="#{solicitudRefinanController.imprimirDeclaraciónJurada}"/></rich:column>
                  </h:panelGrid>																										 	
                  </h:panelGrid>
              </rich:panel>
@@ -336,4 +336,24 @@
 	    </f:facet>
 			<a4j:include viewId="/pages/reprogRefinan/popUp/detalleRefinanciamiento.jsp"/>
 	</rich:modalPanel>
+	<%--Inicio del popup autor: Rodolfo Villarreal Acuña --%>
+  <rich:modalPanel id="formEnBlancoRefi" width="500" height="180" 
+	resizeable="false" style="background-color:#DEEBF5;" onhide="enableFormEnBlanco()">
+     <f:facet name="header">
+         <h:panelGrid>
+           <rich:column style="border: none;">
+             <h:outputText value="Opciones"/>
+           </rich:column>
+         </h:panelGrid>
+     </f:facet>
+     <f:facet name="controls">
+         <h:panelGroup>
+            <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+            	<rich:componentControl for="formEnBlancoRefi" operation="hide" event="onclick"/>
+            </h:graphicImage>
+        </h:panelGroup>
+     </f:facet>
+     <a4j:include viewId="/pages/reprogRefinan/popUp/formatosEnBlancoSolicitudRefinanciamiento.jsp" layout="block"/>
+  </rich:modalPanel>
+			    <%--Fin del pop imprimir formtos en blanco --%>
 	

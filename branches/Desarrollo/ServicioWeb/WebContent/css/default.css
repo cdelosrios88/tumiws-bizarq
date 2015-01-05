@@ -395,11 +395,15 @@ textarea[type="textarea"], input[type="text"], input[type="password"], select {
              font-weight: bold;
 }
 
+/*
+	Autor: jchavez / Tarea: Modificación / Fecha: 16.12.2014
+*/
 .msgError{
 			 font-family:Verdana, Arial, Helvetica, sans-serif;
-             font-size: 10px; 
-             color: #ec2606;
+             font-size: 14px; 
+             color: #FF0000;
              text-align: left;
+             font-weight: bold;             
 }
 
 .msgError2{
@@ -423,11 +427,15 @@ textarea[type="textarea"], input[type="text"], input[type="password"], select {
              text-align: center;
              
 }
-
+/*
+	Autor: jchavez / Tarea: Modificación / Fecha: 16.12.2014
+*/
 .msgInfo{
 			 font-family:Verdana, Arial, Helvetica, sans-serif;
-             font-size: 10px; 
+             font-size: 14px; 
              color: #204dde;
+             text-align: left;
+             font-weight: bold;    
 }
 
 .spacioexportar{
@@ -1190,4 +1198,50 @@ s .yui-gb .yui-gd div.first {
 .rich-tab-inactive{
    background-color:none;
    background-image:none;
+}
+
+/*
+	Autor: jchavez / Tarea: Nuevo estilo / Fecha: 03.12.2014
+	Estilo usado al mostrar errores de validación en los diferentes formularios
+*/
+.msgErrorValidacion{
+			 font-family:Verdana, Arial, Helvetica, sans-serif;
+             font-size: 14px; 
+             color: #FF0000;
+             text-align: left;
+             font-weight: bold;
+             
+}
+
+/*
+	Autor: jchavez / Tarea: Nuevo estilo / Fecha: 03.12.2014
+	Estilo usado en los títulos de los diferentes formularios 
+*/
+.tagTitulo{
+			 font-family:Verdana, Arial, Helvetica, sans-serif;
+             font-size: 16px; 
+             color: #000000;
+             font-weight: bold;
+}
+
+/*
+	Autor: jchavez / Tarea: Nuevo estilo / Fecha: 03.12.2014
+	Estilo usado en los subtítulos de los diferentes formularios 
+*/
+.tagSubTitulo{
+			 font-family:Verdana, Arial, Helvetica, sans-serif;
+             font-size: 13px; 
+             color: #000000;
+             font-weight: bold;
+}
+/*
+	Autor: jchavez / Tarea: Nuevo estilo / Fecha: 16.12.2014
+	Estilo usado en los montos finales de los formularios.
+*/
+.txtMontoFinal{
+			 font-family:Verdana, Arial, Helvetica, sans-serif;
+             font-size: 17px; 
+             color: #FF0000;
+             text-align: right;
+             font-weight: bold;
 }

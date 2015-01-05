@@ -60,7 +60,7 @@
     					
     				<a4j:commandButton id="btnCapacidadPagoCas" value="Grabar" actionListener="#{capacidadPagoController.grabarCapacidadCreditoRef}" 
     					oncomplete="if(#{capacidadPagoController.validCapacidadCredito}){Richfaces.hideModalPanel('mpCapacidadCreditoEsp')}"
-    					styleClass="btnEstilos" reRender="frmCapacidadPagoEspecial,pgListCapacidadCreditoEspecial,pgDatosSocio,pgSolicitudRefinan"/>
+    					styleClass="btnEstilos" reRender="frmCapacidadPagoEspecial,pgListCapacidadCreditoEspecial,pgDatosSocio"/>
     			</rich:column>
     			<rich:column>
     				<a4j:commandButton value="Cancelar" styleClass="btnEstilos"
@@ -78,8 +78,10 @@
     				</rich:column>
     			</h:panelGrid>
     			
+    			<!-- Autor: jchavez / Tarea: Modificación / Fecha: 28.08.2014 -->
     			<h:panelGrid columns="2">
-    				<h:selectBooleanCheckbox value="#{capacidadPagoController.blnChkCartaAutorizacion}">
+    				<h:selectBooleanCheckbox value="#{capacidadPagoController.blnChkCartaAutorizacion}"
+    					disabled="#{solicitudEspecialController.blnEsMINSA}">
     					<a4j:support event="onclick" actionListener="#{capacidadPagoController.enableDisableControlsEsp}" reRender="pgIndiceDscto"/>
     				</h:selectBooleanCheckbox>Tiene Carta de Autorización (Descuento 100%)
     			</h:panelGrid>
@@ -247,7 +249,7 @@
     			
     			<h:panelGrid columns="1">
     				<rich:column>
-    					<a4j:commandButton value="Calcular" actionListener="#{capacidadPagoController.calcularCapacidadPago}" styleClass="btnEstilos" reRender="pgBaseTotYDsctos,pgTotalEntidades,pgCapacPagoCas,pgDsctosVarios"/>
+    					<a4j:commandButton value="Calcular" actionListener="#{capacidadPagoController.calcularCapacidadPagoEspecial}" styleClass="btnEstilos" reRender="pgBaseTotYDsctos,pgTotalEntidades,pgCapacPagoCas,pgDsctosVarios"/>
     				</rich:column>
     			</h:panelGrid>
     			

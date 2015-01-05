@@ -6748,16 +6748,343 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 			log.error("error: " + e);
 			e.printStackTrace();
 		} 
- catch (ParseException e1) {
-			log.error(e1);
-		} catch (Exception e2) {
-			log.error(e2);
-}
-
-		blnShowDivFormSolicitudPrevision = true;
-		pgValidDatos = false;
-		blnDatosSocio = true;
-}
+	 catch (ParseException e1) {
+				log.error(e1);
+			} catch (Exception e2) {
+				log.error(e2);
+	}
+	
+			blnShowDivFormSolicitudPrevision = true;
+			pgValidDatos = false;
+			blnDatosSocio = true;
+	}
+	
+	
+	
+//	public void irVerSolicitudPrevisionAutoriza2(ActionEvent event,ExpedientePrevision registroSeleccionadoAut){	
+//		cancelarGrabarSolicitud(event);
+//		//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014
+//		registroSeleccionado = new ExpedientePrevisionComp();
+//		registroSeleccionado.setExpedientePrevision(registroSeleccionadoAut);
+//		strSolicitudPrevision = Constante.MANTENIMIENTO_NINGUNO;
+//		blnMostrarDescripcionTipoPrevision = Boolean.TRUE;
+//		SocioComp socioComp = null;
+//		Integer intIdPersona = null;
+//		Persona persona = null;
+//		List<Captacion> listaCaptacion = null;		//blnDeshabilitar = true;
+//		ExpedientePrevisionId expedientePrevisionId = null;
+//		Cuenta cuentaExpediente = null;
+//		
+//		try {
+//			expedientePrevisionId = new ExpedientePrevisionId();
+//			expedientePrevisionId.setIntPersEmpresaPk(registroSeleccionado.getExpedientePrevision().getId().getIntPersEmpresaPk());
+//			expedientePrevisionId.setIntCuentaPk(registroSeleccionado.getExpedientePrevision().getId().getIntCuentaPk());
+//			expedientePrevisionId.setIntItemExpediente(registroSeleccionado.getExpedientePrevision().getId().getIntItemExpediente());
+//			// devuelve el crongrama son id vacio.
+//			beanExpedientePrevision = previsionFacade.getExpedientePrevisionCompletoPorIdExpedientePrevision(expedientePrevisionId);
+//			
+//			if (beanExpedientePrevision != null) {
+//				// Seteamos los valores en combos de tipo y subtipo
+//				intTipoSolicitud = beanExpedientePrevision.getIntParaTipoCaptacion();
+//				intSubTipoSolicitud = beanExpedientePrevision.getIntParaSubTipoOperacion();
+//				cargarDescripcionTipoPrevision();
+//					// Recuperamos al Socio 
+//						if(beanExpedientePrevision.getId() != null){
+//							
+//							CuentaId cuentaIdSocio = new CuentaId();
+//							Cuenta cuentaSocio = new Cuenta();
+//							List<CuentaIntegrante> listaCuentaIntegranteSocio = null;
+//							cuentaIdSocio.setIntPersEmpresaPk(beanExpedientePrevision.getId().getIntPersEmpresaPk());
+//							cuentaIdSocio.setIntCuenta(beanExpedientePrevision.getId().getIntCuentaPk());
+//							cuentaSocio.setId(cuentaIdSocio);
+//							cuentaSocio = cuentaFacade.getCuentaPorIdCuenta(cuentaSocio);
+//							listaCuentaIntegranteSocio = cuentaFacade.getListaCuentaIntegrantePorPKCuenta(cuentaSocio.getId());
+//
+//								if(listaCuentaIntegranteSocio != null){
+//									//intIdPersona = beanExpedientePrevision.getIntPersEmpresa();
+//									intIdPersona = listaCuentaIntegranteSocio.get(0).getId().getIntPersonaIntegrante();
+//									persona = personaFacade.getPersonaNaturalPorIdPersona(intIdPersona);
+//									if (persona != null) {
+//										if (persona.getListaDocumento() != null
+//												&& persona.getListaDocumento().size() > 0) {
+//											for (Documento documento : persona.getListaDocumento()) {
+//												if (documento.getIntTipoIdentidadCod().equals(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO_DNI))) {
+//													persona.setDocumento(documento);
+//													break;
+//												}
+//											}
+//										}							
+//										
+//										cuentaExpediente = new Cuenta();
+//										cuentaExpediente.setId(new CuentaId());
+//										cuentaExpediente.getId().setIntCuenta(beanExpedientePrevision.getId().getIntCuentaPk());
+//										cuentaExpediente.getId().setIntPersEmpresaPk(beanExpedientePrevision.getId().getIntPersEmpresaPk());
+//										
+//										socioComp = socioFacade.getSocioNatuPorDocIdentidadYIdEmpresaYCuenta(
+//													new Integer(Constante.PARAM_T_TIPODOCUMENTO_DNI),
+//													persona.getDocumento().getStrNumeroIdentidad(),
+//													Constante.PARAM_EMPRESASESION, cuentaExpediente);
+//										/*
+//										socioComp = socioFacade.getSocioNatuPorDocIdentidadYIdEmpresa(
+//													new Integer(Constante.PARAM_T_TIPODOCUMENTO_DNI),
+//													persona.getDocumento().getStrNumeroIdentidad(),
+//													Constante.PARAM_EMPRESASESION);
+//										*/
+//										for (SocioEstructura socioEstructura : socioComp.getSocio().getListSocioEstructura()) {
+//											if (socioEstructura.getIntTipoEstructura().equals(Constante.PARAM_T_TIPOESTRUCTURA_ORIGEN)) {
+//												socioComp.getSocio().setSocioEstructura(socioEstructura);
+//											}
+//										}
+//										beanSocioComp = socioComp;
+//										recuperarCuentasConceptoSocio(beanSocioComp);
+//										mostrarlistaAutorizacionesPrevias(beanExpedientePrevision.getListaEstadoPrevision());
+//									}
+//								}	
+//							//}	
+//						}
+//					
+//						// colocar las UNIDADES EJECUTORAS correlativas...
+//						//---------------------------------------------------------------------------------------------------->
+//						cargarDescripcionUEjecutorasConcatenadas(beanSocioComp);
+//
+//					// recuperamos estados
+//					if (beanExpedientePrevision.getEstadoPrevisionPrimero() != null) {
+//						long lnFechaEstadoUno = beanExpedientePrevision.getEstadoPrevisionPrimero().getTsFechaEstado().getTime();
+//						//configurarCampos(beanExpedienteCredito);
+//						dtFechaRegistro = new Date(lnFechaEstadoUno);
+//						strFechaRegistro = Constante.sdf.format(dtFechaRegistro);
+//
+//					}
+//					
+//				if (beanExpedientePrevision.getListaRequisitoPrevisionComp()!= null) {
+//					
+//					listaRequisitoPrevisionComp = beanExpedientePrevision.getListaRequisitoPrevisionComp();
+//				}
+//
+//				if(beanExpedientePrevision.getIntParaTipoCaptacion().compareTo(new Integer(Constante.PARAM_T_TIPOSOLICITUDPREVISION_AES))==0 ){
+//						//intTipoSolicitud = Constante.PARAM_T_TIPO_PREVISION_AES;
+//						//intSubTipoSolicitud = beanExpedientePrevision.getIntParaSubTipoOperacion();
+//						listaSubTipoSolicitud = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCONCEPTO_AES));
+//						blnIsAES = true;
+//						blnIsSepelio = false;
+//						blnIsRetiro = false;
+//						blnBeneficiarioNormal = true;
+//						blnBeneficiarioSepelio = false;
+//						blnBeneficiarioRetiro = false;
+//	
+//				} else if(beanExpedientePrevision.getIntParaTipoCaptacion().compareTo(Constante.PARAM_T_CUENTACONCEPTO_SEPELIO)==0 ){
+//							//intTipoSolicitud = Constante.PARAM_T_TIPO_PREVISION_SEPELIO;
+//							listaSubTipoSolicitud = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCONCEPTO_SEPELIO));
+//							//intSubTipoSolicitud = beanExpedientePrevision.getIntParaSubTipoOperacion();
+//							blnIsAES = false;
+//							blnIsSepelio = true;
+//							blnIsRetiro = false;
+//							blnBeneficiarioNormal = false;
+//							blnBeneficiarioSepelio = true;
+//							blnBeneficiarioRetiro = false;
+//							
+//							if(intSubTipoSolicitud.compareTo(Constante.PARAM_SUBTIPO_OPERACION_SEPELIO_TITULAR)==0){
+//								blnIsSepelioTitular = true;
+//							}
+//							
+//				} else if(beanExpedientePrevision.getIntParaTipoCaptacion().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ){
+//							//intTipoSolicitud = Constante.PARAM_T_TIPO_PREVISION_RETIRO;	
+//							listaSubTipoSolicitud = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCONCEPTO_RETIRO));
+//							//intSubTipoSolicitud = beanExpedientePrevision.getIntParaSubTipoOperacion();
+//							blnIsAES = false;
+//							blnIsSepelio = false;
+//							blnIsRetiro = true; 
+//							blnBeneficiarioNormal = false;
+//							blnBeneficiarioSepelio = false;
+//							blnBeneficiarioRetiro = true;
+//				}
+//				Collections.sort(listaSubTipoSolicitud, new Comparator<Tabla>(){
+//					public int compare(Tabla uno, Tabla otro) {
+//						return uno.getIntOrden().compareTo(otro.getIntOrden());
+//					}
+//				});
+//				blnDeshabilitar = true;
+//
+//
+//				CaptacionId captacionId = new CaptacionId();
+//				captacionId.setIntPersEmpresaPk(beanExpedientePrevision.getIntPersEmpresa());
+//				captacionId.setIntParaTipoCaptacionCod(beanExpedientePrevision.getIntParaTipoCaptacion());
+//				captacionId.setIntItem(beanExpedientePrevision.getIntItem());
+//
+//							listaCaptacion = captacionFacade.getCaptacionPorPKOpcional(captacionId);
+//							if(listaCaptacion!=null){		
+//
+//								for(int k=0; k<listaCaptacion.size();k++){
+//									if((listaCaptacion.get(k).getId().getIntItem().compareTo(beanExpedientePrevision.getIntItem())==0)
+//										&&	(listaCaptacion.get(k).getId().getIntPersEmpresaPk().compareTo(beanExpedientePrevision.getIntPersEmpresa())==0)
+//										&&	(listaCaptacion.get(k).getId().getIntParaTipoCaptacionCod().compareTo(beanExpedientePrevision.getIntParaTipoCaptacion())==0)
+//										){
+//											beanCaptacion = listaCaptacion.get(k);
+//											blnCaptacion = true;
+//										}
+//								
+//								}
+//							}
+//							
+//							if(beanCaptacion!=null){
+//								//for(int k=0; k<listaCaptacion.size();k++){
+//									List<Concepto> listaConceptos = null;
+//									List<Condicion> listaCondiciones = null;
+//									CaptacionId id = new CaptacionId();
+//									id = beanCaptacion.getId();
+//									listaConceptos=captacionFacade.getListaConceptoPorPKCaptacion(id);
+//									listaCondiciones = condicionFacade.listarCondicion(id);
+//										//captacionFacade.getListaPorPKCaptacion(listaCaptacion.get(k).getId());
+//									//(arg0)   condicionFacade.listarCondicion(listaCaptacion.get(k).getId());
+//									
+//									if(listaConceptos != null){
+//										beanCaptacion.setListaConcepto(listaConceptos);
+//									}
+//									if(listaCondiciones != null){
+//										beanCaptacion.setListaCondicion(listaCondiciones);
+//									}
+//								
+//								//}
+//							}
+//							
+//				
+//							
+//				// parche Convertir Fallecidos a beneficiarios (solo visual)
+//				if(intTipoSolicitud.compareTo(new Integer(Constante.PARAM_T_TIPOSOLICITUDPREVISION_AES))==0){
+//					if(beanExpedientePrevision.getListaFallecidoPrevision()!= null
+//						&& !beanExpedientePrevision.getListaFallecidoPrevision().isEmpty()){
+//						List<BeneficiarioPrevision> listaBeneficiariosAES = null;
+//						
+//						listaBeneficiariosAES = regenerarBeneficiariosXPersonaMotivoAES(beanExpedientePrevision.getListaFallecidoPrevision());
+//						if(listaBeneficiariosAES != null & !listaBeneficiariosAES.isEmpty()){
+//							beanExpedientePrevision.setListaBeneficiarioPrevision(listaBeneficiariosAES);
+//							beanExpedientePrevision.getListaFallecidoPrevision().clear();	
+//						}
+//						
+//					}	
+//				}		
+//							
+//			
+//				// Recuperando los beneficiarios
+//				if(beanExpedientePrevision.getListaBeneficiarioPrevision() != null){
+//					
+//					for(int k=0; k<beanExpedientePrevision.getListaBeneficiarioPrevision().size();k++){
+//						
+//						intIdPersona = beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).getIntPersPersonaBeneficiario();
+//						
+//						persona = personaFacade.getPersonaNaturalPorIdPersona(intIdPersona);
+//						// Recuperamos su dni
+//						if (persona != null) {
+//							if (persona.getListaDocumento() != null
+//									&& persona.getListaDocumento().size() > 0) {
+//								for (Documento documento : persona.getListaDocumento()) {
+//									if (documento.getIntTipoIdentidadCod().equals(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO_DNI))) {
+//										persona.setDocumento(documento);
+//										break;
+//									}
+//								}
+//							}
+//							
+//							
+//							// Recuperamos su tipo de relacion, en base a la lista de vinculos del socio.
+//							PersonaEmpresaPK personaEmpresaId = new PersonaEmpresaPK();
+//							personaEmpresaId.setIntIdEmpresa(Constante.PARAM_EMPRESASESION);
+//							personaEmpresaId.setIntIdPersona(socioComp.getPersona().getIntIdPersona());
+//							List<Vinculo> listaVinculos = null;
+//							listaVinculos = personaFacade.getVinculoPorPk(personaEmpresaId);
+//							// cgd - 12.012014
+//							if(!blnIsSepelioTitular){
+//								// solo recupera un beneficiario (el titular), x lo tanto nos e valida y setea.
+//								Vinculo vinculoTitular = new Vinculo();
+//								vinculoTitular = listaVinculos.get(0);
+//								beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).setIntTipoViculo(vinculoTitular.getIntTipoVinculoCod());
+//							}else{
+//								for (Vinculo vinculo2 : listaVinculos) {
+//								if(beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).getIntItemViculo().compareTo(vinculo2.getIntItemVinculo())==0){
+//									beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).setIntTipoViculo(vinculo2.getIntTipoVinculoCod());
+//									break;
+//								}
+//								}
+//							}
+//							/*if(listaVinculos != null && !listaVinculos.isEmpty()){
+//								
+//								for (Vinculo vinculo2 : listaVinculos) {
+//									if(beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).getIntItemViculo().compareTo(vinculo2.getIntItemVinculo())==0){
+//										beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).setIntTipoViculo(vinculo2.getIntTipoVinculoCod());
+//										break;
+//									}
+//								}
+//							}*/
+//							beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).setPersona(persona);
+//
+//						}
+//					}	
+//				}	
+//				
+//				
+//			
+//				if(beanExpedientePrevision.getListaFallecidoPrevision() != null){
+//					//	|| !beanExpedientePrevision.getListaBeneficiarioPrevision().isEmpty()){
+//				//if(!beanExpedientePrevision.getListaBeneficiarioPrevision().isEmpty()){
+//											//intIdPersona = beanExpedientePrevision.getIntPersEmpresa();
+//					for(int k=0; k<beanExpedientePrevision.getListaFallecidoPrevision().size();k++){
+//						
+//						intIdPersona = beanExpedientePrevision.getListaFallecidoPrevision().get(k).getIntPersPersonaFallecido();
+//						
+//						persona = personaFacade.getPersonaNaturalPorIdPersona(intIdPersona);
+//						if (persona != null) {
+//							if (persona.getListaDocumento() != null
+//									&& persona.getListaDocumento().size() > 0) {
+//								for (Documento documento : persona.getListaDocumento()) {
+//									if (documento.getIntTipoIdentidadCod().equals(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO_DNI))) {
+//										persona.setDocumento(documento);
+//										break;
+//									}
+//								}
+//							}
+//							
+//							
+//							
+//							// Recuperamos su tipo de relacion, en base a la lista de vinculos del socio.
+//							PersonaEmpresaPK personaEmpresaId = new PersonaEmpresaPK();
+//							personaEmpresaId.setIntIdEmpresa(Constante.PARAM_EMPRESASESION);
+//							personaEmpresaId.setIntIdPersona(socioComp.getPersona().getIntIdPersona());
+//							List<Vinculo> listaVinculos = null;
+//							listaVinculos = personaFacade.getVinculoPorPk(personaEmpresaId);
+//							if(listaVinculos != null && !listaVinculos.isEmpty()){
+//								
+//								for (Vinculo vinculo2 : listaVinculos) {
+//									if(beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).getIntItemViculo().compareTo(vinculo2.getIntItemVinculo())==0){
+//										beanExpedientePrevision.getListaBeneficiarioPrevision().get(k).setIntTipoViculo(vinculo2.getIntTipoVinculoCod());
+//										break;
+//									}
+//								}
+//							}
+//							beanExpedientePrevision.getListaFallecidoPrevision().get(k).setPersona(persona);
+//						}
+//					}	
+//				}
+//
+//				cargarListaTablaSucursal();
+//				seleccionarSucursal();
+//				evaluarPrevisionMod(event);
+//			}
+//			
+//			
+//		} catch (BusinessException e) {
+//			log.error("error: " + e);
+//			e.printStackTrace();
+//		} 
+//	 catch (ParseException e1) {
+//				log.error(e1);
+//			} catch (Exception e2) {
+//				log.error(e2);
+//	}
+//	
+//			blnShowDivFormSolicitudPrevision = true;
+//			pgValidDatos = false;
+//			blnDatosSocio = true;
+//	}
 
 
 /*	public void irModificarSolicitudPrevisionAutoriza2(ActionEvent event,ExpedientePrevision registroSeleccionadoAut){	
@@ -7072,6 +7399,9 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 		 */
 		public void irModificarSolicitudPrevisionAutoriza2(ActionEvent event,ExpedientePrevision registroSeleccionadoAut){	
 			cancelarGrabarSolicitud(event);
+			//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014
+			registroSeleccionado = new ExpedientePrevisionComp();
+			registroSeleccionado.setExpedientePrevision(registroSeleccionadoAut);
 			strSolicitudPrevision = Constante.MANTENIMIENTO_NINGUNO;
 			blnMostrarDescripcionTipoPrevision = Boolean.TRUE;
 			SocioComp socioComp = null;
@@ -7325,7 +7655,9 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 
 					cargarListaTablaSucursal();
 					seleccionarSucursal();
-					evaluarPrevisionMod(event);
+					//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014
+					evaluarPrevisionModSinValidaciones(event);
+//					evaluarPrevisionMod(event);
 				}
 				
 				
@@ -7944,7 +8276,9 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 							cargarListaTablaSucursal();
 							seleccionarSucursal();
 							//CGD - PRUEBAS - 28.11.2013
-							evaluarPrevisionMod(event);
+							//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014
+//							evaluarPrevisionMod(event);
+							evaluarPrevisionModSinValidaciones(event);
 							
 							System.out.println("mdts:->>"+beanSocioComp.getPersona().getNatural().getStrApellidoPaterno());
 						}else{
@@ -8974,10 +9308,9 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 									}
 									
 								}
-								}
-
-					}else{
-	
+						}
+					}//CASO 2:
+					 else{
 						if((intTipoSolicitud.compareTo(new Integer(Constante.PARAM_T_TIPOSOLICITUDPREVISION_SEPELIO))==0
 							&& intSubTipoSolicitud.compareTo(Constante.PARAM_SUBTIPO_OPERACION_SEPELIO_CONYUGE)==0)
 							|| (intTipoSolicitud.compareTo(new Integer(Constante.PARAM_T_TIPOSOLICITUDPREVISION_SEPELIO))==0
@@ -9493,9 +9826,16 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
         return new Date(timestamp.getTime());
     }
 	
+//	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}
+	
 	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
 	
 	/**
 	 * Calcula los montos de Gastos administratyivos y Monto neto del formulario en base al Monto Total y el % de GA
@@ -10545,8 +10885,9 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 	/**
 	 * Muestra las personas que observaron la solicitud de credito previamente.
 	 * @return
+	 * @throws Exception 
 	 */
-	public boolean mostrarlistaAutorizacionesPrevias(List<EstadoPrevision> listaEstados) {
+	public boolean mostrarlistaAutorizacionesPrevias(List<EstadoPrevision> listaEstados) throws Exception {
 		boolean isValidEncaragadoAutorizar = true;
 		List<AutorizaPrevision> listaAutorizaPrevision = new ArrayList<AutorizaPrevision>();
 		listaAutorizaPrevisionComp = new ArrayList<AutorizaPrevisionComp>();
@@ -11104,6 +11445,106 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 			log.error("Error en imprimirSepelio ---> "+e);
 		}
 	 }
+	/*Inicio Formato en Blanco*/
+	public void imprimirSepelioEnBlanco(){
+		 String strNombreReporte = " ";
+		 HashMap<String,Object> parametro = new HashMap<String,Object>();
+		 Tabla autorizacion = new Tabla();
+		   	ConfServDetalle detalle = null;
+			lstParaQuePinteSepelio.clear();
+		 try {
+			 	 parametro.put("R1", "");
+				 parametro.put("R2", "");
+				 parametro.put("R3", "");
+
+			 List<RequisitoPrevisionComp> lstListaRequisitoPrevisionComp = beanExpedientePrevision.getListaRequisitoPrevisionComp();
+			 if(lstListaRequisitoPrevisionComp!=null && !lstListaRequisitoPrevisionComp.isEmpty()){
+			 for (RequisitoPrevisionComp lstListaRequisitoPrevisionComp1 : lstListaRequisitoPrevisionComp){
+				 	if(lstListaRequisitoPrevisionComp1!=null){
+				 		detalle = new ConfServDetalle();
+				 		detalle.setId(new ConfServDetalleId());
+				 		detalle.getId().setIntPersEmpresaPk(lstListaRequisitoPrevisionComp1.getRequisitoPrevision().getIntPersEmpresaPk());
+				 		detalle.getId().setIntItemSolicitud(lstListaRequisitoPrevisionComp1.getRequisitoPrevision().getIntItemReqAut());
+				 		detalle.getId().setIntItemDetalle(lstListaRequisitoPrevisionComp1.getRequisitoPrevision().getIntItemReqAutEstDetalle());
+						//detalle = solicitudFacade.getConfServDetallePorPk(detalle.getId());
+			 
+						//ConfServDetalle lstConfServDetalle = solicitudFacade.getConfServDetallePorPk(detalle.getId());
+
+						ConfServDetalle lstConfServDetalle = null;
+						Tabla tipoDocumento = tablaFacade.getTablaPorIdMaestroYIdDetalle(Integer.valueOf(Constante.PARAM_T_REQUISITOSDESCRIPCION_FONDOSEPELIO),
+								 lstConfServDetalle.getIntParaTipoDescripcion());
+						if(tipoDocumento!=null){
+									tipoDocumento.setStrAbreviatura(tipoDocumento.getStrDescripcion());
+									lstParaQuePinteSepelio.add(tipoDocumento);
+						}else{
+							 autorizacion= new Tabla();
+							 autorizacion.setStrAbreviatura("");
+							 lstParaQuePinteSepelio.add(autorizacion);
+								}
+							}
+						}
+						 autorizacion= new Tabla();
+						 autorizacion.setStrAbreviatura("");
+						 lstParaQuePinteSepelio.add(autorizacion);
+					}else{
+						 autorizacion= new Tabla();
+						 autorizacion.setStrAbreviatura("");
+						 lstParaQuePinteSepelio.add(autorizacion);
+					}
+
+			
+			 for(int i = 0; i < 9; i++){
+	            	parametro.put("C"+i, "");
+	            }
+			 		parametro.put("P_APELLIDOPATERNO", "");
+			 		parametro.put("P_APELLIDOMATERNO", "");
+			 		parametro.put("P_NOMBRE", "");
+			 		parametro.put("P_DIRECCION", "");
+			 		parametro.put("P_DISTRITO", "");
+	            
+	            for(int i = 0; i < 9; i++){
+	            	parametro.put("T"+i, "");
+	            }
+	            
+	            	parametro.put("D0", "");
+	            	parametro.put("D1", "");
+	            	parametro.put("D2", "");
+	            	parametro.put("D3", "");
+	            	parametro.put("D4", "");
+	            	parametro.put("D5", "");
+	            	parametro.put("D6", "");
+	            	parametro.put("D7", "");
+		            parametro.put("P_DNIFIRMA", "");
+		            parametro.put("P_FECHA", "");
+		            parametro.put("P_DEPENDENCIA", "");
+		            parametro.put("P_AGENCIA", "");
+			        parametro.put("P1", "");
+			        parametro.put("P2", "");
+			        parametro.put("P3", "");
+			        parametro.put("P_APORTE", "");
+		            parametro.put("P_APO", "");
+		            parametro.put("P_CONDICION", "");
+					parametro.put("P_TIPO", "");
+					parametro.put("N1", "");
+					parametro.put("N2", "");
+				    parametro.put("N3", "");
+   				    parametro.put("P_NOMBREFALLECIDO", "");
+					parametro.put("P_SEPELIO", "");
+					parametro.put("P_GASTOADM", "");
+					parametro.put("P_NETOPAGAR", "");
+					parametro.put("P_NETOPAGAR", "");
+					parametro.put("P_EXPEDIENTE", "");
+
+		        System.out.println("PARAMETRO "+ parametro);
+	            
+	           	strNombreReporte = "sepelioBlanco";
+				UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteSepelio), Constante.PARAM_T_TIPOREPORTE_PDF);
+			 
+		} catch (Exception e) {
+			log.error("Error en imprimirSepelio ---> "+e);
+		}
+	 }
+	/*Fin Formato en blanco*/
 	
 	//solicitud AEs
 	 public void imprimirSepelioAes(){
@@ -11121,7 +11562,7 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 		 try {
 			 EstructuraFacadeRemote facade1 = (EstructuraFacadeRemote)EJBFactory.getRemote(EstructuraFacadeRemote.class);
 			 verSolicitudPrevision(null);
-			 autorizacion= new Tabla();
+ 			 autorizacion= new Tabla();
 			 autorizacion.setStrAbreviatura("");
 			 lstParaQuePinteSepelio.add(autorizacion);
 			 String descripcion ="";
@@ -11281,7 +11722,7 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 							FallecidoPrevision x = new FallecidoPrevision();
 							x.setStrNomApeBeneficiario("");
 							lstBeneficiario.add(x);
-							parametro.put("P_LIST_TIPOBENI", listRodo);
+							parametro.put("P_LIST_TIPOBENI", lstBeneficiario);
 						}
 					}
 		        }else{
@@ -11291,7 +11732,7 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 						BeneficiarioPrevision x = new BeneficiarioPrevision();
 						x.setStrNomApeBeneficiario("");
 						lstBeneficiario.add(x);
-						parametro.put("P_LIST_TIPOBENI", listRodo);
+						parametro.put("P_LIST_TIPOBENI", lstBeneficiario);
 		        	}
 		        }
 
@@ -11328,6 +11769,56 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 	  * Se Imprime la solicitud de Renuncia FONRET
 	  * @return
 	  */
+	 /*Inicio*/
+	 public void imprimirSepelioAesBlanco(){
+		 String strNombreReporte = " ";
+		 HashMap<String,Object> parametro = new HashMap<String,Object>();
+		 Tabla autorizacion = new Tabla();
+
+		 lstParaQuePinteSepelio.clear();
+		 try {
+			 
+			 autorizacion= new Tabla();
+			 autorizacion.setStrAbreviatura("");
+			 lstParaQuePinteSepelio.add(autorizacion);
+			 
+			 parametro.put("P_TIPOSOLICITUD", "");
+           	 parametro.put("P_SALDO", "");
+			 parametro.put("P_NUMCUENTA", "");
+		     parametro.put("P_EXPEDIENTE", "");
+	         parametro.put("P_FECHA", "");
+			 parametro.put("P_NUMCUENTA", "");
+
+			 for(int i = 0; i < 9; i++){
+	            	parametro.put("C"+i, "0");
+	            }
+
+		     parametro.put("P_DNI", "");
+			 parametro.put("P_MONTOPRESTAMO", "");
+			 parametro.put("P_APELLIDOPATERNO", "");
+			 parametro.put("P_APELLIDOMATERNO", "");
+			 parametro.put("P_NOMBRE", "");
+	         parametro.put("P_DIRECCION", "");
+	         parametro.put("P_DISTRITO", "");
+	         parametro.put("P_PROVINCIA", "");
+	         parametro.put("P_DEPARTAMENTO", "");
+	         parametro.put("P_REFERENCIA", "");
+
+	            for(int i = 0; i < 9; i++){
+	            	parametro.put("T"+i, "");
+	            }
+	         parametro.put("P_DEPENDENCIA", "");
+		     parametro.put("P_AGENCIA", "");
+		        System.out.println("PARAMETRO "+ parametro);
+	            
+	           	strNombreReporte = "solicitudAesBlanco";
+				UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteSepelio), Constante.PARAM_T_TIPOREPORTE_PDF);
+			 
+		} catch (Exception e) {
+			log.error("Error en imprimirSepelioAes ---> "+e);
+		}
+	 }
+	 /*Fin*/
 	 
 	    public void renunciaFonret(){
 	    	String strNombreReporte = "";
@@ -11376,6 +11867,32 @@ public void putFile(ActionEvent event) throws BusinessException, EJBFactoryExcep
 			}   	
 	    }
 
+	   /*Inico*/
+	    public void renunciaFonretBlanco(){
+	    	String strNombreReporte = "";
+	    	HashMap<String,Object> parametro = new HashMap<String,Object>();
+	    	Tabla x = new Tabla();
+	    	lstParaQuePinteSepelio.clear();
+			DateFormat df4 = DateFormat.getDateInstance(DateFormat.FULL);
+			try {
+				x.setStrAbreviatura("");
+				lstParaQuePinteSepelio.add(x);
+				parametro.put("P_IDCODIGOPERSONA", "");
+				parametro.put("P_NOMBRECOMPLETO", "");
+				parametro.put("P_DOCUMENTO", "");
+				parametro.put("P_DIRECCION",  "");
+				parametro.put("P_FECHAESTADO", "");
+				
+				System.out.println("Parametro : " + parametro);
+				strNombreReporte = "renunciaFonret";
+				UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstParaQuePinteSepelio), Constante.PARAM_T_TIPOREPORTE_PDF);
+			} catch (Exception e) {
+				log.error("Error en imprimirSolicitudDeAfiliacion ---> "+e);
+			}   	
+	    }
+
+	    /*Fin*/
+	    
 	 public Boolean getBlnBotonActulizar() {
 		return blnBotonActulizar;
 	}

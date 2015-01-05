@@ -29,6 +29,13 @@
 		<f:param name="intItemDetExpediente" value="#{autorizacionRefinanController.expedienteCreditoCompSelected.expedienteCredito.id.intItemDetExpediente}" />
 	</a4j:commandLink>
 
+	<h:panelGrid columns="1">
+		<rich:column width="800">
+			<h:outputText value="#{autorizacionRefinanController.strMensajeMorosidad}" styleClass="msgError4" style="text-align: center"/>
+		</rich:column>
+	</h:panelGrid>
+	<rich:spacer height="10"></rich:spacer>
+	
 	<h:panelGrid columns="8">
 		<rich:column width="120px">
 			<h:outputText value="Autorización"
@@ -37,28 +44,28 @@
 		<rich:column>
 			<h:outputText value=":" />
 		</rich:column>
-		<rich:column>
+		<rich:column rendered="false">
 			<a4j:commandButton value="Historial descuentos"
 				styleClass="btnEstilos1" disabled="true" />
 		</rich:column>
-		<rich:column>
+		<rich:column rendered="false">
 			<a4j:commandButton value="Historial de crédito"
 				styleClass="btnEstilos1" disabled="true" />
 		</rich:column>
-		<rich:column>
+		<rich:column rendered="false">
 			<a4j:commandButton value="Cartera de crédito"
 				styleClass="btnEstilos1" disabled="true" />
 		</rich:column>
-		<rich:column>
+		<rich:column rendered="false">
 			<a4j:commandButton value="Historial Movimientos"
 				styleClass="btnEstilos1" disabled="true" />
 		</rich:column>
-		<rich:column>
+		<rich:column rendered="false">
 			<a4j:commandButton value="Terceros" styleClass="btnEstilos1" disabled="false" 
 								actionListener="#{autorizacionRefinanController.recuperarDatosCartera}" />
 		</rich:column>
    
-		<rich:column>
+		<rich:column rendered="false">
 			<a4j:commandButton value="Cronograma"
 				oncomplete="#{rich:component('mpCronogramaCredito')}.show()"
 				disabled="true" styleClass="btnEstilos"

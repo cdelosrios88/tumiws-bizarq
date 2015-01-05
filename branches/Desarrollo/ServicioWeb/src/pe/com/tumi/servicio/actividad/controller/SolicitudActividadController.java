@@ -2034,7 +2034,7 @@ public class SolicitudActividadController {
 		Boolean blnCumpleCondicion = Boolean.TRUE;
 		Boolean blnCumpleCondicionHabil= Boolean.TRUE;
 		Boolean blnCumpleTipoSocio= Boolean.TRUE;
-		
+		limpiarMensajesSolicitud();
 		Credito actividadEvaluada = null;
 		try {
 			
@@ -2167,6 +2167,13 @@ public class SolicitudActividadController {
 			log.error("Error en validarConfiguracionActividad ---> "+e);
 		}
 		return blnPasa;
+	}
+
+	private void limpiarMensajesSolicitud(){
+		strMsgErrorPreEvaluacionCondicionLaboral = "";
+		strMsgErrorPreEvaluacionCondicion = "";
+		strMsgErrorPreEvaluacionCondicionHabil = "";
+		strMsgErrorPreEvaluacionTipoSocio = "";
 	}
 	
 	public void evaluarSolicitudMod(ActionEvent event, Calendar calFechaRegistro) {
