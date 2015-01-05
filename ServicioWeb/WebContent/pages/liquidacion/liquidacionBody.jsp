@@ -10,8 +10,6 @@
 	<!-- Fecha     : 05/10/2012               -->
 
 
-<h:outputText value="#{solicitudLiquidacionController.limpiarLiquidacion}"/>
-
 	<rich:modalPanel id="pBuscarApoderado" width="530" height="200" resizeable="false" style="background-color:#DEEBF5;">
 	    <f:facet name="header">
 	        <h:panelGrid>
@@ -41,38 +39,7 @@
 	   <a4j:include viewId="/pages/liquidacion/popup/adjuntarCartaPoder.jsp"/>
 	</rich:modalPanel>
 
-
-
-	<rich:tabPanel activeTabClass="activo" inactiveTabClass="inactivo" disabledTabClass="disabled">
-		<h:outputText value="#{giroLiquidacionController.inicioPage}" />
-    	
-     	<rich:tab label="Solicitud" disabled="#{solicitudLiquidacionController.blnSol}">
-        	 <a4j:include viewId="/pages/liquidacion/tabSolicitud.jsp"/>
-    	</rich:tab>
-		<rich:tab label="Autorización" disabled="#{solicitudLiquidacionController.blnAut}">
-            <a4j:include viewId="/pages/liquidacion/autorizacionLiquidacion/autorizacionLiquidacionMain.jsp"/>
-     	</rich:tab>
-     	<rich:tab label="Giro" disabled="#{solicitudLiquidacionController.blnGir}">
-            <a4j:include viewId="/pages/liquidacion/tabGiro.jsp"/>
-     	</rich:tab> 
-     	<rich:tab label="Archivamiento" disabled="#{solicitudLiquidacionController.blnArch}">
-            
-     	</rich:tab>
-
-	</rich:tabPanel>  
-	
-	<a4j:jsFunction name="selecTipoPersonaLiquidacion" reRender="cboTipoIdentidadLiquidacion"
-						actionListener="#{solicitudLiquidacionController.loadListDocumentoBusq}">
-			<f:param name="pIntTipoPersonaLiquidacion"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="selecTipoSolicitudLiquidacion" reRender="pgMotivoRenuncia, pgdMotivoRenuncia, pgSolicitudLiquidacion"
-				actionListener="#{solicitudLiquidacionController.loadMotivoRenuncia}">
-	<f:param name="pIntSubTipoOperacion"></f:param>
-	</a4j:jsFunction>
-	
-	
-		<rich:modalPanel id="mpBeneficiarioLiquidacion" width="750" height="350" style="background-color:#DEEBF5;">
+	<rich:modalPanel id="mpBeneficiarioLiquidacion" width="750" height="350" style="background-color:#DEEBF5;">
 		<f:facet name="header">
 			<h:panelGrid>
 				<rich:column style="border: none;">
@@ -84,13 +51,6 @@
 			<a4j:include viewId="/pages/liquidacion/popup/agregarBeneficiario.jsp" layout="block"/>
 		</h:panelGroup>
 	</rich:modalPanel>
-	
-	<a4j:jsFunction name="selecFechaRenuncia" reRender="calFecRecep"
-				actionListener="#{solicitudLiquidacionController.loadFechaRenuncia}">
-		<f:param name="pdtFechaRenuncia"></f:param>
-	</a4j:jsFunction>
-	
-	
 	
 	<rich:modalPanel id="mpUpDelSolLiquidacion" width="480" height="230"
 					resizeable="false" style="background-color:#DEEBF5;">
@@ -109,6 +69,38 @@
 			</h:panelGroup>
 		</f:facet>
 		
+		<h:form id="frmSolicitudLiquidacionModalPanel">
+			<rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5;width: 370px;">                 
+				<h:panelGrid columns="2"  border="0" cellspacing="4" >
+					<h:outputText value="¿Desea Ud. Actualizar o Eliminar una Solicitud de Liquidación?" style="padding-right: 35px;"/>
+				</h:panelGrid>
+				<rich:spacer height="16px"/>
+				<h:panelGrid columns="3" border="0"  style="width: 300px;">
+					<a4j:commandButton value="Actualizar" actionListener="#{solicitudLiquidacionController.irModificarSolicitudLiquidacion}" 
+									rendered="#{solicitudLiquidacionController.blnMonstrarActualizar}"	styleClass="btnEstilos"
+									reRender="pgSolicitudLiquidacion,frmSolicitudLiquidacionModalPanel,mpUpDelSolLiquidacion,pgMsgErrorInicial,divFormLiquidacion,divFormSolicitudLiquidacion,pgViewSolicitudLiquidacion,opViewSolicitudLiquidacion,pgAutorizacionesPreviasLiquidacion">
+					</a4j:commandButton>
+					<a4j:commandButton value="Ver" actionListener="#{solicitudLiquidacionController.verSolicitudLiquidacion}" styleClass="btnEstilos"
+						reRender="pgSolicitudLiquidacionView,frmSolicitudLiquidacionModalPanel,mpUpDelSolLiquidacion,pgMsgErrorInicial,divFormLiquidacion,pgViewSolicitudLiquidacion,opViewSolicitudLiquidacion,pgAutorizacionesPreviasLiquidacion">
+					</a4j:commandButton>
+					<a4j:commandButton value="Eliminar" actionListener="#{solicitudLiquidacionController.irEliminarSolicitudLiquidacion}"
+									rendered="#{solicitudLiquidacionController.blnMonstrarEliminar}" onclick="if (!confirm('Está Ud. Seguro de Eliminar esta Solicitud?')) return false;" styleClass="btnEstilos">
+					</a4j:commandButton>
+				</h:panelGrid>
+			</rich:panel>
+			<!-- Botones de las impreciones -->
+              <rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5;width: 400px;" id="rpBotonesImpresion">    
+					<h:panelGrid columns="1"  border="0" cellspacing="4" >
+                   		<h:outputText value="Imprimir Formatos de Liquidación" style="padding-right: 2px;"/>
+                <rich:spacer height="16px"/>
+              	<h:panelGrid columns="3" border="0"  style="width: 390px;">
+         		<h:commandButton id="btnImprimir31" value="Solicitud Renuncia" action="#{solicitudLiquidacionController.imprimirSepelioRenuncia}" styleClass="btnEstilos1" />
+              	</h:panelGrid>
+				</h:panelGrid>
+             </rich:panel>
+		</h:form>    
+	</rich:modalPanel>
+	
 	<rich:modalPanel id="pAdjuntarGiroLiquidacion" width="530" height="260" resizeable="false" style="background-color:#DEEBF5;">
 	    <f:facet name="header">
 	        <h:panelGrid>
@@ -161,44 +153,8 @@
 	    </h:form>
 	</rich:modalPanel>	
 	
-		<h:form id="frmSolicitudLiquidacionModalPanel">
-			<rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5;width: 370px;">                 
-				<h:panelGrid columns="2"  border="0" cellspacing="4" >
-					<h:outputText value="¿Desea Ud. Actualizar o Eliminar una Solicitud de Liquidación?" style="padding-right: 35px;"/>
-				</h:panelGrid>
-				<rich:spacer height="16px"/>
-				<h:panelGrid columns="3" border="0"  style="width: 300px;">
-					<a4j:commandButton value="Actualizar" actionListener="#{solicitudLiquidacionController.irModificarSolicitudLiquidacion}" 
-									rendered="#{solicitudLiquidacionController.blnMonstrarActualizar}"	styleClass="btnEstilos"
-									reRender="pgSolicitudLiquidacion,frmSolicitudLiquidacionModalPanel,mpUpDelSolLiquidacion,pgMsgErrorInicial,divFormLiquidacion,divFormSolicitudLiquidacion,pgViewSolicitudLiquidacion,opViewSolicitudLiquidacion,pgAutorizacionesPreviasLiquidacion">
-					</a4j:commandButton>
-					<a4j:commandButton value="Ver" actionListener="#{solicitudLiquidacionController.verSolicitudLiquidacion}" styleClass="btnEstilos"
-						reRender="pgSolicitudLiquidacionView,frmSolicitudLiquidacionModalPanel,mpUpDelSolLiquidacion,pgMsgErrorInicial,pgVerSolicitudLiquidacion,divFormLiquidacion,pgViewSolicitudLiquidacion,opViewSolicitudLiquidacion,pgAutorizacionesPreviasLiquidacion">
-					</a4j:commandButton>
-					<a4j:commandButton value="Eliminar" actionListener="#{solicitudLiquidacionController.irEliminarSolicitudLiquidacion}"
-									rendered="#{solicitudLiquidacionController.blnMonstrarEliminar}" onclick="if (!confirm('Está Ud. Seguro de Eliminar esta Solicitud?')) return false;" styleClass="btnEstilos">
-					</a4j:commandButton>
-				</h:panelGrid>
-			</rich:panel>
-			<!-- Botones de las impreciones -->
-              <rich:panel style="border: 0px solid #17356f;background-color:#DEEBF5;width: 400px;" id="rpBotonesImpresion">    
-					<h:panelGrid columns="1"  border="0" cellspacing="4" >
-                   		<h:outputText value="Imprimir Formatos de Liquidación" style="padding-right: 2px;"/>
-                <rich:spacer height="16px"/>
-              	<h:panelGrid columns="3" border="0"  style="width: 390px;">
-         		<h:commandButton id="btnImprimir31" value="Solicitud Renuncia" action="#{solicitudLiquidacionController.imprimirSepelioRenuncia}" styleClass="btnEstilos1" />
-              	</h:panelGrid>
-				</h:panelGrid>
-             </rich:panel>
-		</h:form>
-    
-	</rich:modalPanel>
-	
-	
-<!-- ----------------- autorizacion  -->
-
-<!-- pop up que muestra las opciones de AUTORIZA / VER para autorizacion prevision   -->
-
+	<!-- ----------------- autorizacion  -->
+	<!-- pop up que muestra las opciones de AUTORIZA / VER para autorizacion prevision   -->
     <rich:modalPanel id="panelUpdateDeleteAutorizacionLiquidacion" width="400" height="155"
 	 	resizeable="false" style="background-color:#DEEBF5;">
         <f:facet name="header">
@@ -232,8 +188,7 @@
     </rich:modalPanel> 
     
     
-    <!-- Pop up donde se levanta la solicitud de prevision desde autorizacion -->
-    
+    <!-- Pop up donde se levanta la solicitud de prevision desde autorizacion -->    
     <rich:modalPanel id="mpSolicitudLiquidacionView" width="1000" height="460" 
 		style="background-color:#DEEBF5;">
 	    <f:facet name="header">
@@ -249,8 +204,7 @@
 	            	<rich:componentControl for="mpSolicitudLiquidacionView" operation="hide" event="onclick"/>
 	            </h:graphicImage>
 	        </h:panelGroup>
-	    </f:facet>
-	    
+	    </f:facet>	    
 	    <h:form id="frmSolicitudLiquidacionView">
 		    <a4j:include viewId="/pages/liquidacion/solicitudLiquidacionView.jsp"/>
 	    </h:form>
@@ -274,7 +228,7 @@
 	   <a4j:include viewId="/pages/liquidacion/popup/adjuntarReniec.jsp"/>
 	</rich:modalPanel>
 	
-		<rich:modalPanel id="pAdjuntarDeJuLiq" width="360" height="200" resizeable="false" style="background-color:#DEEBF5;">
+	<rich:modalPanel id="pAdjuntarDeJuLiq" width="360" height="200" resizeable="false" style="background-color:#DEEBF5;">
 	    <f:facet name="header">
 	        <h:panelGrid>
 	          <rich:column style="border: none;">
@@ -291,47 +245,98 @@
 	    </f:facet>
 	   <a4j:include viewId="/pages/liquidacion/popup/adjuntarDeclaracionJurada.jsp"/>
 	</rich:modalPanel>
+	
+	<%--Inicio del popup autor: Rodolfo Villarreal Acuña --%>
+	<rich:modalPanel id="formEnBlanco" width="390" height="140" 
+		resizeable="false" style="background-color:#DEEBF5;" onhide="enableFormEnBlanco()">
+		<f:facet name="header">
+		    <h:panelGrid>
+		      <rich:column style="border: none;">
+		        <h:outputText value="Opciones"/>
+		      </rich:column>
+		    </h:panelGrid>
+		</f:facet>
+		<f:facet name="controls">
+		    <h:panelGroup>
+		       <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+		       	<rich:componentControl for="formEnBlanco" operation="hide" event="onclick"/>
+		       </h:graphicImage>
+		   </h:panelGroup>
+		</f:facet>
+		<a4j:include viewId="/pages/liquidacion/popup/formatoEnBlancoLiquidacion.jsp" layout="block"/>
+	</rich:modalPanel>
+    <%--Fin del pop imprimir formtos en blanco --%>
 
+	<a4j:include viewId="/pages/fileupload/fileupload.jsp"/>
 
-	<a4j:jsFunction name="selecTipoCambio" reRender="pgCambiosEnSolicitud, pgCambioFecha, pgMotivoRenuncia"
-						actionListener="#{autorizacionLiquidacionController.loadCampoCambio}">
-			<f:param name="pIntTipoCambio"></f:param>
-	</a4j:jsFunction>   
+	<a4j:region>	
+		<a4j:jsFunction name="selecTipoPersonaLiquidacion" reRender="cboTipoIdentidadLiquidacion"
+							actionListener="#{solicitudLiquidacionController.loadListDocumentoBusq}">
+			<f:param name="pIntTipoPersonaLiquidacion"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="selecTipoSolicitudLiquidacion" reRender="opMsgErrorSolLiquidacion, pgMotivoRenuncia, btnEvaluacionLiquidacion"
+					actionListener="#{solicitudLiquidacionController.loadMotivoRenuncia}">
+			<f:param name="pIntSubTipoOperacion"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="selecFechaRenuncia" reRender="calFecRecep"
+					actionListener="#{solicitudLiquidacionController.loadFechaRenuncia}">
+			<f:param name="pdtFechaRenuncia"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="selecTipoCambio" reRender="pgCambiosEnSolicitud, pgCambioFecha, pgMotivoRenuncia"
+							actionListener="#{autorizacionLiquidacionController.loadCampoCambio}">
+				<f:param name="pIntTipoCambio"></f:param>
+		</a4j:jsFunction>   
+		
+		<a4j:jsFunction name="renderizarTextBusqueda" reRender="txtBusqueda"
+						actionListener="#{solicitudLiquidacionController.renderizarTextBusqueda}">
+			<f:param name="pIntTipoConsultaBusqueda"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarBusquedaFechas" reRender="cmbFecha, dtDesde, dtHasta"
+						actionListener="#{solicitudLiquidacionController.renderizarBusquedaFechas}">
+			<f:param name="pIntParaEstado"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarBusquedaCondicion" reRender="cmbCondicion"
+						actionListener="#{solicitudLiquidacionController.renderizarBusquedaCondicion}">
+			<f:param name="pIntParaEstadoCondicion"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="putFileDocAdjunto" reRender="colImgDocAdjunto, pgListDocAdjuntosLiquidacion"
+			actionListener="#{solicitudLiquidacionController.putFile}">
+		</a4j:jsFunction>	
+		
+		<a4j:jsFunction name="renderizarTextBusquedaAut" reRender="txtBusquedaAut"
+						actionListener="#{autorizacionLiquidacionController.renderizarTextBusqueda}">
+			<f:param name="pIntTipoConsultaBusqueda"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarBusquedaFechasAut" reRender="cmbFechaAut, dtDesdeAut, dtHastaAut"
+						actionListener="#{autorizacionLiquidacionController.renderizarBusquedaFechas}">
+			<f:param name="pIntParaEstado"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarBusquedaCondicionAut" reRender="cmbCondicionAut"
+						actionListener="#{autorizacionLiquidacionController.renderizarBusquedaCondicion}">
+			<f:param name="pIntParaEstadoCondicion"></f:param>
+		</a4j:jsFunction>	
+		
+	</a4j:region>
 	
-	<a4j:jsFunction name="renderizarTextBusqueda" reRender="txtBusqueda"
-					actionListener="#{solicitudLiquidacionController.renderizarTextBusqueda}">
-		<f:param name="pIntTipoConsultaBusqueda"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="renderizarBusquedaFechas" reRender="cmbFecha, dtDesde, dtHasta"
-					actionListener="#{solicitudLiquidacionController.renderizarBusquedaFechas}">
-		<f:param name="pIntParaEstado"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="renderizarBusquedaCondicion" reRender="cmbCondicion"
-					actionListener="#{solicitudLiquidacionController.renderizarBusquedaCondicion}">
-		<f:param name="pIntParaEstadoCondicion"></f:param>
-	</a4j:jsFunction>
-	
-	
-<a4j:include viewId="/pages/fileupload/fileupload.jsp"/>
-	<a4j:jsFunction name="putFileDocAdjunto" reRender="colImgDocAdjunto, pgListDocAdjuntosLiquidacion"
-		actionListener="#{solicitudLiquidacionController.putFile}">
-	</a4j:jsFunction>
-	
-	
-	<a4j:jsFunction name="renderizarTextBusquedaAut" reRender="txtBusquedaAut"
-					actionListener="#{autorizacionLiquidacionController.renderizarTextBusqueda}">
-		<f:param name="pIntTipoConsultaBusqueda"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="renderizarBusquedaFechasAut" reRender="cmbFechaAut, dtDesdeAut, dtHastaAut"
-					actionListener="#{autorizacionLiquidacionController.renderizarBusquedaFechas}">
-		<f:param name="pIntParaEstado"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="renderizarBusquedaCondicionAut" reRender="cmbCondicionAut"
-					actionListener="#{autorizacionLiquidacionController.renderizarBusquedaCondicion}">
-		<f:param name="pIntParaEstadoCondicion"></f:param>
-	</a4j:jsFunction>
-	
+	<rich:tabPanel activeTabClass="activo" inactiveTabClass="inactivo" disabledTabClass="disabled">
+		<rich:tab label="Solicitud" disabled="#{solicitudLiquidacionController.blnSol}">
+			<a4j:include viewId="/pages/liquidacion/tabSolicitud.jsp"/>
+    	</rich:tab>
+		<rich:tab label="Autorización" disabled="#{solicitudLiquidacionController.blnAut}">
+            <a4j:include viewId="/pages/liquidacion/autorizacionLiquidacion/autorizacionLiquidacionMain.jsp"/>
+     	</rich:tab>
+     	<rich:tab label="Giro" disabled="#{solicitudLiquidacionController.blnGir}">
+            <a4j:include viewId="/pages/liquidacion/tabGiro.jsp"/>
+     	</rich:tab> 
+     	<rich:tab label="Archivamiento" disabled="#{solicitudLiquidacionController.blnArch}">
+            
+     	</rich:tab>
+	</rich:tabPanel>

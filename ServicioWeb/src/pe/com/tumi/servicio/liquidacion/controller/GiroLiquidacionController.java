@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.ConvertirLetras;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaId;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
@@ -52,6 +53,7 @@ import pe.com.tumi.tesoreria.banco.domain.Acceso;
 import pe.com.tumi.tesoreria.banco.facade.BancoFacadeRemote;
 import pe.com.tumi.tesoreria.egreso.domain.ControlFondosFijos;
 import pe.com.tumi.tesoreria.egreso.domain.Egreso;
+import pe.com.tumi.tesoreria.egreso.domain.EgresoId;
 import pe.com.tumi.tesoreria.egreso.facade.CierreDiarioArqueoFacadeRemote;
 import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeRemote;
 
@@ -155,6 +157,10 @@ public class GiroLiquidacionController {
 	private Boolean deshabilitarDescargaAdjuntoGiro;
 	//jchavez 19.05.2014
 	private ConceptoFacadeRemote conceptoFacade;
+	//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 / 
+	private List<BeneficiarioLiquidacion> listaBeneficiariosGirados;
+	private String strTotalEgresoDetalleInterfaz;
+	
 	public GiroLiquidacionController(){
 		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
 		if(usuario != null){
@@ -204,6 +210,7 @@ public class GiroLiquidacionController {
 		mostrarMensajeAdjuntarRequisito = false;
 		mostrarPanelAdjuntoGiro = false;
 		deshabilitarNuevoBeneficiario = false;
+		strTotalEgresoDetalleInterfaz = "";
 	}
 	
 	private void cargarValoresIniciales(){
@@ -240,6 +247,7 @@ public class GiroLiquidacionController {
 			
 			deshabilitarDescargaAdjuntoGiro = true;
 			deshabilitarNuevoBeneficiario = false;
+			strTotalEgresoDetalleInterfaz = "";
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -355,6 +363,7 @@ public class GiroLiquidacionController {
 		Boolean exito = Boolean.FALSE;
 		String mensaje = null;
 		beneficiarioSeleccionado = new BeneficiarioLiquidacion();
+		strTotalEgresoDetalleInterfaz = "";
 		try {
 			// 1. Valida Cierre Diario Arqueo, si existe un cierre diario para la sucursal que hace el giro, se procede a la siguiente validación
 			if(cierreDiarioArqueoFacade.existeCierreDiarioArqueo(controlFondosFijosGirar.getId().getIntPersEmpresa(), controlFondosFijosGirar.getId().getIntSucuIdSucursal(), null)){
@@ -504,6 +513,7 @@ public class GiroLiquidacionController {
 	}
 	
 	private void cargarListaEgresoDetalleInterfaz(List<ExpedienteLiquidacionDetalle> listaExpedienteLiquidacionDetalle) throws Exception{
+		strTotalEgresoDetalleInterfaz = "";
 		listaEgresoDetalleInterfaz = new ArrayList<EgresoDetalleInterfaz>();
 		BigDecimal bdSubTotal = new BigDecimal(0); 
 		
@@ -514,27 +524,76 @@ public class GiroLiquidacionController {
 			bdSubTotal = bdSubTotal.add(egresoDetalleInterfaz.getBdSubTotal());
 		}
 		bdTotalEgresoDetalleInterfaz = bdSubTotal;
+		//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+		strTotalEgresoDetalleInterfaz = ConvertirLetras.convertirMontoALetras(bdTotalEgresoDetalleInterfaz, Constante.PARAM_T_TIPOMONEDA_SOLES);
 	}	
 	
 
+	private void cargarBeneficiarioNoGirado(BeneficiarioLiquidacion beneficiarioLiquidacion) throws Exception{
+		EgresoId egresoId = new EgresoId();
+		egresoId.setIntPersEmpresaEgreso(beneficiarioLiquidacion.getIntPersEmpresaEgreso());
+		egresoId.setIntItemEgresoGeneral(beneficiarioLiquidacion.getIntItemEgresoGeneral());
+		Egreso egreso = egresoFacade.obtenerEgresoYLibroDiario(egresoId);
+		log.info(egreso);
+		beneficiarioLiquidacion.setEgreso(egreso);
+		beneficiarioLiquidacion.setPersona(devolverPersonaCargada(beneficiarioLiquidacion.getIntPersPersonaBeneficiario()));
+		if(egreso.getIntPersPersonaApoderado()!=null){
+			beneficiarioLiquidacion.setPersonaApoderado(devolverPersonaCargada(egreso.getIntPersPersonaApoderado()));
+			beneficiarioLiquidacion.setArchivoCartaPoder(egresoFacade.getArchivoPorEgreso(egreso));
+		}
+		
+		listaBeneficiariosGirados.add(beneficiarioLiquidacion);
+	}
 	
 	private ExpedienteLiquidacion cargarListaBeneficiarioLiquidacion(ExpedienteLiquidacion expedienteLiquidacion)throws Exception{
+		listaBeneficiariosGirados.clear();
 		List<BeneficiarioLiquidacion> listaBeneficiarioLiquidacionTemp = new ArrayList<BeneficiarioLiquidacion>();
+		List<BeneficiarioLiquidacion> listaBeneficiariosGiradosTemp = new ArrayList<BeneficiarioLiquidacion>();
+		
 		for(ExpedienteLiquidacionDetalle expedienteLiquidacionDetalle : expedienteLiquidacion.getListaExpedienteLiquidacionDetalle()){
 			List<BeneficiarioLiquidacion> listaBeneficiarioLiquidacionTemp2 = liquidacionFacade.getListaBeneficiarioLiquidacionPorExpedienteLiquidacionDetalle(expedienteLiquidacionDetalle); 
 			expedienteLiquidacionDetalle.setListaBeneficiarioLiquidacion(listaBeneficiarioLiquidacionTemp2);
 			listaBeneficiarioLiquidacionTemp.addAll(listaBeneficiarioLiquidacionTemp2);
 			intCuenta = expedienteLiquidacionDetalle.getId().getIntCuenta();
+			
 		}
 		
 		HashSet<Integer> hashIntIdPersona = new HashSet<Integer>();
 		for(BeneficiarioLiquidacion beneficiarioLiquidacion : listaBeneficiarioLiquidacionTemp){
+			//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 / 
+			if(beneficiarioLiquidacion.getIntItemEgresoGeneral()!=null){
+				cargarBeneficiarioNoGirado(beneficiarioLiquidacion);
+//				continue;
+			}
+			
 			//Solo listaremos los beneficiarios que aun no hayan girado
 			if(beneficiarioLiquidacion.getIntItemEgresoGeneral()==null){
 				hashIntIdPersona.add(beneficiarioLiquidacion.getIntPersPersonaBeneficiario());
-			}			
+			}	
 		}
 		
+		listaBeneficiariosGiradosTemp.addAll(listaBeneficiariosGirados);
+		listaBeneficiariosGirados.clear();
+		int cont=0;
+		Boolean blnExiste = false;
+		for (BeneficiarioLiquidacion o : listaBeneficiariosGiradosTemp) {
+			if (cont==0) {
+				listaBeneficiariosGirados.add(o);
+			}else{
+				blnExiste = false;
+				for (BeneficiarioLiquidacion x : listaBeneficiariosGirados) {
+					if (x.getPersona().getDocumento().getStrNumeroIdentidad().compareTo(o.getPersona().getDocumento().getStrNumeroIdentidad())==0) {
+						blnExiste = true;
+						break;
+					}
+				}
+				if (!blnExiste) {
+					listaBeneficiariosGirados.add(o);
+				}
+			}
+			cont++;
+		}
+
 		List<Persona> listaPersona = new ArrayList<Persona>();
 		for(Integer intIdPersona : hashIntIdPersona){
 			Integer intItemVinculo = null;
@@ -578,6 +637,7 @@ public class GiroLiquidacionController {
 			intItemCuentaBancariaSeleccionar = null;
 			listaEgresoDetalleInterfaz = new ArrayList<EgresoDetalleInterfaz>();
 			bdTotalEgresoDetalleInterfaz = null;
+			listaBeneficiariosGirados = new ArrayList<BeneficiarioLiquidacion>();
 			
 			expedienteLiquidacionGirar = (ExpedienteLiquidacion)event.getComponent().getAttributes().get("item");
 			
@@ -733,6 +793,8 @@ public class GiroLiquidacionController {
 		mensajeAdjuntarRequisito = "";
 		mostrarMensajeAdjuntarRequisito = false;
 		mostrarPanelAdjuntoGiro = false;
+		
+		strTotalEgresoDetalleInterfaz = "";
 	}	
 	
 	public void ocultarMensaje(){
@@ -801,7 +863,9 @@ public class GiroLiquidacionController {
 				mostrarPanelAdjuntoGiro = false;
 				deshabilitarNuevo = false;
 				deshabilitarNuevoBeneficiario = false;
+				strTotalEgresoDetalleInterfaz = "";
 				return;
+				
 			}
 			
 			List<ExpedienteLiquidacionDetalle> listaExpedienteLiquidacionDetalle = new ArrayList<ExpedienteLiquidacionDetalle>();
@@ -1447,5 +1511,23 @@ public class GiroLiquidacionController {
 	public void setDeshabilitarDescargaAdjuntoGiro(
 			Boolean deshabilitarDescargaAdjuntoGiro) {
 		this.deshabilitarDescargaAdjuntoGiro = deshabilitarDescargaAdjuntoGiro;
+	}
+
+	public List<BeneficiarioLiquidacion> getListaBeneficiariosGirados() {
+		return listaBeneficiariosGirados;
+	}
+
+	public void setListaBeneficiariosGirados(
+			List<BeneficiarioLiquidacion> listaBeneficiariosGirados) {
+		this.listaBeneficiariosGirados = listaBeneficiariosGirados;
+	}
+
+	public String getStrTotalEgresoDetalleInterfaz() {
+		return strTotalEgresoDetalleInterfaz;
+	}
+
+	public void setStrTotalEgresoDetalleInterfaz(
+			String strTotalEgresoDetalleInterfaz) {
+		this.strTotalEgresoDetalleInterfaz = strTotalEgresoDetalleInterfaz;
 	}
 }

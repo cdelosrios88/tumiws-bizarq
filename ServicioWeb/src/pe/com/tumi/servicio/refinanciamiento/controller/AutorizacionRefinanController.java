@@ -3,6 +3,9 @@ package pe.com.tumi.servicio.refinanciamiento.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger; 
 
 import pe.com.tumi.cobranza.cuentacte.facade.CuentacteFacadeRemote;
+import pe.com.tumi.cobranza.planilla.facade.PlanillaFacadeRemote;
 import pe.com.tumi.common.FileUtil;
 import pe.com.tumi.common.MyFile;
 import pe.com.tumi.common.util.Constante;
@@ -32,6 +36,7 @@ import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.composite.CuentaComp
 import pe.com.tumi.credito.socio.core.domain.Socio;
 import pe.com.tumi.credito.socio.core.domain.SocioComp;
 import pe.com.tumi.credito.socio.core.domain.SocioEstructura;
+import pe.com.tumi.credito.socio.core.domain.SocioPK;
 import pe.com.tumi.credito.socio.core.facade.SocioFacadeRemote;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraDetalle;
 import pe.com.tumi.credito.socio.estructura.domain.EstructuraDetalleId;
@@ -150,6 +155,12 @@ public class AutorizacionRefinanController {
 	private List<ExpedienteCreditoComp> listaDetalleRefinanciamiento;
 	private Integer intBusqTipoCreditoEmpresa;
 	private List<Tabla> listaTablaCreditoEmpresa;
+	//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+	private List<Tabla> listaEstadoSolicitud;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 21.11.2014 /
+	private String strMensajeMorosidad;
+	private List<Tabla> listaTablaEstadoPagoEfectuado;
 		
 	public AutorizacionRefinanController() {
 		beanAutorizaCredito = new AutorizaCredito();
@@ -174,6 +185,12 @@ public class AutorizacionRefinanController {
 			listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(Constante.PARAM_EMPRESASESION);
 			ordenarAlfabeticamenteSuc();
 			listaTablaCreditoEmpresa = tablaFacade.getListaTablaPorAgrupamientoB(new Integer(Constante.PARAM_T_TIPOCREDITOEMPRESA), 5);
+			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+			listaEstadoSolicitud = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO),"D");
+			
+			//Autor: jchavez / Tarea: Modificación / Fecha: 21.11.2014 / 
+			listaTablaEstadoPagoEfectuado = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_ESTADO_PAGO));
 		} catch (Exception e) {
 			log.error("error: " + e.getMessage());
 		} finally {
@@ -340,6 +357,9 @@ public class AutorizacionRefinanController {
 	
 	public void seleccionarRegistro(ActionEvent event){
 		try{
+			PlanillaFacadeRemote planillaFacade = null;
+			planillaFacade = (PlanillaFacadeRemote)EJBFactory.getRemote(PlanillaFacadeRemote.class);
+			
 			expedienteCreditoCompSelected = (ExpedienteCreditoComp)event.getComponent().getAttributes().get("itemRefinan");
 			Integer intEstado =  expedienteCreditoCompSelected.getExpedienteCredito().getIntEstadoCreditoUltimo();
 				
@@ -358,12 +378,50 @@ public class AutorizacionRefinanController {
 				blnBotonVer = true;
 				blnBotonEliminar = false;*/
 			}
-			
+			//Autor: jchavez / Tarea: Creación / Fecha: 21.11.2014
+			String strMorosidad = "";
+			SocioEstructura socioEstructura = new SocioEstructura();
+			List<CuentaIntegrante> lstCtaInt = socioFacade.getListaCuentaIntegrantePorCuenta(expedienteCreditoCompSelected.getExpedienteCredito().getId().getIntPersEmpresaPk(),expedienteCreditoCompSelected.getExpedienteCredito().getId().getIntCuentaPk());
+			if (lstCtaInt!=null && !lstCtaInt.isEmpty()) {
+				SocioPK sPk = new SocioPK();
+				sPk.setIntIdEmpresa(lstCtaInt.get(0).getId().getIntPersEmpresaPk());
+				sPk.setIntIdPersona(lstCtaInt.get(0).getId().getIntPersonaIntegrante());
+				socioEstructura = socioFacade.getSocioEstructuraDeOrigenPorPkSocio(sPk);
+			}
+			strMorosidad = planillaFacade.getSocioMorosidad(socioEstructura);
+			Integer r = strMorosidad.indexOf("-");
+			Integer s = strMorosidad.indexOf("/");
+			if (r==-1) {
+				strMensajeMorosidad = "";
+			}else {
+				if(strMorosidad.substring(0,r).equalsIgnoreCase("SIN_EFRE")) {
+					strMensajeMorosidad = "La planilla del periodo "+strMorosidad.substring(r+1,strMorosidad.length())+" no tiene efectuado";
+				}else{
+					if (s!=-1) {							
+						for (Tabla o : listaTablaEstadoPagoEfectuado) {
+							if (o.getIntIdDetalle().equals(Integer.parseInt(strMorosidad.substring(r+1,s)))) {
+								strMensajeMorosidad = "La morosidad del periodo "+strMorosidad.substring(s+1,strMorosidad.length())
+														+" es S/."+(convertirMonto(new BigDecimal(strMorosidad.substring(0,r))))
+														+". Estado pago: "+o.getStrDescripcion();
+								break;
+							}
+						}
+					}						
+				}
+			}
+			//Fin jchavez - 21.11.2014
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
 	
+	public static String convertirMonto(BigDecimal bdMonto)throws Exception{
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		NumberFormat formato = new DecimalFormat("#,###.00",otherSymbols);
+		return formato.format(bdMonto);
+	}
 	private void recuperarAdjuntosAutorizacion(
 			ExpedienteCreditoComp expedienteSeleccionado)
 			throws BusinessException {
@@ -682,7 +740,6 @@ public class AutorizacionRefinanController {
 								expedienteCReditoActualizado= recuperarNuevoExpedienteRefinanciadoRecalculado(event);
 								
 								//CGD-13.01.2014
-								//JCHV - 04.03.2014 Modificación en la generación del proceso de Autorozación de un refinaciamiento.
 								mensaje = solicitudPrestamoFacade.generarProcesosAutorizacionRefinanciamiento(expedienteCReditoActualizado, expedienteCreditoAut, usuario, beanSocioComp);
 								if(mensaje.equals("")) exito = Boolean.TRUE;
 							}
@@ -1969,5 +2026,24 @@ public class AutorizacionRefinanController {
 	}
 	public void setListaTablaCreditoEmpresa(List<Tabla> listaTablaCreditoEmpresa) {
 		this.listaTablaCreditoEmpresa = listaTablaCreditoEmpresa;
+	}
+	public List<Tabla> getListaEstadoSolicitud() {
+		return listaEstadoSolicitud;
+	}
+	public void setListaEstadoSolicitud(List<Tabla> listaEstadoSolicitud) {
+		this.listaEstadoSolicitud = listaEstadoSolicitud;
+	}
+	public String getStrMensajeMorosidad() {
+		return strMensajeMorosidad;
+	}
+	public void setStrMensajeMorosidad(String strMensajeMorosidad) {
+		this.strMensajeMorosidad = strMensajeMorosidad;
+	}
+	public List<Tabla> getListaTablaEstadoPagoEfectuado() {
+		return listaTablaEstadoPagoEfectuado;
+	}
+	public void setListaTablaEstadoPagoEfectuado(
+			List<Tabla> listaTablaEstadoPagoEfectuado) {
+		this.listaTablaEstadoPagoEfectuado = listaTablaEstadoPagoEfectuado;
 	}
 }

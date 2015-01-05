@@ -230,7 +230,7 @@
 		</h:panelGrid>
 	</rich:panel>
 
-	<h:panelGrid id="pgControlsEspecial" columns="3">
+	<h:panelGrid id="pgControlsEspecial" columns="9">
 		<a4j:commandButton value="Nuevo" actionListener="#{solicitudEspecialController.nuevoExpediente}" styleClass="btnEstilos" reRender="pgControls,pgSolicCreditoEspecial,pgMsgErrorGrabar,pgControlsEspecial" />
 		
 		<h:panelGroup rendered="#{solicitudEspecialController.strSolicitudPrestamo == applicationScope.Constante.MANTENIMIENTO_GRABAR}">
@@ -242,6 +242,23 @@
 		
 		<a4j:commandButton value="Cancelar" actionListener="#{solicitudEspecialController.cancelarGrabarSolicitudPrestamo}"
 			styleClass="btnEstilos" reRender="pgControlsEspecial,pgSolicCreditoEspecial" />
+			
+			<rich:column width="100px">
+					</rich:column>
+					<rich:column width="150px">
+					</rich:column>
+				<rich:column width="120px">
+					</rich:column>
+					<rich:column width="120px">
+					</rich:column>
+				<rich:column width="200px" style="margin-left: auto; margin-right: auto">
+				<h:outputText
+					value="Hacer clic para imprimir formatos en blanco"
+					style="color:#8ca0bd" />
+				</rich:column>
+					<%--<a4j:commandButton value="Imprimir" styleClass="btnEstilos" onclick="#{rich:component('popup')}.show()"/>--%>
+				<a4j:commandButton value="Imprimir" styleClass="btnEstilos" oncomplete="Richfaces.showModalPanel('formEnBlanco')"
+				reRender="pgFormEnBlancoSolicitudCredito,frmEnBlancoSolicitudCredito"/>
 	</h:panelGrid>
     
     <h:panelGrid id="pgSolicCreditoEspecial">

@@ -8,6 +8,7 @@
 <!-- Modulo    : Nueva Solicitud de Crédito     -->
 <!-- Prototipo : Empresas			      		-->
 <!-- Fecha     : 20/07/2012               		-->
+<!-- Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014 -->
 
 
 
@@ -126,8 +127,6 @@
 			
 			<h:panelGroup id="divPrestamoBusq">
 				<h:panelGroup>
-			
-					
 					<rich:extendedDataTable id="edtSolicitudCredito" rows="5"
 						value="#{solicitudPrestamoController.listaExpedienteCreditoComp}"
 						enableContextMenu="false" var="item" rowKeyVar="rowKey"
@@ -238,7 +237,7 @@
 
 		</h:panelGroup>
 	
-		<h:panelGrid id="pgControlsPrestamo" columns="3">
+		<h:panelGrid id="pgControlsPrestamo" columns="9">
 			<a4j:commandButton value="Nuevo" actionListener="#{solicitudPrestamoController.habilitarGrabarSolicitud}" styleClass="btnEstilos" reRender="pgControls,pgSolicCredito,pgMsgErrorGrabar,pgControlsPrestamo" />
 			
 			<h:panelGroup rendered="#{solicitudPrestamoController.strSolicitudPrestamo == applicationScope.Constante.MANTENIMIENTO_GRABAR}">
@@ -250,6 +249,23 @@
 			
 			<a4j:commandButton value="Cancelar" actionListener="#{solicitudPrestamoController.cancelarGrabarSolicitudPrestamo}"
 				styleClass="btnEstilos" reRender="pgControlsPrestamo,pgSolicCredito" />
+				
+				<rich:column width="100px">
+					</rich:column>
+					<rich:column width="150px">
+					</rich:column>
+				<rich:column width="120px">
+					</rich:column>
+					<rich:column width="120px">
+					</rich:column>
+				<rich:column width="200px" style="margin-left: auto; margin-right: auto">
+				<h:outputText
+					value="Hacer clic para imprimir formatos en blanco"
+					style="color:#8ca0bd" />
+				</rich:column>
+					<%--<a4j:commandButton value="Imprimir" styleClass="btnEstilos" onclick="#{rich:component('popup')}.show()"/>--%>
+				<a4j:commandButton value="Imprimir" styleClass="btnEstilos" oncomplete="Richfaces.showModalPanel('formEnBlanco')"
+				reRender="pgFormEnBlancoSolicitudCredito,frmEnBlancoSolicitudCredito"/>
 		</h:panelGrid>
 	    
 	    <h:panelGrid id="pgSolicCredito">
@@ -258,14 +274,11 @@
 				
 				<h:outputText value="#{solicitudPrestamoController.strErrorGrabar}" styleClass="msgError"/>
 			</h:panelGrid>
-			<h:panelGroup rendered="#{solicitudPrestamoController.strSolicitudPrestamo == applicationScope.Constante.MANTENIMIENTO_GRABAR ||
-					 				solicitudPrestamoController.strSolicitudPrestamo == applicationScope.Constante.MANTENIMIENTO_MODIFICAR}">
-	   	 		<a4j:include viewId="/pages/creditos/SolicitudCredito/solicitudCreditoEdit.jsp"/>
-	   	 	</h:panelGroup>
-	   	 	<h:panelGroup rendered="#{solicitudPrestamoController.strSolicitudPrestamo == applicationScope.Constante.MANTENIMIENTO_NINGUNO}">
-		 			<h:form>
-		 				<a4j:include viewId="/pages/creditos/SolicitudCredito/solicitudCreditoView.jsp"/>	
-		 			</h:form>
-		 	</h:panelGroup>
+			<a4j:outputPanel id="opSolicitudCreditoUpdate">
+				<a4j:include viewId="/pages/creditos/SolicitudCredito/solicitudCreditoEdit.jsp"/>
+	   	 	</a4j:outputPanel>
+	   	 	
+	   	 	<a4j:outputPanel id="opSolicitudCreditoView">
+	   	 		<a4j:include viewId="/pages/creditos/SolicitudCredito/solicitudCreditoView.jsp"/>
+		 	</a4j:outputPanel>
 	    </h:panelGrid>
-

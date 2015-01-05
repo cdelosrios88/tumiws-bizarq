@@ -16,13 +16,15 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.ConvertirLetras;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.Cuenta;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaId;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaIntegrante;
+import pe.com.tumi.credito.socio.aperturaCuenta.core.facade.CuentaFacadeRemote;
 import pe.com.tumi.empresa.domain.Subsucursal;
 import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.estadoCuenta.domain.DataBeanEstadoCuentaSocioEstructura;
-import pe.com.tumi.estadoCuenta.facade.EstadoCuentaFacadeRemote;
 import pe.com.tumi.fileupload.FileUploadController;
 import pe.com.tumi.fileupload.FileUploadControllerServicio;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
@@ -151,6 +153,9 @@ public class GiroPrevisionController {
 	private ConceptoFacadeRemote conceptoFacade;
 	
 	private Boolean blnCasoAES;
+	//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+	private String strTotalEgresoDetalleInterfaz;
+	
 	public GiroPrevisionController(){
 		cargarUsuario();
 		if(usuario != null){
@@ -196,6 +201,8 @@ public class GiroPrevisionController {
 		mensajeAdjuntarRequisito = "";
 		mostrarMensajeAdjuntarRequisito = false;
 		mostrarPanelAdjuntoGiro = false;
+		
+		strTotalEgresoDetalleInterfaz = "";
 	}
 	
 	private void cargarValoresIniciales(){
@@ -228,6 +235,8 @@ public class GiroPrevisionController {
 			mostrarPanelAdjuntoGiro = false;
 			deshabilitarDescargaAdjuntoGiro = true;
 			blnCasoAES = true;
+			
+			strTotalEgresoDetalleInterfaz = "";
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -339,7 +348,8 @@ public class GiroPrevisionController {
 		Boolean exito = Boolean.FALSE;
 		String mensaje = null;
 		try {
-			EstadoCuentaFacadeRemote estadoCuentaFacade = (EstadoCuentaFacadeRemote)EJBFactory.getRemote(EstadoCuentaFacadeRemote.class);
+//			EstadoCuentaFacadeRemote estadoCuentaFacade = (EstadoCuentaFacadeRemote)EJBFactory.getRemote(EstadoCuentaFacadeRemote.class);
+			CuentaFacadeRemote cuentaFacade = (CuentaFacadeRemote)EJBFactory.getRemote(CuentaFacadeRemote.class);
 			
 			// 1. Valida Cierre Diario Arqueo, si existe un cierre diario para la sucursal que hace el giro, se procede a la siguiente validación
 			if(cierreDiarioArqueoFacade.existeCierreDiarioArqueo(controlFondosFijosGirar.getId().getIntPersEmpresa(), controlFondosFijosGirar.getId().getIntSucuIdSucursal(), null)){
@@ -386,8 +396,15 @@ public class GiroPrevisionController {
 			if (expedientePrevisionGirar.getIntParaDocumentoGeneral().equals(Constante.PARAM_T_DOCUMENTOGENERAL_AES)) {
 				beneficiarioSeleccionado.setId(new BeneficiarioPrevisionId());
 				beneficiarioSeleccionado.setEsUltimoBeneficiarioAGirar(true);
-				DataBeanEstadoCuentaSocioEstructura porNroCuenta = estadoCuentaFacade.getSocioPorNumeroCuenta(EMPRESA_USUARIO,expedientePrevisionGirar.getId().getIntCuentaPk() );
-				beneficiarioSeleccionado.setIntPersPersonaBeneficiario(porNroCuenta.getIntIdPersona());
+				//Autor: jchavez / Tarea: Modificación / Fecha: 
+				Cuenta cta = new Cuenta();
+				cta.setId(new CuentaId());
+				cta.getId().setIntPersEmpresaPk(EMPRESA_USUARIO);
+				cta.getId().setIntCuenta(expedientePrevisionGirar.getId().getIntCuentaPk());
+				cta = cuentaFacade.getCuentaPorIdCuenta(cta);
+//				DataBeanEstadoCuentaSocioEstructura porNroCuenta = estadoCuentaFacade.getSocioPorNumeroCuenta(EMPRESA_USUARIO,expedientePrevisionGirar.getId().getIntCuentaPk() );
+//				beneficiarioSeleccionado.setIntPersPersonaBeneficiario(porNroCuenta.getIntIdPersona());
+				beneficiarioSeleccionado.setIntPersPersonaBeneficiario(cta.getIntIdPersona());
 				beneficiarioSeleccionado.getId().setIntPersEmpresaPrevision(EMPRESA_USUARIO);
 				if (expedientePrevisionGirar.getListaBeneficiarioPrevision()==null || expedientePrevisionGirar.getListaBeneficiarioPrevision().isEmpty()) {
 					expedientePrevisionGirar.setListaBeneficiarioPrevision(new ArrayList<BeneficiarioPrevision>());
@@ -554,6 +571,8 @@ public class GiroPrevisionController {
 		Boolean exito = Boolean.FALSE;
 		String mensaje = null;
 		blnCasoAES = true;
+		
+		strTotalEgresoDetalleInterfaz = "";
 		try{
 			strGlosaEgreso = "";
 			archivoCartaPoder = null;
@@ -657,6 +676,8 @@ public class GiroPrevisionController {
 				beneficiarioSeleccionado.setBdPorcentajeBeneficio(new BigDecimal(100));
 				listaEgresoDetalleInterfaz = previsionFacade.cargarListaEgresoDetalleInterfaz(expedientePrevisionGirar, beneficiarioSeleccionado);
 				bdTotalEgresoDetalleInterfaz = ((EgresoDetalleInterfaz)(listaEgresoDetalleInterfaz.get(0))).getBdSubTotal();;
+				//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+				strTotalEgresoDetalleInterfaz = ConvertirLetras.convertirMontoALetras(bdTotalEgresoDetalleInterfaz, Constante.PARAM_T_TIPOMONEDA_SOLES);
 				blnCasoAES = true;
 			}
 			
@@ -810,6 +831,7 @@ public class GiroPrevisionController {
 	public void seleccionarBeneficiario(){
 //		String mensaje = "";
 		visualizarGrabarRequisito = false;
+		strTotalEgresoDetalleInterfaz = "";
 		try{
 			log.info("intItemBeneficiarioSeleccionar:"+intItemBeneficiarioSeleccionar);
 			if(intItemBeneficiarioSeleccionar.equals(new Integer(0))){
@@ -828,6 +850,8 @@ public class GiroPrevisionController {
 					beneficiarioSeleccionado = beneficiarioPrevision;
 					listaEgresoDetalleInterfaz = previsionFacade.cargarListaEgresoDetalleInterfaz(expedientePrevisionGirar, beneficiarioSeleccionado);					
 					bdTotalEgresoDetalleInterfaz = ((EgresoDetalleInterfaz)(listaEgresoDetalleInterfaz.get(0))).getBdSubTotal();;
+					//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+					strTotalEgresoDetalleInterfaz = ConvertirLetras.convertirMontoALetras(bdTotalEgresoDetalleInterfaz, Constante.PARAM_T_TIPOMONEDA_SOLES);
 					break;
 				}
 			}
@@ -1470,5 +1494,13 @@ public class GiroPrevisionController {
 	}
 	public void setBlnCasoAES(Boolean blnCasoAES) {
 		this.blnCasoAES = blnCasoAES;
+	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+	public String getStrTotalEgresoDetalleInterfaz() {
+		return strTotalEgresoDetalleInterfaz;
+	}
+	public void setStrTotalEgresoDetalleInterfaz(
+			String strTotalEgresoDetalleInterfaz) {
+		this.strTotalEgresoDetalleInterfaz = strTotalEgresoDetalleInterfaz;
 	}
 }

@@ -89,10 +89,10 @@
 				<h:outputText value="Estado :" styleClass="estiloLetra1"/>
 			</rich:column>
 			<rich:column>
-				<h:selectOneMenu value="#{autorizacionLiquidacionController.intBusqEstado}">
-					<f:selectItem itemValue="0" itemLabel="Seleccione..."/>
-					<tumih:selectItems var="sel"
-						cache="#{applicationScope.Constante.PARAM_T_ESTADOSOLICPRESTAMO}"
+				<!-- Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014  -->
+				<h:selectOneMenu value="#{autorizacionLiquidacionController.intBusqEstado}" style="width: 120px;">
+					<f:selectItem itemValue="0" itemLabel="Seleccione..." />
+					<tumih:selectItems var="sel" value="#{autorizacionLiquidacionController.listaEstadoSolicitud}"
 						itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 						propertySort="intOrden" />
 				</h:selectOneMenu>

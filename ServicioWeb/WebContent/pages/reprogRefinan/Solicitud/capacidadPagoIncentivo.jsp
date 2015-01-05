@@ -24,10 +24,10 @@
 			<f:param name="bdMontoTumi"/>
 		</a4j:jsFunction>
 	</a4j:region>
-	
     	<rich:panel  style="border: 0px solid #17356f;background-color:#DEEBF5;width:920px;">
     		<h:panelGrid columns="6">
     			<rich:column>
+
     				<h:outputText value="Socio :"/>
     			</rich:column>
     			<rich:column>

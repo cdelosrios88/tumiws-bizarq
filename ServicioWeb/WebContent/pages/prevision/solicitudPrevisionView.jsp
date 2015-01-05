@@ -314,8 +314,8 @@
 								itemValue="intIdDetalle" itemLabel="strDescripcion"
 								property="#{itemBeneficiariosSep.intTipoViculo}" />
 						</rich:column>
-						<rich:column width="100px" style="text-align: right">
-							<h:inputText value="#{itemBeneficiariosSep.bdPorcentajeBeneficio}" style="text-align: right">
+						<rich:column width="100px" style="text-align: right" >
+							<h:inputText value="#{itemBeneficiariosSep.bdPorcentajeBeneficio}" style="text-align: right" readonly="true">
 							</h:inputText>
 						</rich:column style="text-align: right">			
 						<rich:column width="100px">

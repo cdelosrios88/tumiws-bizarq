@@ -149,7 +149,7 @@
 							<h:outputText value="Tipo de Solicitud" />
 						</rich:column>
 						<rich:column rowspan="2" width="80px">
-							<h:outputText value="Monto Crédito" />
+							<h:outputText value="Monto Previsión" />
 						</rich:column>
 						<rich:column rowspan="2" width="110px">
 							<h:outputText value="Sucursal" />
@@ -240,7 +240,7 @@
 			</h:panelGroup>
 		</h:panelGroup>
 		
-		<h:panelGrid id="divPanelControlPrevision" columns="3"> 
+		<h:panelGrid id="divPanelControlPrevision" columns="12"> 
 			<a4j:commandButton value="Nuevo" actionListener="#{solicitudPrevisionController.nuevaSolicitudPrevision}" styleClass="btnEstilos"  
 			  					reRender="divFormPrevision, pgSolicitudPrevision,pgSoloAplicaSepelio"/>
 			<a4j:commandButton value="Guardar" actionListener="#{solicitudPrevisionController.grabarSolicitud}" styleClass="btnEstilos"
@@ -248,6 +248,26 @@
 			<a4j:commandButton value="Cancelar" actionListener="#{solicitudPrevisionController.cancelarGrabarSolicitud}" styleClass="btnEstilos"
 								reRender="divFormPrevision, pgSolicitudPrevision,pgSoloAplicaSepelio,clnFechaFallecimiento">
 			</a4j:commandButton>
+			<rich:column width="100px">
+			</rich:column>
+			<rich:column width="150px">
+			</rich:column>
+			<rich:column width="120px">
+			</rich:column>
+			<rich:column width="120px">
+			</rich:column>
+			<rich:column width="120px">
+			</rich:column>
+			<rich:column width="120px">
+			</rich:column>
+			<rich:column width="200px" style="margin-left: auto; margin-right: auto">
+				<h:outputText
+					value="Hacer clic para imprimir formatos en blanco"
+					style="color:#8ca0bd" />
+			</rich:column>
+				<%--<a4j:commandButton value="Imprimir" styleClass="btnEstilos" onclick="#{rich:component('popup')}.show()"/>--%>
+				<a4j:commandButton value="Imprimir" styleClass="btnEstilos" oncomplete="Richfaces.showModalPanel('formEnBlancoPrevi')"
+				reRender="pgFormEnBlancoPrevision,frmEnBlancoPrevision"/>
 		</h:panelGrid>
 		    
 		<br/>

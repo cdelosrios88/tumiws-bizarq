@@ -41,9 +41,10 @@
                 <h:panelGrid columns="3" border="0"  style="width: 450px;">
                     <a4j:commandButton value="Actualizar" actionListener="#{solicitudPrestamoController.irModificarSolicitudPrestamo}" 
 	                    styleClass="btnEstilos" rendered="#{solicitudPrestamoController.blnMostrarModificar}" 
-	                    reRender="pgSolicCredito,frmSolicitudPrestamoModalPanel,panelUpdateDeleteSolicitudPrestamo,pgControlsPrestamo, pgEvaluacion,pgDatosSocio"/>
+	                    reRender="pgControlsPrestamo, opSolicitudCreditoUpdate, opSolicitudCreditoView"
+	                    oncomplete="Richfaces.hideModalPanel('panelUpdateDeleteSolicitudPrestamo')"/>
                     <a4j:commandButton value="Ver" actionListener="#{solicitudPrestamoController.irVerSolicitudPrestamo}" styleClass="btnEstilos"
-                    	reRender="pgSolicCredito,frmSolicitudPrestamoModalPanel,panelUpdateDeleteSolicitudPrestamo,pgControlsPrestamo, pgEvaluacion,pgDatosSocio,gridDescargas"
+                    	reRender="pgControlsPrestamo, opSolicitudCreditoUpdate, opSolicitudCreditoView"
                     	oncomplete="Richfaces.hideModalPanel('panelUpdateDeleteSolicitudPrestamo')"/>
                     <h:commandButton value="Eliminar" actionListener="#{solicitudPrestamoController.irEliminarSolicitudPrestamo}" 
                     onclick="if (!confirm('Está Ud. Seguro de Eliminar esta Solicitud?')) return false;" styleClass="btnEstilos"
@@ -186,7 +187,7 @@
 	</rich:modalPanel>
 	
 	
-	<rich:modalPanel id="mpCronogramaCredito" width="950" height="350"
+	<rich:modalPanel id="mpCronogramaCredito" width="1100" height="350"
 	 resizeable="false" style="background-color:#DEEBF5">
         <f:facet name="header">
             <h:panelGrid>
@@ -250,10 +251,65 @@
 	    </h:form>
 	</rich:modalPanel>
 	
-	<a4j:include viewId="/pages/fileupload/fileupload.jsp"/>
-	<a4j:include viewId="/pages/fileupload/fileuploadEspecial.jsp"/>
+	<rich:modalPanel id="mpFileUpload" width="370" height="230"
+		resizeable="false" style="background-color:#DEEBF5">
+		<f:facet name="header">
+			<h:panelGrid>
+				<rich:column style="border: none;">
+					<h:outputText value="#{fileUploadControllerServicio.strTitle}"></h:outputText>
+				</rich:column>
+			</h:panelGrid>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="#{fileUploadControllerServicio.strCloseIconPath}"
+					styleClass="hidelink" id="hideFileUpload" />
+				<rich:componentControl for="mpFileUpload" attachTo="hideFileUpload"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
 
-	<a4j:jsFunction name="putFileDocAdjunto" reRender="colImgDocAdjunto"
+		<h:form>
+			<h:panelGroup>
+				<h:panelGrid border="0" columns="1" style="text-align:left; margin:0 auto">
+					<rich:column>
+						<h:outputText value="#{fileUploadControllerServicio.strDescripcion}"></h:outputText>
+					</rich:column>
+					<rich:column>
+						<rich:fileUpload 
+							addControlLabel="Adjuntar Archivo"
+							clearAllControlLabel="Limpiar Todo"
+							clearControlLabel="Limpiar"  
+							cancelEntryControlLabel="Cancelar"
+							uploadControlLabel="Subir Archivo" 
+							listHeight="64" listWidth="320"
+							fileUploadListener="#{fileUploadControllerServicio.adjuntarArchivo}"
+							maxFilesQuantity="1" 
+							doneLabel="Archivo cargado correctamente"
+							immediateUpload="#{applicationScope.FileUtil.autoUpload}"
+							acceptedTypes="jpg, gif, png, bmp">
+							<f:facet name="label">
+								<h:outputText value="{_KB}KB de {KB}KB cargados --- {mm}:{ss}" />
+							</f:facet>
+						</rich:fileUpload>
+					</rich:column>
+				</h:panelGrid>
+				<rich:spacer height="16px" />
+				<h:panelGrid border="0" style="margin:0 auto">
+					<a4j:commandButton value="Aceptar" 
+										styleClass="btnEstilos" 
+										onmousedown="#{fileUploadControllerServicio.strJsFunction}"
+										reRender="opAdjuntarDocumento"
+										oncomplete="Richfaces.hideModalPanel('mpFileUpload')">
+					</a4j:commandButton>
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:form>
+	</rich:modalPanel>
+	
+<a4j:include viewId="/pages/fileupload/fileuploadEspecial.jsp"/>
+
+	<a4j:jsFunction name="putFileDocAdjunto" reRender="infoDocAdjunto, colImgDocAdjunto"
 		actionListener="#{solicitudPrestamoController.putFile}">
 	</a4j:jsFunction>
 	
@@ -385,7 +441,7 @@
 				</h:panelGrid>
 	    	</h:panelGroup>
 	    </h:form>
-	  
+	    
 	</rich:modalPanel>	
 	
 	
@@ -426,66 +482,7 @@
 	   <a4j:include viewId="/pages/creditos/AutorizacionCredito/adjuntarReniec.jsp"/>
 	</rich:modalPanel>	
 
-	<h:outputText value="#{giroCreditoController.inicioPage}" />
-
-    <h:form id="frmPrincipal">
-    	<h:outputText value="#{solicitudPrestamoController.limpiarPrestamo}"/>
-    	<h:outputText value="#{autorizacionPrestamoController.limpiarAutorizacion}"/>
-    	<h:outputText value="#{solicitudEspecialController.limpiarPrestamoEspecial}"/> 	
-    	
-    	<rich:tabPanel activeTabClass="activo" inactiveTabClass="inactivo" disabledTabClass="disabled">
-	        <rich:tab label="Solicitud" disabled="#{solicitudPrestamoController.blnSolicitud}">	        	
-	         	<a4j:include viewId="/pages/creditos/SolicitudCredito/solicitudCreditoMain.jsp"/>
-	    	</rich:tab>
-	    	
-	    	 <rich:tab label="Solicitudes Especiales" disabled="#{solicitudPrestamoController.blnCreditosEspeciales}">	        	
-	         	<a4j:include viewId="/pages/creditos/prestaTumi/solicitudPrestaTumiMain.jsp"/>
-	    	</rich:tab>
-	    	
-	    	<rich:tab label="Autorización" disabled="#{solicitudPrestamoController.blnAutorizacion}">
-	         	<a4j:include viewId="/pages/creditos/AutorizacionCredito/autorizacionCreditoMain.jsp"/>
-	    	</rich:tab>
-	    	<rich:tab label="Giro" disabled="#{solicitudPrestamoController.blnGiro}">
-	         	<a4j:include viewId="/pages/creditos/GiroCredito/giroCredito.jsp"/>
-	    	</rich:tab>
-	    	<rich:tab label="Archivamiento" disabled="#{solicitudPrestamoController.blnArchivamiento}">
-	         	
-	    	</rich:tab>
-      	</rich:tabPanel>
-    </h:form>
-
-	
-    <a4j:jsFunction name="renderizarTextBusqueda" reRender="txtBusqueda"
-						actionListener="#{solicitudPrestamoController.renderizarTextBusqueda}">
-			<f:param name="pIntTipoConsultaBusqueda"></f:param>
-	</a4j:jsFunction>
-	 
-	
-	<a4j:include viewId="/pages/creditos/popup/tercerosPrestamo.jsp"/>
-	
-	
-	
-	 <a4j:jsFunction name="renderizarTextBusquedaAut" reRender="txtBusquedaAut"
-						actionListener="#{autorizacionPrestamoController.renderizarTextBusqueda}">
-			<f:param name="pIntTipoConsultaBusqueda"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="renderizarBusquedaFechasAut" reRender="cmbFechaAut, dtDesdeAut, dtHastaAut"
-					actionListener="#{autorizacionPrestamoController.renderizarBusquedaFechas}">
-		<f:param name="pIntParaEstado"></f:param>
-	</a4j:jsFunction>
-	
-	<a4j:jsFunction name="renderizarBusquedaCondicionAut" reRender="cmbCondicionAut"
-					actionListener="#{autorizacionPrestamoController.renderizarBusquedaCondicion}">
-		<f:param name="pIntParaEstadoCondicion"></f:param>
-	</a4j:jsFunction>
-	
-	
-	
-	
-	
-	
-	<!-- POPUP DE ACCIONES PARA CREDITOS ESPECIALES 777-->
+<!-- POPUP DE ACCIONES PARA CREDITOS ESPECIALES 777-->
 		<rich:modalPanel id="panelAccionesSolicitudPrestamoEspecial" width="500" height="300"
 			resizeable="false" style="background-color:#DEEBF5;">
 			<f:facet name="header">
@@ -533,7 +530,7 @@
                  <h:commandButton id="btnImprimir9" value="Autorización de Dscto al 100%" styleClass="btnEstilos1" action="#{solicitudEspecialController.imprimirautorizacionDscto100}"/>
                  </h:panelGrid>
                  <h:panelGrid columns="3" border="0"  style="width: 400px;">
-                  <rich:column visible="#{solicitudPrestamoController.mostrarBoton}"><h:commandButton id="btnImprimir10" value="Autorización Descuento Cesantes" styleClass="btnEstilos1" 
+                  <rich:column visible="#{solicitudEspecialController.mostrarBoton}"><h:commandButton id="btnImprimir10" value="Autorización Descuento Cesantes" styleClass="btnEstilos1" 
              				  action="#{solicitudEspecialController.imprimirAutorizacionDescuentoCesantes}"/></rich:column>
             	  <rich:column ><h:commandButton id="btnImprimir11" value="Pagaré" styleClass="btnEstilos1" action="#{solicitudEspecialController.imprimirPagare}"/></rich:column>
              	  <rich:column ><h:commandButton id="btnImprimir12" value="Declaración Jurada" styleClass="btnEstilos1" action="#{solicitudEspecialController.imprimirDeclaraciónJurada}"/></rich:column>
@@ -601,4 +598,102 @@
         	<a4j:include viewId="/pages/creditos/prestaTumi/popup/cronogramaEspecial.jsp"/>
         </h:form>
 	</rich:modalPanel>
+	<%--Inicio del popup autor: Rodolfo Villarreal Acuña --%>
+  <rich:modalPanel id="formEnBlanco" width="500" height="180" 
+	resizeable="false" style="background-color:#DEEBF5;" onhide="enableFormEnBlanco()">
+     <f:facet name="header">
+         <h:panelGrid>
+           <rich:column style="border: none;">
+             <h:outputText value="Opciones"/>
+           </rich:column>
+         </h:panelGrid>
+     </f:facet>
+     <f:facet name="controls">
+         <h:panelGroup>
+            <h:graphicImage value="/images/icons/remove_20.png" styleClass="hidelink">
+            	<rich:componentControl for="formEnBlanco" operation="hide" event="onclick"/>
+            </h:graphicImage>
+        </h:panelGroup>
+     </f:facet>
+     <a4j:include viewId="/pages/creditos/popup/formatosEnBlancoSolicitudCredito.jsp" layout="block"/>
+  </rich:modalPanel>
+			    <%--Fin del pop imprimir formtos en blanco --%>
+	<a4j:include viewId="/pages/creditos/popup/tercerosPrestamo.jsp"/>
 	
+	<!-- Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014 -->
+	<rich:modalPanel id="mpAdjuntarDocSolicitudPrestamo" width="370" height="230"
+		resizeable="false" style="background-color:#DEEBF5">
+		<f:facet name="header">
+			<h:panelGrid>
+				<rich:column style="border: none;">
+					<h:outputText value="#{fileUploadControllerServicio.strTitle}"></h:outputText>
+				</rich:column>
+			</h:panelGrid>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="#{fileUploadControllerServicio.strCloseIconPath}"
+					styleClass="hidelink" id="hideAdjuntarDocSolicitudPrestamo" />
+				<rich:componentControl for="mpAdjuntarDocSolicitudPrestamo" attachTo="hideAdjuntarDocSolicitudPrestamo"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>	
+		<a4j:include viewId="/pages/creditos/popup/adjuntarDocSolicitudPrestamo.jsp"/>	
+	</rich:modalPanel>	
+		
+	<a4j:region>
+		<a4j:jsFunction name="getMontoSolicitado" reRender="idMontoSolicitado"
+			actionListener="#{solicitudPrestamoController.setMontoSolicitado}">
+			<f:param name="bdMontoSolicitado"/>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarTextBusquedaAut" reRender="txtBusquedaAut"
+			actionListener="#{autorizacionPrestamoController.renderizarTextBusqueda}">
+			<f:param name="pIntTipoConsultaBusqueda"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarBusquedaFechasAut" reRender="cmbFechaAut, dtDesdeAut, dtHastaAut"
+			actionListener="#{autorizacionPrestamoController.renderizarBusquedaFechas}">
+			<f:param name="pIntParaEstado"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarBusquedaCondicionAut" reRender="cmbCondicionAut"
+			actionListener="#{autorizacionPrestamoController.renderizarBusquedaCondicion}">
+			<f:param name="pIntParaEstadoCondicion"></f:param>
+		</a4j:jsFunction>
+		
+		<a4j:jsFunction name="renderizarTextBusqueda" reRender="txtBusqueda"
+			actionListener="#{solicitudPrestamoController.renderizarTextBusqueda}">
+			<f:param name="pIntTipoConsultaBusqueda"></f:param>
+		</a4j:jsFunction>
+	</a4j:region>
+
+	
+
+	<h:outputText value="#{giroCreditoController.inicioPage}" />
+
+    <h:form id="frmPrincipal">
+    	<h:outputText value="#{solicitudPrestamoController.limpiarPrestamo}"/>
+    	<h:outputText value="#{autorizacionPrestamoController.limpiarAutorizacion}"/>
+    	<h:outputText value="#{solicitudEspecialController.limpiarPrestamoEspecial}"/> 	
+    	
+    	<rich:tabPanel activeTabClass="activo" inactiveTabClass="inactivo" disabledTabClass="disabled">
+	        <rich:tab label="Solicitud" disabled="#{solicitudPrestamoController.blnSolicitud}">	        	
+	         	<a4j:include viewId="/pages/creditos/SolicitudCredito/solicitudCreditoMain.jsp"/>
+	    	</rich:tab>
+	    	
+	    	 <rich:tab label="Solicitudes Especiales" disabled="#{solicitudPrestamoController.blnCreditosEspeciales}">	        	
+	         	<a4j:include viewId="/pages/creditos/prestaTumi/solicitudPrestaTumiMain.jsp"/>
+	    	</rich:tab>
+	    	
+	    	<rich:tab label="Autorización" disabled="#{solicitudPrestamoController.blnAutorizacion}">
+	         	<a4j:include viewId="/pages/creditos/AutorizacionCredito/autorizacionCreditoMain.jsp"/>
+	    	</rich:tab>
+	    	<rich:tab label="Giro" disabled="#{solicitudPrestamoController.blnGiro}">
+	         	<a4j:include viewId="/pages/creditos/GiroCredito/giroCredito.jsp"/>
+	    	</rich:tab>
+	    	<rich:tab label="Archivamiento" disabled="#{solicitudPrestamoController.blnArchivamiento}">
+	         	
+	    	</rich:tab>
+      	</rich:tabPanel>
+    </h:form>

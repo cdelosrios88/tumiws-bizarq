@@ -3,6 +3,7 @@ package pe.com.tumi.servicio.requisitos.controller;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -123,6 +124,17 @@ public class RequisitosController {
 		cargarValoresIniciales();
 	}
 	
+	//Autor: Rodolfo Villarreal / Tarea: Creación / Fecha: 15.10.2014 /
+	public String getInicioPage() {
+		if(usuario!=null){
+			usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
+			limpiarFomulario();
+		}else{
+			log.error("--Usuario obtenido es NULL o no posee permiso.");
+		}		
+		return "";
+	}
+		
 	private void cargarValoresIniciales(){
 		try{
 			usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
@@ -179,6 +191,10 @@ public class RequisitosController {
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
+	}
+	public void limpiarFomulario(){
+		listaConfServSolicitud = new ArrayList<ConfServSolicitud>();
+		mostrarPanelInferior = Boolean.FALSE;
 	}
 	
 	/*private void cargarListaCreditoComp() throws BusinessException{		
@@ -1300,6 +1316,7 @@ public class RequisitosController {
 			//listaConfServEstructura = confSolicitudFacade.getListaConfServEstructuraPorCabecera(confServSolicitudNuevo);
 			listaConfServEstructuraDetalle = confServSolicitudNuevo.getListaEstructuraDetalle();
 			List<ConfServEstructuraDetalle> listaConfServEstructuraDetalleAux = new ArrayList<ConfServEstructuraDetalle>();
+			List<ConfServEstructuraDetalle> listaConfServEstructuraDetalleAux2 = new ArrayList<ConfServEstructuraDetalle>();
 			
 			for(Object o : listaConfServEstructuraDetalle){
 				EstructuraDetalle estructuraDetalle = null;
@@ -1308,7 +1325,7 @@ public class RequisitosController {
 				if(estructuraDetalle != null){
 					System.out.println("****************  PUERTA ********************");
 					System.out.println("CODIGO --- "+estructuraDetalle.getId().getIntCodigo());
-					System.out.println("NEVEL --- "+estructuraDetalle.getId().getIntNivel());
+					System.out.println("NIVEL --- "+estructuraDetalle.getId().getIntNivel());
 					System.out.println("CASO --- "+estructuraDetalle.getId().getIntCaso());
 					
 					confServEstructuraDetalle.setIntTipoModalidad(estructuraDetalle.getIntParaModalidadCod());
@@ -1317,7 +1334,25 @@ public class RequisitosController {
 					listaConfServEstructuraDetalleAux.add(confServEstructuraDetalle);
 				}
 			}
-			listaConfServEstructuraDetalle = listaConfServEstructuraDetalleAux;
+			for(Iterator<ConfServEstructuraDetalle> iter = listaConfServEstructuraDetalleAux.listIterator(); iter.hasNext();){
+			boolean istrue = false;
+			ConfServEstructuraDetalle comp = iter.next();
+			if(listaConfServEstructuraDetalleAux2==null){
+				listaConfServEstructuraDetalleAux2 = new ArrayList<ConfServEstructuraDetalle>();
+				listaConfServEstructuraDetalleAux2.add(comp);
+			}else{
+				for (ConfServEstructuraDetalle t2 : listaConfServEstructuraDetalleAux2) {
+					if(comp.getIntCodigoPk().compareTo(t2.getIntCodigoPk())==0){
+						istrue = true;
+						break;
+					}
+				}
+				if(!istrue){
+					listaConfServEstructuraDetalleAux2.add(comp);
+				}
+			}
+		}
+			listaConfServEstructuraDetalle = listaConfServEstructuraDetalleAux2;
 			
 			//Para el radiobutton de estructuras
 			radioEstructura = radioEstructuraEntidad;
@@ -1360,7 +1395,7 @@ public class RequisitosController {
 					}
 				}
 				listaConfServCredito = listaConfServCreditoAux;
-			
+
 			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_FONDOSEPELIO)
 				||  confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_FONDORETIRO)
 				||  confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_AES)){
@@ -1417,10 +1452,10 @@ public class RequisitosController {
 				for(int i =0;i<listaCreditoComp.size();i++){
 					((CreditoComp)(listaCreditoComp.get(i))).setChecked(Boolean.FALSE);
 				}
-			}			
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-		}		
+		}
 	}
 	
 	public void abrirConfServCaptacion(ActionEvent event){
@@ -1431,10 +1466,10 @@ public class RequisitosController {
 				for(int i =0;i<listaCaptacion.size();i++){
 					((Captacion)(listaCaptacion.get(i))).setChecked(Boolean.FALSE);
 				}
-			}						
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-		}		
+		}
 	}
 	
 	

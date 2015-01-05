@@ -31,7 +31,7 @@
 	        	</rich:column>
 	    	</h:panelGrid>
 	    	<rich:spacer height="12px"/>  
-	    	<h:panelGrid columns="2">
+	    	<h:panelGrid columns="3">
 	    		<rich:column width="80">
 	    		</rich:column>
 	    		<rich:column>
@@ -40,6 +40,8 @@
              			onclick="Richfaces.hideModalPanel('pAlertaRegistro')"
              			reRender="contPanelInferior,panelMensaje"
         			/>
+	        	</rich:column>
+	        	<rich:column>
         			<a4j:commandButton value="Eliminar" styleClass="btnEstilos"
             			action="#{requisitosController.eliminarRegistro}"
              			onclick="Richfaces.hideModalPanel('pAlertaRegistro')"

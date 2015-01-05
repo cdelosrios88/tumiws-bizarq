@@ -3,6 +3,7 @@ package pe.com.tumi.servicio.autorizacion.controller;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -12,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.credito.socio.creditos.domain.Credito;
+import pe.com.tumi.credito.socio.creditos.domain.CreditoId;
+import pe.com.tumi.credito.socio.creditos.facade.CreditoFacadeRemote;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.parametro.tabla.domain.Tabla;
@@ -54,6 +58,10 @@ public class AutorizacionController {
 	private List listaConfServPerfil;
 	private List listaConfServUsuario;
 	private List listaConfServCancelado;
+	//Rodolfo
+	private List<Tabla> listaTipoPres;
+	private List<Tabla> listaEstado;
+	private List<Tabla> listaEstadoEdit;
 	
 	private List<Perfil> listaPerfilPersiste;
 	private List<UsuarioComp> listaUsuarioCompPersiste;
@@ -87,9 +95,29 @@ public class AutorizacionController {
 	private boolean habilitarCancelado;
 	private boolean habilitarFiltroFecha;
 	private Usuario usuario;
+	//Autor Rodolfo Villarreal
+	private Boolean tipoPrestamo;
+	private Boolean numeroCuotas;
+	private Boolean subOpeConCancelar;
+	private Boolean subOpeSinCancelar;
+	private Boolean panelCancelado;
 	
 	public AutorizacionController(){
-		cargarValoresIniciales();
+		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
+		if(usuario!=null){
+			cargarValoresIniciales();
+		}
+	}
+	
+	//Autor: Rodolfo Villarreal / Tarea: Creación / Fecha: 10.08.2014 / 
+	public String getInicioPage() {
+		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");		
+		if(usuario!=null){
+			cargarValoresIniciales();
+		}else{
+			log.error("--Usuario obtenido es NULL o no posee permiso.");
+		}		
+		return "";
 	}
 	
 	private void cargarValoresIniciales(){
@@ -109,14 +137,19 @@ public class AutorizacionController {
 				listaConfServUsuario = new ArrayList<ConfServUsuario>();
 				listaConfServSolicitud = new ArrayList<ConfServSolicitud>();
 				listaTipoRelacion = new ArrayList<Tabla>();
-				
 				tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 				permisoFacade = (PermisoFacadeRemote) EJBFactory.getRemote(PermisoFacadeRemote.class);
 				loginFacade = (LoginFacadeRemote) EJBFactory.getRemote(LoginFacadeRemote.class);
 				confSolicitudFacade = (ConfSolicitudFacadeLocal) EJBFactory.getLocal(ConfSolicitudFacadeLocal.class);
-				
+				listaEstadoEdit = new ArrayList<Tabla>();
 				listaTipoRelacion = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOROL),"E");
-				listaTipoPrestamo = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+//				listaTipoPrestamo = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+				listaEstado = tablaFacade.getListaTablaPorIdMaestro(1);
+				for (Tabla t : listaEstado) {
+					if(t.getIntIdDetalle()!=-1){
+						listaEstadoEdit.add(t);
+					}
+				}
 				
 				cargarListaPerfilPersiste();
 				cargarListaUsuarioPersiste();
@@ -167,6 +200,13 @@ public class AutorizacionController {
 		mostrarMensajeError = Boolean.FALSE;
 		mostrarMensajeExito = Boolean.FALSE;
 		habilitarGrabar = Boolean.FALSE;
+		listaTipoRelacion = new ArrayList<Tabla>();
+		try {
+			listaTipoRelacion = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOROL),"E");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 	
 	public void habilitarPanelInferior(ActionEvent event){
@@ -205,7 +245,7 @@ public class AutorizacionController {
 	
 	public void grabar(){
 		Boolean exito = Boolean.FALSE;
-		String mensaje = null;
+			String mensaje = null;
 		try{
 			
 			//Validación general
@@ -245,8 +285,261 @@ public class AutorizacionController {
 			confServSolicitudNuevo.setIntParaTipoRequertoAutorizaCod(Constante.PARAM_T_TIPOREQAUT_AUTORIZACION);
 						
 			if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_PRESTAMO)
-					|| confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO)){
+					|| confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO)
+					|| confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_ORDENCREDITO)){
 			
+				//Validaciones
+				if(confServSolicitudNuevo.getDtDesde()==null){
+					mensaje = "Ocurrió un error durante el registro. Debe ingresar el inicio del Rango de Fecha.";
+					return;
+				}
+				if(!seleccionaIndeterminado && confServSolicitudNuevo.getDtHasta()==null){
+					mensaje = "Ocurrió un error durante el registro. Debe ingresar el fin del Rango de Fecha.";
+					return;
+				}
+				if(!seleccionaIndeterminado && confServSolicitudNuevo.getDtDesde().compareTo(confServSolicitudNuevo.getDtHasta())>0){
+					mensaje = "Ocurrió un error durante el registro. La fecha de inicio es mayor a la fecha de fin.";
+					return;
+				}
+				if(!habilitarAgregarUsuario && !habilitarAgregarPerfil){
+					mensaje = "Ocurrió un error durante el registro. Debe seleccionar un tipo de Entidad de Autorización.";
+					return;
+				}
+				if(habilitarAgregarPerfil && listaConfServPerfil.isEmpty()){
+					mensaje = "Ocurrió un error durante el registro. Debe agregar al menos un perfil en Entidad de Autorización.";
+					return;
+				}
+				if(habilitarAgregarUsuario && listaConfServUsuario.isEmpty()){
+					mensaje = "Ocurrió un error durante el registro. Debe agregar al menos un usuario en Entidad de Autorización.";
+					return;
+				}  //habilitarTipoPrestamo
+				if(habilitarTipoPrestamo){
+					boolean seleccionoTipoPrestamo = Boolean.FALSE;
+					for(Object o : listaTipoPrestamo){
+						if(((Tabla)o).getChecked()){
+							seleccionoTipoPrestamo = Boolean.TRUE;
+							break;
+						}
+					}
+					if(!seleccionoTipoPrestamo){
+						mensaje = "Ocurrió un error durante el registro. Debe seleccionar al menos un tipo de préstamo.";
+						return;
+					}
+				}else{
+					mensaje = "Ocurrió un error durante el registro. Debe seleccionar al menos un tipo de préstamo.";
+					return;
+				}
+				if(habilitarRangoMontos){
+					if(confServSolicitudNuevo.getBdMontoDesde()==null || confServSolicitudNuevo.getBdMontoHasta()==null){
+						mensaje = "Ocurrió un error durante el registro. Debe ingresar correctamente el rango de monto.";
+						return;
+					}
+					if(confServSolicitudNuevo.getBdMontoDesde().compareTo(confServSolicitudNuevo.getBdMontoHasta())>0){
+						mensaje = "Ocurrió un error durante el registro. El rango incial del monto es mayor al final.";
+						return;
+					}
+				}
+				if(habilitarNumeroCuotas){
+					if(confServSolicitudNuevo.getBdCuotaDesde()==null || confServSolicitudNuevo.getBdCuotaHasta()==null){
+						mensaje = "Ocurrió un error durante el registro. Debe ingresar correctamente el número de cuotas.";
+						return;
+					}
+					if(confServSolicitudNuevo.getBdCuotaDesde().compareTo(confServSolicitudNuevo.getBdCuotaHasta())>0){
+						mensaje = "Ocurrió un error durante el registro. El número de cuotas incial es mayor al número final.";
+						return;
+					}
+				}
+				if(confServSolicitudNuevo.getIntParaSubtipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO) && habilitarCancelado){
+					if(listaConfServCancelado.isEmpty()){
+						mensaje = "Ocurrió un error durante el registro. Debe agregar al menos un % de cancelado.";
+						return;
+					}
+				}
+				
+				//Grabar
+				//log.info("habilitarAgregarPerfil:"+habilitarAgregarPerfil);
+				if(habilitarAgregarPerfil){
+					//log.info("listaConfServPerfil:"+listaConfServPerfil.size());
+					confServSolicitudNuevo.setListaPerfil(listaConfServPerfil);					
+				}else{
+					confServSolicitudNuevo.setListaPerfil(null);
+				}
+				
+				//log.info("habilitarAgregarUsuario:"+habilitarAgregarUsuario);
+				if(habilitarAgregarUsuario){
+					//log.info("listaConfServUsuario:"+listaConfServUsuario.size());
+					confServSolicitudNuevo.setListaUsuario(listaConfServUsuario);
+				}else{
+					confServSolicitudNuevo.setListaUsuario(null);
+				}
+				
+				if(habilitarTipoPrestamo){					
+					List<ConfServCreditoEmpresa> listaConfServCreditoEmpresa = new ArrayList<ConfServCreditoEmpresa>();
+					for(Object o : listaTipoPrestamo){
+						Tabla tabla = (Tabla)o;
+						ConfServCreditoEmpresa confServCreditoEmpresa = new ConfServCreditoEmpresa();
+						confServCreditoEmpresa.getId().setIntPersEmpresaPk(usuario.getPerfil().getId().getIntPersEmpresaPk());
+						confServCreditoEmpresa.getId().setIntParaTipoCreditoEmpresaCod(tabla.getIntIdDetalle());
+						if(tabla.getChecked()){
+							confServCreditoEmpresa.setIntValor(selecciona);
+						}else{
+							confServCreditoEmpresa.setIntValor(noSelecciona);
+						}
+						listaConfServCreditoEmpresa.add(confServCreditoEmpresa);
+					}					
+					confServSolicitudNuevo.setListaCreditoEmpresa(listaConfServCreditoEmpresa);			
+				}
+				
+				if(!habilitarRangoMontos){
+					confServSolicitudNuevo.setBdMontoDesde(null);
+					confServSolicitudNuevo.setBdMontoHasta(null);
+				}
+				
+				if(!habilitarNumeroCuotas){
+					confServSolicitudNuevo.setBdCuotaDesde(null);
+					confServSolicitudNuevo.setBdCuotaHasta(null);
+				}
+				
+				if(confServSolicitudNuevo.getIntParaSubtipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)){
+					if(habilitarCancelado){
+						confServSolicitudNuevo.setListaCancelado(listaConfServCancelado);
+					}else{
+						confServSolicitudNuevo.setListaCancelado(null);
+					}
+				}
+				
+				if(registrarNuevo){
+					confServSolicitudNuevo.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+					confServSolicitudNuevo.getId().setIntPersEmpresaPk(usuario.getPerfil().getId().getIntPersEmpresaPk());
+					//Cambiar para pruebas en QC con 93
+					//confServSolicitudNuevo.setIntPersPersonaUsuarioPk(Constante.PARAM_USUARIOSESION);
+					confServSolicitudNuevo.setIntPersPersonaUsuarioPk(usuario.getIntPersPersonaPk());
+					confServSolicitudNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));								
+					
+					confSolicitudFacade.grabarAutorizacion(confServSolicitudNuevo);					
+					mensaje = "Se registró correctamente la configuración de autorizaciones.";
+				}else{
+					confSolicitudFacade.modificarAutorizacion(confServSolicitudNuevo);
+					mensaje = "Se modificó correctamente la configuración de autorizaciones.";
+					
+				}
+				exito = Boolean.TRUE;
+				deshabilitarNuevo = Boolean.TRUE;
+				habilitarGrabar = Boolean.FALSE;
+				buscar();
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_LIQUIDACIONDECUENTA)
+					|| confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_FONDORETIRO)
+					|| confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_FONDOSEPELIO)
+					|| confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_AES)){
+				//Validaciones
+				if(confServSolicitudNuevo.getDtDesde()==null){
+					mensaje = "Ocurrió un error durante el registro. Debe ingresar el inicio del Rango de Fecha.";
+					return;
+				}
+				if(!seleccionaIndeterminado && confServSolicitudNuevo.getDtHasta()==null){
+					mensaje = "Ocurrió un error durante el registro. Debe ingresar el fin del Rango de Fecha.";
+					return;
+				}
+				if(!seleccionaIndeterminado && confServSolicitudNuevo.getDtDesde().compareTo(confServSolicitudNuevo.getDtHasta())>0){
+					mensaje = "Ocurrió un error durante el registro. La fecha de inicio es mayor a la fecha de fin.";
+					return;
+				}
+				if(!habilitarAgregarUsuario && !habilitarAgregarPerfil){
+					mensaje = "Ocurrió un error durante el registro. Debe seleccionar un tipo de Entidad de Autorización.";
+					return;
+				}
+				if(habilitarAgregarPerfil && listaConfServPerfil.isEmpty()){
+					mensaje = "Ocurrió un error durante el registro. Debe agregar al menos un perfil en Entidad de Autorización.";
+					return;
+				}
+				if(habilitarAgregarUsuario && listaConfServUsuario.isEmpty()){
+					mensaje = "Ocurrió un error durante el registro. Debe agregar al menos un usuario en Entidad de Autorización.";
+					return;
+				}
+				if(habilitarTipoPrestamo){
+					boolean seleccionoTipoPrestamo = Boolean.FALSE;
+					for(Object o : listaTipoPrestamo){
+						if(((Tabla)o).getChecked()){
+							seleccionoTipoPrestamo = Boolean.TRUE;
+							break;
+						}
+					}
+					if(!seleccionoTipoPrestamo){
+						mensaje = "Ocurrió un error durante el registro. Debe seleccionar al menos un tipo de préstamo.";
+						return;
+					}
+				}
+				if(habilitarRangoMontos){
+					if(confServSolicitudNuevo.getBdMontoDesde()==null || confServSolicitudNuevo.getBdMontoHasta()==null){
+						mensaje = "Ocurrió un error durante el registro. Debe ingresar correctamente el rango de monto.";
+						return;
+					}
+					if(confServSolicitudNuevo.getBdMontoDesde().compareTo(confServSolicitudNuevo.getBdMontoHasta())>0){
+						mensaje = "Ocurrió un error durante el registro. El rango incial del monto es mayor al final.";
+						return;
+					}
+				}
+				if(habilitarNumeroCuotas){
+					if(confServSolicitudNuevo.getBdCuotaDesde()==null || confServSolicitudNuevo.getBdCuotaHasta()==null){
+						mensaje = "Ocurrió un error durante el registro. Debe ingresar correctamente el número de cuotas.";
+						return;
+					}
+					if(confServSolicitudNuevo.getBdCuotaDesde().compareTo(confServSolicitudNuevo.getBdCuotaHasta())>0){
+						mensaje = "Ocurrió un error durante el registro. El número de cuotas incial es mayor al número final.";
+						return;
+					}
+				}
+				if(confServSolicitudNuevo.getIntParaSubtipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO) && habilitarCancelado){
+					if(listaConfServCancelado.isEmpty()){
+						mensaje = "Ocurrió un error durante el registro. Debe agregar al menos un % de cancelado.";
+						return;
+					}
+				}
+				
+				//Grabar
+				//log.info("habilitarAgregarPerfil:"+habilitarAgregarPerfil);
+				if(habilitarAgregarPerfil){
+					//log.info("listaConfServPerfil:"+listaConfServPerfil.size());
+					confServSolicitudNuevo.setListaPerfil(listaConfServPerfil);					
+				}else{
+					confServSolicitudNuevo.setListaPerfil(null);
+				}
+				
+				//log.info("habilitarAgregarUsuario:"+habilitarAgregarUsuario);
+				if(habilitarAgregarUsuario){
+					//log.info("listaConfServUsuario:"+listaConfServUsuario.size());
+					confServSolicitudNuevo.setListaUsuario(listaConfServUsuario);
+				}else{
+					confServSolicitudNuevo.setListaUsuario(null);
+				}
+				
+				if(!habilitarRangoMontos){
+					confServSolicitudNuevo.setBdMontoDesde(null);
+					confServSolicitudNuevo.setBdMontoHasta(null);
+				}
+				
+				if(registrarNuevo){
+					confServSolicitudNuevo.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+					confServSolicitudNuevo.getId().setIntPersEmpresaPk(usuario.getPerfil().getId().getIntPersEmpresaPk());
+					//Cambiar para pruebas en QC con 93
+					//confServSolicitudNuevo.setIntPersPersonaUsuarioPk(Constante.PARAM_USUARIOSESION);
+					confServSolicitudNuevo.setIntPersPersonaUsuarioPk(usuario.getIntPersPersonaPk());
+					confServSolicitudNuevo.setTsFechaRegistro(new Timestamp(new Date().getTime()));								
+					
+					confSolicitudFacade.grabarAutorizacion(confServSolicitudNuevo);					
+					mensaje = "Se registró correctamente la configuración de autorizaciones.";
+				}else{
+					confSolicitudFacade.modificarAutorizacion(confServSolicitudNuevo);
+					mensaje = "Se modificó correctamente la configuración de autorizaciones.";
+					
+				}
+				exito = Boolean.TRUE;
+				deshabilitarNuevo = Boolean.TRUE;
+				habilitarGrabar = Boolean.FALSE;
+				buscar();
+//				mensaje = "Ocurrio un error durante el proceso de registro de autorizaciones. La operación seleccionada no se encuentra soportada.";
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_ACTIVIDAD)){
+
 				//Validaciones
 				if(confServSolicitudNuevo.getDtDesde()==null){
 					mensaje = "Ocurrió un error durante el registro. Debe ingresar el inicio del Rango de Fecha.";
@@ -351,19 +644,6 @@ public class AutorizacionController {
 					confServSolicitudNuevo.setBdMontoHasta(null);
 				}
 				
-				if(!habilitarNumeroCuotas){
-					confServSolicitudNuevo.setBdCuotaDesde(null);
-					confServSolicitudNuevo.setBdCuotaHasta(null);
-				}
-				
-				if(confServSolicitudNuevo.getIntParaSubtipoOperacionCod().equals(Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO)){
-					if(habilitarCancelado){
-						confServSolicitudNuevo.setListaCancelado(listaConfServCancelado);
-					}else{
-						confServSolicitudNuevo.setListaCancelado(null);
-					}
-				}
-				
 				if(registrarNuevo){
 					confServSolicitudNuevo.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
 					confServSolicitudNuevo.getId().setIntPersEmpresaPk(usuario.getPerfil().getId().getIntPersEmpresaPk());
@@ -383,11 +663,8 @@ public class AutorizacionController {
 				deshabilitarNuevo = Boolean.TRUE;
 				habilitarGrabar = Boolean.FALSE;
 				buscar();
-			}else{
-				mensaje = "Ocurrio un error durante el proceso de registro de autorizaciones. La operación seleccionada no se encuentra soportada.";
+//				mensaje = "Ocurrio un error durante el proceso de registro de autorizaciones. La operación seleccionada no se encuentra soportada.";
 			}
-			
-			
 		}catch(Exception e){
 			mensaje = "Ocurrio un error durante el proceso de registro de autorizaciones.";
 			log.error(e.getMessage(),e);
@@ -409,21 +686,253 @@ public class AutorizacionController {
 	}
 	
 	public void seleccionarRegistrarTipo(){
+		Credito cre = null;
+		List<Credito> listCredito = null;
+		CreditoFacadeRemote creditoFacade;
+		List<Tabla> tablaAuxiliar = new ArrayList<Tabla>();
+		List<Tabla> tablaAuxiliarTemp = null;
 		try{
-			habilitarGrabar = Boolean.TRUE;			
-			habilitarTipoOperacion = Boolean.FALSE;
-			habilitarComboEstado = Boolean.TRUE;			
-			habilitarAgregarUsuario = Boolean.FALSE;
-			habilitarAgregarPerfil = Boolean.FALSE;
-			mostrarMensaje(Boolean.TRUE,null);
 			
-			log.info(confServSolicitudNuevo);
-			
-			if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_PRESTAMO)){
+			if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_LIQUIDACIONDECUENTA)){
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(false);
+				setNumeroCuotas(false);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOSUBOPERACION));
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_PRESTAMO)){
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(true);
+				setNumeroCuotas(true);
+				setSubOpeConCancelar(true);
+				setSubOpeSinCancelar(false);
+				creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
 				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONPRESTAMO));
-			
+				listaTipoPres = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+				cre = new Credito();
+				cre.setId(new CreditoId());
+				cre.getId().setIntPersEmpresaPk(2);
+				cre.getId().setIntParaTipoCreditoCod(1);
+				listCredito = creditoFacade.getlistaAutorizaPorPk(cre);
+				for (Credito credito : listCredito) {
+					for (Tabla t : listaTipoPres) {
+						if(credito.getIntParaTipoCreditoEmpresa().equals(t.getIntIdDetalle())){
+							tablaAuxiliar.add(t);
+						}
+					}
+				}
+				for(Iterator<Tabla> iter = tablaAuxiliar.listIterator(); iter.hasNext();){
+					boolean istrue = false;
+					Tabla tb = iter.next();
+					if(tablaAuxiliarTemp==null){
+						tablaAuxiliarTemp = new ArrayList<Tabla>();
+						tablaAuxiliarTemp.add(tb);
+						iter.remove();
+					}else{
+						for (Tabla t2 : tablaAuxiliarTemp) {
+							if(tb.getIntIdDetalle().compareTo(t2.getIntIdDetalle())==0){
+								istrue = true;
+								break;
+							}
+						}
+						if(!istrue){
+							tablaAuxiliarTemp.add(tb);
+						}
+					}
+				}
+				listaTipoPrestamo = tablaAuxiliarTemp; 
+				
 			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO)){
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(true);
+				setNumeroCuotas(true);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+				creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
 				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONREFINANCIAMIENTO));
+				listaTipoPres = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+				cre = new Credito();
+				cre.setId(new CreditoId());
+				cre.getId().setIntPersEmpresaPk(2);
+				cre.getId().setIntParaTipoCreditoCod(5);
+				listCredito = creditoFacade.getlistaAutorizaPorPk(cre);
+				for (Credito credito : listCredito) {
+					for (Tabla t : listaTipoPres) {
+						if(credito.getIntParaTipoCreditoEmpresa().equals(t.getIntIdDetalle())){
+							tablaAuxiliar.add(t);
+						}
+					}
+				}
+				for(Iterator<Tabla> iter = tablaAuxiliar.listIterator(); iter.hasNext();){
+					boolean istrue = false;
+					Tabla tb = iter.next();
+					if(tablaAuxiliarTemp==null){
+						tablaAuxiliarTemp = new ArrayList<Tabla>();
+						tablaAuxiliarTemp.add(tb);
+						iter.remove();
+					}else{
+						for (Tabla t2 : tablaAuxiliarTemp) {
+							if(tb.getIntIdDetalle().compareTo(t2.getIntIdDetalle())==0){
+								istrue = true;
+								break;
+							}
+						}
+						if(!istrue){
+							tablaAuxiliarTemp.add(tb);
+						}
+					}
+				}
+				listaTipoPrestamo = tablaAuxiliarTemp;
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_ACTIVIDAD)){
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(true);
+				setNumeroCuotas(false);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONACTIVIDADES));
+				creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
+				listaTipoPres = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+				cre = new Credito();
+				cre.setId(new CreditoId());
+				cre.getId().setIntPersEmpresaPk(2);
+				cre.getId().setIntParaTipoCreditoCod(3);
+				listCredito = creditoFacade.getlistaAutorizaPorPk(cre);
+				for (Credito credito : listCredito) {
+					for (Tabla t : listaTipoPres) {
+						if(credito.getIntParaTipoCreditoEmpresa().equals(t.getIntIdDetalle())){
+							tablaAuxiliar.add(t);
+						}
+					}
+				}
+				for(Iterator<Tabla> iter = tablaAuxiliar.listIterator(); iter.hasNext();){
+					boolean istrue = false;
+					Tabla tb = iter.next();
+					if(tablaAuxiliarTemp==null){
+						tablaAuxiliarTemp = new ArrayList<Tabla>();
+						tablaAuxiliarTemp.add(tb);
+						iter.remove();
+					}else{
+						for (Tabla t2 : tablaAuxiliarTemp) {
+							if(tb.getIntIdDetalle().compareTo(t2.getIntIdDetalle())==0){
+								istrue = true;
+								break;
+							}
+						}
+						if(!istrue){
+							tablaAuxiliarTemp.add(tb);
+						}
+					}
+				}
+				listaTipoPrestamo = tablaAuxiliarTemp;
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_FONDORETIRO)){
+				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONFONDORETIRO));
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(false);
+				setNumeroCuotas(false);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_FONDOSEPELIO)){
+				List<Tabla> listaFondoRetiro = null;
+				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONFONDOSEPELIO));
+				listaFondoRetiro = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOCUENTA), Constante.VISTA_TIPOPERSONA_JURIDICA);
+				listaTipoPrestamo = listaFondoRetiro;
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(false);
+				setNumeroCuotas(false);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_AES)){
+				List<Tabla> listaFondoRetiro = null;
+				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONFONDOAES));
+				listaFondoRetiro = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOCUENTA), Constante.VISTA_TIPOPERSONA_JURIDICA);
+				listaTipoPrestamo = listaFondoRetiro;
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(false);
+				setNumeroCuotas(false);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+			}else if(confServSolicitudNuevo.getIntParaTipoOperacionCod().equals(Constante.PARAM_T_TIPOOPERACION_ORDENCREDITO)){
+				habilitarGrabar = Boolean.TRUE;			
+				habilitarTipoOperacion = Boolean.FALSE;
+				habilitarComboEstado = Boolean.TRUE;			
+				habilitarAgregarUsuario = Boolean.FALSE;
+				habilitarAgregarPerfil = Boolean.FALSE;
+				mostrarMensaje(Boolean.TRUE,null);
+				setTipoPrestamo(true);
+				setNumeroCuotas(true);
+				setSubOpeConCancelar(false);
+				setSubOpeSinCancelar(true);
+				creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
+				listaSuboperacion = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_SUBOPERACIONORDENDECREDITO));
+				listaTipoPres = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA));
+				cre = new Credito();
+				cre.setId(new CreditoId());
+				cre.getId().setIntPersEmpresaPk(2);
+				cre.getId().setIntParaTipoCreditoCod(2);
+				listCredito = creditoFacade.getlistaAutorizaPorPk(cre);
+				for (Credito credito : listCredito) {
+					for (Tabla t : listaTipoPres) {
+						if(credito.getIntParaTipoCreditoEmpresa().equals(t.getIntIdDetalle())){
+							tablaAuxiliar.add(t);
+						}
+					}
+				}
+				for(Iterator<Tabla> iter = tablaAuxiliar.listIterator(); iter.hasNext();){
+					boolean istrue = false;
+					Tabla tb = iter.next();
+					if(tablaAuxiliarTemp==null){
+						tablaAuxiliarTemp = new ArrayList<Tabla>();
+						tablaAuxiliarTemp.add(tb);
+						iter.remove();
+					}else{
+						for (Tabla t2 : tablaAuxiliarTemp) {
+							if(tb.getIntIdDetalle().compareTo(t2.getIntIdDetalle())==0){
+								istrue = true;
+								break;
+							}
+						}
+						if(!istrue){
+							tablaAuxiliarTemp.add(tb);
+						}
+					}
+				}
+				listaTipoPrestamo = tablaAuxiliarTemp; 
+				
 			}
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -609,7 +1118,12 @@ public class AutorizacionController {
 				mostrarMensaje(Boolean.FALSE,mensaje);
 				return;
 			}
-			confServSolicitudFiltro.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+			if(confServSolicitudFiltro.getIntParaTipoOperacionCod()==0){
+				confServSolicitudFiltro.setIntParaTipoOperacionCod(null);
+			}
+			if(confServSolicitudFiltro.getIntParaEstadoCod()==0){
+				confServSolicitudFiltro.setIntParaEstadoCod(null);
+			}
 			listaConfServSolicitud = confSolicitudFacade.buscarConfSolicitudAutorizacion(confServSolicitudFiltro, confServSolicitudFiltro.getDtDesde(), confServSolicitudFiltro.getDtHasta(), tipoCuentaFiltro);
 			
 			List<ConfServPerfil> listaPerfilAux = new ArrayList<ConfServPerfil>();
@@ -1106,5 +1620,142 @@ public class AutorizacionController {
 	}
 	public void setHabilitarFiltroFecha(boolean habilitarFiltroFecha) {
 		this.habilitarFiltroFecha = habilitarFiltroFecha;
+	}
+
+	public List<Tabla> getListaTipoPres() {
+		return listaTipoPres;
+	}
+
+	public void setListaTipoPres(List<Tabla> listaTipoPres) {
+		this.listaTipoPres = listaTipoPres;
+	}
+
+	public static Logger getLog() {
+		return log;
+	}
+
+	public static void setLog(Logger log) {
+		AutorizacionController.log = log;
+	}
+
+	public TablaFacadeRemote getTablaFacade() {
+		return tablaFacade;
+	}
+
+	public void setTablaFacade(TablaFacadeRemote tablaFacade) {
+		this.tablaFacade = tablaFacade;
+	}
+
+	public PermisoFacadeRemote getPermisoFacade() {
+		return permisoFacade;
+	}
+
+	public void setPermisoFacade(PermisoFacadeRemote permisoFacade) {
+		this.permisoFacade = permisoFacade;
+	}
+
+	public LoginFacadeRemote getLoginFacade() {
+		return loginFacade;
+	}
+
+	public void setLoginFacade(LoginFacadeRemote loginFacade) {
+		this.loginFacade = loginFacade;
+	}
+
+	public ConfSolicitudFacadeLocal getConfSolicitudFacade() {
+		return confSolicitudFacade;
+	}
+
+	public void setConfSolicitudFacade(ConfSolicitudFacadeLocal confSolicitudFacade) {
+		this.confSolicitudFacade = confSolicitudFacade;
+	}
+
+	public List<Tabla> getListaEstado() {
+		return listaEstado;
+	}
+
+	public void setListaEstado(List<Tabla> listaEstado) {
+		this.listaEstado = listaEstado;
+	}
+
+	public List<Tabla> getListaEstadoEdit() {
+		return listaEstadoEdit;
+	}
+
+	public void setListaEstadoEdit(List<Tabla> listaEstadoEdit) {
+		this.listaEstadoEdit = listaEstadoEdit;
+	}
+
+	public List<UsuarioComp> getListaUsuarioCompPersiste() {
+		return listaUsuarioCompPersiste;
+	}
+
+	public void setListaUsuarioCompPersiste(
+			List<UsuarioComp> listaUsuarioCompPersiste) {
+		this.listaUsuarioCompPersiste = listaUsuarioCompPersiste;
+	}
+
+	public Integer getSelecciona() {
+		return selecciona;
+	}
+
+	public void setSelecciona(Integer selecciona) {
+		this.selecciona = selecciona;
+	}
+
+	public Integer getNoSelecciona() {
+		return noSelecciona;
+	}
+
+	public void setNoSelecciona(Integer noSelecciona) {
+		this.noSelecciona = noSelecciona;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public Boolean getTipoPrestamo() {
+		return tipoPrestamo;
+	}
+
+	public void setTipoPrestamo(Boolean tipoPrestamo) {
+		this.tipoPrestamo = tipoPrestamo;
+	}
+
+	public Boolean getNumeroCuotas() {
+		return numeroCuotas;
+	}
+
+	public void setNumeroCuotas(Boolean numeroCuotas) {
+		this.numeroCuotas = numeroCuotas;
+	}
+
+	public Boolean getSubOpeConCancelar() {
+		return subOpeConCancelar;
+	}
+
+	public void setSubOpeConCancelar(Boolean subOpeConCancelar) {
+		this.subOpeConCancelar = subOpeConCancelar;
+	}
+
+	public Boolean getSubOpeSinCancelar() {
+		return subOpeSinCancelar;
+	}
+
+	public void setSubOpeSinCancelar(Boolean subOpeSinCancelar) {
+		this.subOpeSinCancelar = subOpeSinCancelar;
+	}
+
+	public Boolean getPanelCancelado() {
+		return panelCancelado;
+	}
+
+	public void setPanelCancelado(Boolean panelCancelado) {
+		this.panelCancelado = panelCancelado;
 	}
 }

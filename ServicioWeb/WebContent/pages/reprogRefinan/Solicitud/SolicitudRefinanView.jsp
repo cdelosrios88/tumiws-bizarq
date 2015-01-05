@@ -200,9 +200,6 @@
 							<rich:column width="80px" rowspan="2">
 								<h:outputText value="Fondo de Retiro"/>
 							</rich:column>
-							<rich:column width="80px" rowspan="2">
-								<h:outputText value="Fondo de Sepelio"/>
-							</rich:column>
 							<rich:column colspan="5">
 								<h:outputText value="Préstamo"/>
 							</rich:column>
@@ -241,11 +238,6 @@
 						<h:outputText  value="#{itemCuentaComp.bdTotalAporte}">
 							<f:converter converterId="ConvertidorMontos"  />
 						</h:outputText>	
-					</rich:column>
-					<rich:column width="80px" rowspan="#{itemCuentaComp.intTamannoListaExp}">
-						<h:outputText value="#{itemCuentaComp.bdTotalSepelio}">
-							<f:converter converterId="ConvertidorMontos"  />
-						</h:outputText>
 					</rich:column>
 					<rich:column rowspan="#{itemCuentaComp.intTamannoListaExp}">
 						<h:outputText value="#{itemCuentaComp.bdTotalRetiro}">
@@ -382,7 +374,7 @@
 				<h:outputText value="Fecha de Solicitud: " styleClass="estiloLetra1"></h:outputText>
 			</rich:column>
 			<rich:column>
-				<rich:calendar readonly="true" value="#{solicitudRefinanController.dtFechaRegistro}"
+				<rich:calendar readonly="true" disabled="true" value="#{solicitudRefinanController.dtFechaRegistro}"
 					datePattern="dd/MM/yyyy" inputStyle="width:70px">
 				</rich:calendar>
 			</rich:column>
@@ -556,7 +548,16 @@
 		<h:panelGrid columns="8" styleClass="tableCellBorder4">
 			<rich:columnGroup>
 				<rich:column width="120px">
-				<h:outputText value="Cuota Fija:" styleClass="estiloLetra1"></h:outputText>
+					<h:outputText value="Cuota Préstamo" styleClass="estiloLetra1"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value=":"/>
+				</rich:column>
+				<rich:column>
+					<h:inputText value="#{solicitudRefinanController.bdTotalCuotaPrestamo}" readonly="true"/>
+				</rich:column>
+				<rich:column width="120px">
+				<h:outputText value="Cuota Mensual:" styleClass="estiloLetra1"></h:outputText>
 				</rich:column>
 				<rich:column width="120px">
 					<h:inputText  size="15" value="#{solicitudRefinanController.bdTotalCuotaMensual}" readonly="true"></h:inputText>

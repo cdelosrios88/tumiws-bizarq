@@ -92,19 +92,23 @@
 	        	</rich:column>
 	    	</h:panelGrid>
 	    	<rich:spacer height="12px"/>  
-	    	<h:panelGrid columns="1">
+	    	<h:panelGrid columns="4">
+	    		<rich:column width="30">
+	        	</rich:column>
 	    		<rich:column style="border:none" id="colBtnModificar">
 	    			<a4j:commandButton value="Modificar" styleClass="btnEstilos"
             			action="#{autorizacionController.modificarRegistro}"
              			onclick="Richfaces.hideModalPanel('pAlertaRegistro')"
-             			reRender="contPanelInferior,panelMensaje"
-        			/>
+             			reRender="contPanelInferior,panelMensaje"/>
+	        	</rich:column>
+	        	<rich:column width="30">
+	        	</rich:column>
+	        	<rich:column style="border:none" id="colBtnEliminar">
         			<a4j:commandButton value="Eliminar" styleClass="btnEstilos"
             			action="#{autorizacionController.eliminarRegistro}"
              			onclick="Richfaces.hideModalPanel('pAlertaRegistro')"
              			reRender="panelMensaje,contPanelInferior,panelTablaAutorizacion"
-             			rendered="#{autorizacionController.mostrarBtnEliminar}"
-        			/>
+             			rendered="#{autorizacionController.mostrarBtnEliminar}"/>
 	        	</rich:column>
 	    	</h:panelGrid>
     	</rich:panel>
@@ -114,9 +118,9 @@
 
 
 <h:form id="frmAutorizacion">
+ <h:outputLabel value="#{autorizacionController.inicioPage}"/>
+  <rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;">
 	<h:panelGroup layout="block" style="padding:15px;border:1px solid #B3B3B3;text-align: left;">
-		
-        	
         	<h:panelGrid style="margin:0 auto; margin-bottom:5px">
 	    		<rich:columnGroup>
 	    			<rich:column>
@@ -133,6 +137,7 @@
                 	<h:selectOneMenu
 						style="width: 150px;"
 						value="#{autorizacionController.confServSolicitudFiltro.intParaTipoOperacionCod}">
+						<f:selectItem itemLabel="Seleccione..." itemValue="0"/>
 						<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOOPERACION}" 
 							itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 							tipoVista="#{applicationScope.Constante.CACHE_TOTAL}"
@@ -160,6 +165,16 @@
 		         		inputSize="10" 
 		         		showApplyButton="true"/>		         							
          		</rich:column>
+         		<rich:column>
+              				<h:outputText value="Estado :"/>
+              			</rich:column>
+         		<rich:column>
+                        	<h:selectOneMenu value="#{autorizacionController.confServSolicitudFiltro.intParaEstadoCod}">
+                        		<f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+	                        	<tumih:selectItems var="sel" value="#{autorizacionController.listaEstadoEdit}" 
+									itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"/>
+                        	</h:selectOneMenu>
+               </rich:column>
          		<rich:column width="50" style="text-align: right;">
                 	<a4j:commandButton styleClass="btnEstilos"
                 		value="Buscar" reRender="panelTablaAutorizacion,panelMensaje"
@@ -179,7 +194,7 @@
 					rowKeyVar="rowKey" 
 					rows="5" 
 					width="920px" 
-					height="170px" 
+					height="190px" 
 					align="center">
                                 
 					<rich:column width="30px" style="text-align: center">
@@ -199,26 +214,26 @@
                         	<h:outputText value="Tipo de Operación"/>
                       	</f:facet>
                       	<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOOPERACION}" 
-							itemValue="intIdDetalle" 
-							itemLabel="strDescripcion" 
-							property="#{item.intParaTipoOperacionCod}"/>
+                                             itemValue="intIdDetalle" itemLabel="strDescripcion" 
+                                             property="#{item.intParaTipoOperacionCod}"/>
                 	</rich:column>
-                    <rich:column width="150" style="text-align: center">
+                    <rich:column width="100" style="text-align: center">
                     	<f:facet name="header">
                       		<h:outputText value="Sub Operación"/>                      		
                       	</f:facet>
-                      	<h:panelGroup rendered="#{item.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_PRESTAMO}">
+                      	<h:outputText value="#{item.strDescripcionSubTipo}"/>
+                      	<!--<h:panelGroup rendered="#{item.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_PRESTAMO}">
                       		<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_SUBOPERACIONPRESTAMO}" 
 								itemValue="intIdDetalle" 
 								itemLabel="strDescripcion" 
 								property="#{item.intParaSubtipoOperacionCod}"/>
-                      	</h:panelGroup>
-                      	<h:panelGroup rendered="#{item.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO}">
+                      	</h:panelGroup>-->
+                      	<!--<h:panelGroup rendered="#{item.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO}">
                       		<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_SUBOPERACIONREFINANCIAMIENTO}" 
 								itemValue="intIdDetalle" 
 								itemLabel="strDescripcion" 
 								property="#{item.intParaSubtipoOperacionCod}"/>
-                      	</h:panelGroup>
+                      	</h:panelGroup>-->
                   	</rich:column>
                     <rich:column width="160" style="text-align: center">
                    		<f:facet name="header">
@@ -244,6 +259,14 @@
 	                  		</rich:column>
 						</rich:dataTable>
                   	</rich:column>
+                  	<rich:column width="60px">
+                                  <f:facet name="header">
+                                      <h:outputText value="Estado"/>
+                                  </f:facet>
+                                  <tumih:outputText cache="#{applicationScope.Constante.PARAM_T_ESTADOUNIVERSAL}" 
+                                             itemValue="intIdDetalle" itemLabel="strDescripcion" 
+                                             property="#{item.intParaEstadoCod}"/>
+                              </rich:column>
                     <rich:column width="140" style="text-align: center">
                   		<f:facet name="header">
                         	<h:outputText value="Rango de Fecha"/>
@@ -341,6 +364,7 @@
 			        		style="width: 150px;"
 							disabled="#{autorizacionController.deshabilitarNuevo || !autorizacionController.habilitarTipoOperacion}"
 							value="#{autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod}">
+							<f:selectItem itemLabel="Seleccione..." itemValue="0"/>
 							<tumih:selectItems var="sel" cache="#{applicationScope.Constante.PARAM_T_TIPOOPERACION}" 
 								itemValue="#{sel.intIdDetalle}" itemLabel="#{sel.strDescripcion}"
 								propertySort="intOrden"/>			
@@ -371,10 +395,17 @@
 				</h:panelGrid>
 
 				<h:panelGroup id="panelOperacion" 
-					rendered="#{(autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_PRESTAMO)
-					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO)}">
+					rendered="#{
+					   (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_PRESTAMO)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_REFINANCIAMIENTO)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_LIQUIDACIONDECUENTA)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_FONDORETIRO)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_FONDOSEPELIO)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_ACTIVIDAD)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_AES)
+					|| (autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod==applicationScope.Constante.PARAM_T_TIPOOPERACION_ORDENCREDITO)}">
 				
-					<h:panelGrid columns="2">
+					<h:panelGrid columns="2" rendered="#{autorizacionController.subOpeConCancelar}">
 						<rich:column width="150">
 							<h:outputText value="Suboperación : "/>
 						</rich:column>
@@ -387,6 +418,22 @@
 									itemValue="#{sel.intIdDetalle}" 
 									itemLabel="#{sel.strDescripcion}"/>
 								<a4j:support event="onchange" reRender="panelCancelado"  />
+							</h:selectOneMenu>
+				        </rich:column>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2" rendered="#{autorizacionController.subOpeSinCancelar}">
+						<rich:column width="150">
+							<h:outputText value="Suboperación : "/>
+						</rich:column>
+						<rich:column width="150">
+				        	<h:selectOneMenu
+								style="width: 120px;"
+								disabled="#{autorizacionController.deshabilitarNuevo}"
+								value="#{autorizacionController.confServSolicitudNuevo.intParaSubtipoOperacionCod}">
+								<tumih:selectItems var="sel" value="#{autorizacionController.listaSuboperacion}" 
+									itemValue="#{sel.intIdDetalle}" 
+									itemLabel="#{sel.strDescripcion}"/>
 							</h:selectOneMenu>
 				        </rich:column>
 					</h:panelGrid>
@@ -537,7 +584,8 @@
 							<h:outputText value="Niveles de Autorización : "/>
 						</rich:column>
 						<rich:column>
-							<h:panelGrid columns="2" id="panelTipoPrestamo">
+							<h:panelGrid columns="2" id="panelTipoPrestamo"
+										 rendered="#{autorizacionController.tipoPrestamo}">
 								<rich:column width="150">
 									<h:selectBooleanCheckbox value="#{autorizacionController.habilitarTipoPrestamo}"
 										disabled="#{autorizacionController.deshabilitarNuevo}">
@@ -547,7 +595,7 @@
 								</rich:column>
 								<rich:column width="200">
 									<rich:dataTable value="#{autorizacionController.listaTipoPrestamo}" var="item">
-										<rich:column width="150">
+										<rich:column width="180">
 					                  		<f:facet name="header">
 					                        	<h:outputText value="Tipo de Préstamo"/>
 					                     	</f:facet>
@@ -614,7 +662,8 @@
 								</rich:column>
 							</h:panelGrid>
 							
-							<h:panelGrid columns="3" id="panelNumeroCuotas">
+							<h:panelGrid columns="3" id="panelNumeroCuotas"
+										 rendered="#{autorizacionController.numeroCuotas}">
 								<rich:column width="150">
 									<h:selectBooleanCheckbox value="#{autorizacionController.habilitarNumeroCuotas}"
 										disabled="#{autorizacionController.deshabilitarNuevo}">
@@ -649,7 +698,8 @@
 							</h:panelGrid>
 							
 							<h:panelGroup id="panelCancelado">
-							<h:panelGrid columns="3" rendered="#{autorizacionController.confServSolicitudNuevo.intParaSubtipoOperacionCod == applicationScope.Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO}">
+							<h:panelGrid columns="3" rendered="#{autorizacionController.confServSolicitudNuevo.intParaSubtipoOperacionCod == applicationScope.Constante.PARAM_T_SUBOPERACIONPRESTAMO_REPRESTAMO
+																 && autorizacionController.confServSolicitudNuevo.intParaTipoOperacionCod == applicationScope.Constante.PARAM_T_TIPOOPERACION_PRESTAMO}">
 								<rich:column width="150">
 									<h:selectBooleanCheckbox value="#{autorizacionController.habilitarCancelado}"
 										disabled="#{autorizacionController.deshabilitarNuevo}">
@@ -698,14 +748,15 @@
 							</h:panelGrid>
 							</h:panelGroup>
 							
-				        </rich:column>				        
-					</h:panelGrid>
+				       	 </rich:column>				        
+						</h:panelGrid>
 					
-				</h:panelGroup>
+					</h:panelGroup>
 		       	
-		</rich:panel>
+				</rich:panel>
 				
-	</h:panelGroup>	
+			</h:panelGroup>	
 
-</h:panelGroup>
+		</h:panelGroup>
+	</rich:panel>
 </h:form>

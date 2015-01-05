@@ -26,12 +26,6 @@
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">
-					<h:outputText value="Fecha Envío"/>
-				</f:facet>
-				<h:outputText value="#{item.strFechaEnvio}"/>
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
 					<h:outputText value="Fecha de Pago"/>
 				</f:facet>
 				<h:outputText value="#{item.strFechaVencimiento}"/>
@@ -71,6 +65,38 @@
 					<h:outputText value="Aportes"/>
 				</f:facet>
 				<div align="right"><h:outputText value="#{item.bdAportes}"/></div>
+			</rich:column>
+			<rich:column rendered="#{solicitudRefinanController.intCantExpedientesVigentes == 1}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudRefinanController.strDescCuotaFijaExpCred1}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente1}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudRefinanController.intCantExpedientesVigentes == 2}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudRefinanController.strDescCuotaFijaExpCred2}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente2}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudRefinanController.intCantExpedientesVigentes == 3}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudRefinanController.strDescCuotaFijaExpCred3}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente3}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
+			</rich:column>
+			<rich:column rendered="#{solicitudRefinanController.intCantExpedientesVigentes == 4}" width="85px">
+				<f:facet name="header">
+					<h:outputText value="#{solicitudRefinanController.strDescCuotaFijaExpCred4}"/>
+				</f:facet>
+				<h:outputText value="#{item.bdCuotaFijaExpediente4}">
+					<f:converter converterId="ConvertidorMontos"  />
+				</h:outputText>
 			</rich:column>
 			<rich:column width="140px">
 				<f:facet name="header">

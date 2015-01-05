@@ -214,9 +214,6 @@
 						<rich:column width="80px" rowspan="2">
 							<h:outputText value="Fondo de Retiro"/>
 						</rich:column>
-						<rich:column width="80px" rowspan="2">
-							<h:outputText value="Fondo de Sepelio"/>
-						</rich:column>
 						<rich:column colspan="5">
 							<h:outputText value="Préstamo"/>
 						</rich:column>
@@ -255,11 +252,6 @@
 						<h:outputText  value="#{itemCuentaComp.bdTotalAporte}" style="align: right">
 							<f:converter converterId="ConvertidorMontos"  />
 						</h:outputText>	
-					</rich:column>
-					<rich:column width="80px" rowspan="#{itemCuentaComp.intTamannoListaExp}">
-						<h:outputText value="#{itemCuentaComp.bdTotalSepelio}" style="align: right">
-							<f:converter converterId="ConvertidorMontos"  />
-						</h:outputText>
 					</rich:column>
 					<rich:column rowspan="#{itemCuentaComp.intTamannoListaExp}">
 						<h:outputText value="#{itemCuentaComp.bdTotalRetiro}" style="align: right">
@@ -443,7 +435,16 @@
 				</rich:column>
 			</h:panelGrid>
 			
-			<h:panelGrid columns="3">
+			<h:panelGrid columns="6">
+				<rich:column width="120px">
+					<h:outputText value="Cuota Préstamo" styleClass="estiloLetra1"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value=":"/>
+				</rich:column>
+				<rich:column>
+					<h:inputText value="#{solicitudEspecialController.bdTotalCuotaPrestamo}" readonly="true"/>
+				</rich:column>
 				<rich:column width="120px">
 					<h:outputText value="Cuota Mensual" styleClass="estiloLetra1"/>
 				</rich:column>

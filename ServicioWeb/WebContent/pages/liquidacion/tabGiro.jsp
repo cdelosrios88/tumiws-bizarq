@@ -14,8 +14,9 @@
 
 
 
-	<h:form>
-   	<rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;">
+<h:form>
+	<h:outputText value="#{giroLiquidacionController.inicioPage}" />
+	<rich:panel styleClass="rich-tabcell-noborder" style="border:1px solid #17356f;">
         	
         	<h:panelGrid style="margin:0 auto; margin-bottom:10px">
 	    		<rich:columnGroup>
@@ -72,7 +73,7 @@
             
 			<h:panelGrid columns="10">
 				<rich:column width="100">
-					<h:outputText value="Condición :"/>
+					<h:outputText value="Estado Solicitud :"/>
 				</rich:column>
 				<rich:column width="155">
 					<h:selectOneMenu
@@ -100,6 +101,7 @@
 							itemLabel="#{sel.strDescripcion}"/>
 					</h:selectOneMenu>
 				</rich:column>
+				<!-- 
 				<rich:column>
 					<h:selectOneMenu
 						value="#{giroLiquidacionController.intTipoBusquedaFechaFiltro}"
@@ -112,6 +114,7 @@
 							propertySort="intOrden" />
 					</h:selectOneMenu>
 				</rich:column>
+				 -->
 				<rich:column width="75">
 					<h:outputText value="Fecha :"/>
 				</rich:column>
@@ -379,18 +382,18 @@
 					<a4j:commandButton
 						rendered="#{empty giroLiquidacionController.archivoAdjuntoGiro}"
                 		styleClass="btnEstilos"
-                		value="Adjunto de Giro"
+                		value="Adjunto Documento de Giro"
                 		reRender="pAdjuntarGiroLiquidacion, panelAdjuntoRequisito"
                 		oncomplete="Richfaces.showModalPanel('pAdjuntarGiroLiquidacion')"
-                		style="width:130px"/>                 		
+                		style="width:200px"/>                 		
                 	<a4j:commandButton
 						rendered="#{not empty giroLiquidacionController.archivoAdjuntoGiro}"
 						disabled="#{giroLiquidacionController.deshabilitarNuevoBeneficiario}"
                 		styleClass="btnEstilos"
-                		value="Quitar Adjunto de Giro"
+                		value="Quitar Adjunto Documento de Giro"
                 		reRender="pAdjuntarGiroLiquidacion,panelAdjuntoRequisito"
                 		action="#{giroLiquidacionController.quitarAdjuntoGiro}"
-                		style="width:130px"/>
+                		style="width:220px"/>
 				</rich:column>
 				<rich:column width="130" 
 					rendered="#{(not empty giroLiquidacionController.archivoAdjuntoGiro)&&(giroLiquidacionController.deshabilitarDescargaAdjuntoGiro)}">
@@ -483,14 +486,15 @@
 						style="background-color: #BFBFBF;"/>
 				</rich:column>
 				<rich:column width="250">
-					<h:outputText value="Monto Asignado : "/>
-					<h:outputText value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoApertura}">
+					<b><h:outputText value="Monto Asignado : " style="font-size:15px"/>
+					<h:outputText value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoApertura}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
-					<h:outputText value=" Saldo : "/>
-					<h:outputText value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoSaldo}">
+					<h:outputText value=" Saldo : " style="font-size:15px"/>
+					<h:outputText value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoSaldo}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
+					</b>
 				</rich:column>
 			</h:panelGrid>
 			
@@ -513,16 +517,17 @@
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column width="250">
-					<h:outputText value="Monto Asignado : "/>
+					<b><h:outputText value="Monto Asignado : " style="font-size:15px"/>
 					<h:outputText rendered ="#{not empty giroLiquidacionController.controlFondosFijosGirar.bdMontoApertura}" 
-						value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoApertura}">
+						value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoApertura}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
-					<h:outputText value=" Saldo : "/>
+					<h:outputText value=" Saldo : " style="font-size:15px"/>
 					<h:outputText rendered ="#{not empty giroLiquidacionController.controlFondosFijosGirar.bdMontoSaldo}" 
-						value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoSaldo}">
+						value="#{giroLiquidacionController.controlFondosFijosGirar.bdMontoSaldo}" style="font-size:15px">
 						<f:converter converterId="ConvertidorMontos" />
 					</h:outputText>
+					</b>
 				</rich:column>
 			</h:panelGrid>			
 
@@ -597,7 +602,7 @@
                 		value="Desleccionar Persona"
                 		action="#{giroLiquidacionController.deseleccionarPersonaApoderado}"
                 		reRender="panelApoderadoG,panelCartaPoderG"
-                		style="width:130px"/>
+                		style="width:150px"/>
 				</rich:column>
 			</h:panelGrid>
 			
@@ -624,7 +629,7 @@
                 		value="Adjuntar Carta Poder"
                 		reRender="frmAjuntarCartaPoder"
                 		oncomplete="Richfaces.showModalPanel('pAdjuntarCartaPoder')"
-                		style="width:130px"/>
+                		style="width:140px"/>
                 	<a4j:commandButton
 						rendered="#{not empty giroLiquidacionController.archivoCartaPoder}"
 						disabled="#{giroLiquidacionController.deshabilitarNuevo}"
@@ -632,7 +637,7 @@
                 		value="Quitar Carta Poder"
                 		reRender="panelCartaPoderG"
                 		action="#{giroLiquidacionController.quitarCartaPoder}"
-                		style="width:130px"/>
+                		style="width:140px"/>
 				</rich:column>
 			</h:panelGrid>
 						
@@ -657,7 +662,7 @@
 			<h:panelGrid columns="8" id="panelDetalleEgreso">
 				<rich:column width="120"/>
 				<rich:column>
-					<h:panelGrid>
+					<h:panelGrid >
 			        	<rich:dataTable
 			          		sortMode="single" 
 		                    var="item"
@@ -665,7 +670,8 @@
 							rowKeyVar="rowKey"
 							width="800px"
 							align="center"
-							rows="#{fn:length(giroLiquidacionController.listaEgresoDetalleInterfaz)}">
+							rows="#{fn:length(giroLiquidacionController.listaEgresoDetalleInterfaz)}"
+							>
 		                    
 							<rich:column width="20px" style="text-align: center">
 		                    	<h:outputText value="#{rowKey + 1}"/>
@@ -739,17 +745,88 @@
 					<h:outputText value="Total General :"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText size ="15" 
-						value="#{giroLiquidacionController.bdTotalEgresoDetalleInterfaz}" 
+					<h:inputText value="#{giroLiquidacionController.bdTotalEgresoDetalleInterfaz}" 
 						readonly="true" 
-						style="background-color: #BFBFBF;">
+						style="background-color: #BFBFBF;font-weight:bold; width: 160;">
 						<f:converter converterId="ConvertidorMontos"/>
-					</h:inputText>
+					</h:inputText> - 
+					<h:inputText size="76"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"
+						value="#{giroLiquidacionController.strTotalEgresoDetalleInterfaz}"/>					
+				</rich:column>
+			</h:panelGrid>
+			<h:panelGrid columns="8">
+				<rich:column width="120">
+					<h:outputText value="Egresos Anteriores :"/>
+				</rich:column>
+			</h:panelGrid>
+			<h:panelGrid columns="8">
+				<rich:column width="120"/>
+				<rich:column>
+					<h:panelGrid>
+			        	<rich:dataTable
+			          		sortMode="single" 
+		                    var="item"
+		                    value="#{giroLiquidacionController.listaBeneficiariosGirados}"  
+							rowKeyVar="rowKey"
+							width="800px"
+							align="center"
+							rows="#{fn:length(giroLiquidacionController.listaBeneficiariosGirados)}">
+		                    
+							<rich:column width="20px" style="text-align: center">
+		                    	<h:outputText value="#{rowKey + 1}"/>
+		                    </rich:column>
+							<rich:column width="100px" style="text-align: center">
+		                    	<f:facet name="header">
+		                        	<h:outputText value="DNI"/>
+		                      	</f:facet>
+		                      	<h:outputText value="#{item.persona.documento.strNumeroIdentidad}"/>
+		                    </rich:column>
+		                  	<rich:column width="280" style="text-align: center">
+		                    	<f:facet name="header">
+		                      		<h:outputText value="Beneficiario"/>
+		                      	</f:facet>
+		                      	<h:outputText value="#{item.persona.natural.strNombreCompleto}"/>
+		                  	</rich:column>
+		                  	<rich:column width="150" style="text-align: center">
+		                    	<f:facet name="header">
+		                      		<h:outputText value="Egreso"/>
+		                      	</f:facet>
+		                      	<h:outputText value="#{item.egreso.strNumeroEgreso}"/>
+		                  	</rich:column>
+		                  	<rich:column width="150" style="text-align: center">
+		                    	<f:facet name="header">
+		                      		<h:outputText value="Asiento"/>
+		                      	</f:facet>
+		                      	<h:outputText value="#{item.egreso.libroDiario.strNumeroAsiento}"/>
+		                  	</rich:column>
+		                  	<rich:column width="100" style="text-align: center">
+		                    	<f:facet name="header">
+		                      		<h:outputText value="Monto"/>                      		
+		                      	</f:facet>
+		                      	<h:outputText value="#{item.egreso.bdMontoTotal}">
+		                      		<f:converter converterId="ConvertidorMontos" />
+		                      	</h:outputText>
+		                  	</rich:column>
+		                  	<rich:column width="100" style="text-align: center">
+		                    	<f:facet name="header">
+		                      		<h:outputText value="Carta Poder"/>            		
+		                      	</f:facet>
+		                      	<h:commandLink  value=" Descargar"
+		                      		rendered="#{(not empty item.archivoCartaPoder)}"
+									actionListener="#{fileUploadController.descargarArchivo}">
+									<f:attribute name="archivo" value="#{item.archivoCartaPoder}"/>
+								</h:commandLink>
+		                  	</rich:column>
+		            	</rich:dataTable>       	
+		         	</h:panelGrid>
+		         	
 				</rich:column>
 			</h:panelGrid>
 		</rich:panel>
 	</h:panelGroup>	
-
+	
 </rich:panel>
 
 </h:form>

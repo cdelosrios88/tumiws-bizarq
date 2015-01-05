@@ -223,7 +223,7 @@
 	                </a4j:commandLink>
 	            </rich:column>
 	            <rich:column>
-	            	<a4j:commandLink id="lnkEditDependencia" styleClass="no-decor" reRender="mpCapacidadCreditoEsp,frmCapacidadPagoEspecial" 
+	            	<a4j:commandLink id="lnkEditDependencia" styleClass="no-decor" reRender="mpCapacidadCreditoEsp,frmCapacidadPagoEspecial, pgIncentivoGralEspecial, pgIncentivoProrrateoEspecial" 
 						disabled="#{solicitudEspecialController.blnBtnEditCapacidad}"
 	            		actionListener="#{capacidadPagoController.irModificarCapacidadCreditoEspecial}"
 	                    oncomplete="Richfaces.showModalPanel('mpCapacidadCreditoEsp')">
@@ -281,9 +281,6 @@
 						<rich:column width="80px" rowspan="2">
 							<h:outputText value="Fondo de Retiro"/>
 						</rich:column>
-						<rich:column width="80px" rowspan="2">
-							<h:outputText value="Fondo de Sepelio"/>
-						</rich:column>
 						<rich:column colspan="5">
 							<h:outputText value="Préstamo"/>
 						</rich:column>
@@ -326,11 +323,6 @@
 					<rich:column width="80px" rowspan="#{itemCuentaComp.intTamannoListaExp}">
 					<h:outputText value="#{itemCuentaComp.bdTotalRetiro}" style="align: right">
 							<f:converter converterId="ConvertidorMontos"  />
-						</h:outputText>
-					</rich:column>
-					<rich:column rowspan="#{itemCuentaComp.intTamannoListaExp}">
-						<h:outputText value="#{itemCuentaComp.bdTotalSepelio}" style="align: right">
-						<f:converter converterId="ConvertidorMontos"  />
 						</h:outputText>
 					</rich:column>
                    
@@ -422,7 +414,7 @@
 			</rich:column>
 			<rich:column>
 				<a4j:commandButton value="Evaluación" actionListener="#{solicitudEspecialController.evaluarPrestamo}" styleClass="btnEstilos1" 
-					reRender="pgSolicCreditoEspecial,pgRequisitos,pgEvaluacion,pgPrestamo1,pgPrestamo2,pgCondiciones,pgMsgErrorEvaluacion,pgListDocAdjuntos,pgOperacion,idMontoSolicitado"/>
+					reRender="pgSolicCreditoEspecial,pgRequisitos,pgEvaluacion,pgPrestamo1,pgPrestamo2,pgCondiciones,pgMsgErrorEvaluacion,pgListDocAdjuntosEspecial,pgOperacion,idMontoSolicitado"/>
 			</rich:column>
 			<rich:column>
 				<a4j:commandButton value="Cronograma" oncomplete="#{rich:component('mpCronogramaCreditoEsp')}.show()"
@@ -509,7 +501,16 @@
 				</rich:column>
 			</h:panelGrid>
 			
-			<h:panelGrid columns="3">
+			<h:panelGrid columns="6">
+				<rich:column width="120px">
+					<h:outputText value="Cuota Préstamo" styleClass="estiloLetra1"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value=":"/>
+				</rich:column>
+				<rich:column>
+					<h:inputText value="#{solicitudEspecialController.bdTotalCuotaPrestamo}" readonly="true"/>
+				</rich:column>
 				<rich:column width="120px">
 					<h:outputText value="Cuota Mensual" styleClass="estiloLetra1"/>
 				</rich:column>
@@ -621,7 +622,7 @@
 				</rich:column>
 			</h:panelGrid>
 			
-			<h:panelGrid id="pgListDocAdjuntos" columns="3">
+			<h:panelGrid id="pgListDocAdjuntosEspecial" columns="3">
 				<rich:column width="120px">
 					<h:outputText value="Documentos" styleClass="estiloLetra1"/>
 				</rich:column>
@@ -647,7 +648,7 @@
 			                        		actionListener="#{solicitudEspecialController.adjuntarDocumento}" reRender="mpFileUploadEspecial"
 			                        		oncomplete="Richfaces.showModalPanel('mpFileUploadEspecial')" styleClass="btnEstilos1"
 			                        		disabled="#{solicitudEspecialController.blnBtnAddRequisito}"
-			                        		reRender="pgSolicCreditoEspecial,mpFileUploadEspecial, pgListDocAdjuntos,pgEvaluacion,colImgDocAdjuntoEspecial">
+			                        		reRender="pgSolicCreditoEspecial,mpFileUploadEspecial, pgListDocAdjuntosEspecial,pgEvaluacion,colImgDocAdjuntoEspecial">
 			                        		<f:param name="intParaTipoDescripcion" value="#{itemRequisitos.detalle.intParaTipoDescripcion}"/>
 			                        		<f:param name="intParaTipoOperacionPersona" value="#{itemRequisitos.detalle.intParaTipoPersonaOperacionCod}"/>
 			                        	</a4j:commandButton>

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import pe.com.tumi.common.util.Constante;
+import pe.com.tumi.common.util.ConvertirLetras;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaIntegrante;
 import pe.com.tumi.credito.socio.creditos.domain.Credito;
 import pe.com.tumi.credito.socio.creditos.domain.CreditoId;
@@ -143,6 +144,10 @@ public class GiroCreditoController {
 	private boolean mostrarPanelAdjuntoGiro;
 	private List<RequisitoCredito> lstRequisitoCredito;
 	
+	//Autor: jchavez / Tarea: Creación / Fecha: 12.08.2014 / 
+	private List<Tabla> listaTablaTipoCreditoEmpresa;
+	private String strTotalEgresoDetalleInterfaz;
+	
 	public GiroCreditoController(){
 		cargarUsuario();
 		if(usuario != null){
@@ -176,6 +181,8 @@ public class GiroCreditoController {
 		ocultarMensaje();
 		archivoAdjuntoGiro = null;
 		habilitarGrabarRequisito = false;
+		
+		strTotalEgresoDetalleInterfaz = "";
 	}
 	
 	private void cargarUsuario(){
@@ -205,9 +212,13 @@ public class GiroCreditoController {
 			
 			listaTablaEstadoPago = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO), "A");
 			listaTipoBusquedaSucursal = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOSUCURSALBUSQUEDA), "A");
+			//Autor: jchavez / Tarea: Creación / Fecha: 12.08.2014 / 
+			listaTablaTipoCreditoEmpresa = tablaFacade.getListaTablaPorAgrupamientoB(Integer.parseInt(Constante.PARAM_T_TIPOCREDITOEMPRESA), 1);
 			
 			lstRequisitoCredito = new ArrayList<RequisitoCredito>();
 			cargarListaTablaSucursal();
+			
+			strTotalEgresoDetalleInterfaz = "";
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -237,6 +248,8 @@ public class GiroCreditoController {
 	
 	public void buscar(){
 		CreditoId cId = new CreditoId();
+		List<RequisitoCredito> lstReqCred = new ArrayList<RequisitoCredito>();
+		List<RequisitoCreditoComp> lstReqCredTemp;
 		try{
 			CreditoFacadeRemote creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
 			
@@ -298,6 +311,31 @@ public class GiroCreditoController {
 				//Parametro integrante administra = 1
 					if(cuentaIntegrante.getIntParaTipoIntegranteCod().equals(Constante.TIPOINTEGRANTE_ADMINISTRADOR)){						
 						expedienteCredito.setPersonaAdministra(devolverPersonaCargada(cuentaIntegrante.getId().getIntPersonaIntegrante()));
+					}
+				}
+			}
+			
+			//Autor: jchavez / Tarea: Creación / Fecha: 12.08.2014 /
+			//Funcionalidad: Se añade Documento adjunto de giro si lo tuviera.
+			for(ExpedienteCredito expCred : listaExpedienteCredito){
+				lstReqCred.clear();
+				lstReqCredTemp = prestamoFacade.getRequisitoGiroPrestamo(expCred);
+				//2. validamos si existe registro en requisito credito
+				if (lstReqCredTemp!=null && !lstReqCredTemp.isEmpty()) {
+					Integer requisitoSize = lstReqCredTemp.size();
+
+					for (RequisitoCreditoComp o : lstReqCredTemp) {
+						ConfServDetalleId reqAutDetalleId = new ConfServDetalleId();
+						reqAutDetalleId.setIntPersEmpresaPk(o.getIntEmpresa());
+						reqAutDetalleId.setIntItemSolicitud(o.getIntItemRequisito());
+						reqAutDetalleId.setIntItemDetalle(o.getIntItemRequisitoDetalle());
+						lstReqCred.addAll(prestamoFacade.getListaPorPkExpedienteCreditoYRequisitoDetalle(expCred.getId(), reqAutDetalleId));
+				
+					}
+					if (lstReqCred!=null && !lstReqCred.isEmpty()) {
+						if (requisitoSize.equals(lstReqCred.size())) {
+							expCred.setArchivoGiro(prestamoFacade.getArchivoPorRequisitoCredito(lstReqCred.get(0)));
+						}
 					}
 				}
 			}
@@ -410,6 +448,8 @@ public class GiroCreditoController {
 		Boolean exito = Boolean.FALSE;
 		String mensaje = null;
 		try {
+			CreditoFacadeRemote creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
+			
 			// 1. Valida adjunto Giro Credito
 			if(archivoAdjuntoGiro == null){
 				mensaje = "Debe asignar un Archivo Adjunto para el giro.";
@@ -422,35 +462,44 @@ public class GiroCreditoController {
 			 */
 //			lstRequisitoCreditoComp = prestamoFacade.getRequisitoGiroPrestamo(expedienteCreditoGirar);
 			
-			RequisitoCredito requisitoCredito = new RequisitoCredito();
-			requisitoCredito.setId(new RequisitoCreditoId());
+			if (lstRequisitoCreditoComp!=null && !lstRequisitoCreditoComp.isEmpty()) {
+				RequisitoCredito requisitoCredito = new RequisitoCredito();
+				requisitoCredito.setId(new RequisitoCreditoId());
+				
+				//Seteando valores...
+				//Llave del expediente crédito
+				requisitoCredito.getId().setIntPersEmpresaPk(expedienteCreditoGirar.getId().getIntPersEmpresaPk());
+				requisitoCredito.getId().setIntCuentaPk(expedienteCreditoGirar.getId().getIntCuentaPk());
+				requisitoCredito.getId().setIntItemExpediente(expedienteCreditoGirar.getId().getIntItemExpediente());
+				requisitoCredito.getId().setIntItemDetExpediente(expedienteCreditoGirar.getId().getIntItemDetExpediente());
+				//Llave del requisito
+				requisitoCredito.setIntPersEmpresaRequisitoPk(lstRequisitoCreditoComp.get(0).getIntEmpresa());
+				requisitoCredito.setIntItemReqAut(lstRequisitoCreditoComp.get(0).getIntItemRequisito());
+				requisitoCredito.setIntItemReqAutDet(lstRequisitoCreditoComp.get(0).getIntItemRequisitoDetalle());
+				//Archivo cargado
+				requisitoCredito.setIntParaTipoArchivoCod(archivoAdjuntoGiro.getId().getIntParaTipoCod());
+				requisitoCredito.setIntParaItemArchivo(archivoAdjuntoGiro.getId().getIntItemArchivo());
+				requisitoCredito.setIntParaItemHistorico(archivoAdjuntoGiro.getId().getIntItemHistorico());
+				//Del registro
+				requisitoCredito.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
+				requisitoCredito.setTsFechaRequisito(new Timestamp(new Date().getTime()));
+				
+				requisitoCredito = prestamoFacade.grabarRequisito(requisitoCredito);
+				
+				exito = Boolean.TRUE;			
+				deshabilitarNuevo = Boolean.TRUE;
+				habilitarGrabarRequisito = Boolean.FALSE;
+				mensaje = "Se grabó el requisito satisfactoriamente.";
+				
+				buscar();
+			}else {
+				Credito credito = new Credito();
+				credito.setId(new CreditoId());
+				credito = creditoFacade.getCreditoPorIdCreditoDirecto(credito.getId());
+				mensaje = "No existe requisitos configurados para "+credito.getStrDescripcion();
+				return;
+			}
 			
-			//Seteando valores...
-			//Llave del expediente crédito
-			requisitoCredito.getId().setIntPersEmpresaPk(expedienteCreditoGirar.getId().getIntPersEmpresaPk());
-			requisitoCredito.getId().setIntCuentaPk(expedienteCreditoGirar.getId().getIntCuentaPk());
-			requisitoCredito.getId().setIntItemExpediente(expedienteCreditoGirar.getId().getIntItemExpediente());
-			requisitoCredito.getId().setIntItemDetExpediente(expedienteCreditoGirar.getId().getIntItemDetExpediente());
-			//Llave del requisito
-			requisitoCredito.setIntPersEmpresaRequisitoPk(lstRequisitoCreditoComp.get(0).getIntEmpresa());
-			requisitoCredito.setIntItemReqAut(lstRequisitoCreditoComp.get(0).getIntItemRequisito());
-			requisitoCredito.setIntItemReqAutDet(lstRequisitoCreditoComp.get(0).getIntItemRequisitoDetalle());
-			//Archivo cargado
-			requisitoCredito.setIntParaTipoArchivoCod(archivoAdjuntoGiro.getId().getIntParaTipoCod());
-			requisitoCredito.setIntParaItemArchivo(archivoAdjuntoGiro.getId().getIntItemArchivo());
-			requisitoCredito.setIntParaItemHistorico(archivoAdjuntoGiro.getId().getIntItemHistorico());
-			//Del registro
-			requisitoCredito.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
-			requisitoCredito.setTsFechaRequisito(new Timestamp(new Date().getTime()));
-			
-			requisitoCredito = prestamoFacade.grabarRequisito(requisitoCredito);
-			
-			exito = Boolean.TRUE;			
-			deshabilitarNuevo = Boolean.TRUE;
-			habilitarGrabarRequisito = Boolean.FALSE;
-			mensaje = "Se grabó el requisito satisfactoriamente.";
-			
-			buscar();
 		}catch (Exception e){
 			mensaje = "Error durante proceso de grabación de requisito: "+e.getMessage().toString();
 			log.error(e.getMessage(),e);
@@ -556,12 +605,15 @@ public class GiroCreditoController {
 	}
 	
 	private void cargarListaEgresoDetalleInterfaz() throws Exception{
+		strTotalEgresoDetalleInterfaz = "";
 		listaEgresoDetalleInterfaz = prestamoFacade.cargarListaEgresoDetalleInterfaz(expedienteCreditoGirar);
 		
 		bdTotalEgresoDetalleInterfaz = new BigDecimal(0);
 		for(Object o : listaEgresoDetalleInterfaz){
 			EgresoDetalleInterfaz egresoDetalleInterfaz = (EgresoDetalleInterfaz)o;
 			bdTotalEgresoDetalleInterfaz = bdTotalEgresoDetalleInterfaz.add(egresoDetalleInterfaz.getBdSubTotal());
+			//Autor: jchavez / Tarea: Creación / Fecha: 13.08.2014 /
+			strTotalEgresoDetalleInterfaz = ConvertirLetras.convertirMontoALetras(bdTotalEgresoDetalleInterfaz, Constante.PARAM_T_TIPOMONEDA_SOLES);
 		}
 	}
 
@@ -1302,5 +1354,21 @@ public class GiroCreditoController {
 	}
 	public void setMostrarPanelAdjuntoGiro(boolean mostrarPanelAdjuntoGiro) {
 		this.mostrarPanelAdjuntoGiro = mostrarPanelAdjuntoGiro;
+	}
+	//Autor: jchavez / Tarea: Creación / Fecha: 12.08.2014 /
+	public List<Tabla> getListaTablaTipoCreditoEmpresa() {
+		return listaTablaTipoCreditoEmpresa;
+	}
+	public void setListaTablaTipoCreditoEmpresa(
+			List<Tabla> listaTablaTipoCreditoEmpresa) {
+		this.listaTablaTipoCreditoEmpresa = listaTablaTipoCreditoEmpresa;
+	}
+	public String getStrTotalEgresoDetalleInterfaz() {
+		return strTotalEgresoDetalleInterfaz;
+	}
+
+	public void setStrTotalEgresoDetalleInterfaz(
+			String strTotalEgresoDetalleInterfaz) {
+		this.strTotalEgresoDetalleInterfaz = strTotalEgresoDetalleInterfaz;
 	}
 }

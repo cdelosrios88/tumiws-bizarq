@@ -99,29 +99,34 @@
 			<!----------------------------- TIPO CUENTA ------------------------------------------>
 			
 				<rich:column>
-				<rich:dataList value="#{solicitudLiquidacionController.listaCuentaSocio}"
+			<rich:dataList value="#{solicitudLiquidacionController.listaCuentaSocio}"
 				                     		var="item"
 				                        	style="border-top: 1px; border-left: 1px;background-color:#FFFFFF;">
 					   <h:panelGrid columns="3">
-					      <h:selectBooleanCheckbox value="true" disabled="false"/>
+					      <h:selectBooleanCheckbox value="true" disabled="true"/>
 			               <h:outputText value="#{item.strDescripcionTipoCuenta}"></h:outputText>							      
 										      
 	                  </h:panelGrid>
 				  </rich:dataList>
-				 </rich:column> 	
+			</rich:column> 	
 			
-				<!-------------------------------- TIPO CUENTA CONCEPTOS ------------------------------------------------>
+			<!-------------------------------- TIPO CUENTA CONCEPTOS ------------------------------------------------>
 		
 			<rich:column>
 					<rich:dataList value="#{solicitudLiquidacionController.listaCuentaConceptoComp}" 
 				                     		var="itemCuentaConcepto" 
 				                     		rowKeyVar="rowKey"
 				                     		style="border-top: 1px; border-left: 1px;background-color:#FFFFFF;">
-					   <h:panelGrid columns="3">
+					   <!-- Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014 -->
+					   <h:panelGrid columns="3" rendered="#{itemCuentaConcepto.intParaTipoConceptoCod == applicationScope.Constante.PARAM_T_TIPOCUENTA_APORTES || itemCuentaConcepto.intParaTipoConceptoCod == applicationScope.Constante.PARAM_T_TIPOCUENTA_FONDORETIRO}">
 					      <h:selectBooleanCheckbox  value="#{itemCuentaConcepto.cuentaConcepto.checked}" disabled="true"/>
-			               <h:outputText value="#{rowKey+1} - #{itemCuentaConcepto.strDescripcionCuenta} - #{itemCuentaConcepto.strNumeroCuenta} - #{itemCuentaConcepto.strDescripcionConcepto}: S/.#{itemCuentaConcepto.cuentaConcepto.bdSaldo}" >
-			               </h:outputText>							      
-										      
+			               <h:outputText value="#{rowKey+1} - #{itemCuentaConcepto.strDescripcionCuenta} - #{itemCuentaConcepto.strNumeroCuenta} - #{itemCuentaConcepto.strDescripcionConcepto}: S/.#{itemCuentaConcepto.cuentaConcepto.bdSaldo}"
+			               		rendered="#{itemCuentaConcepto.intParaTipoConceptoCod == applicationScope.Constante.PARAM_T_TIPOCUENTA_APORTES}">			        
+			               </h:outputText>
+			               <h:outputText value="#{rowKey+1} - #{itemCuentaConcepto.strDescripcionCuenta} - #{itemCuentaConcepto.strNumeroCuenta} - #{itemCuentaConcepto.strDescripcionConcepto}: S/.#{solicitudLiquidacionController.bdMondoFondoRetiroTotal}"
+			               		rendered="#{itemCuentaConcepto.intParaTipoConceptoCod == applicationScope.Constante.PARAM_T_TIPOCUENTA_FONDORETIRO}">			        
+			               </h:outputText>					      
+						<!-- FIN jchavez 29.08.2014 -->		      
 	                  </h:panelGrid>
 				  </rich:dataList>
 			</rich:column>	

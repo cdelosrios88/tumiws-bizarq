@@ -26,7 +26,7 @@
            		<h:panelGrid id="pgBeneficiariosLiquidacion">
 	              <rich:extendedDataTable id="tblBenenficiario" enableContextMenu="false"
                          			var="itemBeneficiariosPopup" value="#{solicitudLiquidacionController.listaBeneficiarioLiquidacionBusq}" 
-                         			style="margin:0 auto"  rowKeyVar="rowKey" rows="5" sortMode="single" width="650px" 
+                         			style="margin:0 auto"  rowKeyVar="rowKey" rows="5" sortMode="single" width="510px" 
                          			height="165px">
 		  		 	<rich:column width="29px">
                    		<h:outputText value="#{rowKey + 1}"></h:outputText>
@@ -54,27 +54,12 @@
                         </f:facet>
 						<h:outputText value="#{itemBeneficiariosPopup.persona.documento.strNumeroIdentidad}"/>
                     </rich:column>
-                    <!--
-                    <rich:column width="110">
-                 		<f:facet name="header">
-                            <h:outputText value="Relación"></h:outputText>
-                        </f:facet>                        
-						<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOVINCULO}" 
-								itemValue="intIdDetalle" itemLabel="strDescripcion" 
-								property="#{itemBeneficiariosPopup.intTipoViculo}"/>		
-                    </rich:column>
-                    -->
                     <a4j:support event="onRowClick"  
-								 actionListener="#{solicitudLiquidacionController.seleccionarBeneficiario}"
-								 reRender="pgLitstaBeneficiariosLiquidacion, pgSolicitudLiquidacion,pgMsgErrorSolPrev, pgBeneficiarioLiquidacion">
+								 actionListener="#{solicitudLiquidacionController.seleccionarBeneficiario}">
 					       <f:attribute name="itemBeneficiariosPopup" value="#{itemBeneficiariosPopup}"/>
   					</a4j:support>
 	         	  </rich:extendedDataTable>
       	 	</h:panelGrid>
-      	 	
-      	 	<!--                  	<f:facet name="footer">
-	               		<rich:datascroller for="tblBenenficiario" maxPages="5"/>   
-	                </f:facet> -->
            
 	        <h:panelGrid columns="2">
 	         	<rich:column>
@@ -83,14 +68,24 @@
 						actionListener="#{solicitudLiquidacionController.agregarBeneficiarioSocioVisual}"
 						oncomplete="Richfaces.hideModalPanel('mpBeneficiarioLiquidacion')"
 						styleClass="btnEstilos"
-						reRender="pgSolicitudLiquidacion, pgLitstaBeneficiariosLiquidacion,tblBenenficiarioLiquidacion">
+						reRender="pgSolicitudLiquidacion, pgLitstaBeneficiariosLiquidacion, pgMsgErrorSolLiq">
 					</a4j:commandButton>
+					
 					<a4j:commandButton value="Cancelar" 
 				    		styleClass="btnEstilos"
 				    		oncomplete="Richfaces.hideModalPanel('mpBeneficiarioLiquidacion')"/>
-
 	         	</rich:column>
 	        </h:panelGrid>
        </rich:panel>
        
    </h:form>    
+   <!-- 
+                      <rich:column width="110">
+                		<f:facet name="header">
+                           <h:outputText value="Relación"></h:outputText>
+                       </f:facet>                        
+					<tumih:outputText cache="#{applicationScope.Constante.PARAM_T_TIPOVINCULO}" 
+							itemValue="intIdDetalle" itemLabel="strDescripcion" 
+							property="#{itemBeneficiariosPopup.intTipoViculo}"/>		
+                   </rich:column>
+                     -->

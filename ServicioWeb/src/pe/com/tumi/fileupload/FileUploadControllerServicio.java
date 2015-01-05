@@ -1,6 +1,7 @@
 package pe.com.tumi.fileupload;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.richfaces.event.UploadEvent;
@@ -51,6 +56,9 @@ public class FileUploadControllerServicio {
 	private Archivo archivoGiroCredito;
 	private Archivo archivoGiroPrevision;
 	private Archivo archivoGiroLiquidacion;
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	private Archivo archivoSolicitudPrestamo;
 	
 	public Archivo getArchivoDeJu() {
 		return archivoDeJu;
@@ -220,14 +228,14 @@ public class FileUploadControllerServicio {
 			GeneralFacadeRemote facade = (GeneralFacadeRemote)EJBFactory.getRemote(GeneralFacadeRemote.class);
 			TipoArchivo tipoArchivo = facade.getTipoArchivoPorPk(intTipoArch);
 			
-			
 			archivo.setId(new ArchivoId());
 			archivo.getId().setIntParaTipoCod(intTipoArch);
+			
 			if(intItemArchivo!=null)archivo.getId().setIntItemArchivo(intItemArchivo);
 			if(intItemHistorico!=null)archivo.getId().setIntItemHistorico(intItemHistorico);
 			archivo.setStrNombrearchivo(strNombreArchivo);
 			archivo.setTipoarchivo(tipoArchivo);
-			archivo.setIntParaEstadoCod(1);
+			archivo.setIntParaEstadoCod(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO);
 			archivo = facade.grabarArchivo(archivo);
 			
 			//CGD-12.11.2013
@@ -245,8 +253,6 @@ public class FileUploadControllerServicio {
 		} catch (Exception e) {
 			log.error("Error en procesarArchivo --- "+e);
 		}
-		
-
 		return archivo;
 	}
 	
@@ -352,8 +358,7 @@ public class FileUploadControllerServicio {
 	
 
 	public void adjuntarArchivo(UploadEvent event) throws Exception{
-
-		try{
+		try{			
 			objArchivo = procesarArchivo(event, intTipoArchivo);
 			log.info("rutaAntigua:"+objArchivo.getRutaAntigua());
 			log.info("rutaNueva:"+objArchivo.getRutaActual());
@@ -361,8 +366,21 @@ public class FileUploadControllerServicio {
 			
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
-		}
-		 
+		}		 
+	}
+	
+	public void adjuntarArchivoSolicitudPrestamo(UploadEvent event) throws Exception{
+		try{
+			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO;
+			
+			objArchivo = procesarArchivo(event, intTipoArchivo);
+			log.info("rutaAntigua:"+objArchivo.getRutaAntigua());
+			log.info("rutaNueva:"+objArchivo.getRutaActual());
+			renombrarArchivo(objArchivo.getRutaAntigua(), objArchivo.getRutaActual());
+			
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}		 
 	}
 	
 	public void resetDataImage(String strPath, String strExtension) throws IOException{
@@ -409,6 +427,85 @@ public class FileUploadControllerServicio {
 		}
 	}
 	
+	/**
+	 * Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	 * Funcionalidad: Procesa y renombra el archivo adjunto en la Solicitud de Préstamo.
+	 * @param event
+	 */
+//	public void adjuntarSolicitudPrestamo(UploadEvent event) throws Exception{
+//		try{
+//			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO;
+//			
+//			archivoSolicitudPrestamo = procesarArchivo(event, intTipoArchivo);
+//			log.info("rutaAntigua:"+objArchivo.getRutaAntigua());
+//			log.info("rutaNueva:"+objArchivo.getRutaActual());
+//			renombrarArchivo(archivoSolicitudPrestamo.getRutaAntigua(), archivoSolicitudPrestamo.getRutaActual());
+//			
+//		}catch(Exception e){
+//			log.error(e.getMessage(),e);
+//		}		 
+//	}
+	public void adjuntarSolicitudPrestamo(UploadEvent event) throws Exception{
+		try{
+			intTipoArchivo = Constante.PARAM_T_TIPOARCHIVOADJUNTO_SOLICITUD_PRESTAMO;
+			
+			objArchivo = procesarArchivo(event, intTipoArchivo);
+			log.info("rutaAntigua:"+objArchivo.getRutaAntigua());
+			log.info("rutaNueva:"+objArchivo.getRutaActual());
+			renombrarArchivo(objArchivo.getRutaAntigua(), objArchivo.getRutaActual());
+			
+		}catch(Exception e){
+			log.error(e.getMessage(),e);
+		}		 
+	}
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	public void descargarArchivo(ActionEvent event)throws Exception{
+		try{
+			Archivo archivo = (Archivo)event.getComponent().getAttributes().get("archivo");
+			descargarArchivo(archivo);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
+	//Autor: jchavez / Tarea: Creación / Fecha: 16.12.2014
+	public void descargarArchivo(Archivo archivo)throws Exception{
+		try{
+			
+			GeneralFacadeRemote generalFacade = (GeneralFacadeRemote) EJBFactory.getRemote(GeneralFacadeRemote.class);
+		
+			TipoArchivo tipoArchivo = generalFacade.getTipoArchivoPorPk(archivo.getId().getIntParaTipoCod());
+			
+			byte[] buf = new byte[1024];
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("application/force-download");
+			response.addHeader("Content-Disposition", "attachment; filename=\"" + archivo.getStrNombrearchivo() + "\"");
+			
+			String ruta = tipoArchivo.getStrRuta()+ "\\"+ archivo.getStrNombrearchivo();
+			log.info(ruta);
+			
+			//String realPath = sCon.getRealPath(strRutaActual+"/" + strNombreArchivo);
+			//String realPath = "C:\\Tumi\\ArchivosAdjuntos\\Documentos\\ExpedientePrestamos\\CopiaDNI"+"\\" + strNombreArchivo;
+			String realPath = ruta;
+			File file = new File(realPath);
+			log.info("Ruta del archivo a descargar (ruta): "+ruta);
+			log.info("Ruta del archivo a descargar (realPath): "+realPath);
+			long length = file.length();
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+			ServletOutputStream out = response.getOutputStream();
+			response.setContentLength((int)length);
+			while ((in != null) && ((length = in.read(buf)) != -1)) {
+				out.write(buf, 0, (int)length);
+			}
+			in.close();
+			out.flush();
+			out.close();
+			FacesContext.getCurrentInstance().responseComplete();
+		}catch(Exception e){
+			throw e;
+		}
+	}
 	//Getters & Setters
 	public String getStrTitle() {
 		return strTitle;
@@ -507,4 +604,10 @@ public class FileUploadControllerServicio {
 	public void setArchivoGiroLiquidacion(Archivo archivoGiroLiquidacion) {
 		this.archivoGiroLiquidacion = archivoGiroLiquidacion;
 	}
+	public Archivo getArchivoSolicitudPrestamo() {
+		return archivoSolicitudPrestamo;
+	}
+	public void setArchivoSolicitudPrestamo(Archivo archivoSolicitudPrestamo) {
+		this.archivoSolicitudPrestamo = archivoSolicitudPrestamo;
+	}	
 }

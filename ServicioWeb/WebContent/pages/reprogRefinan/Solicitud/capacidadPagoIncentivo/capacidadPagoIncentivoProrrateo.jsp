@@ -58,7 +58,7 @@
    			
    			<h:panelGrid columns="1">
    				<rich:column>
-   					<a4j:commandButton value="Calcular" actionListener="#{capacidadPagoController.calcularCapacPagoIncentProrrateo}" styleClass="btnEstilos" reRender="pgCapacidadPago"/>
+   					<a4j:commandButton value="Calcular" actionListener="#{capacidadPagoController.calcularCapacPagoIncentProrrateoRefinan}" styleClass="btnEstilos" reRender="pgCapacidadPago"/>
    				</rich:column>
    			</h:panelGrid>
    			

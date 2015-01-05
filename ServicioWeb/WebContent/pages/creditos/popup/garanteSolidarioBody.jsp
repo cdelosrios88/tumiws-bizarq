@@ -69,7 +69,7 @@
 		         		</rich:column>
 			         </h:panelGrid>
 			         
-			         <h:panelGrid columns="3">
+			         <h:panelGrid columns="7">
 		          		 <rich:column  width="110px;">
 		          		 	<h:outputText value="Fec. de Nacimiento"/>
 		          		 </rich:column>
@@ -82,6 +82,20 @@
 		                    datePattern="dd/MM/yyyy" inputStyle="width:70px;"
 		                    cellWidth="10px" cellHeight="20px"/>
 		          		 </rich:column>
+		          		 <rich:column  width="110px;">
+		          		 	<h:outputText value="Nro. Garantizados: "/>
+		          		 </rich:column>
+		          		 <rich:column>
+							<h:inputText value="#{solicitudPrestamoController.intNroPersGarantizadas}" size="10" disabled="true"/>
+						 </rich:column>		          
+						 <rich:column  width="110px;">
+		          		 	<h:outputText value="Saldo Aportes: S/."/>
+		          		 </rich:column>
+		          		 <rich:column>
+							<h:inputText value="#{solicitudPrestamoController.bdMontoAporteGaranteSolidario}" size="15" disabled="true">
+								<f:converter converterId="ConvertidorMontos"  />
+							</h:inputText>
+						 </rich:column>			 	
 		          	 </h:panelGrid>
 
 	          		<!-- 

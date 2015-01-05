@@ -180,6 +180,9 @@ public class AutorizacionPrevisionController {
 	
 	private List<ExpedientePrevisionComp> listaExpedientePrevisionComp;
 	
+	//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+	private List<Tabla> listaEstadoSolicitud;
+	
 
 	public AutorizacionPrevisionController() {
 		beanAutorizaPrevision = new AutorizaPrevision();
@@ -232,6 +235,8 @@ public class AutorizacionPrevisionController {
 			
 			blnIsRetiro = false;
 
+			//Autor: jchavez / Tarea: Modificación / Fecha: 01.09.2014 / 
+			listaEstadoSolicitud = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO),"D");
 			} catch (NumberFormatException e) {
 				log.error("Error NumberFormatException en AutorizacionPrevisionController ---> "+e);
 			} catch (BusinessException e) {
@@ -1517,6 +1522,7 @@ public void irModificarSolicitudPrevisionAutoriza(ActionEvent event){
 	System.out.println();
 	SolicitudPrevisionController solicitudPrevisionController = (SolicitudPrevisionController) getSessionBean("solicitudPrevisionController");
 	solicitudPrevisionController.irModificarSolicitudPrevisionAutoriza2(event, registroSeleccionadoBusqueda.getExpedientePrevision());	
+//	solicitudPrevisionController.irVerSolicitudPrevisionAutoriza2(event, registroSeleccionadoBusqueda.getExpedientePrevision());
 }	
 
 
@@ -2750,6 +2756,14 @@ public Integer obtenerPeriodoActual() throws Exception {
 	public void setRegistroSeleccionadoBusqueda(
 			ExpedientePrevisionComp registroSeleccionadoBusqueda) {
 		this.registroSeleccionadoBusqueda = registroSeleccionadoBusqueda;
+	}
+
+	public List<Tabla> getListaEstadoSolicitud() {
+		return listaEstadoSolicitud;
+	}
+
+	public void setListaEstadoSolicitud(List<Tabla> listaEstadoSolicitud) {
+		this.listaEstadoSolicitud = listaEstadoSolicitud;
 	}
 
 	

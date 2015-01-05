@@ -167,7 +167,7 @@
 										<rich:toolTip for="lnkViewDependencia" value="Ver" followMouse="true"/>
 								</a4j:commandLink>
 								&nbsp;
-								<a4j:commandLink id="lnkEditDependencia" styleClass="no-decor" reRender="frmCapacidadPago" 
+								<a4j:commandLink id="lnkEditDependencia" styleClass="no-decor" reRender="frmCapacidadPago,pgIncentivoGral,pgIncentivoProrrateo" 
 								rendered="#{!solicitudRefinanController.blnPostEvaluacion}"
 								actionListener="#{capacidadPagoController.irModificarCapacidadCreditoRef}"
 								oncomplete="Richfaces.showModalPanel('mpCapacidadCreditoRef')">
@@ -209,9 +209,6 @@
 							</rich:column>
 							<rich:column width="80px" rowspan="2">
 								<h:outputText value="Fondo de Retiro"/>
-							</rich:column>
-							<rich:column width="80px" rowspan="2">
-								<h:outputText value="Fondo de Sepelio"/>
 							</rich:column>
 							<rich:column colspan="6">
 								<h:outputText value="Préstamo"/>
@@ -257,12 +254,6 @@
 					</rich:column>
 					<rich:column width="80px" rowspan="#{itemCuentaComp.intTamannoListaExp}">
 						<h:outputText value="#{itemCuentaComp.bdTotalRetiro}">
-							<f:converter converterId="ConvertidorMontos"  />
-						</h:outputText>
-					</rich:column>
-					<rich:column rowspan="#{itemCuentaComp.intTamannoListaExp}">
-					
-					<h:outputText value="#{itemCuentaComp.bdTotalSepelio}">
 							<f:converter converterId="ConvertidorMontos"  />
 						</h:outputText>
 					</rich:column>
@@ -407,7 +398,7 @@
 				<h:outputText value="Fecha de Solicitud: " styleClass="estiloLetra1"></h:outputText>
 			</rich:column>
 			<rich:column>
-				<rich:calendar readonly="true" value="#{solicitudRefinanController.dtFechaRegistro}"
+				<rich:calendar readonly="true" disabled="true" value="#{solicitudRefinanController.dtFechaRegistro}"
 					datePattern="dd/MM/yyyy" inputStyle="width:70px">
 				</rich:calendar>
 			</rich:column>
@@ -430,7 +421,7 @@
 		</rich:column>
 		
 		<rich:column width="150px">
-			<a4j:commandButton value="EvaluaMMción" styleClass="btnEstilos1" style="width: 90%"
+			<a4j:commandButton value="Evaluación" styleClass="btnEstilos1" style="width: 90%"
 			actionListener="#{solicitudRefinanController.evaluarRefinanciamiento}"
 			reRender="pgSolicitudRefinan,pgPostEvaluacionRef,pgMsgErrorSolRefinan,pgListCondicionesRef ,
 					  pgListDocAdjuntosRef,pgListCapacidadRefinan" />
@@ -580,7 +571,16 @@
 		<h:panelGrid columns="8" styleClass="tableCellBorder4">
 			<rich:columnGroup>
 				<rich:column width="120px">
-				<h:outputText value="Cuota Fija:" styleClass="estiloLetra1"></h:outputText>
+					<h:outputText value="Cuota Préstamo" styleClass="estiloLetra1"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value=":"/>
+				</rich:column>
+				<rich:column>
+					<h:inputText value="#{solicitudRefinanController.bdTotalCuotaPrestamo}" readonly="true"/>
+				</rich:column>
+				<rich:column width="120px">
+				<h:outputText value="Cuota Mensual:" styleClass="estiloLetra1"></h:outputText>
 				</rich:column>
 				<rich:column width="120px">
 					<h:inputText  size="15" value="#{solicitudRefinanController.bdTotalCuotaMensual}" readonly="true"></h:inputText>

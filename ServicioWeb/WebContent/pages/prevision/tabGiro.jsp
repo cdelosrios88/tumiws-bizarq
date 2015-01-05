@@ -375,18 +375,18 @@
 					<a4j:commandButton
 						rendered="#{empty giroPrevisionController.archivoAdjuntoGiro}"
                 		styleClass="btnEstilos"
-                		value="Adjunto de Giro"
+                		value="Adjunto Documento de Giro"
                 		reRender="pAdjuntarGiroPrevision,panelAdjuntoRequisito"
                 		oncomplete="Richfaces.showModalPanel('pAdjuntarGiroPrevision')"
-                		style="width:130px"/>                 		
+                		style="width:200px"/>                 		
                 	<a4j:commandButton
 						rendered="#{not empty giroPrevisionController.archivoAdjuntoGiro}"
 						disabled="#{giroPrevisionController.deshabilitarNuevoBeneficiario}"
                 		styleClass="btnEstilos"
-                		value="Quitar Adjunto de Giro"
+                		value="Quitar Adjunto Documento de Giro"
                 		reRender="pAdjuntarGiroPrevision,panelAdjuntoRequisito"
                 		action="#{giroPrevisionController.quitarAdjuntoGiro}"
-                		style="width:130px"/>
+                		style="width:220px"/>
 				</rich:column>
 				<rich:column width="130" 
 					rendered="#{(not empty giroPrevisionController.archivoAdjuntoGiro)&&(giroPrevisionController.deshabilitarDescargaAdjuntoGiro)}">
@@ -493,14 +493,15 @@
 				</rich:column>
 				<rich:column width="250">
 					<h:panelGroup rendered="#{giroPrevisionController.expedientePrevisionGirar.estadoPrevisionUltimo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOSOLICPRESTAMO_APROBADO}">
-						<h:outputText value="Monto Asignado : "/>
-						<h:outputText value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoApertura}">
+						<b><h:outputText value="Monto Asignado : " style="font-size:15px"/>
+						<h:outputText value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoApertura}" style="font-size:15px">
 							<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
-						<h:outputText value=" Saldo : "/>
-						<h:outputText value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoSaldo}">
+						<h:outputText value=" Saldo : " style="font-size:15px" />
+						<h:outputText value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoSaldo}" style="font-size:15px">
 							<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
+						</b>
 					</h:panelGroup>
 				</rich:column>
 			</h:panelGrid>
@@ -526,16 +527,17 @@
 				</rich:column>
 				<rich:column width="250">
 					<h:panelGroup rendered="#{giroPrevisionController.expedientePrevisionGirar.estadoPrevisionUltimo.intParaEstado==applicationScope.Constante.PARAM_T_ESTADOSOLICPRESTAMO_APROBADO}">
-						<h:outputText value="Monto Asignado : "/>
+						<b><h:outputText value="Monto Asignado : " style="font-size:15px"/>
 						<h:outputText rendered ="#{not empty giroPrevisionController.controlFondosFijosGirar.bdMontoApertura}" 
-							value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoApertura}">
+							value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoApertura}" style="font-size:15px">
 							<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
-						<h:outputText value=" Saldo : "/>
+						<h:outputText value=" Saldo : " style="font-size:15px"/>
 						<h:outputText rendered ="#{not empty giroPrevisionController.controlFondosFijosGirar.bdMontoSaldo}" 
-							value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoSaldo}">
+							value="#{giroPrevisionController.controlFondosFijosGirar.bdMontoSaldo}" style="font-size:15px">
 							<f:converter converterId="ConvertidorMontos" />
 						</h:outputText>
+						</b>
 					</h:panelGroup>
 				</rich:column>
 			</h:panelGrid>			
@@ -613,7 +615,7 @@
                 		value="Desleccionar Persona"
                 		action="#{giroPrevisionController.deseleccionarPersonaApoderado}"
                 		reRender="panelApoderadoG,panelCartaPoderG"
-                		style="width:130px"/>
+                		style="width:150px"/>
 				</rich:column>
 			</h:panelGrid>
 			
@@ -640,7 +642,7 @@
                 		value="Adjuntar Carta Poder"
                 		reRender="frmAjuntarCartaPoder"
                 		oncomplete="Richfaces.showModalPanel('pAdjuntarCartaPoder')"
-                		style="width:130px"/>
+                		style="width:140px"/>
                 	<a4j:commandButton
 						rendered="#{not empty giroPrevisionController.archivoCartaPoder}"
 						disabled="#{giroPrevisionController.deshabilitarNuevo}"
@@ -648,7 +650,7 @@
                 		value="Quitar Carta Poder"
                 		reRender="panelCartaPoderG"
                 		action="#{giroPrevisionController.quitarCartaPoder}"
-                		style="width:130px"/>
+                		style="width:140px"/>
 				</rich:column>
 			</h:panelGrid>
 			
@@ -761,9 +763,16 @@
 					<h:outputText value="Total General :"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText size ="15" value="#{giroPrevisionController.bdTotalEgresoDetalleInterfaz}" readonly="true" style="background-color: #BFBFBF;">
-						<f:converter converterId="ConvertidorMontos" />
-					</h:inputText>
+
+					<h:inputText value="#{giroPrevisionController.bdTotalEgresoDetalleInterfaz}" 
+						readonly="true" 
+						style="background-color: #BFBFBF;font-weight:bold; width: 160;">
+						<f:converter converterId="ConvertidorMontos"/>
+					</h:inputText> - 
+					<h:inputText size="76"
+						readonly="true"
+						style="background-color: #BFBFBF;font-weight:bold;"
+						value="#{giroPrevisionController.strTotalEgresoDetalleInterfaz}"/>					
 				</rich:column>
 			</h:panelGrid>
 			

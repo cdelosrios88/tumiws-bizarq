@@ -7,8 +7,8 @@ public class ConvertirNumeroLetras {
 
 	private static final String[] UNIDADES = { "", "UNO ", "DOS ", "TRES ",
         "CUATRO ", "CINCO ", "SEIS ", "SIETE ", "OCHO ", "NUEVE ", "DIEZ ",
-        "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS",
-        "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE" };
+        "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS ",
+        "DIECISIETE ", "DIECIOCHO ", "DIECINUEVE ", "VEINTE " };
 
 	private static final String[] DECENAS = { "VENTI", "TREINTA ", "CUARENTA ",
         "CINCUENTA ", "SESENTA ", "SETENTA ", "OCHENTA ", "NOVENTA ",

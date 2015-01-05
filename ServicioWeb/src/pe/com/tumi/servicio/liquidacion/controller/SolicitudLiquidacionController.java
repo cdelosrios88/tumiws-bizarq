@@ -29,7 +29,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pe.com.tumi.cobranza.planilla.facade.PlanillaFacadeRemote;
 import pe.com.tumi.common.FileUtil;
 import pe.com.tumi.common.MyFile;
 import pe.com.tumi.common.util.Constante;
@@ -39,12 +38,9 @@ import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaId;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.CuentaIntegrante;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.domain.composite.CuentaComp;
 import pe.com.tumi.credito.socio.aperturaCuenta.core.facade.CuentaFacadeRemote;
-//import pe.com.tumi.credito.socio.captacion.domain.Captacion;
-//import pe.com.tumi.credito.socio.captacion.facade.VinculoFacadeRemote;
 import pe.com.tumi.credito.socio.captacion.domain.Captacion;
 import pe.com.tumi.credito.socio.captacion.domain.CaptacionId;
 import pe.com.tumi.credito.socio.captacion.facade.CaptacionFacadeRemote;
-import pe.com.tumi.credito.socio.convenio.facade.ConvenioFacadeRemote;
 import pe.com.tumi.credito.socio.core.domain.Socio;
 import pe.com.tumi.credito.socio.core.domain.SocioComp;
 import pe.com.tumi.credito.socio.core.domain.SocioEstructura;
@@ -104,12 +100,10 @@ import pe.com.tumi.servicio.configuracion.domain.ConfServEstructuraDetalle;
 import pe.com.tumi.servicio.configuracion.domain.ConfServSolicitud;
 import pe.com.tumi.servicio.configuracion.facade.ConfSolicitudFacadeRemote;
 import pe.com.tumi.servicio.liquidacion.service.SolicitudLiquidacionService;
+import pe.com.tumi.servicio.prevision.domain.AutorizaLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.BeneficiarioLiquidacionId;
 import pe.com.tumi.servicio.prevision.domain.EstadoLiquidacion;
-//import pe.com.tumi.servicio.prevision.domain.EstadoPrevision;
-//import pe.com.tumi.servicio.prevision.domain.EstadoPrevision;
-import pe.com.tumi.servicio.prevision.domain.AutorizaLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacion;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionComp;
 import pe.com.tumi.servicio.prevision.domain.ExpedienteLiquidacionDetalle;
@@ -118,60 +112,82 @@ import pe.com.tumi.servicio.prevision.domain.ExpedientePrevision;
 import pe.com.tumi.servicio.prevision.domain.composite.AutorizaLiquidacionComp;
 import pe.com.tumi.servicio.prevision.domain.composite.RequisitoLiquidacionComp;
 import pe.com.tumi.servicio.prevision.facade.AutorizacionLiquidacionFacadeLocal;
+import pe.com.tumi.servicio.prevision.facade.LiquidacionFacadeLocal;
 import pe.com.tumi.servicio.prevision.facade.LiquidacionFacadeRemote;
-import pe.com.tumi.servicio.prevision.facade.PrevisionFacadeRemote;
+import pe.com.tumi.servicio.prevision.facade.PrevisionFacadeLocal;
 import pe.com.tumi.servicio.solicitudPrestamo.domain.GarantiaCredito;
-//import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeNuevoRemote;
-import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeRemote;
-import pe.com.tumi.tesoreria.banco.facade.BancoFacadeRemote;
-import pe.com.tumi.tesoreria.egreso.facade.CierreDiarioArqueoFacadeRemote;
-import pe.com.tumi.tesoreria.egreso.facade.EgresoFacadeRemote;
+import pe.com.tumi.servicio.solicitudPrestamo.facade.SolicitudPrestamoFacadeLocal;
 
 public class SolicitudLiquidacionController {
 	protected static Logger log = Logger.getLogger(SolicitudLiquidacionController.class);
 	
 	// facades
-	private PersonaFacadeRemote 			personaFacade;
-	private TablaFacadeRemote 				tablaFacade;
-	private EmpresaFacadeRemote 			empresaFacade;
-	private EgresoFacadeRemote 				egresoFacade;
-	private LiquidacionFacadeRemote 		liquidacionFacade;
-	private CierreDiarioArqueoFacadeRemote 	cierreDiarioArqueoFacade;
-	private BancoFacadeRemote				bancoFacade;
-	private SocioFacadeRemote 				socioFacade;
-	private EstructuraFacadeRemote 			estructuraFacade;
-	private GeneralFacadeRemote 			generalFacade;
-	private ConceptoFacadeRemote 			conceptoFacade;
-	private CuentaFacadeRemote 				cuentaFacade; 
-	private ConvenioFacadeRemote 			convenioFacade;
-	private CreditoFacadeRemote 			creditoFacade;
-	private SolicitudPrestamoFacadeRemote 	solicitudPrestamoFacade;
-	private PrevisionFacadeRemote 			previsionFacade;
-	private SolicitudLiquidacionService 	solicitudLiquidacionService = null;
-	private PlanillaFacadeRemote 			planillaFacade = null;
-	private AutorizacionLiquidacionFacadeLocal	autorizaLiquidacionFacade;
-	private PermisoFacadeRemote 			permisoFacade = null;
+	private PersonaFacadeRemote 					personaFacade;
+	private TablaFacadeRemote 						tablaFacade;
+	private EmpresaFacadeRemote 					empresaFacade;
+	private LiquidacionFacadeLocal 					liquidacionFacade;
+	private SocioFacadeRemote 						socioFacade;
+	private EstructuraFacadeRemote 					estructuraFacade;
+	private GeneralFacadeRemote 					generalFacade;
+	private ConceptoFacadeRemote 					conceptoFacade;
+	private CuentaFacadeRemote 						cuentaFacade; 
+	private CreditoFacadeRemote 					creditoFacade;
+	private SolicitudPrestamoFacadeLocal 			solicitudPrestamoFacade;
+	private PrevisionFacadeLocal 					previsionFacade;
+	private SolicitudLiquidacionService 			solicitudLiquidacionService;
+	private AutorizacionLiquidacionFacadeLocal		autorizaLiquidacionFacade;
+	private PermisoFacadeRemote 					permisoFacade;
+	
 	// sesion
 	private Usuario 	usuario;
-	private	Integer		EMPRESA_USUARIO;
-	private	Integer		PERSONA_USUARIO;
-	private Integer		SUCURSAL_USUARIO_ID;
-	private Integer		SUBSUCURSAL_USUARIO_ID;
+	private	Integer		SESION_IDEMPRESA;
+	private	Integer		SESION_IDUSUARIO;
+	private Integer		SESION_IDSUCURSAL;
+	private Integer		SESION_IDSUBSUCURSAL;
+	private Integer		SESION_IDPERFIL;
 	
+	// tablas en controlador
+	private List<Tabla> 	listaSubOperacion;
+	private List<Tabla> 	listaDescCondicionSocio;
+	private List<Tabla> 	listaDescTipoCondicionSocio;
+	private List<Tabla> 	listaDescripcionTipoCuenta;
+	private List<Tabla> 	listaDescripcionCuentaConcepto;	
+	private List<Tabla> 	listaDescTipoCredito;
+	private List<Tabla> 	listaDescTipoCreditoEmpresa;
+	private List<Tabla> 	lstMsgCondicionSinGarantesDeudores;
+	private List<Tabla> 	listaDescripcionTipoSocio;
+	private List<Tabla> 	listaDescripcionModalidad;
+	
+	// tablas en formulario
+	private List<Tabla> 	listaTipoRelacion;
+	private List<Tabla> 	listaMotivoRenuncia;
+	private List<Tabla>		listDocumentoBusq;
+	private List<Tabla>		listaTablaTipoDocumento;
+	private List<Tabla>		listaTablaSucursal;
+	
+//	private List<Tabla> 	listaTipoVinculo;	
+//	private List<Tabla> 	listaTablaDeSucursal;
+//	private List<Tabla> 	listaTablaCreditoEmpresa;	
+//	private	List<Tabla>		listaTablaEstadoPago;
+//	private List<Tabla>		listaTipoBusquedaSucursal;
+//	private List<Tabla> 	listaTablaTipoRenuncia;
+//	private List<Tabla> 	listaTablaTipoSolicitud;
+	
+	private List<Tabla> lstReporteVacia;
 	// busqueda
 	private Integer		intTipoPersonaFiltro;
 	private Integer		intTipoBusquedaPersonaFiltro;
 	private String		strTextoPersonaFiltro;
 	private Integer		intItemExpedienteFiltro;
 	private Integer		intTipoCreditoFiltro;
-	private List<Tabla>		listaTablaTipoDocumento;
+	
 	private Integer		intTipoBusquedaFechaFiltro;
-	private	List<Tabla>		listaTablaEstadoPago;
+	
 	private EstadoLiquidacion		estadoCondicionFiltro;
 	private Integer		intTipoBusquedaSucursal;
-	private List<Tabla>		listaTipoBusquedaSucursal;
+	
 	private Integer		intIdSucursalFiltro;
-	private List<Tabla>		listaTablaSucursal;
+	
 	private List<ExpedienteLiquidacionComp> listaExpedienteLiquidacion;
 	private Integer		intIdSubsucursalFiltro;
 	private ExpedienteLiquidacion registroSeleccionadoBusqueda;
@@ -198,25 +214,9 @@ public class SolicitudLiquidacionController {
 	private boolean blnTieneAdjuntosConfigurados;
 	private String StrMsgTxtObservacion;
 	
-	// ETC
-	private List<Tabla> listaTipoVinculo;
-	private List<Tabla> listaSubOperacion;
-	private List<Tabla> listaMotivoRenuncia;
-	private List<Tabla> listaDescCondicionSocio;
-	private List<Tabla> listaDescTipoCondicionSocio;
 
-	private List<Tabla> listaDescripcionTipoCuenta;
-	private List<Tabla> listaDescripcionCuentaConcepto;
-	
-	private List<Tabla> listaDescTipoCredito;
-	private List<Tabla> listaDescTipoCreditoEmpresa;
-	//jchavez 05.05.2014
-	private List<Tabla> lstMsgCondicionSinGarantesDeudores;
-	//rVillarreal 10.06.2014
-	private List<Tabla> lstReporteVacia;
-	// PARAM_T_TIPO_CREDITO 
-	// PARAM_T_TIPOCREDITOEMPRESA
-	
+
+
 	// CONDICIONES - VALIDACIONES
 	private Boolean blnCondicionSocioSinDeudaPendiente;
 	private Boolean blnCondicionSinGarantesDeudores;
@@ -229,9 +229,7 @@ public class SolicitudLiquidacionController {
 	private Boolean chkCondicionSocioSinDeudaPendiente;
 	private Boolean chkCondicionSinGarantesDeudores;
 	private Boolean chkCondicionBeneficioFondoSepelio;
-	
-	
-	//private String strSolicitudPrevision;
+
 	private String strSolicitudLiquidacion;
 	private Boolean blnShowValidarDatos;
 	private Date dtFechaRegistro;
@@ -249,18 +247,14 @@ public class SolicitudLiquidacionController {
 	private Boolean pgValidDatos;
 	private Boolean blnDatosSocio;
 	private String strMsgErrorValidarDatos;
-	private List<Tabla> listaTipoRelacion;
-	private List<Tabla>	listDocumentoBusq;
 	
-	private Date dtHoy = null;
+	
+//	private Date dtHoy = null;
 	private Integer intParaTipoDescripcion;
 	private Integer intParaTipoOperacionPersona;
-	// Estrucruras a mostrar en Concatenado
-	//private List<Estructura> listEstructuraConcat;
 	
 	private ExpedienteLiquidacion beanExpedienteLiquidacion;
-	private List<Tabla> listaTablaTipoRenuncia;
-	private List<Tabla> listaTablaTipoSolicitud;
+
 	private boolean blnPostEvaluacion;
 	private List<RequisitoLiquidacionComp> listaRequisitoLiquidacionComp;
 	private List<BeneficiarioLiquidacion> listaBeneficiarioLiquidacionBusq;
@@ -306,27 +300,24 @@ public class SolicitudLiquidacionController {
 	private EstadoLiquidacion estadoLiquidacionBusqueda;
 	private Persona personaBusqueda;
 	private EstructuraDetalle estructuraDetalleBusqueda;
-	private List<Tabla> listaTablaDeSucursal;
-	private List<Tabla> listaTablaCreditoEmpresa;
-	//private ExpedienteLiquidacion expLiquidacionBusqueda;
+	
+	
 	private String strNumeroSolicitudBusq;
 	private Boolean blnTxtBusqueda;
 	private Boolean blnBusquedaFechas;
 	private Boolean blnBusquedaCondicion;
-	private List<Tabla> listaTipoConsultaBusqueda;
+//	private List<Tabla> listaTipoConsultaBusqueda;
 	private List<Subsucursal>		listaSubsucursal;
 	private List<Subsucursal>		listaSubsucursalBusq;
 	private EstadoLiquidacion estadoLiquidacionFechas;
 	private EstadoLiquidacion estadoLiquidacionSuc;
 	private List<Sucursal> listSucursal;
-	
-	
+		
 	private String strDescripcionTipoLiquidacion;
 	private Boolean blnMostrarDescripcionTipoLiquidacion;
 	private String strMsgTxtAsterisco;
 	
-	private List<Tabla> listaDescripcionTipoSocio;
-	private List<Tabla> listaDescripcionModalidad;
+	
 	private String strMsgTxtCondiciones;
 
 	
@@ -372,84 +363,139 @@ public class SolicitudLiquidacionController {
 	private Boolean blnViewSolicitudLiquidacion;
 	
 	private List<AutorizaLiquidacionComp> 	listaAutorizaLiquidacionComp;
-	//------------------metodos iniciales--------------------------
+	private BigDecimal bdMondoFondoRetiroTotal;
 	
-	public SolicitudLiquidacionController() {
-		
-		lstReporteVacia = new ArrayList<Tabla>();
-		
-		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
+	
+	//
+	private Boolean blnCorrespondeLiquidacion;
+	
+	public SolicitudLiquidacionController() {	
+		log = Logger.getLogger(this.getClass());		
+		cargarUsuario();
 		if(usuario != null){
 			cargarValoresIniciales();
 		}else{
 			log.error("--Usuario obtenido es NULL.");
-		}
-		
+		}		
 	}
 	
+	private void cargarUsuario(){
+		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
+		SESION_IDUSUARIO = usuario.getIntPersPersonaPk();
+		SESION_IDEMPRESA = usuario.getEmpresa().getIntIdEmpresa();
+		SESION_IDPERFIL = usuario.getPerfil().getId().getIntIdPerfil();
+		SESION_IDSUCURSAL = usuario.getSucursal().getId().getIntIdSucursal();
+		SESION_IDSUBSUCURSAL = usuario.getSubSucursal().getId().getIntIdSubSucursal();		
+	}
 	
+	public void cargarPermisos() throws Exception{
+		PermisoPerfil permiso = null;
+		PermisoPerfilId id = null;
+
+		Integer MENU_SOLICITUD = 232;
+		Integer MENU_AUTORIZACION = 233;
+		Integer MENU_GIRO = 234;
+		Integer MENU_ARCHIVAMIENTO = 235;
+
+		try{
+			if(usuario != null){
+				id = new PermisoPerfilId();
+				id.setIntPersEmpresaPk(SESION_IDEMPRESA);
+				id.setIntIdPerfil(SESION_IDPERFIL);
+				
+				//Solicitud de Liquidación.
+				id.setIntIdTransaccion(MENU_SOLICITUD);				
+				permiso = permisoFacade.getPermisoPerfilPorPk(id);
+				blnSol = (permiso == null);
+				
+				//Autorización de Liquidación.
+				id.setIntIdTransaccion(MENU_AUTORIZACION);
+				permiso = permisoFacade.getPermisoPerfilPorPk(id);
+				blnAut = (permiso == null);
+				
+				//Giro de Liquidación.
+				id.setIntIdTransaccion(MENU_GIRO);
+				permiso = permisoFacade.getPermisoPerfilPorPk(id);
+				blnGir = (permiso == null);
+				
+				//Archivamiento de Liquidación.
+				id.setIntIdTransaccion(MENU_ARCHIVAMIENTO);
+				permiso = permisoFacade.getPermisoPerfilPorPk(id);
+				blnArch = (permiso == null);
+			}else{
+				blnSol = false;
+				blnAut= false;
+				blnGir= false;
+				blnArch= false;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}	
+	}
 	
+	public String getInicioPage() {
+		cargarUsuario();		
+		if(usuario!=null){
+			limpiarFiltros();
+			limpiarFormSolicitudLiquidacion();
+			limpiarBeneficiarios();
+		}else{
+			log.error("--Usuario obtenido es NULL o no posee permiso.");
+		}		
+		return "";
+	}
 	
-	
-	/**
-	 * 
-	 */
 	private void cargarValoresIniciales(){
 		try{
-			cargarUsuario();
-			cargarPermisos();
-			intTipoOperacion = Constante.PARAM_T_TIPOOPERACION_LIQUIDACIONDECUENTA;
-			intTipoPersonaFiltro = Constante.PARAM_T_TIPOPERSONA_NATURAL;
-			estadoCondicionFiltro = new EstadoLiquidacion();
-			estadoLiquidacionSuc = new EstadoLiquidacion();
-			estadoCondicionFiltro.getId().setIntPersEmpresaPk(EMPRESA_USUARIO);
-			
-			listaExpedienteLiquidacion =  new ArrayList<ExpedienteLiquidacionComp>();
-			limpiarFormSolicitudLiquidacion();
 			personaFacade = (PersonaFacadeRemote) EJBFactory.getRemote(PersonaFacadeRemote.class);
-			liquidacionFacade = (LiquidacionFacadeRemote) EJBFactory.getRemote(LiquidacionFacadeRemote.class);
+			liquidacionFacade = (LiquidacionFacadeLocal) EJBFactory.getLocal(LiquidacionFacadeLocal.class);
 			tablaFacade = (TablaFacadeRemote) EJBFactory.getRemote(TablaFacadeRemote.class);
 			empresaFacade = (EmpresaFacadeRemote) EJBFactory.getRemote(EmpresaFacadeRemote.class);
-			egresoFacade = (EgresoFacadeRemote) EJBFactory.getRemote(EgresoFacadeRemote.class);
-			cierreDiarioArqueoFacade = (CierreDiarioArqueoFacadeRemote) EJBFactory.getRemote(CierreDiarioArqueoFacadeRemote.class);
-			bancoFacade = (BancoFacadeRemote) EJBFactory.getRemote(BancoFacadeRemote.class); 
 			socioFacade = (SocioFacadeRemote)EJBFactory.getRemote(SocioFacadeRemote.class);
 			estructuraFacade = (EstructuraFacadeRemote)EJBFactory.getRemote(EstructuraFacadeRemote.class);
 			generalFacade = (GeneralFacadeRemote)EJBFactory.getRemote(GeneralFacadeRemote.class);
 			conceptoFacade = (ConceptoFacadeRemote)EJBFactory.getRemote(ConceptoFacadeRemote.class);
 			cuentaFacade = (CuentaFacadeRemote)EJBFactory.getRemote(CuentaFacadeRemote.class);
-			convenioFacade = (ConvenioFacadeRemote) EJBFactory.getRemote(ConvenioFacadeRemote.class);
 			creditoFacade = (CreditoFacadeRemote) EJBFactory.getRemote(CreditoFacadeRemote.class);
-			solicitudPrestamoFacade = (SolicitudPrestamoFacadeRemote) EJBFactory.getRemote(SolicitudPrestamoFacadeRemote.class);
-			previsionFacade = (PrevisionFacadeRemote)EJBFactory.getRemote(PrevisionFacadeRemote.class);
+			solicitudPrestamoFacade = (SolicitudPrestamoFacadeLocal) EJBFactory.getLocal(SolicitudPrestamoFacadeLocal.class);
+			previsionFacade = (PrevisionFacadeLocal)EJBFactory.getLocal(PrevisionFacadeLocal.class);
 			solicitudLiquidacionService = (SolicitudLiquidacionService)TumiFactory.get(SolicitudLiquidacionService.class);
-			planillaFacade = (PlanillaFacadeRemote)EJBFactory.getRemote(PlanillaFacadeRemote.class);
-			//jchavez 09.06.2014
-			autorizaLiquidacionFacade = (AutorizacionLiquidacionFacadeLocal)EJBFactory.getLocal(AutorizacionLiquidacionFacadeLocal.class);
 			permisoFacade = (PermisoFacadeRemote)EJBFactory.getRemote(PermisoFacadeRemote.class);
-			//
-			listaTablaEstadoPago = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_ESTADOSOLICPRESTAMO), "C");
-			listaTipoBusquedaSucursal = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOSUCURSALBUSQUEDA), "A");
-			//listaTablaTipoDocumento = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_DOCUMENTOGENERAL), "F");
-			listaTablaTipoDocumento = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOSUBOPERACION));
-			listaTipoVinculo = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOVINCULO));
-			listaTipoRelacion =tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOROL), "D");
+			autorizaLiquidacionFacade = (AutorizacionLiquidacionFacadeLocal)EJBFactory.getLocal(AutorizacionLiquidacionFacadeLocal.class);
+			
+			cargarPermisos();
+			
+			listaSubOperacion = tablaFacade.getListaTablaPorIdMaestro(Constante.PARAM_T_TIPOS_LIQUIDACION);
 			listaDescCondicionSocio = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_CONDICIONSOCIO));
 			listaDescTipoCondicionSocio = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPO_CONDSOCIO));
-
-			// 2 combos asociados y tipos de cta 
-			listaSubOperacion = tablaFacade.getListaTablaPorIdMaestro(Constante.PARAM_T_TIPOS_LIQUIDACION);
-			listaMotivoRenuncia =tablaFacade.getListaTablaPorIdMaestro(Constante.PARAM_T_MOTIVO_DE_RENUNCIA); 
 			listaDescripcionTipoCuenta = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPOCUENTAREQUISITOS));
 			listaDescripcionCuentaConcepto = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCUENTA));
 			listaDescTipoCredito = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPO_CREDITO));
 			listaDescTipoCreditoEmpresa = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOCREDITOEMPRESA));
-			
 			listaDescripcionTipoSocio = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOSOCIO));
 			listaDescripcionModalidad = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_MODALIDADPLANILLA));
+			listaTipoRelacion =tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPOROL), "D");
+			listaMotivoRenuncia =tablaFacade.getListaTablaPorIdMaestro(Constante.PARAM_T_MOTIVO_DE_RENUNCIA); 
+			listaTablaTipoDocumento = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOSUBOPERACION));
+
 			listSucursal = empresaFacade.getListaSucursalPorPkEmpresa(Constante.PARAM_EMPRESASESION);
-			ordenarAlfabeticamenteSuc();
 			
+//			ordenarAlfabeticamenteSuc();
+			lstReporteVacia = new ArrayList<Tabla>();
+			lstMsgCondicionSinGarantesDeudores = new ArrayList<Tabla>();
+			listDocumentoBusq = new ArrayList<Tabla>();
+			listaTablaSucursal = new ArrayList<Tabla>();
+			cargarListaTablaSucursal();
+			lstDeudaPendiente = new ArrayList<Tabla>();
+			
+			listaCuentaSocio = new ArrayList<CuentaComp>();
+			listaCuentaConcepto=new ArrayList<CuentaConcepto>();
+			listaCuentaConceptoComp = new ArrayList<CuentaConceptoComp>();
+			listaBeneficiarioLiquidacionBusq = new ArrayList<BeneficiarioLiquidacion>();
+			listaExpedienteLiquidacion =  new ArrayList<ExpedienteLiquidacionComp>();
+			listExpedienteMovimientoComp =new ArrayList<ExpedienteComp>();
+			listaExpedienteLiquidacionComp= new ArrayList<ExpedienteLiquidacionComp>();
+			listaBeneficiarioLiquidacionVista = new ArrayList<BeneficiarioLiquidacion>();
 			
 			beanSocioComp = new SocioComp();
 			beanSocioComp.setPersona(new Persona());
@@ -465,148 +511,83 @@ public class SolicitudLiquidacionController {
 			beanSocioComp.getSocio().setSocioEstructura(new SocioEstructura());
 			beanSocioComp.setCuenta(new Cuenta());
 			beanSocioComp.setCuentaComp(new CuentaComp());
+			
 			beanExpedienteLiquidacion = new ExpedienteLiquidacion();
 			beanExpedienteLiquidacion.setId(new ExpedienteLiquidacionId());
 			beanExpedienteLiquidacion.setListaEstadoLiquidacion(new ArrayList<EstadoLiquidacion>());
 			beanExpedienteLiquidacion.setListaExpedienteLiquidacionDetalle(new ArrayList<ExpedienteLiquidacionDetalle>());
-			listaCuentaSocio = new ArrayList<CuentaComp>();
-			listaCuentaConcepto=new ArrayList<CuentaConcepto>();
-			listaCuentaConceptoComp = new ArrayList<CuentaConceptoComp>();
+			
+			estadoCondicionFiltro = new EstadoLiquidacion();
+			estadoCondicionFiltro.getId().setIntPersEmpresaPk(SESION_IDEMPRESA);
+			
+			estadoLiquidacionSuc = new EstadoLiquidacion();
+			estadoLiquidacionBusqueda = new EstadoLiquidacion();
+			estadoLiquidacionFechas = new EstadoLiquidacion();
+			estadoLiquidacionFechas.getId().setIntPersEmpresaPk(SESION_IDEMPRESA);
+			
 			personaValida = new Persona();
 			personaValida.setDocumento(new Documento());
+			
+			estructuraDetalleBusqueda = new EstructuraDetalle(); 
+			
+			intTipoOperacion = Constante.PARAM_T_TIPOOPERACION_LIQUIDACIONDECUENTA;
+			intTipoPersonaFiltro = Constante.PARAM_T_TIPOPERSONA_NATURAL;
+			intTipoConsultaBusqueda = 0;
+			
+			strNumeroSolicitudBusq = "";			
+			strConsultaBusqueda = "";
+			strDescripcionTipoLiquidacion = "";
+			strUnidadesEjecutorasConcatenadas = "";
+			strSolicitudLiquidacion = "";
+			
+			bdMontoInteresFdoRetiro = BigDecimal.ZERO;
+			
 			blnShowDivFormSolicitudLiquidacion = false;
 			blnShowValidarDatos = false ;
 			blnIsRenuncia = false;
-			listaBeneficiarioLiquidacionBusq = new ArrayList<BeneficiarioLiquidacion>();
-			
-			listExpedienteMovimientoComp =new ArrayList<ExpedienteComp>();
-			
-			Calendar fecHoy = Calendar.getInstance();
-			dtHoy = fecHoy.getTime();
-			cargarListaTablaSucursal();
-			cargarCombosBusqueda();
-			
-			estructuraDetalleBusqueda = new EstructuraDetalle(); // ***
-			//expLiquidacionBusqueda = new ExpedienteLiquidacion();		//	***
-			strNumeroSolicitudBusq = "";						//	***
-			intTipoConsultaBusqueda = 0;
-			strConsultaBusqueda = "";
-			estadoLiquidacionBusqueda = new EstadoLiquidacion();
 			blnTxtBusqueda = true;
 			blnBusquedaFechas = false;
 			blnBusquedaCondicion = false;
-			estadoLiquidacionFechas = new EstadoLiquidacion();
-			estadoLiquidacionFechas.getId().setIntPersEmpresaPk(EMPRESA_USUARIO);
-			
-			blnMostrarDescripcionTipoLiquidacion = Boolean.TRUE;
-			strDescripcionTipoLiquidacion = "";			
-			limpiarBeneficiarioTotales();
+			blnMostrarDescripcionTipoLiquidacion = true;
 			blnMostrarObjeto = true;
-			
 			blnMonstrarEliminar= true;
 			blnMonstrarActualizar= true;
-
 			blnVerSolExpLiquidacion = false;
-			
-			//jchavez 03.06.2014 se inicializa variable de monto interes fdo de retiro
-			bdMontoInteresFdoRetiro = BigDecimal.ZERO;
-			strUnidadesEjecutorasConcatenadas="";
+
+			limpiarFiltros();
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 	}
 	
+
+//	public List<Sucursal> ordenarAlfabeticamenteSuc(){
+//		if(listaSucursal != null && !listaSucursal.isEmpty()){
+//			//Ordenamos por nombre
+//			Collections.sort(listaSucursal, new Comparator<Sucursal>(){
+//				public int compare(Sucursal uno, Sucursal otro) {
+//					return uno.getJuridica().getStrSiglas().compareTo(otro.getJuridica().getStrSiglas());
+//				}
+//			});	
+//		}
+//		return listaSucursal;
+//	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public String getLimpiarLiquidacion(){
-		cargarValoresIniciales();
-		listaExpedienteLiquidacionComp= new ArrayList<ExpedienteLiquidacionComp>();
-		strSolicitudLiquidacion="";
-		return "";
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public List<Sucursal> ordenarAlfabeticamenteSuc(){
-		if(listaSucursal != null && !listaSucursal.isEmpty()){
-			//Ordenamos por nombre
-			Collections.sort(listaSucursal, new Comparator<Sucursal>(){
-				public int compare(Sucursal uno, Sucursal otro) {
-					return uno.getJuridica().getStrSiglas().compareTo(otro.getJuridica().getStrSiglas());
-				}
-			});	
-		}
-			return listaSucursal;
-	}
-	
-	/**
-	 * Permite Bloquear los tabs de acuerdo al perfil logueado.
-	 */
-	public void cargarPermisos(){
-		PermisoPerfil permiso = null;
-		PermisoPerfilId id = null;
-		Usuario usuario = null;
-		Integer MENU_SOLICITUD = 232;
-		Integer MENU_AUTORIZACION = 233;
-		Integer MENU_GIRO = 234;
-		Integer MENU_ARCHIVAMIENTO = 235;
-		PermisoFacadeRemote remotePermiso = null;
-		try{
-			usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
-			if(usuario != null){
-				id = new PermisoPerfilId();
-				id.setIntPersEmpresaPk(usuario.getPerfil().getId().getIntPersEmpresaPk());
-				id.setIntIdTransaccion(MENU_SOLICITUD);
-				id.setIntIdPerfil(usuario.getPerfil().getId().getIntIdPerfil());
-				remotePermiso = (PermisoFacadeRemote)EJBFactory.getRemote(PermisoFacadeRemote.class);
-				permiso = remotePermiso.getPermisoPerfilPorPk(id);
-				blnSol = (permiso == null);
-				
-				id.setIntIdTransaccion(MENU_AUTORIZACION);
-				permiso = remotePermiso.getPermisoPerfilPorPk(id);
-				blnAut = (permiso == null);
-				
-				id.setIntIdTransaccion(MENU_GIRO);
-				permiso = remotePermiso.getPermisoPerfilPorPk(id);
-				blnGir = (permiso == null);
-				
-				id.setIntIdTransaccion(MENU_ARCHIVAMIENTO);
-				permiso = remotePermiso.getPermisoPerfilPorPk(id);
-				blnArch = (permiso == null);
-				
-			}else{
-				blnSol = false;
-				blnAut= false;
-				blnGir= false;
-				blnArch= false;
-			}
-		} catch (BusinessException e) {
-			log.error(e);
-		} catch (EJBFactoryException e) {
-			log.error(e);
-		}		
-	}
+
+
 	
 	/**
 	 * Limpia los filtros de la busqueda
-	 * @param event
 	 */
-	public void limpiarFiltros(ActionEvent event){
-		
+	public void limpiarFiltros(){
 		intBusquedaTipo = 0;
 		strBusqCadena = "";
 		strBusqNroSol ="";
-		//intTipoCreditoFiltro =0;
 		intBusqSucursal = 0;
+		intBusqTipoLiquidacion = 0;
 		intBusqEstado =0;
 		dtBusqFechaEstadoDesde = null;
 		dtBusqFechaEstadoHasta = null;
-		intBusqTipoLiquidacion = 0;
 	}
 	
 	/**
@@ -683,24 +664,10 @@ public class SolicitudLiquidacionController {
 		
 	}
 	
-	/**
-	 * 
-	 */
-	private void cargarUsuario(){
-		usuario = (Usuario)getRequest().getSession().getAttribute("usuario");
-		PERSONA_USUARIO = usuario.getIntPersPersonaPk();
-		EMPRESA_USUARIO = usuario.getPerfil().getId().getIntPersEmpresaPk();
-		SUCURSAL_USUARIO_ID = usuario.getSucursal().getId().getIntIdSucursal();
-		SUBSUCURSAL_USUARIO_ID = usuario.getSubSucursal().getId().getIntIdSubSucursal();		
-	}
-	
-	
-	/**
-	 * 
-	 * @throws Exception
-	 */
 	private void cargarListaTablaSucursal() throws Exception{
-		List<Sucursal>listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(EMPRESA_USUARIO);
+		listaTablaSucursal.clear();
+		
+		List<Sucursal> listaSucursal = empresaFacade.getListaSucursalPorPkEmpresa(SESION_IDEMPRESA);
 		//Ordena la sucursal alafabeticamente
 		Collections.sort(listaSucursal, new Comparator<Sucursal>(){
 			public int compare(Sucursal uno, Sucursal otro) {
@@ -708,7 +675,6 @@ public class SolicitudLiquidacionController {
 			}
 		});
 		
-		listaTablaSucursal = new ArrayList<Tabla>();
 		listaTablaSucursal = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TOTALES_SUCURSALES));
 		Sucursal sucursal;
 		Tabla tabla;
@@ -721,10 +687,6 @@ public class SolicitudLiquidacionController {
 		}
 	}
 
-	
-	/**
-	 * 
-	 */
 	public void seleccionarTipoBusquedaSucursal(){
 		try{
 			if(intTipoBusquedaSucursal.intValue()>0){
@@ -821,41 +783,41 @@ public class SolicitudLiquidacionController {
 	/**
 	 * 
 	 */
-	public void cargarCombosBusqueda(){
-		
-		try{
-			
-			// combo 1
-			listaTablaDeSucursal = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TOTALES_SUCURSALES));
-			List<Sucursal> listaSucursal =  empresaFacade.getListaSucursalPorPkEmpresa(usuario.getPerfil().getId().getIntPersEmpresaPk());
-			
-			//Ordenamos por nombre
-			Collections.sort(listaSucursal, new Comparator<Sucursal>(){
-				public int compare(Sucursal sucUno, Sucursal sucDos) {
-					return sucUno.getJuridica().getStrSiglas().compareTo(sucDos.getJuridica().getStrSiglas());
-				}
-			});
-			
-			Sucursal sucursal = null;
-			Tabla tabla = null;
-			for(int i=0;i<listaSucursal.size();i++){
-				 sucursal = listaSucursal.get(i);
-				 tabla = new Tabla();
-				 tabla.setIntIdDetalle(sucursal.getId().getIntIdSucursal());
-				 tabla.setStrDescripcion(sucursal.getJuridica().getStrSiglas());
-				 listaTablaDeSucursal.add(tabla);
-			}
-			
-			
-			// combo 2
-			listaTablaCreditoEmpresa = tablaFacade.getListaTablaPorAgrupamientoB(new Integer(Constante.PARAM_T_TIPOCREDITOEMPRESA), 1);
-			
-			
-		} catch (BusinessException e) {
-			log.error("Error en cargarCombosBusqueda ---> "+e);
-			e.printStackTrace();
-		} 
-}
+//	public void cargarCombosBusqueda(){
+//		
+//		try{
+//			
+//			// combo 1
+//			listaTablaDeSucursal = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TOTALES_SUCURSALES));
+//			List<Sucursal> listaSucursal =  empresaFacade.getListaSucursalPorPkEmpresa(usuario.getPerfil().getId().getIntPersEmpresaPk());
+//			
+//			//Ordenamos por nombre
+//			Collections.sort(listaSucursal, new Comparator<Sucursal>(){
+//				public int compare(Sucursal sucUno, Sucursal sucDos) {
+//					return sucUno.getJuridica().getStrSiglas().compareTo(sucDos.getJuridica().getStrSiglas());
+//				}
+//			});
+//			
+//			Sucursal sucursal = null;
+//			Tabla tabla = null;
+//			for(int i=0;i<listaSucursal.size();i++){
+//				 sucursal = listaSucursal.get(i);
+//				 tabla = new Tabla();
+//				 tabla.setIntIdDetalle(sucursal.getId().getIntIdSucursal());
+//				 tabla.setStrDescripcion(sucursal.getJuridica().getStrSiglas());
+//				 listaTablaDeSucursal.add(tabla);
+//			}
+//			
+//			
+//			// combo 2
+//			listaTablaCreditoEmpresa = tablaFacade.getListaTablaPorAgrupamientoB(new Integer(Constante.PARAM_T_TIPOCREDITOEMPRESA), 1);
+//			
+//			
+//		} catch (BusinessException e) {
+//			log.error("Error en cargarCombosBusqueda ---> "+e);
+//			e.printStackTrace();
+//		} 
+//}
 	
 	
 	/**
@@ -874,7 +836,7 @@ public class SolicitudLiquidacionController {
 	 */
 	public void listarSolicitudLiquidacion(ActionEvent event) {
 		log.info("-----------------------Debugging CreditoController.listarSolicitudPrestamo -----------------------------");
-		cancelarGrabarSolicitud(event);
+		cancelarGrabarSolicitud();
 		ExpedienteLiquidacionComp expLiqComp= null;
 		try {
 			
@@ -936,7 +898,7 @@ public class SolicitudLiquidacionController {
 	 * @param event
 	 */
 	public void nuevaSolicitudLiquidacion(ActionEvent event) {
-		cancelarGrabarSolicitud(event);
+		cancelarGrabarSolicitud();
 		//limpiarMensajesIsValidoExpediente();
 		
 		strSolicitudLiquidacion = Constante.MANTENIMIENTO_MODIFICAR;
@@ -981,7 +943,7 @@ public class SolicitudLiquidacionController {
 		dtFechaRegistro = null;
 		dtFechaRegistro = Calendar.getInstance().getTime();
 		
-		listaCuentaSocio = new ArrayList<CuentaComp>();
+//		listaCuentaSocio = new ArrayList<CuentaComp>();
 		listaCuentaConcepto = new ArrayList<CuentaConcepto>();
 		listaCuentaConceptoComp = new ArrayList<CuentaConceptoComp>();
 		listExpedienteMovimientoComp =new ArrayList<ExpedienteComp>();
@@ -1000,12 +962,11 @@ public class SolicitudLiquidacionController {
 
 		campoBuscarBeneficiario="";
 		blnTieneAdjuntosConfigurados = false;
-		
-		Calendar fecHoy = Calendar.getInstance();
-		dtHoy = fecHoy.getTime();
+
 		strMsgObservacion = "";
 		
-		strFechaRenuncia = Constante.sdf.format(dtHoy);
+		strFechaRenuncia = Constante.sdf.format(Calendar.getInstance().getTime());
+
 		strFechaRecepcionRenuncia = Constante.sdf.format(new Date());
 		strFechaProgramacionPago = "";//Constante.sdf.format(addDaysToDate(new Date(), 60));
 		blnTxtBusqueda = true;
@@ -1017,8 +978,10 @@ public class SolicitudLiquidacionController {
 		strMsgCondicionSocioSinDeudaPendiente = "";
 		strMsgCondicionSinGarantesDeudores = "";
 		
-		limpiarListaBeneficiarios();
-		limpiarBeneficiarioTotales();
+//		limpiarListaBeneficiarios();
+//		limpiarBeneficiarioTotales();
+		limpiarBeneficiarios();
+		
 		blnMostrarObjeto = true;
 		blnMonstrarEliminar= true;
 		blnMonstrarActualizar= true;
@@ -1026,7 +989,17 @@ public class SolicitudLiquidacionController {
 		strMsgTxtProcedeEvaluacion = "";
 		strMsgTxtProcedeEvaluacion1="";
 		blnVerSolExpLiquidacion = false;
-		}
+		
+		//Autor: jchavez / Tarea: Modificación / Fecha: 03.12.2014
+		limpiarBeneficiarios();
+		
+		listaCuentaSocio.clear();
+		
+		blnShowValidarDatos = false;
+		blnShowDivFormSolicitudLiquidacion = false;
+		
+		strSolicitudLiquidacion = Constante.MANTENIMIENTO_MODIFICAR;
+	}
 	
 	
 	/**
@@ -1076,6 +1049,18 @@ public class SolicitudLiquidacionController {
 
 	}
 	
+	public void limpiarBeneficiarios(){
+		listaBeneficiarioLiquidacionBusq.clear();
+		listaBeneficiarioLiquidacionVista.clear();
+		
+		beneficiarioTotales = new BeneficiarioLiquidacion();
+		beneficiarioTotales.setBdPorcentajeBeneficioApo(BigDecimal.ZERO);
+		beneficiarioTotales.setBdMontoAporte(BigDecimal.ZERO);
+		beneficiarioTotales.setBdPorcentajeBeneficioRet(BigDecimal.ZERO);
+		beneficiarioTotales.setBdMontoRetiro(BigDecimal.ZERO);
+		beneficiarioTotales.setBdMontoTotal(BigDecimal.ZERO);
+	}
+	
 	/**
 	 * 
 	 */
@@ -1117,7 +1102,8 @@ public class SolicitudLiquidacionController {
 				for (ExpedienteLiquidacion expedienteLiquidacion : listaLiquidaciones) {
 					if(expedienteLiquidacion.getEstadoLiquidacionUltimo().getIntParaEstado().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_REQUISITO)==0
 					|| expedienteLiquidacion.getEstadoLiquidacionUltimo().getIntParaEstado().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_SOLICITUD)==0
-					|| expedienteLiquidacion.getEstadoLiquidacionUltimo().getIntParaEstado().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_APROBADO)==0){
+					|| expedienteLiquidacion.getEstadoLiquidacionUltimo().getIntParaEstado().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_APROBADO)==0
+					|| expedienteLiquidacion.getEstadoLiquidacionUltimo().getIntParaEstado().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_OBSERVADO)==0){
 						blnExisteLiquidacionPrevia = Boolean.TRUE;
 						break;
 					}
@@ -1133,219 +1119,197 @@ public class SolicitudLiquidacionController {
 	}
 	
 	/**
-	 * Validacion inicial del socio. Se valida etsado de persona, estados de cuenta, etc.
-	 * Valida la existencia de liquidaciones en estado Requsiito, Solicitud o Aprobado. 
+	 * Validacion inicial del socio. Se valida estado de persona, estados de cuenta, etc.
+	 * Valida la existencia de liquidaciones en estado Requisito, Solicitud o Aprobado. 
 	 * Validamos que no tenga solicitudes de prevision Previas en estado Aprobado.
 	 * @param event
 	 */
-	public void validarDatos(ActionEvent event) {
+	public void validarDatos() {
 		SocioComp socioComp = null;
 		Integer intTipoDoc = personaValida.getDocumento().getIntTipoIdentidadCod();
-		String strNumIdentidad = personaValida.getDocumento().getStrNumeroIdentidad();
-		strNumIdentidad =  strNumIdentidad.trim();
-		//CuentaComp cuentaComp = new CuentaComp();
-		listaCuentaSocio = null;
+		String strNumIdentidad = personaValida.getDocumento().getStrNumeroIdentidad().trim();
+		BigDecimal bdMontoSolicitudLiquidacion = BigDecimal.ZERO;
+		
 		Boolean blnContinuaBarrido = Boolean.TRUE;
+		Boolean blnExistenPrevias = Boolean.FALSE;
 		strMsgErrorValidarDatos = "";
 		
-//		List<ExpedientePrevision> listaExpPrevision = null;
-		//Boolean blnPasaValPrevision = Boolean.TRUE;
-		Boolean blnExistenPrevias = Boolean.FALSE;
-		
-		BigDecimal bdMontoSolicitudLiquidacion = BigDecimal.ZERO;
 		bdMontoInteresFdoRetiro = BigDecimal.ZERO;
 
+		//Autor: jchavez / Tarea: Modificación / Fecha: 03.12.2014
+		listaCuentaSocio.clear();
 		try {
-				if ((intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_SOCIO)
-				|| intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_USUARIO)
-				|| intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_CLIENTE)
-				|| intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_NO_SOCIO))){
+			if ((intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_SOCIO)
+			|| intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_USUARIO)
+			|| intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_CLIENTE)
+			|| intTipoRelacion.equals(Constante.PARAM_T_TIPOROL_NO_SOCIO))){
 
-					socioComp = socioFacade.getSocioNatuPorDocIdentidadYIdEmpresa(intTipoDoc,strNumIdentidad, usuario.getEmpresa().getIntIdEmpresa());
-					if (socioComp != null) {
-						if (socioComp.getCuenta() != null) {
-							if(socioComp.getCuenta().getIntParaSituacionCuentaCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0){
+				socioComp = socioFacade.getSocioNatuPorDocIdentidadYIdEmpresa(intTipoDoc,strNumIdentidad, usuario.getEmpresa().getIntIdEmpresa());
+				if (socioComp != null) {
+					if (socioComp.getCuenta() != null) {
+						if(socioComp.getCuenta().getIntParaSituacionCuentaCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0){
+							// Valida la existencia de liquidaciones en estado Requsiito, Solicitud, Aprobado u Observado. 
+							blnExistenPrevias = existeLiquidacionPrevia(socioComp.getCuenta().getId());
 
-								blnExistenPrevias = existeLiquidacionPrevia(socioComp.getCuenta().getId());
-								
-								// Valida la existencia de liquidaciones en estado Requsiito, Solicitud o Aprobado. 
-								if(!blnExistenPrevias){
-									
-									
-									/*listaExpPrevision = previsionFacade.getListaExpedientePrevisionPorCuenta(socioComp.getCuenta());
-									if(listaExpPrevision != null && !listaExpPrevision.isEmpty()){
-										for (ExpedientePrevision expedientePrevision : listaExpPrevision) {
-											if(expedientePrevision.getEstadoPrevisionUltimo().getIntParaEstado().compareTo(Constante.PARAM_T_ESTADOSOLICPRESTAMO_APROBADO)==0){
-												blnPasaValPrevision = Boolean.FALSE;
-											}
-										}	
-									}*/
-									
-									
-									
-									
-									
-									// Validamos que no tenga solicitudes de prevision Previas.
-									//if(blnPasaValPrevision){
-										if(socioComp.getPersona() != null){
-											// • Estado de persona = 1 activa 
-											//28.08.2013
-											//if(socioComp.getPersona().getIntEstadoCod().compareTo(Constante.PARAM_PERSONA_ESTADO_ACTIVO)==0){
-	
-												for (SocioEstructura socioEstructura : socioComp.getSocio().getListSocioEstructura()) {
-													if(blnContinuaBarrido){
-														if(socioEstructura.getIntEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0){
-															if (socioEstructura.getIntTipoEstructura().compareTo(Constante.PARAM_T_TIPOESTRUCTURA_ORIGEN)==0) {
-																strMsgErrorValidarDatos = "";
-																socioComp.getSocio().setSocioEstructura(socioEstructura);
-	
-																//if(!(socioComp.getCuenta().getIntParaSubTipoCuentaCod().compareTo(Constante.PARAM_SUBCONDICION_CUENTASOCIO_REGULAR)==0)){
-																//•	Cuenta situación = 1 activa
-																if(socioComp.getCuenta().getIntParaSubCondicionCuentaCod().compareTo(Constante.PARAM_SUBCONDICION_CUENTASOCIO_REGULAR)==0){
-																	
-																	// agregar validacion: no debe existir expedientes de prevision.
-																	pgValidDatos = false;
-																	blnDatosSocio = true;
-																	beanSocioComp = socioComp;
-																	blnContinuaBarrido = Boolean.FALSE;
-	
-																	// strDescripcionTipoCuenta
-																	listaCuentaSocio = new ArrayList<CuentaComp>();
-																	CuentaComp cuentaCompSocio = new CuentaComp();
-																	cuentaCompSocio.setCuenta(beanSocioComp.getCuenta());
-	
-																	// 1. Secarga la descripcion del Tipo de Cuenta - lista 1
-																	for(int t=0; t<listaDescripcionTipoCuenta.size();t++){
-																		if(listaDescripcionTipoCuenta.get(t).getIntIdDetalle().compareTo(beanSocioComp.getCuenta().getIntParaTipoCuentaCod())==0){
-																			cuentaCompSocio.setStrDescripcionTipoCuenta(listaDescripcionTipoCuenta.get(t).getStrDescripcion());
-																			break;
-																		}
-																	}
-	
-																	// 2. De momento solo hay una cuenta x socio
-																	listaCuentaSocio.add(cuentaCompSocio);
-																	String strDescCuenta = listaCuentaSocio.get(0).getStrDescripcionTipoCuenta();
-	
-																	//List<CuentaConcepto> lstCtaCto = null;
-																	listaCuentaConcepto = conceptoFacade.getListaCuentaConceptoPorPkCuenta(beanSocioComp.getCuenta().getId());
-	
-																	// Solo se deben visualizar 4 cuentas: Aporte, Retiro, Ahoroo y Depaosito
-																	listaCuentaConceptoComp = new ArrayList<CuentaConceptoComp>();
-	
-																	CuentaConceptoComp cuentaConceptoComp = null;
-																	CuentaConcepto cuentaConcepto = null;
-																	for(int k=0; k<listaCuentaConcepto.size();k++){
-																		cuentaConcepto = listaCuentaConcepto.get(k);
-																		cuentaConceptoComp = new CuentaConceptoComp();
-																		// cargando la descripcion del tipo de cuenta
-																		cuentaConceptoComp.setStrDescripcionCuenta(strDescCuenta); 
+							if(!blnExistenPrevias){
+								if(socioComp.getPersona() != null){
+									// • Estado de persona = 1 activa 
+									//28.08.2013
+									//if(socioComp.getPersona().getIntEstadoCod().compareTo(Constante.PARAM_PERSONA_ESTADO_ACTIVO)==0){
+
+										for (SocioEstructura socioEstructura : socioComp.getSocio().getListSocioEstructura()) {
+											if(blnContinuaBarrido){
+												if(socioEstructura.getIntEstadoCod().compareTo(Constante.PARAM_T_ESTADOUNIVERSAL_ACTIVO)==0){
+													if (socioEstructura.getIntTipoEstructura().compareTo(Constante.PARAM_T_TIPOESTRUCTURA_ORIGEN)==0) {
+														strMsgErrorValidarDatos = "";
+														socioComp.getSocio().setSocioEstructura(socioEstructura);
+
+														//if(!(socioComp.getCuenta().getIntParaSubTipoCuentaCod().compareTo(Constante.PARAM_SUBCONDICION_CUENTASOCIO_REGULAR)==0)){
+														//•	Cuenta situación = 1 activa
+														if(socioComp.getCuenta().getIntParaSubCondicionCuentaCod().compareTo(Constante.PARAM_SUBCONDICION_CUENTASOCIO_REGULAR)==0){
 															
-																		// cargando la descripcion de cada cuenta concepto
-																		for (Tabla descripcion : listaDescripcionCuentaConcepto) {
-																			CuentaConceptoDetalle detalle = null;
-																			if(cuentaConcepto.getListaCuentaConceptoDetalle() != null 
-																			&& !cuentaConcepto.getListaCuentaConceptoDetalle().isEmpty()){
-																				detalle = new CuentaConceptoDetalle();
-																				detalle = cuentaConcepto.getListaCuentaConceptoDetalle().get(0);
-	
-																				if(descripcion.getIntIdDetalle().compareTo(detalle.getIntParaTipoConceptoCod())==0){
-																					cuentaConceptoComp.setStrDescripcionConcepto(descripcion.getStrDescripcion());
-																					cuentaConceptoComp.setStrNumeroCuenta(beanSocioComp.getCuenta().getStrNumeroCuenta());
-																					cuentaConceptoComp.setCuentaConcepto(cuentaConcepto);
-																					if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_APORTES)==0
-																					 ||detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ){
-																						cuentaConceptoComp.getCuentaConcepto().setChecked(true);
-																						cuentaConceptoComp.setLstCuentaConceptoDetalle(new ArrayList<CuentaConceptoDetalle>());
-																						cuentaConceptoComp.getLstCuentaConceptoDetalle().add(detalle);
-																						//02.06.2014 jchavez - Se agrega calculo del interes ganado caso liquidacion fdo. de retiro.
-																						BigDecimal bdMontoInteresCalculado = BigDecimal.ZERO;
-																						if (detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ) {
-																							bdMontoInteresCalculado = calcularInteresRetiroAcumulado(cuentaConceptoComp);
-																							bdMontoInteresFdoRetiro = bdMontoInteresCalculado;
-																						}
-																						
-																						bdMontoSolicitudLiquidacion = bdMontoSolicitudLiquidacion.add(cuentaConcepto.getBdSaldo()).add(bdMontoInteresCalculado);
-																					}
-																					
-																						break;
-																					}
-																				}	
-																			}
-	
-																		listaCuentaConceptoComp.add(cuentaConceptoComp);
-																		}
-																	
-																	beanExpedienteLiquidacion.setBdMontoBrutoLiquidacion(bdMontoSolicitudLiquidacion);
-																	
-																	EstructuraId estructuraId = new EstructuraId();
-																	Estructura estructura = null;
-																	estructuraId.setIntNivel(beanSocioComp.getSocio().getSocioEstructura().getIntNivel());
-																	estructuraId.setIntCodigo(beanSocioComp.getSocio().getSocioEstructura().getIntCodigo());
-																	estructura = estructuraFacade.getEstructuraPorPk(estructuraId);
-	
-																	beanEstructuraSocioComp = estructura;
-																	estructura.getListaEstructuraDetalle();
-	
-																	if(estructura.getListaEstructuraDetalle() != null){
-																		for(int k=0; k<estructura.getListaEstructuraDetalle().size();k++){
-																			estructura.getListaEstructuraDetalle().get(k).getListaSubsucursal();
-																		}
-																	}
-	
-																	blnShowDivFormSolicitudLiquidacion = true;
-																	blnShowValidarDatos = false;
-	
-																	// cargando sucursal y subsucursal del socio
-																	cargarListaTablaSucursal();
-																	seleccionarSucursal();
-	
-																} else {
-																	strMsgErrorValidarDatos = strMsgErrorValidarDatos +"La sub condición de la Cuenta no es Regular. ";
+															// agregar validacion: no debe existir expedientes de prevision.
+															pgValidDatos = false;
+															blnDatosSocio = true;
+															beanSocioComp = socioComp;
+															blnContinuaBarrido = Boolean.FALSE;
+
+															// strDescripcionTipoCuenta
+//																	listaCuentaSocio = new ArrayList<CuentaComp>();
+															listaCuentaSocio.clear();
+															CuentaComp cuentaCompSocio = new CuentaComp();
+															cuentaCompSocio.setCuenta(beanSocioComp.getCuenta());
+
+															// 1. Secarga la descripcion del Tipo de Cuenta - lista 1
+															for(int t=0; t<listaDescripcionTipoCuenta.size();t++){
+																if(listaDescripcionTipoCuenta.get(t).getIntIdDetalle().compareTo(beanSocioComp.getCuenta().getIntParaTipoCuentaCod())==0){
+																	cuentaCompSocio.setStrDescripcionTipoCuenta(listaDescripcionTipoCuenta.get(t).getStrDescripcion());
+																	break;
 																}
-	
-															}else{
-																strMsgErrorValidarDatos = strMsgErrorValidarDatos+ "El socio no posee una estructura de origen.";
 															}
+
+															// 2. De momento solo hay una cuenta x socio
+															listaCuentaSocio.add(cuentaCompSocio);
+															String strDescCuenta = listaCuentaSocio.get(0).getStrDescripcionTipoCuenta();
+
+															//List<CuentaConcepto> lstCtaCto = null;
+															listaCuentaConcepto = conceptoFacade.getListaCuentaConceptoPorPkCuenta(beanSocioComp.getCuenta().getId());
+
+															// Solo se deben visualizar 4 cuentas: Aporte, Retiro, Ahoroo y Depaosito
+															listaCuentaConceptoComp = new ArrayList<CuentaConceptoComp>();
+
+															CuentaConceptoComp cuentaConceptoComp = null;
+															CuentaConcepto cuentaConcepto = null;
+															for(int k=0; k<listaCuentaConcepto.size();k++){
+																cuentaConcepto = listaCuentaConcepto.get(k);
+																cuentaConceptoComp = new CuentaConceptoComp();
+																// cargando la descripcion del tipo de cuenta
+																cuentaConceptoComp.setStrDescripcionCuenta(strDescCuenta); 
+													
+																// cargando la descripcion de cada cuenta concepto
+																for (Tabla descripcion : listaDescripcionCuentaConcepto) {
+																	CuentaConceptoDetalle detalle = null;
+																	if(cuentaConcepto.getListaCuentaConceptoDetalle() != null 
+																	&& !cuentaConcepto.getListaCuentaConceptoDetalle().isEmpty()){
+																		detalle = new CuentaConceptoDetalle();
+																		detalle = cuentaConcepto.getListaCuentaConceptoDetalle().get(0);
+
+																		if(descripcion.getIntIdDetalle().compareTo(detalle.getIntParaTipoConceptoCod())==0){
+																			//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014 /
+																			cuentaConceptoComp.setIntParaTipoConceptoCod(detalle.getIntParaTipoConceptoCod());
+																			//FIN jchavez - 29.08.2014
+																			cuentaConceptoComp.setStrDescripcionConcepto(descripcion.getStrDescripcion());
+																			cuentaConceptoComp.setStrNumeroCuenta(beanSocioComp.getCuenta().getStrNumeroCuenta());
+																			cuentaConceptoComp.setCuentaConcepto(cuentaConcepto);
+																			if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_APORTES)==0
+																			 ||detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ){
+																				cuentaConceptoComp.getCuentaConcepto().setChecked(true);
+																				cuentaConceptoComp.setLstCuentaConceptoDetalle(new ArrayList<CuentaConceptoDetalle>());
+																				cuentaConceptoComp.getLstCuentaConceptoDetalle().add(detalle);
+																				//02.06.2014 jchavez - Se agrega calculo del interes ganado caso liquidacion fdo. de retiro.
+																				BigDecimal bdMontoInteresCalculado = BigDecimal.ZERO;
+																				if (detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ) {
+																					bdMontoInteresCalculado = calcularInteresRetiroAcumulado(cuentaConceptoComp);
+																					bdMontoInteresFdoRetiro = bdMontoInteresCalculado;
+																				}
+																				
+																				bdMontoSolicitudLiquidacion = bdMontoSolicitudLiquidacion.add(cuentaConcepto.getBdSaldo()).add(bdMontoInteresCalculado);
+																			}
+																			
+																				break;
+																			}
+																		}	
+																	}
+
+																listaCuentaConceptoComp.add(cuentaConceptoComp);
+																}
+															
+															beanExpedienteLiquidacion.setBdMontoBrutoLiquidacion(bdMontoSolicitudLiquidacion);
+															
+															EstructuraId estructuraId = new EstructuraId();
+															Estructura estructura = null;
+															estructuraId.setIntNivel(beanSocioComp.getSocio().getSocioEstructura().getIntNivel());
+															estructuraId.setIntCodigo(beanSocioComp.getSocio().getSocioEstructura().getIntCodigo());
+															estructura = estructuraFacade.getEstructuraPorPk(estructuraId);
+
+															beanEstructuraSocioComp = estructura;
+															estructura.getListaEstructuraDetalle();
+
+															if(estructura.getListaEstructuraDetalle() != null){
+																for(int k=0; k<estructura.getListaEstructuraDetalle().size();k++){
+																	estructura.getListaEstructuraDetalle().get(k).getListaSubsucursal();
+																}
+															}
+
+															blnShowDivFormSolicitudLiquidacion = true;
+															blnShowValidarDatos = false;
+
+															// cargando sucursal y subsucursal del socio
+															cargarListaTablaSucursal();
+															seleccionarSucursal();
+
+														} else {
+															strMsgErrorValidarDatos = strMsgErrorValidarDatos +"La sub condición de la Cuenta no es Regular. ";
 														}
+
+													}else{
+														strMsgErrorValidarDatos = strMsgErrorValidarDatos+ "El socio no posee una estructura de origen.";
 													}
 												}
-	
-												if(!blnContinuaBarrido){
-													cargarDescripcionUEjecutorasConcatenadas(socioComp);
-												}
-	
-											/*}else{ 28.08.2013
-												strMsgErrorValidarDatos = "La Persona ingresada no se encuentra en estado ACTIVO.";
-											}*/
-	
-	
-										}else{
-											strMsgErrorValidarDatos = "No se recuperó Persona.";
-										}	
-										
+											}
+										}
+
+										if(!blnContinuaBarrido){
+											cargarDescripcionUEjecutorasConcatenadas(socioComp);
+										}
 									}else{
-											strMsgErrorValidarDatos = "El Socio posee Solicitudes de Prevision en estado APROBADO.";
-									}
+										strMsgErrorValidarDatos = "No se recuperó Persona.";
+									}	
+									
 								
-								/*}else{
-									strMsgErrorValidarDatos = "El Socio posee Solicitudes de Liquidación en estado Requisito, Solicitud o Aprobada.";
-								}*/
-							}else{
-								strMsgErrorValidarDatos = "El Socio no posee Cuenta asociada.";
-							}
+								}else{
+										strMsgErrorValidarDatos = "El Socio posee Solicitudes de Prevision en estado APROBADO.";
+								}
+							
+							/*}else{
+								strMsgErrorValidarDatos = "El Socio posee Solicitudes de Liquidación en estado Requisito, Solicitud o Aprobada.";
+							}*/
+						}else{
+							strMsgErrorValidarDatos = "El Socio no posee Cuenta asociada.";
+						}
 
 
-						} else {
-							pgValidDatos = true;
-							blnDatosSocio = false;
-							strMsgErrorValidarDatos = "La Situación de la Cuenta del Socio no se encuentra en estado ACTIVO. ";
-						} 
-					}else {
+					} else {
 						pgValidDatos = true;
 						blnDatosSocio = false;
-						strMsgErrorValidarDatos = "Rol de Socio incorrecto. ";
-					}
-				}			
+						strMsgErrorValidarDatos = "La Situación de la Cuenta del Socio no se encuentra en estado ACTIVO. ";
+					} 
+				}else {
+					pgValidDatos = true;
+					blnDatosSocio = false;
+					strMsgErrorValidarDatos = "Rol de Socio incorrecto. ";
+				}
+			}			
 		} catch (BusinessException e) {
 			log.error("error: " + e);
 		} catch (Exception e1) {
@@ -1479,9 +1443,16 @@ public class SolicitudLiquidacionController {
         return new Date(timestamp.getTime());
     }	
     
+//	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
+//		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
+//	}
+	
 	public static Integer obtenerDiasEntreFechas(Date dtFechaInicio, Date dtFechaFin)throws Exception{
-		return (int)( (dtFechaFin.getTime() - dtFechaInicio.getTime()) / (1000 * 60 * 60 * 24) );
-	}
+		SimpleDateFormat strEnlace = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtFecIni = strEnlace.parse(strEnlace.format(dtFechaInicio));
+		Date dtFecFin = strEnlace.parse(strEnlace.format(dtFechaFin));
+		return (int)( (dtFecFin.getTime() - dtFecIni.getTime()) / (1000 * 60 * 60 * 24) );
+	} 
 	
 	/**
 	 * VAlida la existencia de previsiones previas.
@@ -1559,33 +1530,30 @@ public class SolicitudLiquidacionController {
 			
 			if(listaCuentaConceptoComp != null && !listaCuentaConceptoComp.isEmpty()){
 				for (CuentaConceptoComp cuentaConceptoComp : listaCuentaConceptoComp) {
-					
-					if(cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle()!= null
-						&& !cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().isEmpty()){
+					if (cuentaConceptoComp.getCuentaConcepto()!=null) {
+						if(cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle()!= null
+								&& !cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().isEmpty()){
+								
+							CuentaConceptoDetalle detalle = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0);
+							if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_APORTES)==0){
+								beanCuentaConceptoAportes = new CuentaConceptoComp();
+								beanCuentaConceptoAportes = cuentaConceptoComp;
+								
+							}
+						}
 						
-						CuentaConceptoDetalle detalle = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0);
-						if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_APORTES)==0){
-							beanCuentaConceptoAportes = new CuentaConceptoComp();
-							beanCuentaConceptoAportes = cuentaConceptoComp;
-							
+						if(cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle()!= null
+							&& !cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().isEmpty()){
+								
+							CuentaConceptoDetalle detalle = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0);
+							if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0){
+								beanCuentaConceptoRetiro = new CuentaConceptoComp();
+								beanCuentaConceptoRetiro = cuentaConceptoComp;
+							}
 						}
 					}
-					
-					if(cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle()!= null
-						&& !cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().isEmpty()){
-							
-						CuentaConceptoDetalle detalle = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0);
-						if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0){
-							beanCuentaConceptoRetiro = new CuentaConceptoComp();
-							beanCuentaConceptoRetiro = cuentaConceptoComp;
-						}
-					}
-					
-				}	
+				}
 			}
-			
-
-			
 		} catch (Exception e) {
 			log.error("Error en generarCuentasConceptoBase ---> "+e);
 		}
@@ -1725,26 +1693,21 @@ public class SolicitudLiquidacionController {
 	public void loadListDocumentoBusq(ActionEvent event) {
 		log.info("-------------------------------------Debugging .loadListDocumento-------------------------------------");
 		log.info("pIntTipoPersona: "+getRequestParameter("pIntTipoPersonaLiquidacion")); //pIntTipoPersonaLiquidacion
-		TablaFacadeRemote facade = null;
 		String strIdTipoPersona = null;
 		List<Tabla> listaDocumento = null;
 		try {
 			strIdTipoPersona = getRequestParameter("pIntTipoPersonaLiquidacion");
 			if(!strIdTipoPersona.equals("0")){
-				facade = (TablaFacadeRemote)EJBFactory.getRemote(TablaFacadeRemote.class);
 				if(strIdTipoPersona.equals(Constante.PARAM_T_TIPOPERSONA_JURIDICA.toString())){
-					listaDocumento = facade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO), Constante.VISTA_TIPOPERSONA_JURIDICA);
+					listaDocumento = tablaFacade.getListaTablaPorAgrupamientoA(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO), Constante.VISTA_TIPOPERSONA_JURIDICA);
 				}else{
-					listaDocumento = facade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO));
+					listaDocumento = tablaFacade.getListaTablaPorIdMaestro(Integer.parseInt(Constante.PARAM_T_TIPODOCUMENTO));
 				}
 				log.info("listaDocumento.size: "+listaDocumento.size());
 			}
-		} catch (EJBFactoryException e) {
-			e.printStackTrace();
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
-		log.info("event.getComponent.getId(): "+event.getComponent().getId());
 		setListDocumentoBusq(listaDocumento);
 	}
 	
@@ -1833,7 +1796,7 @@ public class SolicitudLiquidacionController {
 		try {
 			if(lstDeudaPendiente != null && !lstDeudaPendiente.isEmpty()) lstDeudaPendiente.clear();
 			setChkCondicionSocioSinDeudaPendiente(Boolean.TRUE);
-			lstDeudaPendiente = null;
+			lstDeudaPendiente.clear();
 			strMsgCondicionSinGarantesDeudores = "";
 			setChkCondicionSinGarantesDeudores(Boolean.TRUE);
 			setChkCondicionBeneficioFondoSepelio(Boolean.TRUE);
@@ -1849,6 +1812,7 @@ public class SolicitudLiquidacionController {
 	}
 	
 	/**
+	 * Autor: jchavez / Tarea: Modificación / Fecha: 13.12.2014
 	 * Validacion Nro 1.
 	 * recuperamos todos los expediente que tengan saldo distinto de 0.00.
 	 * Solo del tipo prestamo/credito.
@@ -1857,17 +1821,17 @@ public class SolicitudLiquidacionController {
 		List<Expediente> lstExpedienteCreditoMovimiento = null;
 		Expediente expedienteMov = null;
 		blnCondicionSocioSinDeudaPendiente = Boolean.TRUE;
-		lstDeudaPendiente = null;
-	
+		lstDeudaPendiente.clear();
+		listExpedienteMovimientoComp.clear();
+		Integer intContTipoCreditompresa = 0;
 		try {
 			Integer intCuenta = beanSocioComp.getCuenta().getId().getIntCuenta();
 			Integer intEmpresa = beanSocioComp.getCuenta().getId().getIntPersEmpresaPk();
 			lstExpedienteCreditoMovimiento = conceptoFacade.getListaExpedienteConSaldoPorEmpresaYcuenta(intEmpresa,intCuenta);
 		   
-			listExpedienteMovimientoComp = new ArrayList<ExpedienteComp>();
+//			listExpedienteMovimientoComp = new ArrayList<ExpedienteComp>();
 			
 			if( lstExpedienteCreditoMovimiento != null && !lstExpedienteCreditoMovimiento.isEmpty()){
-				
 				
 				for(int k=0; k<lstExpedienteCreditoMovimiento.size();k++) {
 					List<EstadoExpediente> listaEstados = null;
@@ -1907,6 +1871,7 @@ public class SolicitudLiquidacionController {
 									credito = creditoFacade.getCreditoPorIdCreditoDirecto(creditoId);
 									if(credito != null){
 										for(int e=0;e<listaDescTipoCreditoEmpresa.size();e++){
+											intContTipoCreditompresa ++;
 											if(listaDescTipoCreditoEmpresa.get(e).getIntIdDetalle().compareTo(credito.getIntParaTipoCreditoEmpresa())==0){
 												listExpedienteMovimientoComp.get(k).setStrDescripcionTipoCreditoEmpresa(
 														listaDescTipoCreditoEmpresa.get(e).getStrDescripcion());
@@ -1921,7 +1886,7 @@ public class SolicitudLiquidacionController {
 				
 				String strError= "";
 				// formando mensaje de error
-				lstDeudaPendiente = new ArrayList<Tabla>();
+//				lstDeudaPendiente = new ArrayList<Tabla>();
 				for(int m=0;m<listExpedienteMovimientoComp.size();m++){
 					Tabla tablaErr = new Tabla();
 					if(listExpedienteMovimientoComp.get(m).getExpediente().getIntParaTipoCreditoCod().compareTo(Constante.PARAM_T_TIPO_CREDITO_ACTIVIDAD)==0){
@@ -1948,7 +1913,7 @@ public class SolicitudLiquidacionController {
 				blnCondicionSocioSinDeudaPendiente=Boolean.TRUE;
 				chkCondicionSocioSinDeudaPendiente = Boolean.TRUE;
 			}
-			
+			log.info("entra al for tipocreditoempresa: "+intContTipoCreditompresa);
 		} catch (BusinessException e) {
 			System.out.println("isValidCondicionSocioSinDeudaPendiente ---> "+e);
 		}
@@ -1972,7 +1937,8 @@ public class SolicitudLiquidacionController {
 //		Boolean blnContinua = Boolean.TRUE;
 	
 		//05.05.2014 jchavez
-		lstMsgCondicionSinGarantesDeudores = new ArrayList<Tabla>();
+		lstMsgCondicionSinGarantesDeudores.clear();
+		
 		try {
 			
 			strMsgCondicionSinGarantesDeudores = strError;
@@ -2279,7 +2245,7 @@ public class SolicitudLiquidacionController {
 				}
 
 			}
-
+			log.info("PASO EVALUACION: "+blnPostEvaluacion);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		} catch (EJBFactoryException e) {
@@ -2523,29 +2489,39 @@ public class SolicitudLiquidacionController {
 		String strpIntSubTipoOperacion = null;
 		Integer intpIntSubTipoOperacion = null;
 //		List<Tabla> listaDocumento = null;
+		
+		Integer intCorrespondePrevision;
+		blnCorrespondeLiquidacion = true;
+		strMsgTxtParaMotivoRenuncia = "";
+		
+		strpIntSubTipoOperacion = getRequestParameter("pIntSubTipoOperacion");
+		intpIntSubTipoOperacion = new Integer(strpIntSubTipoOperacion);
 
-			strpIntSubTipoOperacion = getRequestParameter("pIntSubTipoOperacion");
-			intpIntSubTipoOperacion = new Integer(strpIntSubTipoOperacion);
+		try {
+			if (!intpIntSubTipoOperacion.equals("0")) {
 
-			try {
-				if (!intpIntSubTipoOperacion.equals("0")) {
-
-					if (intpIntSubTipoOperacion.compareTo(Constante.PARAM_T_TIPO_SUBOPERACION_LIQUIDACION_RENUNCIA) == 0) {
-						blnIsRenuncia = true;
-					} else {
-						blnIsRenuncia = false;
-					}
-					
-					if (intpIntSubTipoOperacion.compareTo(Constante.PARAM_T_TIPO_SUBOPERACION_LIQUIDACION_FALLECIMIENTO) == 0) {
-						blnIsFallecimiento = true;
-					} else {
-						blnIsFallecimiento = false;
-					}
+				if (intpIntSubTipoOperacion.compareTo(Constante.PARAM_T_TIPO_SUBOPERACION_LIQUIDACION_RENUNCIA) == 0) {
+					blnIsRenuncia = true;
+				} else {
+					blnIsRenuncia = false;
 				}
-			} catch (Exception e) {
-				log.error("Error en loadMotivoRenuncia --> "+e);
+				//Autor: jchavez / Tarea: Nueva validación / Fecha: 09.12.2014
+				if (intpIntSubTipoOperacion.compareTo(Constante.PARAM_T_TIPO_SUBOPERACION_LIQUIDACION_FALLECIMIENTO) == 0) {
+					intCorrespondePrevision = liquidacionFacade.getCorrespondePrevision(SESION_IDEMPRESA, beanSocioComp.getCuenta().getId().getIntCuenta());
+					//Si le corresponde prevision, no procede la liquidación
+					if (intCorrespondePrevision == 1) {
+						blnCorrespondeLiquidacion = false;
+						strMsgTxtParaMotivoRenuncia = "NO se puede liquidar dado que al socio le corresponde Previsión.";
+					}
+					blnIsFallecimiento = true;
+				} else {
+					blnIsFallecimiento = false;
+				}
+				//Fin jchavez - 10.12.2014
 			}
-
+		} catch (Exception e) {
+			log.error("Error en loadMotivoRenuncia --> "+e);
+		}
 	} 
 	
 	/**
@@ -3382,7 +3358,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 			beanExpedienteLiquidacion.setIntSucuIdSucursalAdministra(beanSocioComp.getSocio().getSocioEstructura().getIntIdSucursalAdministra());
 			beanExpedienteLiquidacion.setIntSudeIdSubSucursalAdministra(beanSocioComp.getSocio().getSocioEstructura().getIntIdSubsucurAdministra());
 
-			reCalcularMontosGrillaBeneficiarios(event);
+			reCalcularMontosGrillaBeneficiarios();
 			
 			if (isValidRequisitosSolicitud() == 0) {
 			//if (true) {
@@ -3453,7 +3429,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 			
 			//validdamos que se haya generado itemexpediente...
 			if((beanExpedienteLiquidacion.getId().getIntItemExpediente() != null)){
-				cancelarGrabarSolicitud(event);
+				cancelarGrabarSolicitud();
 								
 			}
 			
@@ -3490,7 +3466,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 			beanExpedienteLiquidacion.setIntSucuIdSucursal(beanSocioComp.getCuenta().getIntIdUsuSucursal());
 			beanExpedienteLiquidacion.setIntSudeIdsubsucursal(beanSocioComp.getCuenta().getIntIdUsuSubSucursal());
 			
-			reCalcularMontosGrillaBeneficiarios(event);
+			reCalcularMontosGrillaBeneficiarios();
 			
 			if (isValidRequisitosSolicitud() == 0) {
 				EstadoLiquidacion estadoLiquidacion = new EstadoLiquidacion();
@@ -3542,7 +3518,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 			
 			//validdamos que se haya generado itemexpediente...
 			if((beanExpedienteLiquidacion.getId().getIntItemExpediente() != null)){
-				cancelarGrabarSolicitud(event);
+				cancelarGrabarSolicitud();
 								
 			}
 			
@@ -3597,19 +3573,15 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	 * 
 	 * @param event
 	 */
-	public void cancelarGrabarSolicitud(ActionEvent event) {
-		//xxxxxxxxx
+	public void cancelarGrabarSolicitud() {
 		strSolicitudLiquidacion = "";
 		limpiarFormSolicitudLiquidacion();
 		limpiarMensajesIsValidoExpediente();
-
 		blnShowValidarDatos = false;
-		//strFechaRegistro = Constante.sdf.format(new Date());
 		dtFechaRegistro = Calendar.getInstance().getTime();
-		
 		blnShowDivFormSolicitudLiquidacion = false;
 		blnVerSolExpLiquidacion = false;
-		limpiarListaBeneficiarios();
+		limpiarBeneficiarios();
 	}
 	
 
@@ -3630,7 +3602,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	 * @param event
 	 */
 	public void irModificarSolicitudLiquidacion(ActionEvent event){	
-		cancelarGrabarSolicitud(event);
+		cancelarGrabarSolicitud();
 		strSolicitudLiquidacion = Constante.MANTENIMIENTO_MODIFICAR;
 		blnViewSolicitudLiquidacion = false;
 		SocioComp socioComp = null;
@@ -3735,7 +3707,8 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 																						beanSocioComp = socioComp;
 						
 																						// strDescripcionTipoCuenta
-																						listaCuentaSocio = new ArrayList<CuentaComp>();
+//																						listaCuentaSocio = new ArrayList<CuentaComp>();
+																						listaCuentaSocio.clear();
 																						CuentaComp cuentaCompSocio = new CuentaComp();
 																						cuentaCompSocio.setCuenta(beanSocioComp.getCuenta());
 						
@@ -4114,7 +4087,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	 */
 	
 	public void irModificarSolicitudLiquidacionAutoriza2(ActionEvent event, ExpedienteLiquidacion expedienteLiquidacion){	
-		cancelarGrabarSolicitud(event);
+		cancelarGrabarSolicitud();
 		strSolicitudLiquidacion = Constante.MANTENIMIENTO_MODIFICAR;
 		
 		SocioComp socioComp = null;
@@ -4218,7 +4191,8 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 																						beanSocioComp = socioComp;
 						
 																						// strDescripcionTipoCuenta
-																						listaCuentaSocio = new ArrayList<CuentaComp>();
+//																						listaCuentaSocio = new ArrayList<CuentaComp>();
+																						listaCuentaSocio.clear();
 																						CuentaComp cuentaCompSocio = new CuentaComp();
 																						cuentaCompSocio.setCuenta(beanSocioComp.getCuenta());
 						
@@ -4820,7 +4794,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	 * Se soluciona problemas en la visualizacion de la solicitud.
 	 */
 	public void irVerSolicitudLiquidacion(ActionEvent event){	
-		cancelarGrabarSolicitud(event);
+		cancelarGrabarSolicitud();
 		strSolicitudLiquidacion = Constante.MANTENIMIENTO_ELIMINAR;
 		
 		SocioComp socioComp = null;
@@ -4924,7 +4898,8 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 																						beanSocioComp = socioComp;
 						
 																						// strDescripcionTipoCuenta
-																						listaCuentaSocio = new ArrayList<CuentaComp>();
+//																						listaCuentaSocio = new ArrayList<CuentaComp>();
+																						listaCuentaSocio.clear();
 																						CuentaComp cuentaCompSocio = new CuentaComp();
 																						cuentaCompSocio.setCuenta(beanSocioComp.getCuenta());
 						
@@ -5080,7 +5055,8 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 	
 	public void verSolicitudLiquidacion(ActionEvent event){	
-		cancelarGrabarSolicitud(event);
+		bdMondoFondoRetiroTotal = BigDecimal.ZERO;
+		cancelarGrabarSolicitud();
 		strSolicitudLiquidacion = Constante.MANTENIMIENTO_ELIMINAR;
 		blnViewSolicitudLiquidacion = true;
 		
@@ -5187,7 +5163,8 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 																						beanSocioComp = socioComp;
 						
 																						// strDescripcionTipoCuenta
-																						listaCuentaSocio = new ArrayList<CuentaComp>();
+//																						listaCuentaSocio = new ArrayList<CuentaComp>();
+																						listaCuentaSocio.clear();
 																						CuentaComp cuentaCompSocio = new CuentaComp();
 																						cuentaCompSocio.setCuenta(beanSocioComp.getCuenta());
 						
@@ -5226,6 +5203,9 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 																									detalle = cuentaConcepto.getListaCuentaConceptoDetalle().get(0);
 						
 																									if(descripcion.getIntIdDetalle().compareTo(detalle.getIntParaTipoConceptoCod())==0){
+																										//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014 /
+																										cuentaConceptoComp.setIntParaTipoConceptoCod(detalle.getIntParaTipoConceptoCod());
+																										//FIN jchavez - 29.08.2014
 																										cuentaConceptoComp.setStrDescripcionConcepto(descripcion.getStrDescripcion());
 																										cuentaConceptoComp.setStrNumeroCuenta(beanSocioComp.getCuenta().getStrNumeroCuenta());
 																										cuentaConceptoComp.setCuentaConcepto(cuentaConcepto);
@@ -5233,7 +5213,11 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 																										 ||detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ){
 																											cuentaConceptoComp.getCuentaConcepto().setChecked(true);
 																										}
-																										
+																										BigDecimal bdMontoInteresCalculado = BigDecimal.ZERO;
+																										if (detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0 ) {
+																											bdMontoInteresCalculado = calcularInteresRetiroAcumulado(cuentaConceptoComp);
+																											bdMontoInteresFdoRetiro = bdMontoInteresCalculado;
+																										}
 																										break;
 																									}
 																								}	
@@ -5298,17 +5282,20 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 									
 					for (CuentaConceptoComp cuentaConceptoComp : listaCuentaConceptoComp) {
 						for (ExpedienteLiquidacionDetalle detalleExpediente : beanExpedienteLiquidacion.getListaExpedienteLiquidacionDetalle()) {
-							if(cuentaConceptoComp.getCuentaConcepto().getId().getIntItemCuentaConcepto().
-								compareTo(detalleExpediente.getId().getIntItemCuentaConcepto())==0){
-								
-								CuentaConceptoDetalle detalle = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0);
-								if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0){
-									cuentaConceptoComp.setLstCuentaConceptoDetalle(new ArrayList<CuentaConceptoDetalle>());
-									cuentaConceptoComp.getLstCuentaConceptoDetalle().add(detalle);
-									bdMontoInteresFdoRetiro = calcularInteresRetiroAcumulado(cuentaConceptoComp);
-									break;
+							//Autor: jchavez / Tarea: modificacion para salir del paso. REVISAR / Fecha: 19.12.2014
+							if (cuentaConceptoComp.getCuentaConcepto()!=null) {
+								if(cuentaConceptoComp.getCuentaConcepto().getId().getIntItemCuentaConcepto().
+									compareTo(detalleExpediente.getId().getIntItemCuentaConcepto())==0){
+									
+									CuentaConceptoDetalle detalle = cuentaConceptoComp.getCuentaConcepto().getListaCuentaConceptoDetalle().get(0);
+									if(detalle.getIntParaTipoConceptoCod().compareTo(Constante.PARAM_T_CUENTACONCEPTO_RETIRO)==0){
+										cuentaConceptoComp.setLstCuentaConceptoDetalle(new ArrayList<CuentaConceptoDetalle>());
+										cuentaConceptoComp.getLstCuentaConceptoDetalle().add(detalle);
+										bdMontoInteresFdoRetiro = calcularInteresRetiroAcumulado(cuentaConceptoComp);
+										break;
+									}
 								}
-							}
+							}							
 						}
 					}
 					
@@ -5338,6 +5325,12 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 				cargarListaTablaSucursal();
 				seleccionarSucursal();
 				evaluarSolicitudModSinValidaciones(event);
+				
+				//Autor: jchavez / Tarea: Modificación / Fecha: 29.08.2014
+				for (BeneficiarioLiquidacion beneficiarioVista : listaBeneficiarioLiquidacionVista) {
+					bdMondoFondoRetiroTotal = bdMondoFondoRetiroTotal.add(beneficiarioVista.getBdMontoRetiro());
+				}
+				//FIN jchavez - 29.08.2014 	
 			}
 			
 						}}
@@ -5945,6 +5938,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 		try {
 			
 			if (beanSocioComp.getSocio().getSocioEstructura() != null) {
+				//Autor: jchavez / Tarea: Modificacion / Fecha: 13.12.2014 / Se comenta dado que no se usa.
 				estructuraDetalle = new EstructuraDetalle();
 				estructuraDetalle.setId(new EstructuraDetalleId());
 				estructuraDetalle.getId().setIntNivel(beanSocioComp.getSocio().getSocioEstructura().getIntNivel());
@@ -5952,7 +5946,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 				estructuraDetalle = estructuraFacade.getEstructuraDetallePorPkEstructuraYTipoSocioYModalidad(estructuraDetalle.getId(), 
 																							beanSocioComp.getSocio().getSocioEstructura().getIntTipoSocio(), 
 																							beanSocioComp.getSocio().getSocioEstructura().getIntModalidad());
-
+				//Fin jchavez - 13.12.2014
 				
 				recuperarPeriodoUltimoDescuento();
 				cargarDescripcionTipoLiquidacion();
@@ -5975,7 +5969,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 						
 					
 			}
-
+			log.info("PASO EVALUACION: "+blnPostEvaluacion);
 	} catch (Exception e) {
 				log.error("error en evaluarSolicitud --> " + e);
 					e.printStackTrace();
@@ -6036,11 +6030,11 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 				//public Integer getMaxPeriodoEfectuadoPorEmpresaYEstructuraYTipoSocioYModalidad(Integer intEmpresa,EstructuraId pk,Integer intTipoSocio,Integer intModalidad) throws BusinessException{
 
 				//ultimoMovimiento =  planillaFacade.getMaxPeriodoEfectuadoPorEmpresaYEstructuraYTipoSocioYModalidad(intEmpresa, pk, intTipoSocio, intModalidad);
-				List<Movimiento> ultimoMov = null;
+//				 ultimoMov = null;
 				
 				//ultimoMov =	conceptoFacade.getListPeriodoMaxCuentaEmpresa(beanSocioComp.getCuenta().getId().getIntPersEmpresaPk(), beanSocioComp.getCuenta().getId().getIntCuenta());
 				
-				ultimoMov = conceptoFacade.getMaxMovXCtaEmpresaTipoMov(beanSocioComp.getCuenta().getId().getIntPersEmpresaPk(), beanSocioComp.getCuenta().getId().getIntCuenta(), Constante.PARAM_T_TIPO_MOVIMIENTO_PROCESO_POR_PLANILLA);
+				 List<Movimiento> ultimoMov = conceptoFacade.getMaxMovXCtaEmpresaTipoMov(beanSocioComp.getCuenta().getId().getIntPersEmpresaPk(), beanSocioComp.getCuenta().getId().getIntCuenta(), Constante.PARAM_T_TIPO_MOVIMIENTO_PROCESO_POR_PLANILLA);
 				if(ultimoMov != null && !ultimoMov.isEmpty()) {
 					
 					beanExpedienteLiquidacion.setIntPeriodoUltimoDescuento(ultimoMov.get(0).getIntPeriodoPlanilla());
@@ -6398,7 +6392,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	 * Asosciado al boton Recalcular del formulario de liquidacion.
 	 * 
 	 */
-	public void reCalcularMontosGrillaBeneficiarios (ActionEvent event){
+	public void reCalcularMontosGrillaBeneficiarios (){
 		List<BeneficiarioLiquidacion> listaBeneficiarios = null;
 		
 		try {
@@ -6786,7 +6780,7 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 
 			}
 
-			cancelarGrabarSolicitud(event);
+			cancelarGrabarSolicitud();
 			limpiarFormSolicitudLiquidacion();
 		} catch (BusinessException e) {
 			log.error("error: " + e);
@@ -7109,6 +7103,60 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 			log.error("Error en imprimirSepelio ---> "+e);
 		}
 	 }
+	 
+	 /*Inicio formatos en blanco autor 21/07/2014*/
+	 public void imprimirSepelioRenunciaEnBlanco(){
+		 String strNombreReporte = " ";
+		 HashMap<String,Object> parametro = new HashMap<String,Object>();
+		 Tabla autorizacion = new Tabla();
+
+		 try {
+			 			 
+			 autorizacion.setStrAbreviatura(" ");
+			 lstReporteVacia.add(autorizacion);
+			
+		         	parametro.put("P1", "");
+			        parametro.put("P2", "");
+			        parametro.put("P3", "");
+					parametro.put("P_EXPEDIENTE", "");
+			     	parametro.put("P_FECHA", "");
+				    parametro.put("P_RENUNCIA", "");
+				 	parametro.put("P_OBSERVACION", "");
+				 	int contDoc=0;
+				 	if(contDoc<6){
+						 for(int i=contDoc;i<7;i++){
+							 parametro.put("P_RENUNCIA"+i, "");
+						 }
+					 }
+				    parametro.put("P_RENUNCIA", "");
+				    parametro.put("P_FECHAPAGO", "");
+			 		parametro.put("P_DNI", "");
+				    for(int i = 0; i < 9; i++){
+	            	parametro.put("D"+i, "");
+					}
+					parametro.put("P_NUMEROCUENTA", "");
+					parametro.put("P_APELLIDOPATERNO", "");
+					parametro.put("P_APELLIDOMATERNO", "");
+					parametro.put("P_NOMBRE", "");
+			        parametro.put("P_DIRECCION", "");
+	               	parametro.put("P_DISTRITO", "");
+	                parametro.put("P_PROVINCIA", "");
+	            	parametro.put("P_DEPARTAMENTO", "");
+	            	parametro.put("P_REFERENCIA", "");
+	    			parametro.put("P_DEPENDENCIA", "");
+	    			parametro.put("P_AGENCIA", "");
+		         
+		        System.out.println("PARAMETRO "+ parametro);
+	            
+	           	strNombreReporte = "solicitudRenuncia";
+				UtilManagerReport.generateReport(strNombreReporte, parametro, new ArrayList<Object>(lstReporteVacia), Constante.PARAM_T_TIPOREPORTE_PDF);
+			 
+		} catch (Exception e) {
+			log.error("Error en imprimirSepelio ---> "+e);
+		}
+	 }
+
+	 /*fin del formato en blanco*/
 
 	
 	/**
@@ -7352,24 +7400,24 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public List<Tabla> getListaTablaTipoRenuncia() {
-		return listaTablaTipoRenuncia;
-	}
+//	public List<Tabla> getListaTablaTipoRenuncia() {
+//		return listaTablaTipoRenuncia;
+//	}
+//
+//
+//	public void setListaTablaTipoRenuncia(List<Tabla> listaTablaTipoRenuncia) {
+//		this.listaTablaTipoRenuncia = listaTablaTipoRenuncia;
+//	}
 
-
-	public void setListaTablaTipoRenuncia(List<Tabla> listaTablaTipoRenuncia) {
-		this.listaTablaTipoRenuncia = listaTablaTipoRenuncia;
-	}
-
-
-	public List<Tabla> getListaTablaTipoSolicitud() {
-		return listaTablaTipoSolicitud;
-	}
-
-
-	public void setListaTablaTipoSolicitud(List<Tabla> listaTablaTipoSolicitud) {
-		this.listaTablaTipoSolicitud = listaTablaTipoSolicitud;
-	}
+//
+//	public List<Tabla> getListaTablaTipoSolicitud() {
+//		return listaTablaTipoSolicitud;
+//	}
+//
+//
+//	public void setListaTablaTipoSolicitud(List<Tabla> listaTablaTipoSolicitud) {
+//		this.listaTablaTipoSolicitud = listaTablaTipoSolicitud;
+//	}
 
 
 	public boolean isBlnPostEvaluacion() {
@@ -7647,25 +7695,25 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	public void setEmpresaFacade(EmpresaFacadeRemote empresaFacade) {
 		this.empresaFacade = empresaFacade;
 	}
-	public EgresoFacadeRemote getEgresoFacade() {
-		return egresoFacade;
-	}
-	public void setEgresoFacade(EgresoFacadeRemote egresoFacade) {
-		this.egresoFacade = egresoFacade;
-	}
-	public CierreDiarioArqueoFacadeRemote getCierreDiarioArqueoFacade() {
-		return cierreDiarioArqueoFacade;
-	}
-	public void setCierreDiarioArqueoFacade(
-			CierreDiarioArqueoFacadeRemote cierreDiarioArqueoFacade) {
-		this.cierreDiarioArqueoFacade = cierreDiarioArqueoFacade;
-	}
-	public BancoFacadeRemote getBancoFacade() {
-		return bancoFacade;
-	}
-	public void setBancoFacade(BancoFacadeRemote bancoFacade) {
-		this.bancoFacade = bancoFacade;
-	}
+//	public EgresoFacadeRemote getEgresoFacade() {
+//		return egresoFacade;
+//	}
+//	public void setEgresoFacade(EgresoFacadeRemote egresoFacade) {
+//		this.egresoFacade = egresoFacade;
+//	}
+//	public CierreDiarioArqueoFacadeRemote getCierreDiarioArqueoFacade() {
+//		return cierreDiarioArqueoFacade;
+//	}
+//	public void setCierreDiarioArqueoFacade(
+//			CierreDiarioArqueoFacadeRemote cierreDiarioArqueoFacade) {
+//		this.cierreDiarioArqueoFacade = cierreDiarioArqueoFacade;
+//	}
+//	public BancoFacadeRemote getBancoFacade() {
+//		return bancoFacade;
+//	}
+//	public void setBancoFacade(BancoFacadeRemote bancoFacade) {
+//		this.bancoFacade = bancoFacade;
+//	}
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -7673,28 +7721,28 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 		this.usuario = usuario;
 	}
 	public Integer getEMPRESA_USUARIO() {
-		return EMPRESA_USUARIO;
+		return SESION_IDEMPRESA;
 	}
 	public void setEMPRESA_USUARIO(Integer eMPRESA_USUARIO) {
-		EMPRESA_USUARIO = eMPRESA_USUARIO;
+		SESION_IDEMPRESA = eMPRESA_USUARIO;
 	}
 	public Integer getPERSONA_USUARIO() {
-		return PERSONA_USUARIO;
+		return SESION_IDUSUARIO;
 	}
 	public void setPERSONA_USUARIO(Integer pERSONA_USUARIO) {
-		PERSONA_USUARIO = pERSONA_USUARIO;
+		SESION_IDUSUARIO = pERSONA_USUARIO;
 	}
 	public Integer getSUCURSAL_USUARIO_ID() {
-		return SUCURSAL_USUARIO_ID;
+		return SESION_IDSUCURSAL;
 	}
 	public void setSUCURSAL_USUARIO_ID(Integer sUCURSAL_USUARIO_ID) {
-		SUCURSAL_USUARIO_ID = sUCURSAL_USUARIO_ID;
+		SESION_IDSUCURSAL = sUCURSAL_USUARIO_ID;
 	}
 	public Integer getSUBSUCURSAL_USUARIO_ID() {
-		return SUBSUCURSAL_USUARIO_ID;
+		return SESION_IDSUBSUCURSAL;
 	}
 	public void setSUBSUCURSAL_USUARIO_ID(Integer sUBSUCURSAL_USUARIO_ID) {
-		SUBSUCURSAL_USUARIO_ID = sUBSUCURSAL_USUARIO_ID;
+		SESION_IDSUBSUCURSAL = sUBSUCURSAL_USUARIO_ID;
 	}
 	public Integer getIntTipoPersonaFiltro() {
 		return intTipoPersonaFiltro;
@@ -7738,24 +7786,24 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	public void setIntTipoBusquedaFechaFiltro(Integer intTipoBusquedaFechaFiltro) {
 		this.intTipoBusquedaFechaFiltro = intTipoBusquedaFechaFiltro;
 	}
-	public List<Tabla> getListaTablaEstadoPago() {
-		return listaTablaEstadoPago;
-	}
-	public void setListaTablaEstadoPago(List<Tabla> listaTablaEstadoPago) {
-		this.listaTablaEstadoPago = listaTablaEstadoPago;
-	}
+//	public List<Tabla> getListaTablaEstadoPago() {
+//		return listaTablaEstadoPago;
+//	}
+//	public void setListaTablaEstadoPago(List<Tabla> listaTablaEstadoPago) {
+//		this.listaTablaEstadoPago = listaTablaEstadoPago;
+//	}
 	public Integer getIntTipoBusquedaSucursal() {
 		return intTipoBusquedaSucursal;
 	}
 	public void setIntTipoBusquedaSucursal(Integer intTipoBusquedaSucursal) {
 		this.intTipoBusquedaSucursal = intTipoBusquedaSucursal;
 	}
-	public List<Tabla> getListaTipoBusquedaSucursal() {
-		return listaTipoBusquedaSucursal;
-	}
-	public void setListaTipoBusquedaSucursal(List<Tabla> listaTipoBusquedaSucursal) {
-		this.listaTipoBusquedaSucursal = listaTipoBusquedaSucursal;
-	}
+//	public List<Tabla> getListaTipoBusquedaSucursal() {
+//		return listaTipoBusquedaSucursal;
+//	}
+//	public void setListaTipoBusquedaSucursal(List<Tabla> listaTipoBusquedaSucursal) {
+//		this.listaTipoBusquedaSucursal = listaTipoBusquedaSucursal;
+//	}
 	public Integer getIntIdSucursalFiltro() {
 		return intIdSucursalFiltro;
 	}
@@ -7775,12 +7823,12 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 		this.listaSubsucursal = listaSubsucursal;
 	}
 
-	public List<Tabla> getListaTipoVinculo() {
-		return listaTipoVinculo;
-	}
-	public void setListaTipoVinculo(List<Tabla> listaTipoVinculo) {
-		this.listaTipoVinculo = listaTipoVinculo;
-	}
+//	public List<Tabla> getListaTipoVinculo() {
+//		return listaTipoVinculo;
+//	}
+//	public void setListaTipoVinculo(List<Tabla> listaTipoVinculo) {
+//		this.listaTipoVinculo = listaTipoVinculo;
+//	}
 	
 	public List<Tabla> getListaDescripcionTipoCuenta() {
 		return listaDescripcionTipoCuenta;
@@ -7887,14 +7935,18 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public LiquidacionFacadeRemote getLiquidacionFacade() {
-		return liquidacionFacade;
-	}
-
-
-	public void setLiquidacionFacade(LiquidacionFacadeRemote liquidacionFacade) {
+	public void setLiquidacionFacade(LiquidacionFacadeLocal liquidacionFacade) {
 		this.liquidacionFacade = liquidacionFacade;
 	}
+
+//	public LiquidacionFacadeRemote getLiquidacionFacade() {
+//		return liquidacionFacade;
+//	}
+//
+//
+//	public void setLiquidacionFacade(LiquidacionFacadeRemote liquidacionFacade) {
+//		this.liquidacionFacade = liquidacionFacade;
+//	}
 
 
 	public CuentaFacadeRemote getCuentaFacade() {
@@ -7907,14 +7959,14 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public ConvenioFacadeRemote getConvenioFacade() {
-		return convenioFacade;
-	}
-
-
-	public void setConvenioFacade(ConvenioFacadeRemote convenioFacade) {
-		this.convenioFacade = convenioFacade;
-	}
+//	public ConvenioFacadeRemote getConvenioFacade() {
+//		return convenioFacade;
+//	}
+//
+//
+//	public void setConvenioFacade(ConvenioFacadeRemote convenioFacade) {
+//		this.convenioFacade = convenioFacade;
+//	}
 
 
 	public CreditoFacadeRemote getCreditoFacade() {
@@ -7927,16 +7979,25 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public SolicitudPrestamoFacadeRemote getSolicitudPrestamoFacade() {
+//	public SolicitudPrestamoFacadeRemote getSolicitudPrestamoFacade() {
+//		return solicitudPrestamoFacade;
+//	}
+//
+//
+//	public void setSolicitudPrestamoFacade(
+//			SolicitudPrestamoFacadeRemote solicitudPrestamoFacade) {
+//		this.solicitudPrestamoFacade = solicitudPrestamoFacade;
+//	}
+
+
+	public SolicitudPrestamoFacadeLocal getSolicitudPrestamoFacade() {
 		return solicitudPrestamoFacade;
 	}
 
-
 	public void setSolicitudPrestamoFacade(
-			SolicitudPrestamoFacadeRemote solicitudPrestamoFacade) {
+			SolicitudPrestamoFacadeLocal solicitudPrestamoFacade) {
 		this.solicitudPrestamoFacade = solicitudPrestamoFacade;
 	}
-
 
 	public List<Tabla> getListaDescTipoCredito() {
 		return listaDescTipoCredito;
@@ -7992,14 +8053,14 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public Date getDtHoy() {
-		return dtHoy;
-	}
-
-
-	public void setDtHoy(Date dtHoy) {
-		this.dtHoy = dtHoy;
-	}
+//	public Date getDtHoy() {
+//		return dtHoy;
+//	}
+//
+//
+//	public void setDtHoy(Date dtHoy) {
+//		this.dtHoy = dtHoy;
+//	}
 
 
 	public List<ExpedienteComp> getListExpedienteMovimientoComp() {
@@ -8066,15 +8127,19 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public PrevisionFacadeRemote getPrevisionFacade() {
-		return previsionFacade;
-	}
+//	public PrevisionFacadeRemote getPrevisionFacade() {
+//		return previsionFacade;
+//	}
+//
+//
+//	public void setPrevisionFacade(PrevisionFacadeRemote previsionFacade) {
+//		this.previsionFacade = previsionFacade;
+//	}
 
 
-	public void setPrevisionFacade(PrevisionFacadeRemote previsionFacade) {
+	public void setPrevisionFacade(PrevisionFacadeLocal previsionFacade) {
 		this.previsionFacade = previsionFacade;
 	}
-
 
 	public String getStrMsgTxtSubOperacion() {
 		return strMsgTxtSubOperacion;
@@ -8413,24 +8478,24 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public List<Tabla> getListaTablaDeSucursal() {
-		return listaTablaDeSucursal;
-	}
+//	public List<Tabla> getListaTablaDeSucursal() {
+//		return listaTablaDeSucursal;
+//	}
+//
+//
+//	public void setListaTablaDeSucursal(List<Tabla> listaTablaDeSucursal) {
+//		this.listaTablaDeSucursal = listaTablaDeSucursal;
+//	}
 
 
-	public void setListaTablaDeSucursal(List<Tabla> listaTablaDeSucursal) {
-		this.listaTablaDeSucursal = listaTablaDeSucursal;
-	}
-
-
-	public List<Tabla> getListaTablaCreditoEmpresa() {
-		return listaTablaCreditoEmpresa;
-	}
-
-
-	public void setListaTablaCreditoEmpresa(List<Tabla> listaTablaCreditoEmpresa) {
-		this.listaTablaCreditoEmpresa = listaTablaCreditoEmpresa;
-	}
+//	public List<Tabla> getListaTablaCreditoEmpresa() {
+//		return listaTablaCreditoEmpresa;
+//	}
+//
+//
+//	public void setListaTablaCreditoEmpresa(List<Tabla> listaTablaCreditoEmpresa) {
+//		this.listaTablaCreditoEmpresa = listaTablaCreditoEmpresa;
+//	}
 
 	public String getStrNumeroSolicitudBusq() {
 		return strNumeroSolicitudBusq;
@@ -8452,20 +8517,20 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public List<Tabla> getListaTipoConsultaBusqueda() {
-		try {
-			listaTipoConsultaBusqueda = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOBUSQUEDA_COMBO_DRNRZ));		
-		} catch (BusinessException e) {
-			e.printStackTrace();
-		}
-
-		return listaTipoConsultaBusqueda;
-	}
-
-
-	public void setListaTipoConsultaBusqueda(List<Tabla> listaTipoConsultaBusqueda) {
-		this.listaTipoConsultaBusqueda = listaTipoConsultaBusqueda;
-	}
+//	public List<Tabla> getListaTipoConsultaBusqueda() {
+//		try {
+//			listaTipoConsultaBusqueda = tablaFacade.getListaTablaPorIdMaestro(new Integer(Constante.PARAM_T_TIPOBUSQUEDA_COMBO_DRNRZ));		
+//		} catch (BusinessException e) {
+//			e.printStackTrace();
+//		}
+//
+//		return listaTipoConsultaBusqueda;
+//	}
+//
+//
+//	public void setListaTipoConsultaBusqueda(List<Tabla> listaTipoConsultaBusqueda) {
+//		this.listaTipoConsultaBusqueda = listaTipoConsultaBusqueda;
+//	}
 
 
 	public List<Subsucursal> getListaSubsucursalBusq() {
@@ -8572,14 +8637,14 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	}
 
 
-	public PlanillaFacadeRemote getPlanillaFacade() {
-		return planillaFacade;
-	}
-
-
-	public void setPlanillaFacade(PlanillaFacadeRemote planillaFacade) {
-		this.planillaFacade = planillaFacade;
-	}
+//	public PlanillaFacadeRemote getPlanillaFacade() {
+//		return planillaFacade;
+//	}
+//
+//
+//	public void setPlanillaFacade(PlanillaFacadeRemote planillaFacade) {
+//		this.planillaFacade = planillaFacade;
+//	}
 
 
 	public List<Tabla> getListaDescripcionTipoSocio() {
@@ -9021,6 +9086,30 @@ public List<ExpedienteLiquidacionDetalle> agregarBeneficiarioSocio_Titular (){
 	public void setListaAutorizaLiquidacionComp(
 			List<AutorizaLiquidacionComp> listaAutorizaLiquidacionComp) {
 		this.listaAutorizaLiquidacionComp = listaAutorizaLiquidacionComp;
+	}
+
+
+
+
+
+	public BigDecimal getBdMondoFondoRetiroTotal() {
+		return bdMondoFondoRetiroTotal;
+	}
+
+
+
+
+
+	public void setBdMondoFondoRetiroTotal(BigDecimal bdMondoFondoRetiroTotal) {
+		this.bdMondoFondoRetiroTotal = bdMondoFondoRetiroTotal;
+	}
+
+	public Boolean getBlnCorrespondeLiquidacion() {
+		return blnCorrespondeLiquidacion;
+	}
+
+	public void setBlnCorrespondeLiquidacion(Boolean blnCorrespondeLiquidacion) {
+		this.blnCorrespondeLiquidacion = blnCorrespondeLiquidacion;
 	}
 	
 	
