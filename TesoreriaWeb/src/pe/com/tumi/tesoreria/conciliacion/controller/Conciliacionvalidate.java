@@ -68,8 +68,10 @@ public class Conciliacionvalidate {
 				lstConciliacion = conciliacionBO.getListFilter(concilComp);
 				if(lstConciliacion!= null && lstConciliacion.size() >0){
 					for (Conciliacion conciliacion : lstConciliacion) {
-						if(conciliacion.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
-							||conciliacion.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0
+						if(
+								//conciliacion.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
+							//||
+							conciliacion.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_ANULADO)==0
 							||conciliacion.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0){
 								isValid = false;
 							}
