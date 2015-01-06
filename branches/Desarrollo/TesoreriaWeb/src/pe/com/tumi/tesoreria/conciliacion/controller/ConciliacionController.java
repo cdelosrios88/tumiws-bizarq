@@ -1093,7 +1093,6 @@ public class ConciliacionController{
 			blModoEdicion = Boolean.TRUE;
 			
 			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
-				|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 
 					){
 				//habilitarGrabar = Boolean.TRUE;
 				//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -1114,7 +1113,10 @@ public class ConciliacionController{
 
 				calcularResumen();
 			} else {
-				mostrarMensaje(Boolean.TRUE, "No se poueden Modificar las Conciliaciones en estado Anulado.");
+				mostrarMensaje(Boolean.TRUE, "No se pueden Modificar las Conciliaciones en estado Anulado.");
+			}
+			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 ){
+				mostrarMensaje(Boolean.TRUE, "No se pueden Modificar los registros en estado Conciliado.");
 			}
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
