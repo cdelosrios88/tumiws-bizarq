@@ -41,6 +41,11 @@
     <result property="intPersPersonaCheckConciliacion"  column="ppersonacheckcon"/>
     <result property="tsFechaCheck"      				column="pfechacheck"/>
     <result property="intNumeroOperacion"      			column="pnumerooperacion"/>
+    <result property="bdSaldoFinal"      				column="psaldofinal"/>
+    <result property="intIdSucursalGira"      			column="psucuidsucursalgira"/>
+    <result property="intIdSubSucursalGira"     		column="psucuidsubsucursalgira"/>
+    <result property="intIdSucursalPaga"      			column="psucuidsucursalpaga"/>
+    <result property="intIdSubSucursalPaga"      		column="psucuidsubsucursalpaga"/>
 	
      <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
                 
@@ -63,6 +68,11 @@
 	 <parameter property="intPersPersonaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="tsFechaCheck"						javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
 	 <parameter property="intNumeroOperacion"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/> 
+	 <parameter property="bdSaldoFinal"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdSucursalGira"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdSubSucursalGira"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdSucursalPaga"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="intIdSubSucursalPaga"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
   </parameterMap>
   
   <parameterMap id="parPorPk" class="java.util.Map">
@@ -109,11 +119,11 @@
   </procedure>
   --> 
   <procedure id="grabar" parameterMap="parConciliacionDetalle">
-	{ call PKG_CONCILIACIONDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONDET.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parConciliacionDetalle" >
-	{ call PKG_CONCILIACIONDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONDET.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacionDetalle">
