@@ -532,11 +532,16 @@ public class ConciliacionController{
 	public void grabarConciliacionDiaria(){
 		try {
 			Conciliacionvalidate validate = new Conciliacionvalidate();
-			
 			if(!validate.procedeAccion(conciliacionNuevo)){
 				if(!isValidConciliacion(conciliacionNuevo)){
 					conciliacionNuevo.setUsuario(usuario);
 					calcularCabecera();
+					if(!validate.isValidSaveConciliacion(conciliacionNuevo,registroSeleccionado)){
+						deshabilitarNuevo = Boolean.TRUE;
+						mostrarPanelInferior = Boolean.FALSE;
+						mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación pendiente para el día actual. Se cancela registro.");
+						return;
+					}
 					conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
 					deshabilitarPanelInferior();
 					mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la conciliación diaria.");
@@ -728,19 +733,27 @@ public class ConciliacionController{
 				deshabilitarNuevo = Boolean.TRUE;
 				mostrarPanelInferior = Boolean.FALSE;
 				calcularCabecera();
+				/*******************************************************************/
+				if(!validate.isValidSaveConciliacion(conciliacionNuevo,registroSeleccionado)){
+					mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación pendiente para el día actual. Se cancela registro.");
+					return;
+				}
+				/*******************************************************************/
 				if(conciliacionNuevo.getId().getIntItemConciliacion() == null){
-					isCrear = validate.isValidCrearConciliacion(conciliacionNuevo);
-					if(isCrear){
+					//isCrear = validate.isValidCrearConciliacion(conciliacionNuevo);
+					//if((conciliacionNuevo.getId()==null && conciliacionNuevo.getId().getIntItemConciliacion()==null))
+						
+					//if(isCrear){
 						//logging();
 						
 						conciliacionNuevo.setIntParaEstado(Constante.INT_EST_CONCILIACION_REGISTRADO); // Estado Registrado					
 						conciliacionNuevo = conciliacionService.grabarConciliacion(conciliacionNuevo);
 						mostrarMensaje(Boolean.TRUE, "Se guardó éxitosamente la Conciliación Bancaria.");
 						
-					}else{
-						mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
-						return;
-					}
+					//}else{
+						//mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
+						//return;
+					//}
 
 				}else{
 					//logging();
@@ -823,10 +836,10 @@ public class ConciliacionController{
 				return true;
 			}
 			
-			if(!validate.isValidCrearConciliacion(conciliacionNuevo) && (conciliacionNuevo.getId()!=null && conciliacionNuevo.getId().getIntItemConciliacion()!=null)){
-				mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
-				return true;
-			}
+//			if(!validate.isValidCrearConciliacion(conciliacionNuevo) && (conciliacionNuevo.getId()!=null && conciliacionNuevo.getId().getIntItemConciliacion()!=null)){
+//				mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación Bancaria con las caracteristicas ingresadas. Se cancela registro.");
+//				return true;
+//			}
 			
 			//1. Verificar el arqueo del día anterior
 			/*dtLastArqueo = egresoFacade.obtenerUltimaFechaSaldo(EMPRESA_USUARIO);
@@ -1059,14 +1072,14 @@ public class ConciliacionController{
 			blDeshabilitarBuscarCuenta = Boolean.TRUE;
 			blDeshabilitarVerConc = Boolean.TRUE;
 			
-			if(registroSeleccionado.getIntParaEstado().equals(Constante.INT_EST_CONCILIACION_REGISTRADO)){
+//			if(registroSeleccionado.getIntParaEstado().equals(Constante.INT_EST_CONCILIACION_REGISTRADO)){
 				deshabilitarNuevo = Boolean.FALSE;
 				conciliacionNuevo = conciliacionService.getConciliacionEdit(registroSeleccionado.getId());
 				bancoCtaConcil = getBancoCuentaConciliacion(conciliacionNuevo);
 				cargarDescripcionBancoYCuenta(bancoCtaConcil);			
-			}else{
-				deshabilitarNuevo = Boolean.TRUE;
-			}
+//			}else{
+//				deshabilitarNuevo = Boolean.TRUE;
+//			}
 			mostrarPanelInferior = Boolean.TRUE;
 			
 			showFileUpload = Boolean.FALSE;
@@ -1092,7 +1105,8 @@ public class ConciliacionController{
 			blDeshabilitarVerConc = Boolean.FALSE;
 			blModoEdicion = Boolean.TRUE;
 			
-			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0
+			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0 ||
+					registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 
 					){
 				//habilitarGrabar = Boolean.TRUE;
 				//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -1112,12 +1126,18 @@ public class ConciliacionController{
 				showFileUpload = intBancoNuevoSeleccionado!=null&&intBancoNuevoSeleccionado.equals(Constante.PARAM_T_BANCOS_BANCOCREDITO);
 
 				calcularResumen();
+				conciliacionNuevo.setIndConciliacion(0);
+				if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 ){
+					blDeshabilitarBuscarCuenta = Boolean.TRUE;
+					blDeshabilitarVerConc = Boolean.TRUE;
+					conciliacionNuevo.setIndConciliacion(1);
+				}
 			} else {
 				mostrarMensaje(Boolean.TRUE, "No se pueden Modificar las Conciliaciones en estado Anulado.");
 			}
-			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 ){
-				mostrarMensaje(Boolean.TRUE, "No se pueden Modificar los registros en estado Conciliado.");
-			}
+//			if(registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)==0 ){
+//				mostrarMensaje(Boolean.TRUE, "No se pueden Modificar los registros en estado Conciliado.");
+//			}
 		}catch(Exception e){
 			log.error(e.getMessage(),e);
 		}
@@ -1153,7 +1173,7 @@ public class ConciliacionController{
 						
 			if(listaBancoFondoTemp != null && listaBancoFondoTemp.size()>0){
 				for(Bancofondo bancoFondo : listaBancoFondoTemp){
-					if(bancoFondo.getIntBancoCod().equals(bcoCta.getBancofondo().getIntBancoCod())
+					if(bcoCta.getBancofondo()!= null && bancoFondo.getIntBancoCod().equals(bcoCta.getBancofondo().getIntBancoCod())
 						&& bancoFondo.getId().getIntItembancofondo().compareTo(bcoFdo.getId().getIntItembancofondo())==0){
 						for(Bancocuenta bancoCuenta : bancoFondo.getListaBancocuenta()){
 							if(bancoCuenta.getId().getIntItembancocuenta().compareTo(bcoCta.getId().getIntItembancocuenta())==0
@@ -1254,6 +1274,9 @@ public class ConciliacionController{
 			
 			showFileUpload = Boolean.FALSE;
 			blModoEdicion = Boolean.FALSE;
+
+			registroSeleccionado = null;
+			conciliacionNuevo.setIndConciliacion(0);
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 			
 			//mostrarBotonGrabarConcil = Boolean.TRUE;
@@ -1287,7 +1310,7 @@ public class ConciliacionController{
 			
 			intBancoAnuladoSeleccionado = null;
 			intBancoCuentaAnuladoConcSeleccionado = null;
-			
+			registroSeleccionado = null;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
@@ -1460,7 +1483,7 @@ public class ConciliacionController{
 				// bdResumenSaldoConciliacion
 				//concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar).setScale(2, RoundingMode.HALF_UP));
 				//concilResumen.setBdResumenPorConciliar(bdResumenPorConciliar);
-				concilResumen.setBdResumenSaldoConciliacion(bdResumenDebe.subtract(bdResumenHaber));
+				concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar));
 				
 				concilResumen.setBdDebe(bdResumenDebe);
 				concilResumen.setBdHaber(bdResumenHaber);
@@ -1470,7 +1493,7 @@ public class ConciliacionController{
 						(bdResumenDebe).subtract(bdResumenHaber).setScale(2, RoundingMode.HALF_UP)
 						));
 				//por verificar aun
-				concilResumen.setBdResumenPorConciliar(concilResumen.getBdResumenSaldoCaja().subtract(concilResumen.getBdResumenSaldoConciliacion()));
+				concilResumen.setBdResumenPorConciliar(bdResumenPorConciliar);
 				
 				lstResumen.add(concilResumen);
 			
