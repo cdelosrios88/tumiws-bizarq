@@ -56,7 +56,7 @@
 	 <parameter property="intItemIngresoGeneral"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intIndicadorCheck"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intIndicadorConci"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
-	 <parameter property="bdSaldoInicial"					javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
+	 <parameter property="bdSaldoInicial"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="bdMontoDebe"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="bdMontoHaber"						javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
 	 <parameter property="intPersEmpresaCheckConciliacion"	javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
