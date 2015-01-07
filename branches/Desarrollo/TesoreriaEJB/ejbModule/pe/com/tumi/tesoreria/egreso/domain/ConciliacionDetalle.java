@@ -45,6 +45,10 @@ public class ConciliacionDetalle extends TumiDomain{
 	private Integer intIdSubSucursalPaga;
 	/* Fin: REQ14-006 Bizarq - 28/10/2014 */
 	
+	/* Inicio: REQ14-006 Bizarq - 07/01/2015 */
+	private BigDecimal bdSaldoFinal;
+	/* Fin: REQ14-006 Bizarq - 07/01/2015 */
+	
 	public ConciliacionDetalleId getId() {
 		return id;
 	}
@@ -202,6 +206,12 @@ public class ConciliacionDetalle extends TumiDomain{
 		this.intIdSubSucursalPaga = intIdSubSucursalPaga;
 	}
 
+	public BigDecimal getBdSaldoFinal() {
+		return bdSaldoFinal;
+	}
+	public void setBdSaldoFinal(BigDecimal bdSaldoFinal) {
+		this.bdSaldoFinal = bdSaldoFinal;
+	}
 	@Override
 	public String toString() {
 		return "ConciliacionDetalle [id=" + id + ", intPersEmpresaEgreso="

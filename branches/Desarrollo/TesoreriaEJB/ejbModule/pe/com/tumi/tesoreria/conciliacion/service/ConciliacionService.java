@@ -8,6 +8,7 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,11 +23,8 @@ import pe.com.tumi.empresa.domain.Sucursal;
 import pe.com.tumi.framework.negocio.ejb.factory.EJBFactory;
 import pe.com.tumi.framework.negocio.exception.BusinessException;
 import pe.com.tumi.framework.negocio.factory.TumiFactory;
-import pe.com.tumi.parametro.tabla.domain.Tabla;
-import pe.com.tumi.parametro.tabla.facade.TablaFacadeRemote;
 import pe.com.tumi.seguridad.empresa.facade.EmpresaFacadeRemote;
 import pe.com.tumi.tesoreria.banco.bo.BancocuentaBO;
-import pe.com.tumi.tesoreria.banco.domain.Bancocuenta;
 import pe.com.tumi.tesoreria.banco.service.BancoFondoService;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionBO;
 import pe.com.tumi.tesoreria.egreso.bo.ConciliacionDetalleBO;
@@ -555,7 +553,7 @@ public class ConciliacionService {
 			listaConciliacionDetalleTemp = pConciliacion.getListaConciliacionDetalle();
 			
 			if(listaConciliacionDetalleTemp!=null && !listaConciliacionDetalleTemp.isEmpty()){
-				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalleTemp, conciliacion.getId());
+				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalleTemp, conciliacion);
 			}
 	
 		}catch(BusinessException e){
@@ -606,7 +604,7 @@ public class ConciliacionService {
 				}	
 			}
 			if(listaConciliacionDetalle!=null && !listaConciliacionDetalle.isEmpty()){
-				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalle, conciliacion.getId());
+				grabarListaDinamicaConciliacionDetalle(listaConciliacionDetalle, conciliacion);
 			}
 			
 		}catch(BusinessException e){
@@ -627,7 +625,7 @@ public class ConciliacionService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public List<ConciliacionDetalle> grabarListaDinamicaConciliacionDetalle(List<ConciliacionDetalle> lstConciliacionDetalle, ConciliacionId pPK) throws BusinessException{
+	public List<ConciliacionDetalle> grabarListaDinamicaConciliacionDetalle(List<ConciliacionDetalle> lstConciliacionDetalle, Conciliacion o) throws BusinessException{
 		ConciliacionDetalle conciliacionDetalle = null;
 		ConciliacionDetalleId pk = null;
 		ConciliacionDetalle conciliacionDetalleTemp = null;
@@ -643,20 +641,30 @@ public class ConciliacionService {
 					conciliacionDetalle.setIntIdSubSucursalGira(conciliacionDetalle.getIngreso().getIntSudeIdSubsucursal());
 				}
 				if(conciliacionDetalle!=null && conciliacionDetalle.getEgreso()!=null){
-					conciliacionDetalle.setIntIdSucursalPaga(conciliacionDetalle.getEgreso().getIntSucuIdSucursal());
-					conciliacionDetalle.setIntIdSubSucursalPaga(conciliacionDetalle.getEgreso().getIntSudeIdSubsucursal());
+					conciliacionDetalle.setIntIdSucursalGira(conciliacionDetalle.getEgreso().getIntSucuIdSucursal());
+					conciliacionDetalle.setIntIdSubSucursalGira(conciliacionDetalle.getEgreso().getIntSudeIdSubsucursal());
 				}
 				/* Fin: REQ14-006 Bizarq - 01/01/2015 */
 				
 				if(conciliacionDetalle.getId()== null || conciliacionDetalle.getId().getIntItemConciliacionDetalle()==null){
 					pk = new ConciliacionDetalleId();
-					pk.setIntPersEmpresa(pPK.getIntPersEmpresa());
-					pk.setIntItemConciliacion(pPK.getIntItemConciliacion());
+					pk.setIntPersEmpresa(o.getId().getIntPersEmpresa());
+					pk.setIntItemConciliacion(o.getId().getIntItemConciliacion());
 					conciliacionDetalle.setId(pk);
+					/* Inicio: REQ14-006 Bizarq - 07/01/2015 */
+					conciliacionDetalle.setIntPersEmpresaCheckConciliacion(o.getIntPersEmpresaConcilia());
+					conciliacionDetalle.setIntPersPersonaCheckConciliacion(o.getIntPersPersonaConcilia());
+					conciliacionDetalle.setTsFechaCheck(new Timestamp(new Date().getTime()));
+					/* Fin: REQ14-006 Bizarq - 07/01/2015 */
 					conciliacionDetalle = boConciliacionDet.grabar(conciliacionDetalle);
 				}else{
 					conciliacionDetalleTemp = boConciliacionDet.getPorPk(conciliacionDetalle.getId());
 					if(conciliacionDetalleTemp == null){
+						/* Inicio: REQ14-006 Bizarq - 07/01/2015 */
+						conciliacionDetalle.setIntPersEmpresaCheckConciliacion(o.getIntPersEmpresaConcilia());
+						conciliacionDetalle.setIntPersPersonaCheckConciliacion(o.getIntPersPersonaConcilia());
+						conciliacionDetalle.setTsFechaCheck(new Timestamp(new Date().getTime()));
+						/* Fin: REQ14-006 Bizarq - 07/01/2015 */
 						conciliacionDetalle = boConciliacionDet.grabar(conciliacionDetalle);
 					}else{
 						conciliacionDetalle = boConciliacionDet.modificar(conciliacionDetalle);
