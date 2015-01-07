@@ -54,8 +54,17 @@ public class Conciliacion extends TumiDomain{
 	private BigDecimal bdPorConciliar;
 	private Usuario usuario;
 	private List<ConciliacionDetalle> listaConciliacionDetalleVisual;
+	private int indConciliacion;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
+	public int getIndConciliacion() {
+		return indConciliacion;
+	}
+
+	public void setIndConciliacion(int indConciliacion) {
+		this.indConciliacion = indConciliacion;
+	}
+
 	public Conciliacion(){
 		id = new ConciliacionId();
 	}
