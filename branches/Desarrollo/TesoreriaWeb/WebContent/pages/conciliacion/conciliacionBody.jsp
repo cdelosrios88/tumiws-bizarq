@@ -251,7 +251,8 @@
 						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_ANALISTA_TESORERIA ||
 									conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"
 						disabled="#{empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual || 
-									empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"/>
+									empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle || 
+									conciliacionController.conciliacionNuevo.indConciliacion == 1}"/>
 					<a4j:commandButton value="Grabar Conciliacion Diaria" 
 						styleClass="btnEstilos" 
 						style="width:170px"
@@ -259,7 +260,8 @@
 						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
 						rendered="#{conciliacionController.usuario.perfil.id.intIdPerfil==applicationScope.Constante.INT_PERFIL_JEFE_TESORERIA}"
 						disabled="#{empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual ||
-									empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle}"/>
+									empty conciliacionController.conciliacionNuevo.listaConciliacionDetalle || 
+									conciliacionController.conciliacionNuevo.indConciliacion == 1}"/>
 					<a4j:commandButton value="Anular Conciliacion" 
 						styleClass="btnEstilos" 
 						style="width:140px"
@@ -411,7 +413,8 @@
 								<a4j:commandButton value="Validar Checks" styleClass="btnEstilos"
 									action="#{conciliacionController.matchTelecreditoFileAgainstLstConcDet}"
 									style="width:150px"
-									rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual}"
+									rendered="#{not empty conciliacionController.conciliacionNuevo.listaConciliacionDetalleVisual }"
+									disabled="#{conciliacionController.conciliacionNuevo.indConciliacion == 1}"
 									reRender="panelDatosValidados,panelMensaje"/>
 							</rich:column>
 						</h:panelGrid>
