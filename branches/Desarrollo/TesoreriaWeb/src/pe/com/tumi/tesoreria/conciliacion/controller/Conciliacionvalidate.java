@@ -85,7 +85,43 @@ public class Conciliacionvalidate {
 		return isValid;
 	}
 	
-	
+	/**
+	 * Valida si ya existe conciliaicon registrada.
+	 * Segun Cuenta Bancaria y Fecha.
+	 * @param conciliacionNew
+	 * @return
+	 */
+	public boolean isValidSaveConciliacion(Conciliacion conciliacionNew, Conciliacion registroSeleccionado){
+		boolean isValid = true;
+		ConciliacionComp concilComp = new ConciliacionComp();
+		List<Conciliacion> lstConciliacion= null;
+		try {
+				concilComp.setIntBusqItemBancoCuenta(conciliacionNew.getIntItemBancoCuenta());
+				concilComp.setIntBusqItemBancoFondo(conciliacionNew.getIntItemBancoFondo());
+				concilComp.setDtBusqFechaDesde(new Date(conciliacionNew.getTsFechaConciliacion().getTime()));
+				concilComp.setDtBusqFechaHasta(new Date(conciliacionNew.getTsFechaConciliacion().getTime()));
+
+				lstConciliacion = conciliacionBO.getListFilter(concilComp);
+				if(lstConciliacion!= null && lstConciliacion.size() >0){
+					for (Conciliacion conciliacion : lstConciliacion) {
+						if(registroSeleccionado!= null && conciliacion.getId().getIntItemConciliacion().equals(registroSeleccionado.getId().getIntItemConciliacion()) 
+						 && conciliacion.getId().getIntPersEmpresa().equals(registroSeleccionado.getId().getIntPersEmpresa()))
+						{
+							continue;
+						}else {
+							if(conciliacion.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_REGISTRADO)==0){
+									isValid = false;
+								}
+						}
+					}
+				}
+				
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+
+		return isValid;
+	}
 	/**
 	 * Valida que al momento de Grabar o Grabar COncilaicion diara, se haya seleccionado cuenta bancaria y que existan
 	 * registros de conciliaicon detalle.
