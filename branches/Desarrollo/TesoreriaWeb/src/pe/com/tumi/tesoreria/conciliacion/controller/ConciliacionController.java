@@ -1476,8 +1476,11 @@ public class ConciliacionController{
 					bdResumenDebe  = bdResumenDebe.add(detalle.getIngreso()!= null ? detalle.getIngreso().getBdMontoTotal() : BigDecimal.ZERO);
 					bdResumenHaber = bdResumenHaber.add(detalle.getEgreso()!= null ? detalle.getEgreso().getBdMontoTotal() : BigDecimal.ZERO);
 					
-					if(detalle.getBlIndicadorConci()== null || detalle.getBlIndicadorConci().equals(false)){
+					/*if(detalle.getBlIndicadorConci()== null || detalle.getBlIndicadorConci().equals(false)){
 						intRegNoConciliados = intRegNoConciliados + 1;					
+					}*/
+					if(detalle.getBlIndicadorCheck()== null || !detalle.getBlIndicadorCheck()){
+						intRegNoConciliados++;
 					}
 				}
 				// bdResumenSaldoConciliacion
@@ -1547,8 +1550,11 @@ public class ConciliacionController{
 					bdResumenDebe  = bdResumenDebe.add(detalle.getIngreso()!= null ? detalle.getIngreso().getBdMontoTotal() : BigDecimal.ZERO);
 					bdResumenHaber = bdResumenHaber.add(detalle.getEgreso()!= null ? detalle.getEgreso().getBdMontoTotal() : BigDecimal.ZERO);
 					
-					if(detalle.getBlIndicadorConci()== null || detalle.getBlIndicadorConci().equals(false)){
-						intRegNoConciliados = intRegNoConciliados + 1;					
+					/*if(detalle.getBlIndicadorConci()== null || detalle.getBlIndicadorConci().equals(false)){
+						intRegNoConciliados++;
+					}*/
+					if(detalle.getBlIndicadorCheck()==null || !detalle.getBlIndicadorCheck()){
+						intRegNoConciliados++;
 					}
 				}
 				
@@ -1564,6 +1570,8 @@ public class ConciliacionController{
 				
 				//bdResumenSaldoCaja
 				//conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdSaldoCaja());
+				conciliacionNuevo.setIntPersEmpresaConcilia(EMPRESA_USUARIO);
+				conciliacionNuevo.setIntPersPersonaConcilia(PERSONA_USUARIO);
 			
 			}		
 		}catch (Exception e) {
