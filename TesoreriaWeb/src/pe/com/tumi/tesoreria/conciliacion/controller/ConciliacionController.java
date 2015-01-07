@@ -709,7 +709,7 @@ public class ConciliacionController{
 		
 		/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -1109,7 +1109,7 @@ public class ConciliacionController{
 				conciliacionNuevo.setBancoCuenta(bancoCtaConcil);
 				cargarDescripcionBancoYCuenta(bancoCtaConcil);
 				
-				showFileUpload = intBancoNuevoSeleccionado.equals(Constante.PARAM_T_BANCOS_BANCOCREDITO);
+				showFileUpload = intBancoNuevoSeleccionado!=null&&intBancoNuevoSeleccionado.equals(Constante.PARAM_T_BANCOS_BANCOCREDITO);
 
 				calcularResumen();
 			} else {
@@ -1191,7 +1191,7 @@ public class ConciliacionController{
 					+bcoCta.getCuentaBancaria().getStrNroCuentaBancaria()+" - "
 					+obtenerEtiquetaTipoMoneda(bcoCta.getCuentaBancaria().getIntMonedaCod());
 			
-			intBancoNuevoSeleccionado = bcoCta.getBancofondo().getIntBancoCod();
+			intBancoNuevoSeleccionado = bcoCta.getBancofondo()!=null?bcoCta.getBancofondo().getIntBancoCod():null;
 			intBancoCuentaNuevaConcSeleccionado = bcoCta.getId().getIntItembancocuenta();
 			
 			conciliacionNuevo.setBancoCuenta(bcoCta);	
@@ -1466,7 +1466,9 @@ public class ConciliacionController{
 				concilResumen.setBdHaber(bdResumenHaber);
 				concilResumen.setBdResumenDebe(bdResumenDebe);
 				concilResumen.setBdResumenHaber(bdResumenHaber);
-				concilResumen.setBdResumenSaldoCaja(concilResumen.getBdResumenSaldoAnterior().add(bdResumenDebe).subtract(bdResumenHaber).setScale(2, RoundingMode.HALF_UP));
+				concilResumen.setBdResumenSaldoCaja(concilResumen.getBdResumenSaldoAnterior().add(
+						(bdResumenDebe).subtract(bdResumenHaber).setScale(2, RoundingMode.HALF_UP)
+						));
 				//por verificar aun
 				concilResumen.setBdResumenPorConciliar(concilResumen.getBdResumenSaldoCaja().subtract(concilResumen.getBdResumenSaldoConciliacion()));
 				
@@ -1533,11 +1535,12 @@ public class ConciliacionController{
 
 				conciliacionNuevo.setBdDebe(bdResumenDebe);
 				conciliacionNuevo.setBdHaber(bdResumenHaber);
-				conciliacionNuevo.setBdMontoDebe(bdResumenDebe);
-				conciliacionNuevo.setBdMontoHaber(bdResumenHaber);
+				conciliacionNuevo.setBdMontoDebe(concilResumen.getBdResumenDebe());
+				conciliacionNuevo.setBdMontoHaber(concilResumen.getBdResumenHaber());
+				conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdResumenSaldoCaja());
 				
 				//bdResumenSaldoCaja
-				conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdSaldoCaja());
+				//conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdSaldoCaja());
 			
 			}		
 		}catch (Exception e) {
