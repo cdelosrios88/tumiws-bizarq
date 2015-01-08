@@ -193,7 +193,7 @@
 					
 					<a4j:support event="onRowClick"
 						actionListener="#{conciliacionController.seleccionarRegistro}"
-						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados"
+						reRender="contPanelInferior,panelMensaje,panelBotones,panelTablaResultados,panelUpdateViewConciliacion"
 						oncomplete="if(#{conciliacionController.mostrarBtnView}){Richfaces.showModalPanel('panelUpdateViewConciliacion')}">
 						<f:attribute name="item" value="#{item}"/>
 					</a4j:support>

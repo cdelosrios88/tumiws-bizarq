@@ -42,7 +42,7 @@
 			<h:panelGrid columns="3" border="0"
 				style="margin:0 auto; width: 100%">
 				<a4j:commandButton value="Modificar"
-					style="display:#{conciliacionController.mostrarBtnModificar == 1 ? 'none' : 'block'};"
+					rendered="#{not empty conciliacionController.conciliacionNuevo.id && not empty conciliacionController.conciliacionNuevo.id.intItemConciliacion}"
 					action="#{conciliacionController.irModificarConciliacion}"
 					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje,panelDatosAnular,panelBotones"
 					oncomplete="Richfaces.hideModalPanel('panelUpdateViewConciliacion')" />
