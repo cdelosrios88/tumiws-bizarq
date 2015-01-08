@@ -136,6 +136,15 @@ public class ConciliacionController{
 	private boolean mostrarBtnView;
 	private boolean mostrarBtnActualizar;
 	private boolean poseePermiso;
+	private int mostrarBtnModificar;
+
+	public int getMostrarBtnModificar() {
+		return mostrarBtnModificar;
+	}
+
+	public void setMostrarBtnModificar(int mostrarBtnModificar) {
+		this.mostrarBtnModificar = mostrarBtnModificar;
+	}
 
 	public ConciliacionController(){
 		cargarUsuario();
@@ -996,6 +1005,10 @@ public class ConciliacionController{
 				|| registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)== 0){
 				mostrarBtnActualizar = false;
 			}*/
+			if( registroSeleccionado.getIntParaEstado().compareTo(Constante.INT_EST_CONCILIACION_CONCILIADO)== 0){
+				mostrarBtnModificar = 1;
+			}else
+				mostrarBtnModificar = 0;
 			mostrarBtnView = Boolean.TRUE;
 		}catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -1487,7 +1500,9 @@ public class ConciliacionController{
 				//concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar).setScale(2, RoundingMode.HALF_UP));
 				//concilResumen.setBdResumenPorConciliar(bdResumenPorConciliar);
 				concilResumen.setBdResumenSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar));
-				
+				Conciliacionvalidate validate = new Conciliacionvalidate();
+				if(conciliacionNuevo.getId().getIntItemConciliacion()== null )
+					concilResumen.setBdResumenSaldoAnterior(validate.obtenerSaldoAnterior(conciliacionNuevo));
 				concilResumen.setBdDebe(bdResumenDebe);
 				concilResumen.setBdHaber(bdResumenHaber);
 				concilResumen.setBdResumenDebe(bdResumenDebe);
@@ -1543,7 +1558,19 @@ public class ConciliacionController{
 						}
 					}
 				}
-	
+				
+				if(conciliacionNuevo.getId().getIntItemConciliacion()== null){
+					bdResumenPorConciliar = new BigDecimal(0);
+					for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
+						if(detalle.getBlIndicadorCheck() == null || !detalle.getBlIndicadorCheck()){
+							if(detalle.getEgreso() == null){
+								bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
+							}else{
+								bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
+							}
+						}
+					}
+				}
 				conciliacionNuevo.setBdPorConciliar(bdResumenPorConciliar);
 
 				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
@@ -1567,7 +1594,7 @@ public class ConciliacionController{
 				conciliacionNuevo.setBdMontoDebe(concilResumen.getBdResumenDebe());
 				conciliacionNuevo.setBdMontoHaber(concilResumen.getBdResumenHaber());
 				conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdResumenSaldoCaja());
-				
+				conciliacionNuevo.setBdSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar));
 				//bdResumenSaldoCaja
 				//conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdSaldoCaja());
 				conciliacionNuevo.setIntPersEmpresaConcilia(EMPRESA_USUARIO);
@@ -2147,7 +2174,6 @@ public class ConciliacionController{
 	public void setBlModoEdicion(boolean blModoEdicion) {
 		this.blModoEdicion = blModoEdicion;
 	}
-
 
 	public static <T> Collection<T> filter(Collection<T> col, Predicate<T> predicate){
 		Collection<T> result = new ArrayList<T>();

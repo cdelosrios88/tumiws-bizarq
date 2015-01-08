@@ -104,6 +104,8 @@
 	 <parameter property="intParaEstado"				javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="INOUT"/>
 <!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
 	<parameter property="tsFechaConcilia"     			javaType="java.sql.Timestamp"		jdbcType="TIMESTAMP"	mode="INOUT"/>
+	<parameter property="bdSaldoConciliacion"			javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
+	<parameter property="bdSaldoCaja"					javaType="java.math.BigDecimal"		jdbcType="NUMERIC"		mode="INOUT"/>
 <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->	
   </parameterMap>
   
@@ -133,11 +135,11 @@
   <!-- Fin: REQ14-006 Bizarq - 26/10/2014 -->
   
   <procedure id="grabar" parameterMap="parConciliacion">
-	{ call PKG_CONCILIACIONRE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONRE.grabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="modificar" parameterMap="parConciliacion" >
-	{ call PKG_CONCILIACIONRE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
+	{ call PKG_CONCILIACIONRE.modificar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }  
   </procedure>
   
   <procedure id="getListaPorPk" parameterMap="parPorPk" resultMap="resConciliacion">

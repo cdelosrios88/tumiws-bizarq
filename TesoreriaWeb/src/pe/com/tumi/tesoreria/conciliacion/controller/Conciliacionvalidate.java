@@ -8,6 +8,7 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.controller;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -84,7 +85,37 @@ public class Conciliacionvalidate {
 
 		return isValid;
 	}
-	
+	/**
+	 * Valida si ya existe conciliaicon registrada.
+	 * Segun Cuenta Bancaria y Fecha.
+	 * @param conciliacionNew
+	 * @return
+	 */
+	public BigDecimal obtenerSaldoAnterior(Conciliacion conciliacionNew){
+		BigDecimal bdMontoSaldoAnterior = null;
+		ConciliacionComp concilComp = new ConciliacionComp();
+		List<Conciliacion> lstConciliacion= null;
+		try {
+				concilComp.setIntBusqItemBancoCuenta(conciliacionNew.getIntItemBancoCuenta());
+				concilComp.setIntBusqItemBancoFondo(conciliacionNew.getIntItemBancoFondo());
+
+				lstConciliacion = conciliacionBO.getListFilter(concilComp);
+				if(lstConciliacion!= null && lstConciliacion.size() >0){
+					for (Conciliacion conciliacion : lstConciliacion) {
+						bdMontoSaldoAnterior = conciliacion.getBdSaldoConciliacion();	
+						break;
+					}	
+				}else{
+					bdMontoSaldoAnterior = new BigDecimal(0);
+				}	
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+		if(bdMontoSaldoAnterior == null)
+			bdMontoSaldoAnterior = new BigDecimal(0);
+
+		return bdMontoSaldoAnterior;
+	}	
 	/**
 	 * Valida si ya existe conciliaicon registrada.
 	 * Segun Cuenta Bancaria y Fecha.
