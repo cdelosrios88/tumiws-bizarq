@@ -55,8 +55,26 @@ public class Conciliacion extends TumiDomain{
 	private Usuario usuario;
 	private List<ConciliacionDetalle> listaConciliacionDetalleVisual;
 	private int indConciliacion;
+	private BigDecimal bdMontoDebeNoConci;
+	private BigDecimal bdMontoHaberNoConci;
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 	
+	public BigDecimal getBdMontoDebeNoConci() {
+		return bdMontoDebeNoConci;
+	}
+
+	public void setBdMontoDebeNoConci(BigDecimal bdMontoDebeNoConci) {
+		this.bdMontoDebeNoConci = bdMontoDebeNoConci;
+	}
+
+	public BigDecimal getBdMontoHaberNoConci() {
+		return bdMontoHaberNoConci;
+	}
+
+	public void setBdMontoHaberNoConci(BigDecimal bdMontoHaberNoConci) {
+		this.bdMontoHaberNoConci = bdMontoHaberNoConci;
+	}
+
 	public int getIndConciliacion() {
 		return indConciliacion;
 	}
