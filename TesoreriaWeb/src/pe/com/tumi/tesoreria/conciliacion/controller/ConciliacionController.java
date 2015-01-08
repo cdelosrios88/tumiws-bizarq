@@ -1089,7 +1089,9 @@ public class ConciliacionController{
 				deshabilitarNuevo = Boolean.FALSE;
 				conciliacionNuevo = conciliacionService.getConciliacionEdit(registroSeleccionado.getId());
 				bancoCtaConcil = getBancoCuentaConciliacion(conciliacionNuevo);
-				cargarDescripcionBancoYCuenta(bancoCtaConcil);			
+				cargarDescripcionBancoYCuenta(bancoCtaConcil);	
+				seleccionarNuevoConcBancoFiltro();
+				calcularResumen();
 //			}else{
 //				deshabilitarNuevo = Boolean.TRUE;
 //			}
@@ -1098,7 +1100,7 @@ public class ConciliacionController{
 			showFileUpload = Boolean.FALSE;
 			deshabilitarBancoNuevoConc = Boolean.TRUE;
 			deshabilitarBancoCuentaNuevoConc = Boolean.TRUE;
-			conciliacionNuevo.setBancoCuenta(null);
+			//conciliacionNuevo.setBancoCuenta(null);
 			
 			//mostrarBotonGrabarConcil = Boolean.FALSE;
 			
