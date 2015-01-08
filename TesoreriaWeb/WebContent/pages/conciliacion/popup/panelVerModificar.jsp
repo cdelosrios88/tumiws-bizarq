@@ -42,7 +42,8 @@
 			<h:panelGrid columns="3" border="0"
 				style="margin:0 auto; width: 100%">
 				<a4j:commandButton value="Modificar"
-					rendered="#{not empty conciliacionController.conciliacionNuevo.id && not empty conciliacionController.conciliacionNuevo.id.intItemConciliacion}"
+					rendered="#{not empty conciliacionController.registroSeleccionado 
+						&& conciliacionController.registroSeleccionado.intParaEstado!=applicationScope.Constante.INT_EST_CONCILIACION_CONCILIADO}"
 					action="#{conciliacionController.irModificarConciliacion}"
 					styleClass="btnEstilos" reRender="contPanelInferior,panelMensaje,panelDatosAnular,panelBotones"
 					oncomplete="Richfaces.hideModalPanel('panelUpdateViewConciliacion')" />
