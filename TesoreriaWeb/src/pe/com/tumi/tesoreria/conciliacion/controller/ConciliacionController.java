@@ -424,13 +424,13 @@ public class ConciliacionController{
 					}
 				}			
 			}
-			
+			//Ordenando la lista de ingresos y egresos a través de la fecha de proceso
 			Collections.sort(lstVisual, new Comparator<ConciliacionDetalle>(){
 				public int compare(ConciliacionDetalle uno, ConciliacionDetalle otro) {
 					if(uno.getEgreso()!=null){
-						return uno.getEgreso().getTsFechaProceso().compareTo(otro.getEgreso().getTsFechaProceso());
+						return uno.getEgreso().getTsFechaProceso().compareTo(otro.getEgreso()==null?MyUtil.obtenerFechaActual():otro.getEgreso().getTsFechaProceso());
 					}else{
-						return uno.getIngreso().getTsFechaProceso().compareTo(otro.getIngreso().getTsFechaProceso());
+						return uno.getIngreso().getTsFechaProceso().compareTo(otro.getIngreso()==null?MyUtil.obtenerFechaActual():otro.getIngreso().getTsFechaProceso());
 					}
 				}		
 			});
@@ -449,10 +449,14 @@ public class ConciliacionController{
 		}
 	}
 	
+	//Filtrando los ingresos y egresos mediante el check de conciliación
 	Predicate<ConciliacionDetalle> validCheck = new Predicate<ConciliacionDetalle>(){
 		@Override
 		public boolean apply(ConciliacionDetalle type) {
 			if(conciliacionNuevo.getIntEstadoCheckFiltro().equals(Constante.INT_ONE)){
+				if(type.getIntIndicadorCheck()==null){
+					return Boolean.FALSE;
+				}
 				return type.getIntIndicadorCheck().equals(conciliacionNuevo.getIntEstadoCheckFiltro()) || type.getBlIndicadorCheck();				
 			} else {
 				return !type.getBlIndicadorCheck();
