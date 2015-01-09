@@ -454,10 +454,7 @@ public class ConciliacionController{
 		@Override
 		public boolean apply(ConciliacionDetalle type) {
 			if(conciliacionNuevo.getIntEstadoCheckFiltro().equals(Constante.INT_ONE)){
-				if(type.getIntIndicadorCheck()==null){
-					return Boolean.FALSE;
-				}
-				return type.getIntIndicadorCheck().equals(conciliacionNuevo.getIntEstadoCheckFiltro()) || type.getBlIndicadorCheck();				
+				return type.getBlIndicadorCheck();
 			} else {
 				return !type.getBlIndicadorCheck();
 			}
