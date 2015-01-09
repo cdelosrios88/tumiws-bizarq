@@ -1473,7 +1473,7 @@ public class ConciliacionController{
 				concilResumen.setIntResumenNroMov(conciliacionNuevo.getListaConciliacionDetalleVisual().size());
 				//bdTotalConciliacion
 				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalleVisual()){
-					bdTotalConciliacion = bdTotalConciliacion.add((detalle.getBdMontoDebe() == null ? ( detalle.getBdMontoHaber() == null ? BigDecimal.ZERO : detalle.getBdMontoHaber() ): detalle.getBdMontoDebe()));					
+					bdTotalConciliacion = bdTotalConciliacion.add((detalle.getBdMontoDebe() == null ? ( detalle.getBdMontoHaber() == null ? BigDecimal.ZERO : detalle.getBdMontoHaber().multiply(new BigDecimal(-1)) ): detalle.getBdMontoDebe()));					
 				}
 
 				// bdResumenPorConciliar
@@ -1482,7 +1482,7 @@ public class ConciliacionController{
 						if(detalle.getEgreso() == null){
 							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
 						}else{
-							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
+							bdResumenPorConciliar = bdResumenPorConciliar.subtract(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
 						}
 					}
 				}
@@ -1550,7 +1550,7 @@ public class ConciliacionController{
 				conciliacionNuevo.setIntNroMovimientos(conciliacionNuevo.getListaConciliacionDetalle().size());
 				//bdTotalConciliacion
 				for(ConciliacionDetalle detalle : conciliacionNuevo.getListaConciliacionDetalle()){
-					bdTotalConciliacion = bdTotalConciliacion.add((detalle.getBdMontoDebe() == null ? ( detalle.getBdMontoHaber() == null ? BigDecimal.ZERO : detalle.getBdMontoHaber() ): detalle.getBdMontoDebe()));					
+					bdTotalConciliacion = bdTotalConciliacion.add((detalle.getBdMontoDebe() == null ? ( detalle.getBdMontoHaber() == null ? BigDecimal.ZERO : detalle.getBdMontoHaber().multiply(new BigDecimal(-1)) ): detalle.getBdMontoDebe()));					
 				}
 
 				// bdResumenPorConciliar
@@ -1560,7 +1560,7 @@ public class ConciliacionController{
 							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
 							bdNoConciliadoDebe = bdNoConciliadoDebe.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
 						}else{
-							bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
+							bdResumenPorConciliar = bdResumenPorConciliar.subtract(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
 							bdNoConciliadoHaber = bdNoConciliadoDebe.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
 						}
 					}

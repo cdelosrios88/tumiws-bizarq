@@ -8,6 +8,7 @@
 */
 package pe.com.tumi.tesoreria.conciliacion.service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -630,12 +631,22 @@ public class ConciliacionService {
 		ConciliacionDetalleId pk = null;
 		ConciliacionDetalle conciliacionDetalleTemp = null;
 		try{
+			/* Inicio: REQ14-006 Bizarq - 01/01/2015 */
+			BigDecimal bdSaldoFinal = BigDecimal.ZERO;
+			/* Fin: REQ14-006 Bizarq - 01/01/2015 */
 			for(int i=0; i<lstConciliacionDetalle.size(); i++){
 				conciliacionDetalle = (ConciliacionDetalle) lstConciliacionDetalle.get(i);
 				conciliacionDetalle = checkConciliacionDetalle(conciliacionDetalle);
 				//conciliacionDetalle = convertEgresoIngresoAConcilDet(conciliacionDetalle);
 				
 				/* Inicio: REQ14-006 Bizarq - 01/01/2015 */
+				if(i==0){
+					conciliacionDetalle.setBdSaldoInicial(o.getBdMontoSaldoInicial());
+				}else {
+					conciliacionDetalle.setBdSaldoInicial(bdSaldoFinal);
+				}
+				bdSaldoFinal = conciliacionDetalle.getBdSaldoInicial().add((conciliacionDetalle.getBdMontoDebe()== null ? BigDecimal.ZERO: conciliacionDetalle.getBdMontoDebe()).subtract(conciliacionDetalle.getBdMontoHaber()== null ? BigDecimal.ZERO:conciliacionDetalle.getBdMontoHaber()));	
+				conciliacionDetalle.setBdSaldoFinal(bdSaldoFinal);
 				if(conciliacionDetalle!=null && conciliacionDetalle.getIngreso()!=null){
 					conciliacionDetalle.setIntIdSucursalGira(conciliacionDetalle.getIngreso().getIntSucuIdSucursal());
 					conciliacionDetalle.setIntIdSubSucursalGira(conciliacionDetalle.getIngreso().getIntSudeIdSubsucursal());
