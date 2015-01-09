@@ -114,14 +114,14 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 					
 					
 					bdPMontoConcil = (conciliacion.getBdMontoDebe()==null?BigDecimal.ZERO:conciliacion.getBdMontoDebe())
-							.add(conciliacion.getBdMontoHaber()==null?BigDecimal.ZERO:conciliacion.getBdMontoHaber());
+							.add(conciliacion.getBdMontoHaber()==null?BigDecimal.ZERO:conciliacion.getBdMontoHaber().multiply(new BigDecimal(-1)));
 					
 					List<ConciliacionDetalle> lstDetalle = null;
 					lstDetalle = conciliacionDetBO.getPorConciliacion(conciliacion.getId());
 					if(lstDetalle != null && lstDetalle.size() >0){
 						for (ConciliacionDetalle conciliacionDetalle : lstDetalle) {
 							if(conciliacionDetalle.getIntIndicadorCheck().compareTo(new Integer(1))==0){
-								bdSaldoConcil = bdSaldoConcil.add(conciliacionDetalle.getIntItemIngresoGeneral() != null ?  conciliacionDetalle.getBdMontoDebe(): conciliacionDetalle.getBdMontoHaber());
+								bdSaldoConcil = bdSaldoConcil.add(conciliacionDetalle.getIntItemIngresoGeneral() != null ?  conciliacionDetalle.getBdMontoDebe(): conciliacionDetalle.getBdMontoHaber().multiply(new BigDecimal(-1)));
 							}
 						}
 						bdPorConcil = bdPMontoConcil.subtract(bdSaldoConcil);
