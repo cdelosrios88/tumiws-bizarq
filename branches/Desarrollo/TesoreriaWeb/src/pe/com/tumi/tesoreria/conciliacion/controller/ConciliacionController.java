@@ -549,7 +549,7 @@ public class ConciliacionController{
 					if(!validate.isValidSaveConciliacion(conciliacionNuevo,registroSeleccionado)){
 						deshabilitarNuevo = Boolean.TRUE;
 						mostrarPanelInferior = Boolean.FALSE;
-						mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación pendiente para el día actual. Se cancela registro.");
+						mostrarMensaje(Boolean.FALSE, "No se puede grabar la concilacion, se encontró una Conciliación pendiente.");
 						return;
 					}
 					conciliacionFacade.grabarConciliacionDiaria(conciliacionNuevo);
@@ -745,7 +745,7 @@ public class ConciliacionController{
 				calcularCabecera();
 				/*******************************************************************/
 				if(!validate.isValidSaveConciliacion(conciliacionNuevo,registroSeleccionado)){
-					mostrarMensaje(Boolean.FALSE, "Ya existe Conciliación pendiente para el día actual. Se cancela registro.");
+					mostrarMensaje(Boolean.FALSE, "No se puede grabar la concilacion, se encontró una Conciliación pendiente.");
 					return;
 				}
 				/*******************************************************************/
@@ -1506,6 +1506,7 @@ public class ConciliacionController{
 				Conciliacionvalidate validate = new Conciliacionvalidate();
 				if(conciliacionNuevo.getId().getIntItemConciliacion()== null )
 					concilResumen.setBdResumenSaldoAnterior(validate.obtenerSaldoAnterior(conciliacionNuevo));
+				concilResumen.setBdResumenSaldoConciliacion(concilResumen.getBdResumenSaldoConciliacion().add(concilResumen.getBdResumenSaldoAnterior()));
 				concilResumen.setBdDebe(bdResumenDebe);
 				concilResumen.setBdHaber(bdResumenHaber);
 				concilResumen.setBdResumenDebe(bdResumenDebe);
@@ -1577,7 +1578,7 @@ public class ConciliacionController{
 								bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
 								bdNoConciliadoDebe = bdNoConciliadoDebe.add(detalle.getBdMontoDebe()==null?BigDecimal.ZERO:detalle.getBdMontoDebe());
 							}else{
-								bdResumenPorConciliar = bdResumenPorConciliar.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
+								bdResumenPorConciliar = bdResumenPorConciliar.subtract(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
 								bdNoConciliadoHaber = bdNoConciliadoDebe.add(detalle.getBdMontoHaber()==null?BigDecimal.ZERO:detalle.getBdMontoHaber());
 							}
 						}
@@ -1607,7 +1608,7 @@ public class ConciliacionController{
 				conciliacionNuevo.setBdMontoDebe(concilResumen.getBdResumenDebe());
 				conciliacionNuevo.setBdMontoHaber(concilResumen.getBdResumenHaber());
 				conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdResumenSaldoCaja());
-				conciliacionNuevo.setBdSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar));
+				conciliacionNuevo.setBdSaldoConciliacion(bdTotalConciliacion.subtract(bdResumenPorConciliar).add(conciliacionNuevo.getBdMontoSaldoInicial()));
 				//bdResumenSaldoCaja
 				//conciliacionNuevo.setBdSaldoCaja(concilResumen.getBdSaldoCaja());
 				conciliacionNuevo.setIntPersEmpresaConcilia(EMPRESA_USUARIO);
