@@ -127,7 +127,7 @@ public class ConciliacionFacade extends TumiFacade implements ConciliacionFacade
 						bdPorConcil = bdPMontoConcil.subtract(bdSaldoConcil);
 					}
 					conciliacionResult.setBdPorConciliar(bdPorConcil);
-					conciliacionResult.setBdSaldoConciliacion(bdSaldoConcil);
+					conciliacionResult.setBdSaldoConciliacion(bdSaldoConcil.add(conciliacionResult.getBdMontoSaldoInicial()));
 					lstresult.add(conciliacionResult);
 				}
 				
