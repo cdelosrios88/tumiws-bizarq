@@ -129,8 +129,8 @@ public class Conciliacionvalidate {
 		try {
 				concilComp.setIntBusqItemBancoCuenta(conciliacionNew.getIntItemBancoCuenta());
 				concilComp.setIntBusqItemBancoFondo(conciliacionNew.getIntItemBancoFondo());
-				concilComp.setDtBusqFechaDesde(new Date(conciliacionNew.getTsFechaConciliacion().getTime()));
-				concilComp.setDtBusqFechaHasta(new Date(conciliacionNew.getTsFechaConciliacion().getTime()));
+				//concilComp.setDtBusqFechaDesde(new Date(conciliacionNew.getTsFechaConciliacion().getTime()));
+				//concilComp.setDtBusqFechaHasta(new Date(conciliacionNew.getTsFechaConciliacion().getTime()));
 
 				lstConciliacion = conciliacionBO.getListFilter(concilComp);
 				if(lstConciliacion!= null && lstConciliacion.size() >0){
