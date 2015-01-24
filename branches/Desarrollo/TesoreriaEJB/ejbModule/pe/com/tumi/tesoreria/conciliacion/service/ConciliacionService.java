@@ -446,18 +446,41 @@ public class ConciliacionService {
 					
 				}else if(detalle.getEgreso() == null && detalle.getIngreso() != null){
 					List<IngresoDetalle> lstIngresoDet=null;
-					lstIngresoDet = boIngresoDet.getPorIngreso(detalle.getIngreso());
-					if(lstIngresoDet != null && lstIngresoDet.size()>0){
-						for (IngresoDetalle ingresoDetalle : lstIngresoDet) {
-							int cont = 0;
-							for (Sucursal sucursal : listaSucursal) {
-								if(sucursal.getId().getIntIdSucursal().compareTo(ingresoDetalle.getIntSucuIdSucursalIn())==0){
-									if(!strSucursalPagaConcat.contains(sucursal.getJuridica().getStrRazonSocial()) && cont==0){
-										strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial();
-										cont++;
+					if(detalle.getIntItemEgresoGeneral()!= null 
+							&& detalle.getIntPersEmpresaEgreso() != null && detalle.getIntItemIngresoGeneral()!= null 
+							&& detalle.getIntPersEmpresaIngreso() != null){
+						List<EgresoDetalle> lstEgresoDet=null;
+						Egreso objEgreso = new Egreso();
+						objEgreso.getId().setIntItemEgresoGeneral(detalle.getIngreso().getId().getIntIdIngresoGeneral());
+						objEgreso.getId().setIntPersEmpresaEgreso(detalle.getIngreso().getId().getIntIdEmpresa());
+						lstEgresoDet = boEgresoDet.getPorEgreso(objEgreso);
+						if(lstEgresoDet != null && lstEgresoDet.size()>0){
+							for (EgresoDetalle egresoDetalle : lstEgresoDet) {
+								int cont = 0;
+								for (Sucursal sucursal : listaSucursal) {
+									if(sucursal.getId().getIntIdSucursal().compareTo(egresoDetalle.getIntSucuIdSucursalEgreso())==0){
+										if(!strSucursalPagaConcat.contains(sucursal.getJuridica().getStrRazonSocial()) && cont==0){
+											strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial()+".";
+											cont++;
+										}
 									}
-								}
-							}	
+								}	
+							}
+						}	
+					}else {
+						lstIngresoDet = boIngresoDet.getPorIngreso(detalle.getIngreso());
+						if(lstIngresoDet != null && lstIngresoDet.size()>0){
+							for (IngresoDetalle ingresoDetalle : lstIngresoDet) {
+								int cont = 0;
+								for (Sucursal sucursal : listaSucursal) {
+									if(sucursal.getId().getIntIdSucursal().compareTo(ingresoDetalle.getIntSucuIdSucursalIn())==0){
+										if(!strSucursalPagaConcat.contains(sucursal.getJuridica().getStrRazonSocial()) && cont==0){
+											strSucursalPagaConcat = strSucursalPagaConcat + " " + sucursal.getJuridica().getStrRazonSocial();
+											cont++;
+										}
+									}
+								}	
+							}
 						}
 					}
 				}
@@ -505,7 +528,16 @@ public class ConciliacionService {
 					listaConciliacionDetalle.add(conciliacionDet);
 				}
 			}
-			
+			List<Ingreso> listaIngresoConc = boConciliacion.getListaTransCuentaIngreso(ingresoFiltro);
+			if(listaIngresoConc != null && listaIngresoConc.size() >0){
+				for(Ingreso ingreso : listaIngresoConc){
+					ConciliacionDetalle conciliacionDet = new ConciliacionDetalle();
+					conciliacionDet.setIngreso(ingreso);
+					conciliacionDet.setIntItemEgresoGeneral(ingreso.getId().getIntIdIngresoGeneral());
+					conciliacionDet.setIntPersEmpresaEgreso(ingreso.getId().getIntIdEmpresa());
+					listaConciliacionDetalle.add(conciliacionDet);
+				}
+			}
 			Egreso egresoFiltro = new Egreso();
 			egresoFiltro.getId().setIntPersEmpresaEgreso(intBcoCtaEmpresaPk);
 			egresoFiltro.setIntParaDocumentoGeneral(intParaDocumentoGeneral);
@@ -985,25 +1017,56 @@ public class ConciliacionService {
 					
 					for (ConciliacionDetalle detalle : lstConcildet) {
 						if(detalle.getIntItemEgresoGeneral()!= null 
-								&& detalle.getIntPersEmpresaEgreso() != null){
+								&& detalle.getIntPersEmpresaEgreso() != null && detalle.getIntItemIngresoGeneral()!= null 
+								&& detalle.getIntPersEmpresaIngreso() != null){
 							EgresoId egresoId = new EgresoId();
 							Egreso egreso = null;
 							egresoId.setIntItemEgresoGeneral(detalle.getIntItemEgresoGeneral());
 							egresoId.setIntPersEmpresaEgreso(detalle.getIntPersEmpresaEgreso());
 							egreso = boEgreso.getPorPk(egresoId);
 							if(egreso != null){
-								detalle.setEgreso(egreso);
-							}
-						}
-						if(detalle.getIntItemIngresoGeneral()!= null 
-								&& detalle.getIntPersEmpresaIngreso() != null){
-							IngresoId ingresoId = new IngresoId();
-							Ingreso ingreso = null;
-							ingresoId.setIntIdIngresoGeneral(detalle.getIntItemIngresoGeneral());
-							ingresoId.setIntIdEmpresa(detalle.getIntPersEmpresaIngreso());
-							ingreso = boIngreso.getPorId(ingresoId);
-							if(ingreso != null){
+								IngresoId ingresoId = new IngresoId();
+								Ingreso ingreso = new Ingreso();
+								ingresoId.setIntIdIngresoGeneral(detalle.getIntItemIngresoGeneral());
+								ingresoId.setIntIdEmpresa(detalle.getIntPersEmpresaIngreso());
+								ingreso.setId(ingresoId);
+								ingreso.setBdMontoTotal(egreso.getBdMontoTotal());
+								ingreso.setIntParaDocumentoGeneral(egreso.getIntParaDocumentoGeneral());
+								ingreso.setIntItemIngreso(egreso.getIntItemEgreso());
+								ingreso.setIntItemPeriodoIngreso(egreso.getIntItemPeriodoEgreso());
+								ingreso.setDtFechaIngreso(egreso.getDtFechaEgreso());
+								ingreso.setIntSucuIdSucursal(egreso.getIntSucuIdSucursal());
+								ingreso.setIntSudeIdSubsucursal(egreso.getIntSudeIdSubsucursal());
+								ingreso.setIntPersEmpresaGirado(egreso.getIntPersEmpresaGirado());
+								ingreso.setIntPersPersonaGirado(egreso.getIntPersPersonaGirado());
+								ingreso.setStrNumeroOperacion(egreso.getIntNumeroTransferencia()!=null ? egreso.getIntNumeroTransferencia().toString(): null);
+								ingreso.setStrObservacion(egreso.getStrObservacion());
+								ingreso.setTsFechaProceso(egreso.getTsFechaProceso());
+								
 								detalle.setIngreso(ingreso);
+							}	
+						}else {
+							if(detalle.getIntItemEgresoGeneral()!= null 
+									&& detalle.getIntPersEmpresaEgreso() != null){
+								EgresoId egresoId = new EgresoId();
+								Egreso egreso = null;
+								egresoId.setIntItemEgresoGeneral(detalle.getIntItemEgresoGeneral());
+								egresoId.setIntPersEmpresaEgreso(detalle.getIntPersEmpresaEgreso());
+								egreso = boEgreso.getPorPk(egresoId);
+								if(egreso != null){
+									detalle.setEgreso(egreso);
+								}
+							}
+							if(detalle.getIntItemIngresoGeneral()!= null 
+									&& detalle.getIntPersEmpresaIngreso() != null){
+								IngresoId ingresoId = new IngresoId();
+								Ingreso ingreso = null;
+								ingresoId.setIntIdIngresoGeneral(detalle.getIntItemIngresoGeneral());
+								ingresoId.setIntIdEmpresa(detalle.getIntPersEmpresaIngreso());
+								ingreso = boIngreso.getPorId(ingresoId);
+								if(ingreso != null){
+									detalle.setIngreso(ingreso);
+								}
 							}
 						}
 						detalle = checkDetalleConciliacion(detalle);

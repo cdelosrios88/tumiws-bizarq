@@ -4,7 +4,25 @@
 <sqlMap namespace="ConciliacionDaoIbatis">
 
   <typeAlias type="pe.com.tumi.tesoreria.egreso.domain.Conciliacion" alias="Conciliacion"/>
-
+  <typeAlias type="pe.com.tumi.tesoreria.ingreso.domain.Ingreso" alias="Ingreso"/> 
+	
+  <resultMap id="resIngreso" class="Ingreso" >
+	<result property="id.intIdEmpresa"  					column="pEmpresaingreso" />
+	<result property="id.intIdIngresoGeneral"   			column="pitemingresogeneral" />
+    <result property="intParaDocumentoGeneral"     			column="pdocumentogeneral" />
+    <result property="intItemPeriodoIngreso"      			column="pitemperiodoingreso" />
+    <result property="intItemIngreso"      					column="pitemingreso" />
+    <result property="dtFechaIngreso"      					column="pfechaingreso" />
+    <result property="intSucuIdSucursal"      				column="pidsucursal" />
+    <result property="intSudeIdSubsucursal"      			column="pidsubsucursal" />
+    <result property="intPersEmpresaGirado"      			column="pempresagirado" />
+    <result property="intPersPersonaGirado"      			column="ppersonagirado" />
+    <result property="bdMontoTotal"      					column="pmontototal" />
+    <result property="strNumeroOperacion"      				column="pnumerooperacion" />
+    <result property="strObservacion"      					column="pobservacion" />
+    <result property="tsFechaProceso"      					column="pfechaprogreso" />
+    <result property="strNumeroIngreso"      				column="pnumRefIngreso" />
+  </resultMap>
 <!-- Inicio: REQ14-006 Bizarq - 26/10/2014  -->
   <!--
   <resultMap id="resConciliacion" class="Conciliacion" >
@@ -134,6 +152,14 @@
 	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
 	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
   </parameterMap>
+  
+  <parameterMap id="parPorTransCuentaIng" class="java.util.Map">
+   	 <parameter property="cursorLista" 					javaType="java.sql.ResultSet" 		jdbcType="ORACLECURSOR" mode="OUT"/>
+	 <parameter property="intItemBancoFondo"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>	
+	 <parameter property="intItemBancoCuenta"			javaType="java.lang.Integer"		jdbcType="NUMERIC"		mode="IN"/>
+	 <parameter property="dtFechaDesde"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>
+   	 <parameter property="dtFechaHasta"				javaType="java.util.Date"			jdbcType="DATE"			mode="IN"/>	
+  </parameterMap>
   <!-- Fin: REQ14-006 Bizarq - 26/10/2014 -->
   
   <procedure id="grabar" parameterMap="parConciliacion">
@@ -156,6 +182,9 @@
   <procedure id="getLastConciliacionByCuenta" parameterMap="parPorLastConciliacion" resultMap="resConciliacion">
 	{ call PKG_CONCILIACIONRE.getLastConciliacionByCuenta(?,?,?,?,?)}
   </procedure>
+  <procedure id="getListaTransCuentaIngreso" parameterMap="parPorTransCuentaIng" resultMap="resIngreso">
+	{ call PKG_CONCILIACIONRE.getListaTransCuentaIngreso(?,?,?,?,?) }
+  </procedure> 
   <!-- Fin: REQ14-006 Bizarq - 26/10/2014  -->
 
 </sqlMap>
