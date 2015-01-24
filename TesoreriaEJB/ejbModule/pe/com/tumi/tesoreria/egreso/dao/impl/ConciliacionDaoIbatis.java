@@ -12,6 +12,7 @@ import pe.com.tumi.framework.negocio.exception.DAOException;
 import pe.com.tumi.framework.negocio.persistencia.dao.impl.TumiDaoIbatis;
 import pe.com.tumi.tesoreria.egreso.dao.ConciliacionDao;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
+import pe.com.tumi.tesoreria.ingreso.domain.Ingreso;
 
 public class ConciliacionDaoIbatis extends TumiDaoIbatis implements ConciliacionDao{
 
@@ -69,6 +70,15 @@ public class ConciliacionDaoIbatis extends TumiDaoIbatis implements Conciliacion
 		List<Conciliacion> lista = null;
 		try{
 			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getLastConciliacionByCuenta", o);
+		}catch(Exception e) {
+			throw new DAOException (e);
+		}
+		return lista;
+	}
+	public List<Ingreso> getListaTransCuentaIngreso(Object o) throws DAOException {
+		List<Ingreso> lista = null;
+		try{
+			lista = (List) getSqlMapClientTemplate().queryForList(getNameSpace() + ".getListaTransCuentaIngreso", o);
 		}catch(Exception e) {
 			throw new DAOException (e);
 		}

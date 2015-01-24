@@ -18,6 +18,7 @@ import pe.com.tumi.tesoreria.egreso.dao.impl.ConciliacionDaoIbatis;
 import pe.com.tumi.tesoreria.egreso.domain.Conciliacion;
 import pe.com.tumi.tesoreria.egreso.domain.ConciliacionId;
 import pe.com.tumi.tesoreria.egreso.domain.comp.ConciliacionComp;
+import pe.com.tumi.tesoreria.ingreso.domain.Ingreso;
 
 
 public class ConciliacionBO{
@@ -215,5 +216,29 @@ public class ConciliacionBO{
 		}
 		return domain;
 	}
+	
+	/**
+  	 * 
+  	 * @param conciliacion
+  	 * @return
+  	 * @throws BusinessException
+  	 */
+	public List<Ingreso> getListaTransCuentaIngreso(Ingreso ingreso) throws BusinessException{
+		List<Ingreso> lista = null;
+		try{
+			HashMap<String,Object> mapa = new HashMap<String,Object>();
+			mapa.put("intItemBancoFondo", ingreso.getIntItemBancoFondo());
+			mapa.put("intItemBancoCuenta", ingreso.getIntItemBancoCuenta());
+			mapa.put("dtFechaDesde", ingreso.getDtDechaDesde());
+			mapa.put("dtFechaHasta", ingreso.getDtDechaHasta());
+			lista = dao.getListaTransCuentaIngreso(mapa);
+		}catch(DAOException e){
+			throw new BusinessException(e);
+		}catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		return lista;
+	}
+	
 	/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 }
