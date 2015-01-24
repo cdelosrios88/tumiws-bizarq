@@ -775,7 +775,7 @@ public class ConciliacionController{
 					}
 				}
 			}
-			
+			seleccionarBancoFiltro();
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 		} catch (Exception e) {
 			mostrarMensaje(Boolean.FALSE,"Ocurrio un error durante el proceso de registro de la Conciliacion Bancaria.");
@@ -950,6 +950,7 @@ public class ConciliacionController{
 			conciliacionCompBusq = new ConciliacionComp();
 			conciliacionCompBusq.setConciliacion(new Conciliacion());
 			conciliacionCompBusq.getConciliacion().setBancoCuenta(new Bancocuenta());
+			listaConciliacionBusq = new ArrayList<Conciliacion>();
 			intBancoCuentaSeleccionado = 0;
 			intBancoSeleccionado = 0;
 			
@@ -1231,8 +1232,8 @@ public class ConciliacionController{
 			intBancoCuentaNuevaConcSeleccionado = bcoCta.getId().getIntItembancocuenta();
 			
 			conciliacionNuevo.setBancoCuenta(bcoCta);	
-			listaBancoCuentaFiltro = new ArrayList<Bancocuenta>();
-			listaBancoCuentaFiltro.add(bcoCta);
+			//listaBancoCuentaFiltro = new ArrayList<Bancocuenta>();
+			//listaBancoCuentaFiltro.add(bcoCta);
 			intBancoCuentaNuevaConcSeleccionado = bcoCta.getId().getIntItembancocuenta();
 			
 		} catch (Exception e) {
@@ -1433,6 +1434,7 @@ public class ConciliacionController{
 				cargarDescripcionBancoYCuenta(getBancoCuentaConciliacion(conciliacionNuevo));	
 				
 			}
+			seleccionarBancoFiltro();
 			/* Fin: REQ14-006 Bizarq - 26/10/2014 */
 
 		}catch (Exception e) {

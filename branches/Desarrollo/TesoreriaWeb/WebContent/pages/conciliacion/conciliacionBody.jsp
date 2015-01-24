@@ -144,7 +144,9 @@
 						<f:facet name="header">
 							<h:outputText value="Saldo Anterior"/>
 						</f:facet>
-						<h:outputText value="#{item.bdMontoSaldoInicial}" style="align: right"/>
+						<h:outputText value="#{item.bdMontoSaldoInicial}" style="align: right">
+							<f:converter converterId="ConvertidorMontos" />
+						</h:outputText>
 					</rich:column>
 					<rich:column width="80" style="text-align: center">
 						<f:facet name="header">
@@ -188,7 +190,9 @@
 						<f:facet name="header">
 							<h:outputText value="Por Conciliar"/>
 						</f:facet>
-						<h:outputText value="#{item.bdPorConciliar}"/>
+						<h:outputText value="#{item.bdPorConciliar}" >
+							<f:converter converterId="ConvertidorMontos" />
+						</h:outputText>
 					</rich:column>
 					
 					<a4j:support event="onRowClick"
